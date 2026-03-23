@@ -633,7 +633,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
         <div class="video-cell-cap">Fabrication de la lampe · Making-of</div>
       </div>
       <div class="video-cell">
-        <iframe src="https://player.vimeo.com/video/984191444?autoplay=0&title=0&byline=0&portrait=0" allowfullscreen></iframe>
+        <iframe src="https://player.vimeo.com/video/984191444?h=d4d10b60b4&autoplay=0&title=0&byline=0&portrait=0" allowfullscreen></iframe>
         <div class="video-cell-cap">Rising · Interview</div>
       </div>
     </div>
@@ -1175,7 +1175,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
   </div>
 
   <div class="mag-spread mag-2col" style="border-top:1px solid #e0ddd4;">
-    <div class="photo-block br" style="min-height:60vh;background:#e8f0e8;">
+    <div class="photo-block br" style="min-height:60vh;" id="albatros-1">
       <div class="photo-placeholder"><div class="ph-txt ph-txt-d">Photo · Insérer<br>Albatros · NanoMusée</div></div>
     </div>
     <div class="mc center">
@@ -1198,7 +1198,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
       <p class="body" data-i18n="al-int-1">En collaboration avec les scientifiques du CNRS, leur travail sur les albatros devient une expérience artistique accessible. Grâce aux capteurs placés sur les albatros, ils ont découvert des faits extraordinaires : ils voyagent des milliers de km, ne touchent pas terre pendant des années, forment des couples à vie.</p>
       <p class="body" data-i18n="al-int-2">Le NanoMusée itinérant permet d'amener la science dans des lieux reculés, des écoles, des espaces publics. Un formidable outil de démocratisation · de l'art, de la science, et de la connexion au vivant.</p>
     </div>
-    <div class="photo-block" style="min-height:50vh;background:#e8f0e8;">
+    <div class="photo-block" style="min-height:50vh;" id="albatros-2">
       <div class="photo-placeholder"><div class="ph-txt ph-txt-d">Photo · Insérer<br>Atelier fabrication</div></div>
     </div>
   </div>
@@ -1376,6 +1376,24 @@ function show(id, pushState = true) {
       ai.onerror = () => console.log('about-profile.jpg not found');
       ai.src = 'about-profile.jpg';
     }
+  }
+
+  // Load albatros fixed photos explicitly
+  if(resolvedId === 'albatros') {
+    [['albatros-1','albatros/1.jpg'],['albatros-2','albatros/2.jpg']].forEach(([id,src]) => {
+      const el = document.getElementById(id);
+      if(el && !el.style.backgroundImage) {
+        const img = new Image();
+        img.onload = () => {
+          el.style.backgroundImage = 'url('+src+')';
+          el.style.backgroundSize = 'cover';
+          el.style.backgroundPosition = 'center';
+          const ph = el.querySelector('.photo-placeholder');
+          if(ph) ph.style.opacity = '0';
+        };
+        img.src = src;
+      }
+    });
   }
 
   // Load upperground fixed photos explicitly
@@ -2112,16 +2130,19 @@ PROJECTS.forEach(proj => {
   const homeVisual = document.querySelector('[data-proj="'+proj.id+'"]');
   if(homeVisual) tryBg(homeVisual, proj.folder+'/main.jpg');
 
-  // Skip upperground detail photos — handled explicitly in show('upperground')
+  // Skip upperground and albatros photo blocks — handled explicitly in show()
+  // But albatros still needs its gallery loaded below
   if(proj.id === 'upperground') return;
 
   // DETAIL PAGE photo blocks
   const page = document.getElementById('pg-'+proj.id);
   if(!page) return;
 
-  const photoBlocks = page.querySelectorAll('.photo-block');
-  if(photoBlocks[0]) photoBlocks[0].setAttribute('data-bg', proj.folder+'/1.jpg');
-  if(photoBlocks[1]) photoBlocks[1].setAttribute('data-bg', proj.folder+'/2.jpg');
+  if(proj.id !== 'albatros') {
+    const photoBlocks = page.querySelectorAll('.photo-block');
+    if(photoBlocks[0]) photoBlocks[0].setAttribute('data-bg', proj.folder+'/1.jpg');
+    if(photoBlocks[1]) photoBlocks[1].setAttribute('data-bg', proj.folder+'/2.jpg');
+  }
 
   // GALLERY: try photos starting from 3.jpg, stop when not found
   const gallery = page.querySelector('.gallery-scroll');
