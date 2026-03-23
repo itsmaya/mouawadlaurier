@@ -339,6 +339,117 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
 
 /* SVG ILLUSTRATIONS */
 .tree-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+
+  /* NAV */
+  nav{padding:1rem 1.25rem;}
+  .nav-logo{font-size:10px;letter-spacing:0.25em;}
+  .nav-r{gap:0.9rem;}
+  .nl{font-size:10px;letter-spacing:0.12em;}
+  .lbtn{font-size:10px;}
+  .lsep{display:none;}
+
+  /* COVER */
+  .cover-top{grid-template-columns:1fr;min-height:auto;}
+  .cover-img{height:55vw;min-height:200px;}
+  .cover-txt{padding:3rem 1.25rem 1.5rem;}
+  .cover-name{font-size:clamp(2rem,10vw,3.5rem);}
+  .cover-statement{font-size:1rem;}
+  .cover-bottom{padding:1rem 1.25rem;}
+
+  /* SECTION HEADER */
+  .sec-hdr{padding:1.25rem 1.25rem;}
+
+  /* PROJECT ROWS — stack vertically */
+  .proj-row{grid-template-columns:1fr;min-height:auto;}
+  .proj-row.flip{direction:ltr;}
+  .pv{min-height:55vw;}
+  .pc{padding:2rem 1.25rem;}
+  .pc-title{font-size:clamp(2rem,12vw,4rem);}
+  .pc-tags{gap:0.3rem;}
+  .tag{font-size:9px;}
+
+  /* PULLQUOTE HOME */
+  .pq-home{padding:3rem 1.25rem;}
+
+  /* PROJECT DETAIL HERO */
+  .pd-hero{grid-template-columns:1fr;}
+  .pd-left{padding:2rem 1.25rem 1.5rem;border-right:none;border-bottom:1px solid #e0ddd4;}
+  .pd-right{padding:1.5rem 1.25rem;}
+  .pd-big{font-size:clamp(3.5rem,18vw,7rem) !important;}
+
+  /* VIDEO */
+  .video-grid{grid-template-columns:1fr;}
+  .video-cell{border-right:none;border-bottom:1px solid #e0ddd4;}
+
+  /* CONTENT BLOCKS */
+  .content-blocks{grid-template-columns:1fr;}
+  .mag-spread.mag-2col{grid-template-columns:1fr;}
+  .mag-spread.mag-3col{grid-template-columns:1fr;}
+  .mag-spread.mag-13{grid-template-columns:1fr;}
+  .mag-spread.mag-31{grid-template-columns:1fr;}
+  .mag-spread.mag-21{grid-template-columns:1fr;}
+  .mag-spread.mag-12{grid-template-columns:1fr;}
+  .cb{border-right:none;border-bottom:1px solid #e0ddd4;padding:2rem 1.25rem;}
+  .mc{padding:2rem 1.25rem;}
+  .mc.br{border-right:none;border-bottom:1px solid #e0ddd4;}
+
+  /* PHOTO BLOCKS on mobile — reasonable height */
+  .photo-block{min-height:50vw !important;}
+
+  /* GALLERY */
+  .gitem{width:70vw;height:45vw;}
+
+  /* CREDITS */
+  .credits{grid-template-columns:1fr;gap:1.5rem;padding:2rem 1.25rem;}
+
+  /* PRESS */
+  .pr-item{grid-template-columns:1fr;gap:0.5rem;padding:1.5rem 1.25rem;}
+  .pr-yr{margin-top:0;}
+
+  /* IMPACT STRIP */
+  .impact-strip{gap:1.5rem;padding:1.25rem;}
+
+  /* PROJ NAV */
+  .pnav{padding:1.5rem 1.25rem;}
+
+  /* ABOUT */
+  .about-pg{padding:4rem 1.25rem 3rem;}
+  .ab-grid{grid-template-columns:1fr;gap:2rem;}
+  .ab-2col{grid-template-columns:1fr;gap:2rem;}
+
+  /* LOGOS */
+  .logos-section{padding:1.5rem 1.25rem;}
+  .logos-scroll{gap:1.5rem;}
+  .logos-scroll img{height:22px;}
+
+  /* CONTACT */
+  .ct-pg{padding:5rem 1.25rem;}
+
+  /* FOOTER */
+  .foot{flex-direction:column;gap:0.5rem;text-align:center;padding:1.25rem;}
+
+  /* TECH SPEC */
+  .tech-content{grid-template-columns:1fr !important;}
+
+  /* HIDE CURSOR on touch */
+  .cur{display:none;}
+  body{cursor:auto;}
+  button,a{cursor:pointer;}
+}
+
+/* ── TABLET ── */
+@media (max-width: 1024px) and (min-width: 769px) {
+  nav{padding:1.2rem 1.75rem;}
+  .pc{padding:3rem 2rem;}
+  .pd-left{padding:2.5rem 2rem;}
+  .pd-right{padding:2.5rem 2rem;}
+  .mc{padding:2.5rem 2rem;}
+  .credits{padding:2rem;}
+  .about-pg{padding:5rem 1.75rem 4rem;}
+}
 </style>
 </head>
 <body>
