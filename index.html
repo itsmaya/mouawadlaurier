@@ -2309,19 +2309,19 @@ PROJECTS.forEach(proj => {
 });
 
 </script>
-<div id="lang-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(248,247,242,0.97);border-top:1px solid #e0ddd4;padding:0.6rem 1.25rem;display:flex;justify-content:center;gap:1.5rem;z-index:200;">
-  <button onclick="setL('fr')" class="lbtn" id="lb-fr">Fr</button>
+<div id="lang-bar" style="position:fixed;bottom:0;left:0;right:0;background:rgba(248,247,242,0.97);border-top:1px solid #e0ddd4;padding:0.6rem 1.25rem;justify-content:center;gap:2rem;z-index:200;">
+  <button onclick="setL('fr')" class="lbtn on" id="lb-fr">Fr</button>
   <button onclick="setL('en')" class="lbtn" id="lb-en">En</button>
   <button onclick="setL('es')" class="lbtn" id="lb-es">Es</button>
   <button onclick="setL('ca')" class="lbtn" id="lb-ca">Cat</button>
 </div>
 <style>
 @media (max-width: 768px) {
-  #lang-bar{display:flex !important;}
+  #lang-bar{display:flex;}
   body{padding-bottom:2.5rem;}
 }
 @media (min-width: 769px) {
-  #lang-bar{display:none !important;}
+  #lang-bar{display:none;}
 }
 </style>
 </body>
