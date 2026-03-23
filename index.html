@@ -2166,7 +2166,11 @@ let currentLang = 'fr';
 function setL(l) {
   currentLang = l;
   document.querySelectorAll('.lbtn').forEach(b => b.classList.remove('on'));
-  event.target.classList.add('on');
+  // Highlight all buttons matching this lang (nav + bottom bar)
+  document.querySelectorAll('.lbtn').forEach(b => {
+    const txt = b.textContent.toLowerCase();
+    if(txt === l || (l === 'ca' && txt === 'cat')) b.classList.add('on');
+  });
   document.documentElement.lang = l;
   applyTranslations(l);
 }
@@ -2305,5 +2309,20 @@ PROJECTS.forEach(proj => {
 });
 
 </script>
+<div id="lang-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(248,247,242,0.97);border-top:1px solid #e0ddd4;padding:0.6rem 1.25rem;display:flex;justify-content:center;gap:1.5rem;z-index:200;">
+  <button onclick="setL('fr')" class="lbtn" id="lb-fr">Fr</button>
+  <button onclick="setL('en')" class="lbtn" id="lb-en">En</button>
+  <button onclick="setL('es')" class="lbtn" id="lb-es">Es</button>
+  <button onclick="setL('ca')" class="lbtn" id="lb-ca">Cat</button>
+</div>
+<style>
+@media (max-width: 768px) {
+  #lang-bar{display:flex !important;}
+  body{padding-bottom:2.5rem;}
+}
+@media (min-width: 769px) {
+  #lang-bar{display:none !important;}
+}
+</style>
 </body>
 </html>
