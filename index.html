@@ -464,10 +464,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
     <button class="nl" id="nl-p" onclick="show('press')" data-i18n="nav-press">Presse</button>
     <button class="nl" id="nl-c" onclick="show('contact')" data-i18n="nav-contact">Contact</button>
     <span class="lsep">·</span>
-    <button class="lbtn on" onclick="setL('fr')">Fr</button>
-    <button class="lbtn" onclick="setL('en')">En</button>
-    <button class="lbtn" onclick="setL('es')">Es</button>
-    <button class="lbtn" onclick="setL('ca')">Cat</button>
+    <select id="lang-select" onchange="setL(this.value)" style="font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:11px;letter-spacing:0.15em;background:transparent;border:none;border-bottom:1px solid #ccc;color:#666;cursor:pointer;padding:0.1rem 0.2rem;appearance:none;-webkit-appearance:none;text-transform:uppercase;">
+      <option value="fr">Fr</option>
+      <option value="en">En</option>
+      <option value="es">Es</option>
+      <option value="ca">Cat</option>
+    </select>
   </div>
 </nav>
 
@@ -478,7 +480,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
       <div class="pv pv-dark cover-img" id="cover-home" style="min-height:auto;">
       </div>
       <div class="cover-txt">
-        <div class="cover-issue" data-i18n="cover-issue">Vol. I · 2008 · 2025 · Barcelone</div>
+        
         <div class="cover-title-block">
           <div class="cover-name">Maya<br>Mouawad</div>
           <div class="cover-role" data-i18n="cover-role">Environmental Artist</div>
@@ -1552,7 +1554,12 @@ window.addEventListener('DOMContentLoaded', () => {
   if(hash && validPages.includes(hash)) {
     show(hash, false);
   }
-  applyTranslations('fr');
+  // Auto-detect browser language
+  const browserLang = (navigator.language || navigator.userLanguage || 'fr').toLowerCase().substring(0,2);
+  const supported = ['fr','en','es','ca'];
+  const lang = supported.includes(browserLang) ? browserLang : 'fr';
+  setL(lang);
+  applyTranslations(lang);
 });
 
 // (lazyLoadPage is defined below in photo protocol section)
@@ -2165,12 +2172,9 @@ let currentLang = 'fr';
 
 function setL(l) {
   currentLang = l;
-  document.querySelectorAll('.lbtn').forEach(b => b.classList.remove('on'));
-  // Highlight all buttons matching this lang (nav + bottom bar)
-  document.querySelectorAll('.lbtn').forEach(b => {
-    const txt = b.textContent.toLowerCase();
-    if(txt === l || (l === 'ca' && txt === 'cat')) b.classList.add('on');
-  });
+  // Sync select element
+  const sel = document.getElementById('lang-select');
+  if(sel) sel.value = l;
   document.documentElement.lang = l;
   applyTranslations(l);
 }
@@ -2309,20 +2313,5 @@ PROJECTS.forEach(proj => {
 });
 
 </script>
-<div id="lang-bar" style="position:fixed;bottom:0;left:0;right:0;background:rgba(248,247,242,0.97);border-top:1px solid #e0ddd4;padding:0.6rem 1.25rem;justify-content:center;gap:2rem;z-index:200;">
-  <button onclick="setL('fr')" class="lbtn on" id="lb-fr">Fr</button>
-  <button onclick="setL('en')" class="lbtn" id="lb-en">En</button>
-  <button onclick="setL('es')" class="lbtn" id="lb-es">Es</button>
-  <button onclick="setL('ca')" class="lbtn" id="lb-ca">Cat</button>
-</div>
-<style>
-@media (max-width: 768px) {
-  #lang-bar{display:flex;}
-  body{padding-bottom:2.5rem;}
-}
-@media (min-width: 769px) {
-  #lang-bar{display:none;}
-}
-</style>
 </body>
 </html>
