@@ -1,0 +1,4 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+mouawadlaurier.com	TRUE	/	FALSE	1999999999	crumb	Bas/wTTbU/mqYWMyZjZlNDI0YTZiZjY1YjNjYTk1YzYzNzAxZTAw
+

@@ -1,0 +1,192 @@
+TRADUCTIONS · CATALÀ
+Site mouawadlaurier.com · Maya Mouawad
+============================================================
+
+INSTRUCTIONS :
+· Modifier uniquement le texte APRÈS le signe "="
+· Ne pas modifier les clés (avant le "=")
+· Ne pas supprimer de lignes
+· Sauvegarder en UTF-8
+
+
+── NAVIGATION ──
+nav-work = Obres
+nav-about = Sobre
+nav-press = Premsa
+nav-contact = Contacte
+
+── COVER · PAGE D'ACCUEIL ──
+cover-issue = Vol. I · 2008 · 2025 · Barcelona
+cover-role = Environmental Artist
+cover-statement = "Les emocions assoleixen nivells de consciència profunds."
+cover-bl = Obres · Residències · Instal·lacions · 2008 · 2025
+cover-br = Explorar ↓
+
+── SECTION OEUVRES ──
+sec-work = Obres
+sec-sub = 2019 · 2025
+
+── BOUTONS ──
+btn-see = Veure el projecte
+btn-back = ← Tornar a les obres
+
+── LABELS GÉNÉRAUX ──
+lbl-work = L'obra
+lbl-intent = Intenció
+lbl-credits = Crèdits
+lbl-tour = Gira
+lbl-tech = Tècnica
+lbl-prod = Producció
+lbl-science = Col·laboració científica
+lbl-press = Premsa
+lbl-gallery = Galeria
+lbl-partners = Socis
+lbl-makingof = Making-of · Altres vídeos
+lbl-othervideos = Altres vídeos
+lbl-techspec = Fitxa tècnica · Dispositiu
+lbl-partners-home = Socis i suports
+
+── HOME · RISING ──
+h-s-rising = Visualitzar la pujada del nivell del mar
+h-d-rising = Una projecció monumental immersiva que tradueix dades científiques en experiència sensorial.
+h-q-rising = "L'invisible es fa perceptible."
+
+── HOME · PEUPLER ──
+h-s-peupler = La perspectiva de l'arbre
+h-d-peupler = Una instal·lació immersiva i interactiva que ofereix el punt de vista d'un arbre observant les nostres ciutats.
+h-q-peupler = "Tot ésser viu pobla el món a la seva manera."
+
+── HOME · CITATION CENTRALE ──
+h-pq = "Abordo la tecnologia amb passió i mirada crítica · capturada pel seu potencial, però convençuda que la nostra atenció hauria de dirigir-se cap a la natura."
+
+── HOME · RETOUR AUX SOURCES ──
+h-s-retour = Instal·lació permanent · Ruinart UNESCO
+h-d-retour = Una arrel plantada a 30 metres sota terra escolta el món viu.
+h-q-retour = "Escoltar el que ens diu la natura."
+
+── HOME · ÉPHÉMÈRE ──
+h-s-ephemere = Art inclusiu · Hospitals
+h-d-ephemere = Un dispositiu interactiu que genera un quadre viu per la simple presència dels visitants.
+h-q-ephemere = "L'instant present com a obra viva."
+
+── HOME · PAYSAGE SONORE ──
+h-s-paysage = Performance musical · Realitat augmentada
+h-d-paysage = Una performance musical en realitat augmentada generada en temps real pels sons de tots els visitants.
+h-q-paysage = "Connectar el real i el virtual a través del so."
+
+── HOME · ÊTRE ABSORBÉ ──
+h-s-absorbe = Instal·lació interactiva · Ruinart
+h-d-absorbe = La continuació de Retour aux Sources. El visitant entra en resonància amb l'arrel.
+h-q-absorbe = "La natura ens percep, ens respon i ens integra."
+
+── HOME · UPPERGROUND ──
+h-s-upperground = Instal·lació lluminosa · Vent en temps real
+h-d-upperground = Una instal·lació lluminosa que recorda la natura on els usuaris més s'allunyen d'ella.
+h-q-upperground = "Recordar la natura on l'humà més s'allunya d'ella."
+
+── HOME · ALBATROS ──
+h-s-albatros = Escultura de paper · NanoMuseu · CNRS
+h-d-albatros = Un albatros a mida real fabricat en paper reciclable per al NanoMuseu itinerant.
+h-q-albatros = "Mostrar aquest animal en tota la seva majestuositat."
+
+── PAGE RISING ──
+r-intro = "Una instal·lació sonora i lluminosa a l'aire lliure que parla de la nostra vulnerabilitat. Allunyar la por, usar la bellesa per tornar-nos més resilients."
+r-work-title = Visualitzar la pujada del nivell del mar
+r-work-1 = Rising és una instal·lació immersiva a l'aire lliure que tradueix dades científiques en experiència sensorial.
+r-work-2 = El dispositiu connecta en temps real les dades oceanogràfiques de la Universitat de La Rochelle.
+r-work-q = "Quan l'art troba la ciència. Crear noves narratives sobre l'oceà, al servei del vivent."
+r-int-title = Fer visible l'invisible
+r-int-1 = Rising parla de la nostra vulnerabilitat. Trencar el tabú del futur que ens espera usant la bellesa per tornar-nos més resilients.
+r-int-2 = Les dades climàtiques es viuen, es senten al cos. Rising transforma el coneixement en consciència.
+r-pq = "Fer visible l'invisible: traduir les transformacions climàtiques en experiències que mobilitzen."
+
+── PAGE PEUPLER ──
+p-intro = "Tot ésser viu forma part d'un poble i pobla el món a la seva manera."
+p-work-title = Una sala viva, en temps real
+p-work-1 = Peupler està allotjada en un nou tipus de sala immersiva composta de contingut generatiu en temps real.
+p-work-2 = La música espacialitzada i les experiències olfactives reforcen el vincle entre la natura i els humans.
+p-work-q = "Peupler explora poèticament la dialèctica home-natura." · Kent Bye, Voices of VR
+p-int-title = Donar veu a l'arbre
+p-int-1 = Aquesta instal·lació busca veure i sentir el punt de vista d'un arbre observant les nostres ciutats.
+p-int-2 = Les ciutats de demà han de considerar la cohabitació amb la natura com una necessitat absoluta.
+p-pq = "Com poden tots els éssers vius · humans, no humans · cohabitar en territoris compartits?"
+
+── PAGE RETOUR AUX SOURCES ──
+ret-intro = "Una arrel plantada en una cova de guix a trenta metres sota terra escolta el món viu."
+ret-work-title = Una arrel que escolta el clima
+ret-work-1 = L'arrel escolta els elements naturals de la producció del xampany i tradueix les variacions climàtiques en música generativa i llum.
+ret-work-2 = Instal·lació permanent visible durant les visites a les caves Ruinart a Reims des del 2019.
+ret-work-q = "L'oceà projectat a les parets és un sublim recordatori de l'origen oceànic de la guix." · Numéro Art
+ret-int-title = Humilitat davant el temps profund
+ret-int-1 = Aquestes caves ens inviten a posar el nostre ego humà al seu lloc davant el temps profund de la Terra.
+ret-int-2 = Inspirada en Stefano Mancuso, la instal·lació recorda que el 90% de la biomassa terrestre és constituïda per plantes.
+ret-pq = "La tecnologia al servei de la contemplació, no de la dominació."
+
+── PAGE ÉPHÉMÈRE ──
+e-intro = "L'instant present com a obra viva. Éphémère parla del temps que ens uneix i ens separa."
+e-work-title = Un quadre generat per la presència
+e-work-1 = Un dispositiu interactiu que genera un quadre viu per la simple presència dels visitants. Respon a tot tipus de moviments mitjançant un sensor de profunditat.
+e-work-2 = Els visuals canvien contínuament. La música crea un ambient meditatiu. Accessible per a tothom mitjançant gestos simples.
+e-work-q = "Permetre a una persona, simplement per la seva presència, crear un quadre en moviment."
+e-int-title = L'art com a cura
+e-int-1 = Éphémère transforma els espais de cura en llocs de contemplació. Un parèntesi a les sales d'espera dels hospitals.
+e-int-2 = Els nens poden participar independentment de les seves capacitats. L'art digital al servei de la cohesió social.
+e-pq = "Aquestes instal·lacions aporten moments de joc, imaginació i alleujament emocional en entorns que poden semblar estressants."
+
+── PAGE PAYSAGE SONORE ──
+ps-intro = "Una harmonia musical hipnòtica connecta el real i el virtual · partícules de llum reaccionen als sons de tots els visitants."
+ps-work-title = Els sons dels visitants com a partitura
+ps-work-1 = Paysage Sonore és una performance musical en realitat augmentada, generada en temps real pels sons de tots els visitants.
+ps-work-2 = Partícules de llum reaccionen a aquesta composició. Cada visitant es converteix, sense saber-ho, en compositor.
+ps-int-title = El col·lectiu com a instrument
+ps-int-1 = Paysage Sonore transforma la presència col·lectiva en música, revelant que cada gest contribueix a un tot major.
+ps-int-2 = És una experiència de consciència col·lectiva · la natura com a partitura, els humans com a músics involuntaris.
+ps-pq = "Connectar el real i el virtual a través del so · cada visitant es converteix en compositor sense saber-ho."
+
+── PAGE ÊTRE ABSORBÉ ──
+ab-intro = "La natura no ens és aliena. Ens percep, ens respon i ens integra."
+ab-work-title = El visitant es converteix en actor
+ab-work-1 = Être Absorbé és la continuació de Retour aux Sources. El visitant no es limita a contemplar, sinó que es converteix en actor.
+ab-work-2 = La persona es fon amb l'arrel a través dels seus moviments, comunicant-se amb ella i sentint la seva força.
+ab-work-q = "Com una gota absorbida pel mar, el visitant descobreix la seva vulnerabilitat i la seva immensa força."
+ab-int-title = Unió amb la matèria viva
+ab-int-1 = Être Absorbé convida al moviment i a la interacció. Reconnectar-nos amb les nostres arrels.
+ab-int-2 = No existeixen Homes oposats a la Natura · sinó un tot, i només un tot.
+ab-pq = "Ser absorbit per la Font, com una gota que inexorablement es deixa engolir per la resta de l'aigua."
+
+── PAGE UPPERGROUND ──
+ug-intro = "Recordar la natura on l'usuari més s'allunya d'ella. Les llums reaccionen a les condicions de vent en temps real."
+ug-work-title = El vent com a matèria primera
+ug-work-1 = Upperground recorda la natura on l'usuari més s'allunya d'ella. St Pancras és un dels entorns més urbans.
+ug-work-2 = Upperground usa el vent · alguna cosa viva · per crear una animació lluminosa lenta i contemplativa.
+ug-work-q = "La robotització de la humanitat és una manera d'oblidar que som part de la natura."
+ug-pq = "Recordar la natura on els humans més s'allunyen · usar el vent com a única matèria primera."
+
+── PAGE ALBATROS ──
+al-intro = "5 anys sense trepitjar terra. 150.000 km per any. 75 anys de vida. Mostrar aquest animal a mida real, en paper."
+al-work-title = Un ocell a mida real, en paper
+al-work-1 = L'albatros passa el 80% del seu temps entre l'aigua i l'aire. Només posa peu a terra per reproduir-se.
+al-work-2 = Un albatros de paper a mida real, fabricat amb origami i modelatge 3D · codi obert, lleuger, reciclable.
+al-work-q = "La tecnologia per atraure la mirada i desviar-la cap a la Natura." · Mouawad + Laurier
+al-int-title = Democratitzar la ciència a través de l'art
+al-int-1 = En col·laboració amb el CNRS, el treball sobre els albatros es converteix en una experiència artística accessible.
+al-int-2 = El NanoMuseu itinerant porta la ciència a llocs remots, escoles, espais públics.
+al-pq = "L'art no ha de romandre tancat. El NanoMuseu és una bonica manera de treure'l."
+
+── PAGE ABOUT ──
+about-stmt = "Abordo la tecnologia amb passió i mirada crítica · capturada pel seu potencial, però convençuda que la nostra atenció hauria de dirigir-se cap a la natura."
+about-role = Environmental Artist
+about-bio-short = Maya Mouawad és una artista enginyera francesa afincada a Barcelona. Graduada a l'IMAC (Art i Tecnologies, 2005), crea des del 2008 instal·lacions immersives.
+about-bio1 = Des del 2017, el meu treball artístic se centra en l'ecologia i la connexió amb el vivent.
+about-bio2 = Provinent de famílies doblement refugiades · fugint de la guerra al Líban, o de l'exili dels jueus el 1948 a Tunísia · vaig créixer amb una consciència aguda del canvi.
+about-bio3 = Les meves obres busquen provocar una emoció sincera sense imposar un missatge. Pionera en IA aplicada a la creació artística des del 2014.
+about-bio4 = Rising funciona amb bateria durant 3 hores. Peupler, projectat a Dakar amb només tres maletes, funciona en un simple ordinador portàtil.
+about-collab = Col·laboracions científiques
+about-studios = Estudis
+about-support = Suports institucionals
+about-lang = Idiomes
+
+── PAGE PRESSE & CONTACT ──
+press-title = Premsa
+ct-role = Environmental Artist · Barcelona
+ct-loc = Barcelona · París · Internacional

@@ -1,0 +1,192 @@
+TRADUCTIONS · FRANÇAIS
+Site mouawadlaurier.com · Maya Mouawad
+============================================================
+
+INSTRUCTIONS :
+· Modifier uniquement le texte APRÈS le signe "="
+· Ne pas modifier les clés (avant le "=")
+· Ne pas supprimer de lignes
+· Sauvegarder en UTF-8
+
+
+── NAVIGATION ──
+nav-work = Creations
+nav-about = À propos
+nav-press = Presse
+nav-contact = Contact
+
+── COVER · PAGE D'ACCUEIL ──
+cover-issue = Vol. I · 2008 · 2025 · Barcelone
+cover-role = Environmental Artist
+cover-statement = "Les émotions atteignent des niveaux de conscience profonds."
+cover-bl = Oeuvres · Résidences · Installations · 2008 · 2025
+cover-br = Feuilleter ↓
+
+── SECTION OEUVRES ──
+sec-work = Oeuvres
+sec-sub = 2019 · 2025
+
+── BOUTONS ──
+btn-see = Voir le projet
+btn-back = ← Retour aux oeuvres
+
+── LABELS GÉNÉRAUX ──
+lbl-work = L'oeuvre
+lbl-intent = Intention
+lbl-credits = Crédits
+lbl-tour = Tournée
+lbl-tech = Technique
+lbl-prod = Production
+lbl-science = Collaboration scientifique
+lbl-press = Presse
+lbl-gallery = Galerie
+lbl-partners = Partenaires
+lbl-makingof = Making-of · Autres vidéos
+lbl-othervideos = Autres vidéos
+lbl-techspec = Fiche technique · Dispositif
+lbl-partners-home = Partenaires et soutiens
+
+── HOME · RISING ──
+h-s-rising = Visualiser la montée des eaux
+h-d-rising = Projection monumentale immersive qui traduit les données scientifiques de montée des eaux en expérience sensorielle.
+h-q-rising = "L'invisible devient perceptible."
+
+── HOME · PEUPLER ──
+h-s-peupler = La perspective de l'arbre
+h-d-peupler = Installation immersive et interactive qui donne à voir le point de vue d'un arbre observant nos villes.
+h-q-peupler = "Toute entité vivante peuple le monde à sa manière."
+
+── HOME · CITATION CENTRALE ──
+h-pq = "J'aborde la technologie avec passion et regard critique · captivée par son potentiel, mais convaincue que notre attention devrait être dirigée vers la nature, vers les êtres vivants qui détiennent les clés de notre salut."
+
+── HOME · RETOUR AUX SOURCES ──
+h-s-retour = Installation permanente · Ruinart UNESCO
+h-d-retour = Une racine plantée à 30 mètres sous terre écoute le monde vivant.
+h-q-retour = "Écouter ce que la nature nous dit."
+
+── HOME · ÉPHÉMÈRE ──
+h-s-ephemere = Art inclusif · Hôpitaux
+h-d-ephemere = Un dispositif interactif qui génère un tableau vivant par la présence des visiteurs.
+h-q-ephemere = "L'instant présent comme œuvre vivante."
+
+── HOME · PAYSAGE SONORE ──
+h-s-paysage = Performance musicale · Réalité augmentée
+h-d-paysage = Une performance musicale en réalité augmentée générée en temps réel par les sons de tous les visiteurs.
+h-q-paysage = "Relier le réel et le virtuel par le son."
+
+── HOME · ÊTRE ABSORBÉ ──
+h-s-absorbe = Installation interactive · Ruinart
+h-d-absorbe = La continuité de Retour aux Sources. Le visiteur entre en résonance avec la racine.
+h-q-absorbe = "La nature nous perçoit, nous répond et nous intègre."
+
+── HOME · UPPERGROUND ──
+h-s-upperground = Installation lumineuse · Vent en temps réel
+h-d-upperground = Une installation lumineuse qui rappelle la nature là où l'utilisateur en est le plus éloigné.
+h-q-upperground = "Rappeler la nature là où l'humain en est le plus éloigné."
+
+── HOME · ALBATROS ──
+h-s-albatros = Sculpture papier · NanoMusée · CNRS
+h-d-albatros = Un albatros en taille réelle fabriqué en papier recyclable pour le NanoMusée itinérant.
+h-q-albatros = "Donner à voir cet animal dans toute sa majesté."
+
+── PAGE RISING ──
+r-intro = "Une installation sonore et lumineuse en plein air qui parle de notre vulnérabilité. Repousser la peur, utiliser la beauté pour devenir plus résilients."
+r-work-title = Visualiser la montée des eaux
+r-work-1 = Rising est une installation sonore et lumineuse immersive en plein air qui traduit les données scientifiques de montée des eaux en expérience sensorielle. L'œuvre exprime en temps réel les données en vagues lumineuses qui submergent l'espace.
+r-work-2 = Le dispositif connecte en temps réel les données océanographiques de l'Université de La Rochelle. Plus les anomalies climatiques sont importantes, plus l'expérience visuelle devient intense et oppressante.
+r-work-q = "Quand l'art rencontre la science. Créer de nouveaux récits sur l'océan, au service du vivant."
+r-int-title = Rendre visible l'invisible
+r-int-1 = Rising parle de notre vulnérabilité à travers une expérience poétique. Briser le tabou de l'avenir qui nous attend, repousser la peur et utiliser la beauté pour devenir plus résilients.
+r-int-2 = Les données climatiques ne sont pas abstraites · elles sont vécues, ressenties dans le corps. Rising transforme la connaissance en conscience.
+r-pq = "Rendre visible l'invisible : traduire les transformations territoriales causées par le climat en expériences qui mobilisent."
+
+── PAGE PEUPLER ──
+p-intro = "Toute entité vivante fait partie d'un peuple et peuple le monde à sa manière."
+p-work-title = Une salle vivante, en temps réel
+p-work-1 = Peupler est hébergée dans un nouveau type de salle immersive composée entièrement de contenu génératif en temps réel. Son contenu s'adapte aux données reçues et à la présence des spectateurs.
+p-work-2 = La musique spatialisée et des expériences olfactives renforcent le lien entre la nature et les humains.
+p-work-q = "Peupler explore poétiquement la dialectique homme-nature." · Kent Bye, Voices of VR
+p-int-title = Donner la parole à l'arbre
+p-int-1 = Cette installation cherche à voir et ressentir le point de vue d'un arbre observant nos villes.
+p-int-2 = Les villes de demain doivent considérer la cohabitation avec la nature comme une nécessité absolue.
+p-pq = "Comment tous les vivants · humains, non-humains · peuvent cohabiter dans des territoires partagés ?"
+
+── PAGE RETOUR AUX SOURCES ──
+ret-intro = "Une racine plantée dans une cave de craie à trente mètres sous terre écoute le monde vivant qui respire à la surface."
+ret-work-title = Une racine qui écoute le climat
+ret-work-1 = La racine écoute les éléments naturels impliqués dans la production du champagne. En temps réel, elle capte les données climatiques et traduit ces variations en musique générative et lumière.
+ret-work-2 = Installation permanente visible lors des visites des caves Ruinart à Reims depuis 2019.
+ret-work-q = "L'océan projeté sur les murs est un sublime rappel de l'origine océanique de la craie." · Numéro Art
+ret-int-title = L'humilité face au temps long
+ret-int-1 = Ces caves nous invitent à remettre notre ego d'humains à sa place, à réaliser que nous ne sommes rien face au temps long de la Terre.
+ret-int-2 = Inspirée par Stefano Mancuso sur l'intelligence des plantes, l'installation rappelle que 90% de la biomasse terrestre est constituée de plantes.
+ret-pq = "La technologie au service de la contemplation, pas de la domination."
+
+── PAGE ÉPHÉMÈRE ──
+e-intro = "L'instant présent comme œuvre vivante. Éphémère parle du temps qui nous unit et nous sépare."
+e-work-title = Un tableau généré par la présence
+e-work-1 = Un dispositif interactif qui, par la simple présence des visiteurs, génère un tableau vivant et une musique évolutive. L'écran répond à tous types de mouvements via un capteur de profondeur.
+e-work-2 = Les visuels changent en continu. La musique crée une ambiance méditative. Accessible à tous par le simple geste.
+e-work-q = "Permettre à une personne, simplement par sa présence, de créer un tableau en mouvement."
+e-int-title = L'art comme soin
+e-int-1 = Éphémère transforme des espaces de soin en lieux de contemplation. Une parenthèse hors du temps dans les salles d'attente des hôpitaux.
+e-int-2 = Les enfants peuvent s'engager indépendamment de leurs capacités motrices. L'art numérique au service de la cohésion sociale.
+e-pq = "Ces installations apportent des moments de jeu, d'imagination et de soulagement émotionnel dans des environnements qui peuvent autrement sembler stressants."
+
+── PAGE PAYSAGE SONORE ──
+ps-intro = "Une harmonie musicale hypnotique relie le réel et le virtuel · des particules de lumière réagissent aux sons de tous les visiteurs."
+ps-work-title = Les sons des visiteurs comme partition
+ps-work-1 = Paysage Sonore est une performance musicale en réalité augmentée, générée en temps réel par les sons de tous les visiteurs.
+ps-work-2 = Des particules de lumière réagissent à cette composition. Chaque visiteur devient, sans le savoir, compositeur de l'expérience collective.
+ps-int-title = Le collectif comme instrument
+ps-int-1 = Paysage Sonore transforme la présence collective en musique, révélant que chaque geste contribue à un tout plus grand.
+ps-int-2 = C'est une expérience de prise de conscience collective · la nature comme partition, les humains comme musiciens involontaires.
+ps-pq = "Relier le réel et le virtuel par le son · chaque visiteur devient compositeur sans le savoir."
+
+── PAGE ÊTRE ABSORBÉ ──
+ab-intro = "La nature ne nous est pas étrangère. Elle nous perçoit, nous répond et nous intègre."
+ab-work-title = Le visiteur devient acteur
+ab-work-1 = Être Absorbé est la continuité de Retour aux Sources. Le visiteur ne se contente pas de contempler, mais devient acteur.
+ab-work-2 = La personne fait corps avec la racine grâce à ses mouvements. Il s'agit de communiquer avec elle, de ressentir sa force.
+ab-work-q = "Comme une goutte absorbée par l'immensité de la mer, le visiteur découvre sa vulnérabilité et son immense force."
+ab-int-title = L'union avec la matière vivante
+ab-int-1 = Être Absorbé invite au mouvement et à l'interaction. Se reconnecter à nos racines, ne plus observer l'extérieur comme l'étrange.
+ab-int-2 = Il n'existe pas d'Hommes opposés à la Nature · mais un tout, et seulement un tout.
+ab-pq = "Être absorbé par la Source, comme une goutte qui inexorablement se fait avaler par le reste de l'eau."
+
+── PAGE UPPERGROUND ──
+ug-intro = "Rappeler la nature dans un lieu où l'utilisateur en est le plus éloigné. Les lumières réagissent aux conditions de vent en temps réel."
+ug-work-title = Le vent comme matière première
+ug-work-1 = Upperground rappelle la nature dans un lieu où l'utilisateur en est le plus éloigné. St Pancras est l'un des environnements les plus urbains.
+ug-work-2 = Upperground utilise le vent · une chose vivante · pour créer une animation lumineuse lente et contemplative, contrastant avec la vie urbaine.
+ug-work-q = "La robotisation de l'humanité est une façon d'oublier que nous faisons partie de la nature."
+ug-pq = "Rappeler la nature là où l'humain en est le plus éloigné · utiliser le vent comme seule matière première."
+
+── PAGE ALBATROS ──
+al-intro = "5 ans sans toucher terre. 150 000 km parcourus par an. 75 ans de vie. Donner à voir cet animal en taille réelle, en papier."
+al-work-title = Un oiseau en taille réelle, en papier
+al-work-1 = L'albatros passe 80% de son temps entre l'eau et l'air. Il ne met pied à terre que pour se reproduire sur son île de naissance.
+al-work-2 = Un albatros en papier, en taille réelle, fabriqué selon une technique mêlant origami et modélisation 3D · open source, léger, recyclable.
+al-work-q = "La technologie pour attirer le regard et le détourner vers la Nature." · Mouawad + Laurier
+al-int-title = Démocratiser la science par l'art
+al-int-1 = En collaboration avec le CNRS, le travail sur les albatros devient une expérience artistique accessible. Ils voyagent des milliers de km, forment des couples à vie.
+al-int-2 = Le NanoMusée itinérant amène la science dans des lieux reculés, des écoles, des espaces publics.
+al-pq = "L'art ne doit pas rester enfermé. Le NanoMusée est une belle manière de le faire sortir."
+
+── PAGE ABOUT ──
+about-stmt = "J'aborde la technologie avec passion et regard critique · captivée par son potentiel, mais convaincue que notre attention devrait être dirigée vers la nature."
+about-role = Environmental Artist
+about-bio-short = Maya Mouawad est une artiste ingénieure française basée à Barcelone. Diplômée de l'IMAC (Art et Technologies, 2005), elle crée depuis 2008 des installations immersives à l'intersection de l'écologie, de la technologie et du sensible.
+about-bio1 = Depuis 2017, mon travail artistique se concentre sur l'écologie et la connexion au vivant, bien avant que ces sujets deviennent centraux dans les politiques culturelles.
+about-bio2 = Issue de familles doublement réfugiées · fuyant la guerre au Liban, ou l'exil des juifs en 1948 en Tunisie · j'ai grandi avec une conscience aiguë du basculement, de l'impermanence.
+about-bio3 = Mes œuvres cherchent à s'ancrer dans les lieux où elles sont présentées, à provoquer une émotion sincère. Pionnière des systèmes d'IA appliqués à la création artistique depuis 2014.
+about-bio4 = Rising fonctionne sur batterie pendant 3 heures. Peupler, projeté à Dakar avec seulement trois valises, tourne sur un simple ordinateur portable.
+about-collab = Collaborations scientifiques
+about-studios = Studios
+about-support = Soutiens institutionnels
+about-lang = Langues
+
+── PAGE PRESSE & CONTACT ──
+press-title = Presse
+ct-role = Environmental Artist · Barcelone
+ct-loc = Barcelone · Paris · International

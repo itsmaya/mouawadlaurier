@@ -1,0 +1,22 @@
+HTTrack3.49-2 launched on Mon, 23 Mar 2026 12:24:24 at https://mouawadlaurier.com/ +images.squarespace-cdn.com*
+(httrack https://mouawadlaurier.com/ -O . -%e0 +images.squarespace-cdn.com* )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/1032296710?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/peupler)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/876279290?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/peupler)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/871855125?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/peupler)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/772392954?h=872cbc33f1&amp;app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/paysage-sonore)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/362816752?h=b796da7194&amp;app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/retour-aux-sources)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/432530431?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/retour-aux-sources)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FXUJaSKYqRsA%3Ffeature%3Doembed&amp;display_name=YouTube&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DXUJaSKYqRsA&amp;image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FXUJaSKYqRsA%2Fhqdefault.jpg&amp;type=text%2Fhtml&amp;schema=youtube&amp;wmode=opaque%22 (from https://mouawadlaurier.com/ephemere)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FL9OAVp7VqyQ%3Ffeature%3Doembed&amp;display_name=YouTube&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DL9OAVp7VqyQ&amp;image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FL9OAVp7VqyQ%2Fhqdefault.jpg&amp;key=61d05c9d54e8455ea7a9677c366be814&amp;type=text%2Fhtml&amp;schema=youtube&amp;wmode=opaque%22 (from https://mouawadlaurier.com/ephemere)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/1119951523?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/rising)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/1145290233?app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/rising)
+12:25:10	Error: 	"Not Found" (404) at link https://mouawadlaurier.com/"https://player.vimeo.com/video/984191444?h=d4d10b60b4&amp;app_id=122963&amp;wmode=opaque%22 (from https://mouawadlaurier.com/rising)
+
+HTTrack Website Copier/3.49-2 mirror complete in 46 seconds : 47 links scanned, 34 files written (7091481 bytes overall) [6650576 bytes received at 144577 bytes/sec], 1280834 bytes transferred using HTTP compression in 23 files, ratio 23%, 1.6 requests per connection
+(11 errors, 0 warnings, 0 messages)
