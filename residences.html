@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résidences & Collaborations · Maya Mouawad</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.cdnfonts.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/futura-pt" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#F8F7F2;color:#1a1a1a;cursor:none;overflow-x:hidden;font-family:'Cormorant Garamond',serif;}
+.cur{width:10px;height:10px;background:#1a1a1a;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:width 0.2s ease,height 0.2s ease,margin 0.2s ease;transform:translate(-50%,-50%);}
+.cur.h{width:40px;height:40px;background:rgba(26,26,26,0.12);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(248,247,242,0.96);border-bottom:1px solid #e0ddd4;}
+.nav-logo{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:300;font-size:12px;letter-spacing:0.4em;text-transform:uppercase;cursor:none;background:none;border:none;color:#1a1a1a;text-decoration:none;}
+.nav-r{display:flex;gap:1.5rem;align-items:center;}
+.nl{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;background:none;border:none;cursor:none;color:#666;transition:color 0.2s;text-decoration:none;}
+.nl:hover,.nl.on{color:#1a1a1a;}
+.lsep{color:#ddd;font-size:10px;}
+
+/* SECTION HEADER */
+.sec-hdr{padding:1.75rem 2.5rem;display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid #e0ddd4;border-bottom:1px solid #e0ddd4;}
+.sec-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(1rem,2vw,1.8rem);letter-spacing:0.2em;text-transform:uppercase;}
+.sec-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:#555;}
+
+/* PAGE HERO */
+.page-hero{padding-top:5.5rem;display:grid;grid-template-columns:1fr 1fr;min-height:42vh;border-bottom:1px solid #e0ddd4;}
+.hero-left{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid #e0ddd4;background:#F8F7F2;}
+.hero-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#888;margin-bottom:2rem;}
+.hero-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;letter-spacing:0.12em;text-transform:uppercase;line-height:0.9;font-size:clamp(2.5rem,5vw,5rem);margin-bottom:1.25rem;}
+.hero-title span{display:block;}
+.hero-right{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.hero-intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.1rem,1.9vw,1.45rem);color:#444;line-height:1.85;max-width:520px;border-left:2px solid #e0ddd4;padding-left:1.25rem;}
+
+/* MAGAZINE SPREAD */
+.mag-spread{display:grid;border-top:1px solid #e0ddd4;}
+.mag-2col{grid-template-columns:1fr 1fr;}
+.mag-3col{grid-template-columns:1fr 1fr 1fr;}
+.mag-13{grid-template-columns:1fr 3fr;}
+.mag-31{grid-template-columns:3fr 1fr;}
+.mag-12{grid-template-columns:1fr 2fr;}
+.mag-21{grid-template-columns:2fr 1fr;}
+
+.mc{padding:3.5rem 3rem;display:flex;flex-direction:column;justify-content:flex-start;}
+.mc.center{justify-content:center;}
+.br{border-right:1px solid #e0ddd4;}
+.bl{border-left:1px solid #e0ddd4;}
+.bt{border-top:1px solid #e0ddd4;}
+.bb{border-bottom:1px solid #e0ddd4;}
+
+.mc-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#444;margin-bottom:1.25rem;}
+.mc-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(0.9rem,1.6vw,1.3rem);letter-spacing:0.1em;text-transform:uppercase;color:#1a1a1a;margin-bottom:1.25rem;}
+.mc-title-sm{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(0.8rem,1.3vw,1.1rem);letter-spacing:0.1em;text-transform:uppercase;color:#1a1a1a;margin-bottom:0.75rem;}
+.body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.95;color:#555;font-weight:300;margin-bottom:1.1rem;}
+.aside-q{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(0.95rem,1.6vw,1.2rem);color:#888;line-height:1.7;border-left:1px solid #d5d2c8;padding-left:1.25rem;margin:1.75rem 0;}
+.year-tag{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#999;margin-bottom:0.5rem;}
+
+/* PHOTO BLOCKS */
+.photo-block{position:relative;overflow:hidden;background:#e0ddd4;}
+.photo-block.dark{background:#111;}
+.photo-block.mid{background:#1a1a1a;}
+.photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;}
+.ph-txt{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(26,26,26,0.2);text-align:center;}
+.ph-icon{width:28px;height:28px;opacity:0.15;}
+
+/* RESIDENCES LIST */
+.res-section{border-top:1px solid #e0ddd4;}
+.res-section-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#444;padding:1.25rem 2.5rem;border-bottom:1px solid #e0ddd4;}
+
+.res-item{border-bottom:1px solid #e0ddd4;}
+.res-item:last-child{border-bottom:none;}
+.res-item-top{display:grid;grid-template-columns:160px 1fr;}
+.res-meta{padding:2.5rem 2rem;border-right:1px solid #e0ddd4;display:flex;flex-direction:column;justify-content:flex-start;}
+.res-year{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#999;margin-bottom:0.4rem;}
+.res-place{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1a1a1a;line-height:1.8;}
+.res-tags-col{display:flex;flex-direction:column;gap:0.3rem;margin-top:1rem;}
+.tag{font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid #d8d5cc;padding:0.22rem 0.5rem;color:#888;width:fit-content;}
+.res-content{padding:2.5rem 3rem;}
+.res-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+.res-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.5vw,1.1rem);line-height:1.95;color:#555;font-weight:300;}
+.res-photo{height:320px;position:relative;overflow:hidden;background:#e0ddd4;border-top:1px solid #e0ddd4;}
+.res-photo.dark{background:#111;}
+
+/* COLLAB LIST */
+.collab-item{display:grid;grid-template-columns:220px 1fr auto;border-bottom:1px solid #e0ddd4;align-items:start;}
+.collab-item:last-child{border-bottom:none;}
+.collab-artist{padding:2rem 2.5rem;border-right:1px solid #e0ddd4;}
+.collab-artist-name{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:300;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#1a1a1a;margin-bottom:0.3rem;}
+.collab-artist-years{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.15em;color:#999;}
+.collab-works{padding:2rem 3rem;border-right:1px solid #e0ddd4;}
+.collab-works-list{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(0.95rem,1.4vw,1.1rem);color:#555;line-height:1.9;margin-bottom:0.5rem;}
+.collab-role{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#888;}
+.collab-locs{padding:2rem 2rem;display:flex;flex-direction:column;gap:0.3rem;}
+.collab-loc{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;}
+
+/* LEDOTRON BLOCK */
+.ledotron-block{padding:3.5rem 3rem;background:#0a0a1a;color:rgba(255,255,255,0.85);}
+.led-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:1.5rem;}
+.led-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(1.5rem,3vw,2.5rem);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.25rem;line-height:0.95;}
+.led-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.95;color:rgba(255,255,255,0.5);max-width:480px;}
+.led-stats{display:flex;gap:3rem;margin-top:2.5rem;flex-wrap:wrap;}
+.led-stat-n{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:300;color:rgba(255,255,255,0.7);line-height:1;}
+.led-stat-l{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:0.3rem;}
+
+/* PULLQUOTE */
+.pq-mid{padding:4.5rem 2.5rem;text-align:center;border-top:1px solid #e0ddd4;border-bottom:1px solid #e0ddd4;}
+.pq-mid-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.4rem,2.8vw,2.4rem);color:#1a1a1a;font-weight:300;max-width:750px;margin:0 auto;line-height:1.45;}
+.pq-attr{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#666;margin-top:1.75rem;}
+
+/* NAME NOTE */
+.name-note{padding:1.5rem 2.5rem;border-top:1px solid #e0ddd4;background:#f2f0eb;}
+.name-note-txt{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.12em;color:#888;line-height:1.9;}
+
+/* FOOTER */
+.foot{padding:1.75rem 2.5rem;border-top:1px solid #e0ddd4;display:flex;justify-content:space-between;align-items:center;}
+.foot-l{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#888;}
+.foot-r{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:#888;}
+
+/* MOBILE */
+@media (max-width:768px){
+  nav{padding:1rem 1.25rem;}
+  .page-hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-left{padding:3rem 1.25rem 1.5rem;border-right:none;border-bottom:1px solid #e0ddd4;}
+  .hero-right{padding:1.5rem 1.25rem;}
+  .mag-spread.mag-2col,.mag-spread.mag-3col,.mag-spread.mag-13,.mag-spread.mag-31,.mag-spread.mag-12,.mag-spread.mag-21{grid-template-columns:1fr;}
+  .mc{padding:2rem 1.25rem;}
+  .mc.br{border-right:none;border-bottom:1px solid #e0ddd4;}
+  .res-item-top{grid-template-columns:1fr;}
+  .res-meta{border-right:none;border-bottom:1px solid #e0ddd4;padding:1.5rem 1.25rem;}
+  .res-content{padding:1.5rem 1.25rem;}
+  .res-photo{height:220px;}
+  .collab-item{grid-template-columns:1fr;}
+  .collab-artist{border-right:none;border-bottom:1px solid #e0ddd4;}
+  .collab-works{border-right:none;border-bottom:1px solid #e0ddd4;}
+  .collab-locs{border-bottom:1px solid #e0ddd4;}
+  .ledotron-block{padding:2.5rem 1.25rem;}
+  .name-note,.pq-mid,.foot{padding-left:1.25rem;padding-right:1.25rem;}
+  .cur{display:none;}
+  body{cursor:auto;}
+  button,a{cursor:pointer;}
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">Maya Mouawad</a>
+  <div class="nav-r">
+    <a class="nl" href="/">Work</a>
+    <a class="nl" href="/about">À propos</a>
+    <a class="nl on" href="#">Résidences</a>
+    <a class="nl" href="/press">Presse</a>
+    <a class="nl" href="/contact">Contact</a>
+    <span class="lsep">·</span>
+    <span style="font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:11px;letter-spacing:0.15em;color:#888;text-transform:uppercase;">Fr</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-left">
+    <div class="hero-label">Maya Mouawad · 2008 · 2026</div>
+    <div class="hero-title">
+      <span>Résidences</span>
+      <span>&amp;</span>
+      <span>Collaborations</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <p class="hero-intro">"La création ne se fait jamais seule. Résidences de recherche, collaborations techniques et artistiques, cette pratique parallèle nourrit et ancre mon travail."</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     RÉSIDENCES
+═══════════════════════════════════════════ -->
+
+<div class="res-section">
+  <div class="res-section-label">Résidences · 2008 → 2026</div>
+
+  <!-- VILLA AL QAMAR -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">Lauréate 2024 · Résidence 2026</div>
+      <div class="res-place">Villa Al Qamar<br>Institut Français<br>du Liban</div>
+      <div class="res-tags-col">
+        <span class="tag">Liban</span>
+        <span class="tag">À venir 2026</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Paysages Sonores · Mémoire du territoire</div>
+      <p class="res-body">Résidence de création autour des paysages sonores du Liban, en lien avec la mémoire du territoire et le retour aux racines. Une exploration de la mémoire géographique et sonore d'un pays fracturé, reportée à 2026 en raison des conflits en cours.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/villa-al-qamar">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- CHENGDU -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2020</div>
+      <div class="res-place">Chengdu<br>Contemporary<br>Image Museum<br>Chine</div>
+      <div class="res-tags-col">
+        <span class="tag">Chine</span>
+        <span class="tag">Exposition</span>
+        <span class="tag">700 m²</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Poussière d'étoile</div>
+      <p class="res-body">Résidence d'une semaine pour la conception d'une exposition de 700 m² en collaboration avec Fisheye et Jean-Luc Monterrosso, fondateur de la Maison Européenne de la Photographie. Un projet à l'échelle d'un musée entier, interrompu par la pandémie de Covid-19 avant son ouverture.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/chengdu">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- MURANO -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2019</div>
+      <div class="res-place">Verrerie<br>NasonMoretti<br>Murano · Venise</div>
+      <div class="res-tags-col">
+        <span class="tag">Fabrication</span>
+        <span class="tag">Verre soufflé</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Retour aux Sources · Création des pièces de verre</div>
+      <p class="res-body">Résidence de fabrication avec le maître verrier Marco Nason pour la création des pièces de verre soufflé à la main constituant <em>Retour aux Sources</em>. Une recherche sur la matière, la lumière et l'objet comme organisme vivant, chaque pièce unique, née du souffle et du feu.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/murano">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- REIMS -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2017</div>
+      <div class="res-place">Ruinart<br>Reims · France</div>
+      <div class="res-tags-col">
+        <span class="tag">Immersion</span>
+        <span class="tag">Champagne</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Le temps long de la vigne</div>
+      <p class="res-body">Résidence d'immersion d'une semaine au cœur du processus de fabrication du champagne, de la vigne aux caves de craie creusées à 30 mètres sous terre. Une plongée dans le temps long de la terre, point de départ conceptuel de <em>Retour aux Sources</em>.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/reims">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- SLUSH -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2017</div>
+      <div class="res-place">Music Tech Fest<br>Slush · Helsinki<br>Finlande</div>
+      <div class="res-tags-col">
+        <span class="tag">Hackathon</span>
+        <span class="tag">Accessibilité</span>
+        <span class="tag">Neurotechnologie</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Visuels temps réel · Ondes cérébrales</div>
+      <p class="res-body">Hackathon de quatre jours pour la création d'une performance live au Slush Festival. Conception et développement de visuels génératifs en temps réel à partir des ondes cérébrales d'une chanteuse non-voyante, des battements cardiaques du public, et d'implants cyborg. Une recherche sur les formes d'expérience sensorielle au-delà du visible.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/slush">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- BERLIN MTF -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2016</div>
+      <div class="res-place">Music Tech Fest<br>Funkhaus · Berlin<br>Allemagne</div>
+      <div class="res-tags-col">
+        <span class="tag">MIT Media Lab</span>
+        <span class="tag">Muarts</span>
+        <span class="tag">Corps augmenté</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Viktoria Modesta · Performance bionique</div>
+      <p class="res-body">Résidence d'une semaine avec la chanteuse bionique Viktoria Modesta, des chercheurs du MIT Media Lab, des ingénieurs spécialistes des ondes cérébrales (Muarts), des designers et makers internationaux. Conception de projections interactives et mapping en temps réel pour une performance scénique à l'intersection du corps augmenté, de la neurotechnologie et de l'art numérique. Présenté dans la chambre d'absorption du Funkhaus, le plus grand studio d'enregistrement au monde.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/berlin-mtf">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- VIVOIN -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2015</div>
+      <div class="res-place">Abbaye<br>de Vivoin<br>France</div>
+      <div class="res-tags-col">
+        <span class="tag">30 artistes</span>
+        <span class="tag">Papier augmenté</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Le papier augmenté · Matière et interaction</div>
+      <p class="res-body">Résidence collective avec 30 artistes autour du papier augmenté. Exploration des frontières entre matière physique, impression et interaction numérique, une recherche sur l'objet comme support d'expérience sensible, entre le geste artisanal et le code.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/vivoin">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+  <!-- BIONIC ORCHESTRA -->
+  <div class="res-item">
+    <div class="res-item-top"><div class="res-meta">
+      <div class="res-year">2008 · 2012</div>
+      <div class="res-place">Bionic Orchestra<br>Cie Organic Orchestra<br>dont Abbaye<br>de Fontevraud</div>
+      <div class="res-tags-col">
+        <span class="tag">MTG · UPF Barcelona</span>
+        <span class="tag">Spatialisation</span>
+        <span class="tag">Temps réel</span>
+      </div>
+    </div>
+    <div class="res-content">
+      <div class="res-title">Développement de technologies pour la performance live</div>
+      <p class="res-body">Série de résidences pluriannuelles avec la Compagnie Organic Orchestra, dont une session à l'Abbaye de Fontevraud. Deux résidences par an entre 2008 et 2012, avec des ingénieurs, créateurs visuels et musicaux, et des chercheurs du Music Technology Group (Universitat Pompeu Fabra, Barcelone).</p>
+      <p class="res-body">Développement de technologies pour la performance live : gant électronique interactif de contrôle gestuel, spatialisation sonore automatisée, projections visuelles pilotées en temps réel par la musique, looper pour orchestre humain.</p>
+    </div>
+    </div><div class="res-photo" data-slideshow="residences/bionic-orchestra">
+      <div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div>
+    </div>
+  </div>
+
+</div><!-- / res-section -->
+
+<!-- PULLQUOTE SEPARATION -->
+<div class="pq-mid">
+  <div class="pq-mid-txt">"La technologie est, pour moi, un outil au service de l'art et la science."</div>
+  <div class="pq-attr">Maya Mouawad</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COLLABORATIONS · HAND-CODED
+═══════════════════════════════════════════ -->
+
+<div class="res-section">
+  <div class="res-section-label">Collaborations · Hand-Coded · depuis 2012</div>
+</div>
+
+<!-- INTRO HAND-CODED -->
+<div class="mag-spread mag-2col" style="border-top:none;">
+  <div class="mc br">
+    <div class="mc-label">Hand-Coded · Studio</div>
+    <p class="body">Depuis 2012, Hand-Coded est ma plateforme de conception et développement d'outils sur mesure pour la création artistique. En conception logicielle et développement d'outils de création et contrôle, j'ai contribué à des œuvres d'artistes internationaux du champ de l'art numérique.</p>
+    <div class="aside-q">"Quand la technologie devient un langage partagé entre artistes."</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">Présence internationale</div>
+    <p class="body">France · Angleterre · Allemagne · Espagne · Chine · Mexique · Belgique · Sharjah · Suède · Suisse · Portugal · Danemark · Pays-Bas · Finlande · Italie</p>
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div style="font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;">hand-coded.net</div>
+      <div style="font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;">Fondée 2012 · Barcelone</div>
+    </div>
+  </div>
+</div>
+
+<!-- COLLAB LIST -->
+<div class="res-section" style="border-top:1px solid #e0ddd4;">
+  <div class="res-section-label">Artistes · Projets</div>
+
+  <!-- Pablo Valbuena -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Pablo Valbuena</div>
+      <div class="collab-artist-years">2014 · 2018</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Kinematope · Gyrotope · Wave · Methods</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Madrid</div>
+      <div class="collab-loc">Bruxelles</div>
+      <div class="collab-loc">Durham · UK</div>
+      <div class="collab-loc">Fundación Telefónica</div>
+    </div>
+  </div>
+
+  <!-- Romain Tardy -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Romain Tardy</div>
+      <div class="collab-artist-years">2014 · 2021</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">OX · SAT · MGNTRN · Future Ruins · TGIC</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée France</div>
+      <div class="collab-loc">Berlin</div>
+      <div class="collab-loc">Beijing</div>
+    </div>
+  </div>
+
+  <!-- Adrien M & Claire B -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Adrien M.<br>&amp; Claire B.</div>
+      <div class="collab-artist-years">2016</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Mouvement de l'air</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée mondiale</div>
+    </div>
+  </div>
+
+  <!-- Ezra Maotik -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Ezra Maotik<br>Cie Organic Orchestra</div>
+      <div class="collab-artist-years">2008 · 2017</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">EKO · Bionic Orchestra</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée France</div>
+      <div class="collab-loc">Europe</div>
+    </div>
+  </div>
+
+  <!-- Viktoria Modesta -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Viktoria Modesta</div>
+      <div class="collab-artist-years">2016</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Performance bionique · Projections interactives</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Music Tech Fest</div>
+      <div class="collab-loc">Funkhaus · Berlin</div>
+      <div class="collab-loc">Avec MIT Media Lab</div>
+    </div>
+  </div>
+
+  <!-- MTG UPF -->
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Music Technology Group · UPF Barcelona</div>
+      <div class="collab-artist-years">2015</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Prometheus · PHENICX · Visualisation temps réel pour orchestre philharmonique</div>
+      <div class="collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Singularity University</div>
+      <div class="collab-loc">Summit · Séville</div>
+      <div class="collab-loc">ISMIR 2015 · Málaga</div>
+    </div>
+  </div>
+
+</div><!-- /res-section collabs -->
+
+<!-- LEDOTRON BLOCK -->
+<div class="mag-spread mag-2col" style="border-top:1px solid #e0ddd4;">
+  <div class="ledotron-block">
+    <div class="led-label">Outil · Développé par Maya Mouawad / Hand-Coded</div>
+    <div class="led-title">Ledotron</div>
+    <p class="led-body">Logiciel de contrôle lumière par IA, développé depuis 2014. Conçu pour permettre aux artistes de piloter des installations lumineuses complexes en temps réel, sans intermédiaire technique. Une des premières applications de l'intelligence artificielle à la direction artistique d'installations.</p>
+    <div class="led-stats">
+      <div>
+        <div class="led-stat-n">40+</div>
+        <div class="led-stat-l">Installations</div>
+      </div>
+      <div>
+        <div class="led-stat-n">2</div>
+        <div class="led-stat-l">Permanentes</div>
+      </div>
+      <div>
+        <div class="led-stat-n">2014</div>
+        <div class="led-stat-l">Création</div>
+      </div>
+      <div>
+        <div class="led-stat-n">∞</div>
+        <div class="led-stat-l">Mexico → Chine</div>
+      </div>
+    </div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">Contexte</div>
+    <p class="body">Ledotron est né d'un constat simple : les artistes passaient trop de temps à dépendre d'ingénieurs pour des ajustements en temps réel. L'outil redonne l'autonomie créative à l'artiste, en traduisant une intention artistique en commandes techniques automatisées.</p>
+    <div class="aside-q">"La technologie doit être transparente pour que l'art soit présent."</div>
+  </div>
+</div>
+
+<!-- NOTE NOM -->
+<div class="name-note">
+  <p class="name-note-txt">Développeuse créditée sous le nom Maya Benaïnous dans les projets Hand-Coded antérieurs à 2017 · Mouawad est le nom de famille maternel adopté pour la pratique artistique.</p>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <div class="foot-l">Maya Mouawad</div>
+  <div class="foot-r">mouawadlaurier.com · hand-coded.net</div>
+</div>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('h'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('h'));
+});
+
+// ── SLIDESHOW ──
+// Pour chaque .res-photo[data-slideshow], on essaie de charger
+// slug_1.jpg, slug_2.jpg... jusqu'à ce qu'une image ne charge pas.
+// Si une seule image → affichage fixe.
+// Si plusieurs → slideshow lent avec crossfade toutes les 5 secondes.
+
+const SLIDE_INTERVAL = 5000; // ms entre deux slides
+const FADE_DURATION  = 1200; // ms pour le crossfade (CSS transition)
+
+document.querySelectorAll('.res-photo[data-slideshow]').forEach(block => {
+  const base = block.getAttribute('data-slideshow');
+  const images = [];
+
+  function tryLoad(n) {
+    const src = base + '_' + n + '.jpg';
+    const img = new Image();
+    img.onload = () => {
+      images.push(src);
+      tryLoad(n + 1);
+    };
+    img.onerror = () => {
+      // Fin du chargement
+      if (images.length === 0) return; // pas de photos, placeholder reste
+      initSlideshow(block, images);
+    };
+    img.src = src;
+  }
+
+  tryLoad(1);
+});
+
+function initSlideshow(block, images) {
+  // Vider le placeholder
+  block.innerHTML = '';
+
+  // Créer deux layers superposés pour crossfade
+  const layerA = document.createElement('div');
+  const layerB = document.createElement('div');
+  [layerA, layerB].forEach(l => {
+    l.style.cssText = `
+      position:absolute;inset:0;
+      background-size:cover;background-position:center;
+      transition:opacity ${FADE_DURATION}ms ease;
+    `;
+  });
+  layerA.style.opacity = '1';
+  layerB.style.opacity = '0';
+  block.appendChild(layerA);
+  block.appendChild(layerB);
+
+  // Afficher la première image immédiatement
+  layerA.style.backgroundImage = `url(${images[0]})`;
+
+  if (images.length === 1) return; // pas besoin de slideshow
+
+  let current = 0;
+  let active = layerA;
+  let inactive = layerB;
+
+  setInterval(() => {
+    current = (current + 1) % images.length;
+    inactive.style.backgroundImage = `url(${images[current]})`;
+    inactive.style.opacity = '1';
+    active.style.opacity = '0';
+    // swap
+    [active, inactive] = [inactive, active];
+  }, SLIDE_INTERVAL);
+}
+</script>
+</body>
+</html>
