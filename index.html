@@ -340,6 +340,50 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
 /* SVG ILLUSTRATIONS */
 .tree-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
 
+
+/* ── RESIDENCES PAGE ── */
+.page-hero{display:grid;grid-template-columns:1fr 1fr;min-height:42vh;border-bottom:1px solid #e0ddd4;}
+.hero-left{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:flex-end;border-right:1px solid #e0ddd4;background:#F8F7F2;}
+.hero-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#888;margin-bottom:2rem;}
+.hero-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;letter-spacing:0.12em;text-transform:uppercase;line-height:0.9;font-size:clamp(2.5rem,5vw,5rem);margin-bottom:1.25rem;}
+.hero-title span{display:block;}
+.hero-right{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.hero-intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.1rem,1.9vw,1.45rem);color:#444;line-height:1.85;max-width:520px;border-left:2px solid #e0ddd4;padding-left:1.25rem;}
+.res-section{border-top:1px solid #e0ddd4;}
+.res-section-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#444;padding:1.25rem 2.5rem;border-bottom:1px solid #e0ddd4;}
+.res-item{border-bottom:1px solid #e0ddd4;}
+.res-item:last-child{border-bottom:none;}
+.res-item-top{display:grid;grid-template-columns:160px 1fr;}
+.res-meta{padding:2.5rem 2rem;border-right:1px solid #e0ddd4;display:flex;flex-direction:column;justify-content:flex-start;}
+.res-year{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#999;margin-bottom:0.4rem;}
+.res-place{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#1a1a1a;line-height:1.8;}
+.res-tags-col{display:flex;flex-direction:column;gap:0.3rem;margin-top:1rem;}
+.res-content{padding:2.5rem 3rem;}
+.res-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+.res-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.5vw,1.1rem);line-height:1.95;color:#555;font-weight:300;margin-bottom:0.75rem;}
+.res-photo{height:320px;position:relative;overflow:hidden;background:#e0ddd4;border-top:1px solid #e0ddd4;}
+.collab-item{display:grid;grid-template-columns:220px 1fr 160px;border-bottom:1px solid #e0ddd4;align-items:start;}
+.collab-item:last-child{border-bottom:none;}
+.collab-artist{padding:2rem 2rem;border-right:1px solid #e0ddd4;}
+.collab-artist-name{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:300;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#1a1a1a;margin-bottom:0.3rem;}
+.collab-artist-years{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.15em;color:#999;}
+.collab-link{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.12em;color:#aaa;text-decoration:none;border-bottom:1px solid #e0ddd4;padding-bottom:0.1rem;display:inline-block;margin-top:0.6rem;transition:color 0.2s;}
+.collab-link:hover{color:#1a1a1a;}
+.collab-works{padding:2rem 2.5rem;border-right:1px solid #e0ddd4;}
+.collab-works-list{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(0.95rem,1.4vw,1.1rem);color:#555;line-height:1.9;margin-bottom:0.5rem;}
+.collab-role{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#888;}
+.collab-locs{padding:2rem 1.5rem;display:flex;flex-direction:column;gap:0.3rem;}
+.collab-loc{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;}
+.ledotron-block{padding:3.5rem 3rem;background:#0a0a1a;color:rgba(255,255,255,0.85);}
+.led-label{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:1.5rem;}
+.led-title{font-family:'Futura PT','Josefin Sans',sans-serif;font-weight:100;font-size:clamp(1.5rem,3vw,2.5rem);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.25rem;line-height:0.95;}
+.led-body{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.95;color:rgba(255,255,255,0.5);max-width:480px;}
+.led-stats{display:flex;gap:3rem;margin-top:2.5rem;flex-wrap:wrap;}
+.led-stat-n{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:300;color:rgba(255,255,255,0.7);line-height:1;}
+.led-stat-l{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:0.3rem;}
+.name-note{padding:1.5rem 2.5rem;border-top:1px solid #e0ddd4;background:#f2f0eb;}
+.name-note-txt{font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.12em;color:#888;line-height:1.9;}
+
 /* ── MOBILE ── */
 @media (max-width: 768px) {
 
@@ -434,6 +478,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
   /* TECH SPEC */
   .tech-content{grid-template-columns:1fr !important;}
 
+
+  /* RESIDENCES mobile */
+  .page-hero{grid-template-columns:1fr;}
+  .hero-left{padding:2.5rem 1.25rem 1.5rem;border-right:none;border-bottom:1px solid #e0ddd4;}
+  .hero-right{padding:1.5rem 1.25rem;}
+  .res-item-top{grid-template-columns:1fr;}
+  .res-meta{border-right:none;border-bottom:1px solid #e0ddd4;padding:1.5rem 1.25rem;}
+  .res-content{padding:1.5rem 1.25rem;}
+  .res-photo{height:220px;}
+  .collab-item{grid-template-columns:1fr;}
+  .collab-artist{border-right:none;border-bottom:1px solid #e0ddd4;padding:1.25rem;}
+  .collab-works{border-right:none;border-bottom:1px solid #e0ddd4;padding:1.25rem;}
+  .collab-locs{padding:1.25rem;}
+  .ledotron-block{padding:2.5rem 1.25rem;}
+  .name-note{padding:1.25rem;}
+
   /* HIDE CURSOR on touch */
   .cur{display:none;}
   body{cursor:auto;}
@@ -461,6 +521,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
   <div class="nav-r">
     <button class="nl on" id="nl-w" onclick="show('home')" data-i18n="nav-work">Work</button>
     <button class="nl" id="nl-a" onclick="show('about')" data-i18n="nav-about">À propos</button>
+    <button class="nl" id="nl-r" onclick="show('residences')" data-i18n="nav-res">Résidences & Collabs</button>
     <button class="nl" id="nl-p" onclick="show('press')" data-i18n="nav-press">Presse</button>
     <button class="nl" id="nl-c" onclick="show('contact')" data-i18n="nav-contact">Contact</button>
     <span class="lsep">·</span>
@@ -1344,7 +1405,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
       <div>
         <div class="ab-name">Maya<br>Mouawad</div>
         <div class="ab-role"><span data-i18n="about-role">Environmental Artist</span><br>Barcelone</div>
-        <div class="ab-contact"><a href="mailto:maya@mouawadlaurier.com" style="color:inherit;text-decoration:none;">maya@mouawadlaurier.com</a><br>mouawadlaurier.com</div>
+        <div class="ab-contact"><a href="/cdn-cgi/l/email-protection#066b677f67466b6973677167626a6773746f63742865696b" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="5a373b233b1a37352f3b2d3b3e363b2f28333f2874393537">[email&#160;protected]</span></a><br>mouawadlaurier.com</div>
       </div>
       <div>
         <p class="ab-bio" data-i18n="about-bio1">Depuis 2017, mon travail artistique se concentre sur l'écologie et la connexion au vivant, bien avant que ces sujets deviennent centraux dans les politiques culturelles. C'est une démarche profondément personnelle, ancrée dans une réflexion sur le rapport bénéfice/risque : est-il plus utile de créer une œuvre que de ne rien faire ?</p>
@@ -1402,7 +1463,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
       <div class="ct-role" data-i18n="ct-role">Environmental Artist · Barcelone</div>
       <div class="ct-links">
         <a class="ct-lk" href="https://mayamouawad.com">mayamouawad.com</a>
-        <a class="ct-lk" href="mailto:maya@mouawadlaurier.com">maya@mouawadlaurier.com</a>
+        <a class="ct-lk" href="/cdn-cgi/l/email-protection#e68b879f87a68b8993879187828a8793948f8394c885898b"><span class="__cf_email__" data-cfemail="462b273f27062b2933273127222a2733342f23346825292b">[email&#160;protected]</span></a>
       </div>
       <div class="ct-loc" data-i18n="ct-loc">Barcelone · Paris · International</div>
     </div>
@@ -1410,7 +1471,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;displa
   <footer class="foot"><div class="foot-l">Maya Mouawad</div><div class="foot-r">mouawadlaurier.com · hand-coded.net</div></footer>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // CURSOR
 const cur = document.getElementById('cur');
 document.addEventListener('mousemove', e => {
@@ -1447,6 +1508,7 @@ const PAGE_TITLES = {
   about: 'About · Maya Mouawad',
   press: 'Press · Maya Mouawad',
   contact: 'Contact · Maya Mouawad',
+  residences: 'Résidences & Collaborations · Maya Mouawad',
 };
 
 const PAGE_DESCS = {
@@ -1462,6 +1524,7 @@ const PAGE_DESCS = {
   about: 'À propos de Maya Mouawad · Environmental Artist basée à Barcelone',
   press: 'Presse · Maya Mouawad · Forbes, Nowness, Numéro Art, Fisheye, Beaux Arts',
   contact: 'Contact · Maya Mouawad · maya@mouawadlaurier.com',
+  residences: 'Résidences & Collaborations · Maya Mouawad',
 };
 
 function show(id, pushState = true) {
@@ -1469,8 +1532,8 @@ function show(id, pushState = true) {
   const t = document.getElementById('pg-'+id) || document.getElementById('pg-home');
   const resolvedId = t.id.replace('pg-','');
   t.classList.add('active');
-  ['w','a','p','c'].forEach(x=>document.getElementById('nl-'+x).classList.remove('on'));
-  const m={home:'w',rising:'w',peupler:'w',retour:'w',ephemere:'w',paysage:'w',absorbe:'w',upperground:'w',albatros:'w',about:'a',press:'p',contact:'c'};
+  ['w','a','p','c','r'].forEach(x=>{const el=document.getElementById('nl-'+x);if(el)el.classList.remove('on');});
+  const m={home:'w',rising:'w',peupler:'w',retour:'w',ephemere:'w',paysage:'w',absorbe:'w',upperground:'w',albatros:'w',about:'a',press:'p',contact:'c',residences:'r'};
   if(m[resolvedId]) document.getElementById('nl-'+m[resolvedId]).classList.add('on');
   window.scrollTo(0,0);
 
@@ -1538,6 +1601,7 @@ function show(id, pushState = true) {
 
   // Lazy load images for this page
   lazyLoadPage(t);
+  if(resolvedId === 'residences') initResidenceSlideshows();
 }
 
 // Handle browser back/forward
@@ -1550,7 +1614,7 @@ window.addEventListener('popstate', (e) => {
 // On load, check hash for direct URL access
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.replace('#','');
-  const validPages = ['rising','peupler','retour','ephemere','paysage','absorbe','upperground','albatros','about','press','contact'];
+  const validPages = ['rising','peupler','retour','ephemere','paysage','absorbe','upperground','albatros','about','press','contact','residences'];
   if(hash && validPages.includes(hash)) {
     show(hash, false);
   }
@@ -1577,6 +1641,8 @@ fr: {
   "nav-about": `À propos`,
   "nav-press": `Presse`,
   "nav-contact": `Contact`,
+  "nav-res": `Residencies & Collabs`,
+  "nav-res": `Résidences & Collabs`,
   "cover-issue": `Vol. I · 2008 · 2025 · Barcelone`,
   "cover-role": `Environmental Artist`,
   "cover-statement": `"Les émotions atteignent des niveaux de conscience profonds."`,
@@ -1705,21 +1771,59 @@ fr: {
   "about-support": `Soutiens institutionnels`,
   "about-lang": `Langues`,
   
-  "pq-fisheye-2024": `"Repenser les villes, l'inévitable obsession de l'art numérique."`,
+  "pq-fisheye-2024": `<a href="https://fisheyelagence.com/projet/ruinart-retour-aux-sources/" target="_blank" style="color:inherit;text-decoration:none;">"Repenser les villes, l'inévitable obsession de l'art numérique."</a>`,
   "pq-scam": `Lauréat Brouillon d'un Rêve · Prix de la création numérique.`,
-  "pq-kentbye": `"Peupler explore poétiquement la dialectique homme-nature."`,
+  "pq-kentbye": `<a href="https://voicesofvr.com/1280-interactive-projection-mapped-installation-populate-poetically-explores-the-human-nature-dialectic/" target="_blank" style="color:inherit;text-decoration:none;">"Peupler explore poétiquement la dialectique homme-nature."</a>`,
   "pq-fisheye-peupler": `"Une œuvre immersive proposant de percevoir la ville de demain à travers la vision d'un arbre."`,
-  "pq-forbes": `"Les artistes français Maya Mouawad et Cyril Laurier créent des œuvres artistiques axées sur la technologie et favorisant la durabilité."`,
+  "pq-forbes": `<a href="https://www.forbes.com/sites/yjeanmundelsalle/2020/02/19/french-artists-maya-mouawad-and-cyril-laurier-create-technology-driven-artworks-championing-sustainability/" target="_blank" style="color:inherit;text-decoration:none;">"Les artistes français Maya Mouawad et Cyril Laurier créent des œuvres artistiques axées sur la technologie et favorisant la durabilité."</a>`,
   "pq-drucker": `"Cette œuvre nous a plongé hors du temps et du tumulte extérieur, bravo pour cet instant de poésie."`,
   "pq-nowness": `"Ce projet immersif marque un engagement en faveur de la nature."`,
   "pq-numerro": `"L'océan projeté sur les murs est un sublime rappel de l'origine océanique de la craie, sédiment des océans anciens."`,
   "pq-berlin": `"Les artistes retournent aux sources dans les caves de craie de Ruinart."`,
-  "pq-museum": `"Art numérique en hôpitaux pédiatriques · l'impact de l'art interactif dans les soins."`,
-  "pq-vice": `"Hand Coded se cache derrière toutes vos installations préférées."`,
+  "pq-museum": `<a href="https://www.museumconnections.com/paris-2026/fr/session/4bb1d895-5cd7-f011-8195-0022487f0371/" target="_blank" style="color:inherit;text-decoration:none;">"Art numérique en hôpitaux pédiatriques · l'impact de l'art interactif dans les soins."</a>`,
+  "pq-vice": `<a href="https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/" target="_blank" style="color:inherit;text-decoration:none;">"Hand Coded se cache derrière toutes vos installations préférées."</a>`,
 "press-title": `Presse`,
   "r-science": `Université de La Rochelle (données océanographiques) · Learning Planet Institute · La Scam`,
   "ct-role": `Environmental Artist · Barcelone`,
   "ct-loc": `Barcelone · Paris · International`,
+  "res-hero-label": `Maya Mouawad · 2008 · 2026`,
+  "res-hero-intro": `"Résidences de recherche, collaborations techniques et artistiques : cette pratique parallèle nourrit et ancre mon travail."`,
+  "res-lbl-residences": `Résidences · 2008 → 2026`,
+  "res-lbl-collabs": `Collaborations · Hand-Coded · depuis 2012`,
+  "res-lbl-artists": `Artistes · Projets`,
+  "res-vaq-year": `Lauréate 2024 · Résidence 2026`,
+  "res-vaq-title": `Paysages Sonores · Mémoire du territoire`,
+  "res-vaq-body": `Résidence de création autour des paysages sonores du Liban, en lien avec la mémoire du territoire et le retour aux racines. Une exploration de la mémoire géographique et sonore d'un pays fracturé, reportée à 2026 en raison des conflits en cours.`,
+  "res-chg-title": `Poussière d'étoile`,
+  "res-chg-body": `Résidence d'une semaine pour la conception d'une exposition de 700 m² en collaboration avec Fisheye et Jean-Luc Monterrosso, fondateur de la Maison Européenne de la Photographie. Un projet à l'échelle d'un musée entier, interrompu par la pandémie de Covid-19 avant le lancement de la fabrication.`,
+  "res-mur-title": `Retour aux Sources · Création des pièces de verre`,
+  "res-mur-body": `Résidence de fabrication avec le maître verrier Marco Nason pour la création des pièces de verre soufflé à la main constituant <em>Retour aux Sources</em>. Une recherche sur la matière, la lumière et l'objet comme organisme vivant, chaque pièce unique, née du souffle et du feu.`,
+  "res-rei-title": `Le temps long de la vigne`,
+  "res-rei-body": `Résidence d'immersion d'une semaine au cœur du processus de fabrication du champagne, de la vigne aux caves de craie creusées à 30 mètres sous terre. Une plongée dans le temps long de la terre, point de départ conceptuel de <em>Retour aux Sources</em>.`,
+  "res-slu-title": `Visuels temps réel · Ondes cérébrales`,
+  "res-slu-body": `Hackathon de quatre jours pour la création d'une performance live au Slush Festival. Conception et développement de visuels génératifs en temps réel à partir des ondes cérébrales d'une chanteuse non-voyante, des battements cardiaques du public, et d'implants cyborg. Une recherche sur les formes d'expérience sensorielle au-delà du visible.`,
+  "res-ber-title": `Viktoria Modesta · Performance bionique`,
+  "res-ber-body": `Résidence d'une semaine avec la chanteuse bionique Viktoria Modesta, des chercheurs du MIT Media Lab, des ingénieurs spécialistes des ondes cérébrales (Muarts), des designers et makers internationaux. Conception de projections interactives et mapping en temps réel pour une performance scénique à l'intersection du corps augmenté, de la neurotechnologie et de l'art numérique. Présenté dans la chambre d'absorption du Funkhaus, le plus grand studio d'enregistrement au monde.`,
+  "res-viv-title": `Le papier augmenté · Matière et interaction`,
+  "res-viv-body": `Résidence collective avec 30 artistes autour du papier augmenté. Exploration des frontières entre matière physique, impression et interaction numérique, une recherche sur l'objet comme support d'expérience sensible, entre le geste artisanal et le code.`,
+  "res-bio-title": `Développement de technologies pour la performance live`,
+  "res-bio-body1": `Série de résidences pluriannuelles avec la Compagnie Organic Orchestra, dont une session à l'Abbaye de Fontevraud. Deux résidences par an entre 2008 et 2012, avec des ingénieurs, créateurs visuels et musicaux, et des chercheurs du Music Technology Group (Universitat Pompeu Fabra, Barcelone).`,
+  "res-bio-body2": `Développement de technologies pour la performance live : gant électronique interactif de contrôle gestuel, spatialisation sonore automatisée, projections visuelles pilotées en temps réel par la musique, looper pour orchestre humain.`,
+  "res-pro-title": `Prometheus · Orchestre Philharmonique Augmenté`,
+  "res-pro-body1": `Le Music Technology Group de l'Universitat Pompeu Fabra à Barcelone cherchait une façon visuelle de présenter ses recherches sur la détection en temps réel des différents aspects d'un orchestre philharmonique.`,
+  "res-pro-body2": `Conception du scénario, des graphismes et de l'animation en temps réel projetés sur grand écran pendant l'orchestre, pour illustrer les données de recherche du projet européen PHENICX. Le système analyse en temps réel la partition, les instruments, le chef d'orchestre, et traduit cette détection en une visualisation lisible par tous les publics.`,
+  "res-pro-body3": `Présenté au Singularity University Summit 2015 à Séville, puis à la conférence ISMIR 2015 à Málaga, référence mondiale en recherche sur les technologies musicales.`,
+  "res-pro-team": `Équipe recherche MTG : Emilia Gomez, Alba B. Rosado, Álvaro Sarasua, Oscar Mayor, Agustin Martorell, Jordi Bonada, Carles Fernandez`,
+  "res-hc-intro": `Depuis 2012, Hand-Coded est ma plateforme de conception et développement d'outils sur mesure pour la création artistique. En conception logicielle et développement d'outils de création et contrôle, j'ai contribué à des œuvres d'artistes internationaux du champ de l'art numérique.`,
+  "res-hc-countries": `France · Angleterre · Allemagne · Espagne · Chine · Mexique · Belgique · Sharjah · Suède · Suisse · Portugal · Danemark · Pays-Bas · Finlande · Italie`,
+  "res-led-label": `Outil · Développé par Maya Mouawad / Hand-Coded`,
+  "res-led-body": `Logiciel de contrôle lumière par IA, développé depuis 2014. Conçu pour permettre aux artistes de piloter des installations lumineuses complexes en temps réel, sans intermédiaire technique. Une des premières applications de l'intelligence artificielle à la direction artistique d'installations.`,
+  "res-led-context": `Ledotron est né d'un constat simple : les artistes passaient trop de temps à dépendre d'ingénieurs pour des ajustements en temps réel. L'outil redonne l'autonomie créative à l'artiste, en traduisant une intention artistique en commandes techniques automatisées.`,
+  "res-led-q": `"La technologie doit être transparente pour que l'art soit présent."`,
+  "res-pq": `"La technologie est, pour moi, un outil au service de l'art et la science."`,
+  "res-hc-q": `"Quand la technologie devient un langage partagé entre artistes."`,
+  "res-name-note": `Développeuse créditée sous le nom Maya Benaïnous dans les projets Hand-Coded antérieurs à 2017 · Mouawad est le nom de famille maternel adopté pour la pratique artistique.`,
+  "res-collab-role": `Conception et développement d'outils de création et contrôle`,
 },
 en: {
   "nav-work": `Work`,
@@ -1854,27 +1958,66 @@ en: {
   "about-support": `Institutional support`,
   "about-lang": `Languages`,
   
-  "pq-fisheye-2024": `"Rethinking cities, the inevitable obsession of digital art."`,
+  "pq-fisheye-2024": `<a href="https://fisheyelagence.com/projet/ruinart-retour-aux-sources/" target="_blank" style="color:inherit;text-decoration:none;">"Rethinking cities, the inevitable obsession of digital art."</a>`,
   "pq-scam": `Winner of Brouillon d'un Rêve · Digital Creation Award.`,
-  "pq-kentbye": `"Peupler poetically explores the human-nature dialectic."`,
+  "pq-kentbye": `<a href="https://voicesofvr.com/1280-interactive-projection-mapped-installation-populate-poetically-explores-the-human-nature-dialectic/" target="_blank" style="color:inherit;text-decoration:none;">"Peupler poetically explores the human-nature dialectic."</a>`,
   "pq-fisheye-peupler": `"An immersive work offering a vision of the city of tomorrow through the eyes of a tree."`,
-  "pq-forbes": `"French artists Maya Mouawad and Cyril Laurier create technology-driven artworks championing sustainability."`,
+  "pq-forbes": `<a href="https://www.forbes.com/sites/yjeanmundelsalle/2020/02/19/french-artists-maya-mouawad-and-cyril-laurier-create-technology-driven-artworks-championing-sustainability/" target="_blank" style="color:inherit;text-decoration:none;">"French artists Maya Mouawad and Cyril Laurier create technology-driven artworks championing sustainability."</a>`,
   "pq-drucker": `"This work took us out of time and the external turmoil, bravo for this moment of poetry."`,
   "pq-nowness": `"This immersive project marks a commitment in favour of nature."`,
   "pq-numerro": `"The ocean projected on the walls is a sublime reminder of the oceanic origin of chalk, sediment of ancient seas."`,
   "pq-berlin": `"Artists get back to the roots in Ruinart's ancient chalk cellars."`,
-  "pq-museum": `"Digital art in paediatric hospitals · the impact of interactive art in care."`,
-  "pq-vice": `"Hand Coded is behind all your favourite installations."`,
+  "pq-museum": `<a href="https://www.museumconnections.com/paris-2026/fr/session/4bb1d895-5cd7-f011-8195-0022487f0371/" target="_blank" style="color:inherit;text-decoration:none;">"Digital art in paediatric hospitals · the impact of interactive art in care."</a>`,
+  "pq-vice": `<a href="https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/" target="_blank" style="color:inherit;text-decoration:none;">"Hand Coded is behind all your favourite installations."</a>`,
 "press-title": `Press`,
   "r-science": `University of La Rochelle (oceanographic data) · Learning Planet Institute · La Scam`,
   "ct-role": `Environmental Artist · Barcelona`,
   "ct-loc": `Barcelona · Paris · International`,
+  "res-hero-label": `Maya Mouawad · 2008 · 2026`,
+  "res-hero-intro": `"Research residencies, technical and artistic collaborations: this parallel practice nourishes and grounds my work."`,
+  "res-lbl-residences": `Residencies · 2008 → 2026`,
+  "res-lbl-collabs": `Collaborations · Hand-Coded · since 2012`,
+  "res-lbl-artists": `Artists · Projects`,
+  "res-vaq-year": `Award 2024 · Residency 2026`,
+  "res-vaq-title": `Sound Landscapes · Memory of territory`,
+  "res-vaq-body": `A creative residency exploring Lebanon's sound landscapes, linked to territorial memory and a return to roots. An exploration of the geographical and sonic memory of a fractured country, postponed to 2026 due to ongoing conflicts.`,
+  "res-chg-title": `Stardust`,
+  "res-chg-body": `A week-long residency to design a 700 m² exhibition in collaboration with Fisheye and Jean-Luc Monterrosso, founder of the Maison Européenne de la Photographie. A museum-scale project interrupted by the Covid-19 pandemic before production began.`,
+  "res-mur-title": `Retour aux Sources · Creating the glass pieces`,
+  "res-mur-body": `A fabrication residency with master glassblower Marco Nason to create the hand-blown glass pieces for <em>Retour aux Sources</em>. A research into matter, light and the object as living organism, each piece unique, born of breath and fire.`,
+  "res-rei-title": `The long time of the vine`,
+  "res-rei-body": `A week-long immersion residency at the heart of the champagne-making process, from the vine to the chalk cellars 30 metres underground. A dive into the deep time of the earth, the conceptual starting point for <em>Retour aux Sources</em>.`,
+  "res-slu-title": `Real-time visuals · Brainwaves`,
+  "res-slu-body": `A four-day hackathon to create a live performance for the Slush Festival. Design and development of real-time generative visuals from the brainwaves of a blind singer, audience heartbeats, and cyborg implants. A research into sensory experience beyond the visible.`,
+  "res-ber-title": `Viktoria Modesta · Bionic performance`,
+  "res-ber-body": `A week-long residency with bionic artist Viktoria Modesta, MIT Media Lab researchers, brainwave specialists (Muarts), and international designers and makers. Design of interactive projections and real-time mapping for a stage performance at the intersection of the augmented body, neurotechnology and digital art. Presented in the absorption room of the Funkhaus, the world's largest recording studio.`,
+  "res-viv-title": `Augmented paper · Matter and interaction`,
+  "res-viv-body": `A collective residency with 30 artists exploring augmented paper. Exploration of the boundaries between physical matter, print and digital interaction, a research into the object as support for sensory experience, between craft gesture and code.`,
+  "res-bio-title": `Developing technologies for live performance`,
+  "res-bio-body1": `A series of multi-year residencies with the Compagnie Organic Orchestra, including a session at the Abbaye de Fontevraud. Two residencies per year between 2008 and 2012, with engineers, visual and musical creators, and researchers from the Music Technology Group (Universitat Pompeu Fabra, Barcelona).`,
+  "res-bio-body2": `Development of technologies for live performance: interactive electronic glove for gestural control, automated sound spatialisation, visual projections driven in real time by music, looper for human orchestra.`,
+  "res-pro-title": `Prometheus · Augmented Philharmonic Orchestra`,
+  "res-pro-body1": `The Music Technology Group at the Universitat Pompeu Fabra in Barcelona was looking for a visual way to present their research on the real-time detection of various aspects of a philharmonic orchestra.`,
+  "res-pro-body2": `Design of the scenario, graphics and real-time animation projected on a large screen during the orchestra, to illustrate the research data of the European PHENICX project. The system analyses the score, instruments and conductor in real time, translating this detection into a visualisation accessible to all audiences.`,
+  "res-pro-body3": `Presented at the Singularity University Summit 2015 in Seville, then at the ISMIR 2015 conference in Málaga, the world reference in music technology research.`,
+  "res-pro-team": `MTG research team: Emilia Gomez, Alba B. Rosado, Álvaro Sarasua, Oscar Mayor, Agustin Martorell, Jordi Bonada, Carles Fernandez`,
+  "res-hc-intro": `Since 2012, Hand-Coded has been my platform for designing and developing custom tools for artistic creation. Through software design and the development of creation and control tools, I have contributed to works by international artists in the field of digital art.`,
+  "res-hc-countries": `France · England · Germany · Spain · China · Mexico · Belgium · Sharjah · Sweden · Switzerland · Portugal · Denmark · Netherlands · Finland · Italy`,
+  "res-led-label": `Tool · Developed by Maya Mouawad / Hand-Coded`,
+  "res-led-body": `An AI-based light control software developed since 2014. Designed to allow artists to drive complex light installations in real time, without technical intermediaries. One of the first applications of artificial intelligence to the artistic direction of installations.`,
+  "res-led-context": `Ledotron was born from a simple observation: artists were spending too much time depending on engineers for real-time adjustments. The tool restores creative autonomy to the artist, translating artistic intention into automated technical commands.`,
+  "res-led-q": `"Technology must be transparent for art to be present."`,
+  "res-pq": `"Technology is, for me, a tool in the service of art and science."`,
+  "res-hc-q": `"When technology becomes a shared language between artists."`,
+  "res-name-note": `Developer credited as Maya Benaïnous in Hand-Coded projects prior to 2017 · Mouawad is the maternal family name adopted for artistic practice.`,
+  "res-collab-role": `Design and development of creation and control tools`,
 },
 es: {
   "nav-work": `Obras`,
   "nav-about": `Acerca de`,
   "nav-press": `Prensa`,
   "nav-contact": `Contacto`,
+  "nav-res": `Residencias & Collabs`,
   "cover-issue": `Vol. I · 2008 · 2025 · Barcelona`,
   "cover-role": `Environmental Artist`,
   "cover-statement": `"Las emociones alcanzan niveles de conciencia profundos."`,
@@ -2003,27 +2146,66 @@ es: {
   "about-support": `Apoyos institucionales`,
   "about-lang": `Idiomas`,
   
-  "pq-fisheye-2024": `"Repensar las ciudades, la inevitable obsesión del arte digital."`,
+  "pq-fisheye-2024": `<a href="https://fisheyelagence.com/projet/ruinart-retour-aux-sources/" target="_blank" style="color:inherit;text-decoration:none;">"Repensar las ciudades, la inevitable obsesión del arte digital."</a>`,
   "pq-scam": `Ganador del Brouillon d'un Rêve · Premio de la creación digital.`,
-  "pq-kentbye": `"Peupler explora poéticamente la dialéctica hombre-naturaleza."`,
+  "pq-kentbye": `<a href="https://voicesofvr.com/1280-interactive-projection-mapped-installation-populate-poetically-explores-the-human-nature-dialectic/" target="_blank" style="color:inherit;text-decoration:none;">"Peupler explora poéticamente la dialéctica hombre-naturaleza."</a>`,
   "pq-fisheye-peupler": `"Una obra inmersiva que propone percibir la ciudad del mañana a través de la visión de un árbol."`,
-  "pq-forbes": `"Los artistas franceses Maya Mouawad y Cyril Laurier crean obras artísticas basadas en la tecnología y que promueven la sostenibilidad."`,
+  "pq-forbes": `<a href="https://www.forbes.com/sites/yjeanmundelsalle/2020/02/19/french-artists-maya-mouawad-and-cyril-laurier-create-technology-driven-artworks-championing-sustainability/" target="_blank" style="color:inherit;text-decoration:none;">"Los artistas franceses Maya Mouawad y Cyril Laurier crean obras artísticas basadas en la tecnología que promueven la sostenibilidad."</a>`,
   "pq-drucker": `"Esta obra nos sumergió fuera del tiempo y del tumulto exterior, bravo por este instante de poesía."`,
   "pq-nowness": `"Este proyecto inmersivo marca un compromiso en favor de la naturaleza."`,
   "pq-numerro": `"El océano proyectado en las paredes es un sublime recordatorio del origen oceánico de la tiza, sedimento de mares antiguos."`,
   "pq-berlin": `"Los artistas vuelven a las raíces en las bodegas de tiza de Ruinart."`,
-  "pq-museum": `"Arte digital en hospitales pediátricos · el impacto del arte interactivo en los cuidados."`,
-  "pq-vice": `"Hand Coded se esconde detrás de todas tus instalaciones favoritas."`,
+  "pq-museum": `<a href="https://www.museumconnections.com/paris-2026/fr/session/4bb1d895-5cd7-f011-8195-0022487f0371/" target="_blank" style="color:inherit;text-decoration:none;">"Arte digital en hospitales pediátricos · el impacto del arte interactivo en los cuidados."</a>`,
+  "pq-vice": `<a href="https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/" target="_blank" style="color:inherit;text-decoration:none;">"Hand Coded se esconde detrás de todas tus instalaciones favoritas."</a>`,
 "press-title": `Prensa`,
   "r-science": `Universidad de La Rochelle (datos oceanográficos) · Learning Planet Institute · La Scam`,
   "ct-role": `Environmental Artist · Barcelona`,
   "ct-loc": `Barcelona · París · Internacional`,
+  "res-hero-label": `Maya Mouawad · 2008 · 2026`,
+  "res-hero-intro": `"Residencias de investigación, colaboraciones técnicas y artísticas: esta práctica paralela alimenta y ancla mi trabajo."`,
+  "res-lbl-residences": `Residencias · 2008 → 2026`,
+  "res-lbl-collabs": `Colaboraciones · Hand-Coded · desde 2012`,
+  "res-lbl-artists": `Artistas · Proyectos`,
+  "res-vaq-year": `Premiada 2024 · Residencia 2026`,
+  "res-vaq-title": `Paisajes Sonoros · Memoria del territorio`,
+  "res-vaq-body": `Residencia de creación en torno a los paisajes sonoros del Líbano, relacionada con la memoria del territorio y el retorno a las raíces. Una exploración de la memoria geográfica y sonora de un país fracturado, aplazada hasta 2026 debido a los conflictos.`,
+  "res-chg-title": `Polvo de estrellas`,
+  "res-chg-body": `Residencia de una semana para diseñar una exposición de 700 m² en colaboración con Fisheye y Jean-Luc Monterrosso, fundador de la Maison Européenne de la Photographie. Un proyecto a escala de museo, interrumpido por la pandemia de Covid-19 antes del inicio de la producción.`,
+  "res-mur-title": `Retour aux Sources · Creación de las piezas de vidrio`,
+  "res-mur-body": `Residencia de fabricación con el maestro vidriero Marco Nason para crear las piezas de vidrio soplado a mano de <em>Retour aux Sources</em>. Una investigación sobre la materia, la luz y el objeto como organismo vivo, cada pieza única, nacida del aliento y el fuego.`,
+  "res-rei-title": `El tiempo largo de la vid`,
+  "res-rei-body": `Residencia de inmersión de una semana en el corazón del proceso de elaboración del champán, desde la vid hasta las bodegas de creta excavadas a 30 metros bajo tierra. Una inmersión en el tiempo largo de la tierra, punto de partida conceptual de <em>Retour aux Sources</em>.`,
+  "res-slu-title": `Visuales en tiempo real · Ondas cerebrales`,
+  "res-slu-body": `Hackathon de cuatro días para crear una performance en vivo para el Slush Festival. Diseño y desarrollo de visuales generativos en tiempo real a partir de las ondas cerebrales de una cantante no vidente, los latidos del público e implantes cyborg. Una investigación sobre las formas de experiencia sensorial más allá de lo visible.`,
+  "res-ber-title": `Viktoria Modesta · Performance biónica`,
+  "res-ber-body": `Residencia de una semana con la artista biónica Viktoria Modesta, investigadores del MIT Media Lab, ingenieros especialistas en ondas cerebrales (Muarts), y diseñadores y makers internacionales. Diseño de proyecciones interactivas y mapping en tiempo real para una performance escénica en la intersección del cuerpo aumentado, la neurotecnología y el arte digital.`,
+  "res-viv-title": `El papel aumentado · Materia e interacción`,
+  "res-viv-body": `Residencia colectiva con 30 artistas en torno al papel aumentado. Exploración de las fronteras entre la materia física, la impresión y la interacción digital, una investigación sobre el objeto como soporte de experiencia sensible, entre el gesto artesanal y el código.`,
+  "res-bio-title": `Desarrollo de tecnologías para la performance en vivo`,
+  "res-bio-body1": `Serie de residencias plurianuales con la Compagnie Organic Orchestra, incluyendo una sesión en la Abadía de Fontevraud. Dos residencias por año entre 2008 y 2012, con ingenieros, creadores visuales y musicales, e investigadores del Music Technology Group (Universitat Pompeu Fabra, Barcelona).`,
+  "res-bio-body2": `Desarrollo de tecnologías para la performance en vivo: guante electrónico interactivo de control gestual, espacialización sonora automatizada, proyecciones visuales dirigidas en tiempo real por la música, looper para orquesta humana.`,
+  "res-pro-title": `Prometheus · Orquesta Filarmónica Aumentada`,
+  "res-pro-body1": `El Music Technology Group de la Universitat Pompeu Fabra en Barcelona buscaba una forma visual de presentar su investigación sobre la detección en tiempo real de los diferentes aspectos de una orquesta filarmónica.`,
+  "res-pro-body2": `Diseño del escenario, los gráficos y la animación en tiempo real proyectados en una gran pantalla durante la orquesta, para ilustrar los datos de investigación del proyecto europeo PHENICX. El sistema analiza en tiempo real la partitura, los instrumentos y el director, traduciendo esta detección en una visualización accesible para todos los públicos.`,
+  "res-pro-body3": `Presentado en el Singularity University Summit 2015 en Sevilla, luego en la conferencia ISMIR 2015 en Málaga, referencia mundial en investigación sobre tecnologías musicales.`,
+  "res-pro-team": `Equipo de investigación MTG: Emilia Gomez, Alba B. Rosado, Álvaro Sarasua, Oscar Mayor, Agustin Martorell, Jordi Bonada, Carles Fernandez`,
+  "res-hc-intro": `Desde 2012, Hand-Coded es mi plataforma de diseño y desarrollo de herramientas a medida para la creación artística. A través del diseño de software y el desarrollo de herramientas de creación y control, he contribuido a obras de artistas internacionales del campo del arte digital.`,
+  "res-hc-countries": `Francia · Inglaterra · Alemania · España · China · México · Bélgica · Sharjah · Suecia · Suiza · Portugal · Dinamarca · Países Bajos · Finlandia · Italia`,
+  "res-led-label": `Herramienta · Desarrollada por Maya Mouawad / Hand-Coded`,
+  "res-led-body": `Software de control de luz por IA, desarrollado desde 2014. Diseñado para permitir a los artistas dirigir instalaciones lumínicas complejas en tiempo real, sin intermediarios técnicos. Una de las primeras aplicaciones de la inteligencia artificial a la dirección artística de instalaciones.`,
+  "res-led-context": `Ledotron nació de una constatación simple: los artistas pasaban demasiado tiempo dependiendo de ingenieros para ajustes en tiempo real. La herramienta devuelve la autonomía creativa al artista, traduciendo una intención artística en comandos técnicos automatizados.`,
+  "res-led-q": `"La tecnología debe ser transparente para que el arte esté presente."`,
+  "res-pq": `"La tecnología es, para mí, una herramienta al servicio del arte y la ciencia."`,
+  "res-hc-q": `"Cuando la tecnología se convierte en un lenguaje compartido entre artistas."`,
+  "res-name-note": `Desarrolladora acreditada como Maya Benaïnous en proyectos Hand-Coded anteriores a 2017 · Mouawad es el apellido materno adoptado para la práctica artística.`,
+  "res-collab-role": `Concepción y desarrollo de herramientas de creación y control`,
 },
 ca: {
   "nav-work": `Obres`,
   "nav-about": `Sobre`,
   "nav-press": `Premsa`,
   "nav-contact": `Contacte`,
+  "nav-res": `Residències & Col·labs`,
   "cover-issue": `Vol. I · 2008 · 2025 · Barcelona`,
   "cover-role": `Environmental Artist`,
   "cover-statement": `"Les emocions assoleixen nivells de consciència profunds."`,
@@ -2166,6 +2348,44 @@ ca: {
 "press-title": `Premsa`,
   "ct-role": `Environmental Artist · Barcelona`,
   "ct-loc": `Barcelona · París · Internacional`,
+  "res-hero-label": `Maya Mouawad · 2008 · 2026`,
+  "res-hero-intro": `"Residències de recerca, col·laboracions tècniques i artístiques: aquesta pràctica paral·lela nodreix i ancra el meu treball."`,
+  "res-lbl-residences": `Residències · 2008 → 2026`,
+  "res-lbl-collabs": `Col·laboracions · Hand-Coded · des de 2012`,
+  "res-lbl-artists": `Artistes · Projectes`,
+  "res-vaq-year": `Guanyadora 2024 · Residència 2026`,
+  "res-vaq-title": `Paisatges Sonors · Memòria del territori`,
+  "res-vaq-body": `Residència de creació al voltant dels paisatges sonors del Líban, vinculada a la memòria del territori i el retorn als orígens. Una exploració de la memòria geogràfica i sonora d'un país fracturada, ajornada al 2026 pels conflictes en curs.`,
+  "res-chg-title": `Pols d'estels`,
+  "res-chg-body": `Residència d'una setmana per concebre una exposició de 700 m² en col·laboració amb Fisheye i Jean-Luc Monterrosso, fundador de la Maison Européenne de la Photographie. Un projecte a escala de museu, interromput per la pandèmia de Covid-19 abans de l'inici de la producció.`,
+  "res-mur-title": `Retour aux Sources · Creació de les peces de vidre`,
+  "res-mur-body": `Residència de fabricació amb el mestre vidrier Marco Nason per crear les peces de vidre bufat a mà de <em>Retour aux Sources</em>. Una recerca sobre la matèria, la llum i l'objecte com a organisme viu, cada peça única, nascuda del buf i del foc.`,
+  "res-rei-title": `El temps llarg de la vinya`,
+  "res-rei-body": `Residència d'immersió d'una setmana al cor del procés d'elaboració del xampany, des de la vinya fins als cellers de creta excavats a 30 metres sota terra. Una immersió en el temps llarg de la terra, punt de partida conceptual de <em>Retour aux Sources</em>.`,
+  "res-slu-title": `Visuals en temps real · Ones cerebrals`,
+  "res-slu-body": `Hackathon de quatre dies per crear una performance en viu per al Slush Festival. Disseny i desenvolupament de visuals generatius en temps real a partir de les ones cerebrals d'una cantant no vident, els batecs del públic i implants cyborg. Una recerca sobre les formes d'experiència sensorial més enllà del visible.`,
+  "res-ber-title": `Viktoria Modesta · Performance biònica`,
+  "res-ber-body": `Residència d'una setmana amb l'artista biònica Viktoria Modesta, investigadors del MIT Media Lab, enginyers especialistes en ones cerebrals (Muarts), i dissenyadors i makers internacionals. Disseny de projeccions interactives i mapping en temps real per a una performance escènica a la intersecció del cos augmentat, la neurotecnologia i l'art digital.`,
+  "res-viv-title": `El paper augmentat · Matèria i interacció`,
+  "res-viv-body": `Residència col·lectiva amb 30 artistes al voltant del paper augmentat. Exploració de les fronteres entre matèria física, impressió i interacció digital, una recerca sobre l'objecte com a suport d'experiència sensible, entre el gest artesanal i el codi.`,
+  "res-bio-title": `Desenvolupament de tecnologies per a la performance en viu`,
+  "res-bio-body1": `Sèrie de residències plurianuals amb la Compagnie Organic Orchestra, incloent una sessió a l'Abadia de Fontevraud. Dues residències per any entre 2008 i 2012, amb enginyers, creadors visuals i musicals, i investigadors del Music Technology Group (Universitat Pompeu Fabra, Barcelona).`,
+  "res-bio-body2": `Desenvolupament de tecnologies per a la performance en viu: guant electrònic interactiu de control gestual, espacialització sonora automatitzada, projeccions visuals dirigides en temps real per la música, looper per a orquestra humana.`,
+  "res-pro-title": `Prometheus · Orquestra Filharmònica Augmentada`,
+  "res-pro-body1": `El Music Technology Group de la Universitat Pompeu Fabra a Barcelona buscava una manera visual de presentar la seva recerca sobre la detecció en temps real dels diferents aspectes d'una orquestra filharmònica.`,
+  "res-pro-body2": `Disseny de l'escenari, els gràfics i l'animació en temps real projectats en una gran pantalla durant l'orquestra, per il·lustrar les dades de recerca del projecte europeu PHENICX. El sistema analitza en temps real la partitura, els instruments i el director, traduint aquesta detecció en una visualització accessible per a tots els públics.`,
+  "res-pro-body3": `Presentat al Singularity University Summit 2015 a Sevilla, i posteriorment a la conferència ISMIR 2015 a Màlaga, referència mundial en recerca sobre tecnologies musicals.`,
+  "res-pro-team": `Equip de recerca MTG: Emilia Gomez, Alba B. Rosado, Álvaro Sarasua, Oscar Mayor, Agustin Martorell, Jordi Bonada, Carles Fernandez`,
+  "res-hc-intro": `Des de 2012, Hand-Coded és la meva plataforma de disseny i desenvolupament d'eines a mida per a la creació artística. A través del disseny de programari i el desenvolupament d'eines de creació i control, he contribuït a obres d'artistes internacionals del camp de l'art digital.`,
+  "res-hc-countries": `França · Anglaterra · Alemanya · Espanya · Xina · Mèxic · Bèlgica · Sharjah · Suècia · Suïssa · Portugal · Dinamarca · Països Baixos · Finlàndia · Itàlia`,
+  "res-led-label": `Eina · Desenvolupada per Maya Mouawad / Hand-Coded`,
+  "res-led-body": `Programari de control de llum per IA, desenvolupat des de 2014. Dissenyat per permetre als artistes dirigir instal·lacions lluminoses complexes en temps real, sense intermediaris tècnics. Una de les primeres aplicacions de la intel·ligència artificial a la direcció artística d'instal·lacions.`,
+  "res-led-context": `Ledotron va néixer d'una constatació simple: els artistes passaven massa temps depenent d'enginyers per a ajustos en temps real. L'eina retorna l'autonomia creativa a l'artista, traduint una intenció artística en ordres tècniques automatitzades.`,
+  "res-led-q": `"La tecnologia ha de ser transparent perquè l'art sigui present."`,
+  "res-pq": `"La tecnologia és, per a mi, una eina al servei de l'art i la ciència."`,
+  "res-hc-q": `"Quan la tecnologia es converteix en un llenguatge compartit entre artistes."`,
+  "res-name-note": `Desenvolupadora acreditada com Maya Benaïnous en projectes Hand-Coded anteriors a 2017 · Mouawad és el cognom matern adoptat per a la pràctica artística.`,
+  "res-collab-role": `Concepció i desenvolupament d'eines de creació i control`,
 },
 };
 let currentLang = 'fr';
@@ -2312,6 +2532,355 @@ PROJECTS.forEach(proj => {
   tryGalleryPhoto(3);
 });
 
+// ── RESIDENCES SLIDESHOW ──
+const SLIDE_INTERVAL = 5000;
+const FADE_DURATION  = 1200;
+let slideshowsInitialized = false;
+
+function initResidenceSlideshows() {
+  if(slideshowsInitialized) return;
+  slideshowsInitialized = true;
+  document.querySelectorAll('.res-photo[data-slideshow]').forEach(block => {
+    const base = block.getAttribute('data-slideshow');
+    const images = [];
+    function tryLoad(n) {
+      const src = base + '_' + n + '.jpg';
+      const img = new Image();
+      img.onload = () => { images.push(src); tryLoad(n + 1); };
+      img.onerror = () => { if(images.length > 0) initSlideshow(block, images); };
+      img.src = src;
+    }
+    tryLoad(1);
+  });
+}
+
+function initSlideshow(block, images) {
+  block.innerHTML = '';
+  const layerA = document.createElement('div');
+  const layerB = document.createElement('div');
+  [layerA, layerB].forEach(l => {
+    l.style.cssText = 'position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity ' + FADE_DURATION + 'ms ease;';
+  });
+  layerA.style.opacity = '1';
+  layerB.style.opacity = '0';
+  block.appendChild(layerA);
+  block.appendChild(layerB);
+  layerA.style.backgroundImage = 'url(' + images[0] + ')';
+  if(images.length === 1) return;
+  let current = 0, active = layerA, inactive = layerB;
+  setInterval(() => {
+    current = (current + 1) % images.length;
+    inactive.style.backgroundImage = 'url(' + images[current] + ')';
+    inactive.style.opacity = '1';
+    active.style.opacity = '0';
+    [active, inactive] = [inactive, active];
+  }, SLIDE_INTERVAL);
+}
+
 </script>
-</body>
-</html>
+
+<!-- ============ RÉSIDENCES & COLLABORATIONS ============ -->
+<div class="pg" id="pg-residences">
+  <div style="padding-top:4rem;">
+    <!-- HERO -->
+<div class="page-hero">
+  <div class="hero-left">
+    <div class="hero-label" data-i18n="res-hero-label">Maya Mouawad · 2008 · 2026</div>
+    <div class="hero-title"><span>Résidences</span><span>&amp;</span><span>Collaborations</span></div>
+  </div>
+  <div class="hero-right">
+    <p class="hero-intro" data-i18n="res-hero-intro">"Résidences de recherche, collaborations techniques et artistiques : cette pratique parallèle nourrit et ancre mon travail."</p>
+  </div>
+</div>
+
+<!-- RÉSIDENCES -->
+<div class="res-section">
+  <div class="res-section-label" data-i18n="res-lbl-residences">Résidences · 2008 → 2026</div>
+
+  <!-- VILLA AL QAMAR -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year" data-i18n="res-vaq-year">Lauréate 2024 · Résidence 2026</div>
+        <div class="res-place">Villa Al Qamar<br>Institut Français<br>du Liban</div>
+        <div class="res-tags-col"><span class="tag">Liban</span><span class="tag">2026</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-vaq-title">Paysages Sonores · Mémoire du territoire</div>
+        <p class="res-body" data-i18n="res-vaq-body">Résidence de création autour des paysages sonores du Liban, en lien avec la mémoire du territoire et le retour aux racines. Une exploration de la mémoire géographique et sonore d'un pays fracturé, reportée à 2026 en raison des conflits en cours.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/villa-al-qamar"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- CHENGDU -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2020</div>
+        <div class="res-place">Chengdu<br>Contemporary<br>Image Museum<br>Chine</div>
+        <div class="res-tags-col"><span class="tag">Chine</span><span class="tag">700 m²</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-chg-title">Poussière d'étoile</div>
+        <p class="res-body" data-i18n="res-chg-body">Résidence d'une semaine pour la conception d'une exposition de 700 m² en collaboration avec Fisheye et Jean-Luc Monterrosso, fondateur de la Maison Européenne de la Photographie. Un projet à l'échelle d'un musée entier, interrompu par la pandémie de Covid-19 avant le lancement de la fabrication.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/chengdu"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- MURANO -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2019</div>
+        <div class="res-place">Verrerie<br>NasonMoretti<br>Murano · Venise</div>
+        <div class="res-tags-col"><span class="tag">Fabrication</span><span class="tag">Verre soufflé</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-mur-title">Retour aux Sources · Création des pièces de verre</div>
+        <p class="res-body" data-i18n="res-mur-body">Résidence de fabrication avec le maître verrier Marco Nason pour la création des pièces de verre soufflé à la main constituant <em>Retour aux Sources</em>. Une recherche sur la matière, la lumière et l'objet comme organisme vivant, chaque pièce unique, née du souffle et du feu.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/murano"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- REIMS -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2017</div>
+        <div class="res-place">Ruinart<br>Reims · France</div>
+        <div class="res-tags-col"><span class="tag">Immersion</span><span class="tag">Champagne</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-rei-title">Le temps long de la vigne</div>
+        <p class="res-body" data-i18n="res-rei-body">Résidence d'immersion d'une semaine au cœur du processus de fabrication du champagne, de la vigne aux caves de craie creusées à 30 mètres sous terre. Une plongée dans le temps long de la terre, point de départ conceptuel de <em>Retour aux Sources</em>.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/reims"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- SLUSH -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2017</div>
+        <div class="res-place">Music Tech Fest<br>Slush · Helsinki<br>Finlande</div>
+        <div class="res-tags-col"><span class="tag">Hackathon</span><span class="tag">Neurotechnologie</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-slu-title">Visuels temps réel · Ondes cérébrales</div>
+        <p class="res-body" data-i18n="res-slu-body">Hackathon de quatre jours pour la création d'une performance live au Slush Festival. Conception et développement de visuels génératifs en temps réel à partir des ondes cérébrales d'une chanteuse non-voyante, des battements cardiaques du public, et d'implants cyborg. Une recherche sur les formes d'expérience sensorielle au-delà du visible.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/slush"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- BERLIN MTF -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2016</div>
+        <div class="res-place">Music Tech Fest<br>Funkhaus · Berlin<br>Allemagne</div>
+        <div class="res-tags-col"><span class="tag">MIT Media Lab</span><span class="tag">Corps augmenté</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-ber-title">Viktoria Modesta · Performance bionique</div>
+        <p class="res-body" data-i18n="res-ber-body">Résidence d'une semaine avec la chanteuse bionique Viktoria Modesta, des chercheurs du MIT Media Lab, des ingénieurs spécialistes des ondes cérébrales (Muarts), des designers et makers internationaux. Conception de projections interactives et mapping en temps réel pour une performance scénique à l'intersection du corps augmenté, de la neurotechnologie et de l'art numérique. Présenté dans la chambre d'absorption du Funkhaus, le plus grand studio d'enregistrement au monde.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/berlin-mtf"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- VIVOIN -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2015</div>
+        <div class="res-place">Abbaye<br>de Vivoin<br>France</div>
+        <div class="res-tags-col"><span class="tag">30 artistes</span><span class="tag">Papier augmenté</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-viv-title">Le papier augmenté · Matière et interaction</div>
+        <p class="res-body" data-i18n="res-viv-body">Résidence collective avec 30 artistes autour du papier augmenté. Exploration des frontières entre matière physique, impression et interaction numérique, une recherche sur l'objet comme support d'expérience sensible, entre le geste artisanal et le code.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/vivoin"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- BIONIC ORCHESTRA -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2008 · 2012</div>
+        <div class="res-place">Bionic Orchestra<br>Cie Organic Orchestra<br>dont Abbaye<br>de Fontevraud</div>
+        <div class="res-tags-col"><span class="tag">MTG · UPF Barcelona</span><span class="tag">Spatialisation</span></div>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-bio-title">Développement de technologies pour la performance live</div>
+        <p class="res-body" data-i18n="res-bio-body1">Série de résidences pluriannuelles avec la Compagnie Organic Orchestra, dont une session à l'Abbaye de Fontevraud. Deux résidences par an entre 2008 et 2012, avec des ingénieurs, créateurs visuels et musicaux, et des chercheurs du Music Technology Group (Universitat Pompeu Fabra, Barcelone).</p>
+        <p class="res-body" data-i18n="res-bio-body2">Développement de technologies pour la performance live : gant électronique interactif de contrôle gestuel, spatialisation sonore automatisée, projections visuelles pilotées en temps réel par la musique, looper pour orchestre humain.</p>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/bionic-orchestra"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+  <!-- PROMETHEUS -->
+  <div class="res-item">
+    <div class="res-item-top">
+      <div class="res-meta">
+        <div class="res-year">2015</div>
+        <div class="res-place">Music Technology<br>Group · UPF<br>Barcelone</div>
+        <div class="res-tags-col"><span class="tag">PHENICX</span><span class="tag">Singularity University</span><span class="tag">ISMIR 2015</span></div>
+        <a class="collab-link" href="http://phenicx.upf.edu" target="_blank" rel="noopener">phenicx.upf.edu ↗</a>
+        <a class="collab-link" href="http://www.mtg.upf.edu" target="_blank" rel="noopener">mtg.upf.edu ↗</a>
+      </div>
+      <div class="res-content">
+        <div class="res-title" data-i18n="res-pro-title">Prometheus · Orchestre Philharmonique Augmenté</div>
+        <p class="res-body" data-i18n="res-pro-body1">Le Music Technology Group de l'Universitat Pompeu Fabra à Barcelone cherchait une façon visuelle de présenter ses recherches sur la détection en temps réel des différents aspects d'un orchestre philharmonique.</p>
+        <p class="res-body" data-i18n="res-pro-body2">Conception du scénario, des graphismes et de l'animation en temps réel projetés sur grand écran pendant l'orchestre, pour illustrer les données de recherche du projet européen PHENICX.</p>
+        <p class="res-body" data-i18n="res-pro-body3">Présenté au Singularity University Summit 2015 à Séville, puis à la conférence ISMIR 2015 à Málaga, référence mondiale en recherche sur les technologies musicales.</p>
+        <div class="aside-q">"Le feu dérobé aux dieux, Prometheus Exponentiel." · Hand-Coded</div>
+        <div class="collab-role" style="margin-top:1rem;" data-i18n="res-pro-team">Équipe recherche MTG : Emilia Gomez, Alba B. Rosado, Álvaro Sarasua, Oscar Mayor, Agustin Martorell, Jordi Bonada, Carles Fernandez</div>
+      </div>
+    </div>
+    <div class="res-photo" data-slideshow="residences/prometheus"><div class="photo-placeholder"><div class="ph-txt">Photo à insérer</div></div></div>
+  </div>
+
+</div><!-- /res-section -->
+
+<!-- PULLQUOTE -->
+<div class="pq-mid">
+  <div class="pq-mid-txt" data-i18n="res-pq">"La technologie est, pour moi, un outil au service de l'art et la science."</div>
+  <div class="pq-attr">Maya Mouawad</div>
+</div>
+
+<!-- COLLABORATIONS HAND-CODED -->
+<div class="res-section">
+  <div class="res-section-label" data-i18n="res-lbl-collabs">Collaborations · Hand-Coded · depuis 2012</div>
+</div>
+
+<div class="mag-spread mag-2col" style="border-top:none;">
+  <div class="mc br">
+    <div class="mc-label">Hand-Coded · Studio</div>
+    <p class="body" data-i18n="res-hc-intro">Depuis 2012, Hand-Coded est ma plateforme de conception et développement d'outils sur mesure pour la création artistique. En conception logicielle et développement d'outils de création et contrôle, j'ai contribué à des œuvres d'artistes internationaux du champ de l'art numérique.</p>
+    <div class="aside-q" data-i18n="res-hc-q">"Quand la technologie devient un langage partagé entre artistes."</div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">Présence internationale</div>
+    <p class="body" data-i18n="res-hc-countries">France · Angleterre · Allemagne · Espagne · Chine · Mexique · Belgique · Sharjah · Suède · Suisse · Portugal · Danemark · Pays-Bas · Finlande · Italie</p>
+    <div style="margin-top:2rem;">
+      <div style="font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;">hand-coded.net · Fondée 2012 · Barcelone</div>
+    </div>
+  </div>
+</div>
+
+<!-- COLLAB LIST -->
+<div class="res-section" style="border-top:1px solid #e0ddd4;">
+  <div class="res-section-label" data-i18n="res-lbl-artists">Artistes · Projets</div>
+
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Pablo Valbuena</div>
+      <div class="collab-artist-years">2014 · 2018</div>
+      <a class="collab-link" href="https://www.pablovalbuena.com" target="_blank" rel="noopener">pablovalbuena.com ↗</a>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Kinematope · Gyrotope · Wave · Methods</div>
+      <div class="collab-role" data-i18n="res-collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Madrid · Bruxelles</div>
+      <div class="collab-loc">Durham · UK</div>
+      <div class="collab-loc">Fundación Telefónica</div>
+    </div>
+  </div>
+
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Romain Tardy</div>
+      <div class="collab-artist-years">2014 · 2021</div>
+      <a class="collab-link" href="https://romaintardy.com" target="_blank" rel="noopener">romaintardy.com ↗</a>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">OX · SAT · MGNTRN · Future Ruins · TGIC</div>
+      <div class="collab-role" data-i18n="res-collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée France</div>
+      <div class="collab-loc">Berlin · Beijing</div>
+    </div>
+  </div>
+
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Adrien M. &amp; Claire B.</div>
+      <div class="collab-artist-years">2016</div>
+      <a class="collab-link" href="https://www.am-cb.net" target="_blank" rel="noopener">am-cb.net ↗</a>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Mouvement de l'air</div>
+      <div class="collab-role" data-i18n="res-collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée mondiale</div>
+    </div>
+  </div>
+
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Ezra Maotik<br>Cie Organic Orchestra</div>
+      <div class="collab-artist-years">2008 · 2017</div>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">EKO · Bionic Orchestra</div>
+      <div class="collab-role" data-i18n="res-collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Tournée France · Europe</div>
+    </div>
+  </div>
+
+  <div class="collab-item">
+    <div class="collab-artist">
+      <div class="collab-artist-name">Viktoria Modesta</div>
+      <div class="collab-artist-years">2016</div>
+      <a class="collab-link" href="https://www.viktoriamodesta.com" target="_blank" rel="noopener">viktoriamodesta.com ↗</a>
+    </div>
+    <div class="collab-works br">
+      <div class="collab-works-list">Performance bionique · Projections interactives</div>
+      <div class="collab-role" data-i18n="res-collab-role">Conception et développement d'outils de création et contrôle</div>
+    </div>
+    <div class="collab-locs">
+      <div class="collab-loc">Music Tech Fest</div>
+      <div class="collab-loc">Funkhaus · Berlin</div>
+      <div class="collab-loc">MIT Media Lab</div>
+    </div>
+  </div>
+
+</div><!-- /collab list -->
+
+<!-- LEDOTRON -->
+<div class="mag-spread mag-2col" style="border-top:1px solid #e0ddd4;">
+  <div class="ledotron-block">
+    <div class="led-label" data-i18n="res-led-label">Outil · Développé par Maya Mouawad / Hand-Coded</div>
+    <div class="led-title">Ledotron</div>
+    <p class="led-body" data-i18n="res-led-body">Logiciel de contrôle lumière par IA, développé depuis 2014. Conçu pour permettre aux artistes de piloter des installations lumineuses complexes en temps réel, sans intermédiaire technique.</p>
+    <div class="led-stats">
+      <div><div class="led-stat-n">40+</div><div class="led-stat-l">Installations</div></div>
+      <div><div class="led-stat-n">2</div><div class="led-stat-l">Permanentes</div></div>
+      <div><div class="led-stat-n">2014</div><div class="led-stat-l">Création</div></div>
+      <div><div class="led-stat-n">∞</div><div class="led-stat-l">Mexico → Chine</div></div>
+    </div>
+  </div>
+  <div class="mc">
+    <div class="mc-label">Contexte</div>
+    <p class="body" data-i18n="res-led-context">Ledotron est né d'un constat simple : les artistes passaient trop de temps à dépendre d'ingénieurs pour des ajustements en temps réel. L'outil redonne l'autonomie créative à l'artiste, en traduisant une intention artistique en commandes techniques automatisées.</p>
+    <div class="aside-q" data-i18n="res-led-q">"La technologie doit être transparente pour que l'art soit présent."</div>
+  </div>
+</div>
+
+<!-- NAME NOTE -->
+<div class="name-note">
+  <p class="nam
