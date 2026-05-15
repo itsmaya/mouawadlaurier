@@ -546,11 +546,16 @@
     };
 
     try {
+      const fd = new FormData();
+      fd.append('nom', entree.nom);
+      fd.append('email', entree.email);
+      fd.append('places', entree.places);
+      fd.append('total', entree.total);
+      fd.append('date', entree.date);
       await fetch(SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entree)
+        body: fd
       });
     } catch(e) {
       console.warn('Sheets error:', e);
