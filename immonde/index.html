@@ -472,7 +472,7 @@
 </div>
 
 <script>
-  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyaOIxlSXlLJlNQychY1l1qHwpEYQ_hRrRamctCcRSz9PMbVrbdnqrA1SI_IEky1nmi/exec';
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwRciKG9oaQOzpmC3-odP3xlyVO_ZQoDZRbyL4oJM3RlSFMUl3g9Cw8Yrn6dF-_O878_g/exec';
   const CUT = 22;
   let qty = 1;
   let reservations = JSON.parse(localStorage.getItem('imMonde_resa') || '[]');
@@ -546,17 +546,15 @@
     };
 
     try {
-      const fd = new FormData();
-      fd.append('nom', entree.nom);
-      fd.append('email', entree.email);
-      fd.append('places', entree.places);
-      fd.append('total', entree.total);
-      fd.append('date', entree.date);
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: fd
+      const params = new URLSearchParams({
+        nom: entree.nom,
+        email: entree.email,
+        places: entree.places,
+        total: entree.total,
+        date: entree.date
       });
+      const img = new Image();
+      img.src = SHEETS_URL + '?' + params.toString();
     } catch(e) {
       console.warn('Sheets error:', e);
     }
