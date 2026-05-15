@@ -34,8 +34,8 @@
         0% calc(100% - 22px), 0% 22px
       );
       background:
-        linear-gradient(90deg,rgba(200,215,235,0.3) 0%,rgba(255,255,255,0.5) 38%,rgba(225,235,248,0.1) 65%,rgba(195,210,232,0.28) 100%),
-        linear-gradient(160deg,#f4f6fb 0%,#e9eef7 30%,#dde5f0 60%,#d2dcea 100%);
+        linear-gradient(90deg, rgba(200,215,235,0.3) 0%, rgba(255,255,255,0.5) 38%, rgba(225,235,248,0.1) 65%, rgba(195,210,232,0.28) 100%),
+        linear-gradient(160deg, #f4f6fb 0%, #e9eef7 30%, #dde5f0 60%, #d2dcea 100%);
     }
 
     .cadre-svg {
@@ -48,7 +48,6 @@
 
     .contenu { position: relative; z-index: 1; }
 
-    /* HERO */
     .hero-block { text-align: center; padding: 0.5rem 0 1.5rem; }
 
     .titre-pre {
@@ -101,7 +100,6 @@
       padding: 0.7rem 0;
     }
 
-    /* PORTRAITS */
     .portraits {
       display: flex;
       justify-content: center;
@@ -110,16 +108,10 @@
       flex-wrap: wrap;
     }
 
-    .portrait-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
+    .portrait-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 
     .portrait-cadre {
-      width: 70px;
-      height: 70px;
+      width: 70px; height: 70px;
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
@@ -158,7 +150,6 @@
       line-height: 1.4;
     }
 
-    /* GENERIQUE */
     .generique { margin: 1.25rem 0 0; text-align: center; }
 
     .gen-label {
@@ -172,14 +163,8 @@
       margin-bottom: 0.15rem;
     }
 
-    .gen-ligne {
-      font-size: 0.88rem;
-      color: #3a4048;
-      letter-spacing: 0.03em;
-      line-height: 1.7;
-    }
+    .gen-ligne { font-size: 0.88rem; color: #3a4048; letter-spacing: 0.03em; line-height: 1.7; }
 
-    /* SÉPARATEUR */
     .sep { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 0; }
     .sep::before, .sep::after { content: ''; flex: 1; height: 0.5px; background: rgba(26,24,20,0.13); }
     .sep-txt {
@@ -191,7 +176,6 @@
       white-space: nowrap;
     }
 
-    /* FORMULAIRE */
     .form-group { margin-bottom: 1.25rem; }
 
     label {
@@ -219,218 +203,130 @@
     }
     input[type=text]:focus { border-bottom-color: #1a1814; }
     input[type=text]::placeholder { color: rgba(26,24,20,0.28); font-style: italic; }
+    input[type=text].erreur-champ { border-bottom-color: rgba(160,60,60,0.6); }
 
     .qty-bloc { display: flex; align-items: baseline; gap: 1.5rem; }
     .qty-ctrl { display: flex; align-items: center; border-bottom: 1px solid rgba(26,24,20,0.2); padding-bottom: 4px; }
 
     .qty-btn {
-      background: none;
-      border: none;
-      color: #1a1814;
-      font-family: 'EB Garamond', serif;
-      font-size: 1.2rem;
-      width: 28px; height: 28px;
-      cursor: pointer;
+      background: none; border: none; color: #1a1814;
+      font-family: 'EB Garamond', serif; font-size: 1.2rem;
+      width: 28px; height: 28px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      opacity: 0.4;
-      transition: opacity 0.15s;
+      opacity: 0.4; transition: opacity 0.15s;
     }
     .qty-btn:hover { opacity: 1; }
     .qty-btn:disabled { opacity: 0.15; cursor: default; }
 
     .qty-val {
       font-family: 'Cormorant SC', serif;
-      font-size: 1.4rem;
-      width: 36px;
-      text-align: center;
-      color: #1a1814;
+      font-size: 1.4rem; width: 36px;
+      text-align: center; color: #1a1814;
     }
 
     .qty-montant { font-style: italic; font-size: 1rem; color: #5a6068; }
 
     .total-ligne {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+      display: flex; justify-content: space-between; align-items: baseline;
       border-top: 0.5px solid rgba(26,24,20,0.1);
       border-bottom: 0.5px solid rgba(26,24,20,0.1);
-      padding: 1rem 0;
-      margin: 1.5rem 0;
+      padding: 1rem 0; margin: 1.5rem 0;
     }
 
     .total-label {
-      font-family: 'Cormorant SC', serif;
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      color: #5a6068;
-      text-transform: uppercase;
+      font-family: 'Cormorant SC', serif; font-size: 9px;
+      letter-spacing: 0.25em; color: #5a6068; text-transform: uppercase;
     }
 
     .total-montant { font-size: 1.5rem; color: #1a1814; }
 
-    /* PAIEMENT */
     .paiement-bloc {
       background: rgba(255,255,255,0.2);
       border: 0.5px solid rgba(26,24,20,0.12);
-      padding: 1.1rem 1.25rem;
-      margin-bottom: 1.5rem;
+      padding: 1.1rem 1.25rem; margin-bottom: 1.5rem;
     }
 
     .paiement-titre {
-      font-family: 'Cormorant SC', serif;
-      font-size: 9px;
-      letter-spacing: 0.3em;
-      color: #5a6068;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
+      font-family: 'Cormorant SC', serif; font-size: 9px;
+      letter-spacing: 0.3em; color: #5a6068;
+      text-transform: uppercase; margin-bottom: 0.75rem;
     }
 
     .paiement-option { margin-bottom: 0.5rem; }
 
     .paiement-option-label {
-      font-family: 'Cormorant SC', serif;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(26,24,20,0.38);
-      display: block;
-      margin-bottom: 2px;
+      font-family: 'Cormorant SC', serif; font-size: 9px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(26,24,20,0.38); display: block; margin-bottom: 2px;
     }
 
     .paiement-numero { font-size: 1.2rem; letter-spacing: 0.06em; color: #1a1814; }
 
     .paiement-note {
-      font-style: italic;
-      font-size: 0.82rem;
-      color: #5a6068;
-      line-height: 1.5;
-      margin-top: 0.65rem;
-      padding-top: 0.65rem;
+      font-style: italic; font-size: 0.82rem; color: #5a6068;
+      line-height: 1.5; margin-top: 0.65rem; padding-top: 0.65rem;
       border-top: 0.5px solid rgba(26,24,20,0.1);
     }
     .paiement-note strong { font-weight: 400; color: #1a1814; font-style: normal; }
 
-    /* BOUTON */
     .btn-reserver {
-      width: 100%;
-      padding: 13px;
-      background: #1a1814;
-      color: #e8ecf0;
-      border: none;
-      font-family: 'Cormorant SC', serif;
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: opacity 0.2s;
+      width: 100%; padding: 13px;
+      background: #1a1814; color: #e8ecf0; border: none;
+      font-family: 'Cormorant SC', serif; font-size: 11px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      cursor: pointer; transition: opacity 0.2s;
     }
     .btn-reserver:hover { opacity: 0.82; }
     .btn-reserver:disabled { opacity: 0.3; cursor: default; }
 
-    /* CONFIRMATION */
     .conf-bloc { display: none; text-align: center; padding: 2rem 0; }
-
-    .conf-cadre-mini {
-      width: 38px; height: 38px;
-      margin: 0 auto 1.25rem;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      color: #1a1814;
-    }
+    .conf-check { font-size: 1.8rem; margin-bottom: 1rem; color: #1a1814; }
 
     .conf-titre {
       font-family: 'Cormorant SC', serif;
-      font-size: 1.5rem;
-      font-weight: 300;
-      margin-bottom: 0.75rem;
+      font-size: 1.5rem; font-weight: 300; margin-bottom: 0.75rem;
     }
 
-    .conf-texte { font-style: italic; font-size: 0.92rem; color: #5a6068; line-height: 1.8; }
+    .conf-texte { font-style: italic; font-size: 0.92rem; color: #5a6068; line-height: 1.9; }
     .conf-accent { color: #1a1814; font-style: normal; }
 
+    .conf-email-note {
+      font-size: 0.8rem; color: rgba(26,24,20,0.4);
+      margin-top: 1rem; font-style: italic;
+    }
+
     .btn-reset {
-      margin-top: 1.5rem;
-      background: none;
-      border: 0.5px solid rgba(26,24,20,0.2);
-      padding: 9px 24px;
-      font-family: 'Cormorant SC', serif;
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      color: #5a6068;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s;
+      margin-top: 1.5rem; background: none;
+      border: 0.5px solid rgba(26,24,20,0.2); padding: 9px 24px;
+      font-family: 'Cormorant SC', serif; font-size: 10px;
+      letter-spacing: 0.25em; color: #5a6068;
+      cursor: pointer; text-transform: uppercase; transition: all 0.2s;
     }
     .btn-reset:hover { border-color: #1a1814; color: #1a1814; }
 
-    /* LISTE */
     .liste-section { margin-top: 2rem; padding-top: 1.25rem; border-top: 0.5px solid rgba(26,24,20,0.1); }
     .liste-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
     .liste-compteur { font-style: italic; font-size: 0.83rem; color: #5a6068; }
 
     .section-titre {
-      font-family: 'Cormorant SC', serif;
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      color: #5a6068;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      font-family: 'Cormorant SC', serif; font-size: 10px;
+      letter-spacing: 0.3em; color: #5a6068; text-transform: uppercase;
+      display: flex; align-items: center; gap: 1rem;
     }
     .section-titre::after { content: ''; flex: 1; height: 0.5px; background: rgba(26,24,20,0.1); }
 
     .res-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 8px 0;
-      border-bottom: 0.5px solid rgba(26,24,20,0.07);
-      font-size: 0.92rem;
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 8px 0; border-bottom: 0.5px solid rgba(26,24,20,0.07); font-size: 0.92rem;
     }
     .res-nom { color: #1a1814; }
     .res-date { font-style: italic; font-size: 0.78rem; color: #5a6068; margin-top: 1px; }
-    .res-badge {
-      font-family: 'Cormorant SC', serif;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      color: #5a6068;
-      white-space: nowrap;
-    }
+    .res-badge { font-family: 'Cormorant SC', serif; font-size: 10px; letter-spacing: 0.12em; color: #5a6068; white-space: nowrap; }
+    .vide { text-align: center; font-style: italic; color: rgba(26,24,20,0.25); font-size: 0.88rem; padding: 1rem 0; }
 
-    .vide {
-      text-align: center;
-      font-style: italic;
-      color: rgba(26,24,20,0.25);
-      font-size: 0.88rem;
-      padding: 1rem 0;
-    }
-
-    /* PIED */
-    .pied {
-      text-align: center;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 0.5px solid rgba(26,24,20,0.1);
-    }
-
-    .rem-texte {
-      font-style: italic;
-      font-size: 0.8rem;
-      color: rgba(26,24,20,0.38);
-      letter-spacing: 0.03em;
-      margin-bottom: 1rem;
-    }
-
+    .pied { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 0.5px solid rgba(26,24,20,0.1); }
+    .rem-texte { font-style: italic; font-size: 0.8rem; color: rgba(26,24,20,0.38); letter-spacing: 0.03em; margin-bottom: 1rem; }
     .if-logo { display: block; margin: 0 auto; height: 26px; width: auto; opacity: 0.38; filter: saturate(0); }
-
-    .erreur {
-      font-style: italic;
-      font-size: 0.82rem;
-      color: #a04040;
-      margin-top: 0.5rem;
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -458,35 +354,35 @@
       <div class="portraits">
         <div class="portrait-item">
           <div class="portrait-cadre">
-            <img class="portrait-img" src="https://mouawadlaurier.com/IMMONDE/Perrine.jpg" alt="Perrine Andersen" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img class="portrait-img" src="https://mouawadlaurier.com/immonde/perrine.jpg" alt="Perrine Andersen" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="portrait-initiales">PA</div>
           </div>
           <div class="portrait-prenom">Perrine<br>Andersen</div>
         </div>
         <div class="portrait-item">
           <div class="portrait-cadre">
-            <img class="portrait-img" src="https://mouawadlaurier.com/IMMONDE/Maya.jpg" alt="Maya Benainous" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img class="portrait-img" src="https://mouawadlaurier.com/immonde/maya.jpg" alt="Maya Benainous" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="portrait-initiales">MB</div>
           </div>
           <div class="portrait-prenom">Maya<br>Benainous</div>
         </div>
         <div class="portrait-item">
           <div class="portrait-cadre">
-            <img class="portrait-img" src="https://mouawadlaurier.com/IMMONDE/Sebastien.jpg" alt="Sebastien Coene" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img class="portrait-img" src="https://mouawadlaurier.com/immonde/sebastien.jpg" alt="Sebastien Coene" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="portrait-initiales">SC</div>
           </div>
           <div class="portrait-prenom">Sebastien<br>Coene</div>
         </div>
         <div class="portrait-item">
           <div class="portrait-cadre">
-            <img class="portrait-img" src="https://mouawadlaurier.com/IMMONDE/Melanie.jpg" alt="Mélanie Guillet" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img class="portrait-img" src="https://mouawadlaurier.com/immonde/melanie.jpg" alt="Mélanie Guillet" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="portrait-initiales">MG</div>
           </div>
           <div class="portrait-prenom">Mélanie<br>Guillet</div>
         </div>
         <div class="portrait-item">
           <div class="portrait-cadre">
-            <img class="portrait-img" src="https://mouawadlaurier.com/IMMONDE/Arnault.jpg" alt="Arnault Sablier" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img class="portrait-img" src="https://mouawadlaurier.com/immonde/arnault.jpg" alt="Arnault Sablier" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="portrait-initiales">AS</div>
           </div>
           <div class="portrait-prenom">Arnault<br>Sablier</div>
@@ -506,6 +402,10 @@
         <div class="form-group" style="margin-top:1.25rem;">
           <label for="fname">Nom</label>
           <input type="text" id="fname" placeholder="Votre nom complet">
+        </div>
+        <div class="form-group">
+          <label for="femail">Email</label>
+          <input type="text" id="femail" placeholder="votre@email.com">
         </div>
         <div class="form-group">
           <label>Nombre de places</label>
@@ -535,18 +435,18 @@
           <p class="paiement-note">Indiquez la référence <strong>IM-[votre nom]</strong> lors du paiement.</p>
         </div>
         <button class="btn-reserver" id="btn-reserver" onclick="soumettre()">Confirmer la réservation</button>
-        <p class="erreur" id="erreur">Une erreur est survenue. Veuillez réessayer.</p>
       </div>
 
       <div class="conf-bloc" id="conf-section">
-        <div class="conf-cadre-mini">✓</div>
+        <p class="conf-check">✓</p>
         <p class="conf-titre">Réservation enregistrée</p>
         <p class="conf-texte">
           <span class="conf-accent" id="conf-nom"></span><br>
           <span id="conf-places"></span> place(s) — <span id="conf-total"></span><br><br>
-          Bizum au <span class="conf-accent">666 199 429</span> ou virement<br>
-          référence <span class="conf-accent">IM-<span id="conf-ref"></span></span>
+          Réglez par Bizum au <span class="conf-accent">666 199 429</span><br>
+          ou par virement, référence <span class="conf-accent">IM-<span id="conf-ref"></span></span>
         </p>
+        <p class="conf-email-note">Un email de confirmation a été envoyé à <span id="conf-email"></span>.</p>
         <button class="btn-reset" onclick="reset()">Nouvelle réservation</button>
       </div>
 
@@ -617,15 +517,29 @@
 
   async function soumettre() {
     const nom = document.getElementById('fname').value.trim();
-    if (!nom) { document.getElementById('fname').focus(); return; }
+    const email = document.getElementById('femail').value.trim();
+
+    document.getElementById('fname').classList.remove('erreur-champ');
+    document.getElementById('femail').classList.remove('erreur-champ');
+
+    if (!nom) {
+      document.getElementById('fname').classList.add('erreur-champ');
+      document.getElementById('fname').focus();
+      return;
+    }
+    if (!email || !email.includes('@')) {
+      document.getElementById('femail').classList.add('erreur-champ');
+      document.getElementById('femail').focus();
+      return;
+    }
 
     const btn = document.getElementById('btn-reserver');
     btn.disabled = true;
     btn.textContent = '…';
-    document.getElementById('erreur').style.display = 'none';
 
     const entree = {
       nom,
+      email,
       places: qty,
       total: qty * 8,
       date: new Date().toLocaleDateString('fr-FR')
@@ -649,6 +563,8 @@
     document.getElementById('conf-ref').textContent = nom.toUpperCase();
     document.getElementById('conf-places').textContent = qty;
     document.getElementById('conf-total').textContent = (qty * 8) + ' €';
+    document.getElementById('conf-email').textContent = email;
+
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('conf-section').style.display = 'block';
     chargerListe();
@@ -657,6 +573,9 @@
 
   function reset() {
     document.getElementById('fname').value = '';
+    document.getElementById('femail').value = '';
+    document.getElementById('fname').classList.remove('erreur-champ');
+    document.getElementById('femail').classList.remove('erreur-champ');
     qty = 1;
     document.getElementById('qty-val').textContent = '1';
     document.getElementById('qty-montant').textContent = '= 8 €';
