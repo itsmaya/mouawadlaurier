@@ -16,6 +16,7 @@
       min-height: 100vh;
     }
     .frame-outer { max-width: 620px; margin: 0 auto; padding: 0 1.5rem; }
+
     .tableau-cadre {
       position: relative;
       margin: 2rem auto;
@@ -24,6 +25,7 @@
       background: #e2e2e0;
       overflow: hidden;
     }
+
     .bg-losanges {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -33,6 +35,7 @@
       opacity: 0.1;
       z-index: 0;
     }
+
     .bg-visage {
       position: absolute;
       top: -2%; left: 50%; transform: translateX(-50%);
@@ -41,6 +44,7 @@
       z-index: 0;
       pointer-events: none;
     }
+
     .cadre-svg {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -48,8 +52,11 @@
       pointer-events: none;
       z-index: 3;
     }
+
     .contenu { position: relative; z-index: 2; }
+
     .hero-block { text-align: center; padding: 0.25rem 0 0; }
+
     .titre-pre {
       font-family: 'Cinzel', serif;
       font-size: 10px;
@@ -58,6 +65,7 @@
       margin-bottom: 0.5rem;
       text-transform: uppercase;
     }
+
     .titre-img {
       width: 95%;
       max-width: 500px;
@@ -65,6 +73,7 @@
       margin: 0 auto -0.5rem;
       mix-blend-mode: multiply;
     }
+
     .portraits-img {
       width: 95%;
       max-width: 500px;
@@ -72,12 +81,14 @@
       margin: 0 auto;
       mix-blend-mode: multiply;
     }
+
     .titre-sub {
       font-style: italic;
       font-size: 1rem;
       color: #555;
       margin: 0.25rem 0 0.75rem;
     }
+
     .infos-ligne {
       display: flex;
       justify-content: center;
@@ -92,6 +103,7 @@
       padding: 0.6rem 0;
       margin-bottom: 0.5rem;
     }
+
     .generique { text-align: center; margin: 0.5rem 0; }
     .gen-label {
       font-family: 'Cinzel', serif;
@@ -104,6 +116,7 @@
       text-transform: uppercase;
     }
     .gen-ligne { font-size: 0.85rem; color: #222; letter-spacing: 0.03em; line-height: 1.6; }
+
     .sep { display: flex; align-items: center; gap: 0.75rem; margin: 1.1rem 0 0; }
     .sep::before, .sep::after { content: ''; flex: 1; height: 0.5px; background: rgba(26,24,20,0.2); }
     .sep-txt {
@@ -114,6 +127,7 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
+
     .form-group { margin-bottom: 1rem; }
     label {
       display: block;
@@ -140,6 +154,7 @@
     input[type=text]:focus { border-bottom-color: #1a1814; }
     input[type=text]::placeholder { color: rgba(26,24,20,0.3); font-style: italic; }
     input[type=text].erreur-champ { border-bottom-color: rgba(160,60,60,0.6); }
+
     .qty-bloc { display: flex; align-items: baseline; gap: 1.5rem; }
     .qty-ctrl { display: flex; align-items: center; border-bottom: 1px solid rgba(26,24,20,0.2); padding-bottom: 4px; }
     .qty-btn {
@@ -152,6 +167,28 @@
     .qty-btn:disabled { opacity: 0.15; cursor: default; }
     .qty-val { font-family: 'Cinzel', serif; font-size: 1.2rem; width: 36px; text-align: center; color: #1a1814; }
     .qty-montant { font-style: italic; font-size: 1rem; color: #555; }
+
+    .total-ligne {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-top: 0.5px solid rgba(26,24,20,0.12);
+      border-bottom: 0.5px solid rgba(26,24,20,0.12);
+      padding: 0.75rem 0; margin: 1.1rem 0;
+    }
+    .total-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; color: #555; text-transform: uppercase; }
+    .total-montant { font-family: 'Cinzel', serif; font-size: 1.3rem; color: #1a1814; }
+
+    .paiement-bloc {
+      background: rgba(255,255,255,0.3);
+      border: 0.5px solid rgba(26,24,20,0.15);
+      padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+    }
+    .paiement-titre { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; color: #555; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .paiement-option { margin-bottom: 0.4rem; }
+    .paiement-option-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(26,24,20,0.4); display: block; margin-bottom: 2px; }
+    .paiement-numero { font-size: 1.1rem; letter-spacing: 0.05em; color: #1a1814; }
+    .paiement-note { font-style: italic; font-size: 0.82rem; color: #555; line-height: 1.5; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 0.5px solid rgba(26,24,20,0.1); }
+    .paiement-note strong { font-weight: 400; color: #1a1814; font-style: normal; }
+
     .btn-reserver {
       width: 100%; padding: 12px;
       background: #1a1814; color: #e2e2e0; border: none;
@@ -161,6 +198,7 @@
     }
     .btn-reserver:hover { opacity: 0.82; }
     .btn-reserver:disabled { opacity: 0.3; cursor: default; }
+
     .conf-bloc { display: none; text-align: center; padding: 2rem 0; }
     .conf-check { font-size: 1.8rem; margin-bottom: 1rem; }
     .conf-titre { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
@@ -175,6 +213,7 @@
       cursor: pointer; text-transform: uppercase; transition: all 0.2s;
     }
     .btn-reset:hover { border-color: #1a1814; color: #1a1814; }
+
     .liste-section { margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid rgba(26,24,20,0.12); }
     .liste-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
     .liste-compteur { font-style: italic; font-size: 0.82rem; color: #555; }
@@ -185,17 +224,10 @@
     .res-date { font-style: italic; font-size: 0.75rem; color: #555; margin-top: 1px; }
     .res-badge { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.1em; color: #555; white-space: nowrap; }
     .vide { text-align: center; font-style: italic; color: rgba(26,24,20,0.28); font-size: 0.88rem; padding: 1rem 0; }
+
     .pied { text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 0.5px solid rgba(26,24,20,0.12); }
-    .if-logo { display: block; margin: 0 auto; height: 52px; width: auto; }
-    .gratuit {
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: #555;
-      text-align: center;
-      margin: 0.5rem 0 1rem;
-      font-style: italic;
-    }
+    .rem-texte { font-style: italic; font-size: 0.75rem; color: rgba(26,24,20,0.4); letter-spacing: 0.02em; margin-bottom: 0.75rem; }
+    .if-logo { display: block; margin: 0 auto; height: 36px; width: auto; }
   </style>
 </head>
 <body>
@@ -209,31 +241,30 @@
 
     <div class="contenu">
       <div class="hero-block">
-        <p class="titre-pre" style="font-weight:600;letter-spacing:0.25em;">Institut Français de Barcelone</p>
-        <p class="titre-pre" style="font-size:9px;opacity:0.55;margin-bottom:0.75rem;">Une pièce de Perrine Andersen &amp; Arnault Sablier</p>
+       <p class="titre-pre" style="font-weight:600;letter-spacing:0.25em;">Institut Français de Barcelone</p><br>
+          <p class="titre-pre" style="font-size:12px;opacity:0.95;margin-bottom:0.0rem;">Une pièce de Perrine Andersen<br> &amp;<br> Arnault Sablier</p>
         <img class="titre-img" src="titre.png" alt="im-monde">
-        <div style="height:1.5rem;"></div>
-        <img class="portraits-img" src="portraits.png" alt="Les acteurs">
-        <p class="titre-sub">Une intime conviction que le monde ne tourne pas rond…</p>
+            <div style="height:1.5rem;"></div>
+        <img class="portraits-img" src="portraits.png" alt="Les acteurs"><br>
+             <div class="infos-ligne">
+        <p class="titre-sub">Une intime conviction que le monde ne tourne pas rond…</p> </div>
         <p style="font-family:'Cinzel',serif;font-size:1.6rem;letter-spacing:0.08em;color:#1a1814;text-align:center;margin:0.75rem 0 0.25rem;">1er Juillet 2026</p>
-        <p style="font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.1em;color:#555;text-align:center;margin-bottom:0.75rem;">19H00</p>
+        <p style="font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.1em;color:#555;text-align:center;margin-bottom:0.75rem;">19H30</p>
         <div class="infos-ligne">
           <span>Durée 1H30</span>
-          <span>Entrée libre</span>
+          <span>8 € / place</span>
         </div>
       </div>
 
       <div class="generique">
         <span class="gen-label">Avec</span>
-        <p class="gen-ligne">Perrine Andersen · Maya Benainous · Sebastien Coene · Mélanie Guillet · Arnault Sablier</p>
+        <p class="gen-ligne">Perrine Andersen · Maya Benainous · Sebastien Coene · Mélanie Guilet · Arnault Sablier</p>
       </div>
 
       <div class="sep"><span class="sep-txt">Réservation</span></div>
 
-      <p class="gratuit">La représentation est gratuite — merci de vous inscrire pour nous aider à organiser l'accueil.</p>
-
       <div id="form-section">
-        <div class="form-group">
+        <div class="form-group" style="margin-top:1.1rem;">
           <label for="fname">Nom</label>
           <input type="text" id="fname" placeholder="Votre nom complet">
         </div>
@@ -249,8 +280,24 @@
               <div class="qty-val" id="qty-val">1</div>
               <button class="qty-btn" id="btn-plus" onclick="chgQty(1)">+</button>
             </div>
-            <span class="qty-montant" id="qty-montant"></span>
+            <span class="qty-montant" id="qty-montant">= 8 €</span>
           </div>
+        </div>
+        <div class="total-ligne">
+          <span class="total-label">Total</span>
+          <span class="total-montant" id="total-montant">8 €</span>
+        </div>
+        <div class="paiement-bloc">
+          <p class="paiement-titre">Paiement — aucune caisse sur place</p>
+          <div class="paiement-option">
+            <span class="paiement-option-label">Bizum</span>
+            <span class="paiement-numero">630 100 258</span>
+          </div>
+          <div class="paiement-option" style="margin-top:0.5rem;">
+            <span class="paiement-option-label">Virement bancaire</span>
+            <span class="paiement-numero" style="font-size:0.9rem;letter-spacing:0.02em;">Perrine Andersen<br>ES78 00810 077820 00232 3039</span>
+          </div>
+          <p class="paiement-note">Indiquez la référence <strong>IM-[votre nom]</strong> lors du paiement.</p>
         </div>
         <button class="btn-reserver" id="btn-reserver" onclick="soumettre()">Confirmer la réservation</button>
       </div>
@@ -259,9 +306,10 @@
         <p class="conf-check">✓</p>
         <p class="conf-titre">Réservation enregistrée</p>
         <p class="conf-texte">
-          Merci <span class="conf-accent" id="conf-nom"></span> !<br>
-          <span id="conf-places"></span> place(s) réservée(s).<br><br>
-          Nous sommes impatients de vous accueillir<br>le <span class="conf-accent">1er juillet 2026 à 19h00</span><br>à l'Institut Français de Barcelone.
+          <span class="conf-accent" id="conf-nom"></span><br>
+          <span id="conf-places"></span> place(s) — <span id="conf-total"></span><br><br>
+          Réglez par Bizum au <span class="conf-accent">630 100 258</span><br>
+          ou par virement,<br>Perrine Andersen ES78 00810 077820 00232 3039<br> référence <span class="conf-accent">IM-<span id="conf-ref"></span></span>
         </p>
         <p class="conf-email-note">Un email de confirmation a été envoyé à <span id="conf-email"></span>.</p>
         <button class="btn-reset" onclick="reset()">Nouvelle réservation</button>
@@ -277,7 +325,7 @@
 
       <div class="pied">
         <a href="https://maps.google.com/?q=Institut+Français+de+Barcelone,+Carrer+de+Moià,+8,+08006+Barcelona" target="_blank" style="font-style:italic;font-size:0.88rem;color:#1a1814;letter-spacing:0.02em;text-decoration:underline;display:block;margin-bottom:1rem;">Institut Français de Barcelone<br>Carrer de Moià, 8 · Sarrià-Sant Gervasi · 08006 Barcelona</a>
-        <img class="if-logo" src="logo.png" alt="Institut Français">
+        <img class="if-logo" src="logo.png" alt="Institut Français" style="height:52px;">
       </div>
     </div>
   </div>
@@ -320,6 +368,8 @@
   function chgQty(d) {
     qty = Math.max(1, Math.min(10, qty + d));
     document.getElementById('qty-val').textContent = qty;
+    document.getElementById('qty-montant').textContent = '= ' + (qty*8) + ' €';
+    document.getElementById('total-montant').textContent = (qty*8) + ' €';
     document.getElementById('btn-minus').disabled = qty <= 1;
     document.getElementById('btn-plus').disabled = qty >= 10;
   }
@@ -333,16 +383,18 @@
     if (!email || !email.includes('@')) { document.getElementById('femail').classList.add('erreur-champ'); document.getElementById('femail').focus(); return; }
     const btn = document.getElementById('btn-reserver');
     btn.disabled = true; btn.textContent = '…';
-    const entree = { nom, email, places: qty, date: new Date().toLocaleDateString('fr-FR') };
+    const entree = { nom, email, places: qty, total: qty*8, date: new Date().toLocaleDateString('fr-FR') };
     try {
-      const params = new URLSearchParams({ nom, email, places: qty, total: 0, date: entree.date });
+      const params = new URLSearchParams({ nom, email, places: qty, total: qty*8, date: entree.date });
       const img = new Image();
       img.src = SHEETS_URL + '?' + params.toString();
     } catch(e) {}
     reservations.unshift(entree);
     localStorage.setItem('imMonde_resa', JSON.stringify(reservations));
     document.getElementById('conf-nom').textContent = nom;
+    document.getElementById('conf-ref').textContent = nom.toUpperCase();
     document.getElementById('conf-places').textContent = qty;
+    document.getElementById('conf-total').textContent = (qty*8) + ' €';
     document.getElementById('conf-email').textContent = email;
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('conf-section').style.display = 'block';
@@ -357,6 +409,8 @@
     document.getElementById('femail').classList.remove('erreur-champ');
     qty = 1;
     document.getElementById('qty-val').textContent = '1';
+    document.getElementById('qty-montant').textContent = '= 8 €';
+    document.getElementById('total-montant').textContent = '8 €';
     document.getElementById('btn-minus').disabled = true;
     document.getElementById('btn-plus').disabled = false;
     const btn = document.getElementById('btn-reserver');
@@ -375,7 +429,7 @@
     el.innerHTML = reservations.map(r => `
       <div class="res-item">
         <div><div class="res-nom">${r.nom}</div><div class="res-date">${r.date}</div></div>
-        <span class="res-badge">${r.places} place${r.places>1?'s':''}</span>
+        <span class="res-badge">${r.places} place${r.places>1?'s':''} · ${r.total} €</span>
       </div>`).join('');
   }
 
