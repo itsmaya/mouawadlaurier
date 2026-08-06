@@ -41,6 +41,7 @@ c.useSyncExternalStore=function(a,b,c){return g.current.useSyncExternalStore(a,b
 })();
 
 </script>
+<script>window.React = window.React || (typeof React !== "undefined" ? React : self.React);</script>
 <script>/* ReactDOM 18.2.0 embarqué */
 /**
  * @license React
@@ -311,6 +312,7 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 })();
 
 </script>
+<script>window.ReactDOM = window.ReactDOM || (typeof ReactDOM !== "undefined" ? ReactDOM : self.ReactDOM);</script>
 <script>/* html2canvas 1.4.1 embarqué */
 /*!
  * html2canvas 1.4.1 <https://html2canvas.hertzen.com>
@@ -401,7 +403,8 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 </div>
 
 <script>
-// Exécution directe — React est déjà défini par les scripts inline ci-dessus
+// Exécution directe
+document.addEventListener("DOMContentLoaded", function() {
 (function() {
   var e = React.createElement, useState = React.useState, useRef = React.useRef,
       useCallback = React.useCallback, useEffect = React.useEffect;
@@ -1114,6 +1117,7 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 
   ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 })();
+});;
 </script>
 </body>
 </html>
