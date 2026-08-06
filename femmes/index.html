@@ -401,13 +401,8 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 </div>
 
 <script>
-function boot() {
-  // Scripts inline — React est toujours disponible ici
-  if (!window.React || !window.ReactDOM) {
-    document.getElementById("fallback-msg").innerHTML =
-      "Erreur technique : React n'a pas pu s'initialiser. Essaie de recharger la page (Ctrl+R).";
-    return;
-  }
+// Exécution directe — React est déjà défini par les scripts inline ci-dessus
+(function() {
   var e = React.createElement, useState = React.useState, useRef = React.useRef,
       useCallback = React.useCallback, useEffect = React.useEffect;
 
@@ -1118,9 +1113,7 @@ function boot() {
   }
 
   ReactDOM.createRoot(document.getElementById("root")).render(e(App));
-}
-// Appel direct — les scripts inline sont déjà chargés avant ce point
-boot();
+})();
 </script>
 </body>
 </html>
