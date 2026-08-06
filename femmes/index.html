@@ -453,7 +453,7 @@ function boot() {
                                         // -> augmente pour un contour plus épais, diminue pour plus fin
   // POINT 6 : distance des petits traits par rapport au contour de la silhouette,
   // et longueur de chaque trait. Les 2 sont en "pixels carte".
-  var TRAIT_DISTANCE = 90;
+  var TRAIT_DISTANCE = 40;
   var TRAIT_LENGTH = 26;
 
   var TINT_OPACITY = 0.40;
@@ -551,7 +551,7 @@ function boot() {
         for (var y2 = ah - 1; y2 >= 0; y2--) { if (!isNaN(leftEdge(y2))) { bottom = y2; break; } }
         if (isNaN(top) || isNaN(bottom) || bottom - top < 10) { resolve({ naturalW: naturalW, naturalH: naturalH, points: [] }); return; }
 
-        var fracs = [0.22, 0.48, 0.74]; // 3 hauteurs d'échantillonnage
+        var fracs = [0.48]; // 1 seul point par côté (milieu de la silhouette)
         var dy = 10; // décalage utilisé pour estimer la tangente locale
         var points = [];
 
@@ -576,10 +576,8 @@ function boot() {
           return { x: x0 / ratio, y: row / ratio, nx: nx, ny: ny };
         }
 
-        for (var i = 0; i < fracs.length; i++) {
-          var pl = samplePoint(fracs[i], "left"); if (pl) points.push(pl);
-          var pr = samplePoint(fracs[i], "right"); if (pr) points.push(pr);
-        }
+        var pl = samplePoint(0.55, "left");  if (pl) points.push(pl);
+        var pr = samplePoint(0.25, "right"); if (pr) points.push(pr);
 
         resolve({ naturalW: naturalW, naturalH: naturalH, points: points });
       };
@@ -602,6 +600,7 @@ function boot() {
     portraitRaw: null,   // photo telle qu'uploadée
     portraitImg: null,   // photo + contour blanc (calculée automatiquement)
     portraitTraits: null, // { naturalW, naturalH, points } calculé sur portraitImg
+    portraitScale: 1.0,  // échelle du portrait (1.0 = taille naturelle, 0.5 = moitié, 1.5 = 50% plus grand)
     bgImg: null,
     flagImg: null,
     shadowOpacity: BOTTOM_SHADOW_OPACITY  // intensité du dégradé noir, contrôlée par le slider
@@ -633,6 +632,7 @@ function boot() {
   }
 
   var ICON_PATHS = {
+    // Existants
     target: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
       e("circle", { cx: 12, cy: 12, r: 9 }), e("circle", { cx: 12, cy: 12, r: 4.6 }),
       e("circle", { cx: 12, cy: 12, r: 1.4, fill: "currentColor", stroke: "none" })),
@@ -642,7 +642,84 @@ function boot() {
     people: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
       e("circle", { cx: 11, cy: 8, r: 3 }), e("path", { d: "M5 19c0-3.3 2.7-6 6-6s6 2.7 6 6" }),
       e("circle", { cx: 4, cy: 12, r: 2 }), e("circle", { cx: 19, cy: 12, r: 2 }),
-      e("path", { d: "M1 19c0-2 1.3-3.6 3-4" }), e("path", { d: "M23 19c0-2-1.3-3.6-3-4" }))
+      e("path", { d: "M1 19c0-2 1.3-3.6 3-4" }), e("path", { d: "M23 19c0-2-1.3-3.6-3-4" })),
+    // Ingénierie & technique
+    gear: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 12, cy: 12, r: 3 }),
+      e("path", { d: "M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" })),
+    wrench: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" })),
+    cpu: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("rect", { x: 7, y: 7, width: 10, height: 10, rx: 1 }),
+      e("path", { d: "M9 4v3M15 4v3M9 17v3M15 17v3M4 9h3M4 15h3M17 9h3M17 15h3" })),
+    circuit: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M5 5h2v4H5zM5 15h2v4H5zM17 5h2v4h-2zM17 15h2v4h-2z" }),
+      e("path", { d: "M7 7h4v2H7zM13 7h4v2h-4zM7 15h4v2H7zM13 15h4v2h-4z" }),
+      e("line", { x1: 11, y1: 8, x2: 13, y2: 8 }), e("line", { x1: 11, y1: 16, x2: 13, y2: 16 }),
+      e("line", { x1: 9, y1: 9, x2: 9, y2: 15 }), e("line", { x1: 15, y1: 9, x2: 15, y2: 15 })),
+    // Énergie & environnement
+    flame: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M12 2c0 0-5 4-5 9a5 5 0 0 0 10 0c0-2-1-4-2-5 0 0 0 3-2 4 0 0 0-5-1-8z" })),
+    leaf: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M2 22c0 0 8-2 12-8s4-12 4-12-8 2-12 8-4 12-4 12z" }),
+      e("line", { x1: 2, y1: 22, x2: 11, y2: 13 })),
+    sun: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 12, cy: 12, r: 4 }),
+      e("path", { d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" })),
+    droplet: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M12 2C12 2 5 10 5 14a7 7 0 0 0 14 0c0-4-7-12-7-12z" })),
+    // Recherche & science
+    microscope: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M6 18h8" }), e("path", { d: "M3 22h18" }),
+      e("path", { d: "M14 22a7 7 0 1 0 0-14h-1" }),
+      e("path", { d: "M9 14l2-7" }), e("path", { d: "M9 14l-2 4" }),
+      e("rect", { x: 9, y: 3, width: 4, height: 7, rx: 1 })),
+    atom: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 12, cy: 12, r: 1.5, fill: "currentColor", stroke: "none" }),
+      e("ellipse", { cx: 12, cy: 12, rx: 10, ry: 4 }),
+      e("ellipse", { cx: 12, cy: 12, rx: 10, ry: 4, transform: "rotate(60 12 12)" }),
+      e("ellipse", { cx: 12, cy: 12, rx: 10, ry: 4, transform: "rotate(120 12 12)" })),
+    flask: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M9 3h6M9 3v6l-4 9a1 1 0 0 0 .9 1.5h12.2a1 1 0 0 0 .9-1.5L15 9V3" }),
+      e("line", { x1: 6.5, y1: 14, x2: 17.5, y2: 14 })),
+    // Management & stratégie
+    briefcase: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("rect", { x: 2, y: 7, width: 20, height: 14, rx: 2 }),
+      e("path", { d: "M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" }),
+      e("line", { x1: 12, y1: 12, x2: 12, y2: 12.01 })),
+    chart: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("line", { x1: 18, y1: 20, x2: 18, y2: 10 }),
+      e("line", { x1: 12, y1: 20, x2: 12, y2: 4 }),
+      e("line", { x1: 6, y1: 20, x2: 6, y2: 14 }),
+      e("line", { x1: 2, y1: 20, x2: 22, y2: 20 })),
+    map: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("polygon", { points: "3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" }),
+      e("line", { x1: 9, y1: 3, x2: 9, y2: 18 }),
+      e("line", { x1: 15, y1: 6, x2: 15, y2: 21 })),
+    // Sécurité & conformité
+    shield: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M12 2L4 6v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V6l-8-4z" })),
+    check: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14" }),
+      e("polyline", { points: "22 4 12 14.01 9 11.01" })),
+    // Digital & data
+    database: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("ellipse", { cx: 12, cy: 5, rx: 9, ry: 3 }),
+      e("path", { d: "M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" }),
+      e("path", { d: "M3 12c0 1.66 4 3 9 3s9-1.34 9-3" })),
+    network: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 12, cy: 5, r: 2 }), e("circle", { cx: 5, cy: 19, r: 2 }), e("circle", { cx: 19, cy: 19, r: 2 }),
+      e("line", { x1: 12, y1: 7, x2: 12, y2: 12 }),
+      e("line", { x1: 12, y1: 12, x2: 5, y2: 17 }), e("line", { x1: 12, y1: 12, x2: 19, y2: 17 })),
+    // Terrain & opérations
+    hard_hat: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M2 18h20v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-2z" }),
+      e("path", { d: "M12 2a8 8 0 0 1 8 8v6H4v-6a8 8 0 0 1 8-8z" }),
+      e("line", { x1: 12, y1: 2, x2: 12, y2: 6 })),
+    drill: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("path", { d: "M3 12l5-5 4 4 5-5 4 4" }),
+      e("path", { d: "M3 12v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6" }),
+      e("circle", { cx: 12, cy: 18, r: 1.5 }))
   };
 
   function UploadIcon() {
@@ -687,16 +764,42 @@ function boot() {
     );
   }
 
-  // Un petit trait décoratif blanc, positionné/orienté selon les coordonnées calculées
+  // Groupe de 3 traits en éventail partant du MÊME point d'origine.
+  // Les 3 traits divergent à partir de ce point comme des rayons de soleil.
+  var TRAIT_SPREAD = 35;   // écart angulaire entre chaque trait, en degrés
+
+var TRAIT_ORIGIN_GAP = 20;
+                       
   function TraitLine(props) {
-    var angleDeg = Math.atan2(props.ny, props.nx) * 180 / Math.PI;
-    return e("div", {
-      style: {
-        position: "absolute", left: props.x - TRAIT_LENGTH / 2, top: props.y - 1.6,
-        width: TRAIT_LENGTH, height: 3.2, background: "white", borderRadius: 2,
-        transform: "rotate(" + angleDeg + "deg)", transformOrigin: "center"
-      }
-    });
+    var baseAngle = Math.atan2(props.ny, props.nx) * 180 / Math.PI;
+    var angles = [baseAngle - TRAIT_SPREAD, baseAngle, baseAngle + TRAIT_SPREAD];
+    return e("div", { style: { position: "absolute", left: 0, top: 0, width: 0, height: 0 } },
+      angles.map(function(angleDeg, i) {
+        // Chaque trait part du même point (props.x, props.y),
+        // son centre est décalé de TRAIT_LENGTH/2 dans sa direction propre
+        var rad = angleDeg * Math.PI / 180;
+        var perpRad = (baseAngle + 90) * Math.PI / 180;
+        var offset = (i - 1) * TRAIT_ORIGIN_GAP;
+        var ox = props.x + Math.cos(perpRad) * offset;
+        var oy = props.y + Math.sin(perpRad) * offset;
+        var cx = ox + Math.cos(rad) * TRAIT_LENGTH / 2;
+        var cy = oy + Math.sin(rad) * TRAIT_LENGTH / 2;
+        return e("div", {
+          key: i,
+          style: {
+            position: "absolute",
+            left: cx - TRAIT_LENGTH / 2,
+            top: cy - 1.8,
+            width: TRAIT_LENGTH,
+            height: 3.6,
+            background: "white",
+            borderRadius: 3,
+            transform: "rotate(" + angleDeg + "deg)",
+            transformOrigin: "center"
+          }
+        });
+      })
+    );
   }
 
   function App() {
@@ -753,6 +856,24 @@ function boot() {
       });
     }
 
+    // 0) Au montage : tente de charger les fichiers template par défaut
+    useEffect(function () {
+      function tryLoad(filename, onSuccess) {
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+          canvas.getContext("2d").drawImage(img, 0, 0);
+          onSuccess(canvas.toDataURL("image/png"));
+        };
+        img.onerror = function () {}; // fichier absent, on ignore silencieusement
+        img.src = filename;
+      }
+      tryLoad("TEMPLATE_PORTRAIT.png", function(dataUrl) { set("portraitRaw", dataUrl); });
+      tryLoad("TEMPLATE_BACK.png",     function(dataUrl) { set("bgImg", dataUrl); });
+      tryLoad("TEMPLATE_DRAPEAU.png",  function(dataUrl) { set("flagImg", dataUrl); });
+    }, []);
+
     // 1) dès qu'une photo brute est uploadée -> on ajoute le contour blanc
     useEffect(function () {
       if (!state.portraitRaw) { set("portraitImg", null); set("portraitTraits", null); return; }
@@ -805,26 +926,58 @@ function boot() {
     var handleExport = useCallback(function () {
       if (!cardRef.current) return;
       setExporting(true);
-      window.html2canvas(cardRef.current, {
-        scale: EXPORT_SCALE, useCORS: true, backgroundColor: "#ffffff",
-        width: CARD_W, height: CARD_H,
-        onclone: function (doc) {
-          var q = doc.getElementById("quote-text");
-          if (q) {
-            q.style.backgroundImage = "none";
-            q.style.webkitBackgroundClip = "border-box";
-            q.style.backgroundClip = "border-box";
-            q.style.color = cMid;
+
+      // Pré-blur l'image de fond sur un canvas, car html2canvas ignore filter:blur()
+      function applyBlurToCanvas(imgSrc, w, h, blurPx, onDone) {
+        if (!imgSrc) return onDone(null);
+        var img = new Image();
+        img.onload = function () {
+          var c2 = document.createElement("canvas");
+          c2.width = w; c2.height = h;
+          var cx = c2.getContext("2d");
+          cx.filter = "blur(" + blurPx + "px) saturate(0.72) contrast(1.04)";
+          cx.drawImage(img, 0, 0, w, h);
+          onDone(c2.toDataURL("image/png"));
+        };
+        img.onerror = function () { onDone(null); };
+        img.src = imgSrc;
+      }
+
+      var exportW = CARD_W * EXPORT_SCALE;
+      var exportH = CARD_H * EXPORT_SCALE;
+      var blurPx  = 4 * EXPORT_SCALE; // blur proportionnel à l'échelle d'export
+
+      applyBlurToCanvas(state.bgImg, exportW, exportH, blurPx, function (blurredDataUrl) {
+        window.html2canvas(cardRef.current, {
+          scale: EXPORT_SCALE, useCORS: true, backgroundColor: "#ffffff",
+          width: CARD_W, height: CARD_H,
+          onclone: function (doc) {
+            // Remplacer le fond CSS par le canvas déjà bluré
+            if (blurredDataUrl) {
+              var bgEl = doc.querySelector("[data-layer='bg']");
+              if (bgEl) {
+                bgEl.style.backgroundImage = "url(" + blurredDataUrl + ")";
+                bgEl.style.filter = "none";
+              }
+            }
+            // Correction du texte dégradé (citation)
+            var q = doc.getElementById("quote-text");
+            if (q) {
+              q.style.backgroundImage = "none";
+              q.style.webkitBackgroundClip = "border-box";
+              q.style.backgroundClip = "border-box";
+              q.style.color = cMid;
+            }
           }
-        }
-      }).then(function (canvas) {
-        var a = document.createElement("a");
-        a.download = (state.personName || "post").toLowerCase().replace(/\s+/g, "-") + ".png";
-        a.href = canvas.toDataURL("image/png");
-        a.click();
-      }).catch(function (err) { console.error(err); alert("Erreur lors de l'export."); })
-        .finally(function () { setExporting(false); });
-    }, [state.personName]);
+        }).then(function (canvas) {
+          var a = document.createElement("a");
+          a.download = (state.personName || "post").toLowerCase().replace(/\s+/g, "-") + ".png";
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        }).catch(function (err) { console.error(err); alert("Erreur lors de l'export."); })
+          .finally(function () { setExporting(false); });
+      });
+    }, [state.personName, state.bgImg]);
 
     /* ---------------- PANNEAU D'ÉDITION ---------------- */
     var panel = e("div", { className: "panel" },
@@ -847,6 +1000,14 @@ function boot() {
           value: state.portraitRaw, onChange: function (v) { set("portraitRaw", v); }
         }),
         processingOutline ? e("div", { className: "hint", style: { marginTop: 4 } }, "Calcul du contour et des traits...") : null,
+        e("div", { style: { marginTop: 10 } },
+          e("label", { className: "field-label" }, "Échelle du portrait (" + Math.round(state.portraitScale * 100) + "%)"),
+          e("input", {
+            type: "range", min: 0.3, max: 2.0, step: 0.01,
+            value: state.portraitScale,
+            onChange: function (ev) { set("portraitScale", parseFloat(ev.target.value)); },
+            style: { width: "100%" }
+          })),
         e("div", { className: "grid-2", style: { marginTop: 12 } },
           e(FileDrop, { label: "Image de fond", hint: "2250 × 2812 px", value: state.bgImg, onChange: function (v) { set("bgImg", v); } }),
           e(FileDrop, { label: "Drapeau du pays", hint: "rectangle 3:2, 480 × 300 px", value: state.flagImg, onChange: function (v) { set("flagImg", v); }, small: true })),
@@ -870,7 +1031,29 @@ function boot() {
           return e("div", { className: "bullet-card", key: i },
             e("div", { className: "bullet-top" },
               e("select", { value: b.icon, onChange: function (ev) { setBullet(i, "icon", ev.target.value); } },
-                e("option", { value: "target" }, "Cible"), e("option", { value: "bars" }, "Barres"), e("option", { value: "people" }, "Personnes")),
+                e("option", { value: "target" }, "🎯 Cible"),
+                e("option", { value: "bars" }, "📊 Graphique"),
+                e("option", { value: "people" }, "👥 Équipe"),
+                e("option", { value: "gear" }, "⚙️ Engrenage"),
+                e("option", { value: "wrench" }, "🔧 Clé"),
+                e("option", { value: "cpu" }, "💻 Processeur"),
+                e("option", { value: "circuit" }, "🔌 Circuit"),
+                e("option", { value: "flame" }, "🔥 Flamme"),
+                e("option", { value: "leaf" }, "🌿 Feuille"),
+                e("option", { value: "sun" }, "☀️ Soleil"),
+                e("option", { value: "droplet" }, "💧 Goutte"),
+                e("option", { value: "microscope" }, "🔬 Microscope"),
+                e("option", { value: "atom" }, "⚛️ Atome"),
+                e("option", { value: "flask" }, "⚗️ Fiole"),
+                e("option", { value: "briefcase" }, "💼 Valise"),
+                e("option", { value: "chart" }, "📈 Statistiques"),
+                e("option", { value: "map" }, "🗺️ Carte"),
+                e("option", { value: "shield" }, "🛡️ Protection"),
+                e("option", { value: "check" }, "✅ Validé"),
+                e("option", { value: "database" }, "🗄️ Base de données"),
+                e("option", { value: "network" }, "🕸️ Réseau"),
+                e("option", { value: "hard_hat" }, "👷 Casque"),
+                e("option", { value: "drill" }, "⛏️ Terrain")),
               e("input", { type: "text", value: b.keyword, placeholder: "Mot-clé", onChange: function (ev) { setBullet(i, "keyword", ev.target.value); } })),
             e("textarea", { rows: 2, value: b.text, placeholder: "Texte", onChange: function (ev) { setBullet(i, "text", ev.target.value); } }));
         })),
@@ -928,12 +1111,13 @@ function boot() {
        5. blocs missions/citation  6. badge/logo/drapeau/titre  7. cadre blanc
        ===================================================================== */
     var bgLayer = e("div", {
+      "data-layer": "bg",
       style: {
         position: "absolute", inset: 0,
         backgroundImage: state.bgImg ? "url(" + state.bgImg + ")" : "none",
         backgroundColor: state.bgImg ? undefined : "#3a3a3a",
         backgroundSize: "cover", backgroundPosition: "center",
-        filter: "saturate(0.72) contrast(1.04)"
+        filter: "saturate(0.72) contrast(1.04) blur(4px)"
       }
     });
     var tintLayer = e("div", {
@@ -944,38 +1128,59 @@ function boot() {
       }
     });
 
-    // POINT 4/5 : la photo est centrée (pas calée en bas) pour que le contour blanc
-    // ajouté autour d'elle ne soit jamais coupé net par le bord du cadre.
-    // Les traits dynamiques (POINT 6) sont calculés à partir du contour réel de
-    // la silhouette (voir computeContourTraits) puis repositionnés ici en tenant
-    // compte du redimensionnement "contain" (mêmes calculs que le navigateur).
+    // Portrait : centré horizontalement, ancré en bas, taille contrôlée par portraitScale.
+    // On calcule la taille d'affichage à la main (au lieu de objectFit:contain) pour
+    // pouvoir appliquer le scale et repositionner les traits en conséquence.
+    var pScale = state.portraitScale || 1;
     var traitEls = [];
     if (state.portraitTraits && state.portraitTraits.points.length) {
       var nW = state.portraitTraits.naturalW, nH = state.portraitTraits.naturalH;
+      // Taille "contain" de base (sans scale) ancrée en bas
       var fitScale = Math.min(CARD_W / nW, CARD_H / nH);
-      var dispW = nW * fitScale, dispH = nH * fitScale;
-      var offX = (CARD_W - dispW) / 2, offY = (CARD_H - dispH) / 2; // objectPosition: center center
+      var baseW = nW * fitScale, baseH = nH * fitScale;
+      // Avec le scale appliqué
+      var dispW = baseW * pScale, dispH = baseH * pScale;
+      // Centré en X, ancré en bas
+      var offX = (CARD_W - dispW) / 2, offY = CARD_H - dispH;
       traitEls = state.portraitTraits.points.map(function (p, i) {
-        var cx = offX + p.x * fitScale, cy = offY + p.y * fitScale;
+        var cx = offX + p.x * fitScale * pScale;
+        var cy = offY + p.y * fitScale * pScale;
         var tx = cx + p.nx * TRAIT_DISTANCE, ty = cy + p.ny * TRAIT_DISTANCE;
         return e(TraitLine, { key: i, x: tx, y: ty, nx: p.nx, ny: p.ny });
       });
     }
 
+    // Taille d'affichage du portrait sans les traits (pour la balise img)
+    var pFitScale = state.portraitTraits
+      ? Math.min(CARD_W / state.portraitTraits.naturalW, CARD_H / state.portraitTraits.naturalH)
+      : Math.min(CARD_W / CARD_W, CARD_H / CARD_H);
+    var pDispW = state.portraitTraits ? state.portraitTraits.naturalW * pFitScale * pScale : CARD_W * pScale;
+    var pDispH = state.portraitTraits ? state.portraitTraits.naturalH * pFitScale * pScale : CARD_H * pScale;
+
     var portraitLayer = e("div", {
-      style: { position: "absolute", inset: 0, display: "flex", justifyContent: "center", alignItems: "center", zIndex: 2 }
+      style: { position: "absolute", inset: 0, overflow: "hidden", zIndex: 2 }
     },
       state.portraitImg
         ? e("img", {
             src: state.portraitImg, alt: "portrait",
-            style: { height: "100%", width: "100%", objectFit: "contain", objectPosition: "center bottom" }
+            style: {
+              position: "absolute",
+              width: pDispW + "px",
+              height: pDispH + "px",
+              left: ((CARD_W - pDispW) / 2) + "px",
+              bottom: "0px",
+              objectFit: "contain"
+            }
           })
         : e("div", {
             style: {
-              width: "68%", height: "58%", borderRadius: 16,
+              position: "absolute",
+              top: "50%", left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "68%", borderRadius: 16,
               background: "rgba(255,255,255,0.12)", border: "2px dashed rgba(255,255,255,0.4)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              color: "rgba(255,255,255,0.65)", fontSize: 13, textAlign: "center", padding: 10
+              color: "rgba(255,255,255,0.65)", fontSize: 13, textAlign: "center", padding: "20px 10px"
             }
           }, "Portrait détouré, PNG transparent, pleine hauteur"),
       traitEls
@@ -1005,10 +1210,13 @@ function boot() {
             e("span", {
               style: {
                 background: "linear-gradient(90deg, " + cLight + " 0%, " + cDark + " 98%, " + cDark + " 100%)",
-                fontWeight: 800, padding: "1px 7px", marginRight: 5, display: "inline-block"
+                fontWeight: 800, padding: "1px 7px", marginRight: 5, display: "inline-block",
+                textTransform: "uppercase"
               }
             }, b.keyword),
-            b.text));
+            e("span", {
+              style: { textTransform: "lowercase", textShadow: "0 1px 4px rgba(0,0,0,0.8)" }
+            }, b.text)));
       })
     );
 
@@ -1029,20 +1237,29 @@ function boot() {
       })
     );
 
-    // POINT 3bis : badge décollé du bord haut (BADGE_TOP ≈ 50px)
+    // POINT 3bis : badge — deux blocs séparés côte à côte
+    var badgeGrad = "linear-gradient(90deg, " + cLight + " 0%, " + c + " 45%, " + cDark + " 98%, " + cDark + " 100%)";
     var badge = e("div", {
-      style: {
-        position: "absolute", left: CONTENT_L, top: BADGE_TOP, display: "flex", alignItems: "stretch",
-        borderRadius: 10, overflow: "hidden", zIndex: 4,
-        background: "linear-gradient(90deg, " + cLight + " 0%, " + c + " 45%, " + cDark + " 98%, " + cDark + " 100%)"
-      }
+      style: { position: "absolute", left: CONTENT_L, top: BADGE_TOP, display: "flex", alignItems: "center", gap: 8, zIndex: 4 }
     },
-      e("div", { style: { width: BADGE_ICON_BOX, display: "flex", alignItems: "center", justifyContent: "center" } },
+      e("div", {
+        style: {
+          width: BADGE_ICON_BOX, height: BADGE_ICON_BOX, borderRadius: 10, overflow: "hidden",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: badgeGrad
+        }
+      },
         e("svg", { viewBox: "0 0 24 24", width: BADGE_ICON_SIZE, height: BADGE_ICON_SIZE, fill: "none", stroke: "white", strokeWidth: 2 },
           e("path", { d: "M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" }), e("circle", { cx: 12, cy: 12, r: 3 }))),
-      e("div", { style: { width: 1, background: "rgba(255,255,255,0.4)" } }),
-      e("div", { style: { color: "white", fontWeight: 800, fontSize: BADGE_FONT, letterSpacing: 0.3, padding: "9px 18px", whiteSpace: "nowrap", display: "flex", alignItems: "center" } },
-        state.badgeLabel)
+      e("div", {
+        style: {
+          borderRadius: 10, overflow: "hidden",
+          background: badgeGrad,
+          color: "white", fontWeight: 800, fontSize: BADGE_FONT, letterSpacing: 0.3,
+          height: BADGE_ICON_BOX, padding: "0 18px", whiteSpace: "nowrap", display: "flex", alignItems: "center",
+          boxSizing: "border-box"
+        }
+      }, state.badgeLabel)
     );
 
     // POINT 3 : drapeau collé au coin du cadre, même arrondi (right/top = FRAME_INSET, radius = FRAME_RADIUS)
@@ -1106,11 +1323,7 @@ function boot() {
 
   ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", boot);
-} else {
-  boot();
-}
+boot();
 </script>
 </body>
 </html>
