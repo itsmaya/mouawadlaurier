@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Générateur PNG - Women in Energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Nunito', sans-serif; background: #f0f0f0; }
+  #root { min-height: 100vh; }
+  .app-layout { min-height: 100vh; display: flex; flex-direction: column; gap: 24px; padding: 24px; }
+  @media (min-width: 1024px) { .app-layout { flex-direction: row; } }
+  .panel {
+    width: 100%; flex-shrink: 0; background: white; border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e5e5e5; padding: 20px; height: fit-content;
+  }
+  @media (min-width: 1024px) { .panel { width: 380px; } }
+  .panel h2 { font-size: 14px; font-weight: 700; color: #171717; margin: 0 0 12px 0; }
+  .section { margin-bottom: 20px; }
+  .section:last-child { margin-bottom: 0; }
+  label.field-label { display: block; font-size: 12px; font-weight: 600; color: #404040; margin-bottom: 4px; }
+  .hint { font-size: 11px; color: #737373; font-weight: 400; }
+  input[type="text"], textarea, select {
+    width: 100%; font-size: 14px; border: 1px solid #d4d4d4; border-radius: 6px; padding: 8px; font-family: 'Nunito', sans-serif;
+  }
+  textarea { resize: none; }
+  input[type="color"] { width: 48px; height: 40px; border-radius: 6px; cursor: pointer; border: 1px solid #d4d4d4; padding: 0; }
+  .color-row { display: flex; align-items: center; gap: 12px; }
+  .color-row input[type="text"] { flex: 1; font-family: monospace; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .file-drop {
+    position: relative; cursor: pointer; border-radius: 8px; border: 2px dashed #d4d4d4;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+    background: #fafafa; height: 100px;
+  }
+  .file-drop.small { height: 64px; }
+  .file-drop:hover { border-color: #a3a3a3; }
+  .file-drop img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .file-drop-empty { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #a3a3a3; font-size: 11px; text-align:center; padding: 0 6px; }
+  .file-drop .remove-btn {
+    position: absolute; top: 4px; right: 4px; background: rgba(255,255,255,0.92);
+    border-radius: 999px; padding: 4px; border: none; cursor: pointer; display: flex;
+  }
+  .bullet-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+  .bullet-card:last-child { margin-bottom: 0; }
+  .bullet-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bullet-top select { width: auto; font-size: 12px; padding: 4px; }
+  .bullet-top input { flex: 1; font-size: 12px; font-weight: 700; padding: 6px; }
+  .bullet-card textarea { font-size: 12px; padding: 6px; }
+  .export-btn {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #171717; color: white; font-size: 14px; font-weight: 600; border-radius: 8px;
+    padding: 13px; border: none; cursor: pointer; margin-top: 20px;
+  }
+  .export-btn:hover { background: #303030; }
+  .export-btn:disabled { opacity: 0.6; cursor: default; }
+  .preview-wrap { flex: 1; display: flex; align-items: flex-start; justify-content: center; }
+  .infobox { background: #f5f7ff; border: 1px solid #ccd6f6; border-radius: 8px; padding: 10px 12px; font-size: 11.5px; line-height: 1.5; color: #2a3f66; }
+  .infobox code { background: #e2e8fa; padding: 1px 4px; border-radius: 3px; font-size: 11px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 1s linear infinite; display: inline-flex; }
+  .load-error { max-width: 480px; margin: 60px auto; padding: 24px; background: #fff3f3; border: 1px solid #f0b8b8; border-radius: 10px; font-size: 14px; line-height: 1.5; color: #7a1f1f; }
+</style>
+</head>
+<body>
+<div id="root">
+  <div class="load-error" id="fallback-msg">Chargement...</div>
+</div>
+
+<script>
+function boot() {
+  if (!window.React || !window.ReactDOM) {
+    document.getElementById("fallback-msg").innerHTML =
+      "Erreur : React n'a pas pu se charger depuis le CDN. Vérifie ta connexion, ou qu'un bloqueur/antivirus/proxy ne bloque pas unpkg.com.";
+    return;
+  }
+  var e = React.createElement, useState = React.useState, useRef = React.useRef,
+      useCallback = React.useCallback, useEffect = React.useEffect;
+
+  // =========================================================================
+  // TAILLES / MARGES / ÉPAISSEURS. Unité = "pixels carte" : la carte s'affiche
+  // à 600x750px à l'écran mais s'exporte à 2250x2812px (EXPORT_SCALE=3.75),
+  // la taille exacte des visuels TotalEnergies d'origine.
+  // Conversion depuis une mesure prise sur l'image source (2250px) :
+  // valeur_carte = valeur_mesurée * (600/2250)
+  // =========================================================================
+  var CARD_W = 600, CARD_H = 750, EXPORT_SCALE = 3.75;
+
+  var FRAME_INSET = 21.6, FRAME_BORDER = 2, FRAME_RADIUS = 24;
+
+  // Marge gauche utilisée par le titre / badge / bloc missions
+  var CONTENT_L = 34.1;
+  // Marge droite utilisée par le titre (le drapeau, lui, est calé sur FRAME_INSET — point 3)
+  var CONTENT_R = 578.1;
+
+  // --- Logo TotalEnergies (fichier externe, pas d'upload) ---
+  var LOGO_FILE = "logo-totalenergies.png";
+  var LOGO_W = 72, LOGO_H = 54.4;
+
+  // --- POINT 3 : drapeau du pays, collé au coin du cadre général, même arrondi ---
+  // On positionne le drapeau avec les MÊMES repères que le cadre (right/top = FRAME_INSET)
+  // et le MÊME rayon d'arrondi (FRAME_RADIUS) sur son coin haut-droit : il devient
+  // visuellement le prolongement exact du cadre, sans aucune marge.
+  var FLAG_W = 81.6, FLAG_H = 54.4;
+  var FLAG_BORDER = FRAME_BORDER;      // contour blanc du drapeau = même épaisseur que le cadre
+  var FLAG_RADIUS = FRAME_RADIUS;      // même rayon que le cadre général
+  var FLAG_RADIUS2 = 12;
+  // --- POINT 2 : largeur des 2 blocs du bas + écart entre eux, mesurés précisément ---
+  // (mesure faite sur zone blanche pure, hors texte, sur l'image source à 2250px)
+  var BOTTOM_Y = 535.5, BLOCK_H = 175.5;
+  var MISS_W = 289.4;      // largeur du bloc missions (gauche)
+  var BLOCK_GAP = 11.2;    // écart horizontal entre les 2 blocs
+  var QUOTE_W = 231.2;     // largeur du bloc citation (droite)
+  // -> le bloc citation démarre automatiquement à CONTENT_L + MISS_W + BLOCK_GAP, voir plus bas
+
+  var MISS_FONT = 15;
+  // POINT 2bis (demande précédente) : taille du texte de citation = 81px sur l'image
+  // exportée (2250px de large). Comme l'export fait EXPORT_SCALE=3.75x la carte,
+  // la taille "carte" correspondante est 81 / 3.75 = 21.6.
+  var QUOTE_FONT = 81 / EXPORT_SCALE;
+
+  var TITLE_FONT = 37, NAME_FONT = 20;
+  var TITLE_SHADOW = "none"; // pas d'ombre portée derrière le titre
+
+  var BADGE_FONT = 15;
+  var BADGE_ICON_SIZE = 27, BADGE_ICON_BOX = 48;
+  // POINT 3bis : le badge ne doit plus toucher le cadre — environ 50px d'écart avec le haut.
+  var BADGE_TOP = 38;
+
+  // --- Portrait (photo détourée, PNG transparent, pleine hauteur) ---
+  var PORTRAIT_OUTLINE_RATIO = 0.01;   // épaisseur du contour blanc = 2% de la largeur de la photo uploadée
+                                        // -> augmente pour un contour plus épais, diminue pour plus fin
+  // POINT 6 : distance des petits traits par rapport au contour de la silhouette,
+  // et longueur de chaque trait. Les 2 sont en "pixels carte".
+  var TRAIT_DISTANCE = 90;
+  var TRAIT_LENGTH = 26;
+
+  var TINT_OPACITY = 0.40;
+  // POINT 1 : le dégradé noir du bas doit être PAR-DESSUS la photo (fond + portrait)
+  // et plus sombre qu'avant.
+  var BOTTOM_SHADOW_OPACITY = 0.80;
+
+  function shade(hex, amt) {
+    var c = hex.replace("#", "");
+    if (c.length === 3) c = c.split("").map(function (x) { return x + x; }).join("");
+    var n = parseInt(c, 16);
+    var r = Math.max(0, Math.min(255, (n >> 16) + amt));
+    var g = Math.max(0, Math.min(255, ((n >> 8) & 255) + amt));
+    var b = Math.max(0, Math.min(255, (n & 255) + amt));
+    return "#" + ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0");
+  }
+
+  // =========================================================================
+  // Ajoute un contour blanc épais autour d'une photo détourée (PNG transparent).
+  // On dessine le contour "en dur" sur un <canvas> (pixels réels) plutôt que
+  // via un filtre CSS, car l'outil d'export (html2canvas) ne restitue pas les
+  // filtres de façon fiable — c'est ce qui causait le bug du point 1 par le passé.
+  // =========================================================================
+  function addWhiteOutline(dataUrl, ratio) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var outline = Math.max(2, Math.round(w * ratio));
+
+        var sil = document.createElement("canvas");
+        sil.width = w; sil.height = h;
+        var sctx = sil.getContext("2d");
+        sctx.drawImage(img, 0, 0);
+        sctx.globalCompositeOperation = "source-in";
+        sctx.fillStyle = "#ffffff";
+        sctx.fillRect(0, 0, w, h);
+
+        var canvas = document.createElement("canvas");
+        canvas.width = w + outline * 2;
+        canvas.height = h + outline * 2;
+        var ctx = canvas.getContext("2d");
+        var steps = 24;
+        for (var i = 0; i < steps; i++) {
+          var angle = (i / steps) * Math.PI * 2;
+          ctx.drawImage(sil, outline + Math.cos(angle) * outline, outline + Math.sin(angle) * outline);
+        }
+        ctx.drawImage(img, outline, outline);
+
+        resolve({ dataUrl: canvas.toDataURL("image/png"), naturalW: canvas.width, naturalH: canvas.height });
+      };
+      img.onerror = reject;
+      img.src = dataUrl;
+    });
+  }
+
+  // =========================================================================
+  // POINT 6 — Calcule 6 points le long du contour réel de la silhouette
+  // (3 à gauche, 3 à droite), avec leur direction normale (perpendiculaire
+  // au contour, orientée vers l'extérieur). Ça sert à placer les petits
+  // traits décoratifs automatiquement, quelle que soit la photo uploadée.
+  //
+  // Méthode : on redessine l'image (déjà détourée + contour blanc) en petit
+  // sur un canvas d'analyse, on lit le canal alpha, et pour quelques lignes
+  // choisies on repère le bord gauche / droit de la silhouette. La direction
+  // du contour à cet endroit s'obtient en comparant sa position quelques
+  // lignes au-dessus et en dessous (tangente), la perpendiculaire à cette
+  // tangente donne la direction "vers l'extérieur" des petits traits.
+  // =========================================================================
+  function computeContourTraits(dataUrl) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () {
+        var naturalW = img.naturalWidth, naturalH = img.naturalHeight;
+        var aw = 260; // largeur d'analyse réduite (juste pour la détection, plus rapide)
+        var ratio = aw / naturalW;
+        var ah = Math.round(naturalH * ratio);
+
+        var canvas = document.createElement("canvas");
+        canvas.width = aw; canvas.height = ah;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, aw, ah);
+        var data = ctx.getImageData(0, 0, aw, ah).data;
+
+        function alphaAt(x, y) {
+          if (x < 0 || x >= aw || y < 0 || y >= ah) return 0;
+          return data[(y * aw + x) * 4 + 3];
+        }
+        function leftEdge(y) { for (var x = 0; x < aw; x++) if (alphaAt(x, y) > 20) return x; return NaN; }
+        function rightEdge(y) { for (var x = aw - 1; x >= 0; x--) if (alphaAt(x, y) > 20) return x; return NaN; }
+
+        // bornes verticales de la silhouette
+        var top = NaN, bottom = NaN;
+        for (var y = 0; y < ah; y++) { if (!isNaN(leftEdge(y))) { top = y; break; } }
+        for (var y2 = ah - 1; y2 >= 0; y2--) { if (!isNaN(leftEdge(y2))) { bottom = y2; break; } }
+        if (isNaN(top) || isNaN(bottom) || bottom - top < 10) { resolve({ naturalW: naturalW, naturalH: naturalH, points: [] }); return; }
+
+        var fracs = [0.22, 0.48, 0.74]; // 3 hauteurs d'échantillonnage
+        var dy = 10; // décalage utilisé pour estimer la tangente locale
+        var points = [];
+
+        function samplePoint(frac, side) {
+          var row = Math.round(top + frac * (bottom - top));
+          row = Math.max(top + dy, Math.min(bottom - dy, row));
+          var edgeFn = side === "left" ? leftEdge : rightEdge;
+          var x0 = edgeFn(row), xUp = edgeFn(row - dy), xDown = edgeFn(row + dy);
+          if (isNaN(x0) || isNaN(xUp) || isNaN(xDown)) return null;
+
+          // tangente locale (direction le long du contour)
+          var tx = xDown - xUp, ty = 2 * dy;
+          var tlen = Math.sqrt(tx * tx + ty * ty) || 1;
+          tx /= tlen; ty /= tlen;
+
+          // normale = tangente tournée de 90°, orientée vers l'extérieur du corps
+          var nx = -ty, ny = tx;
+          var outwardSign = side === "left" ? -1 : 1;
+          if (Math.sign(nx || 1) !== outwardSign) { nx = -nx; ny = -ny; }
+
+          // repasse en coordonnées natives de l'image (avant réduction pour l'analyse)
+          return { x: x0 / ratio, y: row / ratio, nx: nx, ny: ny };
+        }
+
+        for (var i = 0; i < fracs.length; i++) {
+          var pl = samplePoint(fracs[i], "left"); if (pl) points.push(pl);
+          var pr = samplePoint(fracs[i], "right"); if (pr) points.push(pr);
+        }
+
+        resolve({ naturalW: naturalW, naturalH: naturalH, points: points });
+      };
+      img.onerror = reject;
+      img.src = dataUrl;
+    });
+  }
+
+  var DEFAULT_STATE = {
+    themeColor: "#3B7CE0",
+    badgeLabel: "WOMEN IN ENERGY",
+    jobTitle: "VP - PUBLIC AFFAIRS,\nCOMMUNICATION & CSR",
+    personName: "KANCHAN DAHIYA",
+    bullets: [
+      { icon: "target", keyword: "ALIGN", text: "human capital strategy with business goals." },
+      { icon: "bars", keyword: "DRIVE", text: "company culture, engagement and diversity." },
+      { icon: "people", keyword: "ENSURE", text: "compliance with labor laws and policies." }
+    ],
+    quote: "Connecting people strategies with business goals and impact.",
+    portraitRaw: null,   // photo telle qu'uploadée
+    portraitImg: null,   // photo + contour blanc (calculée automatiquement)
+    portraitTraits: null, // { naturalW, naturalH, points } calculé sur portraitImg
+    bgImg: null,
+    flagImg: null,
+    shadowOpacity: BOTTOM_SHADOW_OPACITY  // intensité du dégradé noir, contrôlée par le slider
+  };
+
+  var ICON_PATHS = {
+    target: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 12, cy: 12, r: 9 }), e("circle", { cx: 12, cy: 12, r: 4.6 }),
+      e("circle", { cx: 12, cy: 12, r: 1.4, fill: "currentColor", stroke: "none" })),
+    bars: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("line", { x1: 6, y1: 18, x2: 6, y2: 11 }), e("line", { x1: 11, y1: 18, x2: 11, y2: 6 }),
+      e("line", { x1: 16, y1: 18, x2: 16, y2: 9 }), e("line", { x1: 3, y1: 21, x2: 21, y2: 21 })),
+    people: e("svg", { viewBox: "0 0 24 24", width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 1.9 },
+      e("circle", { cx: 11, cy: 8, r: 3 }), e("path", { d: "M5 19c0-3.3 2.7-6 6-6s6 2.7 6 6" }),
+      e("circle", { cx: 4, cy: 12, r: 2 }), e("circle", { cx: 19, cy: 12, r: 2 }),
+      e("path", { d: "M1 19c0-2 1.3-3.6 3-4" }), e("path", { d: "M23 19c0-2-1.3-3.6-3-4" }))
+  };
+
+  function UploadIcon() {
+    return e("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
+      e("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }),
+      e("polyline", { points: "17 8 12 3 7 8" }), e("line", { x1: 12, y1: 3, x2: 12, y2: 15 }));
+  }
+  function TrashIcon() {
+    return e("svg", { width: 12, height: 12, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
+      e("polyline", { points: "3 6 5 6 21 6" }),
+      e("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
+      e("path", { d: "M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" }));
+  }
+  function DownloadIcon() {
+    return e("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
+      e("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }),
+      e("polyline", { points: "7 10 12 15 17 10" }), e("line", { x1: 12, y1: 15, x2: 12, y2: 3 }));
+  }
+
+  function FileDrop(props) {
+    var inputRef = useRef(null);
+    function handleFile(file) {
+      if (!file) return;
+      var r = new FileReader();
+      r.onload = function (ev) { props.onChange(ev.target.result); };
+      r.readAsDataURL(file);
+    }
+    return e("div", null,
+      e("label", { className: "field-label" }, props.label, props.hint ? e("span", { className: "hint" }, " — " + props.hint) : null),
+      e("div", {
+        className: "file-drop" + (props.small ? " small" : ""),
+        onClick: function () { if (inputRef.current) inputRef.current.click(); },
+        onDragOver: function (ev) { ev.preventDefault(); },
+        onDrop: function (ev) { ev.preventDefault(); handleFile(ev.dataTransfer.files && ev.dataTransfer.files[0]); }
+      },
+        props.value ? e("img", { src: props.value, alt: props.label })
+          : e("div", { className: "file-drop-empty" }, e(UploadIcon), e("span", null, props.placeholder || "Cliquer ou glisser")),
+        props.value && e("button", { className: "remove-btn", onClick: function (ev) { ev.stopPropagation(); props.onChange(null); } }, e(TrashIcon))
+      ),
+      e("input", { ref: inputRef, type: "file", accept: "image/*", style: { display: "none" },
+        onChange: function (ev) { handleFile(ev.target.files && ev.target.files[0]); } })
+    );
+  }
+
+  // Un petit trait décoratif blanc, positionné/orienté selon les coordonnées calculées
+  function TraitLine(props) {
+    var angleDeg = Math.atan2(props.ny, props.nx) * 180 / Math.PI;
+    return e("div", {
+      style: {
+        position: "absolute", left: props.x - TRAIT_LENGTH / 2, top: props.y - 1.6,
+        width: TRAIT_LENGTH, height: 3.2, background: "white", borderRadius: 2,
+        transform: "rotate(" + angleDeg + "deg)", transformOrigin: "center"
+      }
+    });
+  }
+
+  function App() {
+    var st = useState(DEFAULT_STATE), state = st[0], setState = st[1];
+    var ex = useState(false), exporting = ex[0], setExporting = ex[1];
+    var lg = useState(true), logoOk = lg[0], setLogoOk = lg[1];
+    var proc = useState(false), processingOutline = proc[0], setProcessingOutline = proc[1];
+    var cardRef = useRef(null);
+
+    function set(k, v) { setState(function (s) { var c = Object.assign({}, s); c[k] = v; return c; }); }
+    function setBullet(i, f, v) {
+      setState(function (s) {
+        var b = s.bullets.slice(); b[i] = Object.assign({}, b[i]); b[i][f] = v;
+        return Object.assign({}, s, { bullets: b });
+      });
+    }
+
+    // 1) dès qu'une photo brute est uploadée -> on ajoute le contour blanc
+    useEffect(function () {
+      if (!state.portraitRaw) { set("portraitImg", null); set("portraitTraits", null); return; }
+      setProcessingOutline(true);
+      addWhiteOutline(state.portraitRaw, PORTRAIT_OUTLINE_RATIO)
+        .then(function (result) { set("portraitImg", result.dataUrl); })
+        .catch(function (err) { console.error(err); set("portraitImg", state.portraitRaw); })
+        .finally(function () { setProcessingOutline(false); });
+    }, [state.portraitRaw]);
+
+    // 2) dès que la photo + contour est prête -> on calcule les points des traits dynamiques
+    useEffect(function () {
+      if (!state.portraitImg) { set("portraitTraits", null); return; }
+      computeContourTraits(state.portraitImg)
+        .then(function (result) { set("portraitTraits", result); })
+        .catch(function (err) { console.error(err); set("portraitTraits", null); });
+    }, [state.portraitImg]);
+
+    var c = state.themeColor, cLight = shade(c, 35), cDark = shade(c, -45);
+
+    var quoteCanvasRef = useRef(null);
+
+    useEffect(function () {
+      var canvas = quoteCanvasRef.current;
+      if (!canvas) return;
+      var ctx = canvas.getContext("2d");
+      var w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      var grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, cLight);
+      grad.addColorStop(1, cDark);
+      ctx.fillStyle = grad;
+      ctx.font = "700 " + QUOTE_FONT + "px Nunito, Arial, sans-serif";
+      ctx.textBaseline = "top";
+      var text = "\u201C" + state.quote + "\u201D";
+      var words = text.split(" ");
+      var lines = [], line = "";
+      for (var i = 0; i < words.length; i++) {
+        var test = line ? line + " " + words[i] : words[i];
+        if (ctx.measureText(test).width > w && line) { lines.push(line); line = words[i]; }
+        else { line = test; }
+      }
+      if (line) lines.push(line);
+      var lineH = QUOTE_FONT * 1.3;
+      var totalH = lines.length * lineH;
+      var startY = Math.max(0, (h - totalH) / 2);
+      for (var j = 0; j < lines.length; j++) { ctx.fillText(lines[j], 0, startY + j * lineH); }
+    }, [state.quote, cLight, cDark]);
+
+    var handleExport = useCallback(function () {
+      if (!cardRef.current) return;
+      setExporting(true);
+      window.html2canvas(cardRef.current, {
+        scale: EXPORT_SCALE, useCORS: true, backgroundColor: "#ffffff",
+        width: CARD_W, height: CARD_H
+      }).then(function (canvas) {
+        var a = document.createElement("a");
+        a.download = (state.personName || "post").toLowerCase().replace(/\s+/g, "-") + ".png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      }).catch(function (err) { console.error(err); alert("Erreur lors de l'export."); })
+        .finally(function () { setExporting(false); });
+    }, [state.personName]);
+
+    /* ---------------- PANNEAU D'ÉDITION ---------------- */
+    var panel = e("div", { className: "panel" },
+      e("div", { className: "section" },
+        e("h2", null, "Couleur du thème"),
+        e("div", { className: "color-row" },
+          e("input", { type: "color", value: c, onChange: function (ev) { set("themeColor", ev.target.value); } }),
+          e("input", { type: "text", value: c, onChange: function (ev) { set("themeColor", ev.target.value); } }))),
+
+      e("div", { className: "section" },
+        e("h2", null, "Images"),
+        e(FileDrop, {
+          label: "Portrait détouré (PNG transparent)",
+          hint: "pleine hauteur, idéal ≥ 2250 × 2812 px — contour blanc + traits ajoutés automatiquement",
+          value: state.portraitRaw, onChange: function (v) { set("portraitRaw", v); }
+        }),
+        processingOutline ? e("div", { className: "hint", style: { marginTop: 4 } }, "Calcul du contour et des traits...") : null,
+        e("div", { className: "grid-2", style: { marginTop: 12 } },
+          e(FileDrop, { label: "Image de fond", hint: "2250 × 2812 px", value: state.bgImg, onChange: function (v) { set("bgImg", v); } }),
+          e(FileDrop, { label: "Drapeau du pays", hint: "rectangle 3:2, 480 × 300 px", value: state.flagImg, onChange: function (v) { set("flagImg", v); }, small: true })),
+        e("div", { className: "infobox", style: { marginTop: 12 } },
+          e("strong", null, "Logo TotalEnergies : "), "pas d'upload. Place le fichier ",
+          e("code", null, LOGO_FILE), " dans le même dossier que cette page (idéal 540 × 408 px, fond blanc).",
+          logoOk ? null : e("div", { style: { marginTop: 6, color: "#a33" } }, "Fichier non trouvé pour l'instant."))),
+
+      e("div", { className: "section" },
+        e("h2", null, "Texte"),
+        e("label", { className: "field-label" }, "Badge (éditable)"),
+        e("input", { type: "text", value: state.badgeLabel, onChange: function (ev) { set("badgeLabel", ev.target.value); }, style: { marginBottom: 12 } }),
+        e("label", { className: "field-label" }, "Titre du poste"),
+        e("textarea", { rows: 2, value: state.jobTitle, onChange: function (ev) { set("jobTitle", ev.target.value); }, style: { marginBottom: 12 } }),
+        e("label", { className: "field-label" }, "Nom"),
+        e("input", { type: "text", value: state.personName, onChange: function (ev) { set("personName", ev.target.value); } })),
+
+      e("div", { className: "section" },
+        e("h2", null, "Missions"),
+        state.bullets.map(function (b, i) {
+          return e("div", { className: "bullet-card", key: i },
+            e("div", { className: "bullet-top" },
+              e("select", { value: b.icon, onChange: function (ev) { setBullet(i, "icon", ev.target.value); } },
+                e("option", { value: "target" }, "Cible"), e("option", { value: "bars" }, "Barres"), e("option", { value: "people" }, "Personnes")),
+              e("input", { type: "text", value: b.keyword, placeholder: "Mot-clé", onChange: function (ev) { setBullet(i, "keyword", ev.target.value); } })),
+            e("textarea", { rows: 2, value: b.text, placeholder: "Texte", onChange: function (ev) { setBullet(i, "text", ev.target.value); } }));
+        })),
+
+      e("div", { className: "section" },
+        e("label", { className: "field-label" }, "Citation"),
+        e("textarea", { rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } })),
+
+      e("div", { className: "section" },
+        e("label", { className: "field-label" }, "Intensité du dégradé noir (" + Math.round(state.shadowOpacity * 100) + "%)"),
+        e("input", {
+          type: "range", min: 0, max: 1, step: 0.05,
+          value: state.shadowOpacity,
+          onChange: function (ev) { set("shadowOpacity", parseFloat(ev.target.value)); },
+          style: { width: "100%" }
+        })),
+
+      e("button", { className: "export-btn", onClick: handleExport, disabled: exporting },
+        exporting ? e("span", { className: "spin" }, e(DownloadIcon)) : e(DownloadIcon),
+        exporting ? "Export en cours..." : "Télécharger le PNG (2250 × 2812)")
+    );
+
+    /* =====================================================================
+       ASSEMBLAGE DE LA CARTE — ordre du fond vers le dessus :
+       1. photo de fond  2. teinte couleur du thème  3. portrait pleine hauteur
+       4. dégradé noir du bas (POINT 1 : maintenant PAR-DESSUS le portrait)
+       5. blocs missions/citation  6. badge/logo/drapeau/titre  7. cadre blanc
+       ===================================================================== */
+    var bgLayer = e("div", {
+      style: {
+        position: "absolute", inset: 0,
+        backgroundImage: state.bgImg ? "url(" + state.bgImg + ")" : "none",
+        backgroundColor: state.bgImg ? undefined : "#3a3a3a",
+        backgroundSize: "cover", backgroundPosition: "center",
+        filter: "saturate(0.72) contrast(1.04)"
+      }
+    });
+    var tintLayer = e("div", {
+      style: {
+        position: "absolute", inset: 0,
+        background: "linear-gradient(160deg, " + cDark + " 0%, " + c + " 55%, " + cDark + " 100%)",
+        opacity: TINT_OPACITY
+      }
+    });
+
+    // POINT 4/5 : la photo est centrée (pas calée en bas) pour que le contour blanc
+    // ajouté autour d'elle ne soit jamais coupé net par le bord du cadre.
+    // Les traits dynamiques (POINT 6) sont calculés à partir du contour réel de
+    // la silhouette (voir computeContourTraits) puis repositionnés ici en tenant
+    // compte du redimensionnement "contain" (mêmes calculs que le navigateur).
+    var traitEls = [];
+    if (state.portraitTraits && state.portraitTraits.points.length) {
+      var nW = state.portraitTraits.naturalW, nH = state.portraitTraits.naturalH;
+      var fitScale = Math.min(CARD_W / nW, CARD_H / nH);
+      var dispW = nW * fitScale, dispH = nH * fitScale;
+      var offX = (CARD_W - dispW) / 2, offY = (CARD_H - dispH) / 2; // objectPosition: center center
+      traitEls = state.portraitTraits.points.map(function (p, i) {
+        var cx = offX + p.x * fitScale, cy = offY + p.y * fitScale;
+        var tx = cx + p.nx * TRAIT_DISTANCE, ty = cy + p.ny * TRAIT_DISTANCE;
+        return e(TraitLine, { key: i, x: tx, y: ty, nx: p.nx, ny: p.ny });
+      });
+    }
+
+    var portraitLayer = e("div", {
+      style: { position: "absolute", inset: 0, display: "flex", justifyContent: "center", alignItems: "center", zIndex: 2 }
+    },
+      state.portraitImg
+        ? e("img", {
+            src: state.portraitImg, alt: "portrait",
+            style: { height: "100%", width: "100%", objectFit: "contain", objectPosition: "center bottom" }
+          })
+        : e("div", {
+            style: {
+              width: "68%", height: "58%", borderRadius: 16,
+              background: "rgba(255,255,255,0.12)", border: "2px dashed rgba(255,255,255,0.4)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "rgba(255,255,255,0.65)", fontSize: 13, textAlign: "center", padding: 10
+            }
+          }, "Portrait détouré, PNG transparent, pleine hauteur"),
+      traitEls
+    );
+
+    // POINT 1 : dégradé noir maintenant AU-DESSUS de bgLayer/tintLayer/portraitLayer
+    // (zIndex plus élevé + placé après dans l'assemblage), et plus sombre.
+    var bottomShadow = e("div", {
+      style: {
+        position: "absolute", left: 0, right: 0, bottom: 0, height: "46%", zIndex: 3,
+        background: "linear-gradient(to top, rgba(0,0,0," + state.shadowOpacity + ") 0%, rgba(0,0,0,0) 100%)",
+        pointerEvents: "none"
+      }
+    });
+
+    var missionsBlock = e("div", {
+      style: {
+        position: "absolute", left: CONTENT_L, top: BOTTOM_Y, width: MISS_W, height: BLOCK_H,
+        border: "2px solid white", borderRadius: 18, padding: "13px 14px",
+        display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box", zIndex: 3
+      }
+    },
+      state.bullets.map(function (b, i) {
+        return e("div", { key: i, style: { display: "flex", alignItems: "flex-start", gap: 9 } },
+          e("div", { style: { color: "white", marginTop: 1, flexShrink: 0 } }, ICON_PATHS[b.icon]),
+          e("div", { style: { fontSize: MISS_FONT, color: "white", lineHeight: 1.3, fontWeight: 600 } },
+            e("span", {
+              style: {
+                background: "linear-gradient(90deg, " + cLight + " 0%, " + cDark + " 98%, " + cDark + " 100%)",
+                fontWeight: 800, padding: "1px 7px", marginRight: 5, display: "inline-block"
+              }
+            }, b.keyword),
+            b.text));
+      })
+    );
+
+    // POINT 2 : le bloc citation démarre juste après le bloc missions + l'écart mesuré
+    var quoteLeft = CONTENT_L + MISS_W + BLOCK_GAP;
+    var quotePadH = 16, quotePadV = 18;
+    var quoteCanvasW = Math.round(QUOTE_W - quotePadV * 2);
+    var quoteCanvasH = Math.round(BLOCK_H - quotePadH * 2);
+    var quoteBlock = e("div", {
+      style: {
+        position: "absolute", left: quoteLeft, top: BOTTOM_Y, width: QUOTE_W, height: BLOCK_H,
+        background: "white", borderRadius: 18, padding: quotePadH + "px " + quotePadV + "px",
+        display: "flex", alignItems: "center", boxSizing: "border-box", zIndex: 3
+      }
+    },
+      e("canvas", {
+        ref: quoteCanvasRef,
+        width: quoteCanvasW,
+        height: quoteCanvasH,
+        style: { display: "block", width: quoteCanvasW + "px", height: quoteCanvasH + "px" }
+      })
+    );
+
+    // POINT 3bis : badge décollé du bord haut (BADGE_TOP ≈ 50px)
+    var badge = e("div", {
+      style: {
+        position: "absolute", left: CONTENT_L, top: BADGE_TOP, display: "flex", alignItems: "stretch",
+        borderRadius: 10, overflow: "hidden", zIndex: 4,
+        background: "linear-gradient(90deg, " + cLight + " 0%, " + c + " 45%, " + cDark + " 98%, " + cDark + " 100%)"
+      }
+    },
+      e("div", { style: { width: BADGE_ICON_BOX, display: "flex", alignItems: "center", justifyContent: "center" } },
+        e("svg", { viewBox: "0 0 24 24", width: BADGE_ICON_SIZE, height: BADGE_ICON_SIZE, fill: "none", stroke: "white", strokeWidth: 2 },
+          e("path", { d: "M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" }), e("circle", { cx: 12, cy: 12, r: 3 }))),
+      e("div", { style: { width: 1, background: "rgba(255,255,255,0.4)" } }),
+      e("div", { style: { color: "white", fontWeight: 800, fontSize: BADGE_FONT, letterSpacing: 0.3, padding: "9px 18px", whiteSpace: "nowrap", display: "flex", alignItems: "center" } },
+        state.badgeLabel)
+    );
+
+    // POINT 3 : drapeau collé au coin du cadre, même arrondi (right/top = FRAME_INSET, radius = FRAME_RADIUS)
+    var flagSlot = e("div", {
+      style: {
+        position: "absolute", right: FRAME_INSET, top: FRAME_INSET, width: FLAG_W, height: FLAG_H,
+        overflow: "hidden", borderTopRightRadius: FLAG_RADIUS, borderBottomLeftRadius: FLAG_RADIUS2,
+        border: FLAG_BORDER + "px solid white", boxSizing: "border-box",
+        background: state.flagImg ? "transparent" : "rgba(255,255,255,0.18)",
+        display: "flex", alignItems: "center", justifyContent: "center", zIndex: 4
+      }
+    },
+      state.flagImg
+        ? e("img", { src: state.flagImg, alt: "drapeau", style: { width: "100%", height: "100%", objectFit: "cover" } })
+        : e("div", { style: { fontSize: 8, color: "rgba(255,255,255,0.75)", textAlign: "center", lineHeight: 1.3 } },
+            "drapeau", e("br"), Math.round(FLAG_W * EXPORT_SCALE) + "×" + Math.round(FLAG_H * EXPORT_SCALE))
+    );
+
+    // Logo collé directement à gauche du drapeau, même ligne haute (FRAME_INSET)
+    var logoSlot = e("div", {
+      style: {
+        position: "absolute", right: FRAME_INSET + FLAG_W+10, top: FRAME_INSET, width: LOGO_W, height: LOGO_H,
+        background: "white", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", zIndex: 4
+      }
+    },
+      e("img", {
+        src: LOGO_FILE, alt: "TotalEnergies",
+        style: { width: "88%", height: "78%", objectFit: "contain", display: logoOk ? "block" : "none" },
+        onLoad: function () { setLogoOk(true); }, onError: function () { setLogoOk(false); }
+      }),
+      logoOk ? null : e("div", { style: { fontSize: 7.5, color: "#999", textAlign: "center", lineHeight: 1.25, padding: 2 } },
+        Math.round(LOGO_W * EXPORT_SCALE) + "×" + Math.round(LOGO_H * EXPORT_SCALE), e("br"), LOGO_FILE)
+    );
+
+    var titleBlock = e("div", { style: { position: "absolute", left: CONTENT_L, top: 92, width: CONTENT_R - CONTENT_L, zIndex: 4 } },
+      e("div", {
+        style: {
+          color: "white", fontWeight: 750, fontSize: TITLE_FONT, lineHeight: 1.2, whiteSpace: "pre-wrap",
+          textTransform: "uppercase", textShadow: TITLE_SHADOW
+        }
+      }, state.jobTitle),
+      e("div", { style: { color: "white", fontWeight: 700, fontSize: NAME_FONT, marginTop: 5, textTransform: "uppercase" } }, state.personName)
+    );
+
+    var frame = e("div", {
+      style: {
+        position: "absolute", left: FRAME_INSET, top: FRAME_INSET, right: FRAME_INSET, bottom: FRAME_INSET,
+        border: FRAME_BORDER + "px solid white", borderRadius: FRAME_RADIUS, pointerEvents: "none", zIndex: 6
+      }
+    });
+
+    var card = e("div", {
+      ref: cardRef,
+      style: { width: CARD_W, height: CARD_H, position: "relative", fontFamily: "Nunito, sans-serif", overflow: "hidden", background: "#333" }
+    },
+      bgLayer, tintLayer, portraitLayer, bottomShadow, missionsBlock, quoteBlock, badge, logoSlot, flagSlot, titleBlock, frame
+    );
+
+    return e("div", { className: "app-layout" }, panel, e("div", { className: "preview-wrap" }, card));
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+window.addEventListener("load", boot);
+</script>
+</body>
+</html>
