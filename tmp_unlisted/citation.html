@@ -328,13 +328,13 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 
 /* ═══ STATE ════════════════════════════════════════════════════════════════ */
 var DEFAULT={
-  format:"1x1", quoteStyle:"curly", blockY:0, blockPct:0,
+  format:"1x1", quoteStyle:"curly", blockYPct:500, blockPct:0, badgeIcon:"iconeCharge.png",
   bgImg:"TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
   photo:"TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
   badge:"MORE ENERGY, LESS EMISSIONS",
   quote:"Our first challenge is to continue to **provide the energy the world needs** while __significantly reducing the emissions generated__ by our operations. One of our priorities remains **methane reduction,** with the ambition of achieving near-zero methane emissions by 2030.",
-  showLogo:false, logoImg:null
+  showLogo:false, logoImg:"logo-totalenergies.png"
 };
 
 /* ═══ APP ══════════════════════════════════════════════════════════════════ */
@@ -346,7 +346,19 @@ function App(){
   var cardRef=useRef(null),impRef=useRef(null);
   function set(k,v){setSt(function(p){var c=Object.assign({},p);c[k]=v;return c;});}
   var L=getLayout(st.format),CARD_H=L.CARD_H,EX=L.EXPORT_SCALE;
-  var dY=st.blockY||0;
+  /* Position verticale : 0–100%.
+     0%  = position native du format
+     50% = valeur par défaut (neutre)
+     Le bas du bloc citation ne peut pas dépasser CARD_H - 5cm (189px). */
+  var CM = 600/15.875;                        // px par cm sur la carte
+  var BLOC_NATIVE_TOP = L.QUOTE_Y;            // position native
+  var MAX_BOTTOM = L.CARD_H - 5*CM;           // 5cm du bord bas
+  // blockYPct : 0–1000 (divisé par 10 = 0.0–100.0%) — 500 = neutre
+  var raw = (st.blockYPct===undefined?500:st.blockYPct);
+  var pct = raw / 10;  // 0.0–100.0
+  /* plage de déplacement disponible */
+  var MAX_DY = Math.max(0, MAX_BOTTOM - BLOC_NATIVE_TOP - 60);
+  var dY = Math.round((pct-50)/50 * MAX_DY);
   /* Largeur du bloc citation exprimée en % de la largeur de la carte.
      blockPct = 0 signifie "valeur native du format". */
   var autoPct = Math.round(L.QUOTE_W/CARD_W*100);
@@ -413,17 +425,19 @@ function App(){
 
     /* BADGE (position fixe, non affecté par le slider) */
     e("div",{style:{position:"absolute",left:L.BADGE_X,top:L.BADGE_Y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
-      e("div",{style:{width:L.BADGE_ICON,height:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,background:TE_GRAD,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
-        e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.56,height:L.BADGE_ICON*0.56,fill:TE_WHITE},
-          e("path",{d:"M13.5 2 L5 13.2 h5.2 L9.6 22 L19 10.4 h-5.4 z"}))),
-      e("div",{style:{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,background:TE_GRAD,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontWeight:800,fontSize:L.BADGE_FONT,letterSpacing:".055em",textTransform:"uppercase",whiteSpace:"nowrap"}},st.badge)),
+      e("div",{style:{width:L.BADGE_ICON,height:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
+        st.badgeIcon
+          ?e("img",{src:st.badgeIcon,alt:"",style:{width:L.BADGE_ICON*0.64+"px",height:L.BADGE_ICON*0.64+"px",objectFit:"contain"}})
+          :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.56,height:L.BADGE_ICON*0.56,fill:TE_WHITE},
+             e("path",{d:"M13.5 2 L5 13.2 h5.2 L9.6 22 L19 10.4 h-5.4 z"}))),
+      e("div",{style:{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontWeight:800,fontSize:L.BADGE_FONT,letterSpacing:".055em",textTransform:"uppercase",whiteSpace:"nowrap"}},st.badge)),
 
     /* PERSONNE (décalée par le slider) */
     e("div",{style:{position:"absolute",left:L.PERSON_X-dW/2,top:L.PERSON_Y+dY,display:"flex",alignItems:"stretch",gap:L.PERSON_GAP}},
-      e("div",{style:{width:L.PHOTO_W,height:L.PHOTO_H,borderRadius:L.PERSON_RADIUS,overflow:"hidden",flexShrink:0,background:"rgba(255,255,255,.14)"}},
-        st.photo?e("img",{src:st.photo,alt:"",style:{width:"100%",height:"100%",objectFit:"cover",display:"block"}})
+      e("div",{style:{width:L.PHOTO_W+"px",height:L.PHOTO_H+"px",borderRadius:L.PERSON_RADIUS+"px",overflow:"hidden",flexShrink:0,position:"relative",background:"rgba(255,255,255,.14)"}},
+        st.photo?e("img",{src:st.photo,alt:"",style:{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top",display:"block"}})
                 :e("div",{style:{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"rgba(255,255,255,.4)",fontSize:10,fontWeight:700,letterSpacing:".08em"}},"PHOTO")),
-      e("div",{style:{height:L.PHOTO_H,borderRadius:L.PERSON_RADIUS,background:TE_GRAD,display:"flex",flexDirection:"column",justifyContent:"center",padding:"0 "+L.PERSON_PADX+"px"}},
+      e("div",{style:{height:L.PHOTO_H,borderRadius:L.PERSON_RADIUS,width:(QW-L.PHOTO_W-L.PERSON_GAP)+"px",backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",flexDirection:"column",justifyContent:"center",padding:"0 "+L.PERSON_PADX+"px",boxSizing:"border-box"}},
         e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:L.NAME_FONT,lineHeight:1.16,letterSpacing:".01em",whiteSpace:"nowrap"}},st.name),
         e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:L.TITLE_FONT,lineHeight:1.28,whiteSpace:"pre-line",marginTop:3}},st.title))),
 
@@ -469,21 +483,24 @@ function App(){
         }))),
 
     e("div",{className:"section"},e("h2",null,"Badge"),
-      e("input",{type:"text",value:st.badge,onChange:function(ev){set("badge",ev.target.value);}})),
+      e("input",{type:"text",value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Icône du badge ","(PNG transparent, défaut = éclair)"),
+      e(FileDrop,{value:st.badgeIcon,onChange:function(v){set("badgeIcon",v);},placeholder:"PNG transparent (défaut = ⚡)",small:true})),
 
     e("div",{className:"section"},e("h2",null,"Position et largeur"),
       e("div",{className:"hint",style:{marginBottom:6}},
         "Décale ensemble le bloc personne et le bloc citation."),
-      e("label",{className:"field-label"},(dY>0?"+":"")+dY+" px"),
-      e("input",{type:"range",min:-90,max:90,step:1,value:dY,
-        onChange:function(ev){set("blockY",parseInt(ev.target.value,10));}}),
+      e("label",{className:"field-label"},pct<50?"Position ↑ ("+(50-pct).toFixed(1)+"%)":pct>50?"Position ↓ ("+(pct-50).toFixed(1)+"%)":"Position neutre (50%)"),
+      e("input",{type:"range",min:0,max:1000,step:1,value:raw,
+        onChange:function(ev){set("blockYPct",parseInt(ev.target.value,10));}}),
       e("div",{style:{height:12}}),
       e("h2",null,"Largeur du bloc citation"),
       e("label",{className:"field-label"},
         curPct+" %  ("+QW+" px)"+(st.blockPct?"":"  — natif")),
       e("input",{type:"range",min:30,max:90,step:1,value:curPct,
         onChange:function(ev){set("blockPct",parseInt(ev.target.value,10));}}),
-      e("button",{onClick:function(){set("blockY",0);set("blockPct",0);},
+      e("button",{onClick:function(){set("blockYPct",500);set("blockPct",0);},
         style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
           border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
         "Réinitialiser position et largeur")),
