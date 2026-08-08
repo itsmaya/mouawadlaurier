@@ -1203,7 +1203,6 @@ var TRAIT_ORIGIN_GAP = 20;
            pour éviter tout upscale par html2canvas — même logique que citation. */
         if (!imgSrc) return onDone(null);
         var img = new Image();
-        img.crossOrigin = "anonymous";
         img.onload = function () {
           var OW = Math.round(w * EXPORT_SCALE);
           var OH = Math.round(h * EXPORT_SCALE);
