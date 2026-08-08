@@ -818,14 +818,20 @@ function boot() {
   // ─── Sauvegardes via IndexedDB ─────────────────────────────────────────────
   // IndexedDB : pas de limite de taille (contrairement à localStorage ~5MB),
   // donc les images base64 passent sans problème.
-  var DB_NAME = "wie_db", DB_VERSION = 1, STORE_NAME = "saves";
+  /* DB_VERSION alignée sur citation.html (version 2) pour partager
+   la même base IndexedDB sans conflit. */
+  var DB_NAME = "wie_db", DB_VERSION = 2, STORE_NAME = "saves";
 
   function openDB(onSuccess, onError) {
     var req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = function(ev) {
       var db = ev.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: "name" });
+      /* Créer les deux stores si absents (wie + citation partagent la même DB) */
+      if (!db.objectStoreNames.contains("saves")) {
+        db.createObjectStore("saves", { keyPath: "name" });
+      }
+      if (!db.objectStoreNames.contains("citation_saves")) {
+        db.createObjectStore("citation_saves", { keyPath: "name" });
       }
     };
     req.onsuccess = function(ev) { onSuccess(ev.target.result); };
