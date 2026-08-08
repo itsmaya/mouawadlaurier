@@ -441,18 +441,18 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
 </head>
 <body>
 <header class="page-header">
-  <img class="page-header-logo" src="https://fisheyemanufacture.com/wp-content/uploads/2023/03/logo-fisheye.png" alt="Fisheye"/>
+  <img class="page-header-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
   <div class="page-header-sep"></div>
   <span class="page-header-title">Fiche Métier</span>
   <span class="page-header-sub">Static Posts Generator</span>
   <nav class="page-header-nav">
-    <a href="index.html">&larr; Accueil</a>
-    <a href="citation.html">Citation Post</a>
+    <a href="../../index.html">&larr; Accueil</a>
+    <a href="../citation/index.html">Citation Post</a>
   </nav>
 </header>
 <footer class="page-footer">
   <span class="page-footer-label">Developed by</span>
-  <img class="page-footer-logo" src="https://fisheyemanufacture.com/wp-content/uploads/2023/03/logo-fisheye.png" alt="Fisheye" style=""/>
+  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye" style=""/>
 </footer>
 <div id="root"></div>
 
@@ -498,7 +498,7 @@ function boot() {
   // Format actif — sera dans le state React
   // On garde CARD_W fixe (600px) et on recalcule CARD_H selon le format choisi
   var CARD_W = 600;
-  var LOGO_FILE = "logo-totalenergies.png";
+  var LOGO_FILE = "../../assets/logos/logo-totalenergies.png";
   var PORTRAIT_OUTLINE_RATIO = 0.01;
   var TINT_OPACITY = 0.40;
   var BOTTOM_SHADOW_OPACITY = 0.80;
@@ -1122,9 +1122,9 @@ var TRAIT_ORIGIN_GAP = 20;
         img.onerror = function () {}; // fichier absent, on ignore silencieusement
         img.src = filename;
       }
-      tryLoad("TEMPLATE_PORTRAIT.png", function(dataUrl) { set("portraitRaw", dataUrl); });
-      tryLoad("TEMPLATE_BACK.png",     function(dataUrl) { set("bgImg", dataUrl); });
-      tryLoad("TEMPLATE_DRAPEAU.png",  function(dataUrl) { set("flagImg", dataUrl); });
+      tryLoad("../../templates/fiche-metier/TEMPLATE_PORTRAIT.png", function(dataUrl) { set("portraitRaw", dataUrl); });
+      tryLoad("../../templates/fiche-metier/TEMPLATE_BACK.png",     function(dataUrl) { set("bgImg", dataUrl); });
+      tryLoad("../../templates/fiche-metier/TEMPLATE_DRAPEAU.png",  function(dataUrl) { set("flagImg", dataUrl); });
     }, []);
 
     // 1) dès qu'une photo brute est uploadée -> on ajoute le contour blanc

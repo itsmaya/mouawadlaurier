@@ -65,18 +65,18 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 </head>
 <body>
 <header class="page-header">
-  <img class="page-header-logo" src="https://fisheyemanufacture.com/wp-content/uploads/2023/03/logo-fisheye.png" alt="Fisheye"/>
+  <img class="page-header-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
   <div class="page-header-sep"></div>
   <span class="page-header-title">Citation Post</span>
   <span class="page-header-sub">Static Posts Generator</span>
   <nav class="page-header-nav">
-    <a href="index.html">&larr; Accueil</a>
-    <a href="wie.html">Fiche Métier</a>
+    <a href="../../index.html">&larr; Accueil</a>
+    <a href="../fiche-metier/index.html">Fiche Métier</a>
   </nav>
 </header>
 <footer class="page-footer">
   <span class="page-footer-label">Developed by</span>
-  <img class="page-footer-logo" src="https://fisheyemanufacture.com/wp-content/uploads/2023/03/logo-fisheye.png" alt="Fisheye"/>
+  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
 </footer>
 <div id="root"></div>
 <script>
@@ -126,7 +126,7 @@ var e=React.createElement,useState=React.useState,useRef=React.useRef,
     useLayoutEffect=React.useLayoutEffect;
 
 /* ═══ GUILLEMETS ══════════════════════════════════════════════════════════
-   curly (EN)  → PNG ouvert.png / ferme.png
+   curly (EN)  → PNG ../../templates/citation/ouvert.png / ../../templates/citation/ferme.png
    chevron (FR)→ SVG « » épais, bouts arrondis, dégradé TE
                  « ouvrant = pointes vers la GAUCHE
                  » fermant = pointes vers la DROITE
@@ -134,7 +134,7 @@ var e=React.createElement,useState=React.useState,useRef=React.useRef,
 var GID=0;
 function Guil(p){
   if(p.qstyle!=="chevron"){
-    return e("img",{src:p.close?"ferme.png":"ouvert.png",alt:"",
+    return e("img",{src:p.close?"../../templates/citation/ferme.png":"../../templates/citation/ouvert.png",alt:"",
       style:{height:p.h+"px",width:"auto",display:"block"}});
   }
   var id="gc"+(++GID);
@@ -251,7 +251,7 @@ function QuoteBody(props){
       /* ancre invisible : réserve la place du guillemet ouvrant.
          hauteur 0 => la 1re ligne garde le même interligne que les autres */
       e("span",{"data-anchor":"open",
-        style:{display:"inline-block",width:ANCHOR,height:0,verticalAlign:"baseline"}}),
+        style:{display:"inline-block",width:qs!=="none"?ANCHOR:0,height:0,verticalAlign:"baseline"}}),
       parts.map(function(p,i){
         if(p.t==="h") return e("span",{key:i,"data-seg":"h","data-part":"1",
           style:{color:TE_WHITE,fontWeight:800}},p.v);
@@ -259,10 +259,10 @@ function QuoteBody(props){
         return e("span",{key:i,"data-part":"1"},p.v);
       }),
       e("span",{"data-anchor":"close",
-        style:{display:"inline-block",width:ANCHOR,height:0,verticalAlign:"baseline"}})),
+        style:{display:"inline-block",width:qs!=="none"?ANCHOR:0,height:0,verticalAlign:"baseline"}})),
 
     /* guillemet ouvrant : bas aligné sur le bas de la 1re ligne */
-    M.open?e("div",{style:{position:"absolute",left:M.open.x,
+    (qs!=="none"&&M.open)?e("div",{style:{position:"absolute",left:M.open.x,
       top:M.open.b-gh, width:gw, height:gh, zIndex:2}},
       e(Guil,{qstyle:qs,h:gh,close:false})):null,
 
@@ -288,9 +288,9 @@ function QuoteBody(props){
         top  = (lt?lt.b:M.close.b)-gh; /* bas aligné sur le bas du texte */
         if(!sameLine) top = M.close.b-gh;
       }
-      return e("div",{style:{position:"absolute",left:left,top:top,
+      return qs!=="none"?e("div",{style:{position:"absolute",left:left,top:top,
         width:gw,height:gh,zIndex:2}},
-        e(Guil,{qstyle:qs,h:gh,close:true}));
+        e(Guil,{qstyle:qs,h:gh,close:true})):null;
     })()
   );
 }
@@ -328,13 +328,13 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 
 /* ═══ STATE ════════════════════════════════════════════════════════════════ */
 var DEFAULT={
-  format:"1x1", quoteStyle:"curly", blockYPct:-1, blockPct:0, badgeIcon:"iconeCharge.png",
-  bgImg:"TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
-  photo:"TEMPLATE_PERSONNE.png",
+  format:"1x1", quoteStyle:"curly", blockYPct:-1, blockPct:0, badgeIcon:"../../assets/icons/iconeCharge.png",
+  bgImg:"../../templates/citation/TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
+  photo:"../../templates/citation/TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
   badge:"MORE ENERGY, LESS EMISSIONS",
   quote:"Our first challenge is to continue to **provide the energy the world needs** while __significantly reducing the emissions generated__ by our operations. One of our priorities remains **methane reduction,** with the ambition of achieving near-zero methane emissions by 2030.",
-  showLogo:false, logoImg:"logo-totalenergies.png"
+  showLogo:false, logoImg:"../../assets/logos/logo-totalenergies.png"
 };
 
 /* ═══ APP ══════════════════════════════════════════════════════════════════ */
@@ -668,11 +668,49 @@ function App(){
                 f.outputW+" × "+f.outputH+" px")));
         }))),
 
+    e("div",{className:"section"},e("h2",null,"Image de fond"),
+      e("div",{className:"upload-hint"},
+        "Format idéal : ",e("b",null,"PNG/JPG, 1080×1080 ou 1080×1350 px")," • Défaut : ../../templates/citation/TEMPLATE_BACK2.png"),
+      e(FileDrop,{value:st.bgImg,onChange:function(v){set("bgImg",v);},placeholder:"Photo de fond"}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
+      e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
+      e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
+      e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})),
+
     e("div",{className:"section"},e("h2",null,"Badge"),
       e("input",{type:"text",value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
       e("div",{style:{height:10}}),
       e("label",{className:"field-label"},"Icône du badge ","(PNG transparent, défaut = éclair)"),
       e(FileDrop,{value:st.badgeIcon,onChange:function(v){set("badgeIcon",v);},placeholder:"PNG transparent (défaut = ⚡)",small:true})),
+
+    e("div",{className:"section"},e("h2",null,"Personne"),
+      e("div",{className:"upload-hint"},
+        "Format idéal : ",e("b",null,"PNG/JPG portrait 3:4 (~400×530 px)")," • Défaut : ../../templates/citation/TEMPLATE_PERSONNE.png"),
+      e(FileDrop,{value:st.photo,onChange:function(v){set("photo",v);},placeholder:"Portrait",small:true}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Nom"),
+      e("input",{type:"text",value:st.name,onChange:function(ev){set("name",ev.target.value);}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Fonction ",e("span",{className:"hint"},"(Entrée = retour à la ligne)")),
+      e("textarea",{rows:2,value:st.title,onChange:function(ev){set("title",ev.target.value);}})),
+
+    e("div",{className:"section"},e("h2",null,"Guillemets"),
+      segBtn(st.quoteStyle,"quoteStyle",[{v:"curly",l:"\u201C \u201D  English"},{v:"chevron",l:"\u00AB \u00BB  Français"},{v:"none",l:"Aucun"}]),
+      e("div",{className:"hint",style:{marginTop:6}},
+        "English utilise ../../templates/citation/ouvert.png / ../../templates/citation/ferme.png du dossier.")),
+
+    e("div",{className:"section"},e("h2",null,"Citation"),
+      e("div",{className:"upload-hint",style:{marginBottom:6}},
+        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
+      e("textarea",{rows:8,value:st.quote,onChange:function(ev){set("quote",ev.target.value);},style:{fontSize:13,lineHeight:1.5}})),
+
+    e("div",{className:"section"},e("h2",null,"Alignement horizontal"),
+      e("div",{className:"seg"},
+        [{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}].map(function(o){
+          return e("button",{key:o.v,className:st.blockAlign===o.v?"on":"",
+            onClick:function(){ set("blockAlign",o.v); }},o.l);
+        }))),
 
     e("div",{className:"section"},e("h2",null,"Position et largeur"),
       e("div",{className:"hint",style:{marginBottom:6}},
@@ -692,44 +730,6 @@ function App(){
         style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
           border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
         "Réinitialiser position et largeur")),
-
-    e("div",{className:"section"},e("h2",null,"Alignement horizontal"),
-      e("div",{className:"seg"},
-        [{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}].map(function(o){
-          return e("button",{key:o.v,className:st.blockAlign===o.v?"on":"",
-            onClick:function(){ set("blockAlign",o.v); }},o.l);
-        }))),
-
-    e("div",{className:"section"},e("h2",null,"Image de fond"),
-      e("div",{className:"upload-hint"},
-        "Format idéal : ",e("b",null,"PNG/JPG, 1080×1080 ou 1080×1350 px")," • Défaut : TEMPLATE_BACK2.png"),
-      e(FileDrop,{value:st.bgImg,onChange:function(v){set("bgImg",v);},placeholder:"Photo de fond"}),
-      e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
-      e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
-      e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
-      e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})),
-
-    e("div",{className:"section"},e("h2",null,"Personne"),
-      e("div",{className:"upload-hint"},
-        "Format idéal : ",e("b",null,"PNG/JPG portrait 3:4 (~400×530 px)")," • Défaut : TEMPLATE_PERSONNE.png"),
-      e(FileDrop,{value:st.photo,onChange:function(v){set("photo",v);},placeholder:"Portrait",small:true}),
-      e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Nom"),
-      e("input",{type:"text",value:st.name,onChange:function(ev){set("name",ev.target.value);}}),
-      e("div",{style:{height:8}}),
-      e("label",{className:"field-label"},"Fonction ",e("span",{className:"hint"},"(Entrée = retour à la ligne)")),
-      e("textarea",{rows:2,value:st.title,onChange:function(ev){set("title",ev.target.value);}})),
-
-    e("div",{className:"section"},e("h2",null,"Guillemets"),
-      segBtn(st.quoteStyle,"quoteStyle",[{v:"curly",l:"\u201C \u201D  English"},{v:"chevron",l:"\u00AB \u00BB  Français"}]),
-      e("div",{className:"hint",style:{marginTop:6}},
-        "English utilise ouvert.png / ferme.png du dossier.")),
-
-    e("div",{className:"section"},e("h2",null,"Citation"),
-      e("div",{className:"upload-hint",style:{marginBottom:6}},
-        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
-      e("textarea",{rows:8,value:st.quote,onChange:function(ev){set("quote",ev.target.value);},style:{fontSize:13,lineHeight:1.5}})),
 
     e("div",{className:"section"},e("h2",null,"Logo TotalEnergies"),
       e("label",{style:{display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:600,cursor:"pointer"}},
