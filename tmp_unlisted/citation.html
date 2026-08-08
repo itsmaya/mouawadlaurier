@@ -343,7 +343,9 @@ function App(){
   var a1=useState([]),saves=a1[0],setSaves=a1[1];
   var a2=useState(""),sname=a2[0],setSname=a2[1];
   var a3=useState(false),busy=a3[0],setBusy=a3[1];
-  var cardRef=useRef(null),impRef=useRef(null);
+  var cardRef=useRef(null),impRef=useRef(null),quoteBlockRef=useRef(null);
+  /* Hauteur mesurée du bloc citation (mis à jour après chaque render) */
+  var qhState=useState(100); var quoteH=qhState[0],setQuoteH=qhState[1];
   function set(k,v){setSt(function(p){var c=Object.assign({},p);c[k]=v;return c;});}
   var L=getLayout(st.format),CARD_H=L.CARD_H,EX=L.EXPORT_SCALE;
   /* Position verticale : 0–100%.
@@ -353,12 +355,27 @@ function App(){
   var CM = 600/15.875;                        // px par cm sur la carte
   var BLOC_NATIVE_TOP = L.QUOTE_Y;            // position native
   var MAX_BOTTOM = L.CARD_H - 5*CM;           // 5cm du bord bas
-  // blockYPct : 0–1000 (divisé par 10 = 0.0–100.0%) — 500 = neutre
+  /* Position verticale : slider 0–1000 → 0.0–100.0%
+     Contrainte : bas du bloc toujours entre (CARD_H-50) et (CARD_H-20).
+     quoteH = hauteur réelle mesurée du bloc citation.
+     BOTTOM_MIN = CARD_H - 50  (au moins 50px du bas)
+     BOTTOM_MAX = CARD_H - 20  (au plus  20px du bas)
+     topMin = BOTTOM_MIN - quoteH  → bord haut min
+     topMax = BOTTOM_MAX - quoteH  → bord haut max
+     Le slider choisit dans [topMin, topMax]. */
+  /* Contraintes :
+     - Le haut du bloc >= 50px depuis le haut de la carte
+     - Le bas du bloc  <= CARD_H - 50px depuis le bas de la carte
+     Le slider choisit dans cette plage. */
+  /* Contraintes :
+     haut du bloc  >= bas du bloc personne + 10px de marge
+     bas  du bloc  <= CARD_H - 20 */
+  var TOP_MIN = L.PERSON_Y + L.PHOTO_H + 10 - 110;
+  var TOP_MAX = Math.max(TOP_MIN, L.CARD_H - 20 - quoteH);
   var raw = (st.blockYPct===undefined?500:st.blockYPct);
   var pct = raw / 10;  // 0.0–100.0
-  /* plage de déplacement disponible */
-  var MAX_DY = Math.max(0, MAX_BOTTOM - BLOC_NATIVE_TOP - 60);
-  var dY = Math.round((pct-50)/50 * MAX_DY);
+  var targetTop = TOP_MIN + (pct/100) * (TOP_MAX - TOP_MIN);
+  var dY = Math.round(targetTop - L.QUOTE_Y);
   /* Largeur du bloc citation exprimée en % de la largeur de la carte.
      blockPct = 0 signifie "valeur native du format". */
   var autoPct = Math.round(L.QUOTE_W/CARD_W*100);
@@ -367,6 +384,17 @@ function App(){
   var QW = Math.round(CARD_W*curPct/100);
   var dW = QW - L.QUOTE_W;   /* décalage utilisé pour recentrer les blocs */
   useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
+
+  /* Mesure la hauteur réelle du bloc citation après chaque render.
+     Déclenche un re-render si elle change (texte ou largeur modifiés). */
+  useLayoutEffect(function(){
+    if(!quoteBlockRef.current) return;
+    var SC=quoteBlockRef.current.getBoundingClientRect().height
+           /quoteBlockRef.current.offsetHeight;
+    var h=Math.round(quoteBlockRef.current.offsetHeight||
+             quoteBlockRef.current.getBoundingClientRect().height/(SC||1));
+    if(h>0 && h!==quoteH) setQuoteH(h);
+  });
 
   function save(){var n=sname.trim()||("Version "+new Date().toLocaleString("fr-FR"));dbPut({name:n,date:new Date().toISOString(),state:st},function(){dbAll(function(a){setSaves(a);});});setSname("");}
   function load(en){setSt(Object.assign({},DEFAULT,en.state));}
@@ -442,7 +470,7 @@ function App(){
         e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:L.TITLE_FONT,lineHeight:1.28,whiteSpace:"pre-line",marginTop:3}},st.title))),
 
     /* BLOC CITATION (décalé + largeur ajustable par les sliders) */
-    e("div",{style:{position:"absolute",left:L.QUOTE_X-dW/2,top:L.QUOTE_Y+dY,width:QW,
+    e("div",{ref:quoteBlockRef,style:{position:"absolute",left:L.QUOTE_X-dW/2,top:L.QUOTE_Y+dY,width:QW,
         background:TE_WHITE,borderRadius:L.QUOTE_RADIUS,
         padding:L.QUOTE_PAD,paddingBottom:L.QUOTE_PAD+6,boxSizing:"border-box"}},
       e(QuoteBody,{text:st.quote,fs:L.QUOTE_FONT,lh:L.QUOTE_LH,
@@ -491,7 +519,7 @@ function App(){
     e("div",{className:"section"},e("h2",null,"Position et largeur"),
       e("div",{className:"hint",style:{marginBottom:6}},
         "Décale ensemble le bloc personne et le bloc citation."),
-      e("label",{className:"field-label"},pct<50?"Position ↑ ("+(50-pct).toFixed(1)+"%)":pct>50?"Position ↓ ("+(pct-50).toFixed(1)+"%)":"Position neutre (50%)"),
+      e("label",{className:"field-label"},"Position — bas du bloc à "+(L.CARD_H-(L.QUOTE_Y+dY+quoteH))+"px du bord"),
       e("input",{type:"range",min:0,max:1000,step:1,value:raw,
         onChange:function(ev){set("blockYPct",parseInt(ev.target.value,10));}}),
       e("div",{style:{height:12}}),
