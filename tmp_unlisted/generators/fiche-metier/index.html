@@ -1199,14 +1199,27 @@ var TRAIT_ORIGIN_GAP = 20;
 
       // Pré-blur l'image de fond sur un canvas, car html2canvas ignore filter:blur()
       function applyBlurToCanvas(imgSrc, w, h, blurPx, onDone) {
+        /* Rendu directement à la résolution OUTPUT (×EXPORT_SCALE)
+           pour éviter tout upscale par html2canvas — même logique que citation. */
         if (!imgSrc) return onDone(null);
         var img = new Image();
+        img.crossOrigin = "anonymous";
         img.onload = function () {
+          var OW = Math.round(w * EXPORT_SCALE);
+          var OH = Math.round(h * EXPORT_SCALE);
           var c2 = document.createElement("canvas");
-          c2.width = w; c2.height = h;
+          c2.width = OW; c2.height = OH;
           var cx = c2.getContext("2d");
-          cx.filter = "blur(" + blurPx + "px) saturate(0.72) contrast(1.04)";
-          cx.drawImage(img, 0, 0, w, h);
+          cx.imageSmoothingEnabled = true;
+          cx.imageSmoothingQuality = "high";
+          /* Blur proportionnel au scale pour rendu identique à la preview */
+          if (blurPx > 0) cx.filter = "blur(" + Math.round(blurPx * EXPORT_SCALE) + "px) saturate(0.72) contrast(1.04)";
+          else cx.filter = "saturate(0.72) contrast(1.04)";
+          /* Cover : remplir en conservant le ratio, avec marge scale(1.06) */
+          var ir = img.naturalWidth / img.naturalHeight, cr = OW / OH, dw, dh;
+          if (ir > cr) { dh = OH * 1.06; dw = dh * ir; }
+          else         { dw = OW * 1.06; dh = dw / ir; }
+          cx.drawImage(img, (OW - dw) / 2, (OH - dh) / 2, dw, dh);
           onDone(c2.toDataURL("image/png"));
         };
         img.onerror = function () { onDone(null); };

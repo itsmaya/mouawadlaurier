@@ -421,14 +421,25 @@ function App(){
     if(!cardRef.current)return;
     setBusy(true);
     function preBlur(src,w,h,px,done){
-      if(!src||px<=0)return done(null);
-      var i=new Image();
-      i.onload=function(){var c=document.createElement("canvas");c.width=w;c.height=h;
-        var x=c.getContext("2d");x.filter="blur("+px+"px)";
-        var ir=i.naturalWidth/i.naturalHeight,cr=w/h,dw,dh;
-        if(ir>cr){dh=h*1.06;dw=dh*ir;}else{dw=w*1.06;dh=dw/ir;}
-        x.drawImage(i,(w-dw)/2,(h-dh)/2,dw,dh);done(c.toDataURL("image/png"));};
-      i.onerror=function(){done(null);};i.src=src;
+      /* Rendu à la résolution OUTPUT (×EX) pour éviter tout upscale */
+      if(!src) return done(null);
+      var img=new Image();
+      img.crossOrigin="anonymous";
+      img.onload=function(){
+        var OW=Math.round(w*EX), OH=Math.round(h*EX);
+        var cv=document.createElement("canvas");
+        cv.width=OW; cv.height=OH;
+        var ctx=cv.getContext("2d");
+        ctx.imageSmoothingEnabled=true;
+        ctx.imageSmoothingQuality="high";
+        if(px>0) ctx.filter="blur("+Math.round(px*EX)+"px)";
+        var ir=img.naturalWidth/img.naturalHeight, cr=OW/OH, dw,dh;
+        if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
+        ctx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
+        done(cv.toDataURL("image/png"));
+      };
+      img.onerror=function(){done(null);};
+      img.src=src;
     }
     var realH=Math.round(cardRef.current.getBoundingClientRect().height)||CARD_H;
     preBlur(st.bgImg,CARD_W,realH,st.bgBlur,function(blurred){
@@ -456,6 +467,8 @@ function App(){
           var c2 = document.createElement("canvas");
           c2.width = pw * EX; c2.height = ph * EX;
           var x = c2.getContext("2d");
+          x.imageSmoothingEnabled=true;
+          x.imageSmoothingQuality="high";
           /* cover : remplir en conservant le ratio, ancré en haut */
           var ir = src.naturalWidth / src.naturalHeight;
           var cr = pw / ph;
