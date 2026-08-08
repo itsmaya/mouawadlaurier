@@ -328,7 +328,7 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 
 /* ═══ STATE ════════════════════════════════════════════════════════════════ */
 var DEFAULT={
-  format:"1x1", quoteStyle:"curly", blockYPct:500, blockPct:0, badgeIcon:"iconeCharge.png",
+  format:"1x1", quoteStyle:"curly", blockYPct:-1, blockPct:0, badgeIcon:"iconeCharge.png",
   bgImg:"TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
   photo:"TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
@@ -363,18 +363,32 @@ function App(){
      topMin = BOTTOM_MIN - quoteH  → bord haut min
      topMax = BOTTOM_MAX - quoteH  → bord haut max
      Le slider choisit dans [topMin, topMax]. */
-  /* Contraintes :
-     - Le haut du bloc >= 50px depuis le haut de la carte
-     - Le bas du bloc  <= CARD_H - 50px depuis le bas de la carte
-     Le slider choisit dans cette plage. */
-  /* Contraintes :
-     haut du bloc  >= bas du bloc personne + 10px de marge
-     bas  du bloc  <= CARD_H - 20 */
-  var TOP_MIN = L.PERSON_Y + L.PHOTO_H + 10 - 110;
-  var TOP_MAX = Math.max(TOP_MIN, L.CARD_H - 20 - quoteH);
-  var raw = (st.blockYPct===undefined?500:st.blockYPct);
-  var pct = raw / 10;  // 0.0–100.0
-  var targetTop = TOP_MIN + (pct/100) * (TOP_MAX - TOP_MIN);
+  /* ── POSITION VERTICALE DU BLOC CITATION ──────────────────────────
+     Contraintes absolues en pixels sur la carte :
+       TOP_MIN = bas du bloc personne + 10px  (haut du bloc citation)
+       TOP_MAX = CARD_H - 20 - quoteH         (bas du bloc à 20px du bord)
+
+     Valeur par défaut blockYPct=-1 = sentinel "position native du format".
+     Quand l utilisateur bouge le slider, on passe à 0–1000 :
+       0    → TOP_MIN (bloc collé sous la photo)
+       1000 → TOP_MAX (bloc à 20px du bas)
+
+     dY = targetTop - L.QUOTE_Y  (décalage depuis la position native)
+     ──────────────────────────────────────────────────────────────── */
+  /* TOP_MIN = 10px sous le badge (le "titre") */
+  var TOP_MIN = L.BADGE_Y + L.BADGE_H + 10 + L.PHOTO_H + 10;
+  var TOP_MAX = L.CARD_H - 20 - quoteH;
+  if (TOP_MAX < TOP_MIN) TOP_MAX = TOP_MIN;
+
+  var raw = (st.blockYPct===undefined ? -1 : st.blockYPct);
+  var targetTop;
+  if (raw < 0) {
+    /* Sentinel : position native du format, clampée dans la plage */
+    targetTop = Math.max(TOP_MIN, Math.min(TOP_MAX, L.QUOTE_Y));
+  } else {
+    /* Slider 0–1000 : 0 = juste sous le badge, 1000 = 20px du bas */
+    targetTop = TOP_MIN + (raw / 1000) * (TOP_MAX - TOP_MIN);
+  }
   var dY = Math.round(targetTop - L.QUOTE_Y);
   /* Largeur du bloc citation exprimée en % de la largeur de la carte.
      blockPct = 0 signifie "valeur native du format". */
@@ -425,21 +439,158 @@ function App(){
       box.appendChild(cl);document.body.appendChild(box);
       if(blurred){var bg=cl.querySelector("[data-layer=bg]");
         if(bg){bg.style.backgroundImage="url("+blurred+")";bg.style.filter="none";bg.style.transform="none";}}
-      var captH=Math.round(cl.getBoundingClientRect().height)||realH;
-      window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
-          backgroundColor:"#12203c",width:CARD_W,height:captH,
-          windowWidth:CARD_W,windowHeight:captH})
-        .then(function(cv){var a=document.createElement("a");
-          a.download=(st.name||"citation").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+st.format+".png";
-          a.href=cv.toDataURL("image/png");a.click();})
-        .catch(function(er){console.error(er);alert("Erreur export : "+er.message);})
-        .then(function(){document.body.removeChild(box);setBusy(false);});
+
+      /* ── Fixer la photo personne pour l'export ─────────────────────
+         html2canvas ignore objectFit:cover et les transforms CSS sur <img>.
+         On remplace l'<img> par un canvas offscreen qui contient la photo
+         recadrée correctement (cover + centré sur le haut). */
+      function fixPhotoForExport(done) {
+        if (!st.photo) return done();
+        var imgEl = cl.querySelector("[data-photo]");
+        if (!imgEl) return done();
+        var pw = parseInt(imgEl.getAttribute("data-pw")||L.PHOTO_W);
+        var ph = parseInt(imgEl.getAttribute("data-ph")||L.PHOTO_H);
+        var src = new Image();
+        src.crossOrigin = "anonymous";
+        src.onload = function() {
+          var c2 = document.createElement("canvas");
+          c2.width = pw * EX; c2.height = ph * EX;
+          var x = c2.getContext("2d");
+          /* cover : remplir en conservant le ratio, ancré en haut */
+          var ir = src.naturalWidth / src.naturalHeight;
+          var cr = pw / ph;
+          var dw, dh, dx, dy;
+          if (ir > cr) { dh = ph*EX; dw = dh*ir; dx = (pw*EX-dw)/2; dy = 0; }
+          else         { dw = pw*EX; dh = dw/ir; dx = 0; dy = 0; /* ancré haut */ }
+          x.drawImage(src, dx, dy, dw, dh);
+          /* Remplacer l'img par un vrai img avec le canvas en src */
+          var rep = document.createElement("img");
+          rep.src = c2.toDataURL("image/png");
+          rep.style.cssText = "position:absolute;top:0;left:0;width:"+pw+"px;height:"+ph+"px;display:block;";
+          imgEl.parentNode.replaceChild(rep, imgEl);
+          done();
+        };
+        src.onerror = function() { done(); };
+        src.src = st.photo;
+      }
+
+      fixPhotoForExport(function() {
+        var captH=Math.round(cl.getBoundingClientRect().height)||realH;
+        window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
+            backgroundColor:"#12203c",width:CARD_W,height:captH,
+            windowWidth:CARD_W,windowHeight:captH})
+          .then(function(cv){var a=document.createElement("a");
+            a.download=(st.name||"citation").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+st.format+".png";
+            a.href=cv.toDataURL("image/png");a.click();})
+          .catch(function(er){console.error(er);alert("Erreur export : "+er.message);})
+          .then(function(){document.body.removeChild(box);setBusy(false);});
+      });
     });
   },[st,CARD_H,EX]);
 
   var previewScale=Math.min(520/CARD_W,(window.innerHeight-140)/CARD_H,1);
 
   /* ═══ CARTE ═══════════════════════════════════════════════════════════════ */
+  /* Adaptation du texte personne à la largeur de la pilule.
+     Stratégie :
+       1. Mesurer le nom sur 1 ligne. Si ça tient → OK.
+       2. Sinon chercher le meilleur point de coupure du nom (2 lignes).
+          Si les 2 lignes tiennent → passer en whiteSpace:pre-wrap.
+       3. Sinon réduire la fonte jusqu'à ce que tout tienne.
+     Dans tous les cas : marge droite = marge gauche (PERSON_PADX). */
+  var pillW  = QW - L.PHOTO_W - L.PERSON_GAP;
+  var nFont  = L.NAME_FONT;
+  var tFont  = L.TITLE_FONT;
+  var nameDisplay = st.name; /* texte affiché : peut contenir \n si on coupe */
+  var nameWrap    = "nowrap";
+  (function(){
+    try {
+      var inner = Math.max(1, pillW - L.PERSON_PADX * 2);
+      var cvs = document.createElement("canvas");
+      var ctx = cvs.getContext("2d");
+      function titleMaxW(fs){
+        ctx.font = "400 " + fs + "px Nunito";
+        return (st.title||"").split("\n").reduce(function(mx,l){
+          return Math.max(mx, ctx.measureText(l).width);
+        }, 0);
+      }
+      ctx.font = "900 " + L.NAME_FONT + "px Nunito";
+      var nameW1 = ctx.measureText(st.name).width;
+      var tW     = titleMaxW(L.TITLE_FONT);
+      var maxW   = Math.max(nameW1, tW);
+
+      if (maxW <= inner) return; /* tout tient sur 1 ligne, rien à faire */
+
+      /* ── Étape 2 : essayer de couper le nom en 2 lignes ─────────── */
+      var words = st.name.split(" ");
+      if (words.length >= 2) {
+        /* Trouver la coupure qui minimise max(ligne1, ligne2) */
+        var bestCut = -1, bestMax = Infinity;
+        for (var wi = 1; wi < words.length; wi++) {
+          var l1 = ctx.measureText(words.slice(0,wi).join(" ")).width;
+          var l2 = ctx.measureText(words.slice(wi).join(" ")).width;
+          var mx = Math.max(l1, l2);
+          if (mx < bestMax) { bestMax = mx; bestCut = wi; }
+        }
+        if (bestMax <= inner) {
+          /* Le nom tient en 2 lignes — vérifier avec le titre aussi */
+          var stillMaxW = Math.max(bestMax, tW);
+          if (stillMaxW <= inner) {
+            nameDisplay = words.slice(0,bestCut).join(" ") + "\n" + words.slice(bestCut).join(" ");
+            nameWrap = "pre-line";
+            return; /* résolu sans scale */
+          }
+        }
+      }
+
+      /* ── Étape 3 : réduire la fonte (avec nom potentiellement en 2 lignes) */
+      /* Utiliser la meilleure coupure trouvée si elle existe */
+      var nameForScale = nameDisplay; /* peut déjà avoir un \n */
+      if (nameWrap === "nowrap" && words.length >= 2) {
+        /* recalculer bestCut pour le scale */
+        var bc = -1, bm = Infinity;
+        for (var wj = 1; wj < words.length; wj++) {
+          var la = ctx.measureText(words.slice(0,wj).join(" ")).width;
+          var lb = ctx.measureText(words.slice(wj).join(" ")).width;
+          var mm = Math.max(la, lb);
+          if (mm < bm) { bm = mm; bc = wj; }
+        }
+        nameForScale = words.slice(0,bc).join(" ") + "\n" + words.slice(bc).join(" ");
+        nameWrap = "pre-line";
+      }
+      /* Mesurer la ligne la plus longue du nom coupé */
+      var nameWlines = nameForScale.split("\n");
+      ctx.font = "900 " + L.NAME_FONT + "px Nunito";
+      var nameWbest = nameWlines.reduce(function(mx,l){ return Math.max(mx,ctx.measureText(l).width); },0);
+      var worstW = Math.max(nameWbest, tW);
+      if (worstW > inner) {
+        var scale = inner / worstW;
+        nFont = L.NAME_FONT  * scale;
+        tFont = L.TITLE_FONT * scale;
+        nameDisplay = nameForScale;
+      }
+    } catch(ex) { /* canvas indisponible : on garde les valeurs natives */ }
+  })();
+
+  /* ── Alignement horizontal ──────────────────────────────────────
+     left   → 20px du bord gauche
+     center → position native du format (défaut)
+     right  → 20px du bord droit */
+  /* Marge de référence = bord gauche du badge (L.BADGE_X),
+     pour que le bloc soit aligné avec le badge quel que soit le format. */
+  var ALIGN_MARGIN = L.BADGE_X;
+  var blockX, personX;
+  if (st.blockAlign === "left") {
+    blockX  = ALIGN_MARGIN;
+    personX = ALIGN_MARGIN;
+  } else if (st.blockAlign === "right") {
+    blockX  = CARD_W - QW - ALIGN_MARGIN;
+    personX = CARD_W - QW - ALIGN_MARGIN;
+  } else {
+    blockX  = L.QUOTE_X  - dW/2;
+    personX = L.PERSON_X - dW/2;
+  }
+
   var card=e("div",{ref:cardRef,style:{
     width:CARD_W,minHeight:CARD_H,position:"relative",
     fontFamily:"'Nunito',sans-serif",background:"#12203c",overflow:"hidden"}},
@@ -461,16 +612,23 @@ function App(){
       e("div",{style:{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontWeight:800,fontSize:L.BADGE_FONT,letterSpacing:".055em",textTransform:"uppercase",whiteSpace:"nowrap"}},st.badge)),
 
     /* PERSONNE (décalée par le slider) */
-    e("div",{style:{position:"absolute",left:L.PERSON_X-dW/2,top:L.PERSON_Y+dY,display:"flex",alignItems:"stretch",gap:L.PERSON_GAP}},
+    e("div",{style:{position:"absolute",left:personX,top:L.PERSON_Y+dY,display:"flex",alignItems:"stretch",gap:L.PERSON_GAP}},
       e("div",{style:{width:L.PHOTO_W+"px",height:L.PHOTO_H+"px",borderRadius:L.PERSON_RADIUS+"px",overflow:"hidden",flexShrink:0,position:"relative",background:"rgba(255,255,255,.14)"}},
-        st.photo?e("img",{src:st.photo,alt:"",style:{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top",display:"block"}})
+        st.photo?e("img",{"data-photo":"1","data-pw":L.PHOTO_W,"data-ph":L.PHOTO_H,src:st.photo,alt:"",style:{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top",display:"block"}})
                 :e("div",{style:{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"rgba(255,255,255,.4)",fontSize:10,fontWeight:700,letterSpacing:".08em"}},"PHOTO")),
-      e("div",{style:{height:L.PHOTO_H,borderRadius:L.PERSON_RADIUS,width:(QW-L.PHOTO_W-L.PERSON_GAP)+"px",backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",flexDirection:"column",justifyContent:"center",padding:"0 "+L.PERSON_PADX+"px",boxSizing:"border-box"}},
-        e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:L.NAME_FONT,lineHeight:1.16,letterSpacing:".01em",whiteSpace:"nowrap"}},st.name),
-        e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:L.TITLE_FONT,lineHeight:1.28,whiteSpace:"pre-line",marginTop:3}},st.title))),
+      e("div",{style:{height:L.PHOTO_H,borderRadius:L.PERSON_RADIUS,
+          width:pillW+"px",
+          backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",
+          display:"flex",flexDirection:"column",justifyContent:"center",
+          padding:"0 "+L.PERSON_PADX+"px",boxSizing:"border-box",overflow:"hidden"}},
+          e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:nFont,
+            lineHeight:1.16,letterSpacing:".01em",whiteSpace:nameWrap}},nameDisplay),
+          e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:tFont,
+            lineHeight:1.28,whiteSpace:"pre-line",marginTop:3,
+            overflow:"hidden"}},st.title))),
 
     /* BLOC CITATION (décalé + largeur ajustable par les sliders) */
-    e("div",{ref:quoteBlockRef,style:{position:"absolute",left:L.QUOTE_X-dW/2,top:L.QUOTE_Y+dY,width:QW,
+    e("div",{ref:quoteBlockRef,style:{position:"absolute",left:blockX,top:L.QUOTE_Y+dY,width:QW,
         background:TE_WHITE,borderRadius:L.QUOTE_RADIUS,
         padding:L.QUOTE_PAD,paddingBottom:L.QUOTE_PAD+6,boxSizing:"border-box"}},
       e(QuoteBody,{text:st.quote,fs:L.QUOTE_FONT,lh:L.QUOTE_LH,
@@ -519,8 +677,10 @@ function App(){
     e("div",{className:"section"},e("h2",null,"Position et largeur"),
       e("div",{className:"hint",style:{marginBottom:6}},
         "Décale ensemble le bloc personne et le bloc citation."),
-      e("label",{className:"field-label"},"Position — bas du bloc à "+(L.CARD_H-(L.QUOTE_Y+dY+quoteH))+"px du bord"),
-      e("input",{type:"range",min:0,max:1000,step:1,value:raw,
+      e("label",{className:"field-label"},(raw<0?"Position native":"Position — bas à "+(L.CARD_H-(Math.round(targetTop)+quoteH))+"px du bord")),
+      e("input",{type:"range",min:0,max:1000,step:1,
+        /* si raw<0 (sentinel), on affiche le slider centré sur la position actuelle */
+        value:raw<0?Math.round((targetTop-TOP_MIN)/(TOP_MAX-TOP_MIN)*1000)||500:raw,
         onChange:function(ev){set("blockYPct",parseInt(ev.target.value,10));}}),
       e("div",{style:{height:12}}),
       e("h2",null,"Largeur du bloc citation"),
@@ -528,10 +688,17 @@ function App(){
         curPct+" %  ("+QW+" px)"+(st.blockPct?"":"  — natif")),
       e("input",{type:"range",min:30,max:90,step:1,value:curPct,
         onChange:function(ev){set("blockPct",parseInt(ev.target.value,10));}}),
-      e("button",{onClick:function(){set("blockYPct",500);set("blockPct",0);},
+      e("button",{onClick:function(){set("blockYPct",-1);set("blockPct",0);},
         style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
           border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
         "Réinitialiser position et largeur")),
+
+    e("div",{className:"section"},e("h2",null,"Alignement horizontal"),
+      e("div",{className:"seg"},
+        [{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}].map(function(o){
+          return e("button",{key:o.v,className:st.blockAlign===o.v?"on":"",
+            onClick:function(){ set("blockAlign",o.v); }},o.l);
+        }))),
 
     e("div",{className:"section"},e("h2",null,"Image de fond"),
       e("div",{className:"upload-hint"},
