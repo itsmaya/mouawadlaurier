@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Générateur PNG - Women in Energy</title>
+<title>Générateur PNG - Fiche Métier</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
 
@@ -393,28 +393,14 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
     display: flex; align-items: center; padding: 0 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-  .page-header-logo {
-    height: 19px; width: auto; display: block; flex-shrink: 0;
-  }
-  .page-header-sep {
-    width: 1px; height: 18px; background: #e0e0e0; flex-shrink: 0; margin: 0 14px;
-  }
   .page-header-title {
-    font-size: 11px; font-weight: 800; color: #111; letter-spacing: 0.07em;
+    font-size: 13px; font-weight: 700; color: #171717; letter-spacing: 0.04em;
     text-transform: uppercase;
   }
   .page-header-sub {
-    font-size: 11px; font-weight: 400; color: #aaa; margin-left: 10px;
+    font-size: 11px; font-weight: 500; color: #737373; margin-left: 10px;
+    letter-spacing: 0.02em; padding-left: 10px; border-left: 1px solid #e5e5e5;
   }
-  .page-header-nav {
-    margin-left: auto; display: flex; gap: 8px;
-  }
-  .page-header-nav a {
-    font-size: 11px; font-weight: 700; color: #333; text-decoration: none;
-    padding: 5px 12px; border-radius: 2px; border: 1px solid #ddd;
-    letter-spacing: 0.03em; text-transform: uppercase;
-  }
-  .page-header-nav a:hover { background: #f5f5f5; }
   .page-footer {
     position: fixed; bottom: 0; right: 0; z-index: 100;
     display: flex; align-items: center; gap: 8px;
@@ -427,14 +413,31 @@ function(a,b,c){if(!Vd(b))throw Error(n(200));return Wd(null,a,b,!1,c)};Q.unmoun
     text-transform: uppercase;
   }
   .page-footer-logo { height: 18px; filter: grayscale(1) opacity(0.55); }
-  .app-layout { padding-top: 72px; padding-bottom: 48px; }
+  .app-layout { padding-top: 64px; padding-bottom: 48px; }
+  .page-header-nav { margin-left: auto; display: flex; gap: 8px; }
+  .page-header-nav a { font-size: 12px; font-weight: 600; color: #1a1a1a; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid #d2d0cb; }
+  .page-header-nav a:hover { background: #f0efec; }
+
+.page-header{position:fixed;top:0;left:0;right:0;height:52px;z-index:100;
+  background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;
+  padding:0 24px;gap:16px;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+.page-header-logo{height:20px;display:block;
+  /* Logo fond noir → invert pour fond blanc */
+  }
+.page-header-sep{width:1px;height:20px;background:#e0e0e0;flex-shrink:0;}
+.page-header-title{font-size:12px;font-weight:800;color:#111;
+  letter-spacing:.06em;text-transform:uppercase;}
+.page-header-sub{font-size:11px;font-weight:500;color:#999;margin-left:2px;}
+.page-header-nav{margin-left:auto;display:flex;gap:8px;}
+.page-header-nav a{font-size:11px;font-weight:700;color:#222;text-decoration:none;
+  padding:5px 12px;border-radius:2px;border:1px solid #ddd;
+  letter-spacing:.04em;text-transform:uppercase;transition:background .15s;}
+.page-header-nav a:hover{background:#f5f5f5;}
+
+.page-footer{position:fixed;bottom:0;right:0;z-index:100;display:flex;align-items:center;gap:8px;padding:8px 16px;background:#fff;border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:12px 0 0 0;}
+.page-footer-label{font-size:10px;font-weight:700;color:#aaa;letter-spacing:.06em;text-transform:uppercase;}
+.page-footer-logo{height:16px;}
 </style>
-<script type="module">
-import { pipeline, env } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/transformers.min.js";
-env.allowLocalModels = false;
-window.__transformers = { pipeline, env };
-window.__transformersReady = true;
-</script>
 </head>
 <body>
 <header class="page-header">
@@ -449,7 +452,7 @@ window.__transformersReady = true;
 </header>
 <footer class="page-footer">
   <span class="page-footer-label">Developed by</span>
-  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye" />
+  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye" style=""/>
 </footer>
 <div id="root"></div>
 
@@ -806,8 +809,6 @@ function boot() {
     portraitRaw: null,   // photo telle qu'uploadée
     portraitImg: null,   // photo + contour blanc (calculée automatiquement)
     portraitTraits: null, // { naturalW, naturalH, points } calculé sur portraitImg
-    removingBg: false,
-    langTarget: "FR",
     portraitScale: 1.0,  // échelle du portrait (1.0 = taille naturelle, 0.5 = moitié, 1.5 = 50% plus grand)
     bgImg: null,
     flagImg: null,
@@ -817,13 +818,15 @@ function boot() {
   // ─── Sauvegardes via IndexedDB ─────────────────────────────────────────────
   // IndexedDB : pas de limite de taille (contrairement à localStorage ~5MB),
   // donc les images base64 passent sans problème.
+  /* DB_VERSION alignée sur citation.html (version 2) pour partager
+   la même base IndexedDB sans conflit. */
   var DB_NAME = "wie_db", DB_VERSION = 2, STORE_NAME = "saves";
 
   function openDB(onSuccess, onError) {
     var req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = function(ev) {
       var db = ev.target.result;
-      // Les deux générateurs partagent la même base : créer les deux stores
+      /* Créer les deux stores si absents (wie + citation partagent la même DB) */
       if (!db.objectStoreNames.contains("saves")) {
         db.createObjectStore("saves", { keyPath: "name" });
       }
@@ -1046,7 +1049,6 @@ var TRAIT_ORIGIN_GAP = 20;
   function App() {
     var st = useState(DEFAULT_STATE), state = st[0], setState = st[1];
     var ex = useState(false), exporting = ex[0], setExporting = ex[1];
-    var translating_state = useState(false); var isTranslating=translating_state[0],setTranslating=translating_state[1];
     var lg = useState(true), logoOk = lg[0], setLogoOk = lg[1];
     var proc = useState(false), processingOutline = proc[0], setProcessingOutline = proc[1];
     // ─── State sauvegardes ────────────────────────────────────────────────────
@@ -1203,19 +1205,26 @@ var TRAIT_ORIGIN_GAP = 20;
 
       // Pré-blur l'image de fond sur un canvas, car html2canvas ignore filter:blur()
       function applyBlurToCanvas(imgSrc, w, h, blurPx, onDone) {
+        /* Rendu directement à la résolution OUTPUT (×EXPORT_SCALE)
+           pour éviter tout upscale par html2canvas — même logique que citation. */
         if (!imgSrc) return onDone(null);
         var img = new Image();
         img.onload = function () {
-          var OW=Math.round(w*EXPORT_SCALE), OH=Math.round(h*EXPORT_SCALE);
+          var OW = Math.round(w * EXPORT_SCALE);
+          var OH = Math.round(h * EXPORT_SCALE);
           var c2 = document.createElement("canvas");
           c2.width = OW; c2.height = OH;
           var cx = c2.getContext("2d");
-          cx.imageSmoothingEnabled=true; cx.imageSmoothingQuality="high";
-          if(blurPx>0) cx.filter="blur("+Math.round(blurPx*EXPORT_SCALE)+"px) saturate(0.72) contrast(1.04)";
-          else cx.filter="saturate(0.72) contrast(1.04)";
-          var ir=img.naturalWidth/img.naturalHeight,cr=OW/OH,dw,dh;
-          if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
-          cx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
+          cx.imageSmoothingEnabled = true;
+          cx.imageSmoothingQuality = "high";
+          /* Blur proportionnel au scale pour rendu identique à la preview */
+          if (blurPx > 0) cx.filter = "blur(" + Math.round(blurPx * EXPORT_SCALE) + "px) saturate(0.72) contrast(1.04)";
+          else cx.filter = "saturate(0.72) contrast(1.04)";
+          /* Cover : remplir en conservant le ratio, avec marge scale(1.06) */
+          var ir = img.naturalWidth / img.naturalHeight, cr = OW / OH, dw, dh;
+          if (ir > cr) { dh = OH * 1.06; dw = dh * ir; }
+          else         { dw = OW * 1.06; dh = dw / ir; }
+          cx.drawImage(img, (OW - dw) / 2, (OH - dh) / 2, dw, dh);
           onDone(c2.toDataURL("image/png"));
         };
         img.onerror = function () { onDone(null); };
@@ -1310,8 +1319,8 @@ var TRAIT_ORIGIN_GAP = 20;
               style: {
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "10px 12px", borderRadius: 8, cursor: "pointer",
-                border: active ? "2px solid #3B7CE0" : "2px solid #e8e8e8",
-                background: active ? "#f0f5ff" : "#fafafa",
+                border: active ? "2px solid #1a1a1a" : "2px solid #e8e8e8",
+                background: active ? "#f0efec" : "#fafafa",
                 transition: "all 0.15s"
               }
             },
@@ -1320,12 +1329,12 @@ var TRAIT_ORIGIN_GAP = 20;
                   width: key === "story" ? 20 : key === "square" ? 28 : 22,
                   height: key === "story" ? 34 : key === "square" ? 28 : 28,
                   borderRadius: 3,
-                  background: active ? "#3B7CE0" : "#ccc",
+                  background: active ? "#1a1a1a" : "#ccc",
                   flexShrink: 0
                 }
               }),
               e("div", null,
-                e("div", { style: { fontWeight: 700, fontSize: 13, color: active ? "#3B7CE0" : "#333" } }, fmt.label),
+                e("div", { style: { fontWeight: 700, fontSize: 13, color: active ? "#1a1a1a" : "#333" } }, fmt.label),
                 e("div", { style: { fontSize: 11, color: "#888", marginTop: 1 } },
                   fmt.outputW + " × " + fmt.outputH + " px"
                 )
@@ -1353,14 +1362,6 @@ var TRAIT_ORIGIN_GAP = 20;
           hint: "pleine hauteur, idéal ≥ 2250 × 2812 px — contour blanc + traits ajoutés automatiquement",
           value: state.portraitRaw, onChange: function (v) { set("portraitRaw", v); }
         }),
-        state.portraitRaw ? e("div", {style:{marginTop:8,display:"flex",gap:6,alignItems:"center"}},
-          e("button", {onClick:removeBg, disabled:state.removingBg,
-            style:{fontSize:12,fontWeight:700,padding:"7px 14px",borderRadius:6,
-              border:"1px solid #d4d4d4",background:state.removingBg?"#f5f5f5":"#fff",
-              cursor:state.removingBg?"default":"pointer",fontFamily:"inherit",display:"flex",gap:6,alignItems:"center"}},
-            state.removingBg?"⏳ Traitement…":"✨ Supprimer le fond (IA)"),
-          e("span",{className:"hint"},"1er chargement ~50 Mo")
-        ) : null,
         processingOutline ? e("div", { className: "hint", style: { marginTop: 4 } }, "Calcul du contour et des traits...") : null,
         e("div", { style: { marginTop: 10 } },
           e("label", { className: "field-label" }, "Échelle du portrait (" + Math.round(state.portraitScale * 100) + "%)"),
@@ -1425,19 +1426,6 @@ var TRAIT_ORIGIN_GAP = 20;
         e("textarea", { rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } })),
 
 
-      e("div", {className:"section"},
-        e("h2",null,"Traduction IA"),
-        e("div",{className:"hint",style:{marginBottom:10}},
-          "Traduit badge, poste, missions et citation (DeepL Free)."),
-        e("button",{onClick:translate,disabled:isTranslating,
-          style:{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",
-            gap:8,fontSize:13,fontWeight:700,padding:"10px",borderRadius:7,
-            border:"1px solid #d4d4d4",background:isTranslating?"#f5f5f5":"#fff",
-            cursor:isTranslating?"default":"pointer",fontFamily:"inherit"}},
-          isTranslating?"🌐 Traduction en cours…":("🌐 Traduire → "+(state.langTarget||"FR"))
-        )
-      ),
-
       e("div", { className: "section" },
         e("h2", null, "Sauvegardes"),
         e("div", { style: { display: "flex", gap: 8, marginBottom: 10 } },
@@ -1445,7 +1433,7 @@ var TRAIT_ORIGIN_GAP = 20;
             onChange: function(ev) { setSaveName(ev.target.value); },
             style: { flex: 1, fontSize: 13, padding: "6px 8px" } }),
           e("button", { onClick: handleSave,
-            style: { background: "#3B7CE0", color: "white", border: "none", borderRadius: 6,
+            style: { background: "#1a1a1a", color: "white", border: "none", borderRadius: 6,
               padding: "6px 14px", cursor: "pointer", fontWeight: 700, fontSize: 13 }
           }, "Sauvegarder")),
         saves.length === 0
@@ -1458,7 +1446,7 @@ var TRAIT_ORIGIN_GAP = 20;
                     e("div", { style: { fontSize: 13, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, s.name),
                     e("div", { className: "hint" }, new Date(s.date).toLocaleString("fr-FR"))),
                   e("button", { onClick: (function(en){ return function(){ handleLoad(en); }; })(s),
-                    style: { background: "#f0f4ff", color: "#3B7CE0", border: "none", borderRadius: 5,
+                    style: { background: "#f0f4ff", color: "#1a1a1a", border: "none", borderRadius: 5,
                       padding: "4px 10px", cursor: "pointer", fontWeight: 700, fontSize: 12 } }, "Charger"),
                   e("button", { onClick: (function(nm){ return function(){ if(confirm("Supprimer << "+nm+" >> ?")) handleDelete(nm); }; })(s.name),
                     style: { background: "#fff0f0", color: "#c0392b", border: "none", borderRadius: 5,
@@ -1539,23 +1527,16 @@ var TRAIT_ORIGIN_GAP = 20;
     var portraitLayer = e("div", {
       style: { position: "absolute", inset: 0, overflow: "hidden", zIndex: 2 }
     },
-      (state.portraitImg || state.portraitRaw)
+      state.portraitImg
         ? e("img", {
-            src: state.portraitImg || state.portraitRaw, alt: "portrait",
+            src: state.portraitImg, alt: "portrait",
             style: {
-              /* Boîte de contrainte = carte × pScale, ancrée en bas et centrée.
-                 object-fit:contain + object-position:bottom laisse le navigateur
-                 conserver le ratio réel de l'image — plus besoin de portraitTraits
-                 pour dimensionner, donc plus de décalage au chargement d'une
-                 sauvegarde (les traits arrivent après, ils ne servent qu'aux
-                 lignes de contour). */
               position: "absolute",
-              width: (CARD_W * pScale) + "px",
-              height: (CARD_H * pScale) + "px",
-              left: ((CARD_W - CARD_W * pScale) / 2) + "px",
+              width: pDispW + "px",
+              height: pDispH + "px",
+              left: ((CARD_W - pDispW) / 2) + "px",
               bottom: "0px",
-              objectFit: "contain",
-              objectPosition: "bottom center"
+              objectFit: "contain"
             }
           })
         : e("div", {
@@ -1697,141 +1678,6 @@ var TRAIT_ORIGIN_GAP = 20;
         border: FRAME_BORDER + "px solid white", borderRadius: FRAME_RADIUS, pointerEvents: "none", zIndex: 6
       }
     });
-
-
-    /* ── SUPPRESSION DE FOND — Transformers.js RMBG-1.4 ── */
-    var removeBgPipe = null;
-    function removeBg() {
-      if (!state.portraitRaw) return;
-      set("removingBg", true);
-      var tf = window.__transformers;
-      if (!tf) { alert("Transformers.js non disponible"); set("removingBg", false); return; }
-
-      /* Charger l image originale d abord */
-      var origImg = new Image();
-      origImg.onload = function() {
-        var W = origImg.naturalWidth, H = origImg.naturalHeight;
-
-        Promise.resolve()
-          .then(function() {
-            if (removeBgPipe) return removeBgPipe;
-            /* RMBG-1.4 : modèle de segmentation portrait, extrait le sujet principal */
-            return tf.pipeline("image-segmentation", "briaai/RMBG-1.4", {device:"wasm"})
-              .then(function(p){ removeBgPipe=p; return p; });
-          })
-          .then(function(pipe){
-            /* Passer le base64 string directement — format accepté par RMBG-1.4 */
-            return pipe(state.portraitRaw);
-          })
-          .then(function(result){
-            console.log("RMBG result:", JSON.stringify(Object.keys(result[0]||{})));
-            var item = result[0] || result;
-
-            /* Transformers.js v3 peut retourner :
-               - item.mask : RawImage avec .data (Uint8Array) + .width + .height
-               - item.output : HTMLImageElement (PNG avec alpha)
-               On gère les deux cas. */
-
-            if (item.output && (item.output instanceof HTMLImageElement || item.output.tagName === "IMG")) {
-              /* Cas simple : sortie déjà en PNG avec fond transparent */
-              var outImg = item.output;
-              var cv = document.createElement("canvas");
-              cv.width = outImg.naturalWidth || W;
-              cv.height = outImg.naturalHeight || H;
-              var ctx = cv.getContext("2d");
-              ctx.clearRect(0,0,cv.width,cv.height);
-              ctx.drawImage(outImg,0,0);
-              set("portraitRaw", cv.toDataURL("image/png"));
-              set("removingBg", false);
-              return;
-            }
-
-            /* Cas masque : on l applique manuellement */
-            var mask = item.mask;
-            if (!mask) throw new Error("Format de résultat inattendu : " + JSON.stringify(Object.keys(item)));
-
-            /* Canvas destination : image originale */
-            var cv = document.createElement("canvas");
-            cv.width = W; cv.height = H;
-            var ctx = cv.getContext("2d");
-            ctx.drawImage(origImg, 0, 0);
-
-            /* Canvas masque : redimensionné à W×H si nécessaire */
-            var mCv = document.createElement("canvas");
-            mCv.width = mask.width; mCv.height = mask.height;
-            var mCtx = mCv.getContext("2d");
-            /* mask.data est un Uint8Array (niveaux de gris) → convertir en RGBA */
-            var mRaw = mask.data instanceof Uint8Array ? mask.data : new Uint8Array(mask.data);
-            var mRGBA = new Uint8ClampedArray(mRaw.length * 4);
-            for (var i=0; i<mRaw.length; i++){
-              mRGBA[i*4]=255; mRGBA[i*4+1]=255; mRGBA[i*4+2]=255; mRGBA[i*4+3]=mRaw[i];
-            }
-            mCtx.putImageData(new ImageData(mRGBA, mask.width, mask.height), 0, 0);
-
-            /* Appliquer le masque : destination-in = garde les pixels de origImg où masque > 0 */
-            ctx.globalCompositeOperation = "destination-in";
-            ctx.drawImage(mCv, 0, 0, W, H);
-
-            set("portraitRaw", cv.toDataURL("image/png"));
-            set("removingBg", false);
-          })
-          .catch(function(err){
-            console.error("RemoveBG error:", err);
-            alert("Suppression de fond : " + err.message);
-            set("removingBg", false);
-          });
-      };
-      origImg.onerror = function(){ set("removingBg",false); alert("Impossible de charger l image"); };
-      origImg.src = state.portraitRaw;
-    }
-
-    /* ── TRADUCTION — API Claude (qualité corporate) ── */
-    var translating_state = useState(false);
-    var isTranslating = translating_state[0], setTranslating = translating_state[1];
-    function translate() {
-      var tgt = state.langTarget || "FR";
-      var src = tgt === "FR" ? "EN" : "FR";
-      setTranslating(true);
-      var bullets = (state.bullets||[]);
-      var texts = [
-        state.badgeLabel||"",
-        state.jobTitle||"",
-        state.quote||""
-      ].concat(bullets.reduce(function(a,b){
-        return a.concat([b.keyword||"", b.text||""]);
-      },[]));
-      fetch("../../api/translate.php",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({texts:texts,source_lang:src,target_lang:tgt})
-      })
-      .then(function(r){
-        return r.text().then(function(txt){
-          try{return JSON.parse(txt);}
-          catch(e){throw new Error("Proxy : "+txt.slice(0,300));}
-        });
-      })
-      .then(function(data){
-        if(data.error) throw new Error(data.error);
-        if(!data.translations) throw new Error("Verifier la cle DeepL dans api/translate.php");
-        var t=data.translations.map(function(x){return x.text;});
-        if(t[0]!==undefined) set("badgeLabel",t[0]);
-        if(t[1]!==undefined) set("jobTitle",t[1]);
-        if(t[2]!==undefined) set("quote",t[2]);
-        var nb=bullets.map(function(b){return Object.assign({},b);});
-        nb.forEach(function(b,i){
-          if(t[3+i*2]!==undefined) nb[i].keyword=t[3+i*2];
-          if(t[4+i*2]!==undefined) nb[i].text=t[4+i*2];
-        });
-        set("bullets",nb);
-        set("langTarget",src);
-        setTranslating(false);
-      })
-      .catch(function(err){
-        alert("Traduction impossible : "+err.message);
-        setTranslating(false);
-      });
-    }
 
     var card = e("div", {
       ref: cardRef,
