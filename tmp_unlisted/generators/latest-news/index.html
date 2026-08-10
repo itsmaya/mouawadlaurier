@@ -111,14 +111,14 @@ var GRADS={
 function gradCss(k,deg){var g=GRADS[k]||GRADS.bleu;
   return "linear-gradient("+(deg===undefined?90:deg)+"deg,"+g.from+" 0%,"+g.to+" 100%)";}
 
-/* Couleurs de texte autorisées sur fond blanc (charte "Textes") */
-var TEXT_COLORS=[
-  {v:"#374649",l:"Gris foncé"},
-  {v:"#4632FF",l:"Bleu"},
-  {v:"#0197E6",l:"Cyan"},
-  {v:"#00884A",l:"Vert"},
-  {v:"#E70000",l:"Rouge"}
-];
+/* ═══ COULEURS TEXTE — charte "Textes", fond blanc uniquement ════════════
+   Autorisé : gris foncé, les 4 couleurs unies de fin de dégradé principal,
+              ou le dégradé lui-même appliqué en diagonal.
+   Interdit  : toutes les couleurs secondaires (turquoise, fluo green, etc.)
+   Si le paragraphe dépasse 5 lignes : préférer gris ou couleur unie (charte).
+   ══════════════════════════════════════════════════════════════════════════ */
+/* Couleur gris foncé autorisée sur fond blanc, indépendamment du dégradé actif */
+var COLOR_GREY="#374649";
 var TE_WHITE="#FFFFFF";
 
 /* ═══ LAYOUT ══════════════════════════════════════════════════════════════
@@ -139,11 +139,59 @@ var FORMATS={
    Avec marie-louise, le cartouche passe à 100 px de marge (28 + 28). */
 var ML_W=px(50);
 
+/* ════════════════════════════════════════════════════════════════════════════
+   TYPO & MISE EN PAGE — toutes les valeurs éditables sont ici.
+   Les valeurs sont exprimées en PT CHARTE (base 1080px).
+   La fonction px() les convertit en pixels de carte (600px de large).
+
+   CARTOUCHE LÉGENDE
+   ──────────────────────────────────────────────────────────────────────── */
+var T={
+  /* Cartouche : boîte icône */
+  BADGE_H_PT      : 70,   /* hauteur de la pilule texte (pt charte) */
+  BADGE_ICON_PT   : 70,   /* taille de la boîte icône carrée */
+  BADGE_ICON_RATIO: 0.68, /* taille de l'icône dans la boîte (0.68 = 68%) */
+  BADGE_GAP_PT    : 15,   /* espace entre boîte icône et pilule texte */
+  BADGE_RADIUS_PT : 22,   /* rayon des coins du cartouche */
+  BADGE_PADX_PT   : 25,   /* padding horizontal intérieur de la pilule */
+  BADGE_FONT_PT   : 30,   /* taille de la police du cartouche */
+
+  /* Pavé de texte */
+  PAVE_PAD_PT     : 30,   /* padding intérieur du pavé blanc */
+  PAVE_RADIUS_PT  : 22,   /* rayon des coins du pavé */
+
+  /* Flèche / point de carrousel */
+  ARROW_PT        : 70,   /* taille de la boîte flèche/point */
+  ARROW_RADIUS_PT : 15,   /* rayon des coins de la boîte */
+  ARROW_GAP_PT    : 30,   /* espace entre pavé et flèche (50 en story) */
+  ARROW_GAP_STORY : 50,   /* espace entre pavé et flèche en story */
+
+  /* Texte du pavé (charte : 45–80pt SemiBold, interl. 55–95pt) */
+  TEXT_MIN_PT     : 45,   /* taille minimum autorisée par la charte */
+  TEXT_MAX_PT     : 80,   /* taille maximum autorisée par la charte */
+  TEXT_DEF_PT     : 48,   /* taille par défaut au lancement */
+  TEXT_LH         : 1.25, /* interligne (ratio × taille) */
+
+  /* Graisses — fontWeight */
+  FW_TEXT         : 500,  /* texte courant du pavé (SemiBold) */
+  FW_HIGHLIGHT    : 500,  /* mots surlignés **comme ça** (ExtraBold) */
+  FW_UNDERLINE    : 600,  /* mots soulignés __comme ça__ (SemiBold) */
+  FW_BADGE_MAIN   : 600,  /* titre cartouche ex. "LATEST NEWS" (ExtraBold) */
+  FW_BADGE_SUB    : 200,  /* précision cartouche ex. lieu (SemiBold) */
+
+  /* Surlignage */
+  HIGHLIGHT_PAD_X : 0.28, /* espace horizontal autour du bloc surligné (× fs) */
+  HIGHLIGHT_H     : 1.14, /* hauteur du rectangle de surlignage (× fs) */
+
+  /* Soulignage */
+  UNDERLINE_TH    : 0.17, /* épaisseur de la barre (× fs, min 3px) */
+  UNDERLINE_OFF   : 0.03, /* décalage sous la baseline (× fs) */
+};
+/* ════════════════════════════════════════════════════════════════════════════ */
+
 function getLayout(k,firstSlide,hasML){
   var f=FORMATS[k]||FORMATS["1x1"];
   var story=(k==="9x16");
-  /* Marge latérale : 50 px, ou 84 px pour la 1re slide de carrousel,
-     ou 80 px en story (la marie-louise n'existe pas en story). */
   var base = story ? px(80) : (firstSlide ? px(84) : px(50));
   var ml   = (!story && hasML) ? ML_W : 0;
   return {
@@ -152,11 +200,14 @@ function getLayout(k,firstSlide,hasML){
     BADGE_TOP: story ? px(180) : base+ml,
     RIGHT_MIN: (story ? px(160) : px(100)) + ml,
     BOTTOM:    (story ? px(230) : px(100)) + ml,
-    BADGE_H:px(70), BADGE_ICON:px(70), BADGE_GAP:px(15),
-    BADGE_RADIUS:px(15), BADGE_PADX:px(25), BADGE_FONT:px(30),
-    PAVE_PAD:px(40), PAVE_RADIUS:px(20),
-    ARROW:px(70), ARROW_RADIUS:px(15), ARROW_GAP:story?px(50):px(30),
-    TEXT_MIN:px(45), TEXT_MAX:px(80), TEXT_DEF:px(48), TEXT_LH:1.19
+    BADGE_H:px(T.BADGE_H_PT), BADGE_ICON:px(T.BADGE_ICON_PT),
+    BADGE_GAP:px(T.BADGE_GAP_PT), BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
+    BADGE_PADX:px(T.BADGE_PADX_PT), BADGE_FONT:px(T.BADGE_FONT_PT),
+    PAVE_PAD:px(T.PAVE_PAD_PT), PAVE_RADIUS:px(T.PAVE_RADIUS_PT),
+    ARROW:px(T.ARROW_PT), ARROW_RADIUS:px(T.ARROW_RADIUS_PT),
+    ARROW_GAP:story?px(T.ARROW_GAP_STORY):px(T.ARROW_GAP_PT),
+    TEXT_MIN:px(T.TEXT_MIN_PT), TEXT_MAX:px(T.TEXT_MAX_PT),
+    TEXT_DEF:px(T.TEXT_DEF_PT), TEXT_LH:T.TEXT_LH
   };
 }
 
@@ -180,6 +231,18 @@ var e=React.createElement,useState=React.useState,useRef=React.useRef,
     useCallback=React.useCallback,useEffect=React.useEffect,
     useLayoutEffect=React.useLayoutEffect;
 
+/* Interpolation couleur hex — utilisée dans RichBody ET dans doExport */
+function lerpHex(c1,c2,t){
+  function hx(s){return parseInt(s.slice(1),16);}
+  var a=hx(c1),b=hx(c2);
+  var ar=(a>>16)&255,ag=(a>>8)&255,ab=a&255;
+  var br=(b>>16)&255,bg=(b>>8)&255,bb=b&255;
+  var r=Math.round(ar+(br-ar)*t);
+  var g=Math.round(ag+(bg-ag)*t);
+  var bl=Math.round(ab+(bb-ab)*t);
+  return "rgb("+r+","+g+","+bl+")";
+}
+
 /* ═══ CORPS DE TEXTE RICHE ════════════════════════════════════════════════
    Les surlignages / soulignages sont mesurés ligne par ligne puis dessinés
    comme des rectangles absolus. html2canvas ne sait pas gérer
@@ -191,10 +254,9 @@ var e=React.createElement,useState=React.useState,useRef=React.useRef,
 function RichBody(props){
   var fs=props.fs, lh=props.lh, grad=props.grad;
   var hostRef=useRef(null);
-  var s0=useState({h:[],u:[]}); var M=s0[0],setM=s0[1];
+  var s0=useState({h:[],u:[],n:[]}); var M=s0[0],setM=s0[1];
   var s1=useState(0); var setTick=s1[1];
 
-  /* Re-mesure quand les webfonts sont chargées */
   useEffect(function(){
     if(document.fonts&&document.fonts.ready){
       document.fonts.ready.then(function(){ setTick(function(t){return t+1;}); });
@@ -204,37 +266,82 @@ function RichBody(props){
   useLayoutEffect(function(){
     var host=hostRef.current; if(!host) return;
     var base=host.getBoundingClientRect();
-    /* La preview est dans un conteneur transform:scale(). getBoundingClientRect
-       renvoie des px ÉCRAN : on divise par le facteur d'échelle pour revenir
-       en px CSS, sinon les rectangles sont décalés (et l'export aussi). */
     var SC = host.offsetWidth ? (base.width/host.offsetWidth) : 1;
     if(!SC || !isFinite(SC) || SC<=0) SC=1;
     function N(v){ return v/SC; }
 
-    var res={h:[],u:[]};
+    var res={h:[],u:[],n:[]};
     var segs=host.querySelectorAll("[data-seg]");
     for(var i=0;i<segs.length;i++){
       var kind=segs[i].getAttribute("data-seg");
       var rs=segs[i].getClientRects();
       for(var j=0;j<rs.length;j++){
-        var r=rs[j];
-        if(r.width<0.5) continue;
+        var r=rs[j]; if(r.width<0.5) continue;
         var o={x:N(r.left-base.left),y:N(r.top-base.top),
                w:N(r.width),h:N(r.height),b:N(r.bottom-base.top)};
-        if(kind==="h") res.h.push(o); else res.u.push(o);
+        if(kind==="h") res.h.push(o);
+        else if(kind==="u") res.u.push(o);
+        else res.n.push(o);
       }
     }
     if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
   });
 
-  var parts=parseRich(props.text);
+  /* Parseur → tableau de tokens, avec support saut de ligne \n → br */
+  function renderParts(text,useGrad,color){
+    /* On découpe d'abord sur \n pour gérer les sauts de ligne */
+    var lines=text.split("\n");
+    var out=[];
+    lines.forEach(function(line,li){
+      if(li>0) out.push(e("br",{key:"br"+li}));
+      var parts=parseRich(line);
+      parts.forEach(function(p,pi){
+        var key=li+"-"+pi;
+        if(p.t==="h"){
+          /* Espace insécable avant/après le bloc surligné */
+          out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
+          out.push(e("span",{key:key,"data-seg":"h",
+            style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                   WebkitTextFillColor:TE_WHITE}},p.v));
+          out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
+        } else if(p.t==="u"){
+          out.push(e("span",{key:key,"data-seg":"u",
+            style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_UNDERLINE,
+                   color:useGrad?"transparent":color,
+                   WebkitTextFillColor:useGrad?"transparent":undefined}}
+            ,p.v));
+        } else {
+          out.push(useGrad
+            ? e("span",{key:key,"data-seg":"n",
+                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
+                       color:"transparent",WebkitTextFillColor:"transparent"}},p.v)
+            : e("span",{key:key,
+                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},p.v));
+        }
+      });
+    });
+    return out;
+  }
 
-  /* Surlignage : la charte cale la hauteur sur le corps du caractère
-     (taille effective + espace autour), et ajoute un espace avant/après. */
-  var H_PAD_X=fs*0.26;
-  var H_H=fs*1.12;
-  var U_TH=Math.max(3,fs*0.17);
-  var U_OFF=fs*0.03;
+  var useGrad=(props.textMode==="grad");
+
+  /* Surlignage */
+  var H_PAD_X=fs*T.HIGHLIGHT_PAD_X;
+  var H_H=fs*T.HIGHLIGHT_H;
+  /* Soulignage */
+  var U_TH=Math.max(3,fs*T.UNDERLINE_TH);
+  var U_OFF=fs*T.UNDERLINE_OFF;
+
+  /* Dégradé diagonal sur texte normal */
+  var gradFrom=props.gradFrom||"#0098E3";
+  var gradTo=props.gradTo||"#4632FF";
+  var nMinX=Infinity,nMinY=Infinity,nMaxX=-Infinity,nMaxY=-Infinity;
+  if(useGrad&&M.n.length){
+    M.n.forEach(function(r){
+      nMinX=Math.min(nMinX,r.x); nMinY=Math.min(nMinY,r.y);
+      nMaxX=Math.max(nMaxX,r.x+r.w); nMaxY=Math.max(nMaxY,r.y+r.h);
+    });
+  }
 
   return e("div",{style:{position:"relative"}},
 
@@ -242,7 +349,7 @@ function RichBody(props){
       var cy=r.y+r.h/2;
       return e("div",{key:"h"+i,style:{position:"absolute",
         left:r.x-H_PAD_X, top:cy-H_H/2, width:r.w+H_PAD_X*2, height:H_H,
-        backgroundImage:grad, borderRadius:1, zIndex:0}});
+        backgroundImage:grad, borderRadius:2, zIndex:0}});
     }),
 
     M.u.map(function(r,i){
@@ -251,21 +358,37 @@ function RichBody(props){
         backgroundImage:grad, borderRadius:U_TH/2, zIndex:0}});
     }),
 
-    e("div",{ref:hostRef,style:{position:"relative",zIndex:1,
-        fontFamily:"'Nunito',sans-serif",fontWeight:400,
-        color:props.color,fontSize:fs,lineHeight:lh,
-        textAlign:props.align}},
-      /* Rond rouge live — charte : couleur secondaire #E70000, avant le texte */
+    useGrad&&M.n.length?(function(){
+      var spanW=nMaxX-nMinX, spanH=nMaxY-nMinY, span=spanW+spanH||1;
+      return M.n.map(function(r,i){
+        var t=((r.x+r.w/2-nMinX)+(r.y+r.h/2-nMinY))/span;
+        t=Math.max(0,Math.min(1,t));
+        /* Rectangles uniquement pour l'export html2canvas (data-grad-rect).
+           En preview ils sont rendus invisibles : le texte porte la couleur
+           via background-clip:text ci-dessous. */
+        return e("div",{key:"ng"+i,"data-grad-rect":"1",style:{position:"absolute",
+          left:r.x-1,top:r.y,width:r.w+2,height:r.h,
+          background:lerpHex(gradFrom,gradTo,t),zIndex:1,
+          opacity:0,pointerEvents:"none"}});
+      });
+    })():null,
+
+    e("div",{ref:hostRef,"data-richhost":"1",style:{position:"relative",zIndex:2,
+        fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
+        /* Mode dégradé : background-clip:text en preview.
+           L'export utilise les rects data-grad-rect rendus opaques à la volée. */
+        background:useGrad?undefined:undefined,
+        backgroundImage:useGrad?grad:undefined,
+        WebkitBackgroundClip:useGrad?"text":undefined,
+        backgroundClip:useGrad?"text":undefined,
+        color:useGrad?"transparent":props.color,
+        WebkitTextFillColor:useGrad?"transparent":undefined,
+        fontSize:fs,lineHeight:lh,textAlign:props.align}},
       props.live?e("span",{style:{display:"inline-block",
-        width:fs*0.55,height:fs*0.55,borderRadius:"50%",
+        width:fs*0.9,height:fs*0.9,borderRadius:"50%",
         background:"#E70000",marginRight:fs*0.28,
         verticalAlign:"middle",marginBottom:fs*0.08,flexShrink:0}}):null,
-      parts.map(function(p,i){
-        if(p.t==="h") return e("span",{key:i,"data-seg":"h",
-          style:{color:TE_WHITE,fontWeight:800}},p.v);
-        if(p.t==="u") return e("span",{key:i,"data-seg":"u"},p.v);
-        return e("span",{key:i},p.v);
-      }))
+      renderParts(props.text,useGrad,props.color))
   );
 }
 
@@ -335,21 +458,71 @@ var PICTOS_SEC=[
   {k:"ampoule",l:"Ampoule",
    p:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V17H9v-2.8C7.2 13.1 6 11.2 6 9a6 6 0 0 1 6-6z" fill="none" stroke="#FFCC00" stroke-width="2"/><line x1="9" y1="17" x2="15" y2="17" stroke="#FFCC00" stroke-width="2"/>',fill:"none"},
 ];
+/* ═══ SONDE PICTOS ══════════════════════════════════════════════════════════
+   Sonde assets/pictos/NOM_plein.png et assets/pictos/NOM_vide.png pour chaque
+   picto connu. Les fichiers trouvés remplacent les SVG générés.
+   Les noms correspondent aux clés des tableaux PICTOS_ENERGY et PICTOS_SEC.
+   ══════════════════════════════════════════════════════════════════════════ */
+var PICTO_DIR="../../assets/pictos/";
+var PICTO_MANIFEST=PICTO_DIR+"../manifest.json"; /* assets/manifest.json */
+
+function pictoUrl(k,mode){ return PICTO_DIR+k+"_"+(mode||"plein")+".png"; }
+
+/* Sonde une liste de clés pour un mode donné.
+   Retourne { key: url } pour les fichiers qui répondent. */
+function tryLoadPictos(keys,mode,cb){
+  var result={}, remaining=keys.length;
+  if(!remaining){cb(result);return;}
+  keys.forEach(function(k){
+    var u=pictoUrl(k,mode), im=new Image();
+    im.onload=function(){result[k]=u; if(!--remaining)cb(result);};
+    im.onerror=function(){result[k]=null; if(!--remaining)cb(result);};
+    im.src=u;
+  });
+}
+
+/* Charge le manifest, extrait les noms, sonde plein+vide.
+   Appelle cb({ keys:[], vide:{}, plein:{} }) quand c'est prêt. */
+function loadPictosFromManifest(cb){
+  fetch(PICTO_MANIFEST)
+    .then(function(r){ return r.ok?r.json():Promise.reject("manifest absent"); })
+    .then(function(data){
+      var keys=(data.pictos||[]).filter(function(k){return k&&k.trim();});
+      if(!keys.length){ cb({keys:[],vide:{},plein:{}}); return; }
+      tryLoadPictos(keys,"plein",function(plein){
+        tryLoadPictos(keys,"vide",function(vide){
+          cb({keys:keys,vide:vide,plein:plein});
+        });
+      });
+    })
+    .catch(function(){
+      /* Manifest absent ou invalide : galerie vide, SVG fallback uniquement */
+      cb({keys:[],vide:{},plein:{}});
+    });
+}
 function makePictoSrc(pk){
+  /* Charte : sur fond dégradé, les pictogrammes sont toujours blancs.
+     Toutes les icônes sont générées en blanc ici, la boîte dégradée
+     derrière elles assure l'identité colorée. */
+  var WHITE="#FFFFFF";
   var e1=PICTOS_ENERGY.find(function(p){return p.k===pk;});
   if(e1){
-    var g=e1.grad;
     var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
-      +'<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">'
-      +'<stop offset="0%" stop-color="'+g[0]+'"/>'
-      +'<stop offset="100%" stop-color="'+g[1]+'"/>'
-      +'</linearGradient></defs>'
-      +'<path d="'+e1.p+'" fill="url(#rg)"/></svg>';
+      +'<path d="'+e1.p+'" fill="'+WHITE+'"/></svg>';
     return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
   }
   var e2=PICTOS_SEC.find(function(p){return p.k===pk;});
   if(e2){
-    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+e2.p+'</svg>';
+    /* Les icônes secondaires utilisent stroke : on force stroke blanc et fill none */
+    var inner=e2.p
+      .replace(/stroke="[^"]*"/g,'stroke="'+WHITE+'"')
+      .replace(/fill="[^"]*"/g,'fill="none"')
+      /* les éléments purement fill (rect, circle pleins) */
+      .replace(/(<(rect|circle|path)[^>]*?)(\/>)/g,function(m){
+        if(m.indexOf('stroke')>=0) return m;
+        return m.replace('/>','fill="'+WHITE+'" />');
+      });
+    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+inner+'</svg>';
     return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg2);
   }
   return null;
@@ -422,13 +595,18 @@ function tryLoad(cands,cb){
 var DEFAULT={
   format:"1x1", grad:"bleu", lowCarbon:false, firstSlide:false,
   bgMode:"photo",
-  bgImg:null, bgCustom:false, bgBlur:0, bgDark:0,
+  bgImg:null, bgCustom:false, bgIsDefault:false, bgBlur:0, bgDark:0,
+  bgX_1x1:50, bgY_1x1:50, bgZoom_1x1:100,
+  bgX_4x5:50, bgY_4x5:50, bgZoom_4x5:100,
+  bgX_9x16:50, bgY_9x16:50, bgZoom_9x16:100,
   hasML:false, mlStyle:"white",
   badgeIconKey:"elec",              /* clé charte — remplacé par upload si badgeIconCustom */
   badgeIconCustom:null,             /* data-URI du PNG déposé par l'utilisateur */
+  pictoMode:"plein",                 /* "vide" | "plein" — s'applique à toute la galerie */
   badgeMain:"LATEST NEWS", badgeSub:"LEUNA, GERMANY",
   liveMode:false,                   /* rond rouge ● devant le texte */
-  text:"TotalEnergies & RWE:\nA Major Step Towards **Decarbonizing Hydrogen**",
+  text:"TotalEnergies acquires\n**Shell's renewables business**\nand sells a 50% stake in a portfolio of developed assets to KKR",
+  textMode:"uni",               /* "uni" | "grad" — charte autorise les deux sur fond blanc */
   textColor:"#4632FF",
   navMark:"arrow",
   align:"left",
@@ -437,16 +615,107 @@ var DEFAULT={
   b_1x1:-1,  b_4x5:-1,  b_9x16:-1
 };
 
+/* ═══ DRAG IMAGE ═══════════════════════════════════════════════════════════
+   Affiche l'image de fond dans un conteneur overflow:hidden.
+   L'image est positionnée par object-position (%) controllée par drag.
+   Le zoom est un scale supplémentaire (100% = cover normal).
+   Le drag reçoit l'offset en px sur la carte et le convertit en %.
+   ══════════════════════════════════════════════════════════════════════════ */
+function DragImage(props){
+  var dragRef=useRef(null);
+  var dragging=useRef(false);
+  var last=useRef({x:0,y:0});
+
+  function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+
+  function onDown(ev){
+    if(!props.src) return;
+    ev.preventDefault();
+    dragging.current=true;
+    var pt=ev.touches?ev.touches[0]:ev;
+    last.current={x:pt.clientX,y:pt.clientY};
+  }
+  function onMove(ev){
+    if(!dragging.current) return;
+    ev.preventDefault();
+    var pt=ev.touches?ev.touches[0]:ev;
+    var dx=pt.clientX-last.current.x;
+    var dy=pt.clientY-last.current.y;
+    last.current={x:pt.clientX,y:pt.clientY};
+    /* Convertir le déplacement px écran en % de position.
+       Le conteneur fait props.w × props.h px CSS (déjà en px carte scalés). */
+    var pctX=clamp(props.x - dx/props.w*100/props.scale, 0, 100);
+    var pctY=clamp(props.y - dy/props.h*100/props.scale, 0, 100);
+    props.onChange(pctX,pctY);
+  }
+  function onUp(){ dragging.current=false; }
+
+  useEffect(function(){
+    window.addEventListener("mousemove",onMove);
+    window.addEventListener("mouseup",onUp);
+    window.addEventListener("touchmove",onMove,{passive:false});
+    window.addEventListener("touchend",onUp);
+    return function(){
+      window.removeEventListener("mousemove",onMove);
+      window.removeEventListener("mouseup",onUp);
+      window.removeEventListener("touchmove",onMove);
+      window.removeEventListener("touchend",onUp);
+    };
+  });
+
+  var zoom=props.zoom||100;
+  /* object-position en % : 50 50 = centre */
+  var pos=props.x+"% "+props.y+"%";
+
+  return e("div",{ref:dragRef,
+    style:{position:"absolute",inset:0,overflow:"hidden",
+      cursor:props.src?"grab":"default"},
+    onMouseDown:onDown,
+    onTouchStart:onDown},
+    props.src?e("img",{src:props.src,alt:"",
+      style:{position:"absolute",
+        /* zoom : l'image est agrandie par rapport au cover de base.
+           On utilise width/height en % du conteneur × zoom factor. */
+        width:(zoom)+"%",height:(zoom)+"%",
+        minWidth:"100%",minHeight:"100%",
+        objectFit:"cover",objectPosition:pos,
+        left:"50%",top:"50%",
+        transform:"translate(-50%,-50%) scale("+(zoom/100)+")",
+        transformOrigin:"center center",
+        filter:props.blur>0?"blur("+props.blur+"px)":"none",
+        userSelect:"none",pointerEvents:"none"}}):null
+  );
+}
+
 /* ═══ APP ══════════════════════════════════════════════════════════════════ */
 function App(){
   var a0=useState(DEFAULT),st=a0[0],setSt=a0[1];
   var a1=useState([]),saves=a1[0],setSaves=a1[1];
   var a2=useState(""),sname=a2[0],setSname=a2[1];
   var a3=useState(false),busy=a3[0],setBusy=a3[1];
+  /* Dimensions naturelles de l'image de fond pour calculer le zoom max */
+  var a4=useState({w:0,h:0}); var bgNat=a4[0],setBgNat=a4[1];
+  /* Pictos chargés depuis assets/pictos/ — { key: url|null } pour chaque mode */
+  var a5=useState({keys:[],vide:{},plein:{},probed:false});
+  var pictoFiles=a5[0],setPictoFiles=a5[1];
   var cardRef=useRef(null),impRef=useRef(null),paveRef=useRef(null);
   var phState=useState(120); var paveH=phState[0],setPaveH=phState[1];
   var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
-  function set(k,v){setSt(function(p){var c=Object.assign({},p);c[k]=v;return c;});}
+  function set(k,v){setSt(function(p){
+    var c=Object.assign({},p);
+    c[k]=v;
+    /* Synchronisation couleur texte ↔ dégradé actif ────────────────────────
+       Règle : en mode "uni", la couleur du texte doit appartenir à la gamme
+       du dégradé actif ou être le gris foncé.
+       → quand on change de dégradé, on met à jour textColor si elle ne
+         correspond plus au nouveau dégradé (sauf si c'est le gris).
+       → quand on passe en mode "grad", textColor n'est plus utilisé. */
+    if(k==="grad" && p.textMode==="uni" && p.textColor!==COLOR_GREY){
+      /* Passer à la couleur de fin du nouveau dégradé */
+      c.textColor=GRADS[v]?GRADS[v].to:p.textColor;
+    }
+    return c;
+  });}
 
   /* Changement de format : la marie-louise n'existe pas en story.
      Le fond par défaut est rechargé par la sonde ci-dessous. */
@@ -466,11 +735,40 @@ function App(){
     var k=st.format;
     setBgStatus({s:"loading",p:null});
     tryLoad(bgCandidates(k),function(u){
-      setSt(function(p){
-        if(p.bgCustom||p.format!==k) return p;
-        var c=Object.assign({},p); c.bgImg=u; return c;
-      });
-      setBgStatus(u?{s:"ok",p:u}:{s:"missing",p:null});
+      if(!u){
+        setSt(function(p){
+          if(p.bgCustom||p.format!==k) return p;
+          var c=Object.assign({},p); c.bgImg=null; c.bgIsDefault=false; return c;
+        });
+        setBgStatus({s:"missing",p:null});
+        return;
+      }
+      /* Charger en base64 pour affichage dans FileDrop, comme un vrai dépôt */
+      var xhr=new XMLHttpRequest();
+      xhr.open("GET",u,true);
+      xhr.responseType="blob";
+      xhr.onload=function(){
+        var rd=new FileReader();
+        rd.onload=function(ev){
+          var dataUrl=ev.target.result;
+          setSt(function(p){
+            if(p.bgCustom||p.format!==k) return p;
+            var c=Object.assign({},p);
+            c.bgImg=dataUrl; c.bgIsDefault=true; return c;
+          });
+          setBgStatus({s:"ok",p:u});
+        };
+        rd.readAsDataURL(xhr.response);
+      };
+      xhr.onerror=function(){
+        /* Fallback : URL directe si XHR bloqué (CORS, GitHub Pages) */
+        setSt(function(p){
+          if(p.bgCustom||p.format!==k) return p;
+          var c=Object.assign({},p); c.bgImg=u; c.bgIsDefault=true; return c;
+        });
+        setBgStatus({s:"ok",p:u});
+      };
+      xhr.send();
     });
   },[st.format,st.bgCustom]);
 
@@ -518,7 +816,42 @@ function App(){
   var paveLeft=(st.align==="right")?(CARD_W-PW-L.MARGIN):L.MARGIN;
   var textAlign=(st.align==="right")?"right":"left";
 
-  useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
+  useEffect(function(){
+    dbAll(function(a){
+      setSaves(a);
+      /* Premier lancement : aucune sauvegarde → créer "Défaut" automatiquement */
+      if(a.length===0){
+        var defEntry={name:"\u2b50 D\u00e9faut",date:new Date().toISOString(),state:DEFAULT};
+        dbPut(defEntry,function(){dbAll(function(b){setSaves(b);});});
+      }
+    });
+  },[]);
+
+  /* Chargement des pictos via manifest.json au démarrage */
+  useEffect(function(){
+    loadPictosFromManifest(function(res){
+      setPictoFiles({keys:res.keys,vide:res.vide,plein:res.plein,probed:true});
+      /* Sélectionner le premier picto du manifest par défaut si aucun n'est choisi */
+      if(res.keys.length){
+        setSt(function(p){
+          var keyExists=res.keys.indexOf(p.badgeIconKey)>=0;
+          if(keyExists) return p;
+          var c=Object.assign({},p);
+          c.badgeIconKey=res.keys[0];
+          return c;
+        });
+      }
+    });
+  },[]);
+
+  /* Lire les dimensions naturelles de l'image dès qu'elle change */
+  useEffect(function(){
+    if(!st.bgImg){setBgNat({w:0,h:0});return;}
+    var im=new Image();
+    im.onload=function(){setBgNat({w:im.naturalWidth,h:im.naturalHeight});};
+    im.onerror=function(){setBgNat({w:0,h:0});};
+    im.src=st.bgImg;
+  },[st.bgImg]);
 
   /* Hauteur réelle du pavé, mesurée après chaque render */
   useLayoutEffect(function(){
@@ -538,8 +871,10 @@ function App(){
     if(!cardRef.current)return;
     setBusy(true);
     var bgW=CARD_W-L.ML*2, bgH=CARD_H-L.ML*2;
+    var _bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
+    var _bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
+    var _bgZoom=st["bgZoom_"+st.format]||100;
     function preBlur(src,w,h,pxb,done){
-      /* Rendu à la résolution OUTPUT (×EX) pour éviter tout upscale */
       if(!src||st.bgMode!=="photo") return done(null);
       var img=new Image();
       img.crossOrigin="anonymous";
@@ -551,9 +886,16 @@ function App(){
         ctx.imageSmoothingEnabled=true;
         ctx.imageSmoothingQuality="high";
         if(pxb>0) ctx.filter="blur("+Math.round(pxb*EX)+"px)";
+        /* Cover de base */
         var ir=img.naturalWidth/img.naturalHeight, cr=OW/OH, dw,dh;
-        if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
-        ctx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
+        if(ir>cr){dh=OH;dw=dh*ir;}else{dw=OW;dh=dw/ir;}
+        /* Zoom supplémentaire */
+        var zf=_bgZoom/100;
+        dw*=zf; dh*=zf;
+        /* Position : bgX/bgY en % → offset dans l'image */
+        var dx=(OW-dw)*(_bgX/100);
+        var dy=(OH-dh)*(_bgY/100);
+        ctx.drawImage(img,dx,dy,dw,dh);
         done(cv.toDataURL("image/png"));
       };
       img.onerror=function(){done(null);};
@@ -565,8 +907,56 @@ function App(){
       var cl=cardRef.current.cloneNode(true);
       cl.style.transform="none";cl.style.position="static";cl.style.width=CARD_W+"px";
       box.appendChild(cl);document.body.appendChild(box);
-      if(blurred){var bg=cl.querySelector("[data-layer=bg]");
-        if(bg){bg.style.backgroundImage="url("+blurred+")";bg.style.filter="none";bg.style.transform="none";}}
+      if(blurred){
+        /* Remplacer l'img de DragImage par le canvas preBlur déjà rendu
+           (position + zoom + blur appliqués en haute résolution) */
+        var bgLayer=cl.querySelector("[data-layer=bg]");
+        if(bgLayer){
+          bgLayer.style.background="#12203c";
+          var oldImg=bgLayer.querySelector("img");
+          if(oldImg) oldImg.parentNode.removeChild(oldImg);
+          var bgEl=document.createElement("img");
+          bgEl.src=blurred;
+          bgEl.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";
+          bgLayer.appendChild(bgEl);
+        }
+      }
+
+      /* ── Fix dégradé texte pour l'export ─────────────────────────────────
+         html2canvas ignore background-clip:text et les z-index entre siblings.
+         Solution : on dessine le texte dégradé sur un canvas offscreen et on
+         remplace le host transparent par une img du résultat. */
+      if(st.textMode==="grad"){
+        /* 1. Supprimer les rects data-grad-rect du clone (inutiles pour l'export) */
+        var rects=cl.querySelectorAll("[data-grad-rect]");
+        for(var ri=0;ri<rects.length;ri++) rects[ri].parentNode.removeChild(rects[ri]);
+
+        /* 2. Pour chaque host data-richhost, dessiner le texte en couleur pleine
+              sur un canvas à la résolution de sortie puis remplacer par une img */
+        var hosts=cl.querySelectorAll("[data-richhost]");
+        for(var hi=0;hi<hosts.length;hi++){
+          var host=hosts[hi];
+          /* Rendre le texte visible en couleur unie (couleur de fin du dégradé) */
+          host.style.backgroundImage="none";
+          host.style.webkitBackgroundClip="unset";
+          host.style.backgroundClip="unset";
+          host.style.color=G.to;
+          host.style.webkitTextFillColor=G.to;
+          /* Colorier chaque span data-seg="n" avec la couleur interpolée
+             selon sa position dans la boîte du host */
+          var hostRect=host.getBoundingClientRect();
+          var spans=host.querySelectorAll("[data-seg='n']");
+          for(var si=0;si<spans.length;si++){
+            var sp=spans[si];
+            var sr=sp.getBoundingClientRect();
+            var spanW2=hostRect.width||1, spanH2=hostRect.height||1;
+            var cx=(sr.left+sr.width/2-hostRect.left), cy=(sr.top+sr.height/2-hostRect.top);
+            var t2=Math.max(0,Math.min(1,(cx+cy)/(spanW2+spanH2)));
+            sp.style.color=lerpHex(G.from,G.to,t2);
+            sp.style.webkitTextFillColor=lerpHex(G.from,G.to,t2);
+          }
+        }
+      }
 
       var captH=Math.round(cl.getBoundingClientRect().height)||CARD_H;
       window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
@@ -604,19 +994,49 @@ function App(){
     }catch(ex){/* canvas indisponible : on garde la valeur charte */}
   })();
 
-  var badgeBoxStyle={
-    height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
-    display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
-    backgroundImage:onGrad?"none":GRAD_H,
-    background:onGrad?"transparent":undefined,
-    border:onGrad?"2px solid #FFFFFF":"none",boxSizing:"border-box"};
-  var pillStyle={
-    height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",
-    padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,
-    letterSpacing:".05em",whiteSpace:"nowrap",
-    backgroundImage:onGrad?"none":GRAD_H,
-    background:onGrad?"transparent":undefined,
-    border:onGrad?"2px solid #FFFFFF":"none",boxSizing:"border-box"};
+  /* Charte : sur fond blanc ou image → cartouche rempli en dégradé.
+     Sur fond aplat dégradé → cartouche transparent + filet blanc 2px. */
+  var badgeBoxStyle= onGrad
+    ? {height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
+       display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
+       background:"transparent",border:"2px solid #FFFFFF",boxSizing:"border-box"}
+    : {height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
+       display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
+       backgroundImage:GRAD_H,border:"none"};
+  var pillStyle= onGrad
+    ? {height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",
+       padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,
+       letterSpacing:".05em",whiteSpace:"nowrap",
+       background:"transparent",border:"2px solid #FFFFFF",boxSizing:"border-box"}
+    : {height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",
+       padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,
+       letterSpacing:".05em",whiteSpace:"nowrap",
+       backgroundImage:GRAD_H,border:"none"};
+
+  var _fmtBg=st.format;
+  var bgX=st["bgX_"+_fmtBg]!==undefined?st["bgX_"+_fmtBg]:50;
+  var bgY=st["bgY_"+_fmtBg]!==undefined?st["bgY_"+_fmtBg]:50;
+  var bgZoom=st["bgZoom_"+_fmtBg]||100;
+
+  /* Zoom maximum sans dépasser la résolution naturelle de l'image.
+     Le fond est rendu à outputW × outputH px.
+     En cover de base (zoom=100%), l'image remplit exactement le cadre.
+     Si l'image est plus grande que le cadre de sortie, on peut zoomer
+     jusqu'à ce que 1 pixel image = 1 pixel sortie. */
+  var bgW=CARD_W-L.ML*2, bgH=CARD_H-L.ML*2;
+  var outW=FORMATS[st.format].outputW-L.ML*2*EX;
+  var outH=FORMATS[st.format].outputH-L.ML*2*EX;
+  var maxZoom=300; /* plafond absolu */
+  if(bgNat.w>0&&bgNat.h>0){
+    var ir=bgNat.w/bgNat.h, cr=outW/outH;
+    /* Dimension de l'image en cover de base */
+    var coverW=(ir>cr)?outH*ir:outW;
+    var coverH=(ir>cr)?outH:outW/ir;
+    /* Zoom max = rapport entre la dimension naturelle et la dimension cover */
+    var zmW=Math.floor(bgNat.w/coverW*100);
+    var zmH=Math.floor(bgNat.h/coverH*100);
+    maxZoom=Math.max(100,Math.min(300,Math.min(zmW,zmH)));
+  }
 
   var card=e("div",{ref:cardRef,style:{
       width:CARD_W,height:CARD_H,position:"relative",
@@ -624,15 +1044,21 @@ function App(){
       backgroundImage:(st.hasML&&st.mlStyle==="grad")?GRAD_V:"none",
       background:(st.hasML&&st.mlStyle==="grad")?undefined:(st.hasML?"#FFFFFF":"#12203c")}},
 
-    /* FOND : image ou aplat dégradé, encadré par la marie-louise */
-    e("div",{"data-layer":"bg",style:{position:"absolute",
-      left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
-      /* Pas d'image : on retombe sur un aplat dégradé de la charte
-         plutôt que sur un rectangle vide. */
-      backgroundImage:(onGrad||!st.bgImg)?GRAD_V:("url("+st.bgImg+")"),
-      backgroundSize:"cover",backgroundPosition:"center",
-      filter:(!onGrad&&st.bgBlur>0)?"blur("+st.bgBlur+"px)":"none",
-      transform:(!onGrad&&st.bgBlur>0)?"scale(1.06)":"none"}}),
+    /* FOND : image repositionnable ou aplat dégradé */
+    onGrad
+      ? e("div",{"data-layer":"bg",style:{position:"absolute",
+          left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
+          backgroundImage:GRAD_V}})
+      : e("div",{"data-layer":"bg",style:{position:"absolute",
+          left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
+          backgroundColor:"#12203c"}},
+          e(DragImage,{src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
+            w:CARD_W*(1-2*L.ML/CARD_W)*previewScale,
+            h:CARD_H*(1-2*L.ML/CARD_H)*previewScale,
+            scale:previewScale,
+            onChange:function(x,y){
+              setSt(function(p){var c=Object.assign({},p);
+                c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c;});}})),
     (!onGrad&&st.bgDark>0)?e("div",{style:{position:"absolute",
       left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
       background:"rgba(10,20,45,"+st.bgDark+")"}}):null,
@@ -640,17 +1066,28 @@ function App(){
     /* CARTOUCHE LÉGENDE — haut gauche, marge charte */
     e("div",{style:{position:"absolute",left:L.MARGIN,top:L.BADGE_TOP,
         display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
-      e("div",{style:badgeBoxStyle},
-        (function(){
-          var src=st.badgeIconCustom||makePictoSrc(st.badgeIconKey);
-          return src
-            ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*0.56+"px",height:L.BADGE_ICON*0.56+"px",objectFit:"contain"}})
+      (function(){
+        var src=st.badgeIconCustom||(
+          (pictoFiles[st.pictoMode]&&pictoFiles[st.pictoMode][st.badgeIconKey])
+          ||(pictoFiles[st.pictoMode==="plein"?"vide":"plein"]&&
+             pictoFiles[st.pictoMode==="plein"?"vide":"plein"][st.badgeIconKey])
+          ||null
+        );
+        /* Picto réel : remplace toute la boîte, même hauteur que la pilule */
+        if(src) return e("img",{src:src,alt:"",
+          style:{height:L.BADGE_H+"px",width:"auto",display:"block",
+                 flexShrink:0,objectFit:"contain"}});
+        /* Fallback SVG : conserve la boîte dégradée d'origine */
+        var fallbackSrc=makePictoSrc(st.badgeIconKey);
+        return e("div",{style:badgeBoxStyle},
+          fallbackSrc
+            ?e("img",{src:fallbackSrc,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
             :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:TE_WHITE},
-               e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"}));
-        })()),
+               e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"})));
+      })(),
       e("div",{style:pillStyle},
-        e("span",{style:{fontWeight:800,textTransform:"uppercase"}},st.badgeMain),
-        st.badgeSub?e("span",{style:{fontWeight:600,textTransform:"uppercase"}}," - "+st.badgeSub):null)),
+        e("span",{style:{fontWeight:T.FW_BADGE_MAIN,textTransform:"uppercase"}},st.badgeMain),
+        st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB,textTransform:"uppercase"}}," - "+st.badgeSub):null)),
 
     /* PAVÉ TEXTE — ancré par le bas */
     e("div",{ref:paveRef,style:{position:"absolute",left:paveLeft,
@@ -658,7 +1095,8 @@ function App(){
         background:TE_WHITE,borderRadius:L.PAVE_RADIUS,
         padding:L.PAVE_PAD,boxSizing:"border-box"}},
       e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,
-        color:st.textColor,align:textAlign,live:st.liveMode})),
+        color:st.textColor,align:textAlign,live:st.liveMode,
+        textMode:st.textMode,gradFrom:G.from,gradTo:G.to})),
 
     /* FLÈCHE / POINT DE CARROUSEL — sous le pavé, aligné dessus */
     (st.navMark!=="none")?e("div",{style:{position:"absolute",
@@ -712,7 +1150,10 @@ function App(){
         L.STORY?"Marges story : 80 px de bord, cartouche à 180 px du haut."
                :"Slides suivantes : marge habituelle de 50 px.")),
 
-    e("div",{className:"section"},e("h2",null,"Dégradé"),
+    e("div",{className:"section"},e("h2",null,"Couleurs"),
+
+      /* ── Sélecteur de dégradé ─────────────────────────────────────── */
+      e("label",{className:"field-label"},"Dégradé actif"),
       e("div",{className:"grad-row"},
         Object.keys(GRADS).map(function(k){
           return e("div",{key:k,title:GRADS[k].label,
@@ -722,14 +1163,45 @@ function App(){
         })),
       e("div",{className:"grad-active"},
         e("i",{style:{backgroundImage:GRAD_H}}),
-        "Dégradé actif : ",G.label," (",G.from," → ",G.to,")"),
+        G.label," — ",G.from," → ",G.to),
+
+      e("div",{style:{height:14}}),
+
+      /* ── Couleur du texte : liée au dégradé ───────────────────────── */
+      e("label",{className:"field-label"},"Couleur du texte"),
+      e("div",{className:"seg",style:{marginBottom:10}},
+        [{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}].map(function(o){
+          return e("button",{key:o.v,className:st.textMode===o.v?"on":"",
+            onClick:function(){set("textMode",o.v);}},o.l);
+        })),
+      st.textMode==="uni"
+        ? e(React.Fragment,null,
+            /* Seulement 2 choix : couleur du dégradé actif + gris foncé */
+            e("div",{style:{display:"flex",gap:8}},
+              e("div",{title:G.label+" (couleur du dégradé)",
+                className:"col-sw"+(st.textColor!==COLOR_GREY?" on":""),
+                onClick:function(){set("textColor",G.to);},
+                style:{background:GRAD_H,backgroundImage:GRAD_H,width:48,height:30,borderRadius:6,
+                  cursor:"pointer",border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}}),
+              e("div",{title:"Gris foncé #374649",
+                className:"col-sw"+(st.textColor===COLOR_GREY?" on":""),
+                onClick:function(){set("textColor",COLOR_GREY);},
+                style:{background:COLOR_GREY,width:48,height:30,borderRadius:6,
+                  cursor:"pointer",border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}})),
+            e("div",{className:"hint",style:{marginTop:6}},
+              "La couleur suit automatiquement le dégradé sélectionné."))
+        : e("div",{className:"hint"},
+            "Le texte et les surlignages utilisent le même dégradé diagonal."),
+
       e("div",{style:{height:10}}),
+
+      /* ── Bas carbone ──────────────────────────────────────────────── */
       e("label",{className:"toggle"},
         e("input",{type:"checkbox",checked:st.lowCarbon,
           onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
         "Sujet énergie bas carbone"),
       e("div",{className:"hint",style:{marginTop:4}},
-        "Biomasse, éolien, solaire. Active le contrôle de charte sur les dégradés."),
+        "Active le contrôle charte : dégradé rouge interdit sur le bas carbone."),
       charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null),
 
     e("div",{className:"section"},e("h2",null,"Fond"),
@@ -740,19 +1212,35 @@ function App(){
           "Format idéal : ",e("b",null,FORMATS[st.format].outputW+" × "+FORMATS[st.format].outputH+" px"),
           e("br",null),
           st.bgCustom?"Image personnalisée en cours d'utilisation."
+          :st.bgIsDefault?["Fond par défaut : ",e("b",{key:"p"},bgStatus.p?bgStatus.p.replace(BG_DIR,""):"")]
           :bgStatus.s==="loading"?"Recherche du fond par défaut\u2026"
-          :bgStatus.s==="ok"?["Fond par défaut chargé : ",e("b",{key:"p"},bgStatus.p.replace(BG_DIR,""))]
           :["Aucun fond par défaut trouvé dans ",e("b",{key:"d"},BG_DIR.replace("../../","")),
             ". Dépose ",e("b",{key:"n"},"TEMPLATE_LN_"+st.format+".png"),
-            " ou une image ci-dessous. En attendant, l'aplat dégradé de la charte est utilisé."]),
-        e(FileDrop,{value:st.bgCustom?st.bgImg:null,placeholder:"Photo de fond",
+            " ou une image ci-dessous."]),
+        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
           onChange:function(v){setSt(function(p){var c=Object.assign({},p);
-            c.bgImg=v||null;c.bgCustom=!!v;return c;});}}),
+            c.bgImg=v||null;c.bgCustom=!!v;c.bgIsDefault=!v&&p.bgIsDefault;return c;});}}),
         e("div",{style:{height:10}}),
         e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
         e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
         e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
-        e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})
+        e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}}),
+        e("div",{style:{height:10}}),
+        e("label",{className:"field-label"},
+          "Zoom image — "+Math.round(bgZoom)+" %",
+          maxZoom<300?e("span",{className:"hint",style:{marginLeft:6}},
+            "(max "+maxZoom+"% sans perte de qualité)"):null),
+        e("input",{type:"range",min:100,max:maxZoom,step:1,
+          value:Math.min(Math.round(bgZoom),maxZoom),
+          onChange:function(ev){setSt(function(p){var c=Object.assign({},p);
+            c["bgZoom_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
+        e("div",{className:"hint",style:{marginTop:4}},
+          "Glisse directement sur l'image pour la repositionner."),
+        e("button",{onClick:function(){setSt(function(p){var c=Object.assign({},p);
+            c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});},
+          style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
+            border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
+          "Réinitialiser position et zoom")
       ):e("div",{className:"hint",style:{marginTop:8}},
         "Sur aplat dégradé, la charte impose un cartouche transparent entouré d'un filet blanc de 2 px. C'est appliqué automatiquement."),
       e("div",{style:{height:12}}),
@@ -776,29 +1264,63 @@ function App(){
         onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},
         style:{textTransform:"uppercase"}}),
       e("div",{style:{height:12}}),
-      e("label",{className:"field-label"},"Pictogramme — énergies"),
-      e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:6}},
-        PICTOS_ENERGY.map(function(pk){
-          var on=!st.badgeIconCustom&&st.badgeIconKey===pk.k;
-          return e("div",{key:pk.k,title:pk.l,
-            onClick:function(){set("badgeIconKey",pk.k);set("badgeIconCustom",null);},
-            style:{width:36,height:36,borderRadius:8,padding:4,cursor:"pointer",
-              border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
-              background:on?"#f0efec":"#fafafa",display:"flex",alignItems:"center",justifyContent:"center"}},
-            e("img",{src:makePictoSrc(pk.k),alt:pk.l,style:{width:22,height:22,objectFit:"contain"}}));
-        })),
-      e("label",{className:"field-label"},"Pictogramme — sujets secondaires"),
-      e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}},
-        PICTOS_SEC.map(function(pk){
-          var on=!st.badgeIconCustom&&st.badgeIconKey===pk.k;
-          return e("div",{key:pk.k,title:pk.l,
-            onClick:function(){set("badgeIconKey",pk.k);set("badgeIconCustom",null);},
-            style:{width:36,height:36,borderRadius:8,padding:4,cursor:"pointer",
-              border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
-              background:on?"#f0efec":"#fafafa",display:"flex",alignItems:"center",justifyContent:"center"}},
-            e("img",{src:makePictoSrc(pk.k),alt:pk.l,style:{width:22,height:22,objectFit:"contain"}}));
-        })),
-      e("label",{className:"field-label"},"Ou importer un pictogramme personnalisé ",e("span",{className:"hint"},"(PNG transparent)")),
+      /* Toggle plein/vide */
+      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}},
+        e("label",{className:"field-label",style:{margin:0}},"Pictogramme"),
+        e("div",{style:{display:"flex",gap:0,borderRadius:6,overflow:"hidden",border:"1px solid #d4d4d4"}},
+          ["plein","vide"].map(function(m){
+            var active=st.pictoMode===m;
+            var hasFiles=pictoFiles.keys.length>0&&
+              pictoFiles.keys.some(function(k){return pictoFiles[m]&&pictoFiles[m][k];});
+            return e("button",{key:m,
+              onClick:function(){set("pictoMode",m);},
+              title:m==="plein"?"Picto sur fond dégradé carré":"Picto seul sur fond transparent",
+              style:{padding:"5px 14px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+                background:active?"#1a1a1a":"#fafafa",color:active?"#fff":"#555",
+                border:"none",borderRight:m==="plein"?"1px solid #d4d4d4":"none",
+                opacity:(hasFiles||!pictoFiles.probed)?1:0.35}},
+              m==="plein"?"Plein":"Vide");
+          }))),
+      /* Statut de chargement */
+      !pictoFiles.probed
+        ?e("div",{className:"hint",style:{marginBottom:6}},"Chargement du manifest\u2026")
+        :pictoFiles.keys.length===0
+          ?e("div",{className:"hint",style:{marginBottom:6}},
+              "Manifest non trouvé ou vide. Crée ",
+              e("b",{key:"m"},"assets/manifest.json"),
+              " avec la liste des noms de pictos.")
+          :null,
+      /* Galerie depuis le manifest */
+      pictoFiles.keys.length>0
+        ?e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}},
+            pictoFiles.keys.map(function(k){
+              var on=!st.badgeIconCustom&&st.badgeIconKey===k;
+              var src=pictoFiles[st.pictoMode]&&pictoFiles[st.pictoMode][k];
+              var hasFile=!!src;
+              /* Fallback mode : si plein manque essaie vide, et vice versa */
+              if(!src) src=pictoFiles[st.pictoMode==="plein"?"vide":"plein"]&&
+                           pictoFiles[st.pictoMode==="plein"?"vide":"plein"][k];
+              if(!src) return null; /* ne devrait pas arriver si le manifest est cohérent */
+              /* Label lisible : remplacer _ par espace, capitaliser */
+              var label=k.replace(/_/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
+              return e("div",{key:k,title:label,
+                onClick:function(){set("badgeIconKey",k);set("badgeIconCustom",null);},
+                style:{width:44,height:52,borderRadius:8,padding:2,cursor:"pointer",
+                  border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
+                  background:on?"#f0efec":"#fafafa",
+                  display:"flex",flexDirection:"column",alignItems:"center",
+                  justifyContent:"center",gap:3,boxSizing:"border-box"}},
+                e("img",{src:src,alt:label,
+                  style:{width:36,height:36,objectFit:"contain",
+                    opacity:hasFile?1:0.4}}),
+                e("span",{style:{fontSize:6.5,color:on?"#1a1a1a":"#999",
+                  lineHeight:1,textAlign:"center",maxWidth:40,
+                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                  label));
+            }))
+        :null,
+      e("label",{className:"field-label",style:{marginTop:pictoFiles.keys.length?8:0}},
+        "Ou importer un pictogramme personnalisé ",e("span",{className:"hint"},"(PNG transparent)")),
       e(FileDrop,{value:st.badgeIconCustom,onChange:function(v){set("badgeIconCustom",v);},placeholder:"PNG transparent",small:true}),
       st.badgeIconCustom?e("button",{onClick:function(){set("badgeIconCustom",null);},
         style:{marginTop:6,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:5,
@@ -819,14 +1341,6 @@ function App(){
       e("textarea",{spellCheck:true,rows:5,value:st.text,
         onChange:function(ev){set("text",ev.target.value);},
         style:{fontSize:13,lineHeight:1.5}}),
-      e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Couleur du texte"),
-      e("div",{className:"col-row"},TEXT_COLORS.map(function(c){
-        return e("div",{key:c.v,title:c.l,
-          className:"col-sw"+(st.textColor===c.v?" on":""),
-          onClick:function(){set("textColor",c.v);},
-          style:{background:c.v}});
-      })),
       e("div",{style:{height:12}}),
       e("label",{className:"field-label"},
         "Corps du texte — "+Math.round(fs)+" px carte ("+Math.round(fs/K)+" pt charte)"),
