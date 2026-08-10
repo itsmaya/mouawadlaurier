@@ -808,7 +808,10 @@ function boot() {
     portraitTraits: null, // { naturalW, naturalH, points } calculé sur portraitImg
     removingBg: false,
     langTarget: "FR",
-    portraitScale: 1.0,  // échelle du portrait (1.0 = taille naturelle, 0.5 = moitié, 1.5 = 50% plus grand)
+    // Échelle portrait indépendante par format
+    portraitScalePortrait: 1.0,
+    portraitScaleSquare: 1.0,
+    portraitScaleStory: 1.0,
     bgImg: null,
     flagImg: null,
     shadowOpacity: BOTTOM_SHADOW_OPACITY  // intensité du dégradé noir, contrôlée par le slider
@@ -1339,7 +1342,7 @@ var TRAIT_ORIGIN_GAP = 20;
         e("h2", null, "Couleur du thème"),
         e("div", { className: "color-row" },
           e("input", { type: "color", value: c, onChange: function (ev) { set("themeColor", ev.target.value); } }),
-          e("input", { type: "text", value: c, onChange: function (ev) { set("themeColor", ev.target.value); } })),
+          e("input", { type: "text", spellCheck: true, value: c, onChange: function (ev) { set("themeColor", ev.target.value); } })),
         e("div", { style: { marginTop: 10 } },
           e("label", { className: "field-label" }, "Dégradé noir (" + Math.round(state.shadowOpacity * 100) + "%)"),
           e("input", { type: "range", min: 0, max: 1, step: 0.05, value: state.shadowOpacity,
@@ -1363,11 +1366,24 @@ var TRAIT_ORIGIN_GAP = 20;
         ) : null,
         processingOutline ? e("div", { className: "hint", style: { marginTop: 4 } }, "Calcul du contour et des traits...") : null,
         e("div", { style: { marginTop: 10 } },
-          e("label", { className: "field-label" }, "Échelle du portrait (" + Math.round(state.portraitScale * 100) + "%)"),
+          e("label", { className: "field-label" },
+            "Échelle du portrait — " +
+            (state.format==="portrait"?"Portrait":state.format==="square"?"Carré":"Story") +
+            " (" + Math.round(
+              (state.format==="portrait" ? (state.portraitScalePortrait||1)
+               : state.format==="square"  ? (state.portraitScaleSquare||1)
+               : (state.portraitScaleStory||1)) * 100) + "%)"),
           e("input", {
             type: "range", min: 0.3, max: 2.0, step: 0.01,
-            value: state.portraitScale,
-            onChange: function (ev) { set("portraitScale", parseFloat(ev.target.value)); },
+            value: state.format==="portrait" ? (state.portraitScalePortrait||1)
+                 : state.format==="square"   ? (state.portraitScaleSquare||1)
+                 : (state.portraitScaleStory||1),
+            onChange: function (ev) {
+              var v = parseFloat(ev.target.value);
+              if (state.format==="portrait") set("portraitScalePortrait", v);
+              else if (state.format==="square")  set("portraitScaleSquare", v);
+              else set("portraitScaleStory", v);
+            },
             style: { width: "100%" }
           })),
         e("div", { className: "grid-2", style: { marginTop: 12 } },
@@ -1381,11 +1397,11 @@ var TRAIT_ORIGIN_GAP = 20;
       e("div", { className: "section" },
         e("h2", null, "Texte"),
         e("label", { className: "field-label" }, "Badge (éditable)"),
-        e("input", { type: "text", value: state.badgeLabel, onChange: function (ev) { set("badgeLabel", ev.target.value); }, style: { marginBottom: 12 } }),
+        e("input", { type: "text", spellCheck: true, value: state.badgeLabel, onChange: function (ev) { set("badgeLabel", ev.target.value); }, style: { marginBottom: 12 } }),
         e("label", { className: "field-label" }, "Titre du poste"),
-        e("textarea", { rows: 2, value: state.jobTitle, onChange: function (ev) { set("jobTitle", ev.target.value); }, style: { marginBottom: 12 } }),
+        e("textarea", { spellCheck: true, rows: 2, value: state.jobTitle, onChange: function (ev) { set("jobTitle", ev.target.value); }, style: { marginBottom: 12 } }),
         e("label", { className: "field-label" }, "Nom"),
-        e("input", { type: "text", value: state.personName, onChange: function (ev) { set("personName", ev.target.value); } })),
+        e("input", { type: "text", spellCheck: true, value: state.personName, onChange: function (ev) { set("personName", ev.target.value.toUpperCase()); }, style: { textTransform: "uppercase" } })),
 
       e("div", { className: "section" },
         e("h2", null, "Missions"),
@@ -1416,13 +1432,13 @@ var TRAIT_ORIGIN_GAP = 20;
                 e("option", { value: "network" }, "🕸️ Réseau"),
                 e("option", { value: "hard_hat" }, "👷 Casque"),
                 e("option", { value: "drill" }, "⛏️ Terrain")),
-              e("input", { type: "text", value: b.keyword, placeholder: "Mot-clé", onChange: function (ev) { setBullet(i, "keyword", ev.target.value); } })),
-            e("textarea", { rows: 2, value: b.text, placeholder: "Texte", onChange: function (ev) { setBullet(i, "text", ev.target.value); } }));
+              e("input", { type: "text", spellCheck: true, value: b.keyword, placeholder: "Mot-clé", onChange: function (ev) { setBullet(i, "keyword", ev.target.value); } })),
+            e("textarea", { spellCheck: true, rows: 2, value: b.text, placeholder: "Texte", onChange: function (ev) { setBullet(i, "text", ev.target.value); } }));
         })),
 
       e("div", { className: "section" },
         e("label", { className: "field-label" }, "Citation"),
-        e("textarea", { rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } })),
+        e("textarea", { spellCheck: true, rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } })),
 
 
       e("div", {className:"section"},
@@ -1441,7 +1457,7 @@ var TRAIT_ORIGIN_GAP = 20;
       e("div", { className: "section" },
         e("h2", null, "Sauvegardes"),
         e("div", { style: { display: "flex", gap: 8, marginBottom: 10 } },
-          e("input", { type: "text", value: saveName, placeholder: "Nom de la version...",
+          e("input", { type: "text", spellCheck: true, value: saveName, placeholder: "Nom de la version...",
             onChange: function(ev) { setSaveName(ev.target.value); },
             style: { flex: 1, fontSize: 13, padding: "6px 8px" } }),
           e("button", { onClick: handleSave,
@@ -1506,11 +1522,12 @@ var TRAIT_ORIGIN_GAP = 20;
     // Portrait : centré horizontalement, ancré en bas, taille contrôlée par portraitScale.
     // On calcule la taille d'affichage à la main (au lieu de objectFit:contain) pour
     // pouvoir appliquer le scale et repositionner les traits en conséquence.
-    var pScale = state.portraitScale || 1;
-    // En Story, la carte est ~42% plus haute qu'en Portrait (1067 vs 750).
-    // Pour que portraitScale=1.0 ait le même rendu visuel qu'en Portrait,
-    // on compense en multipliant pScale par 1.4 uniquement en Story.
-    if (state.format === "story") pScale = pScale * 1.4;
+    /* Échelle portrait par format */
+    var pScale = state.format === "square"
+      ? (state.portraitScaleSquare  || 1)
+      : state.format === "story"
+      ? (state.portraitScaleStory   || 1) * 1.4
+      : (state.portraitScalePortrait || 1);
     var traitEls = [];
     if (state.portraitTraits && state.portraitTraits.points.length) {
       var nW = state.portraitTraits.naturalW, nH = state.portraitTraits.naturalH;

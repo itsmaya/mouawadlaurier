@@ -328,7 +328,9 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 
 /* ═══ STATE ════════════════════════════════════════════════════════════════ */
 var DEFAULT={
-  format:"1x1", quoteStyle:"curly", blockYPct:-1, blockPct:0, badgeIcon:"../../assets/icons/iconeCharge.png",
+  format:"1x1", quoteStyle:"curly", // Position et largeur par format
+  blockYPct_1x1:-1, blockPct_1x1:0,
+  blockYPct_4x5:-1, blockPct_4x5:0, badgeIcon:"../../assets/icons/iconeCharge.png",
   bgImg:"../../templates/citation/TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
   photo:"../../templates/citation/TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
@@ -375,12 +377,22 @@ function App(){
 
      dY = targetTop - L.QUOTE_Y  (décalage depuis la position native)
      ──────────────────────────────────────────────────────────────── */
+  /* Position et largeur selon le format actif */
+  var _fmt = st.format==="4x5" ? "4x5" : "1x1";
+  var _rawY = (st["blockYPct_"+_fmt]!==undefined) ? st["blockYPct_"+_fmt] : -1;
+  var _rawW = st["blockPct_"+_fmt] || 0;
+  var autoPct = Math.round(L.QUOTE_W/CARD_W*100);
+  var curPct  = _rawW || autoPct;
+  curPct = Math.max(30, Math.min(90, curPct));
+  var QW = Math.round(CARD_W*curPct/100);
+  var dW = QW - L.QUOTE_W;   /* décalage utilisé pour recentrer les blocs */
+
   /* TOP_MIN = 10px sous le badge (le "titre") */
   var TOP_MIN = L.BADGE_Y + L.BADGE_H + 10 + L.PHOTO_H + 10;
   var TOP_MAX = L.CARD_H - 20 - quoteH;
   if (TOP_MAX < TOP_MIN) TOP_MAX = TOP_MIN;
 
-  var raw = (st.blockYPct===undefined ? -1 : st.blockYPct);
+  var raw = _rawY;
   var targetTop;
   if (raw < 0) {
     /* Sentinel : position native du format, clampée dans la plage */
@@ -390,13 +402,6 @@ function App(){
     targetTop = TOP_MIN + (raw / 1000) * (TOP_MAX - TOP_MIN);
   }
   var dY = Math.round(targetTop - L.QUOTE_Y);
-  /* Largeur du bloc citation exprimée en % de la largeur de la carte.
-     blockPct = 0 signifie "valeur native du format". */
-  var autoPct = Math.round(L.QUOTE_W/CARD_W*100);
-  var curPct  = st.blockPct || autoPct;
-  curPct = Math.max(30, Math.min(90, curPct));
-  var QW = Math.round(CARD_W*curPct/100);
-  var dW = QW - L.QUOTE_W;   /* décalage utilisé pour recentrer les blocs */
   useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
 
   /* Mesure la hauteur réelle du bloc citation après chaque render.
@@ -692,7 +697,7 @@ function App(){
       e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})),
 
     e("div",{className:"section"},e("h2",null,"Badge"),
-      e("input",{type:"text",value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
+      e("input",{type:"text",spellCheck:true,value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
       e("div",{style:{height:10}}),
       e("label",{className:"field-label"},"Icône du badge ","(PNG transparent, défaut = éclair)"),
       e(FileDrop,{value:st.badgeIcon,onChange:function(v){set("badgeIcon",v);},placeholder:"PNG transparent (défaut = ⚡)",small:true})),
@@ -703,10 +708,10 @@ function App(){
       e(FileDrop,{value:st.photo,onChange:function(v){set("photo",v);},placeholder:"Portrait",small:true}),
       e("div",{style:{height:10}}),
       e("label",{className:"field-label"},"Nom"),
-      e("input",{type:"text",value:st.name,onChange:function(ev){set("name",ev.target.value);}}),
+      e("input",{type:"text",spellCheck:true,value:st.name,onChange:function(ev){set("name",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}}),
       e("div",{style:{height:8}}),
       e("label",{className:"field-label"},"Fonction ",e("span",{className:"hint"},"(Entrée = retour à la ligne)")),
-      e("textarea",{rows:2,value:st.title,onChange:function(ev){set("title",ev.target.value);}})),
+      e("textarea",{spellCheck:true,rows:2,value:st.title,onChange:function(ev){set("title",ev.target.value);}})),
 
     e("div",{className:"section"},e("h2",null,"Guillemets"),
       segBtn(st.quoteStyle,"quoteStyle",[{v:"curly",l:"\u201C \u201D  English"},{v:"chevron",l:"\u00AB \u00BB  Français"},{v:"none",l:"Aucun"}]),
@@ -716,7 +721,7 @@ function App(){
     e("div",{className:"section"},e("h2",null,"Citation"),
       e("div",{className:"upload-hint",style:{marginBottom:6}},
         e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
-      e("textarea",{rows:8,value:st.quote,onChange:function(ev){set("quote",ev.target.value);},style:{fontSize:13,lineHeight:1.5}})),
+      e("textarea",{spellCheck:true,rows:8,value:st.quote,onChange:function(ev){set("quote",ev.target.value);},style:{fontSize:13,lineHeight:1.5}})),
 
     e("div",{className:"section"},e("h2",null,"Alignement horizontal"),
       e("div",{className:"seg"},
@@ -731,15 +736,15 @@ function App(){
       e("label",{className:"field-label"},(raw<0?"Position native":"Position — bas à "+(L.CARD_H-(Math.round(targetTop)+quoteH))+"px du bord")),
       e("input",{type:"range",min:0,max:1000,step:1,
         /* si raw<0 (sentinel), on affiche le slider centré sur la position actuelle */
-        value:raw<0?Math.round((targetTop-TOP_MIN)/(TOP_MAX-TOP_MIN)*1000)||500:raw,
-        onChange:function(ev){set("blockYPct",parseInt(ev.target.value,10));}}),
+        value:_rawY<0?Math.round((targetTop-TOP_MIN)/(TOP_MAX-TOP_MIN)*1000)||500:_rawY,
+        onChange:function(ev){set("blockYPct_"+st.format,parseInt(ev.target.value,10));}}),
       e("div",{style:{height:12}}),
       e("h2",null,"Largeur du bloc citation"),
       e("label",{className:"field-label"},
         curPct+" %  ("+QW+" px)"+(st.blockPct?"":"  — natif")),
       e("input",{type:"range",min:30,max:90,step:1,value:curPct,
-        onChange:function(ev){set("blockPct",parseInt(ev.target.value,10));}}),
-      e("button",{onClick:function(){set("blockYPct",-1);set("blockPct",0);},
+        onChange:function(ev){set("blockPct_"+st.format,parseInt(ev.target.value,10));}}),
+      e("button",{onClick:function(){set("blockYPct_"+st.format,-1);set("blockPct_"+st.format,0);},
         style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
           border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
         "Réinitialiser position et largeur")),
@@ -753,7 +758,7 @@ function App(){
 
     e("div",{className:"section"},e("h2",null,"Sauvegardes"),
       e("div",{style:{display:"flex",gap:8,marginBottom:10}},
-        e("input",{type:"text",value:sname,placeholder:"Nom de la version\u2026",onChange:function(ev){setSname(ev.target.value);},style:{flex:1,fontSize:13,padding:"6px 8px"}}),
+        e("input",{type:"text",spellCheck:true,value:sname,placeholder:"Nom de la version\u2026",onChange:function(ev){setSname(ev.target.value);},style:{flex:1,fontSize:13,padding:"6px 8px"}}),
         e("button",{onClick:save,style:{background:"#1a1a1a",color:"#fff",border:"none",borderRadius:6,padding:"6px 14px",cursor:"pointer",fontWeight:700,fontSize:13,fontFamily:"inherit"}},"Sauvegarder")),
       saves.length===0?e("div",{className:"hint",style:{marginBottom:10}},"Aucune sauvegarde."):
         e("div",{className:"saves-list"},saves.map(function(v,i){
