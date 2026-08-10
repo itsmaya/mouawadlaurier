@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Latest News — TotalEnergies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script>
+function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
+</script>
+<script>
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js","https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"],function(){boot();});});});
+</script>
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Nunito',sans-serif;background:#f0f0f0;}
+#root{min-height:100vh;}
+.app-layout{min-height:100vh;display:flex;flex-direction:column;gap:24px;padding:24px;padding-top:68px;padding-bottom:52px;}
+@media(min-width:1024px){.app-layout{flex-direction:row;}}
+.panel{width:100%;flex-shrink:0;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid #e5e5e5;padding:20px;height:fit-content;}
+@media(min-width:1024px){.panel{width:400px;}}
+.panel h2{font-size:14px;font-weight:700;color:#171717;margin:0 0 12px;}
+.section{margin-bottom:20px;}.section:last-child{margin-bottom:0;}
+label.field-label{display:block;font-size:12px;font-weight:600;color:#404040;margin-bottom:4px;}
+.hint{font-size:11px;color:#737373;}
+input[type=text],textarea{width:100%;font-size:14px;border:1px solid #d4d4d4;border-radius:6px;padding:8px;font-family:'Nunito',sans-serif;}
+textarea{resize:vertical;}
+input[type=range]{width:100%;accent-color:#1a1a1a;}
+.file-drop{position:relative;cursor:pointer;border-radius:8px;border:2px dashed #d4d4d4;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fafafa;height:96px;}
+.file-drop.small{height:64px;}
+.file-drop:hover{border-color:#a3a3a3;}
+.file-drop img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.file-drop-empty{display:flex;flex-direction:column;align-items:center;gap:4px;color:#a3a3a3;font-size:11px;text-align:center;padding:0 6px;}
+.file-drop .remove-btn{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px;border:none;cursor:pointer;display:flex;}
+.export-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#171717;color:#fff;font-size:14px;font-weight:600;border-radius:8px;padding:13px;border:none;cursor:pointer;margin-top:20px;font-family:inherit;}
+.export-btn:hover{background:#303030;}.export-btn:disabled{opacity:.6;cursor:default;}
+.preview-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;position:sticky;top:68px;align-self:flex-start;}
+.page-header{position:fixed;top:0;left:0;right:0;height:52px;z-index:100;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:0 24px;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
+.page-header-logo{height:19px;display:block;}
+.page-header-sep{width:1px;height:18px;background:#e0e0e0;flex-shrink:0;}
+.page-header-title{font-size:11px;font-weight:800;color:#111;letter-spacing:.07em;text-transform:uppercase;}
+.page-header-sub{font-size:11px;font-weight:400;color:#aaa;}
+.page-header-nav{margin-left:auto;display:flex;gap:8px;}
+.page-header-nav a{font-size:11px;font-weight:700;color:#333;text-decoration:none;padding:5px 12px;border-radius:2px;border:1px solid #ddd;letter-spacing:.03em;text-transform:uppercase;}
+.page-header-nav a:hover{background:#f5f5f5;}
+.page-footer{position:fixed;bottom:0;right:0;z-index:100;display:flex;align-items:center;gap:8px;padding:7px 14px;background:#fff;border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:10px 0 0 0;}
+.page-footer-label{font-size:10px;font-weight:700;color:#bbb;letter-spacing:.06em;text-transform:uppercase;}
+.page-footer-logo{height:15px;opacity:.4;}
+@keyframes spin{to{transform:rotate(360deg);}}.spin{animation:spin 1s linear infinite;display:inline-flex;}
+.saves-list{max-height:190px;overflow-y:auto;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:10px;}
+.save-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #f0f0f0;}
+.save-row:last-child{border-bottom:none;}
+.seg{display:flex;gap:6px;}
+.seg button{flex:1;padding:7px;font-size:12px;font-weight:700;border-radius:6px;border:1px solid #d4d4d4;background:#fff;cursor:pointer;font-family:inherit;}
+.seg button.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.upload-hint{font-size:11px;color:#737373;background:#f8f8f8;border:1px solid #e5e5e5;border-radius:6px;padding:8px 10px;margin-bottom:10px;}
+.upload-hint b{color:#404040;}
+.grad-row{display:flex;gap:8px;}
+.grad-sw{flex:1;height:38px;border-radius:8px;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .15s;}
+.grad-sw:hover{transform:translateY(-1px);}
+.grad-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset,0 2px 8px rgba(0,0,0,.18);}
+.grad-sw.on::after{content:"";position:absolute;left:50%;bottom:6px;width:5px;height:5px;
+  margin-left:-2.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);}
+.grad-active{font-size:11px;font-weight:700;color:#404040;margin-top:8px;display:flex;align-items:center;gap:6px;}
+.grad-active i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+.col-row{display:flex;gap:8px;flex-wrap:wrap;}
+.col-sw{width:38px;height:30px;border-radius:6px;cursor:pointer;border:2px solid transparent;}
+.col-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset;}
+.charte-warn{font-size:11px;line-height:1.45;color:#8a4b00;background:#fff6e6;border:1px solid #f0d29a;border-radius:6px;padding:8px 10px;margin-top:10px;}
+.charte-warn b{color:#6b3a00;}
+.toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.toggle input{accent-color:#1a1a1a;}
+.toggle.off{opacity:.45;cursor:not-allowed;}
+</style>
+</head>
+<body>
+<header class="page-header">
+  <img class="page-header-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+  <div class="page-header-sep"></div>
+  <span class="page-header-title">Latest News</span>
+  <span class="page-header-sub">Static Posts Generator</span>
+  <nav class="page-header-nav">
+    <a href="../../index.html">&larr; Accueil</a>
+    <a href="../fiche-metier/index.html">Fiche Métier</a>
+    <a href="../citation/index.html">Citation Post</a>
+  </nav>
+</header>
+<footer class="page-footer">
+  <span class="page-footer-label">Developed by</span>
+  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+</footer>
+<div id="root"></div>
+<script>
+function boot(){
+
+/* ═══ CHARTE TOTALENERGIES V8 ═════════════════════════════════════════════
+   Les 4 dégradés principaux, valeurs exactes de la charte (slide "Couleurs
+   principales"). Le dégradé est construit de la couleur du haut à la
+   couleur du bas du bloc.
+   ══════════════════════════════════════════════════════════════════════════ */
+var GRADS={
+  bleu:  {label:"Bleu",   from:"#0098E3", to:"#4632FF", lowCarbonOK:true },
+  cyan:  {label:"Cyan",   from:"#0197E6", to:"#00A55E", lowCarbonOK:true },
+  vert:  {label:"Vert",   from:"#3EA400", to:"#00884A", lowCarbonOK:true },
+  rouge: {label:"Rouge",  from:"#EB6A17", to:"#E70000", lowCarbonOK:false}
+};
+function gradCss(k,deg){var g=GRADS[k]||GRADS.bleu;
+  return "linear-gradient("+(deg===undefined?90:deg)+"deg,"+g.from+" 0%,"+g.to+" 100%)";}
+
+/* Couleurs de texte autorisées sur fond blanc (charte "Textes") */
+var TEXT_COLORS=[
+  {v:"#374649",l:"Gris foncé"},
+  {v:"#4632FF",l:"Bleu"},
+  {v:"#0197E6",l:"Cyan"},
+  {v:"#00884A",l:"Vert"},
+  {v:"#E70000",l:"Rouge"}
+];
+var TE_WHITE="#FFFFFF";
+
+/* ═══ LAYOUT ══════════════════════════════════════════════════════════════
+   Toutes les valeurs de la charte sont exprimées sur un canevas 1080 px.
+   La carte de preview fait 600 px de large : K = 600/1080 = 0.5556.
+   Chaque constante ci-dessous est donc la valeur charte × K, arrondie.
+   ══════════════════════════════════════════════════════════════════════════ */
+var CARD_W=600, K=600/1080;
+function px(v){return Math.round(v*K);}   /* charte px → card px */
+
+var FORMATS={
+  "1x1" :{label:"Carré 1:1",   outputW:1080,outputH:1080,cardH:600 },
+  "4x5" :{label:"Portrait 4:5",outputW:1080,outputH:1350,cardH:750 },
+  "9x16":{label:"Story 9:16",  outputW:1080,outputH:1920,cardH:1067}
+};
+
+/* Marie-louise : 50 px de charte → 28 px carte.
+   Avec marie-louise, le cartouche passe à 100 px de marge (28 + 28). */
+var ML_W=px(50);
+
+function getLayout(k,firstSlide,hasML){
+  var f=FORMATS[k]||FORMATS["1x1"];
+  var story=(k==="9x16");
+  /* Marge latérale : 50 px, ou 84 px pour la 1re slide de carrousel,
+     ou 80 px en story (la marie-louise n'existe pas en story). */
+  var base = story ? px(80) : (firstSlide ? px(84) : px(50));
+  var ml   = (!story && hasML) ? ML_W : 0;
+  return {
+    CARD_H:f.cardH, EXPORT_SCALE:f.outputW/CARD_W, STORY:story, ML:ml,
+    MARGIN: base+ml,
+    BADGE_TOP: story ? px(180) : base+ml,
+    RIGHT_MIN: (story ? px(160) : px(100)) + ml,
+    BOTTOM:    (story ? px(230) : px(100)) + ml,
+    BADGE_H:px(70), BADGE_ICON:px(70), BADGE_GAP:px(15),
+    BADGE_RADIUS:px(15), BADGE_PADX:px(25), BADGE_FONT:px(30),
+    PAVE_PAD:px(40), PAVE_RADIUS:px(20),
+    ARROW:px(70), ARROW_RADIUS:px(15), ARROW_GAP:story?px(50):px(30),
+    TEXT_MIN:px(45), TEXT_MAX:px(80), TEXT_DEF:px(48), TEXT_LH:1.19
+  };
+}
+
+/* ═══ PARSEUR ═════════════════════════════════════════════════════════════
+   **mot** = surlignage dégradé    __mot__ = soulignage dégradé
+   Identique au générateur Citation, pour que les deux outils partagent
+   la même syntaxe côté utilisateur.
+   ══════════════════════════════════════════════════════════════════════════ */
+function parseRich(t){
+  var out=[],re=/(\*\*[\s\S]+?\*\*|__[\s\S]+?__)/g,last=0,m;
+  while((m=re.exec(t))!==null){
+    if(m.index>last) out.push({t:"n",v:t.slice(last,m.index)});
+    out.push(m[0].slice(0,2)==="**"?{t:"h",v:m[0].slice(2,-2)}:{t:"u",v:m[0].slice(2,-2)});
+    last=re.lastIndex;
+  }
+  if(last<t.length) out.push({t:"n",v:t.slice(last)});
+  return out;
+}
+
+var e=React.createElement,useState=React.useState,useRef=React.useRef,
+    useCallback=React.useCallback,useEffect=React.useEffect,
+    useLayoutEffect=React.useLayoutEffect;
+
+/* ═══ CORPS DE TEXTE RICHE ════════════════════════════════════════════════
+   Les surlignages / soulignages sont mesurés ligne par ligne puis dessinés
+   comme des rectangles absolus. html2canvas ne sait pas gérer
+   box-decoration-break sur du texte inline : sans ça l'export est faux.
+
+   Exception LATEST NEWS de la charte : le texte courant est en Regular (400)
+   et les mots surlignés en ExtraBold (800).
+   ══════════════════════════════════════════════════════════════════════════ */
+function RichBody(props){
+  var fs=props.fs, lh=props.lh, grad=props.grad;
+  var hostRef=useRef(null);
+  var s0=useState({h:[],u:[]}); var M=s0[0],setM=s0[1];
+  var s1=useState(0); var setTick=s1[1];
+
+  /* Re-mesure quand les webfonts sont chargées */
+  useEffect(function(){
+    if(document.fonts&&document.fonts.ready){
+      document.fonts.ready.then(function(){ setTick(function(t){return t+1;}); });
+    }
+  },[]);
+
+  useLayoutEffect(function(){
+    var host=hostRef.current; if(!host) return;
+    var base=host.getBoundingClientRect();
+    /* La preview est dans un conteneur transform:scale(). getBoundingClientRect
+       renvoie des px ÉCRAN : on divise par le facteur d'échelle pour revenir
+       en px CSS, sinon les rectangles sont décalés (et l'export aussi). */
+    var SC = host.offsetWidth ? (base.width/host.offsetWidth) : 1;
+    if(!SC || !isFinite(SC) || SC<=0) SC=1;
+    function N(v){ return v/SC; }
+
+    var res={h:[],u:[]};
+    var segs=host.querySelectorAll("[data-seg]");
+    for(var i=0;i<segs.length;i++){
+      var kind=segs[i].getAttribute("data-seg");
+      var rs=segs[i].getClientRects();
+      for(var j=0;j<rs.length;j++){
+        var r=rs[j];
+        if(r.width<0.5) continue;
+        var o={x:N(r.left-base.left),y:N(r.top-base.top),
+               w:N(r.width),h:N(r.height),b:N(r.bottom-base.top)};
+        if(kind==="h") res.h.push(o); else res.u.push(o);
+      }
+    }
+    if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
+  });
+
+  var parts=parseRich(props.text);
+
+  /* Surlignage : la charte cale la hauteur sur le corps du caractère
+     (taille effective + espace autour), et ajoute un espace avant/après. */
+  var H_PAD_X=fs*0.26;
+  var H_H=fs*1.12;
+  var U_TH=Math.max(3,fs*0.17);
+  var U_OFF=fs*0.03;
+
+  return e("div",{style:{position:"relative"}},
+
+    M.h.map(function(r,i){
+      var cy=r.y+r.h/2;
+      return e("div",{key:"h"+i,style:{position:"absolute",
+        left:r.x-H_PAD_X, top:cy-H_H/2, width:r.w+H_PAD_X*2, height:H_H,
+        backgroundImage:grad, borderRadius:1, zIndex:0}});
+    }),
+
+    M.u.map(function(r,i){
+      return e("div",{key:"u"+i,style:{position:"absolute",
+        left:r.x, top:r.b-U_OFF, width:r.w, height:U_TH,
+        backgroundImage:grad, borderRadius:U_TH/2, zIndex:0}});
+    }),
+
+    e("div",{ref:hostRef,style:{position:"relative",zIndex:1,
+        fontFamily:"'Nunito',sans-serif",fontWeight:400,
+        color:props.color,fontSize:fs,lineHeight:lh,
+        textAlign:props.align}},
+      /* Rond rouge live — charte : couleur secondaire #E70000, avant le texte */
+      props.live?e("span",{style:{display:"inline-block",
+        width:fs*0.55,height:fs*0.55,borderRadius:"50%",
+        background:"#E70000",marginRight:fs*0.28,
+        verticalAlign:"middle",marginBottom:fs*0.08,flexShrink:0}}):null,
+      parts.map(function(p,i){
+        if(p.t==="h") return e("span",{key:i,"data-seg":"h",
+          style:{color:TE_WHITE,fontWeight:800}},p.v);
+        if(p.t==="u") return e("span",{key:i,"data-seg":"u"},p.v);
+        return e("span",{key:i},p.v);
+      }))
+  );
+}
+
+/* ─── Flèche de navigation (carrousel) ─────────────────────────────────── */
+var AID=0;
+function NavMark(p){
+  var id="ar"+(++AID);
+  if(p.kind==="dot"){
+    return e("div",{style:{width:p.size,height:p.size,borderRadius:p.radius,
+        background:TE_WHITE,display:"flex",alignItems:"center",justifyContent:"center"}},
+      e("div",{style:{width:p.size*0.26,height:p.size*0.26,borderRadius:"50%",
+        backgroundImage:p.grad}}));
+  }
+  return e("div",{style:{width:p.size,height:p.size,borderRadius:p.radius,
+      background:TE_WHITE,display:"flex",alignItems:"center",justifyContent:"center"}},
+    e("svg",{width:p.size*0.5,height:p.size*0.5,viewBox:"0 0 24 24",
+        style:{display:"block",overflow:"visible"}},
+      e("defs",null,e("linearGradient",{id:id,x1:"0",y1:"0",x2:"1",y2:"0"},
+        e("stop",{offset:"0%",stopColor:p.from}),
+        e("stop",{offset:"100%",stopColor:p.to}))),
+      e("path",{d:"M4 12h15M13 6l6 6-6 6",fill:"none",stroke:"url(#"+id+")",
+        strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round"})));
+}
+
+/* ═══ PICTOGRAMMES CHARTE ══════════════════════════════════════════════════
+   Source : charte TotalEnergies V8, slides "Pictogrammes énergies" et
+   "Pictogrammes secondaires".
+   Chaque icône est encodée en SVG data-URI pour éviter tout fichier externe.
+   Règle charte : utiliser soit dans leurs couleurs chartées, soit en blanc
+   sur fond dégradé. Ici on laisse html2canvas gérer l'img tag normalement.
+   ══════════════════════════════════════════════════════════════════════════ */
+function svgUri(path,fill,viewBox){
+  var vb=viewBox||"0 0 24 24";
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" fill="'+fill+'">'+path+'</svg>';
+  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);
+}
+/* Icônes couleurs chartées (source : charte) */
+var PICTOS_ENERGY=[
+  {k:"petrole",  l:"Pétrole",    fill:"url(#rg)", grad:["#EB6A17","#E70000"],
+   p:"M12 2a5 5 0 0 0-5 5c0 .9.3 2.1 1 3.4L12 18l4-7.6c.7-1.3 1-2.5 1-3.4a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
+  {k:"gaz",      l:"Gaz",        fill:"url(#rg)", grad:["#0098E3","#4632FF"],
+   p:"M12 3c-1.5 3-4 5-4 8a4 4 0 0 0 8 0c0-3-2.5-5-4-8zm0 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
+  {k:"elec",     l:"Électricité",fill:"url(#rg)", grad:["#0197E6","#00A55E"],
+   p:"M7 2h5l-1 8h4L8 22l2-12H7z"},
+  {k:"hydro",    l:"Hydrogène",  fill:"url(#rg)", grad:["#0197E6","#00A55E"],
+   p:"M12 2a7.5 7.5 0 1 0 0 15A7.5 7.5 0 0 0 12 2zm-1 5h2v3h3v2h-3v3h-2v-3H8V10h3z"},
+  {k:"biomasse", l:"Biomasse",   fill:"url(#rg)", grad:["#0197E6","#00A55E"],
+   p:"M12 2S6 7 6 13a6 6 0 0 0 12 0c0-6-6-11-6-11zm-1 14v-5l-2 2-1-1 3-3v-2h2v2l3 3-1 1-2-2v5h-2z"},
+  {k:"eolien",   l:"Éolien",     fill:"url(#rg)", grad:["#3EA400","#00884A"],
+   p:"M12 11.5A1.5 1.5 0 0 1 10.5 10 1.5 1.5 0 0 1 12 8.5 1.5 1.5 0 0 1 13.5 10 1.5 1.5 0 0 1 12 11.5M12 2l2.5 7H22l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7.5z"},
+  {k:"solaire",  l:"Solaire",    fill:"url(#rg)", grad:["#FFCC00","#FF9900"],
+   p:"M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0-5v3M5.6 5.6 7 7M2 12h3M5.6 18.4 7 17M12 21v-3M18.4 18.4 17 17M22 12h-3M18.4 5.6 17 7"},
+];
+var PICTOS_SEC=[
+  {k:"actus",  l:"Actus",
+   p:'<rect x="4" y="3" width="12" height="16" rx="2"/><rect x="7" y="6" width="6" height="2"/><rect x="7" y="10" width="6" height="2"/><rect x="7" y="14" width="4" height="2"/>',fill:"#E70000"},
+  {k:"sport",  l:"Sport",
+   p:'<circle cx="12" cy="12" r="9" stroke="#285AFF" stroke-width="2" fill="none"/><path d="M12 3a9 9 0 0 1 6.4 15.4M5.6 5.6A9 9 0 0 1 12 3" stroke="#285AFF" stroke-width="2" fill="none"/>',fill:"none"},
+  {k:"innov",  l:"Innovation",
+   p:'<ellipse cx="12" cy="12" rx="4" ry="8" fill="none" stroke="#FFB700" stroke-width="2"/><ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="#FFB700" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#FFB700"/>',fill:"none"},
+  {k:"planete",l:"Planète",
+   p:'<circle cx="12" cy="12" r="9" fill="none" stroke="#0197E6" stroke-width="2"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="#0197E6" stroke-width="1.5"/>',fill:"none"},
+  {k:"batt",  l:"Batterie",
+   p:'<rect x="6" y="4" width="12" height="16" rx="2" fill="none" stroke="#4632FF" stroke-width="2"/><rect x="9" y="1" width="6" height="3"/><rect x="8" y="10" width="8" height="2" fill="#4632FF"/><rect x="8" y="13" width="8" height="2" fill="#4632FF"/><rect x="8" y="7" width="8" height="2" fill="#4632FF"/>',fill:"none"},
+  {k:"jeux",  l:"Jeux",
+   p:'<rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="#3EA400" stroke-width="2"/><circle cx="8" cy="8" r="1.5" fill="#3EA400"/><circle cx="16" cy="8" r="1.5" fill="#3EA400"/><circle cx="8" cy="16" r="1.5" fill="#3EA400"/><circle cx="16" cy="16" r="1.5" fill="#3EA400"/>',fill:"none"},
+  {k:"ampoule",l:"Ampoule",
+   p:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V17H9v-2.8C7.2 13.1 6 11.2 6 9a6 6 0 0 1 6-6z" fill="none" stroke="#FFCC00" stroke-width="2"/><line x1="9" y1="17" x2="15" y2="17" stroke="#FFCC00" stroke-width="2"/>',fill:"none"},
+];
+function makePictoSrc(pk){
+  var e1=PICTOS_ENERGY.find(function(p){return p.k===pk;});
+  if(e1){
+    var g=e1.grad;
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
+      +'<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0%" stop-color="'+g[0]+'"/>'
+      +'<stop offset="100%" stop-color="'+g[1]+'"/>'
+      +'</linearGradient></defs>'
+      +'<path d="'+e1.p+'" fill="url(#rg)"/></svg>';
+    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+  }
+  var e2=PICTOS_SEC.find(function(p){return p.k===pk;});
+  if(e2){
+    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+e2.p+'</svg>';
+    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg2);
+  }
+  return null;
+}
+
+/* ─── FileDrop ─────────────────────────────────────────────────────────── */
+function FileDrop(p){
+  var r=useRef(null);
+  function take(f){if(!f||!f.type||f.type.indexOf("image/")!==0)return;var rd=new FileReader();rd.onload=function(ev){p.onChange(ev.target.result);};rd.readAsDataURL(f);}
+  return e("div",{className:"file-drop"+(p.small?" small":""),
+    onClick:function(){if(r.current)r.current.click();},
+    onDragOver:function(ev){ev.preventDefault();},
+    onDrop:function(ev){ev.preventDefault();take(ev.dataTransfer.files[0]);}},
+    p.value
+      ?e(React.Fragment,null,
+          e("img",{src:p.value,alt:""}),
+          e("button",{className:"remove-btn",onClick:function(ev){ev.stopPropagation();p.onChange(null);}},
+            e("svg",{viewBox:"0 0 16 16",width:14,height:14,fill:"none",stroke:"#666",strokeWidth:2},
+              e("line",{x1:4,y1:4,x2:12,y2:12}),e("line",{x1:12,y1:4,x2:4,y2:12}))))
+      :e("div",{className:"file-drop-empty"},
+          e("svg",{viewBox:"0 0 24 24",width:20,height:20,fill:"none",stroke:"#a3a3a3",strokeWidth:1.5},
+            e("rect",{x:3,y:3,width:18,height:18,rx:3}),
+            e("circle",{cx:8.5,cy:8.5,r:1.5}),e("path",{d:"M21 15l-5-5L5 21"})),
+          e("span",null,p.placeholder||"Cliquer ou déposer")),
+    e("input",{ref:r,type:"file",accept:"image/*",style:{display:"none"},onChange:function(ev){take(ev.target.files[0]);}}));
+}
+function DownloadIcon(){return e("svg",{viewBox:"0 0 24 24",width:18,height:18,fill:"none",stroke:"currentColor",strokeWidth:2},e("path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"}),e("polyline",{points:"7 10 12 15 17 10"}),e("line",{x1:12,y1:15,x2:12,y2:3}));}
+
+/* ═══ IndexedDB ════════════════════════════════════════════════════════════
+   DB_VERSION passe à 3 pour créer le store latestnews_saves.
+   ⚠ La même valeur doit être reportée dans fiche-metier et citation,
+   sinon leurs sauvegardes cassent silencieusement.
+   ══════════════════════════════════════════════════════════════════════════ */
+var DB_NAME="wie_db",DB_VERSION=3,STORE="latestnews_saves";
+function openDB(ok,ko){var q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=function(ev){var db=ev.target.result;if(!db.objectStoreNames.contains("saves"))db.createObjectStore("saves",{keyPath:"name"});if(!db.objectStoreNames.contains("citation_saves"))db.createObjectStore("citation_saves",{keyPath:"name"});if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:"name"});};q.onsuccess=function(ev){ok(ev.target.result);};q.onerror=function(){ko&&ko();};}
+function dbAll(cb){openDB(function(db){var q=db.transaction(STORE,"readonly").objectStore(STORE).getAll();q.onsuccess=function(ev){var a=ev.target.result||[];a.sort(function(x,y){return y.date>x.date?1:-1;});cb(a);};q.onerror=function(){cb([]);};},function(){cb([]);});}
+function dbPut(en,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE).put(en);t.oncomplete=cb||function(){};});}
+function dbDel(n,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE)["delete"](n);t.oncomplete=cb||function(){};});}
+function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite"),s=t.objectStore(STORE);a.forEach(function(x){s.put(x);});t.oncomplete=cb||function(){};});}
+
+/* ═══ FONDS PAR DÉFAUT ═════════════════════════════════════════════════════
+   Un fond par format : le cadrage n'est pas le même en carré et en story.
+
+   Le chemin n'est plus posé en dur : on sonde plusieurs noms et extensions
+   au démarrage et à chaque changement de format. Si rien ne répond, la carte
+   reste sur un aplat dégradé de la charte au lieu d'un rectangle vide, et le
+   panneau affiche le chemin testé.
+   ══════════════════════════════════════════════════════════════════════════ */
+var BG_DIR="../../templates/latest-news/";
+function bgCandidates(k){
+  var names=["TEMPLATE_LN_"+k,"TEMPLATE_LN_"+k.toUpperCase(),"TEMPLATE_"+k];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[];
+  for(var i=0;i<names.length;i++)
+    for(var j=0;j<exts.length;j++) out.push(BG_DIR+names[i]+exts[j]);
+  return out;
+}
+function tryLoad(cands,cb){
+  var i=0;
+  (function next(){
+    if(i>=cands.length) return cb(null);
+    var u=cands[i++], im=new Image();
+    im.onload=function(){cb(u);};
+    im.onerror=next;
+    im.src=u;
+  })();
+}
+
+/* ═══ STATE ════════════════════════════════════════════════════════════════ */
+var DEFAULT={
+  format:"1x1", grad:"bleu", lowCarbon:false, firstSlide:false,
+  bgMode:"photo",
+  bgImg:null, bgCustom:false, bgBlur:0, bgDark:0,
+  hasML:false, mlStyle:"white",
+  badgeIconKey:"elec",              /* clé charte — remplacé par upload si badgeIconCustom */
+  badgeIconCustom:null,             /* data-URI du PNG déposé par l'utilisateur */
+  badgeMain:"LATEST NEWS", badgeSub:"LEUNA, GERMANY",
+  liveMode:false,                   /* rond rouge ● devant le texte */
+  text:"TotalEnergies & RWE:\nA Major Step Towards **Decarbonizing Hydrogen**",
+  textColor:"#4632FF",
+  navMark:"arrow",
+  align:"left",
+  fs_1x1:0,  fs_4x5:0,  fs_9x16:0,
+  w_1x1:0,   w_4x5:0,   w_9x16:0,
+  b_1x1:-1,  b_4x5:-1,  b_9x16:-1
+};
+
+/* ═══ APP ══════════════════════════════════════════════════════════════════ */
+function App(){
+  var a0=useState(DEFAULT),st=a0[0],setSt=a0[1];
+  var a1=useState([]),saves=a1[0],setSaves=a1[1];
+  var a2=useState(""),sname=a2[0],setSname=a2[1];
+  var a3=useState(false),busy=a3[0],setBusy=a3[1];
+  var cardRef=useRef(null),impRef=useRef(null),paveRef=useRef(null);
+  var phState=useState(120); var paveH=phState[0],setPaveH=phState[1];
+  var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
+  function set(k,v){setSt(function(p){var c=Object.assign({},p);c[k]=v;return c;});}
+
+  /* Changement de format : la marie-louise n'existe pas en story.
+     Le fond par défaut est rechargé par la sonde ci-dessous. */
+  function setFormat(k){
+    setSt(function(p){
+      var c=Object.assign({},p);
+      c.format=k;
+      if(k==="9x16") c.hasML=false;   /* charte : jamais de marie-louise en story */
+      return c;
+    });
+  }
+
+  /* Sonde du fond par défaut : au démarrage, puis à chaque changement de
+     format, tant que l'utilisateur n'a pas déposé sa propre image. */
+  useEffect(function(){
+    if(st.bgCustom) return;
+    var k=st.format;
+    setBgStatus({s:"loading",p:null});
+    tryLoad(bgCandidates(k),function(u){
+      setSt(function(p){
+        if(p.bgCustom||p.format!==k) return p;
+        var c=Object.assign({},p); c.bgImg=u; return c;
+      });
+      setBgStatus(u?{s:"ok",p:u}:{s:"missing",p:null});
+    });
+  },[st.format,st.bgCustom]);
+
+  var G=GRADS[st.grad]||GRADS.bleu;
+  var GRAD_H=gradCss(st.grad,90);    /* horizontal : cartouches et surlignages */
+  var GRAD_V=gradCss(st.grad,180);   /* vertical   : fonds de bloc (charte) */
+
+  var L=getLayout(st.format,st.firstSlide,st.hasML);
+  var CARD_H=L.CARD_H, EX=L.EXPORT_SCALE;
+
+  /* ── Réglages par format ─────────────────────────────────────────────
+     Déclarés AVANT les bornes de position : l'ordre compte, une valeur
+     undefined ici décale tout le positionnement. ─────────────────────── */
+  var _f=st.format;
+  var _rawFs=st["fs_"+_f]||0;
+  var _rawW =st["w_"+_f] ||0;
+  var _rawB =(st["b_"+_f]!==undefined)?st["b_"+_f]:-1;
+
+  var fs=_rawFs||L.TEXT_DEF;
+  fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
+
+  var autoW=CARD_W-L.MARGIN-L.RIGHT_MIN;
+  var PW=_rawW?Math.round(CARD_W*_rawW/100):autoW;
+  PW=Math.max(Math.round(CARD_W*0.30),Math.min(CARD_W-L.MARGIN*2,PW));
+  var curWPct=Math.round(PW/CARD_W*100);
+
+  /* ── Position verticale du pavé ──────────────────────────────────────
+     Le pavé est ancré par le bas. La flèche, si elle existe, se place
+     sous le pavé et c'est elle qui porte la marge basse de la charte. */
+  var markH=(st.navMark!=="none")?L.ARROW+L.ARROW_GAP:0;
+  var BOTTOM_MIN=L.MARGIN;
+  var BOTTOM_MAX=Math.max(BOTTOM_MIN,CARD_H-L.BADGE_TOP-L.BADGE_H-px(60)-paveH-markH);
+  var bottomTarget;
+  if(_rawB<0){
+    bottomTarget=Math.max(BOTTOM_MIN,Math.min(BOTTOM_MAX,L.BOTTOM));
+  }else{
+    bottomTarget=BOTTOM_MIN+(_rawB/1000)*(BOTTOM_MAX-BOTTOM_MIN);
+  }
+  bottomTarget=Math.round(bottomTarget);
+  var paveBottom=bottomTarget+markH;     /* px depuis le bas de la carte */
+
+  /* ── Alignement horizontal ───────────────────────────────────────────
+     Charte : le texte est ferré à gauche dans le cartouche ; il n'est
+     ferré à droite que lorsque le cartouche est lui-même placé à droite. */
+  var paveLeft=(st.align==="right")?(CARD_W-PW-L.MARGIN):L.MARGIN;
+  var textAlign=(st.align==="right")?"right":"left";
+
+  useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
+
+  /* Hauteur réelle du pavé, mesurée après chaque render */
+  useLayoutEffect(function(){
+    if(!paveRef.current) return;
+    var h=Math.round(paveRef.current.offsetHeight||0);
+    if(h>0 && h!==paveH) setPaveH(h);
+  });
+
+  function save(){var n=sname.trim()||("Version "+new Date().toLocaleString("fr-FR"));dbPut({name:n,date:new Date().toISOString(),state:st},function(){dbAll(function(a){setSaves(a);});});setSname("");}
+  function load(en){setSt(Object.assign({},DEFAULT,en.state));}
+  function del(n){dbDel(n,function(){dbAll(function(a){setSaves(a);});});}
+  function expJson(){dbAll(function(a){var b=new Blob([JSON.stringify(a,null,2)],{type:"application/json"});var l=document.createElement("a");l.href=URL.createObjectURL(b);l.download="latest-news-sauvegardes.json";l.click();});}
+  function impJson(f){if(!f)return;var r=new FileReader();r.onload=function(ev){try{var a=JSON.parse(ev.target.result);var ok=a.filter(function(x){return x&&x.name&&x.state;});if(!ok.length)throw new Error("aucune entrée valide");dbPutAll(ok,function(){dbAll(function(m){setSaves(m);alert(ok.length+" sauvegarde(s) importée(s).");});});}catch(er){alert("Fichier invalide ("+er.message+").");}};r.readAsText(f);}
+
+  /* ─── Export PNG ──────────────────────────────────────────────────────── */
+  var doExport=useCallback(function(){
+    if(!cardRef.current)return;
+    setBusy(true);
+    var bgW=CARD_W-L.ML*2, bgH=CARD_H-L.ML*2;
+    function preBlur(src,w,h,pxb,done){
+      /* Rendu à la résolution OUTPUT (×EX) pour éviter tout upscale */
+      if(!src||st.bgMode!=="photo") return done(null);
+      var img=new Image();
+      img.crossOrigin="anonymous";
+      img.onload=function(){
+        var OW=Math.round(w*EX), OH=Math.round(h*EX);
+        var cv=document.createElement("canvas");
+        cv.width=OW; cv.height=OH;
+        var ctx=cv.getContext("2d");
+        ctx.imageSmoothingEnabled=true;
+        ctx.imageSmoothingQuality="high";
+        if(pxb>0) ctx.filter="blur("+Math.round(pxb*EX)+"px)";
+        var ir=img.naturalWidth/img.naturalHeight, cr=OW/OH, dw,dh;
+        if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
+        ctx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
+        done(cv.toDataURL("image/png"));
+      };
+      img.onerror=function(){done(null);};
+      img.src=src;
+    }
+    preBlur(st.bgImg,bgW,bgH,st.bgBlur,function(blurred){
+      var box=document.createElement("div");
+      box.style.cssText="position:fixed;left:-99999px;top:0;pointer-events:none;z-index:-1";
+      var cl=cardRef.current.cloneNode(true);
+      cl.style.transform="none";cl.style.position="static";cl.style.width=CARD_W+"px";
+      box.appendChild(cl);document.body.appendChild(box);
+      if(blurred){var bg=cl.querySelector("[data-layer=bg]");
+        if(bg){bg.style.backgroundImage="url("+blurred+")";bg.style.filter="none";bg.style.transform="none";}}
+
+      var captH=Math.round(cl.getBoundingClientRect().height)||CARD_H;
+      window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
+          backgroundColor:st.hasML&&st.mlStyle==="white"?"#ffffff":"#12203c",
+          width:CARD_W,height:captH,windowWidth:CARD_W,windowHeight:captH})
+        .then(function(cv){var a=document.createElement("a");
+          a.download=((st.badgeSub||st.badgeMain||"latest-news").toLowerCase()
+            .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""))+"-"+st.format+".png";
+          a.href=cv.toDataURL("image/png");a.click();})
+        .catch(function(er){console.error(er);alert("Erreur export : "+er.message);})
+        .then(function(){document.body.removeChild(box);setBusy(false);});
+    });
+  },[st,CARD_H,EX,L.ML]);
+
+  var previewScale=Math.min(520/CARD_W,(window.innerHeight-140)/CARD_H,1);
+
+  /* ═══ CARTOUCHE LÉGENDE ═══════════════════════════════════════════════════
+     Charte : sur fond blanc ou sur une image, le cartouche est rempli en
+     fond dégradé. Sur fond dégradé, il est transparent, entouré d'un filet
+     blanc de 2 px.
+     La taille de police est réduite automatiquement si le cartouche déborde
+     de la largeur utile de la carte. */
+  var onGrad=(st.bgMode==="grad");
+  var badgeFont=L.BADGE_FONT;
+  (function(){
+    try{
+      var avail=CARD_W-L.MARGIN*2-L.BADGE_ICON-L.BADGE_GAP-L.BADGE_PADX*2;
+      var cvs=document.createElement("canvas"),ctx=cvs.getContext("2d");
+      ctx.font="800 "+L.BADGE_FONT+"px Nunito";
+      var w1=ctx.measureText(st.badgeMain||"").width;
+      ctx.font="600 "+L.BADGE_FONT+"px Nunito";
+      var w2=ctx.measureText(st.badgeSub?(" - "+st.badgeSub):"").width;
+      var tot=w1+w2;
+      if(tot>avail && tot>0) badgeFont=Math.max(9,L.BADGE_FONT*(avail/tot));
+    }catch(ex){/* canvas indisponible : on garde la valeur charte */}
+  })();
+
+  var badgeBoxStyle={
+    height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
+    display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
+    backgroundImage:onGrad?"none":GRAD_H,
+    background:onGrad?"transparent":undefined,
+    border:onGrad?"2px solid #FFFFFF":"none",boxSizing:"border-box"};
+  var pillStyle={
+    height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",
+    padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,
+    letterSpacing:".05em",whiteSpace:"nowrap",
+    backgroundImage:onGrad?"none":GRAD_H,
+    background:onGrad?"transparent":undefined,
+    border:onGrad?"2px solid #FFFFFF":"none",boxSizing:"border-box"};
+
+  var card=e("div",{ref:cardRef,style:{
+      width:CARD_W,height:CARD_H,position:"relative",
+      fontFamily:"'Nunito',sans-serif",overflow:"hidden",
+      backgroundImage:(st.hasML&&st.mlStyle==="grad")?GRAD_V:"none",
+      background:(st.hasML&&st.mlStyle==="grad")?undefined:(st.hasML?"#FFFFFF":"#12203c")}},
+
+    /* FOND : image ou aplat dégradé, encadré par la marie-louise */
+    e("div",{"data-layer":"bg",style:{position:"absolute",
+      left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
+      /* Pas d'image : on retombe sur un aplat dégradé de la charte
+         plutôt que sur un rectangle vide. */
+      backgroundImage:(onGrad||!st.bgImg)?GRAD_V:("url("+st.bgImg+")"),
+      backgroundSize:"cover",backgroundPosition:"center",
+      filter:(!onGrad&&st.bgBlur>0)?"blur("+st.bgBlur+"px)":"none",
+      transform:(!onGrad&&st.bgBlur>0)?"scale(1.06)":"none"}}),
+    (!onGrad&&st.bgDark>0)?e("div",{style:{position:"absolute",
+      left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,
+      background:"rgba(10,20,45,"+st.bgDark+")"}}):null,
+
+    /* CARTOUCHE LÉGENDE — haut gauche, marge charte */
+    e("div",{style:{position:"absolute",left:L.MARGIN,top:L.BADGE_TOP,
+        display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
+      e("div",{style:badgeBoxStyle},
+        (function(){
+          var src=st.badgeIconCustom||makePictoSrc(st.badgeIconKey);
+          return src
+            ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*0.56+"px",height:L.BADGE_ICON*0.56+"px",objectFit:"contain"}})
+            :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:TE_WHITE},
+               e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"}));
+        })()),
+      e("div",{style:pillStyle},
+        e("span",{style:{fontWeight:800,textTransform:"uppercase"}},st.badgeMain),
+        st.badgeSub?e("span",{style:{fontWeight:600,textTransform:"uppercase"}}," - "+st.badgeSub):null)),
+
+    /* PAVÉ TEXTE — ancré par le bas */
+    e("div",{ref:paveRef,style:{position:"absolute",left:paveLeft,
+        bottom:paveBottom,width:PW,
+        background:TE_WHITE,borderRadius:L.PAVE_RADIUS,
+        padding:L.PAVE_PAD,boxSizing:"border-box"}},
+      e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,
+        color:st.textColor,align:textAlign,live:st.liveMode})),
+
+    /* FLÈCHE / POINT DE CARROUSEL — sous le pavé, aligné dessus */
+    (st.navMark!=="none")?e("div",{style:{position:"absolute",
+        left:(st.align==="right")?(CARD_W-L.MARGIN-L.ARROW):L.MARGIN,
+        bottom:bottomTarget}},
+      e(NavMark,{kind:st.navMark,size:L.ARROW,radius:L.ARROW_RADIUS,
+        grad:GRAD_H,from:G.from,to:G.to})):null
+  );
+
+  var previewWrap=e("div",{style:{width:CARD_W*previewScale,minHeight:CARD_H*previewScale,position:"relative",flexShrink:0}},
+    e("div",{style:{width:CARD_W,transform:"scale("+previewScale+")",transformOrigin:"top left",position:"absolute",top:0,left:0}},card));
+
+  /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
+  function segBtn(val,key,opts){
+    return e("div",{className:"seg"},opts.map(function(o){
+      return e("button",{key:o.v,className:val===o.v?"on":"",onClick:function(){set(key,o.v);}},o.l);
+    }));
+  }
+
+  /* Contrôle de conformité charte : le dégradé rouge est réservé au pétrole
+     et interdit sur les créations traitant des énergies bas carbone. */
+  var charteWarn=(st.lowCarbon && !G.lowCarbonOK)
+    ? "Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone (biomasse, éolien, solaire) : passe sur le dégradé vert."
+    : null;
+
+  var panel=e("div",{className:"panel"},
+
+    e("div",{className:"section"},e("h2",null,"Format"),
+      e("div",{style:{display:"flex",flexDirection:"column",gap:8}},
+        Object.keys(FORMATS).map(function(k){
+          var f=FORMATS[k],on=st.format===k;
+          var vh=30, vw=Math.round(vh*(f.outputW/f.outputH));
+          return e("div",{key:k,onClick:function(){setFormat(k);},
+            style:{display:"flex",alignItems:"center",gap:10,
+              padding:"10px 12px",borderRadius:8,cursor:"pointer",
+              border:on?"2px solid #1a1a1a":"2px solid #e8e8e8",
+              background:on?"#f0efec":"#fafafa",transition:"all .15s"}},
+            e("div",{style:{width:vw,height:vh,borderRadius:3,
+              background:on?"#1a1a1a":"#ccc",flexShrink:0}}),
+            e("div",null,
+              e("div",{style:{fontWeight:700,fontSize:13,color:on?"#1a1a1a":"#333"}},f.label),
+              e("div",{style:{fontSize:11,color:"#888",marginTop:1}},
+                f.outputW+" × "+f.outputH+" px")));
+        })),
+      e("div",{style:{height:10}}),
+      e("label",{className:"toggle"+(L.STORY?" off":"")},
+        e("input",{type:"checkbox",checked:st.firstSlide,disabled:L.STORY,
+          onChange:function(ev){set("firstSlide",ev.target.checked);}}),
+        "1re slide de carrousel (marge 84 px)"),
+      e("div",{className:"hint",style:{marginTop:4}},
+        L.STORY?"Marges story : 80 px de bord, cartouche à 180 px du haut."
+               :"Slides suivantes : marge habituelle de 50 px.")),
+
+    e("div",{className:"section"},e("h2",null,"Dégradé"),
+      e("div",{className:"grad-row"},
+        Object.keys(GRADS).map(function(k){
+          return e("div",{key:k,title:GRADS[k].label,
+            className:"grad-sw"+(st.grad===k?" on":""),
+            onClick:function(){set("grad",k);},
+            style:{backgroundImage:gradCss(k,90)}});
+        })),
+      e("div",{className:"grad-active"},
+        e("i",{style:{backgroundImage:GRAD_H}}),
+        "Dégradé actif : ",G.label," (",G.from," → ",G.to,")"),
+      e("div",{style:{height:10}}),
+      e("label",{className:"toggle"},
+        e("input",{type:"checkbox",checked:st.lowCarbon,
+          onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+        "Sujet énergie bas carbone"),
+      e("div",{className:"hint",style:{marginTop:4}},
+        "Biomasse, éolien, solaire. Active le contrôle de charte sur les dégradés."),
+      charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null),
+
+    e("div",{className:"section"},e("h2",null,"Fond"),
+      segBtn(st.bgMode,"bgMode",[{v:"photo",l:"Image"},{v:"grad",l:"Aplat dégradé"}]),
+      st.bgMode==="photo"?e(React.Fragment,null,
+        e("div",{style:{height:10}}),
+        e("div",{className:"upload-hint"},
+          "Format idéal : ",e("b",null,FORMATS[st.format].outputW+" × "+FORMATS[st.format].outputH+" px"),
+          e("br",null),
+          st.bgCustom?"Image personnalisée en cours d'utilisation."
+          :bgStatus.s==="loading"?"Recherche du fond par défaut\u2026"
+          :bgStatus.s==="ok"?["Fond par défaut chargé : ",e("b",{key:"p"},bgStatus.p.replace(BG_DIR,""))]
+          :["Aucun fond par défaut trouvé dans ",e("b",{key:"d"},BG_DIR.replace("../../","")),
+            ". Dépose ",e("b",{key:"n"},"TEMPLATE_LN_"+st.format+".png"),
+            " ou une image ci-dessous. En attendant, l'aplat dégradé de la charte est utilisé."]),
+        e(FileDrop,{value:st.bgCustom?st.bgImg:null,placeholder:"Photo de fond",
+          onChange:function(v){setSt(function(p){var c=Object.assign({},p);
+            c.bgImg=v||null;c.bgCustom=!!v;return c;});}}),
+        e("div",{style:{height:10}}),
+        e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
+        e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
+        e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
+        e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})
+      ):e("div",{className:"hint",style:{marginTop:8}},
+        "Sur aplat dégradé, la charte impose un cartouche transparent entouré d'un filet blanc de 2 px. C'est appliqué automatiquement."),
+      e("div",{style:{height:12}}),
+      e("label",{className:"toggle"+(L.STORY?" off":"")},
+        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,
+          onChange:function(ev){set("hasML",ev.target.checked);}}),
+        "Encadré marie-louise"),
+      (st.hasML&&!L.STORY)?e("div",{style:{marginTop:8}},
+        segBtn(st.mlStyle,"mlStyle",[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}])):null,
+      L.STORY?e("div",{className:"hint",style:{marginTop:4}},
+        "La charte n'autorise pas la marie-louise au format story."):null),
+
+    e("div",{className:"section"},e("h2",null,"Cartouche légende"),
+      e("label",{className:"field-label"},"Titre ",e("span",{className:"hint"},"(ExtraBold)")),
+      e("input",{type:"text",spellCheck:true,value:st.badgeMain,
+        onChange:function(ev){set("badgeMain",ev.target.value.toUpperCase());},
+        style:{textTransform:"uppercase"}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Lieu ou précision ",e("span",{className:"hint"},"(SemiBold, optionnel)")),
+      e("input",{type:"text",spellCheck:true,value:st.badgeSub,
+        onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},
+        style:{textTransform:"uppercase"}}),
+      e("div",{style:{height:12}}),
+      e("label",{className:"field-label"},"Pictogramme — énergies"),
+      e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:6}},
+        PICTOS_ENERGY.map(function(pk){
+          var on=!st.badgeIconCustom&&st.badgeIconKey===pk.k;
+          return e("div",{key:pk.k,title:pk.l,
+            onClick:function(){set("badgeIconKey",pk.k);set("badgeIconCustom",null);},
+            style:{width:36,height:36,borderRadius:8,padding:4,cursor:"pointer",
+              border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
+              background:on?"#f0efec":"#fafafa",display:"flex",alignItems:"center",justifyContent:"center"}},
+            e("img",{src:makePictoSrc(pk.k),alt:pk.l,style:{width:22,height:22,objectFit:"contain"}}));
+        })),
+      e("label",{className:"field-label"},"Pictogramme — sujets secondaires"),
+      e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}},
+        PICTOS_SEC.map(function(pk){
+          var on=!st.badgeIconCustom&&st.badgeIconKey===pk.k;
+          return e("div",{key:pk.k,title:pk.l,
+            onClick:function(){set("badgeIconKey",pk.k);set("badgeIconCustom",null);},
+            style:{width:36,height:36,borderRadius:8,padding:4,cursor:"pointer",
+              border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
+              background:on?"#f0efec":"#fafafa",display:"flex",alignItems:"center",justifyContent:"center"}},
+            e("img",{src:makePictoSrc(pk.k),alt:pk.l,style:{width:22,height:22,objectFit:"contain"}}));
+        })),
+      e("label",{className:"field-label"},"Ou importer un pictogramme personnalisé ",e("span",{className:"hint"},"(PNG transparent)")),
+      e(FileDrop,{value:st.badgeIconCustom,onChange:function(v){set("badgeIconCustom",v);},placeholder:"PNG transparent",small:true}),
+      st.badgeIconCustom?e("button",{onClick:function(){set("badgeIconCustom",null);},
+        style:{marginTop:6,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:5,
+          border:"1px solid #ddd",background:"#fff0f0",color:"#c0392b",cursor:"pointer",fontFamily:"inherit"}},
+        "Retirer le pictogramme personnalisé"):null),
+
+    e("div",{className:"section"},e("h2",null,"Texte"),
+      e("div",{className:"upload-hint",style:{marginBottom:6}},
+        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage",
+        e("br",null),
+        "Exception charte Latest News : texte en Regular, surlignés en ExtraBold."),
+      e("label",{className:"toggle",style:{marginBottom:10}},
+        e("input",{type:"checkbox",checked:st.liveMode,
+          onChange:function(ev){set("liveMode",ev.target.checked);}}),
+        e("span",{style:{display:"inline-flex",alignItems:"center",gap:6}},
+          e("span",{style:{width:10,height:10,borderRadius:"50%",background:"#E70000",display:"inline-block",flexShrink:0}}),
+          "Mode LIVE — rond rouge devant le texte")),
+      e("textarea",{spellCheck:true,rows:5,value:st.text,
+        onChange:function(ev){set("text",ev.target.value);},
+        style:{fontSize:13,lineHeight:1.5}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Couleur du texte"),
+      e("div",{className:"col-row"},TEXT_COLORS.map(function(c){
+        return e("div",{key:c.v,title:c.l,
+          className:"col-sw"+(st.textColor===c.v?" on":""),
+          onClick:function(){set("textColor",c.v);},
+          style:{background:c.v}});
+      })),
+      e("div",{style:{height:12}}),
+      e("label",{className:"field-label"},
+        "Corps du texte — "+Math.round(fs)+" px carte ("+Math.round(fs/K)+" pt charte)"),
+      e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:Math.round(fs),
+        onChange:function(ev){set("fs_"+st.format,parseInt(ev.target.value,10));}}),
+      e("div",{className:"hint"},"La charte autorise 45 à 80 pt.")),
+
+    e("div",{className:"section"},e("h2",null,"Position du pavé"),
+      e("div",{className:"seg"},
+        [{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}].map(function(o){
+          return e("button",{key:o.v,className:st.align===o.v?"on":"",
+            onClick:function(){set("align",o.v);}},o.l);
+        })),
+      e("div",{className:"hint",style:{marginTop:6}},
+        "Le texte suit : ferré à gauche, sauf pavé placé à droite."),
+      e("div",{style:{height:12}}),
+      e("label",{className:"field-label"},
+        _rawB<0?("Marge basse native — "+bottomTarget+" px")
+               :("Marge basse — "+bottomTarget+" px")),
+      e("input",{type:"range",min:0,max:1000,step:1,
+        value:_rawB<0?Math.round((bottomTarget-BOTTOM_MIN)/Math.max(1,BOTTOM_MAX-BOTTOM_MIN)*1000):_rawB,
+        onChange:function(ev){set("b_"+st.format,parseInt(ev.target.value,10));}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Largeur du pavé — "+curWPct+" % ("+PW+" px)"),
+      e("input",{type:"range",min:30,max:90,step:1,value:curWPct,
+        onChange:function(ev){set("w_"+st.format,parseInt(ev.target.value,10));}}),
+      e("button",{onClick:function(){set("b_"+st.format,-1);set("w_"+st.format,0);set("fs_"+st.format,0);},
+        style:{marginTop:10,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
+          border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
+        "Réinitialiser aux valeurs charte")),
+
+    e("div",{className:"section"},e("h2",null,"Repère de carrousel"),
+      segBtn(st.navMark,"navMark",[{v:"arrow",l:"Flèche"},{v:"dot",l:"Point"},{v:"none",l:"Aucun"}]),
+      e("div",{className:"hint",style:{marginTop:6}},
+        "Flèche sur les slides intermédiaires, point sur la dernière.")),
+
+    e("div",{className:"section"},e("h2",null,"Sauvegardes"),
+      e("div",{style:{display:"flex",gap:8,marginBottom:10}},
+        e("input",{type:"text",spellCheck:true,value:sname,placeholder:"Nom de la version\u2026",onChange:function(ev){setSname(ev.target.value);},style:{flex:1,fontSize:13,padding:"6px 8px"}}),
+        e("button",{onClick:save,style:{background:"#1a1a1a",color:"#fff",border:"none",borderRadius:6,padding:"6px 14px",cursor:"pointer",fontWeight:700,fontSize:13,fontFamily:"inherit"}},"Sauvegarder")),
+      saves.length===0?e("div",{className:"hint",style:{marginBottom:10}},"Aucune sauvegarde."):
+        e("div",{className:"saves-list"},saves.map(function(v,i){
+          return e("div",{key:i,className:"save-row"},
+            e("div",{style:{flex:1,minWidth:0}},
+              e("div",{style:{fontSize:13,fontWeight:700,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},v.name),
+              e("div",{className:"hint"},new Date(v.date).toLocaleString("fr-FR"))),
+            e("button",{onClick:function(){load(v);},style:{background:"#f0efec",color:"#1a1a1a",border:"none",borderRadius:5,padding:"4px 10px",cursor:"pointer",fontWeight:700,fontSize:12,fontFamily:"inherit"}},"Charger"),
+            e("button",{onClick:function(){if(confirm("Supprimer \u00AB "+v.name+" \u00BB ?"))del(v.name);},style:{background:"#fff0f0",color:"#c0392b",border:"none",borderRadius:5,padding:"4px 8px",cursor:"pointer",fontWeight:700,fontSize:12,fontFamily:"inherit"}},"\u00D7"));
+        })),
+      e("div",{style:{display:"flex",gap:8}},
+        e("button",{onClick:expJson,style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:6,padding:6,cursor:"pointer",fontSize:12,fontWeight:600,fontFamily:"inherit"}},"Export .json"),
+        e("button",{onClick:function(){if(impRef.current)impRef.current.click();},style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:6,padding:6,cursor:"pointer",fontSize:12,fontWeight:600,fontFamily:"inherit"}},"Import .json"),
+        e("input",{ref:impRef,type:"file",accept:".json",style:{display:"none"},onChange:function(ev){impJson(ev.target.files&&ev.target.files[0]);}}))),
+
+    e("button",{className:"export-btn",onClick:doExport,disabled:busy},
+      busy?e("span",{className:"spin"},e(DownloadIcon)):e(DownloadIcon),
+      busy?"Export en cours\u2026":"Télécharger le PNG ("+FORMATS[st.format].outputW+" \u00D7 "+FORMATS[st.format].outputH+")")
+  );
+
+  return e("div",{className:"app-layout"},panel,e("div",{className:"preview-wrap"},previewWrap));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+</script>
+</body>
+</html>
