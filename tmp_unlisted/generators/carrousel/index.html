@@ -89,6 +89,8 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .page-footer-logo{height:15px;opacity:.4;}
 </style>
 <script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
 </head>
 <body>
 
@@ -413,120 +415,7 @@ function NavMark(p){
         strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round"})));
 }
 
-/* ═══ PICTOGRAMMES CHARTE ══════════════════════════════════════════════════
-   Source : charte TotalEnergies V8, slides "Pictogrammes énergies" et
-   "Pictogrammes secondaires".
-   Chaque icône est encodée en SVG data-URI pour éviter tout fichier externe.
-   Règle charte : utiliser soit dans leurs couleurs chartées, soit en blanc
-   sur fond dégradé. Ici on laisse html2canvas gérer l'img tag normalement.
-   ══════════════════════════════════════════════════════════════════════════ */
-function svgUri(path,fill,viewBox){
-  var vb=viewBox||"0 0 24 24";
-  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" fill="'+fill+'">'+path+'</svg>';
-  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);
-}
-/* Icônes couleurs chartées (source : charte) */
-var PICTOS_ENERGY=[
-  {k:"petrole",  l:"Pétrole",    fill:"url(#rg)", grad:["#EB6A17","#E70000"],
-   p:"M12 2a5 5 0 0 0-5 5c0 .9.3 2.1 1 3.4L12 18l4-7.6c.7-1.3 1-2.5 1-3.4a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
-  {k:"gaz",      l:"Gaz",        fill:"url(#rg)", grad:["#0098E3","#4632FF"],
-   p:"M12 3c-1.5 3-4 5-4 8a4 4 0 0 0 8 0c0-3-2.5-5-4-8zm0 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
-  {k:"elec",     l:"Électricité",fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M7 2h5l-1 8h4L8 22l2-12H7z"},
-  {k:"hydro",    l:"Hydrogène",  fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M12 2a7.5 7.5 0 1 0 0 15A7.5 7.5 0 0 0 12 2zm-1 5h2v3h3v2h-3v3h-2v-3H8V10h3z"},
-  {k:"biomasse", l:"Biomasse",   fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M12 2S6 7 6 13a6 6 0 0 0 12 0c0-6-6-11-6-11zm-1 14v-5l-2 2-1-1 3-3v-2h2v2l3 3-1 1-2-2v5h-2z"},
-  {k:"eolien",   l:"Éolien",     fill:"url(#rg)", grad:["#3EA400","#00884A"],
-   p:"M12 11.5A1.5 1.5 0 0 1 10.5 10 1.5 1.5 0 0 1 12 8.5 1.5 1.5 0 0 1 13.5 10 1.5 1.5 0 0 1 12 11.5M12 2l2.5 7H22l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7.5z"},
-  {k:"solaire",  l:"Solaire",    fill:"url(#rg)", grad:["#FFCC00","#FF9900"],
-   p:"M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0-5v3M5.6 5.6 7 7M2 12h3M5.6 18.4 7 17M12 21v-3M18.4 18.4 17 17M22 12h-3M18.4 5.6 17 7"},
-];
-var PICTOS_SEC=[
-  {k:"actus",  l:"Actus",
-   p:'<rect x="4" y="3" width="12" height="16" rx="2"/><rect x="7" y="6" width="6" height="2"/><rect x="7" y="10" width="6" height="2"/><rect x="7" y="14" width="4" height="2"/>',fill:"#E70000"},
-  {k:"sport",  l:"Sport",
-   p:'<circle cx="12" cy="12" r="9" stroke="#285AFF" stroke-width="2" fill="none"/><path d="M12 3a9 9 0 0 1 6.4 15.4M5.6 5.6A9 9 0 0 1 12 3" stroke="#285AFF" stroke-width="2" fill="none"/>',fill:"none"},
-  {k:"innov",  l:"Innovation",
-   p:'<ellipse cx="12" cy="12" rx="4" ry="8" fill="none" stroke="#FFB700" stroke-width="2"/><ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="#FFB700" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#FFB700"/>',fill:"none"},
-  {k:"planete",l:"Planète",
-   p:'<circle cx="12" cy="12" r="9" fill="none" stroke="#0197E6" stroke-width="2"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="#0197E6" stroke-width="1.5"/>',fill:"none"},
-  {k:"batt",  l:"Batterie",
-   p:'<rect x="6" y="4" width="12" height="16" rx="2" fill="none" stroke="#4632FF" stroke-width="2"/><rect x="9" y="1" width="6" height="3"/><rect x="8" y="10" width="8" height="2" fill="#4632FF"/><rect x="8" y="13" width="8" height="2" fill="#4632FF"/><rect x="8" y="7" width="8" height="2" fill="#4632FF"/>',fill:"none"},
-  {k:"jeux",  l:"Jeux",
-   p:'<rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="#3EA400" stroke-width="2"/><circle cx="8" cy="8" r="1.5" fill="#3EA400"/><circle cx="16" cy="8" r="1.5" fill="#3EA400"/><circle cx="8" cy="16" r="1.5" fill="#3EA400"/><circle cx="16" cy="16" r="1.5" fill="#3EA400"/>',fill:"none"},
-  {k:"ampoule",l:"Ampoule",
-   p:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V17H9v-2.8C7.2 13.1 6 11.2 6 9a6 6 0 0 1 6-6z" fill="none" stroke="#FFCC00" stroke-width="2"/><line x1="9" y1="17" x2="15" y2="17" stroke="#FFCC00" stroke-width="2"/>',fill:"none"},
-];
-/* ═══ SONDE PICTOS ══════════════════════════════════════════════════════════
-   Sonde assets/pictos/NOM_plein.png et assets/pictos/NOM_vide.png pour chaque
-   picto connu. Les fichiers trouvés remplacent les SVG générés.
-   Les noms correspondent aux clés des tableaux PICTOS_ENERGY et PICTOS_SEC.
-   ══════════════════════════════════════════════════════════════════════════ */
-var PICTO_DIR="../../assets/pictos/";
-var PICTO_MANIFEST=PICTO_DIR+"../manifest.json"; /* assets/manifest.json */
-
-function pictoUrl(k,mode){ return PICTO_DIR+k+"_"+(mode||"plein")+".png"; }
-
-/* Sonde une liste de clés pour un mode donné.
-   Retourne { key: url } pour les fichiers qui répondent. */
-function tryLoadPictos(keys,mode,cb){
-  var result={}, remaining=keys.length;
-  if(!remaining){cb(result);return;}
-  keys.forEach(function(k){
-    var u=pictoUrl(k,mode), im=new Image();
-    im.onload=function(){result[k]=u; if(!--remaining)cb(result);};
-    im.onerror=function(){result[k]=null; if(!--remaining)cb(result);};
-    im.src=u;
-  });
-}
-
-/* Charge le manifest, extrait les noms, sonde plein+vide.
-   Appelle cb({ keys:[], vide:{}, plein:{} }) quand c'est prêt. */
-function loadPictosFromManifest(cb){
-  fetch(PICTO_MANIFEST)
-    .then(function(r){ return r.ok?r.json():Promise.reject("manifest absent"); })
-    .then(function(data){
-      var keys=(data.pictos||[]).filter(function(k){return k&&k.trim();});
-      if(!keys.length){ cb({keys:[],vide:{},plein:{}}); return; }
-      tryLoadPictos(keys,"plein",function(plein){
-        tryLoadPictos(keys,"vide",function(vide){
-          cb({keys:keys,vide:vide,plein:plein});
-        });
-      });
-    })
-    .catch(function(){
-      /* Manifest absent ou invalide : galerie vide, SVG fallback uniquement */
-      cb({keys:[],vide:{},plein:{}});
-    });
-}
-function makePictoSrc(pk){
-  /* Charte : sur fond dégradé, les pictogrammes sont toujours blancs.
-     Toutes les icônes sont générées en blanc ici, la boîte dégradée
-     derrière elles assure l'identité colorée. */
-  var WHITE="#FFFFFF";
-  var e1=PICTOS_ENERGY.find(function(p){return p.k===pk;});
-  if(e1){
-    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
-      +'<path d="'+e1.p+'" fill="'+WHITE+'"/></svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
-  }
-  var e2=PICTOS_SEC.find(function(p){return p.k===pk;});
-  if(e2){
-    /* Les icônes secondaires utilisent stroke : on force stroke blanc et fill none */
-    var inner=e2.p
-      .replace(/stroke="[^"]*"/g,'stroke="'+WHITE+'"')
-      .replace(/fill="[^"]*"/g,'fill="none"')
-      /* les éléments purement fill (rect, circle pleins) */
-      .replace(/(<(rect|circle|path)[^>]*?)(\/>)/g,function(m){
-        if(m.indexOf('stroke')>=0) return m;
-        return m.replace('/>','fill="'+WHITE+'" />');
-      });
-    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+inner+'</svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg2);
-  }
-  return null;
-}
+/* Pictos — délégués à PictoGallery (assets/pictos.js) */
 
 function FileDrop(p){
   var r=useRef(null);
@@ -615,77 +504,8 @@ function DragImage(props){
   );
 }
 
-/* ═══ SONDE PICTOS ══════════════════════════════════════════════════════════
-   Sonde assets/pictos/NOM_plein.png et assets/pictos/NOM_vide.png pour chaque
-   picto connu. Les fichiers trouvés remplacent les SVG générés.
-   Les noms correspondent aux clés des tableaux PICTOS_ENERGY et PICTOS_SEC.
-   ══════════════════════════════════════════════════════════════════════════ */
-var PICTO_DIR="../../assets/pictos/";
-var PICTO_MANIFEST=PICTO_DIR+"../manifest.json"; /* assets/manifest.json */
+/* Pictos — délégués à PictoGallery (assets/pictos.js) */
 
-function pictoUrl(k,mode){ return PICTO_DIR+k+"_"+(mode||"plein")+".png"; }
-
-/* Sonde une liste de clés pour un mode donné.
-   Retourne { key: url } pour les fichiers qui répondent. */
-function tryLoadPictos(keys,mode,cb){
-  var result={}, remaining=keys.length;
-  if(!remaining){cb(result);return;}
-  keys.forEach(function(k){
-    var u=pictoUrl(k,mode), im=new Image();
-    im.onload=function(){result[k]=u; if(!--remaining)cb(result);};
-    im.onerror=function(){result[k]=null; if(!--remaining)cb(result);};
-    im.src=u;
-  });
-}
-
-/* Charge le manifest, extrait les noms, sonde plein+vide.
-   Appelle cb({ keys:[], vide:{}, plein:{} }) quand c'est prêt. */
-function loadPictosFromManifest(cb){
-  fetch(PICTO_MANIFEST)
-    .then(function(r){ return r.ok?r.json():Promise.reject("manifest absent"); })
-    .then(function(data){
-      var keys=(data.pictos||[]).filter(function(k){return k&&k.trim();});
-      if(!keys.length){ cb({keys:[],vide:{},plein:{}}); return; }
-      tryLoadPictos(keys,"plein",function(plein){
-        tryLoadPictos(keys,"vide",function(vide){
-          cb({keys:keys,vide:vide,plein:plein});
-        });
-      });
-    })
-    .catch(function(){
-      /* Manifest absent ou invalide : galerie vide, SVG fallback uniquement */
-      cb({keys:[],vide:{},plein:{}});
-    });
-}
-function makePictoSrc(pk){
-  /* Charte : sur fond dégradé, les pictogrammes sont toujours blancs.
-     Toutes les icônes sont générées en blanc ici, la boîte dégradée
-     derrière elles assure l'identité colorée. */
-  var WHITE="#FFFFFF";
-  var e1=PICTOS_ENERGY.find(function(p){return p.k===pk;});
-  if(e1){
-    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
-      +'<path d="'+e1.p+'" fill="'+WHITE+'"/></svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
-  }
-  var e2=PICTOS_SEC.find(function(p){return p.k===pk;});
-  if(e2){
-    /* Les icônes secondaires utilisent stroke : on force stroke blanc et fill none */
-    var inner=e2.p
-      .replace(/stroke="[^"]*"/g,'stroke="'+WHITE+'"')
-      .replace(/fill="[^"]*"/g,'fill="none"')
-      /* les éléments purement fill (rect, circle pleins) */
-      .replace(/(<(rect|circle|path)[^>]*?)(\/>)/g,function(m){
-        if(m.indexOf('stroke')>=0) return m;
-        return m.replace('/>','fill="'+WHITE+'" />');
-      });
-    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+inner+'</svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg2);
-  }
-  return null;
-}
-
-/* ─── FileDrop ─────────────────────────────────────────────────────────── */
 function FileDrop(p){
   var r=useRef(null);
   function take(f){if(!f||!f.type||f.type.indexOf("image/")!==0)return;var rd=new FileReader();rd.onload=function(ev){p.onChange(ev.target.result);};rd.readAsDataURL(f);}
@@ -720,7 +540,7 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 /* ═══ ÉTAT ════════════════════════════════════════════════════════════════ */
 function newSlide(idx){return{id:Date.now()+idx+Math.random(),bgMode:"photo",bgImg:null,bgBlur:0,bgDark:0,bgX:50,bgY:50,bgZoom:100,text:"Texte de la slide "+(idx+1),textMode:"uni",textColor:"#4632FF",liveMode:false,align:"left",fs:0,w:0,b:-1};}
 
-var DEFAULT_GLOBAL={format:"1x1",grad:"bleu",lowCarbon:false,hasML:false,mlStyle:"white",badgeMain:"SUSTAINABILITY",badgeSub:"",badgeIconKey:"",badgeIconCustom:null,pictoMode:"plein"};
+var DEFAULT_GLOBAL={format:"1x1",grad:"bleu",lowCarbon:false,hasML:false,mlStyle:"white",badgeMain:"SUSTAINABILITY",badgeSub:"",badgeIconKey:"",badgeIconCustom:null};
 
 /* ═══ SLIDE CARD ══════════════════════════════════════════════════════════ */
 function SlideCard(props){
@@ -746,9 +566,11 @@ function SlideCard(props){
   var pillStyle=onGrad
     ?{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:L.BADGE_FONT,letterSpacing:".05em",whiteSpace:"nowrap",background:"transparent",border:"2px solid #FFFFFF",boxSizing:"border-box"}
     :{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:L.BADGE_FONT,letterSpacing:".05em",whiteSpace:"nowrap",backgroundImage:GRAD_H,border:"none"};
-  var pf=props.pictoFiles||{keys:[],plein:{},vide:{}};
-  var pictoSrc=g.badgeIconCustom||(pf[g.pictoMode]&&pf[g.pictoMode][g.badgeIconKey])||(pf[g.pictoMode==="plein"?"vide":"plein"]&&pf[g.pictoMode==="plein"?"vide":"plein"][g.badgeIconKey])||null;
-  var hasRealPicto=!!(g.badgeIconCustom||(pf.keys&&pf.keys.length>0&&pf.keys.indexOf(g.badgeIconKey)>=0));
+
+  var pictoSrc=g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey))||null;
+  var hasRealPicto=!!(g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey)));
+  var isPictoOut=!g.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(g.badgeIconKey);
+  var badgeBoxActual=isPictoOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",background:"#FFFFFF"}):badgeBoxStyle;
   var numLabel="#"+(idx+1)+(g.badgeMain?" "+g.badgeMain:"");
 
   return e("div",{ref:props.cardRef,style:{width:CARD_W,height:CARD_H,position:"relative",fontFamily:"'Nunito',sans-serif",overflow:"hidden",backgroundImage:(g.hasML&&g.mlStyle==="grad")?GRAD_V:"none",background:(g.hasML&&g.mlStyle==="grad")?undefined:(g.hasML?"#FFFFFF":"#12203c")}},
@@ -759,7 +581,7 @@ function SlideCard(props){
     (!onGrad&&sl.bgDark>0)?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,background:"rgba(10,20,45,"+sl.bgDark+")"}}):null,
     e("div",{style:{position:"absolute",left:L.MARGIN,top:L.BADGE_TOP,display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
       pictoSrc&&hasRealPicto
-        ?e("img",{src:pictoSrc,alt:"",style:{height:L.BADGE_H+"px",width:"auto",display:"block",flexShrink:0,objectFit:"contain"}})
+        ?e("div",{style:badgeBoxActual},e("img",{src:pictoSrc,alt:"",style:{width:L.BADGE_ICON*0.9+"px",height:L.BADGE_ICON*0.9+"px",objectFit:"contain"}}))
         :e("div",{style:badgeBoxStyle},e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:TE_WHITE},e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"}))),
       e("div",{style:pillStyle},
         e("span",{style:{fontWeight:T.FW_BADGE_MAIN,textTransform:"uppercase"}},numLabel),
@@ -778,7 +600,6 @@ function App(){
   var a2=useState(0);var activeIdx=a2[0],setActiveIdx=a2[1];
   var a3=useState([]);var saves=a3[0],setSaves=a3[1];
   var a4=useState("");var sname=a4[0],setSname=a4[1];
-  var a5=useState({keys:[],vide:{},plein:{},probed:false});var pictoFiles=a5[0],setPictoFiles=a5[1];
   var a6=useState({progress:0,total:0,busy:false});var expSt=a6[0],setExpSt=a6[1];
   var a7=useState(0);var paveH=a7[0],setPaveH=a7[1];
   var cardRef=useRef(null),paveRef=useRef(null),impRef=useRef(null);
@@ -794,7 +615,26 @@ function App(){
 
   useEffect(function(){
     dbAll(function(a){setSaves(a);if(a.length===0){var def={name:"\u2b50 D\u00e9faut",date:new Date().toISOString(),state:{global:DEFAULT_GLOBAL,slides:[newSlide(0),newSlide(1)]}};dbPut(def,function(){dbAll(function(b){setSaves(b);});});}});
-    loadPictosFromManifest(function(res){setPictoFiles({keys:res.keys,vide:res.vide,plein:res.plein,probed:true});if(res.keys.length)setGlobal(function(p){if(res.keys.indexOf(p.badgeIconKey)>=0)return p;var c=Object.assign({},p);c.badgeIconKey=res.keys[0];return c;});});
+  },[]);
+
+  useEffect(function(){
+    window.PictoGallery.load(function(){
+      var keys=window.PictoGallery.getKeys();
+      if(keys.length) setGlobal(function(p){
+        if(keys.indexOf(p.badgeIconKey)>=0) return p;
+        var c=Object.assign({},p); c.badgeIconKey=keys[0]; return c;
+      });
+      var container=document.getElementById("picto-gallery-container");
+      if(container&&!container._pg){
+        container._pg=window.PictoGallery.init(container,{
+          grad:"linear-gradient(90deg,#0098E3,#4632FF)",
+          selected:global.badgeIconKey,
+          custom:global.badgeIconCustom,
+          onChange:function(key){setGlobal(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
+          onCustom:function(uri){setGlobal(function(p){var c=Object.assign({},p);c.badgeIconCustom=uri;return c;});},
+        });
+      }
+    });
   },[]);
 
   function addSlide(){setSlides(function(ss){var ns=newSlide(ss.length);ns.textColor=GRADS[global.grad]?GRADS[global.grad].to:"#4632FF";return ss.concat(ns);});setActiveIdx(slides.length);}
@@ -893,20 +733,14 @@ function App(){
       charteWarn?e("div",{className:"charte-warn"},charteWarn):null),
 
     e("div",{className:"panel-section"},
+      e("h2",null,"Pictogramme (toutes slides)"),
+      e("div",{id:"picto-gallery-container",key:"picto-gallery"}),
+      global.badgeIconCustom?e("button",{onClick:function(){setG("badgeIconCustom",null);},style:{marginTop:4,fontSize:10,fontWeight:700,padding:"3px 8px",borderRadius:4,border:"1px solid #ddd",background:"#fff0f0",color:"#c0392b",cursor:"pointer",fontFamily:"inherit"}},"Retirer"):null),
+
+    e("div",{className:"panel-section"},
       e("h2",null,"Cartouche (toutes slides)"),
       e("input",{type:"text",spellCheck:true,value:global.badgeMain,placeholder:"Ex. SUSTAINABILITY",onChange:function(ev){setG("badgeMain",ev.target.value.toUpperCase());},style:{textTransform:"uppercase",marginBottom:5}}),
       e("input",{type:"text",spellCheck:true,value:global.badgeSub,placeholder:"Lieu / précision (optionnel)",onChange:function(ev){setG("badgeSub",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}})),
-
-    e("div",{className:"panel-section"},
-      e("h2",null,"Pictogramme (toutes slides)"),
-      e("div",{style:{display:"flex",gap:0,borderRadius:5,overflow:"hidden",border:"1px solid #d4d4d4",marginBottom:8,width:"fit-content"}},
-        ["plein","vide"].map(function(m){var active=global.pictoMode===m;var hasF=pictoFiles.keys.length>0&&pictoFiles.keys.some(function(k){return pictoFiles[m]&&pictoFiles[m][k];});
-          return e("button",{key:m,onClick:function(){setG("pictoMode",m);},style:{padding:"4px 12px",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",background:active?"#1a1a1a":"#fafafa",color:active?"#fff":"#555",border:"none",borderRight:m==="plein"?"1px solid #d4d4d4":"none",opacity:(hasF||!pictoFiles.probed)?1:0.35}},m==="plein"?"Plein":"Vide");})),
-      !pictoFiles.probed?e("div",{className:"hint"},"Chargement…"):pictoFiles.keys.length===0?e("div",{className:"hint"},"Manifest non trouvé — assets/manifest.json"):null,
-      pictoFiles.keys.length>0?e("div",{style:{display:"flex",flexWrap:"wrap",gap:4,marginBottom:6}},pictoFiles.keys.map(function(k){var on=!global.badgeIconCustom&&global.badgeIconKey===k;var src=(pictoFiles[global.pictoMode]&&pictoFiles[global.pictoMode][k])||(pictoFiles[global.pictoMode==="plein"?"vide":"plein"]&&pictoFiles[global.pictoMode==="plein"?"vide":"plein"][k]);if(!src)return null;var lbl=k.replace(/_/g," ");return e("div",{key:k,title:lbl,onClick:function(){setG("badgeIconKey",k);setG("badgeIconCustom",null);},style:{width:36,height:42,borderRadius:5,padding:2,cursor:"pointer",border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",background:on?"#f0efec":"#fafafa",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2}},e("img",{src:src,alt:lbl,style:{width:28,height:28,objectFit:"contain"}}),e("span",{style:{fontSize:6,color:on?"#1a1a1a":"#999",lineHeight:1,maxWidth:32,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},lbl));})):null,
-      e("label",{className:"field-label",style:{marginTop:4}},"Import personnalisé"),
-      e(FileDrop,{value:global.badgeIconCustom,small:true,onChange:function(v){setG("badgeIconCustom",v);},placeholder:"PNG transparent"}),
-      global.badgeIconCustom?e("button",{onClick:function(){setG("badgeIconCustom",null);},style:{marginTop:4,fontSize:10,fontWeight:700,padding:"3px 8px",borderRadius:4,border:"1px solid #ddd",background:"#fff0f0",color:"#c0392b",cursor:"pointer",fontFamily:"inherit"}},"Retirer"):null),
 
     e("div",{className:"panel-section"},
       e("h2",null,"Slide #"+(activeIdx+1)),
@@ -987,7 +821,7 @@ function App(){
       e("div",{style:{width:CARD_W,transform:"scale("+previewScale+")",transformOrigin:"top left",position:"absolute",top:0,left:0}},
         e(SlideCard,{global:global,slide:sl,idx:activeIdx,total:slides.length,
           cardRef:cardRef,paveRef:paveRef,paveH:paveH,
-          pictoFiles:pictoFiles,previewScale:previewScale,
+          previewScale:previewScale,
           onBgMove:function(x,y){setSl("bgX",x);setSl("bgY",y);}}))));
 
   return e("div",{className:"app-layout"},panel,slideList,preview);

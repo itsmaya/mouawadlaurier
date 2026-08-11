@@ -77,6 +77,8 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .toggle.off{opacity:.45;cursor:not-allowed;}
 </style>
 <script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
 </head>
 <body>
 
@@ -401,120 +403,7 @@ function NavMark(p){
         strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round"})));
 }
 
-/* ═══ PICTOGRAMMES CHARTE ══════════════════════════════════════════════════
-   Source : charte TotalEnergies V8, slides "Pictogrammes énergies" et
-   "Pictogrammes secondaires".
-   Chaque icône est encodée en SVG data-URI pour éviter tout fichier externe.
-   Règle charte : utiliser soit dans leurs couleurs chartées, soit en blanc
-   sur fond dégradé. Ici on laisse html2canvas gérer l'img tag normalement.
-   ══════════════════════════════════════════════════════════════════════════ */
-function svgUri(path,fill,viewBox){
-  var vb=viewBox||"0 0 24 24";
-  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" fill="'+fill+'">'+path+'</svg>';
-  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);
-}
-/* Icônes couleurs chartées (source : charte) */
-var PICTOS_ENERGY=[
-  {k:"petrole",  l:"Pétrole",    fill:"url(#rg)", grad:["#EB6A17","#E70000"],
-   p:"M12 2a5 5 0 0 0-5 5c0 .9.3 2.1 1 3.4L12 18l4-7.6c.7-1.3 1-2.5 1-3.4a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
-  {k:"gaz",      l:"Gaz",        fill:"url(#rg)", grad:["#0098E3","#4632FF"],
-   p:"M12 3c-1.5 3-4 5-4 8a4 4 0 0 0 8 0c0-3-2.5-5-4-8zm0 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"},
-  {k:"elec",     l:"Électricité",fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M7 2h5l-1 8h4L8 22l2-12H7z"},
-  {k:"hydro",    l:"Hydrogène",  fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M12 2a7.5 7.5 0 1 0 0 15A7.5 7.5 0 0 0 12 2zm-1 5h2v3h3v2h-3v3h-2v-3H8V10h3z"},
-  {k:"biomasse", l:"Biomasse",   fill:"url(#rg)", grad:["#0197E6","#00A55E"],
-   p:"M12 2S6 7 6 13a6 6 0 0 0 12 0c0-6-6-11-6-11zm-1 14v-5l-2 2-1-1 3-3v-2h2v2l3 3-1 1-2-2v5h-2z"},
-  {k:"eolien",   l:"Éolien",     fill:"url(#rg)", grad:["#3EA400","#00884A"],
-   p:"M12 11.5A1.5 1.5 0 0 1 10.5 10 1.5 1.5 0 0 1 12 8.5 1.5 1.5 0 0 1 13.5 10 1.5 1.5 0 0 1 12 11.5M12 2l2.5 7H22l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7.5z"},
-  {k:"solaire",  l:"Solaire",    fill:"url(#rg)", grad:["#FFCC00","#FF9900"],
-   p:"M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0-5v3M5.6 5.6 7 7M2 12h3M5.6 18.4 7 17M12 21v-3M18.4 18.4 17 17M22 12h-3M18.4 5.6 17 7"},
-];
-var PICTOS_SEC=[
-  {k:"actus",  l:"Actus",
-   p:'<rect x="4" y="3" width="12" height="16" rx="2"/><rect x="7" y="6" width="6" height="2"/><rect x="7" y="10" width="6" height="2"/><rect x="7" y="14" width="4" height="2"/>',fill:"#E70000"},
-  {k:"sport",  l:"Sport",
-   p:'<circle cx="12" cy="12" r="9" stroke="#285AFF" stroke-width="2" fill="none"/><path d="M12 3a9 9 0 0 1 6.4 15.4M5.6 5.6A9 9 0 0 1 12 3" stroke="#285AFF" stroke-width="2" fill="none"/>',fill:"none"},
-  {k:"innov",  l:"Innovation",
-   p:'<ellipse cx="12" cy="12" rx="4" ry="8" fill="none" stroke="#FFB700" stroke-width="2"/><ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="#FFB700" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#FFB700"/>',fill:"none"},
-  {k:"planete",l:"Planète",
-   p:'<circle cx="12" cy="12" r="9" fill="none" stroke="#0197E6" stroke-width="2"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="#0197E6" stroke-width="1.5"/>',fill:"none"},
-  {k:"batt",  l:"Batterie",
-   p:'<rect x="6" y="4" width="12" height="16" rx="2" fill="none" stroke="#4632FF" stroke-width="2"/><rect x="9" y="1" width="6" height="3"/><rect x="8" y="10" width="8" height="2" fill="#4632FF"/><rect x="8" y="13" width="8" height="2" fill="#4632FF"/><rect x="8" y="7" width="8" height="2" fill="#4632FF"/>',fill:"none"},
-  {k:"jeux",  l:"Jeux",
-   p:'<rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="#3EA400" stroke-width="2"/><circle cx="8" cy="8" r="1.5" fill="#3EA400"/><circle cx="16" cy="8" r="1.5" fill="#3EA400"/><circle cx="8" cy="16" r="1.5" fill="#3EA400"/><circle cx="16" cy="16" r="1.5" fill="#3EA400"/>',fill:"none"},
-  {k:"ampoule",l:"Ampoule",
-   p:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V17H9v-2.8C7.2 13.1 6 11.2 6 9a6 6 0 0 1 6-6z" fill="none" stroke="#FFCC00" stroke-width="2"/><line x1="9" y1="17" x2="15" y2="17" stroke="#FFCC00" stroke-width="2"/>',fill:"none"},
-];
-/* ═══ SONDE PICTOS ══════════════════════════════════════════════════════════
-   Sonde assets/pictos/NOM_plein.png et assets/pictos/NOM_vide.png pour chaque
-   picto connu. Les fichiers trouvés remplacent les SVG générés.
-   Les noms correspondent aux clés des tableaux PICTOS_ENERGY et PICTOS_SEC.
-   ══════════════════════════════════════════════════════════════════════════ */
-var PICTO_DIR="../../assets/pictos/";
-var PICTO_MANIFEST=PICTO_DIR+"../manifest.json"; /* assets/manifest.json */
-
-function pictoUrl(k,mode){ return PICTO_DIR+k+"_"+(mode||"plein")+".png"; }
-
-/* Sonde une liste de clés pour un mode donné.
-   Retourne { key: url } pour les fichiers qui répondent. */
-function tryLoadPictos(keys,mode,cb){
-  var result={}, remaining=keys.length;
-  if(!remaining){cb(result);return;}
-  keys.forEach(function(k){
-    var u=pictoUrl(k,mode), im=new Image();
-    im.onload=function(){result[k]=u; if(!--remaining)cb(result);};
-    im.onerror=function(){result[k]=null; if(!--remaining)cb(result);};
-    im.src=u;
-  });
-}
-
-/* Charge le manifest, extrait les noms, sonde plein+vide.
-   Appelle cb({ keys:[], vide:{}, plein:{} }) quand c'est prêt. */
-function loadPictosFromManifest(cb){
-  fetch(PICTO_MANIFEST)
-    .then(function(r){ return r.ok?r.json():Promise.reject("manifest absent"); })
-    .then(function(data){
-      var keys=(data.pictos||[]).filter(function(k){return k&&k.trim();});
-      if(!keys.length){ cb({keys:[],vide:{},plein:{}}); return; }
-      tryLoadPictos(keys,"plein",function(plein){
-        tryLoadPictos(keys,"vide",function(vide){
-          cb({keys:keys,vide:vide,plein:plein});
-        });
-      });
-    })
-    .catch(function(){
-      /* Manifest absent ou invalide : galerie vide, SVG fallback uniquement */
-      cb({keys:[],vide:{},plein:{}});
-    });
-}
-function makePictoSrc(pk){
-  /* Charte : sur fond dégradé, les pictogrammes sont toujours blancs.
-     Toutes les icônes sont générées en blanc ici, la boîte dégradée
-     derrière elles assure l'identité colorée. */
-  var WHITE="#FFFFFF";
-  var e1=PICTOS_ENERGY.find(function(p){return p.k===pk;});
-  if(e1){
-    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
-      +'<path d="'+e1.p+'" fill="'+WHITE+'"/></svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
-  }
-  var e2=PICTOS_SEC.find(function(p){return p.k===pk;});
-  if(e2){
-    /* Les icônes secondaires utilisent stroke : on force stroke blanc et fill none */
-    var inner=e2.p
-      .replace(/stroke="[^"]*"/g,'stroke="'+WHITE+'"')
-      .replace(/fill="[^"]*"/g,'fill="none"')
-      /* les éléments purement fill (rect, circle pleins) */
-      .replace(/(<(rect|circle|path)[^>]*?)(\/>)/g,function(m){
-        if(m.indexOf('stroke')>=0) return m;
-        return m.replace('/>','fill="'+WHITE+'" />');
-      });
-    var svg2='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'+inner+'</svg>';
-    return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg2);
-  }
-  return null;
-}
+/* Pictos — délégués à PictoGallery (assets/pictos.js) */
 
 /* ─── FileDrop ─────────────────────────────────────────────────────────── */
 function FileDrop(p){
@@ -588,9 +477,8 @@ var DEFAULT={
   bgX_4x5:50, bgY_4x5:50, bgZoom_4x5:100,
   bgX_9x16:50, bgY_9x16:50, bgZoom_9x16:100,
   hasML:false, mlStyle:"white",
-  badgeIconKey:"elec",              /* clé charte — remplacé par upload si badgeIconCustom */
-  badgeIconCustom:null,             /* data-URI du PNG déposé par l'utilisateur */
-  pictoMode:"plein",                 /* "vide" | "plein" — s'applique à toute la galerie */
+  badgeIconKey:"Battery 1",
+  badgeIconCustom:null,
   badgeMain:"LATEST NEWS", badgeSub:"LEUNA, GERMANY",
   liveMode:false,                   /* rond rouge ● devant le texte */
   text:"TotalEnergies acquires\n**Shell's renewables business**\nand sells a 50% stake in a portfolio of developed assets to KKR",
@@ -683,9 +571,6 @@ function App(){
   var a3=useState(false),busy=a3[0],setBusy=a3[1];
   /* Dimensions naturelles de l'image de fond pour calculer le zoom max */
   var a4=useState({w:0,h:0}); var bgNat=a4[0],setBgNat=a4[1];
-  /* Pictos chargés depuis assets/pictos/ — { key: url|null } pour chaque mode */
-  var a5=useState({keys:[],vide:{},plein:{},probed:false});
-  var pictoFiles=a5[0],setPictoFiles=a5[1];
   var cardRef=useRef(null),impRef=useRef(null),paveRef=useRef(null);
   var phState=useState(120); var paveH=phState[0],setPaveH=phState[1];
   var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
@@ -815,22 +700,38 @@ function App(){
     });
   },[]);
 
-  /* Chargement des pictos via manifest.json au démarrage */
   useEffect(function(){
-    loadPictosFromManifest(function(res){
-      setPictoFiles({keys:res.keys,vide:res.vide,plein:res.plein,probed:true});
-      /* Sélectionner le premier picto du manifest par défaut si aucun n'est choisi */
-      if(res.keys.length){
-        setSt(function(p){
-          var keyExists=res.keys.indexOf(p.badgeIconKey)>=0;
-          if(keyExists) return p;
-          var c=Object.assign({},p);
-          c.badgeIconKey=res.keys[0];
-          return c;
+    /* PictoGallery charge le manifest et sonde les fichiers.
+       On récupère les clés pour initialiser badgeIconKey si besoin. */
+    window.PictoGallery.load(function(){
+      var keys=window.PictoGallery.getKeys();
+      if(keys.length) setSt(function(p){
+        if(keys.indexOf(p.badgeIconKey)>=0)return p;
+        var c=Object.assign({},p);c.badgeIconKey=keys[0];return c;
+      });
+      /* Init galerie dans le container DOM fixe */
+      var container=document.getElementById("picto-gallery-container");
+      if(container&&!container._pg){
+        container._pg=window.PictoGallery.init(container,{
+          grad:gradCss(st.grad,90),
+          selected:st.badgeIconKey,
+          custom:st.badgeIconCustom,
+          onChange:function(key){
+            setSt(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});
+          },
+          onCustom:function(dataUri){
+            setSt(function(p){var c=Object.assign({},p);c.badgeIconCustom=dataUri;return c;});
+          },
         });
       }
     });
   },[]);
+
+  /* Mettre à jour le dégradé de la galerie quand il change */
+  useEffect(function(){
+    var container=document.getElementById("picto-gallery-container");
+    if(container&&container._pg) container._pg.setGrad(gradCss(st.grad,90));
+  },[st.grad]);
 
   /* Lire les dimensions naturelles de l'image dès qu'elle change */
   useEffect(function(){
@@ -1055,21 +956,14 @@ function App(){
     e("div",{style:{position:"absolute",left:L.MARGIN,top:L.BADGE_TOP,
         display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
       (function(){
-        var src=st.badgeIconCustom||(
-          (pictoFiles[st.pictoMode]&&pictoFiles[st.pictoMode][st.badgeIconKey])
-          ||(pictoFiles[st.pictoMode==="plein"?"vide":"plein"]&&
-             pictoFiles[st.pictoMode==="plein"?"vide":"plein"][st.badgeIconKey])
-          ||null
-        );
-        /* Picto réel : remplace toute la boîte, même hauteur que la pilule */
-        if(src) return e("img",{src:src,alt:"",
-          style:{height:L.BADGE_H+"px",width:"auto",display:"block",
-                 flexShrink:0,objectFit:"contain"}});
-        /* Fallback SVG : conserve la boîte dégradée d'origine */
-        var fallbackSrc=makePictoSrc(st.badgeIconKey);
-        return e("div",{style:badgeBoxStyle},
-          fallbackSrc
-            ?e("img",{src:fallbackSrc,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
+        var src=st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey))||null;
+        var isOut=!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey);
+        var boxStyle=isOut
+          ? Object.assign({},badgeBoxStyle,{backgroundImage:"none",background:"#FFFFFF"})
+          : badgeBoxStyle;
+        return e("div",{style:boxStyle},
+          src
+            ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
             :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:TE_WHITE},
                e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"})));
       })(),
@@ -1190,7 +1084,10 @@ function App(){
         "Sujet énergie bas carbone"),
       e("div",{className:"hint",style:{marginTop:4}},
         "Active le contrôle charte : dégradé rouge interdit sur le bas carbone."),
-      charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null),
+      charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null,
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Pictogramme"),
+      e("div",{id:"picto-gallery-container",key:"picto-gallery"})),
 
     e("div",{className:"section"},e("h2",null,"Fond"),
       segBtn(st.bgMode,"bgMode",[{v:"photo",l:"Image"},{v:"grad",l:"Aplat dégradé"}]),
@@ -1251,69 +1148,7 @@ function App(){
       e("input",{type:"text",spellCheck:true,value:st.badgeSub,
         onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},
         style:{textTransform:"uppercase"}}),
-      e("div",{style:{height:12}}),
-      /* Toggle plein/vide */
-      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}},
-        e("label",{className:"field-label",style:{margin:0}},"Pictogramme"),
-        e("div",{style:{display:"flex",gap:0,borderRadius:6,overflow:"hidden",border:"1px solid #d4d4d4"}},
-          ["plein","vide"].map(function(m){
-            var active=st.pictoMode===m;
-            var hasFiles=pictoFiles.keys.length>0&&
-              pictoFiles.keys.some(function(k){return pictoFiles[m]&&pictoFiles[m][k];});
-            return e("button",{key:m,
-              onClick:function(){set("pictoMode",m);},
-              title:m==="plein"?"Picto sur fond dégradé carré":"Picto seul sur fond transparent",
-              style:{padding:"5px 14px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
-                background:active?"#1a1a1a":"#fafafa",color:active?"#fff":"#555",
-                border:"none",borderRight:m==="plein"?"1px solid #d4d4d4":"none",
-                opacity:(hasFiles||!pictoFiles.probed)?1:0.35}},
-              m==="plein"?"Plein":"Vide");
-          }))),
-      /* Statut de chargement */
-      !pictoFiles.probed
-        ?e("div",{className:"hint",style:{marginBottom:6}},"Chargement du manifest\u2026")
-        :pictoFiles.keys.length===0
-          ?e("div",{className:"hint",style:{marginBottom:6}},
-              "Manifest non trouvé ou vide. Crée ",
-              e("b",{key:"m"},"assets/manifest.json"),
-              " avec la liste des noms de pictos.")
-          :null,
-      /* Galerie depuis le manifest */
-      pictoFiles.keys.length>0
-        ?e("div",{style:{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}},
-            pictoFiles.keys.map(function(k){
-              var on=!st.badgeIconCustom&&st.badgeIconKey===k;
-              var src=pictoFiles[st.pictoMode]&&pictoFiles[st.pictoMode][k];
-              var hasFile=!!src;
-              /* Fallback mode : si plein manque essaie vide, et vice versa */
-              if(!src) src=pictoFiles[st.pictoMode==="plein"?"vide":"plein"]&&
-                           pictoFiles[st.pictoMode==="plein"?"vide":"plein"][k];
-              if(!src) return null; /* ne devrait pas arriver si le manifest est cohérent */
-              /* Label lisible : remplacer _ par espace, capitaliser */
-              var label=k.replace(/_/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
-              return e("div",{key:k,title:label,
-                onClick:function(){set("badgeIconKey",k);set("badgeIconCustom",null);},
-                style:{width:44,height:52,borderRadius:8,padding:2,cursor:"pointer",
-                  border:on?"2px solid #1a1a1a":"2px solid #e5e5e5",
-                  background:on?"#f0efec":"#fafafa",
-                  display:"flex",flexDirection:"column",alignItems:"center",
-                  justifyContent:"center",gap:3,boxSizing:"border-box"}},
-                e("img",{src:src,alt:label,
-                  style:{width:36,height:36,objectFit:"contain",
-                    opacity:hasFile?1:0.4}}),
-                e("span",{style:{fontSize:6.5,color:on?"#1a1a1a":"#999",
-                  lineHeight:1,textAlign:"center",maxWidth:40,
-                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
-                  label));
-            }))
-        :null,
-      e("label",{className:"field-label",style:{marginTop:pictoFiles.keys.length?8:0}},
-        "Ou importer un pictogramme personnalisé ",e("span",{className:"hint"},"(PNG transparent)")),
-      e(FileDrop,{value:st.badgeIconCustom,onChange:function(v){set("badgeIconCustom",v);},placeholder:"PNG transparent",small:true}),
-      st.badgeIconCustom?e("button",{onClick:function(){set("badgeIconCustom",null);},
-        style:{marginTop:6,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:5,
-          border:"1px solid #ddd",background:"#fff0f0",color:"#c0392b",cursor:"pointer",fontFamily:"inherit"}},
-        "Retirer le pictogramme personnalisé"):null),
+      e("div",{style:{height:12}})),  /* fin section cartouche */
 
     e("div",{className:"section"},e("h2",null,"Texte"),
       e("div",{className:"upload-hint",style:{marginBottom:6}},

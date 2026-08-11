@@ -63,6 +63,8 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .upload-hint b{color:#404040;}
 </style>
 <script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
 </head>
 <body>
 
@@ -319,7 +321,7 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 var DEFAULT={
   format:"1x1", quoteStyle:"curly", // Position et largeur par format
   blockYPct_1x1:-1, blockPct_1x1:0,
-  blockYPct_4x5:-1, blockPct_4x5:0, badgeIcon:"../../assets/icons/iconeCharge.png",
+  blockYPct_4x5:-1, blockPct_4x5:0, badgeIconKey:"", badgeIconCustom:null,
   bgImg:"../../templates/citation/TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
   photo:"../../templates/citation/TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
@@ -392,6 +394,26 @@ function App(){
   }
   var dY = Math.round(targetTop - L.QUOTE_Y);
   useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
+
+  useEffect(function(){
+    window.PictoGallery.load(function(){
+      var keys=window.PictoGallery.getKeys();
+      if(keys.length) setSt(function(p){
+        if(keys.indexOf(p.badgeIconKey)>=0) return p;
+        var c=Object.assign({},p); c.badgeIconKey=keys[0]; return c;
+      });
+      var container=document.getElementById("picto-gallery-container");
+      if(container&&!container._pg){
+        container._pg=window.PictoGallery.init(container,{
+          grad:"linear-gradient(90deg,#0098E3,#4632FF)",
+          selected:st.badgeIconKey,
+          custom:st.badgeIconCustom,
+          onChange:function(key){setSt(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
+          onCustom:function(uri){setSt(function(p){var c=Object.assign({},p);c.badgeIconCustom=uri;return c;});},
+        });
+      }
+    });
+  },[]);
 
   /* Mesure la hauteur réelle du bloc citation après chaque render.
      Déclenche un re-render si elle change (texte ou largeur modifiés). */
@@ -611,9 +633,12 @@ function App(){
 
     /* BADGE (position fixe, non affecté par le slider) */
     e("div",{style:{position:"absolute",left:L.BADGE_X,top:L.BADGE_Y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
-      e("div",{style:{width:L.BADGE_ICON,height:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
-        st.badgeIcon
-          ?e("img",{src:st.badgeIcon,alt:"",style:{width:L.BADGE_ICON*0.64+"px",height:L.BADGE_ICON*0.64+"px",objectFit:"contain"}})
+      e("div",{style:{width:L.BADGE_ICON,height:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
+          backgroundImage:(!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey))?"none":"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",
+          background:(!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey))?"#FFFFFF":undefined,
+          display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
+        (st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)))
+          ?e("img",{src:st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)),alt:"",style:{width:L.BADGE_ICON*0.64+"px",height:L.BADGE_ICON*0.64+"px",objectFit:"contain"}})
           :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.56,height:L.BADGE_ICON*0.56,fill:TE_WHITE},
              e("path",{d:"M13.5 2 L5 13.2 h5.2 L9.6 22 L19 10.4 h-5.4 z"}))),
       e("div",{style:{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,backgroundImage:"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontWeight:800,fontSize:L.BADGE_FONT,letterSpacing:".055em",textTransform:"uppercase",whiteSpace:"nowrap"}},st.badge)),
@@ -688,8 +713,8 @@ function App(){
     e("div",{className:"section"},e("h2",null,"Badge"),
       e("input",{type:"text",spellCheck:true,value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
       e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Icône du badge ","(PNG transparent, défaut = éclair)"),
-      e(FileDrop,{value:st.badgeIcon,onChange:function(v){set("badgeIcon",v);},placeholder:"PNG transparent (défaut = ⚡)",small:true})),
+      e("label",{className:"field-label"},"Pictogramme"),
+      e("div",{id:"picto-gallery-container",key:"picto-gallery"})),
 
     e("div",{className:"section"},e("h2",null,"Personne"),
       e("div",{className:"upload-hint"},
