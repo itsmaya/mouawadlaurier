@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Générateur PNG - Women in Energy</title>
+<title>Fiche Métier — TotalEnergies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
 
@@ -435,22 +435,11 @@ env.allowLocalModels = false;
 window.__transformers = { pipeline, env };
 window.__transformersReady = true;
 </script>
+<script src="../../assets/header.js"></script>
 </head>
 <body>
-<header class="page-header">
-  <img class="page-header-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
-  <div class="page-header-sep"></div>
-  <span class="page-header-title">Fiche Métier</span>
-  <span class="page-header-sub">Static Posts Generator</span>
-  <nav class="page-header-nav">
-    <a href="../../index.html">&larr; Accueil</a>
-    <a href="../citation/index.html">Citation Post</a>
-  </nav>
-</header>
-<footer class="page-footer">
-  <span class="page-footer-label">Developed by</span>
-  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye" />
-</footer>
+
+
 <div id="root"></div>
 
 <script>
@@ -820,19 +809,16 @@ function boot() {
   // ─── Sauvegardes via IndexedDB ─────────────────────────────────────────────
   // IndexedDB : pas de limite de taille (contrairement à localStorage ~5MB),
   // donc les images base64 passent sans problème.
-  var DB_NAME = "wie_db", DB_VERSION = 2, STORE_NAME = "saves";
+  var DB_NAME = "wie_db", DB_VERSION = 4, STORE_NAME = "saves";
 
   function openDB(onSuccess, onError) {
     var req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = function(ev) {
       var db = ev.target.result;
-      // Les deux générateurs partagent la même base : créer les deux stores
-      if (!db.objectStoreNames.contains("saves")) {
-        db.createObjectStore("saves", { keyPath: "name" });
-      }
-      if (!db.objectStoreNames.contains("citation_saves")) {
-        db.createObjectStore("citation_saves", { keyPath: "name" });
-      }
+      ["saves","citation_saves","latestnews_saves","carrousel_saves"].forEach(function(s){
+        if (!db.objectStoreNames.contains(s))
+          db.createObjectStore(s, { keyPath: "name" });
+      });
     };
     req.onsuccess = function(ev) { onSuccess(ev.target.result); };
     req.onerror   = function()   { onError && onError(); };

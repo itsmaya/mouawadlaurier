@@ -76,23 +76,11 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .toggle input{accent-color:#1a1a1a;}
 .toggle.off{opacity:.45;cursor:not-allowed;}
 </style>
+<script src="../../assets/header.js"></script>
 </head>
 <body>
-<header class="page-header">
-  <img class="page-header-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
-  <div class="page-header-sep"></div>
-  <span class="page-header-title">Latest News</span>
-  <span class="page-header-sub">Static Posts Generator</span>
-  <nav class="page-header-nav">
-    <a href="../../index.html">&larr; Accueil</a>
-    <a href="../fiche-metier/index.html">Fiche Métier</a>
-    <a href="../citation/index.html">Citation Post</a>
-  </nav>
-</header>
-<footer class="page-footer">
-  <span class="page-footer-label">Developed by</span>
-  <img class="page-footer-logo" src="../../assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
-</footer>
+
+
 <div id="root"></div>
 <script>
 function boot(){
@@ -556,8 +544,8 @@ function DownloadIcon(){return e("svg",{viewBox:"0 0 24 24",width:18,height:18,f
    ⚠ La même valeur doit être reportée dans fiche-metier et citation,
    sinon leurs sauvegardes cassent silencieusement.
    ══════════════════════════════════════════════════════════════════════════ */
-var DB_NAME="wie_db",DB_VERSION=3,STORE="latestnews_saves";
-function openDB(ok,ko){var q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=function(ev){var db=ev.target.result;if(!db.objectStoreNames.contains("saves"))db.createObjectStore("saves",{keyPath:"name"});if(!db.objectStoreNames.contains("citation_saves"))db.createObjectStore("citation_saves",{keyPath:"name"});if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:"name"});};q.onsuccess=function(ev){ok(ev.target.result);};q.onerror=function(){ko&&ko();};}
+var DB_NAME="wie_db",DB_VERSION=4,STORE="latestnews_saves";
+function openDB(ok,ko){var q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=function(ev){var db=ev.target.result;["saves","citation_saves","latestnews_saves","carrousel_saves"].forEach(function(s){if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"name"});});};q.onsuccess=function(ev){ok(ev.target.result);};q.onerror=function(){ko&&ko();};}
 function dbAll(cb){openDB(function(db){var q=db.transaction(STORE,"readonly").objectStore(STORE).getAll();q.onsuccess=function(ev){var a=ev.target.result||[];a.sort(function(x,y){return y.date>x.date?1:-1;});cb(a);};q.onerror=function(){cb([]);};},function(){cb([]);});}
 function dbPut(en,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE).put(en);t.oncomplete=cb||function(){};});}
 function dbDel(n,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE)["delete"](n);t.oncomplete=cb||function(){};});}
