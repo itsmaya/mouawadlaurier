@@ -477,7 +477,7 @@ var DEFAULT={
   bgX_4x5:50, bgY_4x5:50, bgZoom_4x5:100,
   bgX_9x16:50, bgY_9x16:50, bgZoom_9x16:100,
   hasML:false, mlStyle:"white",
-  badgeIconKey:"Battery 1",
+  badgeIconKey:"Place",
   badgeIconCustom:null,
   badgeMain:"LATEST NEWS", badgeSub:"LEUNA, GERMANY",
   liveMode:false,                   /* rond rouge ● devant le texte */
@@ -705,9 +705,10 @@ function App(){
        On récupère les clés pour initialiser badgeIconKey si besoin. */
     window.PictoGallery.load(function(){
       var keys=window.PictoGallery.getKeys();
-      if(keys.length) setSt(function(p){
-        if(keys.indexOf(p.badgeIconKey)>=0)return p;
-        var c=Object.assign({},p);c.badgeIconKey=keys[0];return c;
+      setSt(function(p){
+        var c=Object.assign({},p);
+        if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=keys[0];
+        c._pgLoaded=true; return c;
       });
       /* Init galerie dans le container DOM fixe */
       var container=document.getElementById("picto-gallery-container");
@@ -931,7 +932,7 @@ function App(){
       width:CARD_W,height:CARD_H,position:"relative",
       fontFamily:"'Nunito',sans-serif",overflow:"hidden",
       backgroundImage:(st.hasML&&st.mlStyle==="grad")?GRAD_V:"none",
-      background:(st.hasML&&st.mlStyle==="grad")?undefined:(st.hasML?"#FFFFFF":"#12203c")}},
+      backgroundColor:(st.hasML&&st.mlStyle==="grad")?"transparent":(st.hasML?"#FFFFFF":"#12203c")}},
 
     /* FOND : image repositionnable ou aplat dégradé */
     onGrad
@@ -957,9 +958,10 @@ function App(){
         display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
       (function(){
         var src=st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey))||null;
-        var isOut=!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey);
+        var hasSrc=!!(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey));
+        var isOut=!st.badgeIconCustom&&hasSrc&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey);
         var boxStyle=isOut
-          ? Object.assign({},badgeBoxStyle,{backgroundImage:"none",background:"#FFFFFF"})
+          ? Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"})
           : badgeBoxStyle;
         return e("div",{style:boxStyle},
           src

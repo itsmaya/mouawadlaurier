@@ -99,15 +99,13 @@
     fetch(manifestUrl())
       .then(function(r){return r.ok?r.json():Promise.reject();})
       .then(function(data){
-        var allowed=global.PICTO_CATEGORIES||null;
         var cats={};
         /* Rétrocompat : ancien format {"pictos":[...]} */
         if(Array.isArray(data.pictos)){
           cats={energies_white:data.pictos};
         } else {
           Object.keys(data).forEach(function(cat){
-            if(!allowed||allowed.indexOf(cat)>=0)
-              if(Array.isArray(data[cat])) cats[cat]=data[cat];
+            if(Array.isArray(data[cat])) cats[cat]=data[cat];
           });
         }
         probe(cats,function(files){
@@ -166,6 +164,13 @@
       ".pg-dropdown::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px;}",
 
       /* En-tête de catégorie — sticky */
+      /* Champ de recherche */
+      ".pg-search-wrap{padding:8px 8px 4px;position:sticky;top:0;background:#fff;z-index:2;}",
+      ".pg-search{width:100%;box-sizing:border-box;border:1px solid #d4d4d4;border-radius:6px;",
+        "padding:6px 10px;font-size:11px;font-family:inherit;outline:none;}",
+      ".pg-search:focus{border-color:#1a1a1a;}",
+      ".pg-no-results{padding:10px;font-size:11px;color:#aaa;text-align:center;font-family:inherit;}",
+
       ".pg-cat-label{font-size:9px;font-weight:800;letter-spacing:.1em;",
         "text-transform:uppercase;color:#888;padding:8px 10px 4px;",
         "font-family:inherit;position:sticky;top:0;background:#fff;z-index:1;",
@@ -184,9 +189,9 @@
       ".pg-item.pg-on{border-color:#1a1a1a;background:#f0f0f0;}",
 
       /* Miniature — deux variantes selon fond */
-      ".pg-thumb{width:44px;height:44px;border-radius:6px;flex-shrink:0;",
+      ".pg-thumb{width:56px;height:56px;border-radius:6px;flex-shrink:0;",
         "display:flex;align-items:center;justify-content:center;}",
-      ".pg-thumb img{width:28px;height:28px;object-fit:contain;display:block;}",
+      ".pg-thumb img{width:36px;height:36px;object-fit:contain;display:block;}",
       /* fond blanc pour les _out */
       ".pg-thumb.pg-bg-white{background:#f0f0f0;border:1px solid #e0e0e0;}",
 
@@ -222,6 +227,7 @@
     this.grad=opts.grad||"linear-gradient(90deg,#0098E3,#4632FF)";
     this.selected=opts.selected||null;
     this.custom=opts.custom||null;
+    this.categories=opts.categories||null; /* surcharge PICTO_CATEGORIES pour cette galerie */
     this.onChange=opts.onChange||function(){};
     this.onCustom=opts.onCustom||function(){};
     this._open=false;
@@ -248,10 +254,6 @@
     var selBox=document.createElement("div");
     selBox.className="pg-sel-box";
     this._selBox=selBox;
-    var entry=_files[this.selected]||null;
-    var isOut=entry&&!isWhiteCat(entry.cat);
-    selBox.style.backgroundImage=isOut?"none":this.grad;
-    if(isOut) selBox.style.background="#f0f0f0";
     this._renderSelBox();
     trigger.appendChild(selBox);
 
@@ -263,7 +265,13 @@
     this._selLabel=selLabel;
     var selHint=document.createElement("div");
     selHint.className="pg-sel-hint";
-    selHint.textContent=_loaded?(_keys.length+" pictos disponibles"):"Chargement…";
+    var _visKeys=(function(allowed){
+      if(!allowed) return _keys;
+      var seen={},out=[];
+      allowed.forEach(function(cat){(_cats[cat]||[]).forEach(function(k){if(_files[k]&&!seen[k]){seen[k]=true;out.push(k);}});});
+      return out;
+    })(this.categories||(global.PICTO_CATEGORIES||null));
+    selHint.textContent=_loaded?(_visKeys.length+" pictos disponibles"):"Chargement…";
     this._selHint=selHint;
     selInfo.appendChild(selLabel); selInfo.appendChild(selHint);
     trigger.appendChild(selInfo);
@@ -302,14 +310,35 @@
 
   Gallery.prototype._renderSelBox=function(){
     if(!this._selBox)return;
-    this._selBox.innerHTML="";
+    /* Vider le contenu SANS toucher aux styles inline */
+    while(this._selBox.firstChild) this._selBox.removeChild(this._selBox.firstChild);
+    /* Fond — appliqué après le vidage pour ne pas être écrasé */
+    var entry=_files[this.selected]||null;
+    if(this.custom||!entry||isWhiteCat(entry.cat)){
+      this._selBox.style.backgroundImage=this.grad;
+      this._selBox.style.backgroundColor="transparent";
+    } else {
+      this._selBox.style.backgroundImage="none";
+      this._selBox.style.backgroundColor="#f0f0f0";
+    }
+    /* Contenu */
     var src=this.custom||(_files[this.selected]?_files[this.selected].url:null);
     if(src){
       var img=document.createElement("img");
       img.src=src; img.alt=this.selected||"";
       this._selBox.appendChild(img);
     } else {
-      this._selBox.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+      var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+      svg.setAttribute("viewBox","0 0 24 24"); svg.setAttribute("width","18"); svg.setAttribute("height","18");
+      svg.setAttribute("fill","none"); svg.setAttribute("stroke","rgba(255,255,255,.5)"); svg.setAttribute("stroke-width","1.5");
+      var r=document.createElementNS("http://www.w3.org/2000/svg","rect");
+      r.setAttribute("x","3"); r.setAttribute("y","3"); r.setAttribute("width","18"); r.setAttribute("height","18"); r.setAttribute("rx","2");
+      var c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      c.setAttribute("cx","8.5"); c.setAttribute("cy","8.5"); c.setAttribute("r","1.5");
+      var p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      p.setAttribute("d","M21 15l-5-5L5 21");
+      svg.appendChild(r); svg.appendChild(c); svg.appendChild(p);
+      this._selBox.appendChild(svg);
     }
   };
 
@@ -332,7 +361,10 @@
       hint.textContent="Chargement…"; dd.appendChild(hint);
       wrap.appendChild(dd); return;
     }
-    var catKeys=Object.keys(_cats);
+    var allowed=this.categories||(global.PICTO_CATEGORIES||null);
+    var catKeys=allowed
+      ? allowed.filter(function(c){return _cats[c]&&_cats[c].length;})
+      : Object.keys(_cats);
     if(!catKeys.length){
       var h2=document.createElement("div");
       h2.style.cssText="padding:12px;font-size:11px;color:#888;font-family:inherit;";
@@ -341,6 +373,20 @@
     }
 
     var showHeaders=catKeys.length>1;
+
+    /* Champ de recherche */
+    var searchWrap=document.createElement("div");
+    searchWrap.className="pg-search-wrap";
+    var searchInput=document.createElement("input");
+    searchInput.className="pg-search";
+    searchInput.type="text";
+    searchInput.placeholder="Rechercher un picto…";
+    searchInput.setAttribute("autocomplete","off");
+    searchWrap.appendChild(searchInput);
+    dd.appendChild(searchWrap);
+
+    /* Grilles par catégorie — construites une fois, filtrées en live */
+    var allItems=[];  /* [{el, key, cat}] pour filtrage */
 
     catKeys.forEach(function(cat){
       var keys=(_cats[cat]||[]).filter(function(k){return _files[k];});
@@ -377,16 +423,13 @@
         lbl.className="pg-lbl"; lbl.textContent=k;
 
         item.appendChild(thumb); item.appendChild(lbl);
-        item.addEventListener("click",function(e){
+        allItems.push({el:item,key:k,cat:cat});
+        item.addEventListener("click",(function(key,isWhite){return function(e){
           e.stopPropagation();
-          self.selected=k; self.custom=null;
+          self.selected=key; self.custom=null;
           /* Mettre à jour le trigger */
-          if(self._selBox){
-            self._selBox.style.backgroundImage=white?self.grad:"none";
-            self._selBox.style.background=white?"":("#f0f0f0");
-            self._renderSelBox();
-          }
-          if(self._selLabel) self._selLabel.textContent=k;
+          if(self._selBox) self._renderSelBox();
+          if(self._selLabel) self._selLabel.textContent=key;
           /* Mettre à jour sélection dans la grille */
           var allItems=dd.querySelectorAll(".pg-item");
           for(var i=0;i<allItems.length;i++) allItems[i].className="pg-item";
@@ -399,12 +442,40 @@
             self._outsideListener=null;
           }
           self._removeDropdown();
-          self.onChange(k,src);
-        });
+          self.onChange(key,src);
+        };})(k,white));
         grid.appendChild(item);
       });
       dd.appendChild(grid);
     });
+
+    /* Filtrage en live sur saisie */
+    searchInput.addEventListener("input",function(){
+      var q=searchInput.value.trim().toLowerCase();
+      /* Afficher/masquer les items */
+      allItems.forEach(function(it){
+        var match=!q||it.key.toLowerCase().indexOf(q)>=0;
+        it.el.style.display=match?"":"none";
+      });
+      /* Afficher/masquer les en-têtes de catégorie si tous leurs items sont masqués */
+      dd.querySelectorAll(".pg-cat-label").forEach(function(lbl){
+        var grid=lbl.nextElementSibling;
+        if(!grid)return;
+        var anyVisible=Array.from(grid.querySelectorAll(".pg-item")).some(function(el){return el.style.display!=="none";});
+        lbl.style.display=anyVisible?"":"none";
+      });
+      /* Message "aucun résultat" */
+      var noRes=dd.querySelector(".pg-no-results");
+      var anyMatch=allItems.some(function(it){return it.el.style.display!=="none";});
+      if(!anyMatch){
+        if(!noRes){noRes=document.createElement("div");noRes.className="pg-no-results";noRes.textContent="Aucun résultat";dd.appendChild(noRes);}
+        noRes.style.display="";
+      } else {
+        if(noRes) noRes.style.display="none";
+      }
+    });
+    /* Focus auto */
+    setTimeout(function(){searchInput.focus();},50);
 
     /* Import custom */
     var sepRow=document.createElement("div");
@@ -453,7 +524,7 @@
         rd.onload=function(ev){
           self.custom=ev.target.result; self.selected=null;
           self.onCustom(self.custom);
-          if(self._selBox){ self._selBox.style.backgroundImage="none"; self._selBox.style.background="#f0f0f0"; self._renderSelBox(); }
+          if(self._selBox) self._renderSelBox();
           if(self._selLabel) self._selLabel.textContent="Picto personnalis\u00e9";
           self._removeDropdown(); self._open=false;
           self._trigger&&(self._trigger.className="pg-trigger");
@@ -472,7 +543,7 @@
       rd.onload=function(ev){
         self.custom=ev.target.result; self.selected=null;
         self.onCustom(self.custom);
-        if(self._selBox){ self._selBox.style.backgroundImage="none"; self._selBox.style.background="#f0f0f0"; self._renderSelBox(); }
+        if(self._selBox) self._renderSelBox();
         if(self._selLabel) self._selLabel.textContent="Picto personnalis\u00e9";
         self._removeDropdown(); self._open=false;
         self._trigger&&(self._trigger.className="pg-trigger");
@@ -484,12 +555,7 @@
   /* ── setGrad — live sans re-render ───────────────────────────────────── */
   Gallery.prototype.setGrad=function(grad){
     this.grad=grad;
-    /* Trigger : seulement si le picto sélectionné est de type _white */
-    if(this._selBox){
-      var entry=_files[this.selected];
-      if(!this.custom&&entry&&isWhiteCat(entry.cat))
-        this._selBox.style.backgroundImage=grad;
-    }
+    if(this._selBox) this._renderSelBox();
     /* Miniatures ouvertes dans le dropdown */
     if(this._dropdown){
       var thumbs=this._dropdown.querySelectorAll(".pg-thumb:not(.pg-bg-white)");
@@ -512,8 +578,10 @@
     getSrc:function(key){ return _files[key]?_files[key].url:null; },
     getKeys:function(){ return _keys.slice(); },
     setGrad:function(grad){ _galleries.forEach(function(g){g.setGrad(grad);}); },
-    /* Retourne la catégorie d'un picto ('energies_white', 'energies_out', etc.) */
+    /* Retourne la catégorie d'un picto */
     getCat:function(key){ return _files[key]?_files[key].cat:null; },
+    /* Retourne les clés d'une catégorie */
+    getCatKeys:function(cat){ return (_cats[cat]||[]).filter(function(k){return !!_files[k];}); },
     /* True si le picto est de type blanc (fond dégradé) */
     isWhite:function(key){ var e=_files[key]; return !e||isWhiteCat(e.cat); },
   };

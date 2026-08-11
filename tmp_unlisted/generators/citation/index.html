@@ -286,6 +286,61 @@ function QuoteBody(props){
   );
 }
 
+/* ─── DragImage ─────────────────────────────────────────────────────────── */
+function DragImage(props){
+  var dragRef=useRef(null);
+  var dragging=useRef(false);
+  var last=useRef({x:0,y:0});
+  function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+  function onDown(ev){
+    if(!props.src)return;
+    ev.preventDefault();
+    dragging.current=true;
+    var pt=ev.touches?ev.touches[0]:ev;
+    last.current={x:pt.clientX,y:pt.clientY};
+  }
+  function onMove(ev){
+    if(!dragging.current)return;
+    ev.preventDefault();
+    var pt=ev.touches?ev.touches[0]:ev;
+    var dx=pt.clientX-last.current.x;
+    var dy=pt.clientY-last.current.y;
+    last.current={x:pt.clientX,y:pt.clientY};
+    var pctX=clamp(props.x-dx/props.w*100/props.scale,0,100);
+    var pctY=clamp(props.y-dy/props.h*100/props.scale,0,100);
+    props.onChange(pctX,pctY);
+  }
+  function onUp(){dragging.current=false;}
+  useEffect(function(){
+    window.addEventListener("mousemove",onMove);
+    window.addEventListener("mouseup",onUp);
+    window.addEventListener("touchmove",onMove,{passive:false});
+    window.addEventListener("touchend",onUp);
+    return function(){
+      window.removeEventListener("mousemove",onMove);
+      window.removeEventListener("mouseup",onUp);
+      window.removeEventListener("touchmove",onMove);
+      window.removeEventListener("touchend",onUp);
+    };
+  });
+  var zoom=props.zoom||100;
+  var pos=props.x+"% "+props.y+"%";
+  return e("div",{ref:dragRef,
+    style:{position:"absolute",inset:0,overflow:"hidden",cursor:props.src?"grab":"default"},
+    onMouseDown:onDown,onTouchStart:onDown},
+    props.src?e("img",{src:props.src,alt:"",
+      style:{position:"absolute",
+        width:(zoom)+"%",height:(zoom)+"%",
+        minWidth:"100%",minHeight:"100%",
+        objectFit:"cover",objectPosition:pos,
+        left:"50%",top:"50%",
+        transform:"translate(-50%,-50%) scale("+(zoom/100)+")",
+        transformOrigin:"center center",
+        filter:props.blur>0?"blur("+props.blur+"px)":"none",
+        userSelect:"none",pointerEvents:"none"}}):null
+  );
+}
+
 /* ─── FileDrop ─────────────────────────────────────────────────────────── */
 function FileDrop(p){
   var r=useRef(null);
@@ -321,8 +376,10 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 var DEFAULT={
   format:"1x1", quoteStyle:"curly", // Position et largeur par format
   blockYPct_1x1:-1, blockPct_1x1:0,
-  blockYPct_4x5:-1, blockPct_4x5:0, badgeIconKey:"", badgeIconCustom:null,
+  blockYPct_4x5:-1, blockPct_4x5:0, badgeIconKey:"Electricity", badgeIconCustom:null,
   bgImg:"../../templates/citation/TEMPLATE_BACK2.png", bgBlur:0, bgDark:0,
+  bgX_1x1:50, bgY_1x1:50, bgZoom_1x1:100,
+  bgX_4x5:50, bgY_4x5:50, bgZoom_4x5:100,
   photo:"../../templates/citation/TEMPLATE_PERSONNE.png",
   name:"PATRICK POUYANNÉ", title:"Chairman & CEO\nof TotalEnergies",
   badge:"MORE ENERGY, LESS EMISSIONS",
@@ -336,6 +393,7 @@ function App(){
   var a1=useState([]),saves=a1[0],setSaves=a1[1];
   var a2=useState(""),sname=a2[0],setSname=a2[1];
   var a3=useState(false),busy=a3[0],setBusy=a3[1];
+  var a5=useState({w:0,h:0}); var bgNat=a5[0],setBgNat=a5[1];
   var cardRef=useRef(null),impRef=useRef(null),quoteBlockRef=useRef(null);
   /* Hauteur mesurée du bloc citation (mis à jour après chaque render) */
   var qhState=useState(100); var quoteH=qhState[0],setQuoteH=qhState[1];
@@ -393,14 +451,23 @@ function App(){
     targetTop = TOP_MIN + (raw / 1000) * (TOP_MAX - TOP_MIN);
   }
   var dY = Math.round(targetTop - L.QUOTE_Y);
+  useEffect(function(){
+    if(!st.bgImg){setBgNat({w:0,h:0});return;}
+    var im=new Image();
+    im.onload=function(){setBgNat({w:im.naturalWidth,h:im.naturalHeight});};
+    im.onerror=function(){setBgNat({w:0,h:0});};
+    im.src=st.bgImg;
+  },[st.bgImg]);
+
   useEffect(function(){dbAll(function(a){setSaves(a);});},[]);
 
   useEffect(function(){
     window.PictoGallery.load(function(){
       var keys=window.PictoGallery.getKeys();
-      if(keys.length) setSt(function(p){
-        if(keys.indexOf(p.badgeIconKey)>=0) return p;
-        var c=Object.assign({},p); c.badgeIconKey=keys[0]; return c;
+      setSt(function(p){
+        var c=Object.assign({},p);
+        if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=keys[0];
+        c._pgLoaded=true; return c;
       });
       var container=document.getElementById("picto-gallery-container");
       if(container&&!container._pg){
@@ -436,8 +503,10 @@ function App(){
   var doExport=useCallback(function(){
     if(!cardRef.current)return;
     setBusy(true);
+    var _bgXe=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
+    var _bgYe=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
+    var _bgZoome=st["bgZoom_"+st.format]||100;
     function preBlur(src,w,h,px,done){
-      /* Rendu à la résolution OUTPUT (×EX) pour éviter tout upscale */
       if(!src) return done(null);
       var img=new Image();
       img.crossOrigin="anonymous";
@@ -450,8 +519,12 @@ function App(){
         ctx.imageSmoothingQuality="high";
         if(px>0) ctx.filter="blur("+Math.round(px*EX)+"px)";
         var ir=img.naturalWidth/img.naturalHeight, cr=OW/OH, dw,dh;
-        if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
-        ctx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
+        if(ir>cr){dh=OH;dw=dh*ir;}else{dw=OW;dh=dw/ir;}
+        var zf=_bgZoome/100;
+        dw*=zf; dh*=zf;
+        var dx=(OW-dw)*(_bgXe/100);
+        var dy=(OH-dh)*(_bgYe/100);
+        ctx.drawImage(img,dx,dy,dw,dh);
         done(cv.toDataURL("image/png"));
       };
       img.onerror=function(){done(null);};
@@ -620,22 +693,37 @@ function App(){
     personX = L.PERSON_X - dW/2;
   }
 
+  var _fmt=st.format;
+  var bgX=st["bgX_"+_fmt]!==undefined?st["bgX_"+_fmt]:50;
+  var bgY=st["bgY_"+_fmt]!==undefined?st["bgY_"+_fmt]:50;
+  var bgZoom=st["bgZoom_"+_fmt]||100;
+  var outW=FORMATS[st.format].outputW, outH=FORMATS[st.format].outputH;
+  var maxZoom=300;
+  if(bgNat.w>0&&bgNat.h>0){
+    var ir=bgNat.w/bgNat.h, cr=outW/outH;
+    var coverW=(ir>cr)?outH*ir:outW;
+    var coverH=(ir>cr)?outH:outW/ir;
+    var zmW=Math.floor(bgNat.w/coverW*100);
+    var zmH=Math.floor(bgNat.h/coverH*100);
+    maxZoom=Math.max(100,Math.min(300,Math.min(zmW,zmH)));
+  }
+
   var card=e("div",{ref:cardRef,style:{
     width:CARD_W,minHeight:CARD_H,position:"relative",
     fontFamily:"'Nunito',sans-serif",background:"#12203c",overflow:"hidden"}},
 
-    e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,
-      backgroundImage:st.bgImg?"url("+st.bgImg+")":"none",
-      backgroundSize:"cover",backgroundPosition:"center",
-      filter:st.bgBlur>0?"blur("+st.bgBlur+"px)":"none",
-      transform:st.bgBlur>0?"scale(1.06)":"none"}}),
+    e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,backgroundColor:"#12203c"}},
+      e(DragImage,{src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
+        w:CARD_W,h:CARD_H,scale:1,
+        onChange:function(x,y){setSt(function(p){var c=Object.assign({},p);
+          c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c;});}})),
     st.bgDark>0?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null,
 
     /* BADGE (position fixe, non affecté par le slider) */
     e("div",{style:{position:"absolute",left:L.BADGE_X,top:L.BADGE_Y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
       e("div",{style:{width:L.BADGE_ICON,height:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
-          backgroundImage:(!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey))?"none":"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",
-          background:(!st.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey))?"#FFFFFF":undefined,
+          backgroundImage:(!st.badgeIconCustom&&window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)&&!window.PictoGallery.isWhite(st.badgeIconKey))?"none":"linear-gradient(90deg,#0097E2 0%,#4534FF 100%)",
+          backgroundColor:(!st.badgeIconCustom&&window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)&&!window.PictoGallery.isWhite(st.badgeIconKey))?"#FFFFFF":"transparent",
           display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
         (st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)))
           ?e("img",{src:st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey)),alt:"",style:{width:L.BADGE_ICON*0.64+"px",height:L.BADGE_ICON*0.64+"px",objectFit:"contain"}})
@@ -708,7 +796,21 @@ function App(){
       e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
       e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
       e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
-      e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})),
+      e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},
+        "Zoom image — "+Math.round(bgZoom)+" %",
+        maxZoom<300?e("span",{className:"hint",style:{marginLeft:6}},"(max "+maxZoom+"% sans perte de qualité)"):null),
+      e("input",{type:"range",min:100,max:maxZoom,step:1,
+        value:Math.min(Math.round(bgZoom),maxZoom),
+        onChange:function(ev){setSt(function(p){var c=Object.assign({},p);
+          c["bgZoom_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
+      e("div",{className:"hint",style:{marginTop:4}},"Glisse directement sur l’image pour la repositionner."),
+      e("button",{onClick:function(){setSt(function(p){var c=Object.assign({},p);
+          c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});},
+        style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
+          border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
+        "Réinitialiser position et zoom")),
 
     e("div",{className:"section"},e("h2",null,"Badge"),
       e("input",{type:"text",spellCheck:true,value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),

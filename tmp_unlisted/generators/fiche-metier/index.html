@@ -436,7 +436,7 @@ window.__transformers = { pipeline, env };
 window.__transformersReady = true;
 </script>
 <script src="../../assets/header.js"></script>
-<script>window.PICTO_BASE="../../assets/";window.PICTO_CATEGORIES=["profession_white","functional_white"];</script>
+<script>window.PICTO_BASE="../../assets/";</script>
 <script src="../../assets/pictos.js"></script>
 </head>
 <body>
@@ -789,25 +789,24 @@ function boot() {
     jobTitle: "HEAD OF LARGE SCALE H2",
     personName: "CRISTINA FERREIRA",
     bullets: [
-      { icon: "target", iconKey: "", keyword: "DEVELOP", text: "large-scale hydrogen projects." },
-      { icon: "bars", iconKey: "", keyword: "DRIVE", text: "industrial execution." },
-      { icon: "people", iconKey: "", keyword: "COORDINATE", text: "teams, patners and stakeholders." }
+      { icon: "target", iconKey: "Bar graph 2", keyword: "DEVELOP", text: "large-scale hydrogen projects." },
+      { icon: "bars",   iconKey: "Wheel",       keyword: "DRIVE",    text: "industrial execution." },
+      { icon: "people", iconKey: "Workforce plus", keyword: "COORDINATE", text: "teams, patners and stakeholders." }
     ],
     quote: "Driving large-scale hydrogen projects from concept to industrial reality.",
-    portraitRaw: null,   // photo telle qu'uploadée
-    portraitImg: null,   // photo + contour blanc (calculée automatiquement)
-    portraitTraits: null, // { naturalW, naturalH, points } calculé sur portraitImg
+    portraitRaw: null,
+    portraitImg: null,
+    portraitTraits: null,
     removingBg: false,
-    badgeIconKey: "",
+    badgeIconKey: "Eye",
     badgeIconCustom: null,
     langTarget: "FR",
-    // Échelle portrait indépendante par format
     portraitScalePortrait: 1.0,
     portraitScaleSquare: 1.0,
     portraitScaleStory: 1.0,
     bgImg: null,
     flagImg: null,
-    shadowOpacity: BOTTOM_SHADOW_OPACITY  // intensité du dégradé noir, contrôlée par le slider
+    shadowOpacity: BOTTOM_SHADOW_OPACITY
   };
 
   // ─── Sauvegardes via IndexedDB ─────────────────────────────────────────────
@@ -1053,16 +1052,29 @@ var TRAIT_ORIGIN_GAP = 20;
       dbGetAll(function(arr) { setSaves(arr); });
     }, []);
 
+    var pgLoaded=React.useState(false); var setPgLoaded=pgLoaded[1];
+
     useEffect(function(){
       window.PictoGallery.load(function(){
         var keys=window.PictoGallery.getKeys();
-        if(keys.length) setState(function(p){
-          if(keys.indexOf(p.badgeIconKey)>=0) return p;
-          var c=Object.assign({},p); c.badgeIconKey=keys[0]; return c;
+        /* Badge : premier picto de profession_white */
+        var badgeCats=["profession_white","functional_white"];
+        var firstBadge=null;
+        for(var ci=0;ci<badgeCats.length&&!firstBadge;ci++){
+          var ck=window.PictoGallery.getCatKeys(badgeCats[ci]);
+          if(ck&&ck.length) firstBadge=ck[0];
+        }
+        setState(function(p){
+          var c=Object.assign({},p);
+          if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=firstBadge||keys[0];
+          return c;
         });
+        /* Forcer re-render pour que la carte affiche les pictos chargés */
+        setPgLoaded(true);
         var container=document.getElementById("picto-gallery-container");
         if(container&&!container._pg){
           container._pg=window.PictoGallery.init(container,{
+            categories:["profession_white","functional_white"],
             grad:"linear-gradient(90deg,"+state.themeColor+","+state.themeColor+")",
             selected:state.badgeIconKey,
             custom:state.badgeIconCustom,
@@ -1076,6 +1088,7 @@ var TRAIT_ORIGIN_GAP = 20;
           if(bc&&!bc._pg){
             (function(idx){
               bc._pg=window.PictoGallery.init(bc,{
+                categories:["functional_white","profession_white"],
                 grad:"linear-gradient(90deg,"+state.themeColor+","+state.themeColor+")",
                 selected:state.bullets[idx].iconKey||"",
                 onChange:function(key){setState(function(p){
@@ -1614,9 +1627,9 @@ var TRAIT_ORIGIN_GAP = 20;
     },
       state.bullets.map(function (b, i) {
         return e("div", { key: i, style: { display: "flex", alignItems: "flex-start", gap: 9 } },
-          e("div", { style: { width: 24, height: 24, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" } },
+          e("div", { style: { width: 32, height: 32, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" } },
           (b.iconKey && window.PictoGallery && window.PictoGallery.getSrc(b.iconKey))
-            ? e("img", { src: window.PictoGallery.getSrc(b.iconKey), alt: "", style: { width: 22, height: 22, objectFit: "contain" } })
+            ? e("img", { src: window.PictoGallery.getSrc(b.iconKey), alt: "", style: { width: 30, height: 30, objectFit: "contain" } })
             : e("div", { style: { color: "white" } }, ICON_PATHS[b.icon] || ICON_PATHS.target)),
           e("div", { style: { fontSize: MISS_FONT, color: "white", lineHeight: 1.3, fontWeight: 600 } },
             e("span", {

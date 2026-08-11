@@ -540,7 +540,7 @@ function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrit
 /* ═══ ÉTAT ════════════════════════════════════════════════════════════════ */
 function newSlide(idx){return{id:Date.now()+idx+Math.random(),bgMode:"photo",bgImg:null,bgBlur:0,bgDark:0,bgX:50,bgY:50,bgZoom:100,text:"Texte de la slide "+(idx+1),textMode:"uni",textColor:"#4632FF",liveMode:false,align:"left",fs:0,w:0,b:-1};}
 
-var DEFAULT_GLOBAL={format:"1x1",grad:"bleu",lowCarbon:false,hasML:false,mlStyle:"white",badgeMain:"SUSTAINABILITY",badgeSub:"",badgeIconKey:"",badgeIconCustom:null};
+var DEFAULT_GLOBAL={format:"1x1",grad:"bleu",lowCarbon:false,hasML:false,mlStyle:"white",badgeMain:"SUSTAINABILITY",badgeSub:"",badgeIconKey:"Green Energy",badgeIconCustom:null};
 
 /* ═══ SLIDE CARD ══════════════════════════════════════════════════════════ */
 function SlideCard(props){
@@ -569,11 +569,11 @@ function SlideCard(props){
 
   var pictoSrc=g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey))||null;
   var hasRealPicto=!!(g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey)));
-  var isPictoOut=!g.badgeIconCustom&&window.PictoGallery&&!window.PictoGallery.isWhite(g.badgeIconKey);
-  var badgeBoxActual=isPictoOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",background:"#FFFFFF"}):badgeBoxStyle;
+  var isPictoOut=!g.badgeIconCustom&&!!(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey))&&window.PictoGallery&&!window.PictoGallery.isWhite(g.badgeIconKey);
+  var badgeBoxActual=isPictoOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"}):badgeBoxStyle;
   var numLabel="#"+(idx+1)+(g.badgeMain?" "+g.badgeMain:"");
 
-  return e("div",{ref:props.cardRef,style:{width:CARD_W,height:CARD_H,position:"relative",fontFamily:"'Nunito',sans-serif",overflow:"hidden",backgroundImage:(g.hasML&&g.mlStyle==="grad")?GRAD_V:"none",background:(g.hasML&&g.mlStyle==="grad")?undefined:(g.hasML?"#FFFFFF":"#12203c")}},
+  return e("div",{ref:props.cardRef,style:{width:CARD_W,height:CARD_H,position:"relative",fontFamily:"'Nunito',sans-serif",overflow:"hidden",backgroundImage:(g.hasML&&g.mlStyle==="grad")?GRAD_V:"none",backgroundColor:(g.hasML&&g.mlStyle==="grad")?"transparent":(g.hasML?"#FFFFFF":"#12203c")}},
     onGrad
       ?e("div",{"data-layer":"bg",style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundImage:GRAD_V}})
       :e("div",{"data-layer":"bg",style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundColor:"#12203c"}},
@@ -620,9 +620,10 @@ function App(){
   useEffect(function(){
     window.PictoGallery.load(function(){
       var keys=window.PictoGallery.getKeys();
-      if(keys.length) setGlobal(function(p){
-        if(keys.indexOf(p.badgeIconKey)>=0) return p;
-        var c=Object.assign({},p); c.badgeIconKey=keys[0]; return c;
+      setGlobal(function(p){
+        var c=Object.assign({},p);
+        if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=keys[0];
+        c._pgLoaded=true; return c;
       });
       var container=document.getElementById("picto-gallery-container");
       if(container&&!container._pg){
