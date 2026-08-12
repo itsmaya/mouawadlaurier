@@ -7,6 +7,7 @@
     { label: "Fiche Métier",  href: "generators/fiche-metier/index.html" },
     { label: "Citation Post", href: "generators/citation/index.html"     },
     { label: "Latest News",   href: "generators/latest-news/index.html"  },
+    { label: "Split Screen",  href: "generators/split-screen/index.html" },
     { label: "Carrousel",     href: "generators/carrousel/index.html"    },
   ];
 
