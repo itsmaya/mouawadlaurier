@@ -151,8 +151,9 @@ var T={
   PAVE_RADIUS_PT  : 22,   /* rayon des coins du pavé */
 
   /* Flèche / point de carrousel */
-  ARROW_PT        : 70,   /* taille de la boîte flèche/point */
-  ARROW_RADIUS_PT : 15,   /* rayon des coins de la boîte */
+  ARROW_W_PT      : 90,   /* largeur bouton carrousel (90 px export) */
+  ARROW_H_PT      : 71,   /* hauteur bouton carrousel (71 px export) */
+  ARROW_RADIUS_PT : 11,   /* rayon des coins — exposé dans le panneau */
   ARROW_GAP_PT    : 30,   /* espace entre pavé et flèche (50 en story) */
   ARROW_GAP_STORY : 50,   /* espace entre pavé et flèche en story */
 
@@ -195,7 +196,7 @@ function getLayout(k,hasML){
     BADGE_H:px(T.BADGE_H_PT), BADGE_ICON:px(T.BADGE_ICON_PT),
     BADGE_GAP:px(T.BADGE_GAP_PT), BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
     BADGE_PADX:px(T.BADGE_PADX_PT), BADGE_FONT:px(T.BADGE_FONT_PT),
-    ARROW:px(T.ARROW_PT), ARROW_RADIUS:px(T.ARROW_RADIUS_PT),
+    ARROW_W:px(T.ARROW_W_PT), ARROW_H:px(T.ARROW_H_PT), ARROW_RADIUS:px(T.ARROW_RADIUS_PT),
     TEXT_MIN:px(T.TEXT_MIN_PT), TEXT_MAX:px(T.TEXT_MAX_PT),
     TEXT_DEF:px(T.TEXT_DEF_PT), TEXT_LH:T.TEXT_LH
   };
@@ -385,18 +386,21 @@ function RichBody(props){
 /* ─── Flèche de navigation (carrousel) ─────────────────────────────────── */
 var AID=0;
 function NavMark(p){
+  /* Bouton rectangulaire 90×71 px export */
+  var bw=p.w, bh=p.h, br=p.radius;
   if(p.kind==="dot"){
-    return e("div",{style:{width:p.size,height:p.size,borderRadius:p.radius,
+    /* Rond 23×23 px export centré dans le même rectangle */
+    var ds=bh*0.32; /* 23/71 = 32% de la hauteur du bouton */
+    return e("div",{style:{width:bw,height:bh,borderRadius:br,
         backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-      e("div",{style:{width:p.size*0.26,height:p.size*0.26,borderRadius:"50%",
+      e("div",{style:{width:ds,height:ds,borderRadius:"50%",
         background:TE_WHITE}}));
   }
-  return e("div",{style:{width:p.size,height:p.size,borderRadius:p.radius,
+  /* Flèche PNG 53×30 px export = 59% de la largeur du bouton */
+  return e("div",{style:{width:bw,height:bh,borderRadius:br,
       backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-    e("svg",{width:p.size*0.5,height:p.size*0.5,viewBox:"0 0 24 24",
-        style:{display:"block",overflow:"visible"}},
-      e("path",{d:"M4 12h15M13 6l6 6-6 6",fill:"none",stroke:TE_WHITE,
-        strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round"})));
+    e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",alt:"",
+      style:{width:"59%",height:"auto",display:"block",objectFit:"contain"}}));
 }
 
 /* Pictos — délégués à PictoGallery (assets/pictos.js) */
@@ -491,6 +495,7 @@ function DragImage(props){
   var dragRef=useRef(null);
   var dragging=useRef(false);
   var last=useRef({x:0,y:0});
+  var natRef=useRef({w:0,h:0});
 
   function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
 
@@ -508,13 +513,40 @@ function DragImage(props){
     var dx=pt.clientX-last.current.x;
     var dy=pt.clientY-last.current.y;
     last.current={x:pt.clientX,y:pt.clientY};
-    /* Convertir le déplacement px écran en % de position.
-       Le conteneur fait props.w × props.h px CSS (déjà en px carte scalés). */
-    var pctX=clamp(props.x - dx/props.w*100/props.scale, 0, 100);
-    var pctY=clamp(props.y - dy/props.h*100/props.scale, 0, 100);
+    /* Dimensions de l'image après cover + zoom, en px preview */
+    var cw=props.w, ch=props.h;
+    var nat=natRef.current;
+    var zf=(props.zoom||100)/100;
+    var iw,ih;
+    if(nat.w>0&&nat.h>0){
+      var ir=nat.w/nat.h, cr=cw/ch;
+      if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
+    } else {
+      iw=cw; ih=ch;
+    }
+    iw*=zf; ih*=zf;
+    /* Plage de déplacement réelle en px */
+    var rangeX=Math.max(0,iw-cw);
+    var rangeY=Math.max(0,ih-ch);
+    /* Convertir drag px → delta % */
+    var dPctX=rangeX>0 ? dx/rangeX*100 : 0;
+    var dPctY=rangeY>0 ? dy/rangeY*100 : 0;
+    var pctX=clamp(props.x - dPctX, 0, 100);
+    var pctY=clamp(props.y - dPctY, 0, 100);
     props.onChange(pctX,pctY);
   }
   function onUp(){ dragging.current=false; }
+
+  useEffect(function(){
+    /* Charger les dimensions naturelles de l'image pour calcul du drag */
+    if(props.src){
+      var im=new Image();
+      im.onload=function(){natRef.current={w:im.naturalWidth,h:im.naturalHeight};};
+      im.src=props.src;
+    } else {
+      natRef.current={w:0,h:0};
+    }
+  },[props.src]);
 
   useEffect(function(){
     window.addEventListener("mousemove",onMove);
@@ -530,8 +562,22 @@ function DragImage(props){
   });
 
   var zoom=props.zoom||100;
-  /* object-position en % : 50 50 = centre */
-  var pos=props.x+"% "+props.y+"%";
+  var zf=zoom/100;
+  var cw=props.w, ch=props.h;
+  var nat=natRef.current;
+  var iw,ih;
+  if(nat.w>0&&nat.h>0){
+    var ir=nat.w/nat.h, cr=cw/ch;
+    if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
+  } else {
+    iw=cw; ih=ch;
+  }
+  iw*=zf; ih*=zf;
+  /* Position left/top en px depuis les % x/y */
+  var rangeX=Math.max(0,iw-cw);
+  var rangeY=Math.max(0,ih-ch);
+  var left=(cw-iw)/2 + rangeX*(1-props.x/100);
+  var top =(ch-ih)/2 + rangeY*(1-props.y/100);
 
   return e("div",{ref:dragRef,
     style:{position:"absolute",inset:0,overflow:"hidden",
@@ -540,15 +586,9 @@ function DragImage(props){
     onTouchStart:onDown},
     props.src?e("img",{src:props.src,alt:"",
       style:{position:"absolute",
-        /* zoom : l'image est agrandie par rapport au cover de base.
-           On utilise width/height en % du conteneur × zoom factor. */
-        width:(zoom)+"%",height:(zoom)+"%",
-        minWidth:"100%",minHeight:"100%",
-        objectFit:"cover",objectPosition:pos,
-        left:"50%",top:"50%",
-        transform:"translate(-50%,-50%) scale("+(zoom/100)+")",
-        transformOrigin:"center center",
-        filter:props.blur>0?"blur("+props.blur+"px)":"none",
+        width:iw+"px", height:ih+"px",
+        left:left+"px", top:top+"px",
+        filter:props.blur>0?"blur("+Math.round(props.blur)+"px)":"none",
         userSelect:"none",pointerEvents:"none"}}):null
   );
 }
@@ -981,7 +1021,7 @@ function App(){
     /* REPÈRE DE CARROUSEL — coin bas-droit, indique qu'il y a une slide après */
     (st.navMark!=="none")?e("div",{style:{position:"absolute",
         right:L.MARGIN+arrowNudge,bottom:L.MARGIN+arrowNudge}},
-      e(NavMark,{kind:st.navMark,size:L.ARROW,radius:L.ARROW_RADIUS,
+      e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(18),
         grad:GRAD_H,from:G.from,to:G.to})):null
   );
 

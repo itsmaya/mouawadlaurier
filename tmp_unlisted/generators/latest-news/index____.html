@@ -289,11 +289,21 @@ function RichBody(props){
       parts.forEach(function(p,pi){
         var key=li+"-"+pi;
         if(p.t==="h"){
+          /* Surlignage :
+             - normal    : fond dégradé, texte blanc
+             - inversé   : fond blanc, texte dégradé (via background-clip:text) */
           out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-          out.push(e("span",{key:key,"data-seg":"h",
-            style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                   color:inv?props.gradFrom:TE_WHITE,
-                   WebkitTextFillColor:inv?props.gradFrom:TE_WHITE}},p.v));
+          if(inv){
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     background:TE_WHITE,WebkitBackgroundClip:"text",backgroundClip:"text",
+                     color:"transparent",WebkitTextFillColor:"transparent",
+                     backgroundImage:"linear-gradient(90deg,"+props.gradFrom+" 0%,"+props.gradTo+" 100%)"}},p.v));
+          } else {
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     WebkitTextFillColor:TE_WHITE}},p.v));
+          }
           out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
         } else if(p.t==="u"){
           out.push(e("span",{key:key,"data-seg":"u",

@@ -158,14 +158,14 @@ var T={
   ARROW_GAP_STORY : 50,   /* espace entre pavé et flèche en story */
 
   /* Texte du pavé (charte : 45–80pt SemiBold, interl. 55–95pt) */
-  TEXT_MIN_PT     : 18,   /* taille minimum */
+  TEXT_MIN_PT     : 45,   /* taille minimum autorisée par la charte */
   TEXT_MAX_PT     : 80,   /* taille maximum autorisée par la charte */
   TEXT_DEF_PT     : 48,   /* taille par défaut au lancement */
   TEXT_LH         : 1.25, /* interligne (ratio × taille) */
 
   /* Graisses — fontWeight */
   FW_TEXT         : 500,  /* texte courant du pavé (SemiBold) */
-  FW_HIGHLIGHT    : 800,  /* mots surlignés **comme ça** (ExtraBold) */
+  FW_HIGHLIGHT    : 500,  /* mots surlignés **comme ça** (ExtraBold) */
   FW_UNDERLINE    : 600,  /* mots soulignés __comme ça__ (SemiBold) */
   FW_BADGE_MAIN   : 600,  /* titre cartouche ex. "LATEST NEWS" (ExtraBold) */
   FW_BADGE_SUB    : 200,  /* précision cartouche ex. lieu (SemiBold) */
@@ -289,11 +289,21 @@ function RichBody(props){
       parts.forEach(function(p,pi){
         var key=li+"-"+pi;
         if(p.t==="h"){
+          /* Surlignage :
+             - normal    : fond dégradé, texte blanc
+             - inversé   : fond blanc, texte dégradé (via background-clip:text) */
           out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-          out.push(e("span",{key:key,"data-seg":"h",
-            style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                   color:inv?props.gradFrom:TE_WHITE,
-                   WebkitTextFillColor:inv?props.gradFrom:TE_WHITE}},p.v));
+          if(inv){
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     background:TE_WHITE,WebkitBackgroundClip:"text",backgroundClip:"text",
+                     color:"transparent",WebkitTextFillColor:"transparent",
+                     backgroundImage:"linear-gradient(90deg,"+props.gradFrom+" 0%,"+props.gradTo+" 100%)"}},p.v));
+          } else {
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     WebkitTextFillColor:TE_WHITE}},p.v));
+          }
           out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
         } else if(p.t==="u"){
           out.push(e("span",{key:key,"data-seg":"u",
@@ -339,7 +349,7 @@ function RichBody(props){
 
     M.h.map(function(r,i){
       var cy=r.y+r.h/2;
-      return e("div",{key:"h"+i,"data-hl":"1",style:{position:"absolute",
+      return e("div",{key:"h"+i,style:{position:"absolute",
         left:r.x-H_PAD_X, top:cy-H_H/2, width:r.w+H_PAD_X*2, height:H_H,
         backgroundImage:inv?"none":grad,
         backgroundColor:inv?TE_WHITE:"transparent",
@@ -347,7 +357,7 @@ function RichBody(props){
     }),
 
     M.u.map(function(r,i){
-      return e("div",{key:"u"+i,"data-ul":"1",style:{position:"absolute",
+      return e("div",{key:"u"+i,style:{position:"absolute",
         left:r.x, top:r.b-U_OFF, width:r.w, height:U_TH,
         backgroundImage:inv?"none":grad,
         backgroundColor:inv?TE_WHITE:"transparent",
@@ -624,6 +634,8 @@ function App(){
   var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
   /* Bloc actif dans le panneau */
   var abState=useState(0); var activeBloc=abState[0],setActiveBloc=abState[1];
+  /* Drag & drop */
+  var dragBloc=useRef(null);
 
   function set(k,v){setSt(function(p){var c=Object.assign({},p);c[k]=v;return c;});}
 
@@ -927,81 +939,39 @@ function App(){
         }
       }
 
-      /* ── Fix dégradé texte et surlignages pour l'export ────────────────────
-         html2canvas ignore background-clip:text et les backgroundImage sur les
-         éléments absolus de surlignage.
-         Solution : on rend tout en couleur unie interpolée selon position. */
+      /* ── Fix dégradé texte pour l'export ─────────────────────────────────
+         html2canvas ignore background-clip:text et les z-index entre siblings.
+         Solution : on dessine le texte dégradé sur un canvas offscreen et on
+         remplace le host transparent par une img du résultat. */
+      if(st.textMode==="grad"){
+        /* 1. Supprimer les rects data-grad-rect du clone (inutiles pour l'export) */
+        var rects=cl.querySelectorAll("[data-grad-rect]");
+        for(var ri=0;ri<rects.length;ri++) rects[ri].parentNode.removeChild(rects[ri]);
 
-      /* 1. Supprimer les rects data-grad-rect (preview only) */
-      var rects=cl.querySelectorAll("[data-grad-rect]");
-      for(var ri=0;ri<rects.length;ri++) rects[ri].parentNode.removeChild(rects[ri]);
-
-      /* 2. Pour chaque host, corriger le texte dégradé */
-      var hosts=cl.querySelectorAll("[data-richhost]");
-      for(var hi=0;hi<hosts.length;hi++){
-        var host=hosts[hi];
-        var hostRect=host.getBoundingClientRect();
-        var spanW2=hostRect.width||1, spanH2=hostRect.height||1;
-        /* Texte en mode dégradé diagonal → colorier chaque span */
-        if(host.style.backgroundImage&&host.style.backgroundImage!=="none"&&
-           host.style.webkitBackgroundClip==="text"){
+        /* 2. Pour chaque host data-richhost, dessiner le texte en couleur pleine
+              sur un canvas à la résolution de sortie puis remplacer par une img */
+        var hosts=cl.querySelectorAll("[data-richhost]");
+        for(var hi=0;hi<hosts.length;hi++){
+          var host=hosts[hi];
+          /* Rendre le texte visible en couleur unie (couleur de fin du dégradé) */
           host.style.backgroundImage="none";
           host.style.webkitBackgroundClip="unset";
           host.style.backgroundClip="unset";
           host.style.color=G.to;
           host.style.webkitTextFillColor=G.to;
-          var spansN=host.querySelectorAll("[data-seg='n']");
-          for(var si=0;si<spansN.length;si++){
-            var sp=spansN[si];
+          /* Colorier chaque span data-seg="n" avec la couleur interpolée
+             selon sa position dans la boîte du host */
+          var hostRect=host.getBoundingClientRect();
+          var spans=host.querySelectorAll("[data-seg='n']");
+          for(var si=0;si<spans.length;si++){
+            var sp=spans[si];
             var sr=sp.getBoundingClientRect();
-            var cx=(sr.left+sr.width/2-hostRect.left);
-            var cy=(sr.top+sr.height/2-hostRect.top);
+            var spanW2=hostRect.width||1, spanH2=hostRect.height||1;
+            var cx=(sr.left+sr.width/2-hostRect.left), cy=(sr.top+sr.height/2-hostRect.top);
             var t2=Math.max(0,Math.min(1,(cx+cy)/(spanW2+spanH2)));
             sp.style.color=lerpHex(G.from,G.to,t2);
             sp.style.webkitTextFillColor=lerpHex(G.from,G.to,t2);
           }
-        }
-        /* Spans surlignés en mode inversé (texte dégradé sur fond blanc) */
-        var spansH=host.querySelectorAll("[data-seg='h']");
-        for(var si2=0;si2<spansH.length;si2++){
-          var sph=spansH[si2];
-          if(sph.style.backgroundImage&&sph.style.backgroundImage!=="none"&&
-             sph.style.webkitBackgroundClip==="text"){
-            var srh=sph.getBoundingClientRect();
-            var cxh=(srh.left+srh.width/2-hostRect.left);
-            var cyh=(srh.top+srh.height/2-hostRect.top);
-            var th=Math.max(0,Math.min(1,(cxh+cyh)/(spanW2+spanH2)));
-            sph.style.backgroundImage="none";
-            sph.style.webkitBackgroundClip="unset";
-            sph.style.backgroundClip="unset";
-            sph.style.color=lerpHex(G.from,G.to,th);
-            sph.style.webkitTextFillColor=lerpHex(G.from,G.to,th);
-          }
-        }
-      }
-
-      /* 3. Rectangles de surlignage (data-hl) et soulignage (data-ul) :
-            remplacer backgroundImage:gradient par backgroundColor interpolé */
-      var hlDivs=cl.querySelectorAll("[data-hl],[data-ul]");
-      for(var di=0;di<hlDivs.length;di++){
-        var d=hlDivs[di];
-        var bg=d.style.backgroundImage;
-        if(bg&&bg.indexOf("gradient")>=0){
-          var dr=d.getBoundingClientRect();
-          var pcx=dr.left+dr.width/2;
-          var pcy=dr.top+dr.height/2;
-          /* Trouver le host parent pour la position relative */
-          var parentHost=d.parentNode;
-          while(parentHost&&parentHost.nodeType===1&&!parentHost.getAttribute("data-richhost"))
-            parentHost=parentHost.parentNode;
-          var t3=0.5;
-          if(parentHost&&parentHost.nodeType===1){
-            var pr=parentHost.getBoundingClientRect();
-            var pw=Math.max(1,pr.width), ph=Math.max(1,pr.height);
-            t3=Math.max(0,Math.min(1,((pcx-pr.left)+(pcy-pr.top))/(pw+ph)));
-          }
-          d.style.backgroundImage="none";
-          d.style.backgroundColor=lerpHex(G.from,G.to,t3);
         }
       }
 
@@ -1326,34 +1296,36 @@ function App(){
       e("div",{className:"hint",style:{marginBottom:10}},
         e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
 
-      /* Liste des blocs avec flèches de réordonnancement */
+      /* Liste des blocs avec drag & drop */
       e("div",{style:{display:"flex",flexDirection:"column",gap:6,marginBottom:10}},
         (st.blocs||[]).map(function(bloc,idx){
           var isActive=activeBloc===idx;
-          var total=(st.blocs||[]).length;
           var label=(bloc.text||"").replace(/\*\*|__/g,"").substring(0,32)||(idx===0?"Bloc 1":"Bloc "+(idx+1));
           return e("div",{key:bloc.id,
+            draggable:true,
+            onDragStart:function(ev){
+              /* Ne pas déclencher le drag depuis un input/select/textarea/button */
+              var t=ev.target;var tag=t.tagName.toLowerCase();
+              if(tag==="input"||tag==="textarea"||tag==="select"||tag==="button"){ev.preventDefault();return;}
+              dragBloc.current=idx;
+            },
+            onDragOver:function(ev){ev.preventDefault();},
+            onDrop:function(ev){ev.preventDefault();
+              if(dragBloc.current!==null&&dragBloc.current!==idx){
+                moveBloc(dragBloc.current,idx);
+                setActiveBloc(idx);
+                dragBloc.current=null;
+              }},
             style:{border:"1px solid "+(isActive?"#1a1a1a":"#e0e0e0"),
               borderRadius:8,overflow:"hidden",
-              background:isActive?"#f9f9f7":"#fff"}},
+              background:isActive?"#f9f9f7":"#fff",
+              cursor:"grab"}},
 
             /* En-tête du bloc */
-            e("div",{style:{display:"flex",alignItems:"center",gap:6,
+            e("div",{style:{display:"flex",alignItems:"center",gap:8,
                 padding:"8px 10px",cursor:"pointer"},
               onClick:function(){setActiveBloc(isActive?-1:idx);}},
-              /* Flèches ↑ ↓ */
-              e("div",{style:{display:"flex",flexDirection:"column",gap:1},
-                  onClick:function(ev){ev.stopPropagation();}},
-                e("button",{disabled:idx===0,
-                  onClick:function(ev){ev.stopPropagation();moveBloc(idx,idx-1);setActiveBloc(idx-1);},
-                  style:{border:"none",background:"none",color:idx===0?"#ddd":"#888",
-                    fontSize:10,cursor:idx===0?"default":"pointer",padding:"0 2px",
-                    lineHeight:1,fontFamily:"inherit",display:"block"}},"\u25B2"),
-                e("button",{disabled:idx===total-1,
-                  onClick:function(ev){ev.stopPropagation();moveBloc(idx,idx+1);setActiveBloc(idx+1);},
-                  style:{border:"none",background:"none",color:idx===total-1?"#ddd":"#888",
-                    fontSize:10,cursor:idx===total-1?"default":"pointer",padding:"0 2px",
-                    lineHeight:1,fontFamily:"inherit",display:"block"}},"\u25BC")),
+              e("span",{style:{fontSize:10,color:"#bbb",userSelect:"none",cursor:"grab"}},"\u2630"),
               e("span",{style:{flex:1,fontSize:12,fontWeight:700,color:"#333",
                 overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
                 (bloc.type==="texte"?"✦ ":"▪ ")+label),
