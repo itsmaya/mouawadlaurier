@@ -43,7 +43,11 @@ app.post('/export', async (req, res) => {
 
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
-    await new Promise(r => setTimeout(r, 600));
+    /* Attendre que React ait rendu l'état (signal data-ready + délai) */
+    try {
+      await page.waitForSelector('[data-export-card][data-ready]', { timeout: 5000 });
+    } catch(e) {}
+    await new Promise(r => setTimeout(r, 800));
 
     const el = await page.$(selector);
     if (!el) { await page.close(); return res.status(404).json({ error: 'selector not found' }); }

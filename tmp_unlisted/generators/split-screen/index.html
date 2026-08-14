@@ -13,7 +13,7 @@ function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No 
 <script>
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js"],function(){
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js","https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"],function(){boot();});});});
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){boot();});});});
 </script>
 <style>
 *{box-sizing:border-box;}
@@ -21,10 +21,10 @@ body{margin:0;font-family:'Nunito',sans-serif;background:#f0f0f0;}
 #root{min-height:100vh;}
 .app-layout{min-height:100vh;display:flex;flex-direction:column;gap:24px;padding:24px;padding-top:68px;padding-bottom:52px;}
 @media(min-width:1024px){.app-layout{flex-direction:row;}}
-.panel{width:100%;flex-shrink:0;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid #e5e5e5;padding:20px;height:fit-content;}
-@media(min-width:1024px){.panel{width:400px;}}
-.panel h2{font-size:14px;font-weight:700;color:#171717;margin:0 0 12px;}
+.panel{width:100%;flex-shrink:0;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid #e5e5e5;padding:16px;height:fit-content;}
+@media(min-width:1024px){.panel{width:380px;}}
 .section{margin-bottom:20px;}.section:last-child{margin-bottom:0;}
+.section>h2{cursor:default;margin:0 -16px 12px;padding:8px 16px;background:#f5f5f3;border-bottom:1px solid #e8e8e8;border-top:1px solid #e8e8e8;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#aaa;}
 label.field-label{display:block;font-size:12px;font-weight:600;color:#404040;margin-bottom:4px;}
 .hint{font-size:11px;color:#737373;}
 input[type=text],textarea{width:100%;font-size:14px;border:1px solid #d4d4d4;border-radius:6px;padding:8px;font-family:'Nunito',sans-serif;}
@@ -39,21 +39,7 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .export-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#171717;color:#fff;font-size:14px;font-weight:600;border-radius:8px;padding:13px;border:none;cursor:pointer;margin-top:20px;font-family:inherit;}
 .export-btn:hover{background:#303030;}.export-btn:disabled{opacity:.6;cursor:default;}
 .preview-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;position:sticky;top:68px;align-self:flex-start;}
-.page-header{position:fixed;top:0;left:0;right:0;height:52px;z-index:100;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:0 24px;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
-.page-header-logo{height:19px;display:block;}
-.page-header-sep{width:1px;height:18px;background:#e0e0e0;flex-shrink:0;}
-.page-header-title{font-size:11px;font-weight:800;color:#111;letter-spacing:.07em;text-transform:uppercase;}
-.page-header-sub{font-size:11px;font-weight:400;color:#aaa;}
-.page-header-nav{margin-left:auto;display:flex;gap:8px;}
-.page-header-nav a{font-size:11px;font-weight:700;color:#333;text-decoration:none;padding:5px 12px;border-radius:2px;border:1px solid #ddd;letter-spacing:.03em;text-transform:uppercase;}
-.page-header-nav a:hover{background:#f5f5f5;}
-.page-footer{position:fixed;bottom:0;right:0;z-index:100;display:flex;align-items:center;gap:8px;padding:7px 14px;background:#fff;border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:10px 0 0 0;}
-.page-footer-label{font-size:10px;font-weight:700;color:#bbb;letter-spacing:.06em;text-transform:uppercase;}
-.page-footer-logo{height:15px;opacity:.4;}
 @keyframes spin{to{transform:rotate(360deg);}}.spin{animation:spin 1s linear infinite;display:inline-flex;}
-.saves-list{max-height:190px;overflow-y:auto;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:10px;}
-.save-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #f0f0f0;}
-.save-row:last-child{border-bottom:none;}
 .seg{display:flex;gap:6px;}
 .seg button{flex:1;padding:7px;font-size:12px;font-weight:700;border-radius:6px;border:1px solid #d4d4d4;background:#fff;cursor:pointer;font-family:inherit;}
 .seg button.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
@@ -63,1176 +49,487 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 .grad-sw{flex:1;height:38px;border-radius:8px;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .15s;}
 .grad-sw:hover{transform:translateY(-1px);}
 .grad-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset,0 2px 8px rgba(0,0,0,.18);}
-.grad-sw.on::after{content:"";position:absolute;left:50%;bottom:6px;width:5px;height:5px;
-  margin-left:-2.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);}
-.grad-active{font-size:11px;font-weight:700;color:#404040;margin-top:8px;display:flex;align-items:center;gap:6px;}
-.grad-active i{width:12px;height:12px;border-radius:3px;display:inline-block;}
-.col-row{display:flex;gap:8px;flex-wrap:wrap;}
 .col-sw{width:38px;height:30px;border-radius:6px;cursor:pointer;border:2px solid transparent;}
 .col-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset;}
 .charte-warn{font-size:11px;line-height:1.45;color:#8a4b00;background:#fff6e6;border:1px solid #f0d29a;border-radius:6px;padding:8px 10px;margin-top:10px;}
-.charte-warn b{color:#6b3a00;}
 .toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;}
 .toggle input{accent-color:#1a1a1a;}
 .toggle.off{opacity:.45;cursor:not-allowed;}
+/* Onglets */
+.panel-tabs-wrap{margin:-16px -16px 0;background:#e8e8e6;flex-shrink:0;}
+.panel-tabs{display:flex;align-items:flex-end;padding:0 12px;gap:3px;overflow-x:auto;scrollbar-width:none;}
+.panel-tabs::-webkit-scrollbar{display:none;}
+.panel-tab{padding:9px 16px 8px;font-size:11px;font-weight:700;color:#888;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-radius:6px 6px 0 0;background:#d8d8d6;border:1px solid #ccc;border-bottom:none;flex-shrink:0;position:relative;top:1px;transition:background .1s,color .1s;}
+.panel-tab:hover{background:#e4e4e2;color:#555;}
+.panel-tab.on{background:#fff;color:#1a1a1a;border-color:#ddd;box-shadow:0 -2px 6px rgba(0,0,0,.08);z-index:2;}
+.panel-tabs-progress{height:3px;background:#e0e0de;}
+.panel-tabs-progress-bar{height:100%;background:#1a1a1a;border-radius:0 2px 0 0;transition:width .2s;}
+.panel-tab-content{display:none;padding-top:16px;}
+.panel-tab-content.on{display:block;}
+.tab-nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0 4px;gap:8px;}
+.tab-nav-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;border:1px solid #ddd;background:#fafafa;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;color:#333;}
+.tab-nav-btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+/* Languette droite */
+#sm-side-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:999;display:flex;flex-direction:column;gap:0;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-2px 0 16px rgba(0,0,0,.15);}
+.sm-tab-btn{width:48px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;cursor:pointer;padding:0;}
+.sm-tab-btn:hover{filter:brightness(.92);}
+.sm-tab-btn span{font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1;}
 </style>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
 <script src="../../assets/pictos.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
 </head>
 <body>
-
-
 <div id="root"></div>
 <script>
 function boot(){
-
-/* ═══ CHARTE TOTALENERGIES V8 ═════════════════════════════════════════════
-   Les 4 dégradés principaux, valeurs exactes de la charte (slide "Couleurs
-   principales"). Le dégradé est construit de la couleur du haut à la
-   couleur du bas du bloc.
-   ══════════════════════════════════════════════════════════════════════════ */
-var GRADS={
-  bleu:  {label:"Bleu",   from:"#0098E3", to:"#4632FF", lowCarbonOK:true },
-  cyan:  {label:"Cyan",   from:"#0197E6", to:"#00A55E", lowCarbonOK:true },
-  vert:  {label:"Vert",   from:"#3EA400", to:"#00884A", lowCarbonOK:true },
-  rouge: {label:"Rouge",  from:"#EB6A17", to:"#E70000", lowCarbonOK:false}
-};
-function gradCss(k,deg){var g=GRADS[k]||GRADS.bleu;
-  return "linear-gradient("+(deg===undefined?90:deg)+"deg,"+g.from+" 0%,"+g.to+" 100%)";}
-
-/* ═══ COULEURS TEXTE — charte "Textes", fond blanc uniquement ════════════
-   Autorisé : gris foncé, les 4 couleurs unies de fin de dégradé principal,
-              ou le dégradé lui-même appliqué en diagonal.
-   Interdit  : toutes les couleurs secondaires (turquoise, fluo green, etc.)
-   Si le paragraphe dépasse 5 lignes : préférer gris ou couleur unie (charte).
-   ══════════════════════════════════════════════════════════════════════════ */
-/* Couleur gris foncé autorisée sur fond blanc, indépendamment du dégradé actif */
-var COLOR_GREY="#374649";
-var TE_WHITE="#FFFFFF";
-
-/* ═══ LAYOUT ══════════════════════════════════════════════════════════════
-   Toutes les valeurs de la charte sont exprimées sur un canevas 1080 px.
-   La carte de preview fait 600 px de large : K = 600/1080 = 0.5556.
-   Chaque constante ci-dessous est donc la valeur charte × K, arrondie.
-   ══════════════════════════════════════════════════════════════════════════ */
-var CARD_W=600, K=600/1080;
-function px(v){return Math.round(v*K);}   /* charte px → card px */
-
-var FORMATS={
-  "1x1" :{label:"Carré 1:1",   outputW:1080,outputH:1080,cardH:600 },
-  "4x5" :{label:"Portrait 4:5",outputW:1080,outputH:1350,cardH:750 },
-  "9x16":{label:"Story 9:16",  outputW:1080,outputH:1920,cardH:1067}
-};
-
-/* Marie-louise : 50 px de charte → 28 px carte.
-   Avec marie-louise, le cartouche passe à 100 px de marge (28 + 28). */
-var ML_W=px(50);
-
-/* ════════════════════════════════════════════════════════════════════════════
-   TYPO & MISE EN PAGE — toutes les valeurs éditables sont ici.
-   Les valeurs sont exprimées en PT CHARTE (base 1080px).
-   La fonction px() les convertit en pixels de carte (600px de large).
-
-   CARTOUCHE LÉGENDE
-   ──────────────────────────────────────────────────────────────────────── */
-var T={
-  /* Cartouche : boîte icône */
-  BADGE_H_PT      : 70,   /* hauteur de la pilule texte (pt charte) */
-  BADGE_ICON_PT   : 70,   /* taille de la boîte icône carrée */
-  BADGE_ICON_RATIO: 0.68, /* taille de l'icône dans la boîte (0.68 = 68%) */
-  BADGE_GAP_PT    : 15,   /* espace entre boîte icône et pilule texte */
-  BADGE_RADIUS_PT : 22,   /* rayon des coins du cartouche */
-  BADGE_PADX_PT   : 25,   /* padding horizontal intérieur de la pilule */
-  BADGE_FONT_PT   : 30,   /* taille de la police du cartouche */
-
-  /* Pavé de texte */
-  PAVE_PAD_PT     : 30,   /* padding intérieur du pavé blanc */
-  PAVE_RADIUS_PT  : 22,   /* rayon des coins du pavé */
-
-  /* Flèche / point de carrousel */
-  ARROW_W_PT      : 90,   /* largeur bouton carrousel (90 px export) */
-  ARROW_H_PT      : 71,   /* hauteur bouton carrousel (71 px export) */
-  ARROW_RADIUS_PT : 11,   /* rayon des coins — exposé dans le panneau */
-  ARROW_GAP_PT    : 30,   /* espace entre pavé et flèche (50 en story) */
-  ARROW_GAP_STORY : 50,   /* espace entre pavé et flèche en story */
-
-  /* Texte du bloc (charte Split Screen : 40–60pt) */
-  TEXT_MIN_PT     : 40,   /* taille minimum autorisée par la charte */
-  TEXT_MAX_PT     : 60,   /* taille maximum autorisée par la charte */
-  TEXT_DEF_PT     : 48,   /* taille par défaut au lancement */
-  TEXT_LH         : 1.25, /* interligne (ratio × taille) */
-
-  /* Graisses — fontWeight */
-  FW_TEXT         : 500,  /* texte courant du pavé (SemiBold) */
-  FW_HIGHLIGHT    : 500,  /* mots surlignés **comme ça** (ExtraBold) */
-  FW_UNDERLINE    : 600,  /* mots soulignés __comme ça__ (SemiBold) */
-  FW_BADGE_MAIN   : 600,  /* titre cartouche ex. "LATEST NEWS" (ExtraBold) */
-  FW_BADGE_SUB    : 200,  /* précision cartouche ex. lieu (SemiBold) */
-
-  /* Surlignage */
-  HIGHLIGHT_PAD_X : 0.28, /* espace horizontal autour du bloc surligné (× fs) */
-  HIGHLIGHT_H     : 1.14, /* hauteur du rectangle de surlignage (× fs) */
-
-  /* Soulignage */
-  UNDERLINE_TH    : 0.17, /* épaisseur de la barre (× fs, min 3px) */
-  UNDERLINE_OFF   : 0.03, /* décalage sous la baseline (× fs) */
-};
-/* ════════════════════════════════════════════════════════════════════════════ */
-
-function getLayout(k,hasML){
-  var f=FORMATS[k]||FORMATS["1x1"];
-  var story=(k==="9x16");
-  var base = story ? px(80) : px(50);
-  var ml   = (!story && hasML) ? ML_W : 0;
-  var margin = base+ml;
-  return {
-    CARD_H:f.cardH, EXPORT_SCALE:f.outputW/CARD_W, STORY:story, ML:ml,
-    MARGIN: margin,
-    BADGE_TOP: story ? px(180) : margin,
-    RIGHT_MIN: (story ? px(160) : px(100)) + ml,
-    BOTTOM:    story ? px(180) : margin,
-    IMG_RADIUS: px(20),
-    BADGE_H:px(T.BADGE_H_PT), BADGE_ICON:px(T.BADGE_ICON_PT),
-    BADGE_GAP:px(T.BADGE_GAP_PT), BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
-    BADGE_PADX:px(T.BADGE_PADX_PT), BADGE_FONT:px(T.BADGE_FONT_PT),
-    ARROW_W:px(T.ARROW_W_PT), ARROW_H:px(T.ARROW_H_PT), ARROW_RADIUS:px(T.ARROW_RADIUS_PT),
-    TEXT_MIN:px(T.TEXT_MIN_PT), TEXT_MAX:px(T.TEXT_MAX_PT),
-    TEXT_DEF:px(T.TEXT_DEF_PT), TEXT_LH:T.TEXT_LH
-  };
-}
-
-/* ═══ PARSEUR ═════════════════════════════════════════════════════════════
-   **mot** = surlignage dégradé    __mot__ = soulignage dégradé
-   Identique au générateur Citation, pour que les deux outils partagent
-   la même syntaxe côté utilisateur.
-   ══════════════════════════════════════════════════════════════════════════ */
-function parseRich(t){
-  var out=[],re=/(\*\*[\s\S]+?\*\*|__[\s\S]+?__)/g,last=0,m;
-  while((m=re.exec(t))!==null){
-    if(m.index>last) out.push({t:"n",v:t.slice(last,m.index)});
-    out.push(m[0].slice(0,2)==="**"?{t:"h",v:m[0].slice(2,-2)}:{t:"u",v:m[0].slice(2,-2)});
-    last=re.lastIndex;
-  }
-  if(last<t.length) out.push({t:"n",v:t.slice(last)});
-  return out;
-}
 
 var e=React.createElement,useState=React.useState,useRef=React.useRef,
     useCallback=React.useCallback,useEffect=React.useEffect,
     useLayoutEffect=React.useLayoutEffect;
 
-/* Interpolation couleur hex — utilisée dans RichBody ET dans doExport */
-function lerpHex(c1,c2,t){
-  function hx(s){return parseInt(s.slice(1),16);}
-  var a=hx(c1),b=hx(c2);
-  var ar=(a>>16)&255,ag=(a>>8)&255,ab=a&255;
-  var br=(b>>16)&255,bg=(b>>8)&255,bb=b&255;
-  var r=Math.round(ar+(br-ar)*t);
-  var g=Math.round(ag+(bg-ag)*t);
-  var bl=Math.round(ab+(bb-ab)*t);
-  return "rgb("+r+","+g+","+bl+")";
-}
-
-/* ═══ CORPS DE TEXTE RICHE ════════════════════════════════════════════════
-   Les surlignages / soulignages sont mesurés ligne par ligne puis dessinés
-   comme des rectangles absolus. html2canvas ne sait pas gérer
-   box-decoration-break sur du texte inline : sans ça l'export est faux.
-
-   Exception LATEST NEWS de la charte : le texte courant est en Regular (400)
-   et les mots surlignés en ExtraBold (800).
-   ══════════════════════════════════════════════════════════════════════════ */
-function RichBody(props){
-  var fs=props.fs, lh=props.lh, grad=props.grad;
-  var hostRef=useRef(null);
-  var s0=useState({h:[],u:[],n:[]}); var M=s0[0],setM=s0[1];
-  var s1=useState(0); var setTick=s1[1];
-
-  useEffect(function(){
-    if(document.fonts&&document.fonts.ready){
-      document.fonts.ready.then(function(){ setTick(function(t){return t+1;}); });
-    }
-  },[]);
-
-  useLayoutEffect(function(){
-    var host=hostRef.current; if(!host) return;
-    var base=host.getBoundingClientRect();
-    var SC = host.offsetWidth ? (base.width/host.offsetWidth) : 1;
-    if(!SC || !isFinite(SC) || SC<=0) SC=1;
-    function N(v){ return v/SC; }
-
-    var res={h:[],u:[],n:[]};
-    var segs=host.querySelectorAll("[data-seg]");
-    for(var i=0;i<segs.length;i++){
-      var kind=segs[i].getAttribute("data-seg");
-      var rs=segs[i].getClientRects();
-      for(var j=0;j<rs.length;j++){
-        var r=rs[j]; if(r.width<0.5) continue;
-        var o={x:N(r.left-base.left),y:N(r.top-base.top),
-               w:N(r.width),h:N(r.height),b:N(r.bottom-base.top)};
-        if(kind==="h") res.h.push(o);
-        else if(kind==="u") res.u.push(o);
-        else res.n.push(o);
-      }
-    }
-    if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
-  });
-
-  /* Parseur → tableau de tokens, avec support saut de ligne \n → br */
-  function renderParts(text,useGrad,color){
-    /* On découpe d'abord sur \n pour gérer les sauts de ligne */
-    var lines=text.split("\n");
-    var out=[];
-    lines.forEach(function(line,li){
-      if(li>0) out.push(e("br",{key:"br"+li}));
-      var parts=parseRich(line);
-      parts.forEach(function(p,pi){
-        var key=li+"-"+pi;
-        if(p.t==="h"){
-          /* Espace insécable avant/après le bloc surligné */
-          out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-          out.push(e("span",{key:key,"data-seg":"h",
-            style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                   WebkitTextFillColor:TE_WHITE}},p.v));
-          out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-        } else if(p.t==="u"){
-          out.push(e("span",{key:key,"data-seg":"u",
-            style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_UNDERLINE,
-                   color:useGrad?"transparent":color,
-                   WebkitTextFillColor:useGrad?"transparent":undefined}}
-            ,p.v));
-        } else {
-          out.push(useGrad
-            ? e("span",{key:key,"data-seg":"n",
-                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
-                       color:"transparent",WebkitTextFillColor:"transparent"}},p.v)
-            : e("span",{key:key,
-                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},p.v));
-        }
-      });
-    });
-    return out;
-  }
-
-  var useGrad=(props.textMode==="grad");
-
-  /* Surlignage */
-  var H_PAD_X=fs*T.HIGHLIGHT_PAD_X;
-  var H_H=fs*T.HIGHLIGHT_H;
-  /* Soulignage */
-  var U_TH=Math.max(3,fs*T.UNDERLINE_TH);
-  var U_OFF=fs*T.UNDERLINE_OFF;
-
-  /* Dégradé diagonal sur texte normal */
-  var gradFrom=props.gradFrom||"#0098E3";
-  var gradTo=props.gradTo||"#4632FF";
-  var nMinX=Infinity,nMinY=Infinity,nMaxX=-Infinity,nMaxY=-Infinity;
-  if(useGrad&&M.n.length){
-    M.n.forEach(function(r){
-      nMinX=Math.min(nMinX,r.x); nMinY=Math.min(nMinY,r.y);
-      nMaxX=Math.max(nMaxX,r.x+r.w); nMaxY=Math.max(nMaxY,r.y+r.h);
-    });
-  }
-
-  return e("div",{style:{position:"relative"}},
-
-    M.h.map(function(r,i){
-      var cy=r.y+r.h/2;
-      return e("div",{key:"h"+i,style:{position:"absolute",
-        left:r.x-H_PAD_X, top:cy-H_H/2, width:r.w+H_PAD_X*2, height:H_H,
-        backgroundImage:grad, borderRadius:2, zIndex:0}});
-    }),
-
-    M.u.map(function(r,i){
-      return e("div",{key:"u"+i,style:{position:"absolute",
-        left:r.x, top:r.b-U_OFF, width:r.w, height:U_TH,
-        backgroundImage:grad, borderRadius:U_TH/2, zIndex:0}});
-    }),
-
-    useGrad&&M.n.length?(function(){
-      var spanW=nMaxX-nMinX, spanH=nMaxY-nMinY, span=spanW+spanH||1;
-      return M.n.map(function(r,i){
-        var t=((r.x+r.w/2-nMinX)+(r.y+r.h/2-nMinY))/span;
-        t=Math.max(0,Math.min(1,t));
-        /* Rectangles uniquement pour l'export html2canvas (data-grad-rect).
-           En preview ils sont rendus invisibles : le texte porte la couleur
-           via background-clip:text ci-dessous. */
-        return e("div",{key:"ng"+i,"data-grad-rect":"1",style:{position:"absolute",
-          left:r.x-1,top:r.y,width:r.w+2,height:r.h,
-          background:lerpHex(gradFrom,gradTo,t),zIndex:1,
-          opacity:0,pointerEvents:"none"}});
-      });
-    })():null,
-
-    e("div",{ref:hostRef,"data-richhost":"1",style:{position:"relative",zIndex:2,
-        fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
-        /* Mode dégradé : background-clip:text en preview.
-           L'export utilise les rects data-grad-rect rendus opaques à la volée. */
-        background:useGrad?undefined:undefined,
-        backgroundImage:useGrad?grad:undefined,
-        WebkitBackgroundClip:useGrad?"text":undefined,
-        backgroundClip:useGrad?"text":undefined,
-        color:useGrad?"transparent":props.color,
-        WebkitTextFillColor:useGrad?"transparent":undefined,
-        fontSize:fs,lineHeight:lh,textAlign:props.align}},
-      props.live?e("span",{style:{display:"inline-block",
-        width:fs*0.9,height:fs*0.9,borderRadius:"50%",
-        background:"#E70000",marginRight:fs*0.28,
-        verticalAlign:"middle",marginBottom:fs*0.08,flexShrink:0}}):null,
-      renderParts(props.text,useGrad,props.color))
-  );
-}
-
-/* ─── Flèche de navigation (carrousel) ─────────────────────────────────── */
-var AID=0;
-function NavMark(p){
-  /* Bouton rectangulaire 90×71 px export */
-  var bw=p.w, bh=p.h, br=p.radius;
-  if(p.kind==="dot"){
-    /* Rond 23×23 px export centré dans le même rectangle */
-    var ds=bh*0.32; /* 23/71 = 32% de la hauteur du bouton */
-    return e("div",{style:{width:bw,height:bh,borderRadius:br,
-        backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-      e("div",{style:{width:ds,height:ds,borderRadius:"50%",
-        background:TE_WHITE}}));
-  }
-  /* Flèche PNG 53×30 px export = 59% de la largeur du bouton */
-  return e("div",{style:{width:bw,height:bh,borderRadius:br,
-      backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-    e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",alt:"",
-      style:{width:"59%",height:"auto",display:"block",objectFit:"contain"}}));
-}
-
-/* Pictos — délégués à PictoGallery (assets/pictos.js) */
-
-/* ─── FileDrop ─────────────────────────────────────────────────────────── */
-function FileDrop(p){
-  var r=useRef(null);
-  function take(f){if(!f||!f.type||f.type.indexOf("image/")!==0)return;var rd=new FileReader();rd.onload=function(ev){p.onChange(ev.target.result);};rd.readAsDataURL(f);}
-  return e("div",{className:"file-drop"+(p.small?" small":""),
-    onClick:function(){if(r.current)r.current.click();},
-    onDragOver:function(ev){ev.preventDefault();},
-    onDrop:function(ev){ev.preventDefault();take(ev.dataTransfer.files[0]);}},
-    p.value
-      ?e(React.Fragment,null,
-          e("img",{src:p.value,alt:""}),
-          e("button",{className:"remove-btn",onClick:function(ev){ev.stopPropagation();p.onChange(null);}},
-            e("svg",{viewBox:"0 0 16 16",width:14,height:14,fill:"none",stroke:"#666",strokeWidth:2},
-              e("line",{x1:4,y1:4,x2:12,y2:12}),e("line",{x1:12,y1:4,x2:4,y2:12}))))
-      :e("div",{className:"file-drop-empty"},
-          e("svg",{viewBox:"0 0 24 24",width:20,height:20,fill:"none",stroke:"#a3a3a3",strokeWidth:1.5},
-            e("rect",{x:3,y:3,width:18,height:18,rx:3}),
-            e("circle",{cx:8.5,cy:8.5,r:1.5}),e("path",{d:"M21 15l-5-5L5 21"})),
-          e("span",null,p.placeholder||"Cliquer ou déposer")),
-    e("input",{ref:r,type:"file",accept:"image/*",style:{display:"none"},onChange:function(ev){take(ev.target.files[0]);}}));
-}
-function DownloadIcon(){return e("svg",{viewBox:"0 0 24 24",width:18,height:18,fill:"none",stroke:"currentColor",strokeWidth:2},e("path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"}),e("polyline",{points:"7 10 12 15 17 10"}),e("line",{x1:12,y1:15,x2:12,y2:3}));}
-
-/* ═══ IndexedDB ════════════════════════════════════════════════════════════
-   DB_VERSION passe à 5 pour créer le store splitscreen_saves, propre à ce
-   générateur (indépendant de latestnews_saves).
-   ⚠ La même valeur doit être reportée dans les autres générateurs,
-   sinon leurs sauvegardes cassent silencieusement.
-   ══════════════════════════════════════════════════════════════════════════ */
-var DB_NAME="wie_db",DB_VERSION=5,STORE="splitscreen_saves";
-function openDB(ok,ko){var q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=function(ev){var db=ev.target.result;["saves","citation_saves","latestnews_saves","carrousel_saves","splitscreen_saves"].forEach(function(s){if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"name"});});};q.onsuccess=function(ev){ok(ev.target.result);};q.onerror=function(){ko&&ko();};}
-function dbAll(cb){openDB(function(db){var q=db.transaction(STORE,"readonly").objectStore(STORE).getAll();q.onsuccess=function(ev){var a=ev.target.result||[];a.sort(function(x,y){return y.date>x.date?1:-1;});cb(a);};q.onerror=function(){cb([]);};},function(){cb([]);});}
-function dbPut(en,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE).put(en);t.oncomplete=cb||function(){};});}
-function dbDel(n,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE)["delete"](n);t.oncomplete=cb||function(){};});}
-function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite"),s=t.objectStore(STORE);a.forEach(function(x){s.put(x);});t.oncomplete=cb||function(){};});}
-
-/* ═══ FOND PAR DÉFAUT ══════════════════════════════════════════════════════
-   Un seul fichier, partagé par tous les formats : templates/split-screen/template.png
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ═══ FOND PAR DÉFAUT ══════════════════════════════════════════════════════ */
 var BG_DIR="../../templates/split-screen/";
 var BG_DEFAULT_FILE="template.png";
 function bgCandidates(k){
-  return [BG_DIR+BG_DEFAULT_FILE];
+  var names=["TEMPLATE_SS_"+k,"template_"+k,"template"];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[];
+  names.forEach(function(n){exts.forEach(function(x){out.push(BG_DIR+n+x);});});
+  return out;
 }
-function tryLoad(cands,cb){
-  var i=0;
-  (function next(){
-    if(i>=cands.length) return cb(null);
-    var u=cands[i++], im=new Image();
-    im.onload=function(){cb(u);};
-    im.onerror=next;
-    im.src=u;
-  })();
-}
+
 
 /* ═══ STATE ════════════════════════════════════════════════════════════════ */
 var DEFAULT={
   format:"1x1", grad:"rouge", lowCarbon:false,
   hasML:false, mlStyle:"grad",
-  /* Disposition : "bottom" | "top" | "left" | "right" */
   layout:"left",
-  /* imgRatio : proportion de la carte occupée par l'image
-     (hauteur si top/bottom, largeur si left/right) */
   imgRatio:0.61,
   badgeIconKey:"Electricity",
   badgeIconCustom:null,
   badgeMain:"MOBILITÉ ÉLECTRIQUE", badgeSub:"",
-  navMark:"arrow",              /* "arrow" | "dot" | "none" — repère de carrousel */
-  textMode:"grad",              /* "uni" | "grad" — charte autorise les deux sur fond blanc */
+  navMark:"arrow",
+  textMode:"grad",
   textColor:"#E70000",
-  /* Texte libre : \n = saut de ligne, **mot** = surlignage, __mot__ = soulignage */
   text:"TotalEnergies déploie **20 000 points de recharge**\nsur les autoroutes européennes d'ici 2028.",
-  bgImg:null, bgCustom:false, bgIsDefault:false, bgBlur:0, bgDark:0,
-  bgX_1x1:50, bgY_1x1:50, bgZoom_1x1:100,
-  bgX_4x5:50, bgY_4x5:50, bgZoom_4x5:100,
-  bgX_9x16:50, bgY_9x16:50, bgZoom_9x16:100,
-  /* fs_ : taille police par format (px à l'échelle preview) */
-  fs_1x1:22, fs_4x5:0, fs_9x16:0
+  /* image : voir BG_DEFAULT_STATE dans bg-controls.js */
+  fs_1x1:0, fs_4x5:0, fs_9x16:0
 };
-
-/* ═══ DRAG IMAGE ═══════════════════════════════════════════════════════════
-   Affiche l'image de fond dans un conteneur overflow:hidden.
-   L'image est positionnée par object-position (%) controllée par drag.
-   Le zoom est un scale supplémentaire (100% = cover normal).
-   Le drag reçoit l'offset en px sur la carte et le convertit en %.
-   ══════════════════════════════════════════════════════════════════════════ */
-function DragImage(props){
-  var dragRef=useRef(null);
-  var dragging=useRef(false);
-  var last=useRef({x:0,y:0});
-  var natRef=useRef({w:0,h:0});
-
-  function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
-
-  function onDown(ev){
-    if(!props.src) return;
-    ev.preventDefault();
-    dragging.current=true;
-    var pt=ev.touches?ev.touches[0]:ev;
-    last.current={x:pt.clientX,y:pt.clientY};
-  }
-  function onMove(ev){
-    if(!dragging.current) return;
-    ev.preventDefault();
-    var pt=ev.touches?ev.touches[0]:ev;
-    var dx=pt.clientX-last.current.x;
-    var dy=pt.clientY-last.current.y;
-    last.current={x:pt.clientX,y:pt.clientY};
-    /* Dimensions de l'image après cover + zoom, en px preview */
-    var cw=props.w, ch=props.h;
-    var nat=natRef.current;
-    var zf=(props.zoom||100)/100;
-    var iw,ih;
-    if(nat.w>0&&nat.h>0){
-      var ir=nat.w/nat.h, cr=cw/ch;
-      if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
-    } else {
-      iw=cw; ih=ch;
-    }
-    iw*=zf; ih*=zf;
-    /* Plage de déplacement réelle en px */
-    var rangeX=Math.max(0,iw-cw);
-    var rangeY=Math.max(0,ih-ch);
-    /* Convertir drag px → delta % */
-    var dPctX=rangeX>0 ? dx/rangeX*100 : 0;
-    var dPctY=rangeY>0 ? dy/rangeY*100 : 0;
-    var pctX=clamp(props.x - dPctX, 0, 100);
-    var pctY=clamp(props.y - dPctY, 0, 100);
-    props.onChange(pctX,pctY);
-  }
-  function onUp(){ dragging.current=false; }
-
-  useEffect(function(){
-    /* Charger les dimensions naturelles de l'image pour calcul du drag */
-    if(props.src){
-      var im=new Image();
-      im.onload=function(){natRef.current={w:im.naturalWidth,h:im.naturalHeight};};
-      im.src=props.src;
-    } else {
-      natRef.current={w:0,h:0};
-    }
-  },[props.src]);
-
-  useEffect(function(){
-    window.addEventListener("mousemove",onMove);
-    window.addEventListener("mouseup",onUp);
-    window.addEventListener("touchmove",onMove,{passive:false});
-    window.addEventListener("touchend",onUp);
-    return function(){
-      window.removeEventListener("mousemove",onMove);
-      window.removeEventListener("mouseup",onUp);
-      window.removeEventListener("touchmove",onMove);
-      window.removeEventListener("touchend",onUp);
-    };
-  });
-
-  var zoom=props.zoom||100;
-  var zf=zoom/100;
-  var cw=props.w, ch=props.h;
-  var nat=natRef.current;
-  var iw,ih;
-  if(nat.w>0&&nat.h>0){
-    var ir=nat.w/nat.h, cr=cw/ch;
-    if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
-  } else {
-    iw=cw; ih=ch;
-  }
-  iw*=zf; ih*=zf;
-  /* Position left/top en px depuis les % x/y */
-  var rangeX=Math.max(0,iw-cw);
-  var rangeY=Math.max(0,ih-ch);
-  var left=(cw-iw)/2 + rangeX*(1-props.x/100);
-  var top =(ch-ih)/2 + rangeY*(1-props.y/100);
-
-  return e("div",{ref:dragRef,
-    style:{position:"absolute",inset:0,overflow:"hidden",
-      cursor:props.src?"grab":"default"},
-    onMouseDown:onDown,
-    onTouchStart:onDown},
-    props.src?e("img",{src:props.src,alt:"",
-      style:{position:"absolute",
-        width:iw+"px", height:ih+"px",
-        left:left+"px", top:top+"px",
-        filter:props.blur>0?"blur("+Math.round(props.blur)+"px)":"none",
-        userSelect:"none",pointerEvents:"none"}}):null
-  );
-}
+Object.assign(DEFAULT, BG_DEFAULT_STATE);
 
 /* ═══ APP ══════════════════════════════════════════════════════════════════ */
 function App(){
-  var a0=useState(DEFAULT),st=a0[0],setSt=a0[1];
-  var a1=useState([]),saves=a1[0],setSaves=a1[1];
-  var a2=useState(""),sname=a2[0],setSname=a2[1];
+  var a0=useState(DEFAULT),st=a0[0],_setSt=a0[1];
+
+  /* Ctrl+Z */
+  var historyRef=useRef([]), historyIdx=useRef(-1);
+  function setSt(newSt){
+    _setSt(function(prev){
+      var next=typeof newSt==="function"?newSt(prev):newSt;
+      if(JSON.stringify(next)===JSON.stringify(prev)) return prev;
+      historyRef.current=historyRef.current.slice(0,historyIdx.current+1);
+      historyRef.current.push(prev);
+      if(historyRef.current.length>30) historyRef.current.shift();
+      historyIdx.current=historyRef.current.length-1;
+      return next;
+    });
+  }
+  function undo(){
+    if(historyIdx.current<0) return;
+    var prev=historyRef.current[historyIdx.current];
+    historyIdx.current--;
+    _setSt(prev);
+  }
+  useEffect(function(){
+    function onKey(ev){if((ev.ctrlKey||ev.metaKey)&&ev.key==="z"&&!ev.shiftKey){ev.preventDefault();undo();}}
+    window.addEventListener("keydown",onKey);
+    return function(){window.removeEventListener("keydown",onKey);};
+  },[]);
+
   var a3=useState(false),busy=a3[0],setBusy=a3[1];
-  /* Dimensions naturelles de l'image de fond pour calculer le zoom max */
   var a4=useState({w:0,h:0}); var bgNat=a4[0],setBgNat=a4[1];
-  var cardRef=useRef(null),impRef=useRef(null),paveRef=useRef(null);
+  var cardRef=useRef(null),paveRef=useRef(null);
   var phState=useState(120); var paveH=phState[0],setPaveH=phState[1];
   var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
+
+  /* Sauvegarde */
+  var saveStore=useRef(null);
+  if(!saveStore.current) saveStore.current=SaveManager.createStore("splitscreen",{legacy:"splitscreen_saves"});
+  var smId=useState(null); var currentId=smId[0],setCurrentId=smId[1];
+  var smName=useState(""); var currentName=smName[0],setCurrentName=smName[1];
+  var smHash=useRef(null); var smFolder=useRef("");
+  var statusRootRef=useRef(null);
+  var smDrawer=useState(false); var drawerOpen=smDrawer[0],setDrawerOpen=smDrawer[1];
+  var dirty=currentId!==null&&smHash.current!==null&&SaveManager.hashState(st)!==smHash.current;
+
+  /* Onglets */
+  var tabState=useState("image"); var activeTab=tabState[0],setActiveTab=tabState[1];
+  var TABS=[{id:"image",label:"Image"},{id:"couleurs",label:"Couleurs"},{id:"cartouche",label:"Cartouche"},{id:"texte",label:"Texte"}];
+
   function set(k,v){setSt(function(p){
-    var c=Object.assign({},p);
-    c[k]=v;
-    /* Synchronisation couleur texte ↔ dégradé actif ────────────────────────
-       Règle : en mode "uni", la couleur du texte doit appartenir à la gamme
-       du dégradé actif ou être le gris foncé.
-       → quand on change de dégradé, on met à jour textColor si elle ne
-         correspond plus au nouveau dégradé (sauf si c'est le gris).
-       → quand on passe en mode "grad", textColor n'est plus utilisé. */
-    if(k==="grad" && p.textMode==="uni" && p.textColor!==COLOR_GREY){
-      /* Passer à la couleur de fin du nouveau dégradé */
+    var c=Object.assign({},p); c[k]=v;
+    if(k==="grad"&&p.textMode==="uni"&&p.textColor!==COLOR_GREY)
       c.textColor=GRADS[v]?GRADS[v].to:p.textColor;
-    }
     return c;
   });}
 
-  /* Changement de format : la marie-louise n'existe pas en story.
-     Le fond par défaut est rechargé par la sonde ci-dessous. */
-  function setFormat(k){
-    setSt(function(p){
-      var c=Object.assign({},p);
-      c.format=k;
-      if(k==="9x16") c.hasML=false;   /* charte : jamais de marie-louise en story */
-      return c;
-    });
-  }
+  function setFormat(k){setSt(function(p){var c=Object.assign({},p);c.format=k;if(k==="9x16")c.hasML=false;return c;});}
 
-  /* Sonde du fond par défaut : au démarrage, puis à chaque changement de
-     format, tant que l'utilisateur n'a pas déposé sa propre image. */
+  /* Fond par défaut */
   useEffect(function(){
     if(st.bgCustom) return;
     var k=st.format;
     setBgStatus({s:"loading",p:null});
-    tryLoad(bgCandidates(k),function(u){
-      if(!u){
-        setSt(function(p){
-          if(p.bgCustom||p.format!==k) return p;
-          var c=Object.assign({},p); c.bgImg=null; c.bgIsDefault=false; return c;
-        });
+    tryLoadDefault(bgCandidates(k),
+      function(dataUrl,srcUrl){
+        setSt(function(p){if(p.bgCustom||p.format!==k)return p;var c=Object.assign({},p);c.bgImg=dataUrl;c.bgIsDefault=true;return c;});
+        setBgStatus({s:"ok",p:srcUrl});
+      },
+      function(){
+        setSt(function(p){if(p.bgCustom||p.format!==k)return p;var c=Object.assign({},p);c.bgImg=null;c.bgIsDefault=false;return c;});
         setBgStatus({s:"missing",p:null});
-        return;
-      }
-      /* Charger en base64 pour affichage dans FileDrop, comme un vrai dépôt */
-      var xhr=new XMLHttpRequest();
-      xhr.open("GET",u,true);
-      xhr.responseType="blob";
-      xhr.onload=function(){
-        var rd=new FileReader();
-        rd.onload=function(ev){
-          var dataUrl=ev.target.result;
-          setSt(function(p){
-            if(p.bgCustom||p.format!==k) return p;
-            var c=Object.assign({},p);
-            c.bgImg=dataUrl; c.bgIsDefault=true; return c;
-          });
-          setBgStatus({s:"ok",p:u});
-        };
-        rd.readAsDataURL(xhr.response);
-      };
-      xhr.onerror=function(){
-        /* Fallback : URL directe si XHR bloqué (CORS, GitHub Pages) */
-        setSt(function(p){
-          if(p.bgCustom||p.format!==k) return p;
-          var c=Object.assign({},p); c.bgImg=u; c.bgIsDefault=true; return c;
-        });
-        setBgStatus({s:"ok",p:u});
-      };
-      xhr.send();
-    });
+      });
   },[st.format,st.bgCustom]);
 
+  /* PictoGallery */
+  useEffect(function(){
+    window.PictoGallery.load(function(){
+      var keys=window.PictoGallery.getKeys();
+      setSt(function(p){var c=Object.assign({},p);if(keys.indexOf(p.badgeIconKey)<0)c.badgeIconKey=keys[0];c._pgLoaded=true;return c;});
+      var container=document.getElementById("picto-gallery-container");
+      if(container&&!container._pg){
+        container._pg=window.PictoGallery.init(container,{grad:gradCss(st.grad,90),selected:st.badgeIconKey,custom:st.badgeIconCustom,
+          onChange:function(key){setSt(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
+          onCustom:function(d){setSt(function(p){var c=Object.assign({},p);c.badgeIconCustom=d;return c;});}});
+      }
+    });
+  },[]);
+  useEffect(function(){var ct=document.getElementById("picto-gallery-container");if(ct&&ct._pg)ct._pg.setGrad(gradCss(st.grad,90));},[st.grad]);
+
+  /* Dimensions naturelles image */
+  useEffect(function(){
+    if(!st.bgImg){setBgNat({w:0,h:0});return;}
+    var im=new Image();im.onload=function(){setBgNat({w:im.naturalWidth,h:im.naturalHeight});};im.onerror=function(){setBgNat({w:0,h:0});};im.src=st.bgImg;
+  },[st.bgImg]);
+
+  useLayoutEffect(function(){
+    if(!paveRef.current) return;
+    var h=Math.round(paveRef.current.offsetHeight||0);
+    if(h>0&&h!==paveH) setPaveH(h);
+  });
+
+  /* StatusBar */
+  useEffect(function(){
+    var slot=document.getElementById("sm-status-slot");
+    if(!slot||!SaveManager.StatusBar) return;
+    if(!statusRootRef.current) statusRootRef.current=ReactDOM.createRoot(slot);
+    statusRootRef.current.render(e(SaveManager.StatusBar,{
+      currentId:currentId,currentName:currentName,dirty:dirty,
+      onSave:function(){
+        var name=currentName||("Version "+new Date().toLocaleString("fr-FR"));
+        saveStore.current.save({id:currentId||undefined,name:name,folder:"",state:st},function(rec){
+          if(!rec)return;setCurrentId(rec.id);setCurrentName(rec.name);smHash.current=SaveManager.hashState(st);
+        });
+      }
+    }));
+    window.smDrawerToggle=function(){setDrawerOpen(function(o){return !o;});};
+    window.smDownloadTrigger=function(){doExport();};
+    if(currentId) localStorage.setItem("sm_last_id_splitscreen",currentId);
+  },[currentId,currentName,dirty]);
+
+  /* Dernier projet */
+  useEffect(function(){
+    var hash=window.location.hash;
+    if(hash&&hash.indexOf("#exportkey=")===0){
+      try{var key=hash.slice(12),raw=localStorage.getItem(key);if(raw){var d=JSON.parse(raw);setSt(Object.assign({},DEFAULT,d));localStorage.removeItem(key);return;}}catch(e){}
+    }
+    var lastId=localStorage.getItem("sm_last_id_splitscreen");
+    if(!lastId)return;
+    saveStore.current.get(lastId,function(rec){
+      if(!rec||!rec.state)return;
+      setSt(Object.assign({},DEFAULT,rec.state));
+      setCurrentId(rec.id);setCurrentName(rec.name);
+      smFolder.current=rec.folder||"";
+      smHash.current=SaveManager.hashState(Object.assign({},DEFAULT,rec.state));
+    });
+  },[]);
+
   var G=GRADS[st.grad]||GRADS.bleu;
-  var GRAD_H=gradCss(st.grad,90);    /* horizontal : cartouches et surlignages */
-  var GRAD_V=gradCss(st.grad,180);   /* vertical   : fonds de bloc (charte) */
-
-  var L=getLayout(st.format,st.hasML);
+  var GRAD_H=gradCss(st.grad,90);
+  var GRAD_V=gradCss(st.grad,180);
+  var L=getLayout(st.format,{hasML:st.hasML});
   var CARD_H=L.CARD_H, EX=L.EXPORT_SCALE;
+  var _f=st.format;
+  var fs=st["fs_"+_f]||L.TEXT_DEF;
+  fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
 
-  /* ── Rectangles Split Screen ─────────────────────────────────────────── */
-  /* Selon layout et imgRatio, calcule la position de l'image et du texte.
-     Le cartouche est en position fixe (comme Latest News, coin haut-gauche
-     de la carte) : il est calculé séparément plus bas, avec un léger
-     décalage quand la photo touche ce coin. Ici on réserve juste la place
-     du cartouche dans la zone de texte quand celle-ci commence en haut. */
+  /* Disposition Split Screen */
   function computeRects(L2,CH,layout,imgRatio){
-    var m=L2.MARGIN, bt=L2.BOTTOM, rt=L2.RIGHT_MIN;
-    var left=m, top=m, right=CARD_W-m, bottom=CH-bt;
-    var cw=right-left, ch=bottom-top;
-    var gap=Math.round(0.04*CH);        /* espace image ↔ texte */
-    var badgeClear=L2.BADGE_H+gap;      /* place réservée au cartouche dans la zone de texte */
+    var m=L2.MARGIN,bt=L2.BOTTOM,rt=L2.RIGHT_MIN;
+    var left=m,top=m,right=CARD_W-m,bottom=CH-bt;
+    var cw=right-left,ch=bottom-top;
+    var gap=Math.round(0.04*CH);
+    var badgeClear=L2.BADGE_H+gap;
     var img,txt;
     if(layout==="bottom"){
-      var ih=Math.round(ch*imgRatio);
-      var imgTop=bottom-ih;
-      img={x:left,y:imgTop,w:cw,h:ih};
-      /* cartouche en haut du bloc texte : le texte démarre après lui */
-      txt={x:left,y:top+badgeClear,w:cw,h:imgTop-gap-(top+badgeClear)};
+      var ih=Math.round(ch*imgRatio);var imgTop=bottom-ih;
+      img={x:left,y:imgTop,w:cw,h:ih};txt={x:left,y:top+badgeClear,w:cw,h:imgTop-gap-(top+badgeClear)};
     } else if(layout==="top"){
-      var ih2=Math.round(ch*imgRatio);
-      img={x:left,y:top,w:cw,h:ih2};
-      /* cartouche posé sur la photo : le texte n'a pas besoin de lui laisser de place */
-      var txtTop=top+ih2+gap;
-      txt={x:left,y:txtTop,w:cw,h:bottom-txtTop};
+      var ih2=Math.round(ch*imgRatio);img={x:left,y:top,w:cw,h:ih2};
+      var txtTop=top+ih2+gap;txt={x:left,y:txtTop,w:cw,h:bottom-txtTop};
     } else if(layout==="left"){
-      var iw=Math.round(cw*imgRatio);
-      img={x:left,y:top,w:iw,h:ch};
-      /* cartouche posé sur la photo : la colonne de texte démarre en haut */
-      var txtLeft=left+iw+gap;
-      txt={x:txtLeft,y:top,w:CARD_W-m-rt-iw-gap,h:ch};
-    } else { /* right */
-      var iw2=Math.round(cw*imgRatio);
-      img={x:right-iw2,y:top,w:iw2,h:ch};
-      /* cartouche en haut de la colonne de texte : le texte démarre après lui */
+      var iw=Math.round(cw*imgRatio);img={x:left,y:top,w:iw,h:ch};
+      var txtLeft=left+iw+gap;txt={x:txtLeft,y:top,w:CARD_W-m-rt-iw-gap,h:ch};
+    } else {
+      var iw2=Math.round(cw*imgRatio);img={x:right-iw2,y:top,w:iw2,h:ch};
       txt={x:left,y:top+badgeClear,w:right-iw2-gap-left,h:ch-badgeClear};
     }
     return {img:img,txt:txt};
   }
   var R=computeRects(L,CARD_H,st.layout,st.imgRatio||0.55);
 
-  /* ── Taille du texte ────────────────────────────────────────────────── */
-  var _f=st.format;
-  var fs=st["fs_"+_f]||L.TEXT_DEF;
-  fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
-  var lh=fs*L.TEXT_LH;
-
-  useEffect(function(){
-    dbAll(function(a){
-      setSaves(a);
-      /* Premier lancement : aucune sauvegarde → créer "Défaut" automatiquement */
-      if(a.length===0){
-        var defEntry={name:"\u2b50 D\u00e9faut",date:new Date().toISOString(),state:DEFAULT};
-        dbPut(defEntry,function(){dbAll(function(b){setSaves(b);});});
-      }
-    });
-  },[]);
-
-  useEffect(function(){
-    /* PictoGallery charge le manifest et sonde les fichiers.
-       On récupère les clés pour initialiser badgeIconKey si besoin. */
-    window.PictoGallery.load(function(){
-      var keys=window.PictoGallery.getKeys();
-      setSt(function(p){
-        var c=Object.assign({},p);
-        if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=keys[0];
-        c._pgLoaded=true; return c;
-      });
-      /* Init galerie dans le container DOM fixe */
-      var container=document.getElementById("picto-gallery-container");
-      if(container&&!container._pg){
-        container._pg=window.PictoGallery.init(container,{
-          grad:gradCss(st.grad,90),
-          selected:st.badgeIconKey,
-          custom:st.badgeIconCustom,
-          onChange:function(key){
-            setSt(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});
-          },
-          onCustom:function(dataUri){
-            setSt(function(p){var c=Object.assign({},p);c.badgeIconCustom=dataUri;return c;});
-          },
-        });
-      }
-    });
-  },[]);
-
-  /* Mettre à jour le dégradé de la galerie quand il change */
-  useEffect(function(){
-    var container=document.getElementById("picto-gallery-container");
-    if(container&&container._pg) container._pg.setGrad(gradCss(st.grad,90));
-  },[st.grad]);
-
-  /* Lire les dimensions naturelles de l'image dès qu'elle change */
-  useEffect(function(){
-    if(!st.bgImg){setBgNat({w:0,h:0});return;}
-    var im=new Image();
-    im.onload=function(){setBgNat({w:im.naturalWidth,h:im.naturalHeight});};
-    im.onerror=function(){setBgNat({w:0,h:0});};
-    im.src=st.bgImg;
-  },[st.bgImg]);
-
-  /* Hauteur réelle du pavé, mesurée après chaque render */
-  useLayoutEffect(function(){
-    if(!paveRef.current) return;
-    var h=Math.round(paveRef.current.offsetHeight||0);
-    if(h>0 && h!==paveH) setPaveH(h);
-  });
-
-  function save(){var n=sname.trim()||("Version "+new Date().toLocaleString("fr-FR"));dbPut({name:n,date:new Date().toISOString(),state:st},function(){dbAll(function(a){setSaves(a);});});setSname("");}
-  function load(en){setSt(Object.assign({},DEFAULT,en.state));}
-  function del(n){dbDel(n,function(){dbAll(function(a){setSaves(a);});});}
-  function expJson(){dbAll(function(a){var b=new Blob([JSON.stringify(a,null,2)],{type:"application/json"});var l=document.createElement("a");l.href=URL.createObjectURL(b);l.download="split-screen-sauvegardes.json";l.click();});}
-  function impJson(f){if(!f)return;var r=new FileReader();r.onload=function(ev){try{var a=JSON.parse(ev.target.result);var ok=a.filter(function(x){return x&&x.name&&x.state;});if(!ok.length)throw new Error("aucune entrée valide");dbPutAll(ok,function(){dbAll(function(m){setSaves(m);alert(ok.length+" sauvegarde(s) importée(s).");});});}catch(er){alert("Fichier invalide ("+er.message+").");}};r.readAsText(f);}
-
-  /* ─── Export PNG ──────────────────────────────────────────────────────── */
-  var doExport=useCallback(function(){
-    if(!cardRef.current)return;
-    setBusy(true);
-    var bgW=R.img.w, bgH=R.img.h;
-    var _bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
-    var _bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
-    var _bgZoom=st["bgZoom_"+st.format]||100;
-    function preBlur(src,w,h,pxb,done){
-      if(!src) return done(null);
-      var img=new Image();
-      img.crossOrigin="anonymous";
-      img.onload=function(){
-        var OW=Math.round(w*EX), OH=Math.round(h*EX);
-        var cv=document.createElement("canvas");
-        cv.width=OW; cv.height=OH;
-        var ctx=cv.getContext("2d");
-        ctx.imageSmoothingEnabled=true;
-        ctx.imageSmoothingQuality="high";
-        if(pxb>0) ctx.filter="blur("+Math.round(pxb*EX)+"px)";
-        /* Cover de base */
-        var ir=img.naturalWidth/img.naturalHeight, cr=OW/OH, dw,dh;
-        if(ir>cr){dh=OH;dw=dh*ir;}else{dw=OW;dh=dw/ir;}
-        /* Zoom supplémentaire */
-        var zf=_bgZoom/100;
-        dw*=zf; dh*=zf;
-        /* Position : bgX/bgY en % → offset dans l'image */
-        var dx=(OW-dw)*(_bgX/100);
-        var dy=(OH-dh)*(_bgY/100);
-        ctx.drawImage(img,dx,dy,dw,dh);
-        done(cv.toDataURL("image/png"));
-      };
-      img.onerror=function(){done(null);};
-      img.src=src;
-    }
-    preBlur(st.bgImg,bgW,bgH,st.bgBlur,function(blurred){
-      var box=document.createElement("div");
-      box.style.cssText="position:fixed;left:-99999px;top:0;pointer-events:none;z-index:-1";
-      var cl=cardRef.current.cloneNode(true);
-      cl.style.transform="none";cl.style.position="static";cl.style.width=CARD_W+"px";
-      box.appendChild(cl);document.body.appendChild(box);
-      if(blurred){
-        /* Remplacer l'img de DragImage par le canvas preBlur déjà rendu
-           (position + zoom + blur appliqués en haute résolution) */
-        var bgLayer=cl.querySelector("[data-layer=bg]");
-        if(bgLayer){
-          bgLayer.style.backgroundColor="#E4E4E4";
-          var oldImg=bgLayer.querySelector("img");
-          if(oldImg) oldImg.parentNode.removeChild(oldImg);
-          var bgEl=document.createElement("img");
-          bgEl.src=blurred;
-          bgEl.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";
-          bgLayer.appendChild(bgEl);
-        }
-      }
-
-      /* ── Fix dégradé texte pour l'export ─────────────────────────────────
-         html2canvas ignore background-clip:text et les z-index entre siblings.
-         Solution : on dessine le texte dégradé sur un canvas offscreen et on
-         remplace le host transparent par une img du résultat. */
-      if(st.textMode==="grad"){
-        /* 1. Supprimer les rects data-grad-rect du clone (inutiles pour l'export) */
-        var rects=cl.querySelectorAll("[data-grad-rect]");
-        for(var ri=0;ri<rects.length;ri++) rects[ri].parentNode.removeChild(rects[ri]);
-
-        /* 2. Pour chaque host data-richhost, dessiner le texte en couleur pleine
-              sur un canvas à la résolution de sortie puis remplacer par une img */
-        var hosts=cl.querySelectorAll("[data-richhost]");
-        for(var hi=0;hi<hosts.length;hi++){
-          var host=hosts[hi];
-          /* Rendre le texte visible en couleur unie (couleur de fin du dégradé) */
-          host.style.backgroundImage="none";
-          host.style.webkitBackgroundClip="unset";
-          host.style.backgroundClip="unset";
-          host.style.color=G.to;
-          host.style.webkitTextFillColor=G.to;
-          /* Colorier chaque span data-seg="n" avec la couleur interpolée
-             selon sa position dans la boîte du host */
-          var hostRect=host.getBoundingClientRect();
-          var spans=host.querySelectorAll("[data-seg='n']");
-          for(var si=0;si<spans.length;si++){
-            var sp=spans[si];
-            var sr=sp.getBoundingClientRect();
-            var spanW2=hostRect.width||1, spanH2=hostRect.height||1;
-            var cx=(sr.left+sr.width/2-hostRect.left), cy=(sr.top+sr.height/2-hostRect.top);
-            var t2=Math.max(0,Math.min(1,(cx+cy)/(spanW2+spanH2)));
-            sp.style.color=lerpHex(G.from,G.to,t2);
-            sp.style.webkitTextFillColor=lerpHex(G.from,G.to,t2);
-          }
-        }
-      }
-
-      var captH=Math.round(cl.getBoundingClientRect().height)||CARD_H;
-      window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
-          backgroundColor:"#FFFFFF",
-          width:CARD_W,height:captH,windowWidth:CARD_W,windowHeight:captH})
-        .then(function(cv){var a=document.createElement("a");
-          a.download=((st.badgeSub||st.badgeMain||"split-screen").toLowerCase()
-            .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""))+"-"+st.format+".png";
-          a.href=cv.toDataURL("image/png");a.click();})
-        .catch(function(er){console.error(er);alert("Erreur export : "+er.message);})
-        .then(function(){document.body.removeChild(box);setBusy(false);});
-    });
-  },[st,CARD_H,EX,L.ML]);
-
-  var previewScale=Math.min(520/CARD_W,(window.innerHeight-140)/CARD_H,1);
-
-  /* ═══ CARTOUCHE LÉGENDE ═══════════════════════════════════════════════════
-     Split Screen : fond toujours blanc → cartouche toujours rempli en
-     dégradé (pas de variante "filet blanc sur aplat", réservée aux fonds
-     dégradés pleine carte).
-     La taille de police est réduite automatiquement si le cartouche déborde
-     de la largeur utile de la carte. */
-  var badgeFont=L.BADGE_FONT;
-  (function(){
-    try{
-      var avail=CARD_W-L.MARGIN*2-L.BADGE_ICON-L.BADGE_GAP-L.BADGE_PADX*2;
-      var cvs=document.createElement("canvas"),ctx=cvs.getContext("2d");
-      ctx.font="800 "+L.BADGE_FONT+"px Nunito";
-      var w1=ctx.measureText(st.badgeMain||"").width;
-      ctx.font="600 "+L.BADGE_FONT+"px Nunito";
-      var w2=ctx.measureText(st.badgeSub?(" \u2013 "+st.badgeSub):"").width;
-      var tot=w1+w2;
-      if(tot>avail && tot>0) badgeFont=Math.max(9,L.BADGE_FONT*(avail/tot));
-    }catch(ex){/* canvas indisponible : on garde la valeur charte */}
-  })();
-
-  var badgeBoxStyle={height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,
-    display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
-    backgroundImage:GRAD_H};
-  var pillStyle={height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",
-    padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,
-    fontWeight:T.FW_BADGE_MAIN,letterSpacing:".04em",whiteSpace:"nowrap",
-    textTransform:"uppercase",backgroundImage:GRAD_H};
-
-  var onML=st.hasML&&!L.STORY;
-
-  /* ── Position du cartouche ─────────────────────────────────────────────
-     Fixe, au même endroit que Latest News (coin haut-gauche, marge charte).
-     Quand la photo touche ce coin ("Photo en haut" / "Colonne gauche"),
-     on le décale un peu vers le bas et la droite pour qu'il reste lisible
-     posé sur l'image plutôt que collé au bord. */
-  var badgeOnPhoto=(st.layout==="top"||st.layout==="left");
-  var badgeNudge=badgeOnPhoto?Math.round(0.035*CARD_H):0;
-  var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
-
-  /* ── Position du repère de carrousel ─────────────────────────────────── 
-     Coin bas-droit, même logique de décalage quand la photo le touche
-     ("Photo en bas" / "Colonne droite"). */
-  var arrowOnPhoto=(st.layout==="bottom"||st.layout==="right");
-  var arrowNudge=arrowOnPhoto?Math.round(0.035*CARD_H):0;
-
   var bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
   var bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
   var bgZoom=st["bgZoom_"+st.format]||100;
 
-  /* Zoom maximum sans dépasser la résolution naturelle de l'image, calculé
-     sur le rectangle réellement occupé par la photo dans la disposition
-     Split Screen (R.img), pas sur toute la carte. */
-  var maxZoom=300; /* plafond absolu */
+  var maxZoom=300;
   if(bgNat.w>0&&bgNat.h>0){
-    var outW=Math.round(R.img.w*EX), outH=Math.round(R.img.h*EX);
-    var ir=bgNat.w/bgNat.h, cr=outW/outH;
-    var coverW=(ir>cr)?outH*ir:outW;
-    var coverH=(ir>cr)?outH:outW/ir;
-    var zmW=Math.floor(bgNat.w/coverW*100);
-    var zmH=Math.floor(bgNat.h/coverH*100);
-    maxZoom=Math.max(100,Math.min(300,Math.min(zmW,zmH)));
+    var outW=Math.round(R.img.w*EX),outH=Math.round(R.img.h*EX);
+    var ir=bgNat.w/bgNat.h,cr=outW/outH;
+    var coverW=(ir>cr)?outH*ir:outW,coverH=(ir>cr)?outH:outW/ir;
+    maxZoom=Math.max(100,Math.min(300,Math.min(Math.floor(bgNat.w/coverW*100),Math.floor(bgNat.h/coverH*100))));
   }
 
-  /* Fond blanc, marie-louise optionnelle */
+  /* Export Puppeteer */
+  var doExport=useCallback(function(){
+    if(!cardRef.current)return;
+    setBusy(true);
+    var exportKey="wie_export_"+Date.now();
+    try{localStorage.setItem(exportKey,JSON.stringify(st));}catch(er){}
+    var fname=SaveManager.exportFilename(smFolder.current,currentName||(st.badgeSub||st.badgeMain||"split-screen"),st.format);
+    var outW=FORMATS[st.format].outputW,outH=FORMATS[st.format].outputH;
+    var currentUrl=window.location.href.split("#")[0]+"#exportkey="+exportKey;
+    var EXPORT_SERVER="http://localhost:3001";
+    fetch(EXPORT_SERVER+"/ping",{signal:AbortSignal.timeout(1500)})
+      .then(function(r){if(!r.ok)throw new Error("ping");
+        return fetch(EXPORT_SERVER+"/export",{method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({url:currentUrl,selector:"[data-export-card]",width:outW,height:outH,previewWidth:CARD_W,filename:fname,scale:1})});
+      }).then(function(r){return r.blob();})
+      .catch(function(){
+        return new Promise(function(res,rej){
+          document.fonts.ready.then(function(){
+            return window.domtoimage.toPng(cardRef.current,{width:CARD_W,height:CARD_H,scale:EX,useCORS:true});
+          }).then(function(d){fetch(d).then(function(r){return r.blob();}).then(res).catch(rej);}).catch(rej);
+        });
+      }).then(function(blob){
+        var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;a.click();
+      }).catch(function(er){console.error(er);})
+      .then(function(){setBusy(false);});
+  },[st,CARD_H,EX]);
+
+  var previewScale=Math.min(480/CARD_W,(window.innerHeight-140)/CARD_H,1);
+
+  /* Cartouche */
+  var badgeFont=L.BADGE_FONT;
+  (function(){try{
+    var avail=CARD_W-L.MARGIN*2-L.BADGE_ICON-L.BADGE_GAP-L.BADGE_PADX*2;
+    var cvs=document.createElement("canvas"),ctx=cvs.getContext("2d");
+    ctx.font="800 "+L.BADGE_FONT+"px Nunito";
+    var w1=ctx.measureText(st.badgeMain||"").width;
+    ctx.font="600 "+L.BADGE_FONT+"px Nunito";
+    var w2=ctx.measureText(st.badgeSub?(" \u2013 "+st.badgeSub):"").width;
+    var tot=w1+w2;
+    if(tot>avail&&tot>0) badgeFont=Math.max(9,L.BADGE_FONT*(avail/tot));
+  }catch(ex){}})();
+
+  var badgeBoxStyle={height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,backgroundImage:GRAD_H};
+  var pillStyle={height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,fontWeight:T.FW_BADGE_MAIN,letterSpacing:".04em",whiteSpace:"nowrap",textTransform:"uppercase",backgroundImage:GRAD_H};
+
+  var onML=st.hasML&&!L.STORY;
+  var badgeOnPhoto=(st.layout==="top"||st.layout==="left");
+  var badgeNudge=badgeOnPhoto?Math.round(0.035*CARD_H):0;
+  var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
+  var arrowOnPhoto=(st.layout==="bottom"||st.layout==="right");
+  var arrowNudge=arrowOnPhoto?Math.round(0.035*CARD_H):0;
   var cardBgImg=onML&&st.mlStyle==="grad"?GRAD_V:"none";
   var cardBgColor=onML&&st.mlStyle==="grad"?"transparent":"#FFFFFF";
+  var charteWarn=(st.lowCarbon&&!G.lowCarbonOK)?"Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone.":null;
 
-  var card=e("div",{ref:cardRef,style:{
+  var card=e("div",{ref:cardRef,"data-export-card":"1","data-ready":"1",style:{
       width:CARD_W,height:CARD_H,position:"relative",overflow:"hidden",
-      fontFamily:"'Nunito',sans-serif",
-      backgroundImage:cardBgImg,
-      backgroundColor:cardBgColor}},
+      fontFamily:"'Nunito',sans-serif",backgroundImage:cardBgImg,backgroundColor:cardBgColor}},
 
-    /* Marie-louise : zone blanche intérieure quand dégradé */
-    onML?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,
-      bottom:L.ML,backgroundColor:"#FFFFFF"}}):null,
+    onML?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundColor:"#FFFFFF"}}):null,
 
-    /* BLOC IMAGE à bords arrondis */
-    e("div",{"data-layer":"bg",style:{position:"absolute",
-        left:R.img.x,top:R.img.y,width:R.img.w,height:R.img.h,
-        borderRadius:L.IMG_RADIUS,overflow:"hidden",backgroundColor:"#E4E4E4"}},
-      e(DragImage,{src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
-        w:R.img.w*previewScale,h:R.img.h*previewScale,scale:previewScale,
-        onChange:function(x,y){setSt(function(p){var c=Object.assign({},p);
-          c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;});}}),
-      st.bgDark>0?e("div",{style:{position:"absolute",inset:0,
-        background:"rgba(10,20,45,"+st.bgDark+")"}}):null),
+    e("div",{"data-layer":"bg",style:{position:"absolute",left:R.img.x,top:R.img.y,width:R.img.w,height:R.img.h,borderRadius:L.IMG_RADIUS,overflow:"hidden",backgroundColor:"#E4E4E4"}},
+      e(DragImage,{key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
+        flipH:st.bgFlipH,
+        w:R.img.w*previewScale,h:R.img.h*previewScale,scale:previewScale,natW:bgNat.w,natH:bgNat.h,
+        brightness:st.bgBrightness,saturation:st.bgSaturation,contrast:st.bgContrast,
+        onChange:function(x,y){setSt(function(p){var c=Object.assign({},p);c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;});}}),
+      st.bgDark>0?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null),
 
-    /* TEXTE dans la zone blanche */
-    e("div",{ref:paveRef,style:{position:"absolute",
-        left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
-      e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,
-        grad:GRAD_H,gradFrom:G.from,gradTo:G.to,
-        color:st.textColor,align:"left",textMode:st.textMode})),
+    e("div",{ref:paveRef,style:{position:"absolute",left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
+      e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,gradFrom:G.from,gradTo:G.to,color:st.textColor,align:"left",textMode:st.textMode})),
 
-    /* CARTOUCHE — position fixe (coin haut-gauche, comme Latest News) */
-    e("div",{style:{position:"absolute",left:badgeXY.x,top:badgeXY.y,
-        display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
+    e("div",{style:{position:"absolute",left:badgeXY.x,top:badgeXY.y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
       (function(){
         var src=st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey))||null;
         var hasSrc=!!(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey));
         var isOut=!st.badgeIconCustom&&hasSrc&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey);
-        var boxStyle=isOut
-          ? Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"})
-          : badgeBoxStyle;
-        return e("div",{style:boxStyle},
-          src
-            ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
-            :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:"none",stroke:TE_WHITE,strokeWidth:2},
-               e("path",{d:"M13 10V3L4 14h7v7l9-11h-7z"})));
+        var bStyle=isOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"}):badgeBoxStyle;
+        return e("div",{style:bStyle},src
+          ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
+          :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:"none",stroke:TE_WHITE,strokeWidth:2},e("path",{d:"M13 10V3L4 14h7v7l9-11h-7z"})));
       })(),
-      e("div",{style:pillStyle},
-        st.badgeMain,
-        st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB}}," \u2013 "+st.badgeSub):null)),
+      e("div",{style:pillStyle},st.badgeMain,st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB}}," \u2013 "+st.badgeSub):null)),
 
-    /* REPÈRE DE CARROUSEL — coin bas-droit, indique qu'il y a une slide après */
-    (st.navMark!=="none")?e("div",{style:{position:"absolute",
-        right:L.MARGIN+arrowNudge,bottom:L.MARGIN+arrowNudge}},
-      e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(18),
-        grad:GRAD_H,from:G.from,to:G.to})):null
+    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN+arrowNudge,bottom:L.MARGIN+arrowNudge}},
+      e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(18),grad:GRAD_H,from:G.from,to:G.to})):null
   );
 
   var previewWrap=e("div",{style:{width:CARD_W*previewScale,minHeight:CARD_H*previewScale,position:"relative",flexShrink:0}},
     e("div",{style:{width:CARD_W,transform:"scale("+previewScale+")",transformOrigin:"top left",position:"absolute",top:0,left:0}},card));
 
-  /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
   function segBtn(val,key,opts){
     return e("div",{className:"seg"},opts.map(function(o){
       return e("button",{key:o.v,className:val===o.v?"on":"",onClick:function(){set(key,o.v);}},o.l);
     }));
   }
 
-  /* Contrôle de conformité charte : le dégradé rouge est réservé au pétrole
-     et interdit sur les créations traitant des énergies bas carbone. */
-  var charteWarn=(st.lowCarbon && !G.lowCarbonOK)
-    ? "Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone (biomasse, éolien, solaire) : passe sur le dégradé vert."
-    : null;
-
   var panel=e("div",{className:"panel"},
 
-    e("div",{className:"section"},e("h2",null,"Format"),
+    e("div",{className:"section"},e("h2",{"data-static":"1"},"Format"),
       e("div",{style:{display:"flex",flexDirection:"column",gap:8}},
         Object.keys(FORMATS).map(function(k){
           var f=FORMATS[k],on=st.format===k;
-          var vh=30, vw=Math.round(vh*(f.outputW/f.outputH));
-          return e("div",{key:k,onClick:function(){setFormat(k);},
-            style:{display:"flex",alignItems:"center",gap:10,
-              padding:"10px 12px",borderRadius:8,cursor:"pointer",
-              border:on?"2px solid #1a1a1a":"2px solid #e8e8e8",
-              background:on?"#f0efec":"#fafafa",transition:"all .15s"}},
-            e("div",{style:{width:vw,height:vh,borderRadius:3,
-              background:on?"#1a1a1a":"#ccc",flexShrink:0}}),
-            e("div",null,
-              e("div",{style:{fontWeight:700,fontSize:13,color:on?"#1a1a1a":"#333"}},f.label),
-              e("div",{style:{fontSize:11,color:"#888",marginTop:1}},
-                f.outputW+" × "+f.outputH+" px")));
-        })),
-      e("div",{style:{height:10}}),
-      e("div",{className:"hint"},
-        L.STORY?"Marges 80 px, zone sûre 180 px du haut et du bas."
-               :"Marges 50 px"+(onML?" + 50 px de marie-louise.":"."))),
+          var vh=30,vw=Math.round(vh*(f.outputW/f.outputH));
+          return e("div",{key:k,onClick:function(){setFormat(k);},style:{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",borderRadius:8,cursor:"pointer",border:on?"2px solid #1a1a1a":"2px solid #e8e8e8",background:on?"#f0efec":"#fafafa",transition:"all .15s"}},
+            e("div",{style:{width:vw,height:vh,borderRadius:3,background:on?"#1a1a1a":"#ccc",flexShrink:0}}),
+            e("div",null,e("div",{style:{fontWeight:700,fontSize:13,color:on?"#1a1a1a":"#333"}},f.label),e("div",{style:{fontSize:11,color:"#888",marginTop:1}},f.outputW+" × "+f.outputH+" px")));
+        }))),
 
-    e("div",{className:"section"},e("h2",null,"Disposition de l'image"),
-      segBtn(st.layout,"layout",[
-        {v:"bottom",l:"Photo en bas"},{v:"top",l:"Photo en haut"},
-        {v:"left",l:"Colonne gauche"},{v:"right",l:"Colonne droite"}]),
+    /* Barre d'onglets */
+    e("div",{className:"panel-tabs-wrap"},
+      e("div",{className:"panel-tabs"},
+        TABS.map(function(t){return e("div",{key:t.id,className:"panel-tab"+(activeTab===t.id?" on":""),onClick:function(){setActiveTab(t.id);}},t.label);})),
+      e("div",{className:"panel-tabs-progress"},
+        e("div",{className:"panel-tabs-progress-bar",style:{width:(((TABS.findIndex(function(t){return t.id===activeTab;})+1)/TABS.length)*100)+"%"}}))),
+
+    /* Onglet Image */
+    e("div",{className:"panel-tab-content"+(activeTab==="image"?" on":""),style:{paddingTop:16}},
+      e("label",{className:"field-label"},"Disposition"),
+      segBtn(st.layout,"layout",[{v:"bottom",l:"Bas"},{v:"top",l:"Haut"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]),
       e("div",{style:{height:8}}),
-      e("label",{className:"field-label"},
-        (st.layout==="left"||st.layout==="right"?"Largeur":"Hauteur")+" de la photo — "+Math.round((st.imgRatio||0.55)*100)+" %"),
-      e("input",{type:"range",min:30,max:72,step:1,value:Math.round((st.imgRatio||0.55)*100),
-        onChange:function(ev){set("imgRatio",parseInt(ev.target.value,10)/100);}}),
-      e("div",{className:"hint",style:{marginTop:4}},
-        "Le cartouche se pose toujours sur le coin haut-gauche de la photo.")),
+      e("label",{className:"field-label"},(st.layout==="left"||st.layout==="right"?"Largeur":"Hauteur")+" photo — "+Math.round((st.imgRatio||0.55)*100)+" %"),
+      e("input",{type:"range",min:30,max:72,step:1,value:Math.round((st.imgRatio||0.55)*100),onChange:function(ev){set("imgRatio",parseInt(ev.target.value,10)/100);}}),
+      e("div",{style:{height:12}}),
+      e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
+        bgStatus:bgStatus,bgNat:bgNat,bgDir:BG_DIR,maxZoom:maxZoom}),
+      e("div",{style:{marginTop:8}}),
+      e("label",{className:"toggle"+(L.STORY?" off":"")},
+        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,onChange:function(ev){set("hasML",ev.target.checked);}}),
+        "Encadré marie-louise"),
+      onML?e("div",{style:{marginTop:8}},segBtn(st.mlStyle,"mlStyle",[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}])):null,
+      e("div",{className:"tab-nav"},
+        e("div",null),
+        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("couleurs");}},"Couleurs"," →"))),
 
-    e("div",{className:"section"},e("h2",null,"Couleurs"),
+    /* Onglet Couleurs */
+    e("div",{className:"panel-tab-content"+(activeTab==="couleurs"?" on":""),style:{paddingTop:16}},
       e("label",{className:"field-label"},"Dégradé actif"),
       e("div",{className:"grad-row"},Object.keys(GRADS).map(function(k){
-        return e("div",{key:k,className:"grad-sw"+(st.grad===k?" on":""),
-          onClick:function(){set("grad",k);},title:GRADS[k].label,
-          style:{backgroundImage:gradCss(k,90)}});
+        return e("div",{key:k,className:"grad-sw"+(st.grad===k?" on":""),onClick:function(){set("grad",k);},title:GRADS[k].label,style:{backgroundImage:gradCss(k,90)}});
       })),
-      e("div",{className:"grad-active"},
-        e("i",{style:{backgroundImage:GRAD_H}}),G.label," — ",G.from," → ",G.to),
-
+      e("div",{style:{fontSize:11,color:"#404040",marginTop:8,display:"flex",alignItems:"center",gap:6}},
+        e("i",{style:{width:12,height:12,borderRadius:3,display:"inline-block",backgroundImage:GRAD_H}}),
+        G.label," — ",G.from," → ",G.to),
       e("div",{style:{height:14}}),
-
-      /* ── Couleur du texte : liée au dégradé ───────────────────────── */
       e("label",{className:"field-label"},"Couleur du texte"),
       e("div",{className:"seg",style:{marginBottom:10}},
         [{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}].map(function(o){
-          return e("button",{key:o.v,className:st.textMode===o.v?"on":"",
-            onClick:function(){set("textMode",o.v);}},o.l);
+          return e("button",{key:o.v,className:st.textMode===o.v?"on":"",onClick:function(){set("textMode",o.v);}},o.l);
         })),
-      st.textMode==="uni"
-        ? e(React.Fragment,null,
-            /* Seulement 2 choix : couleur du dégradé actif + gris foncé */
-            e("div",{style:{display:"flex",gap:8}},
-              e("div",{title:G.label+" (couleur du dégradé)",
-                className:"col-sw"+(st.textColor!==COLOR_GREY?" on":""),
-                onClick:function(){set("textColor",G.to);},
-                style:{background:GRAD_H,backgroundImage:GRAD_H,width:48,height:30,borderRadius:6,
-                  cursor:"pointer",border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}}),
-              e("div",{title:"Gris foncé #374649",
-                className:"col-sw"+(st.textColor===COLOR_GREY?" on":""),
-                onClick:function(){set("textColor",COLOR_GREY);},
-                style:{background:COLOR_GREY,width:48,height:30,borderRadius:6,
-                  cursor:"pointer",border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}})),
-            e("div",{className:"hint",style:{marginTop:6}},
-              "La couleur suit automatiquement le dégradé sélectionné."))
-        : e("div",{className:"hint"},
-            "Le texte et les surlignages utilisent le même dégradé diagonal."),
-
-      e("div",{style:{height:14}}),
-
+      st.textMode==="uni"?e(React.Fragment,null,
+        e("div",{style:{display:"flex",gap:8}},
+          e("div",{className:"col-sw"+(st.textColor!==COLOR_GREY?" on":""),onClick:function(){set("textColor",G.to);},
+            style:{background:GRAD_H,backgroundImage:GRAD_H,width:48,height:30,borderRadius:6,cursor:"pointer",border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}}),
+          e("div",{className:"col-sw"+(st.textColor===COLOR_GREY?" on":""),onClick:function(){set("textColor",COLOR_GREY);},
+            style:{background:COLOR_GREY,width:48,height:30,borderRadius:6,cursor:"pointer",border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}})),
+        e("div",{className:"hint",style:{marginTop:6}},"La couleur suit automatiquement le dégradé.")):null,
+      e("div",{style:{height:12}}),
       e("label",{className:"toggle"},
-        e("input",{type:"checkbox",checked:st.lowCarbon,
-          onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+        e("input",{type:"checkbox",checked:st.lowCarbon,onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
         "Sujet énergie bas carbone"),
-      e("div",{className:"hint",style:{marginTop:4}},
-        "Active le contrôle charte : dégradé rouge interdit sur le bas carbone."),
       charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null,
       e("div",{style:{height:10}}),
       e("label",{className:"field-label"},"Pictogramme"),
-      e("div",{id:"picto-gallery-container",key:"picto-gallery"})),
+      e("div",{id:"picto-gallery-container",key:"picto-gallery"}),
+      e("div",{className:"tab-nav"},
+        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("image");}},"← ","Image"),
+        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("cartouche");}},"Cartouche"," →"))),
 
-    e("div",{className:"section"},e("h2",null,"Marie-louise"),
-      e("label",{className:"toggle"+(L.STORY?" off":"")},
-        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,
-          onChange:function(ev){set("hasML",ev.target.checked);}}),
-        "Encadré marie-louise"),
-      onML?e("div",{style:{marginTop:8}},
-        segBtn(st.mlStyle,"mlStyle",[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}])):null,
-      e("div",{className:"hint",style:{marginTop:4}},
-        L.STORY?"La charte n'autorise pas la marie-louise au format story."
-               :"Blanche ou dégradée parmi les 4 principales.")),
-
-    e("div",{className:"section"},e("h2",null,"Photo"),
-      e("div",{className:"upload-hint"},
-        "Format idéal : ",e("b",null,FORMATS[st.format].outputW+" × "+FORMATS[st.format].outputH+" px"),
-        e("br",null),
-        st.bgCustom?"Image personnalisée en cours d'utilisation."
-        :st.bgIsDefault?["Fond par défaut : ",e("b",{key:"p"},bgStatus.p?bgStatus.p.replace(BG_DIR,""):"")]
-        :bgStatus.s==="loading"?"Recherche du fond par défaut\u2026"
-        :["Aucun fond par défaut trouvé dans ",e("b",{key:"d"},BG_DIR.replace("../../","")),
-          ". Dépose ",e("b",{key:"n"},BG_DEFAULT_FILE),
-          " ou une image ci-dessous."]),
-      e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
-        onChange:function(v){setSt(function(p){var c=Object.assign({},p);
-          c.bgImg=v||null;c.bgCustom=!!v;c.bgIsDefault=!v&&p.bgIsDefault;return c;});}}),
-      e("div",{style:{height:8}}),
-      e("label",{className:"field-label"},"Zoom — "+Math.round(bgZoom)+" %",
-        maxZoom<300?e("span",{className:"hint",style:{marginLeft:6}},"(max "+maxZoom+"%)"):null),
-      e("input",{type:"range",min:100,max:maxZoom,step:1,
-        value:Math.min(Math.round(bgZoom),maxZoom),
-        onChange:function(ev){setSt(function(p){var c=Object.assign({},p);
-          c["bgZoom_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
-      e("div",{className:"hint",style:{marginTop:4}},"Glisse sur la photo pour la repositionner."),
-      e("div",{style:{height:8}}),
-      e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
-      e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,
-        onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}}),
-      e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
-      e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,
-        onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}}),
-      e("div",{style:{height:6}}),
-      e("button",{onClick:function(){setSt(function(p){var c=Object.assign({},p);
-          c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});},
-        style:{fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
-          border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
-        "Réinitialiser")),
-
-    e("div",{className:"section"},e("h2",null,"Cartouche"),
+    /* Onglet Cartouche */
+    e("div",{className:"panel-tab-content"+(activeTab==="cartouche"?" on":""),style:{paddingTop:16}},
       e("label",{className:"field-label"},"Titre ",e("span",{className:"hint"},"(ExtraBold)")),
-      e("input",{type:"text",spellCheck:true,value:st.badgeMain,
-        onChange:function(ev){set("badgeMain",ev.target.value.toUpperCase());},
-        style:{textTransform:"uppercase"}}),
+      e("input",{type:"text",spellCheck:true,value:st.badgeMain,onChange:function(ev){set("badgeMain",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}}),
       e("div",{style:{height:6}}),
-      e("label",{className:"field-label"},"Précision ",e("span",{className:"hint"},"(SemiBold, optionnel)")),
-      e("input",{type:"text",spellCheck:true,value:st.badgeSub||"",
-        onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},
-        style:{textTransform:"uppercase"}})),
-
-    e("div",{className:"section"},e("h2",null,"Texte"),
-      e("div",{className:"upload-hint",style:{marginBottom:6}},
-        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage",
-        e("br",null),
-        "Retour à la ligne = Entrée."),
-      e("textarea",{spellCheck:true,rows:5,value:st.text,
-        onChange:function(ev){set("text",ev.target.value);},
-        style:{fontSize:13,lineHeight:1.5}}),
+      e("label",{className:"field-label"},"Précision ",e("span",{className:"hint"},"(optionnel)")),
+      e("input",{type:"text",spellCheck:true,value:st.badgeSub||"",onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}}),
       e("div",{style:{height:12}}),
-      e("label",{className:"field-label"},
-        "Taille — "+(fs/K).toFixed(0)+" pt "+(st["fs_"+st.format]?"":"(défaut)"),
-        e("span",{className:"hint"}," charte : "+T.TEXT_MIN_PT+"–"+T.TEXT_MAX_PT+" pt")),
-      e("input",{type:"range",
-        min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
-        onChange:function(ev){setSt(function(p){var c=Object.assign({},p);
-          c["fs_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
-      e("div",{className:"hint",style:{marginTop:4}},
-        "Interligne : "+(lh/K).toFixed(0)+" pt (automatique × "+L.TEXT_LH+")")),
-
-    e("div",{className:"section"},e("h2",null,"Repère de carrousel"),
+      e("label",{className:"field-label"},"Repère de carrousel"),
       segBtn(st.navMark,"navMark",[{v:"arrow",l:"Flèche"},{v:"dot",l:"Point"},{v:"none",l:"Aucun"}]),
-      e("div",{className:"hint",style:{marginTop:6}},
-        "Flèche pour indiquer une slide suivante, point pour la dernière.")),
+      e("div",{className:"tab-nav"},
+        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("couleurs");}},"← ","Couleurs"),
+        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("texte");}},"Texte"," →"))),
 
-    e("div",{className:"section"},e("h2",null,"Sauvegardes"),
-      e("div",{style:{display:"flex",gap:8,marginBottom:10}},
-        e("input",{type:"text",spellCheck:true,value:sname,placeholder:"Nom de la version\u2026",onChange:function(ev){setSname(ev.target.value);},style:{flex:1,fontSize:13,padding:"6px 8px"}}),
-        e("button",{onClick:save,style:{background:"#1a1a1a",color:"#fff",border:"none",borderRadius:6,padding:"6px 14px",cursor:"pointer",fontWeight:700,fontSize:13,fontFamily:"inherit"}},"Sauvegarder")),
-      saves.length===0?e("div",{className:"hint",style:{marginBottom:10}},"Aucune sauvegarde."):
-        e("div",{className:"saves-list"},saves.map(function(v,i){
-          return e("div",{key:i,className:"save-row"},
-            e("div",{style:{flex:1,minWidth:0}},
-              e("div",{style:{fontSize:13,fontWeight:700,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},v.name),
-              e("div",{className:"hint"},new Date(v.date).toLocaleString("fr-FR"))),
-            e("button",{onClick:function(){load(v);},style:{background:"#f0efec",color:"#1a1a1a",border:"none",borderRadius:5,padding:"4px 10px",cursor:"pointer",fontWeight:700,fontSize:12,fontFamily:"inherit"}},"Charger"),
-            e("button",{onClick:function(){if(confirm("Supprimer \u00AB "+v.name+" \u00BB ?"))del(v.name);},style:{background:"#fff0f0",color:"#c0392b",border:"none",borderRadius:5,padding:"4px 8px",cursor:"pointer",fontWeight:700,fontSize:12,fontFamily:"inherit"}},"\u00D7"));
-        })),
-      e("div",{style:{display:"flex",gap:8}},
-        e("button",{onClick:expJson,style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:6,padding:6,cursor:"pointer",fontSize:12,fontWeight:600,fontFamily:"inherit"}},"Export .json"),
-        e("button",{onClick:function(){if(impRef.current)impRef.current.click();},style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:6,padding:6,cursor:"pointer",fontSize:12,fontWeight:600,fontFamily:"inherit"}},"Import .json"),
-        e("input",{ref:impRef,type:"file",accept:".json",style:{display:"none"},onChange:function(ev){impJson(ev.target.files&&ev.target.files[0]);}}))),
-
-    e("button",{className:"export-btn",onClick:doExport,disabled:busy},
-      busy?e("span",{className:"spin"},e(DownloadIcon)):e(DownloadIcon),
-      busy?"Export en cours\u2026":"Télécharger le PNG ("+FORMATS[st.format].outputW+" \u00D7 "+FORMATS[st.format].outputH+")")
+    /* Onglet Texte */
+    e("div",{className:"panel-tab-content"+(activeTab==="texte"?" on":""),style:{paddingTop:16}},
+      e("div",{className:"upload-hint",style:{marginBottom:6}},
+        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
+      e("textarea",{spellCheck:true,rows:5,value:st.text,onChange:function(ev){set("text",ev.target.value);},style:{fontSize:13,lineHeight:1.5}}),
+      e("div",{style:{height:12}}),
+      e("label",{className:"field-label"},"Taille — "+(fs).toFixed(0)+" px"),
+      e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,onChange:function(ev){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
+      e("div",{className:"tab-nav"},
+        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("cartouche");}},"← ","Cartouche"),
+        e("button",{className:"tab-nav-btn primary",onClick:doExport,disabled:busy},
+          busy?e("span",{className:"spin"},e(DownloadIcon)):e(DownloadIcon),
+          busy?"Export…":"Télécharger le PNG")))
   );
 
-  return e("div",{className:"app-layout"},panel,e("div",{className:"preview-wrap"},previewWrap));
+  /* Drawer */
+  var drawer=e(SaveManager.Drawer,{
+    store:saveStore.current,state:st,open:drawerOpen,
+    onClose:function(){setDrawerOpen(false);},
+    currentId:currentId,currentName:currentName,
+    onLoad:function(rec){setSt(Object.assign({},DEFAULT,rec.state));setCurrentId(rec.id);setCurrentName(rec.name);smFolder.current=rec.folder||"";smHash.current=SaveManager.hashState(Object.assign({},DEFAULT,rec.state));},
+    onSaved:function(rec){setCurrentId(rec.id);setCurrentName(rec.name);smFolder.current=rec.folder||"";smHash.current=SaveManager.hashState(st);},
+    doExportOne:function(savedState,fmt,filename){
+      return new Promise(function(resolve,reject){
+        var prevSt=st;
+        setSt(Object.assign({},DEFAULT,savedState,{format:fmt}));
+        setTimeout(function(){
+          var EXPORT_SERVER="http://localhost:3001";
+          var outW=FORMATS[fmt].outputW,outH=FORMATS[fmt].outputH;
+          fetch(EXPORT_SERVER+"/ping",{signal:AbortSignal.timeout(1500)})
+            .then(function(){return fetch(EXPORT_SERVER+"/export",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:window.location.href.split("#")[0],selector:"[data-export-card]",width:outW,height:outH,previewWidth:CARD_W,filename:filename,scale:1})});})
+            .then(function(r){return r.blob();})
+            .catch(function(){return new Promise(function(res,rej){document.fonts.ready.then(function(){return window.domtoimage.toPng(cardRef.current,{width:CARD_W,height:CARD_H,scale:EX,useCORS:true});}).then(function(d){fetch(d).then(function(r){return r.blob();}).then(res).catch(rej);}).catch(rej);});})
+            .then(resolve).catch(reject)
+            .then(function(){setTimeout(function(){setSt(prevSt);},100);});
+        },400);
+      });
+    }
+  });
+
+  return e("div",{className:"app-layout"},panel,e("div",{className:"preview-wrap"},previewWrap),drawer);
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));

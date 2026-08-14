@@ -102,6 +102,12 @@
     var nav = document.createElement("nav");
     nav.className = "page-header-nav";
 
+    /* Slot pour la StatusBar React (nom + statut), avant la nav */
+    var statusSlot = document.createElement("div");
+    statusSlot.id = "sm-status-slot";
+    statusSlot.style.cssText = "display:flex;align-items:center;height:100%;margin-left:auto;";
+    header.appendChild(statusSlot);
+
     var home = document.createElement("a");
     home.href = pageUrl("index.html");
     home.innerHTML = "&larr; Accueil";
@@ -116,6 +122,7 @@
     });
 
     header.appendChild(nav);
+
     document.body.insertBefore(header, document.body.firstChild);
   }
 
