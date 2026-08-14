@@ -7,13 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+/* Fallback : fontes locales si disponibles (chargées en priorité par Puppeteer).
+   Placer les fichiers woff2 dans assets/fonts/ via :
+   curl "https://gwfh.mranftl.com/api/fonts/nunito?download=zip&subsets=latin&variants=regular,500,600,700,800,900&formats=woff2" -o /tmp/nunito.zip && unzip /tmp/nunito.zip -d ../../assets/fonts/ */
+@font-face { font-family:'Nunito'; font-weight:400; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-regular.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:500; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-500.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:600; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-600.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:700; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-700.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:800; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-800.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:900; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-900.woff2') format('woff2'); }
+</style>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js"],function(){
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js","https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"],function(){boot();});});});
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){boot();});});});
 </script>
 <style>
 *{box-sizing:border-box;}
@@ -116,13 +127,13 @@ var TE_WHITE="#FFFFFF";
    La carte de preview fait 600 px de large : K = 600/1080 = 0.5556.
    Chaque constante ci-dessous est donc la valeur charte × K, arrondie.
    ══════════════════════════════════════════════════════════════════════════ */
-var CARD_W=600, K=600/1080;
+var CARD_W=1080, K=1;
 function px(v){return Math.round(v*K);}   /* charte px → card px */
 
 var FORMATS={
-  "1x1" :{label:"Carré 1:1",   outputW:1080,outputH:1080,cardH:600 },
-  "4x5" :{label:"Portrait 4:5",outputW:1080,outputH:1350,cardH:750 },
-  "9x16":{label:"Story 9:16",  outputW:1080,outputH:1920,cardH:1067}
+  "1x1" :{label:"Carré 1:1",   outputW:1080,outputH:1080,cardH:1080},
+  "4x5" :{label:"Portrait 4:5",outputW:1080,outputH:1350,cardH:1350},
+  "9x16":{label:"Story 9:16",  outputW:1080,outputH:1920,cardH:1920}
 };
 
 /* Marie-louise : 50 px de charte → 28 px carte.
@@ -289,11 +300,21 @@ function RichBody(props){
       parts.forEach(function(p,pi){
         var key=li+"-"+pi;
         if(p.t==="h"){
+          /* Surlignage :
+             - normal    : fond dégradé, texte blanc
+             - inversé   : fond blanc, texte dégradé (via background-clip:text) */
           out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-          out.push(e("span",{key:key,"data-seg":"h",
-            style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                   color:inv?props.gradFrom:TE_WHITE,
-                   WebkitTextFillColor:inv?props.gradFrom:TE_WHITE}},p.v));
+          if(inv){
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     background:TE_WHITE,WebkitBackgroundClip:"text",backgroundClip:"text",
+                     color:"transparent",WebkitTextFillColor:"transparent",
+                     backgroundImage:"linear-gradient(90deg,"+props.gradFrom+" 0%,"+props.gradTo+" 100%)"}},p.v));
+          } else {
+            out.push(e("span",{key:key,"data-seg":"h",
+              style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
+                     WebkitTextFillColor:TE_WHITE}},p.v));
+          }
           out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
         } else if(p.t==="u"){
           out.push(e("span",{key:key,"data-seg":"u",
@@ -907,118 +928,77 @@ function App(){
       img.src=src;
     }
     preBlur(st.bgImg,bgW,bgH,st.bgBlur,function(blurred){
-      var box=document.createElement("div");
-      box.style.cssText="position:fixed;left:-99999px;top:0;pointer-events:none;z-index:-1";
-      var cl=cardRef.current.cloneNode(true);
-      cl.style.transform="none";cl.style.position="static";cl.style.width=CARD_W+"px";
-      box.appendChild(cl);document.body.appendChild(box);
-      if(blurred){
-        /* Remplacer l'img de DragImage par le canvas preBlur déjà rendu
-           (position + zoom + blur appliqués en haute résolution) */
-        var bgLayer=cl.querySelector("[data-layer=bg]");
-        if(bgLayer){
-          bgLayer.style.background="#12203c";
-          var oldImg=bgLayer.querySelector("img");
-          if(oldImg) oldImg.parentNode.removeChild(oldImg);
-          var bgEl=document.createElement("img");
-          bgEl.src=blurred;
-          bgEl.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";
-          bgLayer.appendChild(bgEl);
-        }
+      var bgLayer=cardRef.current.querySelector("[data-layer=bg]");
+      var oldBgImg=null, tmpBgEl=null;
+      if(blurred&&bgLayer){
+        oldBgImg=bgLayer.querySelector("img");
+        tmpBgEl=document.createElement("img");
+        tmpBgEl.src=blurred;
+        tmpBgEl.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";
+        bgLayer.appendChild(tmpBgEl);
+        if(oldBgImg) oldBgImg.style.display="none";
       }
 
-      /* ── Fix dégradé texte et surlignages pour l'export ────────────────────
-         html2canvas ignore background-clip:text et les backgroundImage sur les
-         éléments absolus de surlignage.
-         Solution : on rend tout en couleur unie interpolée selon position. */
-
-      /* 1. Supprimer les rects data-grad-rect (preview only) */
-      var rects=cl.querySelectorAll("[data-grad-rect]");
-      for(var ri=0;ri<rects.length;ri++) rects[ri].parentNode.removeChild(rects[ri]);
-
-      /* 2. Pour chaque host, corriger le texte dégradé */
-      var hosts=cl.querySelectorAll("[data-richhost]");
-      for(var hi=0;hi<hosts.length;hi++){
-        var host=hosts[hi];
-        var hostRect=host.getBoundingClientRect();
-        var spanW2=hostRect.width||1, spanH2=hostRect.height||1;
-        /* Texte en mode dégradé diagonal → colorier chaque span */
-        if(host.style.backgroundImage&&host.style.backgroundImage!=="none"&&
-           host.style.webkitBackgroundClip==="text"){
-          host.style.backgroundImage="none";
-          host.style.webkitBackgroundClip="unset";
-          host.style.backgroundClip="unset";
-          host.style.color=G.to;
-          host.style.webkitTextFillColor=G.to;
-          var spansN=host.querySelectorAll("[data-seg='n']");
-          for(var si=0;si<spansN.length;si++){
-            var sp=spansN[si];
-            var sr=sp.getBoundingClientRect();
-            var cx=(sr.left+sr.width/2-hostRect.left);
-            var cy=(sr.top+sr.height/2-hostRect.top);
-            var t2=Math.max(0,Math.min(1,(cx+cy)/(spanW2+spanH2)));
-            sp.style.color=lerpHex(G.from,G.to,t2);
-            sp.style.webkitTextFillColor=lerpHex(G.from,G.to,t2);
-          }
-        }
-        /* Spans surlignés en mode inversé (texte dégradé sur fond blanc) */
-        var spansH=host.querySelectorAll("[data-seg='h']");
-        for(var si2=0;si2<spansH.length;si2++){
-          var sph=spansH[si2];
-          if(sph.style.backgroundImage&&sph.style.backgroundImage!=="none"&&
-             sph.style.webkitBackgroundClip==="text"){
-            var srh=sph.getBoundingClientRect();
-            var cxh=(srh.left+srh.width/2-hostRect.left);
-            var cyh=(srh.top+srh.height/2-hostRect.top);
-            var th=Math.max(0,Math.min(1,(cxh+cyh)/(spanW2+spanH2)));
-            sph.style.backgroundImage="none";
-            sph.style.webkitBackgroundClip="unset";
-            sph.style.backgroundClip="unset";
-            sph.style.color=lerpHex(G.from,G.to,th);
-            sph.style.webkitTextFillColor=lerpHex(G.from,G.to,th);
-          }
-        }
+      function restore(){
+        if(oldBgImg) oldBgImg.style.display="";
+        if(tmpBgEl&&tmpBgEl.parentNode) tmpBgEl.parentNode.removeChild(tmpBgEl);
       }
 
-      /* 3. Rectangles de surlignage (data-hl) et soulignage (data-ul) :
-            remplacer backgroundImage:gradient par backgroundColor interpolé */
-      var hlDivs=cl.querySelectorAll("[data-hl],[data-ul]");
-      for(var di=0;di<hlDivs.length;di++){
-        var d=hlDivs[di];
-        var bg=d.style.backgroundImage;
-        if(bg&&bg.indexOf("gradient")>=0){
-          var dr=d.getBoundingClientRect();
-          var pcx=dr.left+dr.width/2;
-          var pcy=dr.top+dr.height/2;
-          /* Trouver le host parent pour la position relative */
-          var parentHost=d.parentNode;
-          while(parentHost&&parentHost.nodeType===1&&!parentHost.getAttribute("data-richhost"))
-            parentHost=parentHost.parentNode;
-          var t3=0.5;
-          if(parentHost&&parentHost.nodeType===1){
-            var pr=parentHost.getBoundingClientRect();
-            var pw=Math.max(1,pr.width), ph=Math.max(1,pr.height);
-            t3=Math.max(0,Math.min(1,((pcx-pr.left)+(pcy-pr.top))/(pw+ph)));
-          }
-          d.style.backgroundImage="none";
-          d.style.backgroundColor=lerpHex(G.from,G.to,t3);
-        }
-      }
+      var fname=((st.badgeSub||st.badgeMain||"latest-news").toLowerCase()
+        .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""))+"-"+st.format+".png";
+      var outW=FORMATS[st.format].outputW;
+      var outH=FORMATS[st.format].outputH;
 
-      var captH=Math.round(cl.getBoundingClientRect().height)||CARD_H;
-      window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,
-          backgroundColor:st.hasML&&st.mlStyle==="white"?"#ffffff":"#12203c",
-          width:CARD_W,height:captH,windowWidth:CARD_W,windowHeight:captH})
-        .then(function(cv){var a=document.createElement("a");
-          a.download=((st.badgeSub||st.badgeMain||"latest-news").toLowerCase()
-            .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""))+"-"+st.format+".png";
-          a.href=cv.toDataURL("image/png");a.click();})
-        .catch(function(er){console.error(er);alert("Erreur export : "+er.message);})
-        .then(function(){document.body.removeChild(box);setBusy(false);});
+      /* Essayer d'abord le serveur Puppeteer (export pixel-parfait).
+         Fallback sur dom-to-image si le serveur n'est pas disponible. */
+      var EXPORT_SERVER="http://localhost:3001";
+      var currentUrl=window.location.href.split("#")[0];
+
+      fetch(EXPORT_SERVER+"/ping",{signal:AbortSignal.timeout(1500)})
+        .then(function(r){ if(!r.ok) throw new Error("ping failed"); return r; })
+        .then(function(){
+          return fetch(EXPORT_SERVER+"/export",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+              url:currentUrl,
+              selector:"[data-export-card]",
+              width:outW, height:outH,
+              previewWidth:CARD_W,
+              filename:fname, scale:1
+            })
+          });        })
+        .then(function(r){
+          if(!r.ok) throw new Error("export failed "+r.status);
+          return r.blob();
+        })
+        .then(function(blob){
+          restore(); setBusy(false);
+          var url=URL.createObjectURL(blob);
+          var a=document.createElement("a");
+          a.download=fname; a.href=url; a.click();
+          URL.revokeObjectURL(url);
+        })
+        .catch(function(err){
+          console.warn("Puppeteer non disponible ("+err.message+"), fallback dom-to-image");
+          document.fonts.ready.then(function(){
+            return window.domtoimage.toPng(cardRef.current,{
+              width:CARD_W, height:CARD_H, scale:1,
+              useCORS:true, imagePlaceholder:undefined
+            });
+          }).then(function(dataUrl){
+            restore();
+            var a=document.createElement("a");
+            a.download=fname; a.href=dataUrl; a.click();
+          }).catch(function(er){
+            restore();
+            console.error(er); alert("Erreur export : "+er.message);
+          }).then(function(){setBusy(false);});
+        });
     });
-  },[st,CARD_H,EX,L.ML]);
+    },[st,CARD_H,EX,L.ML]);
 
-  var previewScale=Math.min(520/CARD_W,(window.innerHeight-140)/CARD_H,1);
+  var previewScale=Math.min(480/CARD_W,(window.innerHeight-140)/CARD_H,1);
 
   /* ═══ CARTOUCHE LÉGENDE ═══════════════════════════════════════════════════
      Charte : sur fond blanc ou sur une image, le cartouche est rempli en
@@ -1085,7 +1065,7 @@ function App(){
     maxZoom=Math.max(100,Math.min(300,Math.min(zmW,zmH)));
   }
 
-  var card=e("div",{ref:cardRef,style:{
+  var card=e("div",{ref:cardRef,"data-export-card":"1",style:{
       width:CARD_W,height:CARD_H,position:"relative",
       fontFamily:"'Nunito',sans-serif",overflow:"hidden",
       backgroundImage:(st.hasML&&st.mlStyle==="grad")?GRAD_V:"none",
