@@ -67,7 +67,7 @@ var normalizeLoadedState=CARD.normalize;
 
 /* ═══ APP ══════════════════════════════════════════════════════════════════ */
 function App(){
-  var shell=Shell.useApp({pageKey:"latestnews",legacy:"latestnews_saves",
+  var shell=Shell.useApp({pageKey:"latestnews",legacy:"latestnews_saves",normalize:normalizeLoadedState,
     DEFAULT:DEFAULT,bgCandidates:bgCandidates});
   var st=shell.st,setSt=shell.setSt,set=shell.set;
 

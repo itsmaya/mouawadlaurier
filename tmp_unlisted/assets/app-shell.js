@@ -14,7 +14,8 @@
      var shell = Shell.useApp({
        pageKey:"blocklayouts", legacy:null,
        DEFAULT:…, formats:["1x1","4x5","9x16","16x9"],
-       bgCandidates:function(formatKey){ return [urls…]; }
+       bgCandidates:function(formatKey){ return [urls…]; },
+       normalize:function(state){ return state; }  // rattrape les vieilles saves
      });
    puis : shell.st, shell.set, shell.setSt, shell.format, shell.setFormat,
           shell.bgStatus, shell.bgNat, shell.maxZoom,
@@ -289,6 +290,14 @@ Shell.useApp = function(cfg){
     if(currentId) localStorage.setItem("sm_last_id_"+cfg.pageKey,currentId);
   },[currentId,currentName,dirty,st]);
 
+  /* Normalisation d'un état chargé — appliquée aux DEUX chemins de
+     chargement (restauration au démarrage ET chargement depuis la liste).
+     Permet à une page de rattraper ses anciennes sauvegardes. */
+  function normalizeLoaded(state){
+    var merged = Object.assign({},cfg.DEFAULT,state||{});
+    return cfg.normalize ? cfg.normalize(merged) : merged;
+  }
+
   /* ── Restauration : exportkey (Puppeteer) puis dernier projet ── */
   useEffect(function(){
     var key=readExportKey();
@@ -303,10 +312,11 @@ Shell.useApp = function(cfg){
     if(!lastId) return;
     saveStore.current.get(lastId,function(rec){
       if(!rec||!rec.state) return;
-      setSt(Object.assign({},cfg.DEFAULT,rec.state));
+      var loaded=normalizeLoaded(rec.state);
+      setSt(loaded);
       setCurrentId(rec.id); setCurrentName(rec.name);
       smFolder.current=rec.folder||"";
-      setSmHash(global.SaveManager.hashState(Object.assign({},cfg.DEFAULT,rec.state)));
+      setSmHash(global.SaveManager.hashState(loaded));
     });
   },[]);
 
@@ -371,10 +381,11 @@ Shell.useApp = function(cfg){
       drawerOpen:drawerOpen, setDrawerOpen:setDrawerOpen,
       folder:smFolder,
       onLoad:function(rec){
-        setSt(Object.assign({},cfg.DEFAULT,rec.state));
+        var loaded=normalizeLoaded(rec.state);
+        setSt(loaded);
         setCurrentId(rec.id); setCurrentName(rec.name);
         smFolder.current=rec.folder||"";
-        setSmHash(global.SaveManager.hashState(Object.assign({},cfg.DEFAULT,rec.state)));
+        setSmHash(global.SaveManager.hashState(loaded));
       },
       onSaved:function(rec){
         setCurrentId(rec.id); setCurrentName(rec.name);
@@ -636,6 +647,13 @@ Shell.ui.ExportTab = function(p){
   useEffect(function(){
     if(store.migrateLegacy) store.migrateLegacy(function(){ refresh(); });
     else refresh();
+    /* Se resynchronise sur toute écriture, y compris celles venant du bouton
+       du header : sinon la version enregistrée n'apparaît pas dans la liste. */
+    if(global.SaveManager.onChange){
+      return global.SaveManager.onChange(function(storeName){
+        if(storeName===store.storeName) refresh();
+      });
+    }
   },[]);
 
   /* Grouper par dossier */

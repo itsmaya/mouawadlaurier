@@ -36,6 +36,21 @@
 
   function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,9); }
 
+  /* ═══ Bus de changement ═══════════════════════════════════════════════════
+     Toute écriture dans un store prévient les abonnés. Sans cela, une liste
+     déjà affichée (onglet Export) reste figée quand on enregistre depuis le
+     header : la sauvegarde existe en base mais reste invisible. */
+  var _listeners = [];
+  function onChange(cb){
+    _listeners.push(cb);
+    return function(){ _listeners = _listeners.filter(function(f){ return f!==cb; }); };
+  }
+  function emitChange(storeName){
+    _listeners.slice().forEach(function(cb){
+      try{ cb(storeName); }catch(err){ console.warn("SaveManager.onChange",err); }
+    });
+  }
+
   function dbAll(store, cb){
     openDB(function(db){
       var req = db.transaction(store,"readonly").objectStore(store).getAll();
@@ -109,14 +124,17 @@
           updatedDate: now,
           state:       rec.state
         };
-        dbPut(storeName, record, function(ok){ cb && cb(ok ? record : null); });
+        dbPut(storeName, record, function(ok){
+          if(ok) emitChange(storeName);
+          cb && cb(ok ? record : null);
+        });
       },
 
       rename: function(id, name, cb){
         handle.get(id, function(r){
           if(!r) return cb&&cb(false);
           r.name = name; r.updatedDate = new Date().toISOString();
-          dbPut(storeName, r, cb);
+          dbPut(storeName, r, function(ok){ if(ok) emitChange(storeName); cb && cb(ok); });
         });
       },
 
@@ -124,11 +142,13 @@
         handle.get(id, function(r){
           if(!r) return cb&&cb(false);
           r.folder = folder||""; r.updatedDate = new Date().toISOString();
-          dbPut(storeName, r, cb);
+          dbPut(storeName, r, function(ok){ if(ok) emitChange(storeName); cb && cb(ok); });
         });
       },
 
-      remove: function(id, cb){ dbDelete(storeName, id, cb); },
+      remove: function(id, cb){
+        dbDelete(storeName, id, function(ok){ emitChange(storeName); cb && cb(ok); });
+      },
 
       exportJson: function(cb){
         handle.list(function(all){
@@ -221,11 +241,15 @@
           e("span",{style:{fontSize:12,fontWeight:700,color:"#1a1a1a",
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
             label)),
-        /* Bouton Enregistrer */
+        /* Bouton Enregistrer / Mettre à jour
+           Actionnable dès qu'il y a quelque chose à écrire : un document neuf
+           n'est jamais « dirty » (rien n'a encore été enregistré), mais il doit
+           évidemment pouvoir être enregistré. */
         e("button",{onClick:props.onSave,
-          style:{background:dirty?"#1a1a1a":"#e8e8e8",
-            color:dirty?"#fff":"#999",border:"none",borderRadius:6,
-            padding:"5px 14px",cursor:dirty?"pointer":"default",fontWeight:700,
+          title:isNew?"Enregistrer ce projet":(dirty?"Enregistrer les modifications":"Aucune modification depuis le dernier enregistrement"),
+          style:{background:(isNew||dirty)?"#1a1a1a":"#e8e8e8",
+            color:(isNew||dirty)?"#fff":"#999",border:"none",borderRadius:6,
+            padding:"5px 14px",cursor:"pointer",fontWeight:700,
             fontSize:12,fontFamily:"inherit",flexShrink:0,
             transition:"all .15s"}},
           isNew?"Enregistrer":"Mettre à jour"));
@@ -533,6 +557,8 @@
 
   window.SaveManager = {
     createStore:    createStore,
+    onChange:       onChange,
+    emitChange:     emitChange,
     hashState:      hashState,
     exportFilename: exportFilename,
     get StatusBar(){ return getComponents().StatusBar; },

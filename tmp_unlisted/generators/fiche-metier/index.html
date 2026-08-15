@@ -1019,6 +1019,12 @@ var TRAIT_ORIGIN_GAP = 20;
     var cardRef = useRef(null);
     var sid=React.useState(null), currentId=sid[0], setCurrentId=sid[1];
     var scn=React.useState(""), currentName=scn[0], setCurrentName=scn[1];
+    /* Suivi de sauvegarde pour la barre de statut du header.
+       La signature DOIT être un state : sur une mise à jour, currentId et
+       currentName ne changent pas, seul un changement d'état redéclenche le
+       rendu et remet le bouton au propre. */
+    var shh=React.useState(null), smHash=shh[0], setSmHash=shh[1];
+    var smFolder=React.useRef("");
     var tb = React.useState("contenu"), activeTab = tb[0], setActiveTab = tb[1];
     var po = React.useState(false), panelOpen = po[0], setPanelOpen = po[1];
 
@@ -1264,6 +1270,44 @@ var TRAIT_ORIGIN_GAP = 20;
       });
     }, [state.personName, state.bgImg, state.format, cLight, L.CARD_H]);
 
+    /* ── Barre de statut dans le header (nom, pastille, Enregistrer /
+          Mettre à jour) — même comportement que les autres générateurs ── */
+    var dirty = currentId!==null && smHash!==null &&
+                SaveManager.hashState(state)!==smHash;
+    var statusRootRef = React.useRef(null);
+    React.useEffect(function(){
+      var slot = document.getElementById("sm-status-slot");
+      if(!slot || !SaveManager.StatusBar) return;
+      if(!statusRootRef.current) statusRootRef.current = ReactDOM.createRoot(slot);
+      statusRootRef.current.render(e(SaveManager.StatusBar,{
+        currentId: currentId, currentName: currentName, dirty: dirty,
+        onSave: function(){
+          var name = currentName || ("Version "+new Date().toLocaleString("fr-FR"));
+          smStore.save({id: currentId||undefined, name: name,
+            folder: smFolder.current, state: state}, function(rec){
+              if(!rec) return;
+              setCurrentId(rec.id); setCurrentName(rec.name);
+              setSmHash(SaveManager.hashState(state));
+            });
+        }
+      }));
+      if(currentId) localStorage.setItem("sm_last_id_fichemetier", currentId);
+    },[currentId,currentName,dirty,state]);
+
+    /* Restauration du dernier projet ouvert */
+    React.useEffect(function(){
+      var lastId = localStorage.getItem("sm_last_id_fichemetier");
+      if(!lastId) return;
+      smStore.get(lastId, function(rec){
+        if(!rec || !rec.state) return;
+        var loaded = Object.assign({}, DEFAULT_STATE, rec.state, { portraitTraits: null });
+        setState(loaded);
+        setCurrentId(rec.id); setCurrentName(rec.name);
+        smFolder.current = rec.folder||"";
+        setSmHash(SaveManager.hashState(loaded));
+      });
+    },[]);
+
     /* Shell fiche-metier pour Shell.ui.ExportTab */
     var fmShell = {
       st: state,
@@ -1271,10 +1315,17 @@ var TRAIT_ORIGIN_GAP = 20;
         store: smStore,
         currentId: currentId,
         currentName: currentName,
-        onSaved: function(rec){ setCurrentId(rec.id); setCurrentName(rec.name); },
-        onLoad: function(rec){
-          setState(Object.assign({}, DEFAULT_STATE, rec.state, { portraitTraits: null }));
+        onSaved: function(rec){
           setCurrentId(rec.id); setCurrentName(rec.name);
+          smFolder.current = rec.folder||"";
+          setSmHash(SaveManager.hashState(state));
+        },
+        onLoad: function(rec){
+          var loaded = Object.assign({}, DEFAULT_STATE, rec.state, { portraitTraits: null });
+          setState(loaded);
+          setCurrentId(rec.id); setCurrentName(rec.name);
+          smFolder.current = rec.folder||"";
+          setSmHash(SaveManager.hashState(loaded));
         }
       },
       busy: exporting,

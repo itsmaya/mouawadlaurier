@@ -196,6 +196,50 @@ function newSlide(type){
   return {id:sid(),type:type,st:JSON.parse(JSON.stringify(SPGCards.get(type).DEFAULT))};
 }
 
+/* ═══ RATTRAPAGE DES ANCIENNES SAUVEGARDES ═══════════════════════════════
+   Avant les cartes partagées, une vignette était un objet plat
+   ({type:"latest-news", quote, personName, …}) au lieu de {type, st}.
+   On la convertit au chargement pour ne perdre aucun projet existant. */
+var LEGACY_TYPE={"citation":"citation","latest-news":"latestnews",
+                 "block-layout":"blocklayouts","split-screen":"splitscreen"};
+
+function migrateSlide(sl){
+  if(!sl) return null;
+  if(sl.st && SPGCards.has(sl.type)) return sl;              /* déjà au bon format */
+  var type=LEGACY_TYPE[sl.type]||(SPGCards.has(sl.type)?sl.type:null);
+  if(!type) return null;                                      /* type inconnu : ignoré */
+  var st;
+  if(type==="citation") st={
+    quote:sl.quote||"", name:sl.personName||"", title:sl.personTitle||"",
+    photo:sl.personPhoto||null, bgImg:sl.bgImg||null,
+    bgMode:sl.bgImg?"photo":"grad", bgCustom:!!sl.bgImg};
+  else if(type==="latestnews"){
+    var blocs=[];
+    if(sl.title) blocs.push(SPGCards.get("latestnews").newBloc({text:sl.title}));
+    if(sl.body)  blocs.push(SPGCards.get("latestnews").newBloc({text:sl.body,type:"texte"}));
+    st={blocs:blocs.length?blocs:undefined, bgImg:sl.bgImg||null,
+        bgMode:sl.bgImg?"photo":"grad", bgCustom:!!sl.bgImg};
+  }
+  else if(type==="blocklayouts") st={
+    blocks:sl.blocks||undefined, bgImg:sl.bgImg||null,
+    bgMode:sl.bgKind==="grad"?"grad":(sl.bgKind==="img"?"photo":"white"),
+    bgCustom:!!sl.bgImg};
+  else st={
+    layout:sl.layout||"left", imgRatio:sl.imgRatio||0.55,
+    textMode:sl.textMode==="solid"?"uni":(sl.textMode||"grad"),
+    textColor:sl.textColor||"#E70000", text:sl.text||"",
+    bgImg:sl.bgImg||null, bgCustom:!!sl.bgImg};
+  Object.keys(st).forEach(function(k){ if(st[k]===undefined) delete st[k]; });
+  return {id:sl.id||sid(), type:type, st:st};
+}
+
+function normalizeCarousel(state){
+  var s=Object.assign({},state||{});
+  s.slides=(s.slides||[]).map(migrateSlide).filter(Boolean);
+  if(!s.slides.length) s.slides=[newSlide("citation")];
+  return s;
+}
+
 /* ═══ STATE ═══════════════════════════════════════════════════════════════ */
 var DEFAULT={
   format:"1x1",grad:"cyan",lowCarbon:false,
@@ -396,7 +440,7 @@ function ImportModal(p){
 
 /* ═══ APP ═════════════════════════════════════════════════════════════════ */
 function App(){
-  var shell=Shell.useApp({pageKey:"carrousel",DEFAULT:DEFAULT});
+  var shell=Shell.useApp({pageKey:"carrousel",DEFAULT:DEFAULT,normalize:normalizeCarousel});
   var st=shell.st,setSt=shell.setSt,set=shell.set;
 
   var tabState=useState("commun"),activeTab=tabState[0],setActiveTab=tabState[1];
