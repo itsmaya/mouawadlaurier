@@ -7,862 +7,733 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+@font-face { font-family:'Nunito'; font-weight:400; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-regular.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:500; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-500.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:600; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-600.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:700; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-700.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:800; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-800.woff2') format('woff2'); }
+@font-face { font-family:'Nunito'; font-weight:900; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-900.woff2') format('woff2'); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS SPÉCIFIQUE AU CARROUSEL UNIQUEMENT — tout préfixé car-*.
+   Le design system (panel, sections, tabs, seg, toggle, inputs, file-drop,
+   mini-btn, tab-nav-btn, grad-sw, hint, field-label…) vient de app-shell.js.
+   Ne rien y redéfinir.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.car-work{flex:1;display:flex;flex-direction:column;min-width:0;height:calc(100vh - 52px);}
+.car-toolbar{display:flex;align-items:center;gap:8px;padding:10px 24px;
+  background:#fff;border-bottom:1px solid #e0e0e0;flex-shrink:0;flex-wrap:wrap;}
+.car-count{font-size:12px;color:#888;}
+.car-body{flex:1;overflow-y:auto;padding:28px 24px;display:flex;
+  justify-content:center;align-items:flex-start;}
+
+.car-grid{display:flex;flex-wrap:wrap;gap:18px;align-content:flex-start;
+  justify-content:center;align-items:flex-start;}
+.car-thumb{position:relative;cursor:pointer;border-radius:8px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);border:2px solid transparent;
+  transition:box-shadow .15s,transform .15s,border-color .15s;flex-shrink:0;background:#fff;}
+.car-thumb:hover{box-shadow:0 6px 20px rgba(0,0,0,.18);transform:translateY(-2px);}
+.car-thumb.on{border-color:#0098E3;box-shadow:0 4px 18px rgba(0,152,227,.28);}
+.car-thumb-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.58);
+  color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:4px 6px;
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.car-thumb-acts{position:absolute;top:5px;left:5px;right:5px;display:flex;gap:4px;
+  opacity:0;transition:opacity .15s;}
+.car-thumb:hover .car-thumb-acts{opacity:1;}
+.car-thumb-acts button{width:22px;height:22px;border-radius:5px;border:none;
+  background:rgba(0,0,0,.6);color:#fff;font-size:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+  font-family:inherit;transition:background .12s;}
+.car-thumb-acts button:hover:not(:disabled){background:#0098E3;}
+.car-thumb-acts button:disabled{opacity:.3;cursor:default;}
+.car-thumb-acts .del{margin-left:auto;background:rgba(192,57,43,.75);}
+.car-thumb-acts .del:hover{background:#c0392b;}
+.car-add-tile{border:2px dashed #ccc;border-radius:8px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+  color:#aaa;gap:4px;flex-shrink:0;transition:border-color .15s,color .15s;background:#fafafa;}
+.car-add-tile:hover{border-color:#0098E3;color:#0098E3;}
+.car-add-tile .plus{font-size:28px;line-height:1;}
+.car-add-tile span{font-size:11px;font-weight:600;}
+
+.car-single{display:flex;flex-direction:column;align-items:center;gap:18px;}
+.car-stage{position:relative;border-radius:10px;overflow:hidden;
+  box-shadow:0 6px 28px rgba(0,0,0,.18);flex-shrink:0;}
+.car-stepper{display:flex;align-items:center;gap:12px;}
+.car-stepper .pos{font-size:12px;color:#666;min-width:56px;text-align:center;font-weight:700;}
+
+.car-list{display:flex;flex-direction:column;gap:5px;}
+.car-row{display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:8px;
+  background:#fafafa;border:1px solid #e8e8e8;border-left:3px solid transparent;
+  cursor:pointer;transition:background .12s,border-color .12s;}
+.car-row:hover{background:#f2f7fb;}
+.car-row.on{background:#eef5fb;border-color:#c0dff0;border-left-color:#0098E3;}
+.car-row-num{font-size:10px;font-weight:800;color:#bbb;width:16px;flex-shrink:0;}
+.car-row.on .car-row-num{color:#0098E3;}
+.car-row-name{flex:1;min-width:0;font-size:12px;font-weight:600;color:#444;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.car-row.on .car-row-name{color:#0098E3;font-weight:800;}
+.car-row-mark{font-size:10px;color:#bbb;flex-shrink:0;}
+.car-row button{border:1px solid #e0e0e0;background:#fff;border-radius:5px;
+  width:22px;height:22px;font-size:11px;cursor:pointer;color:#666;flex-shrink:0;
+  font-family:inherit;display:flex;align-items:center;justify-content:center;
+  transition:background .1s;padding:0;}
+.car-row button:hover:not(:disabled){background:#f0f8ff;color:#0098E3;}
+.car-row button:disabled{opacity:.28;cursor:default;}
+.car-row button.del:hover{background:#fff0f0;color:#c0392b;}
+
+.car-typegrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.car-typebtn{display:flex;align-items:center;gap:7px;padding:9px 10px;border-radius:7px;
+  border:1px solid #e0e0e0;background:#fafafa;cursor:pointer;font-size:11.5px;
+  font-weight:700;color:#555;font-family:inherit;text-align:left;
+  transition:border-color .15s,background .15s,color .15s;}
+.car-typebtn:hover{border-color:#0098E3;background:#f0f8ff;color:#0098E3;}
+.car-typebtn .ico{font-size:15px;flex-shrink:0;}
+
+.car-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:20px;}
+.car-modal{background:#fff;border-radius:12px;width:360px;max-width:100%;
+  max-height:80vh;display:flex;flex-direction:column;box-shadow:0 14px 44px rgba(0,0,0,.26);}
+.car-modal-hd{display:flex;align-items:center;justify-content:space-between;
+  gap:8px;padding:14px 16px;border-bottom:1px solid #f0f0f0;}
+.car-modal-hd h3{margin:0;font-size:13px;font-weight:800;color:#1a1a1a;letter-spacing:.03em;}
+.car-modal-hd button{border:none;background:none;font-size:20px;color:#aaa;
+  cursor:pointer;line-height:1;padding:0 2px;}
+.car-modal-hd button:hover{color:#333;}
+.car-modal-bd{overflow-y:auto;padding:12px 16px 16px;}
+.car-save-row{display:block;width:100%;text-align:left;padding:9px 12px;
+  border:1px solid #e8e8e8;border-radius:8px;margin-bottom:6px;background:#fafafa;
+  cursor:pointer;font-family:inherit;transition:background .12s,border-color .12s;}
+.car-save-row:hover{background:#f0f8ff;border-color:#0098E3;}
+.car-save-row b{display:block;font-size:12.5px;font-weight:700;color:#333;}
+.car-save-row i{display:block;font-size:10px;color:#aaa;font-style:normal;margin-top:2px;}
+
+.car-busy{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;gap:14px;font-size:14px;font-weight:600;}
+.car-busy .ring{width:40px;height:40px;border:3px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;}
+
+.car-menu-bg{position:fixed;inset:0;z-index:98;}
+.car-menu{position:absolute;top:calc(100% + 4px);left:0;z-index:99;background:#fff;
+  border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 6px 22px rgba(0,0,0,.16);
+  min-width:190px;overflow:hidden;}
+.car-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:9px 14px;
+  border:none;background:none;font-size:12.5px;cursor:pointer;color:#333;
+  font-family:inherit;text-align:left;font-weight:600;}
+.car-menu button:hover{background:#f0f8ff;color:#0098E3;}
+
+.car-blockcard{border:1px solid #e8e8e8;border-radius:8px;padding:10px;
+  margin-bottom:8px;background:#fafafa;}
+.car-blockhd{display:flex;align-items:center;gap:5px;margin-bottom:8px;}
+.car-blockhd span{font-size:11px;font-weight:800;color:#888;flex:1;letter-spacing:.04em;}
+
+@media(max-width:768px){
+  .car-toolbar{padding:10px 14px;}
+  .car-body{padding:18px 12px;}
+}
+</style>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js","https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js","https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"],function(){
-boot();
-});});});});
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){
+/* JSZip en parallèle : l'interface ne doit pas dépendre de sa disponibilité,
+   seul l'export ZIP l'exige (doExportZip vérifie window.JSZip). */
+loadScript(["https://unpkg.com/jszip@3.10.1/dist/jszip.min.js","https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js","../../assets/vendor/jszip.min.js"],function(){});
+boot();});});});
 </script>
-<style>
-*{box-sizing:border-box;}
-body{margin:0;font-family:'Nunito',sans-serif;background:#f0f0f0;}
-#root{min-height:100vh;}
-.app-layout{min-height:calc(100vh - 52px);display:grid;grid-template-columns:320px 170px 1fr;margin-top:52px;}
-.panel-left{background:#fff;border-right:1px solid #e5e5e5;overflow-y:auto;height:calc(100vh - 52px);position:sticky;top:52px;}
-.panel-section{padding:14px 18px;border-bottom:1px solid #f0f0f0;}
-.panel-section:last-child{border-bottom:none;}
-.panel-section h2{font-size:11px;font-weight:800;color:#555;margin:0 0 10px;letter-spacing:.08em;text-transform:uppercase;}
-.slide-list-col{background:#f5f5f5;border-right:1px solid #e5e5e5;height:calc(100vh - 52px);position:sticky;top:52px;display:flex;flex-direction:column;overflow:hidden;}
-.slide-list-header{padding:10px 12px;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.slide-list-header span{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#999;}
-.slide-list{flex:1;overflow-y:auto;padding:6px;}
-.slide-item{position:relative;border-radius:7px;margin-bottom:5px;cursor:pointer;border:2px solid transparent;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:all .15s;}
-.slide-item.active{border-color:#1a1a1a;box-shadow:0 2px 8px rgba(0,0,0,.16);}
-.slide-item:hover:not(.active){border-color:#ccc;}
-.slide-num{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:3px;}
-.slide-actions{position:absolute;top:4px;right:4px;display:flex;flex-direction:column;gap:2px;}
-.sld-btn{width:18px;height:18px;border-radius:3px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.92);font-size:9px;padding:0;line-height:1;}
-.sld-btn.del{color:#c0392b;}
-.add-btn{width:100%;padding:9px;border:2px dashed #ccc;border-radius:7px;background:none;cursor:pointer;font-size:11px;font-weight:700;color:#888;font-family:inherit;transition:all .15s;margin-top:2px;}
-.add-btn:hover{border-color:#1a1a1a;color:#1a1a1a;background:#fff;}
-.preview-col{display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;min-height:calc(100vh - 52px);}
-.section{margin-bottom:14px;}.section:last-child{margin-bottom:0;}
-label.field-label{display:block;font-size:11px;font-weight:600;color:#404040;margin-bottom:3px;}
-.hint{font-size:10px;color:#737373;}
-input[type=text],textarea{width:100%;font-size:13px;border:1px solid #d4d4d4;border-radius:6px;padding:6px 8px;font-family:'Nunito',sans-serif;}
-textarea{resize:vertical;}
-input[type=range]{width:100%;accent-color:#1a1a1a;}
-.file-drop{position:relative;cursor:pointer;border-radius:7px;border:2px dashed #d4d4d4;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fafafa;height:80px;}
-.file-drop.small{height:56px;}
-.file-drop:hover{border-color:#a3a3a3;}
-.file-drop img{width:100%;height:100%;object-fit:contain;padding:4px;}
-.file-drop-empty{display:flex;flex-direction:column;align-items:center;gap:3px;color:#a3a3a3;font-size:10px;text-align:center;padding:0 6px;}
-.file-drop .remove-btn{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.9);border-radius:999px;padding:3px;border:none;cursor:pointer;display:flex;}
-.export-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:#171717;color:#fff;font-size:13px;font-weight:700;border-radius:7px;padding:11px;border:none;cursor:pointer;font-family:inherit;}
-.export-btn:hover{background:#303030;}.export-btn:disabled{opacity:.6;cursor:default;}
-.seg{display:flex;gap:4px;}
-.seg button{flex:1;padding:5px;font-size:11px;font-weight:700;border-radius:5px;border:1px solid #d4d4d4;background:#fff;cursor:pointer;font-family:inherit;}
-.seg button.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
-.grad-row{display:flex;gap:5px;}
-.grad-sw{flex:1;height:30px;border-radius:7px;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .15s;}
-.grad-sw:hover{transform:translateY(-1px);}
-.grad-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset,0 2px 6px rgba(0,0,0,.18);}
-.grad-sw.on::after{content:"";position:absolute;left:50%;bottom:4px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);}
-.grad-active{font-size:10px;font-weight:700;color:#555;margin-top:5px;display:flex;align-items:center;gap:5px;}
-.grad-active i{width:10px;height:10px;border-radius:2px;display:inline-block;}
-.toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;cursor:pointer;}
-.toggle input{accent-color:#1a1a1a;}
-.charte-warn{font-size:10px;line-height:1.4;color:#8a4b00;background:#fff6e6;border:1px solid #f0d29a;border-radius:5px;padding:7px 9px;margin-top:7px;}
-.upload-hint{font-size:10px;color:#737373;background:#f8f8f8;border:1px solid #e5e5e5;border-radius:5px;padding:6px 9px;margin-bottom:7px;}
-.upload-hint b{color:#404040;}
-@keyframes spin{to{transform:rotate(360deg);}}.spin{animation:spin 1s linear infinite;display:inline-flex;}
-.saves-list{max-height:150px;overflow-y:auto;border:1px solid #e5e5e5;border-radius:7px;margin-bottom:7px;}
-.save-row{display:flex;align-items:center;gap:5px;padding:6px 9px;border-bottom:1px solid #f0f0f0;}
-.save-row:last-child{border-bottom:none;}
-.prog-bar{height:4px;background:#e5e5e5;border-radius:2px;margin-top:7px;overflow:hidden;}
-.prog-fill{height:100%;background:#1a1a1a;border-radius:2px;transition:width .2s;}
-.page-header{position:fixed;top:0;left:0;right:0;height:52px;z-index:200;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:0 24px;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
-.page-header-logo{height:19px;display:block;}
-.page-header-sep{width:1px;height:18px;background:#e0e0e0;flex-shrink:0;}
-.page-header-title{font-size:11px;font-weight:800;color:#111;letter-spacing:.07em;text-transform:uppercase;}
-.page-header-sub{font-size:11px;font-weight:400;color:#aaa;}
-.page-header-nav{margin-left:auto;display:flex;gap:8px;}
-.page-header-nav a{font-size:11px;font-weight:700;color:#333;text-decoration:none;padding:5px 12px;border-radius:2px;border:1px solid #ddd;letter-spacing:.03em;text-transform:uppercase;}
-.page-header-nav a:hover{background:#f5f5f5;}
-.page-footer{position:fixed;bottom:0;right:0;z-index:200;display:flex;align-items:center;gap:8px;padding:7px 14px;background:#fff;border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:10px 0 0 0;}
-.page-footer-label{font-size:10px;font-weight:700;color:#bbb;letter-spacing:.06em;text-transform:uppercase;}
-.page-footer-logo{height:15px;opacity:.4;}
-</style>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
 <script src="../../assets/pictos.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/charte-2026.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/components-2026.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<!-- ═══ CARTES PARTAGÉES ═══════════════════════════════════════════════════
+     Le Carrousel ne dessine AUCUNE vignette lui-même : il monte exactement
+     les mêmes composants que les pages génératrices. Toute retouche faite
+     dans un module ci-dessous apparaît ici sans aucune modification. -->
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/citation-card.js"></script>
+<script src="../../assets/cards/latest-news-card.js"></script>
+<script src="../../assets/cards/split-screen-card.js"></script>
+<script src="../../assets/cards/block-layouts-card.js"></script>
 </head>
 <body>
-
-
 <div id="root"></div>
 <script>
 function boot(){
 
-var GRADS={
-  bleu:  {label:"Bleu",   from:"#0098E3", to:"#4632FF", lowCarbonOK:true },
-  cyan:  {label:"Cyan",   from:"#0197E6", to:"#00A55E", lowCarbonOK:true },
-  vert:  {label:"Vert",   from:"#3EA400", to:"#00884A", lowCarbonOK:true },
-  rouge: {label:"Rouge",  from:"#EB6A17", to:"#E70000", lowCarbonOK:false}
-};
-
-function gradCss(k,deg){var g=GRADS[k]||GRADS.bleu;
-  return "linear-gradient("+(deg===undefined?90:deg)+"deg,"+g.from+" 0%,"+g.to+" 100%)";}
-
-/* ═══ COULEURS TEXTE — charte "Textes", fond blanc uniquement ════════════
-   Autorisé : gris foncé, les 4 couleurs unies de fin de dégradé principal,
-              ou le dégradé lui-même appliqué en diagonal.
-   Interdit  : toutes les couleurs secondaires (turquoise, fluo green, etc.)
-   Si le paragraphe dépasse 5 lignes : préférer gris ou couleur unie (charte).
-   ══════════════════════════════════════════════════════════════════════════ */
-/* Couleur gris foncé autorisée sur fond blanc, indépendamment du dégradé actif */
-
-var COLOR_GREY="#374649";
-var TE_WHITE="#FFFFFF";
-
-/* ═══ LAYOUT ══════════════════════════════════════════════════════════════
-   Toutes les valeurs de la charte sont exprimées sur un canevas 1080 px.
-   La carte de preview fait 600 px de large : K = 600/1080 = 0.5556.
-   Chaque constante ci-dessous est donc la valeur charte × K, arrondie.
-   ══════════════════════════════════════════════════════════════════════════ */
-var CARD_W=600, K=600/1080;
-function px(v){return Math.round(v*K);}   /* charte px → card px */
-
-var FORMATS={
-  "1x1" :{label:"Carré 1:1",   outputW:1080,outputH:1080,cardH:600 },
-  "4x5" :{label:"Portrait 4:5",outputW:1080,outputH:1350,cardH:750 },
-  "9x16":{label:"Story 9:16",  outputW:1080,outputH:1920,cardH:1067}
-};
-
-/* Marie-louise : 50 px de charte → 28 px carte.
-   Avec marie-louise, le cartouche passe à 100 px de marge (28 + 28). */
-var ML_W=px(50);
-
-/* ════════════════════════════════════════════════════════════════════════════
-   TYPO & MISE EN PAGE — toutes les valeurs éditables sont ici.
-   Les valeurs sont exprimées en PT CHARTE (base 1080px).
-   La fonction px() les convertit en pixels de carte (600px de large).
-
-   CARTOUCHE LÉGENDE
-   ──────────────────────────────────────────────────────────────────────── */
-var T={
-  /* Cartouche : boîte icône */
-  BADGE_H_PT      : 70,   /* hauteur de la pilule texte (pt charte) */
-  BADGE_ICON_PT   : 70,   /* taille de la boîte icône carrée */
-  BADGE_ICON_RATIO: 0.68, /* taille de l'icône dans la boîte (0.68 = 68%) */
-  BADGE_GAP_PT    : 15,   /* espace entre boîte icône et pilule texte */
-  BADGE_RADIUS_PT : 22,   /* rayon des coins du cartouche */
-  BADGE_PADX_PT   : 25,   /* padding horizontal intérieur de la pilule */
-  BADGE_FONT_PT   : 30,   /* taille de la police du cartouche */
-
-  /* Pavé de texte */
-  PAVE_PAD_PT     : 30,   /* padding intérieur du pavé blanc */
-  PAVE_RADIUS_PT  : 22,   /* rayon des coins du pavé */
-
-  /* Flèche / point de carrousel */
-  ARROW_W_PT      : 90,   /* largeur bouton carrousel (90 px export) */
-  ARROW_H_PT      : 71,   /* hauteur bouton carrousel (71 px export) */
-  ARROW_RADIUS_PT : 18,   /* rayon des coins — exposé dans le panneau */
-  ARROW_GAP_PT    : 30,   /* espace entre pavé et flèche (50 en story) */
-  ARROW_GAP_STORY : 50,   /* espace entre pavé et flèche en story */
-
-  /* Texte du pavé (charte : 45–80pt SemiBold, interl. 55–95pt) */
-  TEXT_MIN_PT     : 45,   /* taille minimum autorisée par la charte */
-  TEXT_MAX_PT     : 80,   /* taille maximum autorisée par la charte */
-  TEXT_DEF_PT     : 48,   /* taille par défaut au lancement */
-  TEXT_LH         : 1.25, /* interligne (ratio × taille) */
-
-  /* Graisses — fontWeight */
-  FW_TEXT         : 500,  /* texte courant du pavé (SemiBold) */
-  FW_HIGHLIGHT    : 500,  /* mots surlignés **comme ça** (ExtraBold) */
-  FW_UNDERLINE    : 600,  /* mots soulignés __comme ça__ (SemiBold) */
-  FW_BADGE_MAIN   : 600,  /* titre cartouche ex. "LATEST NEWS" (ExtraBold) */
-  FW_BADGE_SUB    : 200,  /* précision cartouche ex. lieu (SemiBold) */
-
-  /* Surlignage */
-  HIGHLIGHT_PAD_X : 0.28, /* espace horizontal autour du bloc surligné (× fs) */
-  HIGHLIGHT_H     : 1.14, /* hauteur du rectangle de surlignage (× fs) */
-
-  /* Soulignage */
-  UNDERLINE_TH    : 0.17, /* épaisseur de la barre (× fs, min 3px) */
-  UNDERLINE_OFF   : 0.03, /* décalage sous la baseline (× fs) */
-};
-/* ════════════════════════════════════════════════════════════════════════════ */
-
-function getLayout(k,firstSlide,hasML){
-  var f=FORMATS[k]||FORMATS["1x1"];
-  var story=(k==="9x16");
-  var base = story ? px(80) : (firstSlide ? px(84) : px(50));
-  var ml   = (!story && hasML) ? ML_W : 0;
-  return {
-    CARD_H:f.cardH, EXPORT_SCALE:f.outputW/CARD_W, STORY:story, ML:ml,
-    MARGIN: base+ml,
-    BADGE_TOP: story ? px(180) : base+ml,
-    RIGHT_MIN: (story ? px(160) : px(100)) + ml,
-    BOTTOM:    (story ? px(230) : px(100)) + ml,
-    BADGE_H:px(T.BADGE_H_PT), BADGE_ICON:px(T.BADGE_ICON_PT),
-    BADGE_GAP:px(T.BADGE_GAP_PT), BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
-    BADGE_PADX:px(T.BADGE_PADX_PT), BADGE_FONT:px(T.BADGE_FONT_PT),
-    PAVE_PAD:px(T.PAVE_PAD_PT), PAVE_RADIUS:px(T.PAVE_RADIUS_PT),
-    ARROW_W:px(T.ARROW_W_PT), ARROW_H:px(T.ARROW_H_PT), ARROW_RADIUS:px(T.ARROW_RADIUS_PT),
-    ARROW_GAP:story?px(T.ARROW_GAP_STORY):px(T.ARROW_GAP_PT),
-    TEXT_MIN:px(T.TEXT_MIN_PT), TEXT_MAX:px(T.TEXT_MAX_PT),
-    TEXT_DEF:px(T.TEXT_DEF_PT), TEXT_LH:T.TEXT_LH
-  };
-}
-
-/* ═══ PARSEUR ═════════════════════════════════════════════════════════════
-   **mot** = surlignage dégradé    __mot__ = soulignage dégradé
-   Identique au générateur Citation, pour que les deux outils partagent
-   la même syntaxe côté utilisateur.
-   ══════════════════════════════════════════════════════════════════════════ */
-
-function parseRich(t){
-  var out=[],re=/(\*\*[\s\S]+?\*\*|__[\s\S]+?__)/g,last=0,m;
-  while((m=re.exec(t))!==null){
-    if(m.index>last) out.push({t:"n",v:t.slice(last,m.index)});
-    out.push(m[0].slice(0,2)==="**"?{t:"h",v:m[0].slice(2,-2)}:{t:"u",v:m[0].slice(2,-2)});
-    last=re.lastIndex;
-  }
-  if(last<t.length) out.push({t:"n",v:t.slice(last)});
-  return out;
-}
-
 var e=React.createElement,useState=React.useState,useRef=React.useRef,
-    useCallback=React.useCallback,useEffect=React.useEffect,
-    useLayoutEffect=React.useLayoutEffect;
+    useEffect=React.useEffect;
+var UI=Shell.ui;
 
-/* Interpolation couleur hex — utilisée dans RichBody ET dans doExport */
-function lerpHex(c1,c2,t){
-  function hx(s){return parseInt(s.slice(1),16);}
-  var a=hx(c1),b=hx(c2);
-  var ar=(a>>16)&255,ag=(a>>8)&255,ab=a&255;
-  var br=(b>>16)&255,bg=(b>>8)&255,bb=b&255;
-  var r=Math.round(ar+(br-ar)*t);
-  var g=Math.round(ag+(bg-ag)*t);
-  var bl=Math.round(ab+(bb-ab)*t);
-  return "rgb("+r+","+g+","+bl+")";
+/* ═══ TYPES DISPONIBLES ═══════════════════════════════════════════════════
+   Dérivés du registre : ajouter un module de carte dans assets/cards/ le
+   rend automatiquement disponible ici, sans toucher à ce fichier. */
+var TYPES=SPGCards.all();
+
+/* Formats communs à TOUS les types (un carrousel a un seul format) */
+var CAR_FORMATS=(function(){
+  var counts={};
+  TYPES.forEach(function(t){(t.formats||[]).forEach(function(f){counts[f]=(counts[f]||0)+1;});});
+  return Object.keys(counts).filter(function(f){return counts[f]===TYPES.length;});
+})();
+
+var _sc=0;
+function sid(){return "s"+(++_sc)+"_"+Math.random().toString(36).slice(2,7);}
+
+/* Une vignette = un type + l'état NATIF du générateur correspondant.
+   Aucune conversion, aucune perte : c'est exactement ce que la page produit. */
+function newSlide(type){
+  return {id:sid(),type:type,st:JSON.parse(JSON.stringify(SPGCards.get(type).DEFAULT))};
 }
 
-function lerpHex(c1,c2,t){
-  function hx(s){return parseInt(s.slice(1),16);}
-  var a=hx(c1),b=hx(c2);
-  var ar=(a>>16)&255,ag=(a>>8)&255,ab=a&255;
-  var br=(b>>16)&255,bg=(b>>8)&255,bb=b&255;
-  var r=Math.round(ar+(br-ar)*t);
-  var g=Math.round(ag+(bg-ag)*t);
-  var bl=Math.round(ab+(bb-ab)*t);
-  return "rgb("+r+","+g+","+bl+")";
+/* ═══ STATE ═══════════════════════════════════════════════════════════════ */
+var DEFAULT={
+  format:"1x1",grad:"cyan",lowCarbon:false,
+  badgeMain:"CARROUSEL",badgeSub:"",
+  badgeIconKey:"Electricity",badgeIconCustom:null,
+  slides:[newSlide("citation"),newSlide("latestnews"),newSlide("blocklayouts")]
+};
+
+/* ═══ ÉDITEURS DE VIGNETTE ════════════════════════════════════════════════
+   Ils modifient l'état NATIF de la carte : les mêmes clés que le générateur.
+   Un champ ajouté à un générateur se pilote donc ici sans traduction. */
+
+function CitationEditor(p){
+  var st=p.st; function u(k,v){p.onChange(k,v);}
+  return e(React.Fragment,null,
+    e(UI.Section,{title:"Citation"},
+      e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**, __souligné__)")),
+      e("textarea",{spellCheck:true,rows:5,value:st.quote||"",
+        onChange:function(ev){u("quote",ev.target.value);}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Style de guillemets"),
+      e(UI.SegButtons,{value:st.quoteStyle||"curly",onChange:function(v){u("quoteStyle",v);},
+        options:[{v:"curly",l:"Courbes"},{v:"chevron",l:"Chevrons"},{v:"none",l:"Aucun"}]})),
+    e(UI.Section,{title:"Personne"},
+      e("div",{className:"upload-hint"},"Format idéal : ",e("b",null,"Portrait 3:4 (~400×530 px)")),
+      e(FileDrop,{value:st.photo,small:true,placeholder:"Portrait",
+        onChange:function(v){u("photo",v);}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Nom"),
+      e("input",{type:"text",spellCheck:true,value:st.name||"",style:{textTransform:"uppercase"},
+        onChange:function(ev){u("name",ev.target.value.toUpperCase());}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Fonction"),
+      e("textarea",{spellCheck:true,rows:2,value:st.title||"",
+        onChange:function(ev){u("title",ev.target.value);}})),
+    e(UI.Section,{title:"Fond"},
+      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){u("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
+      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
+        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
+          onChange:function(v){u("bgImg",v);u("bgCustom",true);}})):null));
 }
 
-function RichBody(props){
-  var fs=props.fs, lh=props.lh, grad=props.grad;
-  var hostRef=useRef(null);
-  var s0=useState({h:[],u:[],n:[]}); var M=s0[0],setM=s0[1];
-  var s1=useState(0); var setTick=s1[1];
+function LatestNewsEditor(p){
+  var st=p.st;
+  var blocs=st.blocs||[];
+  function setBlocs(b){p.onChange("blocs",b);}
+  function updBloc(i,k,v){var a=blocs.slice();a[i]=Object.assign({},a[i],{[k]:v});setBlocs(a);}
+  function moveBloc(i,d){var a=blocs.slice(),j=i+d;if(j<0||j>=a.length)return;
+    var t=a[i];a[i]=a[j];a[j]=t;setBlocs(a);}
+  return e(React.Fragment,null,
+    e(UI.Section,{title:"Blocs de texte"},
+      blocs.map(function(b,i){
+        return e("div",{key:b.id,className:"car-blockcard"},
+          e("div",{className:"car-blockhd"},
+            e("span",null,"BLOC "+(i+1)),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px"},disabled:i===0,
+              onClick:function(){moveBloc(i,-1);}},"↑"),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px"},disabled:i===blocs.length-1,
+              onClick:function(){moveBloc(i,1);}},"↓"),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px",background:"#fff0f0",
+              color:"#c0392b",borderColor:"#f5c6c6"},
+              onClick:function(){var a=blocs.slice();a.splice(i,1);setBlocs(a);}},"×")),
+          e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**)")),
+          e("textarea",{spellCheck:true,rows:3,value:b.text||"",
+            onChange:function(ev){updBloc(i,"text",ev.target.value);}}),
+          e("div",{style:{height:8}}),
+          e(UI.SegButtons,{value:b.type||"encadre",onChange:function(v){updBloc(i,"type",v);},
+            options:[{v:"encadre",l:"Encadré"},{v:"texte",l:"Texte nu"}]}),
+          e("div",{style:{height:8}}),
+          e("label",{className:"toggle"},
+            e("input",{type:"checkbox",checked:!!b.inverted,
+              onChange:function(ev){updBloc(i,"inverted",ev.target.checked);}}),
+            "Couleurs inversées"));
+      }),
+      e("button",{className:"mini-btn",style:{width:"100%",padding:"8px 0"},
+        onClick:function(){setBlocs(blocs.concat([SPGCards.get("latestnews").newBloc()]));}},
+        "+ Ajouter un bloc")),
+    e(UI.Section,{title:"Fond"},
+      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){p.onChange("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
+      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
+        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
+          onChange:function(v){p.onChange("bgImg",v);p.onChange("bgCustom",true);}})):null));
+}
 
+function SplitScreenEditor(p){
+  var st=p.st; function u(k,v){p.onChange(k,v);}
+  return e(React.Fragment,null,
+    e(UI.Section,{title:"Disposition"},
+      e(UI.SegButtons,{value:st.layout||"left",onChange:function(v){u("layout",v);},
+        options:[{v:"bottom",l:"Bas"},{v:"top",l:"Haut"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]}),
+      e("div",{style:{height:10}}),
+      e(UI.SliderField,{label:"Part de l'image — "+Math.round((st.imgRatio||0.61)*100)+" %",
+        min:30,max:72,step:1,value:Math.round((st.imgRatio||0.61)*100),
+        onChange:function(v){u("imgRatio",v/100);}})),
+    e(UI.Section,{title:"Image"},
+      e(FileDrop,{value:st.bgImg,placeholder:"Photo",
+        onChange:function(v){u("bgImg",v);u("bgCustom",true);}})),
+    e(UI.Section,{title:"Texte"},
+      e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**)")),
+      e("textarea",{spellCheck:true,rows:4,value:st.text||"",
+        onChange:function(ev){u("text",ev.target.value);}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Couleur du pavé"),
+      e(UI.SegButtons,{value:st.textMode||"grad",onChange:function(v){u("textMode",v);},
+        options:[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé"}]})));
+}
+
+function BlockLayoutsEditor(p){
+  var st=p.st;
+  var blocks=st.blocks||[];
+  function setBlocks(b){p.onChange("blocks",b);}
+  function upd(i,k,v){var a=blocks.slice();a[i]=Object.assign({},a[i],{[k]:v});setBlocks(a);}
+  function move(i,d){var a=blocks.slice(),j=i+d;if(j<0||j>=a.length)return;
+    var t=a[i];a[i]=a[j];a[j]=t;setBlocks(a);}
+  return e(React.Fragment,null,
+    e(UI.Section,{title:"Fond"},
+      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){p.onChange("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
+      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
+        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
+          onChange:function(v){p.onChange("bgImg",v);p.onChange("bgCustom",true);}})):null),
+    e(UI.Section,{title:"Blocs"},
+      e("div",{className:"hint",style:{marginBottom:8}},"4 blocs maximum (3 en story) — charte 2026."),
+      blocks.map(function(b,i){
+        return e("div",{key:b.id,className:"car-blockcard"},
+          e("div",{className:"car-blockhd"},
+            e("span",null,"BLOC "+(i+1)),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px"},disabled:i===0,
+              onClick:function(){move(i,-1);}},"↑"),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px"},disabled:i===blocks.length-1,
+              onClick:function(){move(i,1);}},"↓"),
+            e("button",{className:"mini-btn",style:{padding:"3px 8px",background:"#fff0f0",
+              color:"#c0392b",borderColor:"#f5c6c6"},
+              onClick:function(){var a=blocks.slice();a.splice(i,1);setBlocks(a);}},"×")),
+          e(UI.SegButtons,{value:b.kind||"figure",onChange:function(v){upd(i,"kind",v);},
+            options:[{v:"figure",l:"Chiffre"},{v:"body",l:"Texte"}]}),
+          e("div",{style:{height:8}}),
+          b.kind==="figure"?e(React.Fragment,null,
+            e("label",{className:"field-label"},"Chiffre"),
+            e("input",{type:"text",value:b.callout||"",
+              onChange:function(ev){upd(i,"callout",ev.target.value);}}),
+            e("div",{style:{height:8}})):null,
+          e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**)")),
+          e("textarea",{spellCheck:true,rows:2,value:b.text||"",
+            onChange:function(ev){upd(i,"text",ev.target.value);}}),
+          e("div",{style:{height:8}}),
+          e("label",{className:"field-label"},"Colonne"),
+          e(UI.SegButtons,{value:b.col||"full",onChange:function(v){upd(i,"col",v);},
+            options:[{v:"full",l:"Toute"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]}),
+          e("div",{style:{height:8}}),
+          e("label",{className:"toggle"},
+            e("input",{type:"checkbox",checked:!!b.inverted,
+              onChange:function(ev){upd(i,"inverted",ev.target.checked);}}),
+            "Couleurs inversées"));
+      }),
+      blocks.length<4?e("button",{className:"mini-btn",style:{width:"100%",padding:"8px 0"},
+        onClick:function(){setBlocks(blocks.concat([SPGCards.get("blocklayouts").newBlock("body")]));}},
+        "+ Ajouter un bloc"):null));
+}
+
+var EDITORS={citation:CitationEditor,latestnews:LatestNewsEditor,
+             splitscreen:SplitScreenEditor,blocklayouts:BlockLayoutsEditor};
+
+/* ═══ MODALE D'IMPORT ═════════════════════════════════════════════════════ */
+function ImportModal(p){
+  var a=useState(null),recs=a[0],setRecs=a[1];
+  var reg=SPGCards.get(p.type);
   useEffect(function(){
-    if(document.fonts&&document.fonts.ready){
-      document.fonts.ready.then(function(){ setTick(function(t){return t+1;}); });
-    }
-  },[]);
-
-  useLayoutEffect(function(){
-    var host=hostRef.current; if(!host) return;
-    var base=host.getBoundingClientRect();
-    var SC = host.offsetWidth ? (base.width/host.offsetWidth) : 1;
-    if(!SC || !isFinite(SC) || SC<=0) SC=1;
-    function N(v){ return v/SC; }
-
-    var res={h:[],u:[],n:[]};
-    var segs=host.querySelectorAll("[data-seg]");
-    for(var i=0;i<segs.length;i++){
-      var kind=segs[i].getAttribute("data-seg");
-      var rs=segs[i].getClientRects();
-      for(var j=0;j<rs.length;j++){
-        var r=rs[j]; if(r.width<0.5) continue;
-        var o={x:N(r.left-base.left),y:N(r.top-base.top),
-               w:N(r.width),h:N(r.height),b:N(r.bottom-base.top)};
-        if(kind==="h") res.h.push(o);
-        else if(kind==="u") res.u.push(o);
-        else res.n.push(o);
-      }
-    }
-    if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
-  });
-
-  /* Parseur → tableau de tokens, avec support saut de ligne \n → br */
-  function renderParts(text,useGrad,color){
-    /* On découpe d'abord sur \n pour gérer les sauts de ligne */
-    var lines=text.split("\n");
-    var out=[];
-    lines.forEach(function(line,li){
-      if(li>0) out.push(e("br",{key:"br"+li}));
-      var parts=parseRich(line);
-      parts.forEach(function(p,pi){
-        var key=li+"-"+pi;
-        if(p.t==="h"){
-          /* Espace insécable avant/après le bloc surligné */
-          out.push(e("span",{key:key+"a",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-          out.push(e("span",{key:key,"data-seg":"h",
-            style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                   WebkitTextFillColor:TE_WHITE}},p.v));
-          out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
-        } else if(p.t==="u"){
-          out.push(e("span",{key:key,"data-seg":"u",
-            style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_UNDERLINE,
-                   color:useGrad?"transparent":color,
-                   WebkitTextFillColor:useGrad?"transparent":undefined}}
-            ,p.v));
-        } else {
-          out.push(useGrad
-            ? e("span",{key:key,"data-seg":"n",
-                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
-                       color:"transparent",WebkitTextFillColor:"transparent"}},p.v)
-            : e("span",{key:key,
-                style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},p.v));
-        }
-      });
+    SaveManager.createStore(reg.pageKey).list(function(all){
+      (all||[]).sort(function(x,y){
+        return String(y.updatedDate||y.date||"").localeCompare(String(x.updatedDate||x.date||""));});
+      setRecs(all||[]);
     });
-    return out;
-  }
-
-  var useGrad=(props.textMode==="grad");
-
-  /* Surlignage */
-  var H_PAD_X=fs*T.HIGHLIGHT_PAD_X;
-  var H_H=fs*T.HIGHLIGHT_H;
-  /* Soulignage */
-  var U_TH=Math.max(3,fs*T.UNDERLINE_TH);
-  var U_OFF=fs*T.UNDERLINE_OFF;
-
-  /* Dégradé diagonal sur texte normal */
-  var gradFrom=props.gradFrom||"#0098E3";
-  var gradTo=props.gradTo||"#4632FF";
-  var nMinX=Infinity,nMinY=Infinity,nMaxX=-Infinity,nMaxY=-Infinity;
-  if(useGrad&&M.n.length){
-    M.n.forEach(function(r){
-      nMinX=Math.min(nMinX,r.x); nMinY=Math.min(nMinY,r.y);
-      nMaxX=Math.max(nMaxX,r.x+r.w); nMaxY=Math.max(nMaxY,r.y+r.h);
-    });
-  }
-
-  return e("div",{style:{position:"relative"}},
-
-    M.h.map(function(r,i){
-      var cy=r.y+r.h/2;
-      return e("div",{key:"h"+i,style:{position:"absolute",
-        left:r.x-H_PAD_X, top:cy-H_H/2, width:r.w+H_PAD_X*2, height:H_H,
-        backgroundImage:grad, borderRadius:2, zIndex:0}});
-    }),
-
-    M.u.map(function(r,i){
-      return e("div",{key:"u"+i,style:{position:"absolute",
-        left:r.x, top:r.b-U_OFF, width:r.w, height:U_TH,
-        backgroundImage:grad, borderRadius:U_TH/2, zIndex:0}});
-    }),
-
-    useGrad&&M.n.length?(function(){
-      var spanW=nMaxX-nMinX, spanH=nMaxY-nMinY, span=spanW+spanH||1;
-      return M.n.map(function(r,i){
-        var t=((r.x+r.w/2-nMinX)+(r.y+r.h/2-nMinY))/span;
-        t=Math.max(0,Math.min(1,t));
-        /* Rectangles uniquement pour l'export html2canvas (data-grad-rect).
-           En preview ils sont rendus invisibles : le texte porte la couleur
-           via background-clip:text ci-dessous. */
-        return e("div",{key:"ng"+i,"data-grad-rect":"1",style:{position:"absolute",
-          left:r.x-1,top:r.y,width:r.w+2,height:r.h,
-          background:lerpHex(gradFrom,gradTo,t),zIndex:1,
-          opacity:0,pointerEvents:"none"}});
-      });
-    })():null,
-
-    e("div",{ref:hostRef,"data-richhost":"1",style:{position:"relative",zIndex:2,
-        fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
-        /* Mode dégradé : background-clip:text en preview.
-           L'export utilise les rects data-grad-rect rendus opaques à la volée. */
-        background:useGrad?undefined:undefined,
-        backgroundImage:useGrad?grad:undefined,
-        WebkitBackgroundClip:useGrad?"text":undefined,
-        backgroundClip:useGrad?"text":undefined,
-        color:useGrad?"transparent":props.color,
-        WebkitTextFillColor:useGrad?"transparent":undefined,
-        fontSize:fs,lineHeight:lh,textAlign:props.align}},
-      props.live?e("span",{style:{display:"inline-block",
-        width:fs*0.9,height:fs*0.9,borderRadius:"50%",
-        background:"#E70000",marginRight:fs*0.28,
-        verticalAlign:"middle",marginBottom:fs*0.08,flexShrink:0}}):null,
-      renderParts(props.text,useGrad,props.color))
-  );
+  },[p.type]);
+  return e("div",{className:"car-modal-bg",
+      onClick:function(ev){if(ev.target===ev.currentTarget)p.onClose();}},
+    e("div",{className:"car-modal"},
+      e("div",{className:"car-modal-hd"},
+        e("h3",null,reg.icon+"  Sauvegardes « "+reg.label+" »"),
+        e("button",{onClick:p.onClose,"aria-label":"Fermer"},"×")),
+      e("div",{className:"car-modal-bd"},
+        recs===null
+          ? e("div",{className:"hint"},"Chargement…")
+          : recs.length===0
+            ? e("div",{className:"hint",style:{lineHeight:1.6}},
+                "Aucune sauvegarde dans le générateur ",e("b",null,reg.label),". ",
+                "Ouvrez-le, enregistrez une version, puis revenez ici.")
+            : recs.map(function(r){
+                return e("button",{key:r.id,className:"car-save-row",
+                  onClick:function(){p.onPick(r);}},
+                  e("b",null,r.name||"(sans nom)"),
+                  e("i",null,(r.folder?"📁 "+r.folder+"  ·  ":"")+
+                    new Date(r.updatedDate||r.date||Date.now()).toLocaleString("fr-FR")));
+              }))));
 }
 
-var AID=0;
-function NavMark(p){
-  var bw=p.w, bh=p.h, br=p.radius;
-  if(p.kind==="dot"){
-    var ds=bh*0.32;
-    return e("div",{style:{width:bw,height:bh,borderRadius:br,
-        backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-      e("div",{style:{width:ds,height:ds,borderRadius:"50%",
-        background:TE_WHITE}}));
-  }
-  return e("div",{style:{width:bw,height:bh,borderRadius:br,
-      backgroundImage:p.grad,display:"flex",alignItems:"center",justifyContent:"center"}},
-    e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",alt:"",
-      style:{width:"59%",height:"auto",display:"block",objectFit:"contain"}}));
-}
-
-/* Pictos — délégués à PictoGallery (assets/pictos.js) */
-
-function FileDrop(p){
-  var r=useRef(null);
-  function take(f){if(!f||!f.type||f.type.indexOf("image/")!==0)return;var rd=new FileReader();rd.onload=function(ev){p.onChange(ev.target.result);};rd.readAsDataURL(f);}
-  return e("div",{className:"file-drop"+(p.small?" small":""),
-    onClick:function(){if(r.current)r.current.click();},
-    onDragOver:function(ev){ev.preventDefault();},
-    onDrop:function(ev){ev.preventDefault();take(ev.dataTransfer.files[0]);}},
-    p.value
-      ?e(React.Fragment,null,
-          e("img",{src:p.value,alt:""}),
-          e("button",{className:"remove-btn",onClick:function(ev){ev.stopPropagation();p.onChange(null);}},
-            e("svg",{viewBox:"0 0 16 16",width:14,height:14,fill:"none",stroke:"#666",strokeWidth:2},
-              e("line",{x1:4,y1:4,x2:12,y2:12}),e("line",{x1:12,y1:4,x2:4,y2:12}))))
-      :e("div",{className:"file-drop-empty"},
-          e("svg",{viewBox:"0 0 24 24",width:20,height:20,fill:"none",stroke:"#a3a3a3",strokeWidth:1.5},
-            e("rect",{x:3,y:3,width:18,height:18,rx:3}),
-            e("circle",{cx:8.5,cy:8.5,r:1.5}),e("path",{d:"M21 15l-5-5L5 21"})),
-          e("span",null,p.placeholder||"Cliquer ou déposer")),
-    e("input",{ref:r,type:"file",accept:"image/*",style:{display:"none"},onChange:function(ev){take(ev.target.files[0]);}}));
-}
-
-function DragImage(props){
-  var dragRef=useRef(null);
-  var dragging=useRef(false);
-  var last=useRef({x:0,y:0});
-  var natRef=useRef({w:0,h:0});
-
-  function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
-
-  function onDown(ev){
-    if(!props.src) return;
-    ev.preventDefault();
-    dragging.current=true;
-    var pt=ev.touches?ev.touches[0]:ev;
-    last.current={x:pt.clientX,y:pt.clientY};
-  }
-  function onMove(ev){
-    if(!dragging.current) return;
-    ev.preventDefault();
-    var pt=ev.touches?ev.touches[0]:ev;
-    var dx=pt.clientX-last.current.x;
-    var dy=pt.clientY-last.current.y;
-    last.current={x:pt.clientX,y:pt.clientY};
-    /* Dimensions de l'image après cover + zoom, en px preview */
-    var cw=props.w, ch=props.h;
-    var nat=natRef.current;
-    var zf=(props.zoom||100)/100;
-    var iw,ih;
-    if(nat.w>0&&nat.h>0){
-      var ir=nat.w/nat.h, cr=cw/ch;
-      if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
-    } else {
-      iw=cw; ih=ch;
-    }
-    iw*=zf; ih*=zf;
-    /* Plage de déplacement réelle en px */
-    var rangeX=Math.max(0,iw-cw);
-    var rangeY=Math.max(0,ih-ch);
-    /* Convertir drag px → delta % */
-    var dPctX=rangeX>0 ? dx/rangeX*100 : 0;
-    var dPctY=rangeY>0 ? dy/rangeY*100 : 0;
-    var pctX=clamp(props.x - dPctX, 0, 100);
-    var pctY=clamp(props.y - dPctY, 0, 100);
-    props.onChange(pctX,pctY);
-  }
-  function onUp(){ dragging.current=false; }
-
-  useEffect(function(){
-    /* Charger les dimensions naturelles de l'image pour calcul du drag */
-    if(props.src){
-      var im=new Image();
-      im.onload=function(){natRef.current={w:im.naturalWidth,h:im.naturalHeight};};
-      im.src=props.src;
-    } else {
-      natRef.current={w:0,h:0};
-    }
-  },[props.src]);
-
-  useEffect(function(){
-    window.addEventListener("mousemove",onMove);
-    window.addEventListener("mouseup",onUp);
-    window.addEventListener("touchmove",onMove,{passive:false});
-    window.addEventListener("touchend",onUp);
-    return function(){
-      window.removeEventListener("mousemove",onMove);
-      window.removeEventListener("mouseup",onUp);
-      window.removeEventListener("touchmove",onMove);
-      window.removeEventListener("touchend",onUp);
-    };
-  });
-
-  var zoom=props.zoom||100;
-  var zf=zoom/100;
-  var cw=props.w, ch=props.h;
-  var nat=natRef.current;
-  var iw,ih;
-  if(nat.w>0&&nat.h>0){
-    var ir=nat.w/nat.h, cr=cw/ch;
-    if(ir>cr){ih=ch;iw=ih*ir;}else{iw=cw;ih=iw/ir;}
-  } else {
-    iw=cw; ih=ch;
-  }
-  iw*=zf; ih*=zf;
-  /* Position left/top en px depuis les % x/y */
-  var rangeX=Math.max(0,iw-cw);
-  var rangeY=Math.max(0,ih-ch);
-  var left=(cw-iw)/2 + rangeX*(1-props.x/100);
-  var top =(ch-ih)/2 + rangeY*(1-props.y/100);
-
-  return e("div",{ref:dragRef,
-    style:{position:"absolute",inset:0,overflow:"hidden",
-      cursor:props.src?"grab":"default"},
-    onMouseDown:onDown,
-    onTouchStart:onDown},
-    props.src?e("img",{src:props.src,alt:"",
-      style:{position:"absolute",
-        width:iw+"px", height:ih+"px",
-        left:left+"px", top:top+"px",
-        filter:props.blur>0?"blur("+Math.round(props.blur)+"px)":"none",
-        userSelect:"none",pointerEvents:"none"}}):null
-  );
-}
-
-/* Pictos — délégués à PictoGallery (assets/pictos.js) */
-
-function FileDrop(p){
-  var r=useRef(null);
-  function take(f){if(!f||!f.type||f.type.indexOf("image/")!==0)return;var rd=new FileReader();rd.onload=function(ev){p.onChange(ev.target.result);};rd.readAsDataURL(f);}
-  return e("div",{className:"file-drop"+(p.small?" small":""),
-    onClick:function(){if(r.current)r.current.click();},
-    onDragOver:function(ev){ev.preventDefault();},
-    onDrop:function(ev){ev.preventDefault();take(ev.dataTransfer.files[0]);}},
-    p.value
-      ?e(React.Fragment,null,
-          e("img",{src:p.value,alt:""}),
-          e("button",{className:"remove-btn",onClick:function(ev){ev.stopPropagation();p.onChange(null);}},
-            e("svg",{viewBox:"0 0 16 16",width:14,height:14,fill:"none",stroke:"#666",strokeWidth:2},
-              e("line",{x1:4,y1:4,x2:12,y2:12}),e("line",{x1:12,y1:4,x2:4,y2:12}))))
-      :e("div",{className:"file-drop-empty"},
-          e("svg",{viewBox:"0 0 24 24",width:20,height:20,fill:"none",stroke:"#a3a3a3",strokeWidth:1.5},
-            e("rect",{x:3,y:3,width:18,height:18,rx:3}),
-            e("circle",{cx:8.5,cy:8.5,r:1.5}),e("path",{d:"M21 15l-5-5L5 21"})),
-          e("span",null,p.placeholder||"Cliquer ou déposer")),
-    e("input",{ref:r,type:"file",accept:"image/*",style:{display:"none"},onChange:function(ev){take(ev.target.files[0]);}}));
-}
-function DownloadIcon(){return e("svg",{viewBox:"0 0 24 24",width:18,height:18,fill:"none",stroke:"currentColor",strokeWidth:2},e("path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"}),e("polyline",{points:"7 10 12 15 17 10"}),e("line",{x1:12,y1:15,x2:12,y2:3}));}
-
-
-/* ═══ IndexedDB ════════════════════════════════════════════════════════════ */
-var DB_NAME="wie_db",DB_VERSION=4,STORE="carrousel_saves";
-function openDB(ok,ko){var q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=function(ev){var db=ev.target.result;["saves","citation_saves","latestnews_saves",STORE].forEach(function(s){if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"name"});});};q.onsuccess=function(ev){ok(ev.target.result);};q.onerror=function(){ko&&ko();};}
-function dbAll(cb){openDB(function(db){var q=db.transaction(STORE,"readonly").objectStore(STORE).getAll();q.onsuccess=function(ev){var a=ev.target.result||[];a.sort(function(x,y){return y.date>x.date?1:-1;});cb(a);};q.onerror=function(){cb([]);};},function(){cb([]);});}
-function dbPut(en,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE).put(en);t.oncomplete=cb||function(){};});}
-function dbDel(n,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite");t.objectStore(STORE)["delete"](n);t.oncomplete=cb||function(){};});}
-function dbPutAll(a,cb){openDB(function(db){var t=db.transaction(STORE,"readwrite"),s=t.objectStore(STORE);a.forEach(function(x){s.put(x);});t.oncomplete=cb||function(){};});}
-
-/* ═══ ÉTAT ════════════════════════════════════════════════════════════════ */
-function newSlide(idx){return{id:Date.now()+idx+Math.random(),bgMode:"photo",bgImg:null,bgBlur:0,bgDark:0,bgX:50,bgY:50,bgZoom:100,text:"Texte de la slide "+(idx+1),textMode:"uni",textColor:"#4632FF",liveMode:false,align:"left",fs:0,w:0,b:-1};}
-
-var DEFAULT_GLOBAL={format:"1x1",grad:"bleu",lowCarbon:false,hasML:false,mlStyle:"white",badgeMain:"SUSTAINABILITY",badgeSub:"",badgeIconKey:"Green Energy",badgeIconCustom:null};
-
-/* ═══ SLIDE CARD ══════════════════════════════════════════════════════════ */
-function SlideCard(props){
-  var g=props.global,sl=props.slide,idx=props.idx,total=props.total;
-  var isLast=(idx===total-1),isFirst=(idx===0);
-  var GRAD_H=gradCss(g.grad,90),GRAD_V=gradCss(g.grad,180),G=GRADS[g.grad]||GRADS.bleu;
-  var L=getLayout(g.format,isFirst,g.hasML),CARD_H=L.CARD_H;
-  var onGrad=(sl.bgMode==="grad");
-  var fs=sl.fs||L.TEXT_DEF;fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
-  var autoW=CARD_W-L.MARGIN-(L.STORY?px(160):px(100))-L.ML;
-  var PW=sl.w?Math.round(CARD_W*sl.w/100):autoW;
-  PW=Math.max(Math.round(CARD_W*0.30),Math.min(CARD_W-L.MARGIN*2,PW));
-  var paveH=props.paveH||80;
-  var markH=isLast?0:(L.ARROW_H+L.ARROW_GAP);
-  var BOTTOM_MIN=L.MARGIN,BOTTOM_MAX=Math.max(BOTTOM_MIN,CARD_H-L.BADGE_TOP-L.BADGE_H-px(60)-paveH-markH);
-  var bottomTarget=sl.b<0?Math.max(BOTTOM_MIN,Math.min(BOTTOM_MAX,L.BOTTOM)):BOTTOM_MIN+(sl.b/1000)*(BOTTOM_MAX-BOTTOM_MIN);
-  bottomTarget=Math.round(bottomTarget);
-  var paveBottom=bottomTarget+(isLast?0:markH);
-  var paveLeft=(sl.align==="right")?(CARD_W-PW-L.MARGIN):L.MARGIN;
-  var badgeBoxStyle=onGrad
-    ?{height:L.BADGE_H,width:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"transparent",border:"2px solid #FFFFFF",boxSizing:"border-box"}
-    :{height:L.BADGE_H,width:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,backgroundImage:GRAD_H,border:"none"};
-  var pillStyle=onGrad
-    ?{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:L.BADGE_FONT,letterSpacing:".05em",whiteSpace:"nowrap",background:"transparent",border:"2px solid #FFFFFF",boxSizing:"border-box"}
-    :{height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:L.BADGE_FONT,letterSpacing:".05em",whiteSpace:"nowrap",backgroundImage:GRAD_H,border:"none"};
-
-  var pictoSrc=g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey))||null;
-  var hasRealPicto=!!(g.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey)));
-  var isPictoOut=!g.badgeIconCustom&&!!(window.PictoGallery&&window.PictoGallery.getSrc(g.badgeIconKey))&&window.PictoGallery&&!window.PictoGallery.isWhite(g.badgeIconKey);
-  var badgeBoxActual=isPictoOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"}):badgeBoxStyle;
-  var numLabel="#"+(idx+1)+(g.badgeMain?" "+g.badgeMain:"");
-
-  return e("div",{ref:props.cardRef,style:{width:CARD_W,height:CARD_H,position:"relative",fontFamily:"'Nunito',sans-serif",overflow:"hidden",backgroundImage:(g.hasML&&g.mlStyle==="grad")?GRAD_V:"none",backgroundColor:(g.hasML&&g.mlStyle==="grad")?"transparent":(g.hasML?"#FFFFFF":"#12203c")}},
-    onGrad
-      ?e("div",{"data-layer":"bg",style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundImage:GRAD_V}})
-      :e("div",{"data-layer":"bg",style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundColor:"#12203c"}},
-          e(DragImage,{src:sl.bgImg,x:sl.bgX,y:sl.bgY,zoom:sl.bgZoom,blur:sl.bgBlur,w:CARD_W*(props.previewScale||1),h:CARD_H*(props.previewScale||1),scale:props.previewScale||1,onChange:props.onBgMove})),
-    (!onGrad&&sl.bgDark>0)?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,background:"rgba(10,20,45,"+sl.bgDark+")"}}):null,
-    e("div",{style:{position:"absolute",left:L.MARGIN,top:L.BADGE_TOP,display:"flex",alignItems:"flex-start",gap:L.BADGE_GAP}},
-      pictoSrc&&hasRealPicto
-        ?e("div",{style:badgeBoxActual},e("img",{src:pictoSrc,alt:"",style:{width:L.BADGE_ICON*0.9+"px",height:L.BADGE_ICON*0.9+"px",objectFit:"contain"}}))
-        :e("div",{style:badgeBoxStyle},e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:TE_WHITE},e("path",{d:"M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"}))),
-      e("div",{style:pillStyle},
-        e("span",{style:{fontWeight:T.FW_BADGE_MAIN,textTransform:"uppercase"}},numLabel),
-        g.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB,textTransform:"uppercase"}}," - "+g.badgeSub):null)),
-    e("div",{ref:props.paveRef,style:{position:"absolute",left:paveLeft,bottom:paveBottom,width:PW,background:TE_WHITE,borderRadius:L.PAVE_RADIUS,padding:L.PAVE_PAD,boxSizing:"border-box"}},
-      e(RichBody,{text:sl.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,color:sl.textColor,align:sl.align,live:sl.liveMode,textMode:sl.textMode,gradFrom:G.from,gradTo:G.to})),
-    e("div",{style:{position:"absolute",left:(sl.align==="right")?(CARD_W-L.MARGIN-L.ARROW_W):L.MARGIN,bottom:bottomTarget}},
-      e(NavMark,{kind:isLast?"dot":"arrow",w:L.ARROW_W,h:L.ARROW_H,radius:px(18),grad:GRAD_H,from:G.from,to:G.to}))
-  );
-}
-
-/* ═══ APP ════════════════════════════════════════════════════════════════ */
+/* ═══ APP ═════════════════════════════════════════════════════════════════ */
 function App(){
-  var a0=useState(DEFAULT_GLOBAL);var global=a0[0],setGlobal=a0[1];
-  var a1=useState([newSlide(0),newSlide(1)]);var slides=a1[0],setSlides=a1[1];
-  var a2=useState(0);var activeIdx=a2[0],setActiveIdx=a2[1];
-  var a3=useState([]);var saves=a3[0],setSaves=a3[1];
-  var a4=useState("");var sname=a4[0],setSname=a4[1];
-  var a6=useState({progress:0,total:0,busy:false});var expSt=a6[0],setExpSt=a6[1];
-  var a7=useState(0);var paveH=a7[0],setPaveH=a7[1];
-  var cardRef=useRef(null),paveRef=useRef(null),impRef=useRef(null);
+  var shell=Shell.useApp({pageKey:"carrousel",DEFAULT:DEFAULT});
+  var st=shell.st,setSt=shell.setSt,set=shell.set;
 
-  function setG(k,v){setGlobal(function(p){var c=Object.assign({},p);
-    if(k==="grad") setSlides(function(ss){return ss.map(function(sl){
-      if(sl.textMode==="uni"&&sl.textColor!==COLOR_GREY){var c2=Object.assign({},sl);c2.textColor=GRADS[v]?GRADS[v].to:sl.textColor;return c2;}return sl;});});
-    c[k]=v;return c;});}
-  function setSl(k,v){setSlides(function(ss){return ss.map(function(sl,i){if(i!==activeIdx)return sl;var c=Object.assign({},sl);c[k]=v;return c;});});}
-  var sl=slides[Math.min(activeIdx,slides.length-1)]||slides[0];
+  var tabState=useState("commun"),activeTab=tabState[0],setActiveTab=tabState[1];
+  var idxState=useState(0),activeIdx=idxState[0],setActiveIdx=idxState[1];
+  var viewState=useState("grid"),view=viewState[0],setView=viewState[1];
+  var zipState=useState(false),zipping=zipState[0],setZipping=zipState[1];
+  var impState=useState(null),importType=impState[0],setImportType=impState[1];
+  var menuState=useState(false),addMenu=menuState[0],setAddMenu=menuState[1];
 
-  useLayoutEffect(function(){if(!paveRef.current)return;var h=Math.round(paveRef.current.offsetHeight||0);if(h>0&&h!==paveH)setPaveH(h);});
+  var TABS=[{id:"commun",label:"Commun"},{id:"vignettes",label:"Vignettes"},
+            {id:"contenu",label:"Contenu"},{id:"export",label:"Export"}];
 
-  useEffect(function(){
-    dbAll(function(a){setSaves(a);if(a.length===0){var def={name:"\u2b50 D\u00e9faut",date:new Date().toISOString(),state:{global:DEFAULT_GLOBAL,slides:[newSlide(0),newSlide(1)]}};dbPut(def,function(){dbAll(function(b){setSaves(b);});});}});
-  },[]);
+  var slides=st.slides||[];
+  var cf=chFormat(st.format);
 
-  useEffect(function(){
-    window.PictoGallery.load(function(){
-      var keys=window.PictoGallery.getKeys();
-      setGlobal(function(p){
-        var c=Object.assign({},p);
-        if(keys.indexOf(p.badgeIconKey)<0) c.badgeIconKey=keys[0];
-        c._pgLoaded=true; return c;
-      });
-      var container=document.getElementById("picto-gallery-container");
-      if(container&&!container._pg){
-        container._pg=window.PictoGallery.init(container,{
-          grad:"linear-gradient(90deg,#0098E3,#4632FF)",
-          selected:global.badgeIconKey,
-          custom:global.badgeIconCustom,
-          onChange:function(key){setGlobal(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
-          onCustom:function(uri){setGlobal(function(p){var c=Object.assign({},p);c.badgeIconCustom=uri;return c;});},
-        });
-      }
-    });
-  },[]);
-
-  function addSlide(){setSlides(function(ss){var ns=newSlide(ss.length);ns.textColor=GRADS[global.grad]?GRADS[global.grad].to:"#4632FF";return ss.concat(ns);});setActiveIdx(slides.length);}
-  function removeSlide(idx){if(slides.length<=1)return;setSlides(function(ss){return ss.filter(function(_,i){return i!==idx;});});setActiveIdx(function(cur){return Math.min(cur,slides.length-2);});}
-  function moveSlide(idx,dir){var t=idx+dir;if(t<0||t>=slides.length)return;setSlides(function(ss){var a=ss.slice();var tmp=a[idx];a[idx]=a[t];a[t]=tmp;return a;});setActiveIdx(t);}
-
-  var doExport=useCallback(function(){
-    if(!cardRef.current||expSt.busy)return;
-    var tot=slides.length;setExpSt({progress:0,total:tot,busy:true});
-    var G2=GRADS[global.grad]||GRADS.bleu;
-    var zip=new JSZip();
-    function one(idx,done){
-      if(idx>=tot){done();return;}
-      setActiveIdx(idx);
-      setTimeout(function(){
-        if(!cardRef.current){one(idx+1,done);return;}
-        var sl2=slides[idx];
-        function preBlur(done2){
-          if(!sl2.bgImg||sl2.bgMode!=="photo"){done2(null);return;}
-          var f=FORMATS[global.format]||FORMATS["1x1"],OW=f.outputW,OH=f.outputH;
-          var img=new Image();img.crossOrigin="anonymous";
-          img.onload=function(){
-            var cv=document.createElement("canvas");cv.width=OW;cv.height=OH;
-            var ctx=cv.getContext("2d");ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
-            if(sl2.bgBlur>0){var L2=getLayout(global.format,idx===0,global.hasML);ctx.filter="blur("+Math.round(sl2.bgBlur*L2.EXPORT_SCALE)+"px)";}
-            var ir=img.naturalWidth/img.naturalHeight,cr=OW/OH,dw,dh;
-            if(ir>cr){dh=OH;dw=dh*ir;}else{dw=OW;dh=dw/ir;}
-            var zf=sl2.bgZoom/100;dw*=zf;dh*=zf;
-            ctx.drawImage(img,(OW-dw)*(sl2.bgX/100),(OH-dh)*(sl2.bgY/100),dw,dh);
-            done2(cv.toDataURL("image/png"));
-          };img.onerror=function(){done2(null);};img.src=sl2.bgImg;
-        }
-        preBlur(function(blurred){
-          var box=document.createElement("div");box.style.cssText="position:fixed;left:-99999px;top:0;pointer-events:none;z-index:-1;";
-          var cl=cardRef.current.cloneNode(true);cl.style.transform="none";cl.style.position="static";cl.style.width=CARD_W+"px";
-          box.appendChild(cl);document.body.appendChild(box);
-          if(blurred){var bgl=cl.querySelector("[data-layer=bg]");if(bgl){bgl.style.background="#12203c";var oi=bgl.querySelector("img");if(oi)oi.parentNode.removeChild(oi);var bi=document.createElement("img");bi.src=blurred;bi.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;";bgl.appendChild(bi);}}
-          if(sl2.textMode==="grad"){var rects=cl.querySelectorAll("[data-grad-rect]");for(var ri=0;ri<rects.length;ri++)rects[ri].parentNode.removeChild(rects[ri]);var hosts=cl.querySelectorAll("[data-richhost]");for(var hi=0;hi<hosts.length;hi++){var host=hosts[hi];host.style.backgroundImage="none";host.style.webkitBackgroundClip="unset";host.style.backgroundClip="unset";host.style.color=G2.to;host.style.webkitTextFillColor=G2.to;var spans=host.querySelectorAll("[data-seg='n']");for(var si=0;si<spans.length;si++){var sp=spans[si];var hr=host.getBoundingClientRect();var sr=sp.getBoundingClientRect();var t=Math.max(0,Math.min(1,((sr.left+sr.width/2-hr.left)+(sr.top+sr.height/2-hr.top))/(hr.width+hr.height)));sp.style.color=lerpHex(G2.from,G2.to,t);sp.style.webkitTextFillColor=sp.style.color;}}}
-          var captH=Math.round(cl.getBoundingClientRect().height)||getLayout(global.format,idx===0,global.hasML).CARD_H;
-          var EX=getLayout(global.format,idx===0,global.hasML).EXPORT_SCALE;
-          window.html2canvas(cl,{scale:EX,useCORS:true,allowTaint:false,backgroundColor:"#12203c",width:CARD_W,height:captH,windowWidth:CARD_W,windowHeight:captH})
-            .then(function(cv){zip.file("carrousel-"+String(idx+1).padStart(2,"0")+".png",cv.toDataURL("image/png").split(",")[1],{base64:true});document.body.removeChild(box);setExpSt(function(p){return{busy:true,total:tot,progress:idx+1};});one(idx+1,done);})
-            .catch(function(er){console.error(er);document.body.removeChild(box);one(idx+1,done);});
-        });
-      },150);
-    }
-    one(0,function(){zip.generateAsync({type:"blob"}).then(function(blob){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(global.badgeMain||"carrousel").toLowerCase().replace(/[^a-z0-9]+/g,"-")+".zip";a.click();setExpSt({progress:0,total:0,busy:false});});});
-  },[slides,global,expSt.busy]);
-
-  function save(){var n=sname.trim()||("Version "+new Date().toLocaleString("fr-FR"));dbPut({name:n,date:new Date().toISOString(),state:{global:global,slides:slides}},function(){dbAll(function(a){setSaves(a);});});setSname("");}
-  function loadSave(en){setGlobal(Object.assign({},DEFAULT_GLOBAL,en.state.global));setSlides(en.state.slides||[newSlide(0)]);setActiveIdx(0);}
-  function delSave(n){dbDel(n,function(){dbAll(function(a){setSaves(a);});});}
-  function expJson(){dbAll(function(a){var b=new Blob([JSON.stringify(a,null,2)],{type:"application/json"});var l=document.createElement("a");l.href=URL.createObjectURL(b);l.download="carrousel-sauvegardes.json";l.click();});}
-  function impJson(f){if(!f)return;var r=new FileReader();r.onload=function(ev){try{var a=JSON.parse(ev.target.result);var ok=a.filter(function(x){return x&&x.name&&x.state;});if(!ok.length)throw new Error("vide");dbPutAll(ok,function(){dbAll(function(m){setSaves(m);alert(ok.length+" sauvegarde(s) importée(s).");});});}catch(er){alert("Fichier invalide: "+er.message);}};r.readAsText(f);}
-
-  var G=GRADS[global.grad]||GRADS.bleu,GRAD_H=gradCss(global.grad,90);
-  var L=getLayout(global.format,activeIdx===0,global.hasML);
-  var previewScale=Math.min(440/CARD_W,(window.innerHeight-120)/L.CARD_H,1);
-  var charteWarn=(global.lowCarbon&&!G.lowCarbonOK)?"Dégradé rouge interdit sur bas carbone. Utilise le vert.":null;
-
-  function segBtn(val,setFn,opts){return e("div",{className:"seg"},opts.map(function(o){return e("button",{key:o.v,className:val===o.v?"on":"",onClick:function(){setFn(o.v);}},o.l);}));}
-
-  /* Miniature slide */
-  function Thumb(p){
-    return e("div",{className:"slide-item"+(p.i===activeIdx?" active":""),onClick:function(){setActiveIdx(p.i);}},
-      e("div",{style:{width:"100%",aspectRatio:"1/1",backgroundImage:p.s.bgImg?"url("+p.s.bgImg+")":gradCss(global.grad,180),backgroundSize:"cover",backgroundPosition:p.s.bgX+"% "+p.s.bgY+"%",display:"flex",alignItems:"flex-end",padding:3}},
-        p.s.text?e("div",{style:{background:"rgba(255,255,255,.88)",borderRadius:3,padding:"2px 4px",fontSize:7.5,fontWeight:600,lineHeight:1.3,maxWidth:"100%",overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",color:"#222"}},p.s.text.replace(/\*\*|__/g,"").split("\n").join(" ")):null),
-      e("span",{className:"slide-num"},"#"+(p.i+1)),
-      e("div",{className:"slide-actions"},
-        e("button",{className:"sld-btn",title:"Monter",onClick:function(ev){ev.stopPropagation();moveSlide(p.i,-1);}},"↑"),
-        e("button",{className:"sld-btn",title:"Descendre",onClick:function(ev){ev.stopPropagation();moveSlide(p.i,1);}},"↓"),
-        e("button",{className:"sld-btn del",title:"Supprimer",onClick:function(ev){ev.stopPropagation();if(slides.length>1&&confirm("Supprimer slide #"+(p.i+1)+" ?"))removeSlide(p.i);}},"×")));
+  /* ── Surcharges communes appliquées à CHAQUE vignette ──────────────────
+     Le Carrousel impose le format, le dégradé, le cartouche et le repère.
+     Le reste de l'état reste celui de la vignette. */
+  function overridesFor(type,idx){
+    var reg=SPGCards.get(type);
+    var o={
+      format:st.format, grad:st.grad, lowCarbon:st.lowCarbon,
+      badgeIconKey:st.badgeIconKey, badgeIconCustom:st.badgeIconCustom,
+      /* Repère automatique : flèche → partout, point ● sur la dernière */
+      navMark:(idx>=slides.length-1)?"dot":"arrow"
+    };
+    if(reg.badgeField==="badge") o.badge=st.badgeMain;
+    else { o.badgeMain=st.badgeMain; o.badgeSub=st.badgeSub; }
+    return o;
+  }
+  /* État complet rendu par la carte : défauts du type ← état vignette ← commun */
+  function stateFor(sl,idx){
+    return SPGCards.resolve(sl.type,sl.st,overridesFor(sl.type,idx));
+  }
+  function dims(sl){
+    var reg=SPGCards.get(sl.type);
+    var full=SPGCards.resolve(sl.type,sl.st,{format:st.format});
+    return {w:reg.cardWidth?reg.cardWidth(st.format):CARD_W,
+            h:reg.cardHeight(st.format,full)};
   }
 
-  /* ── Panel gauche ────────────────────────── */
-  var panel=e("div",{className:"panel-left"},
+  /* ── Mutations ── */
+  function updSlideState(i,k,v){
+    setSt(function(p){
+      var a=p.slides.slice();
+      a[i]=Object.assign({},a[i],{st:Object.assign({},a[i].st,{[k]:v})});
+      return Object.assign({},p,{slides:a});
+    });
+  }
+  function moveSlide(i,d){
+    var j=i+d; if(j<0||j>=slides.length) return;
+    setSt(function(p){var a=p.slides.slice();var t=a[i];a[i]=a[j];a[j]=t;
+      return Object.assign({},p,{slides:a});});
+    setActiveIdx(j);
+  }
+  function addSlide(sl){
+    setSt(function(p){return Object.assign({},p,{slides:p.slides.concat([sl])});});
+    setActiveIdx(slides.length);
+    setActiveTab("contenu"); setView("single"); setAddMenu(false);
+  }
+  function delSlide(i){
+    setSt(function(p){var a=p.slides.slice();a.splice(i,1);
+      return Object.assign({},p,{slides:a});});
+    setActiveIdx(function(c){return Math.max(0,Math.min(c,slides.length-2));});
+  }
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Format"),
-      e("div",{style:{display:"flex",flexDirection:"column",gap:5}},
-        Object.keys(FORMATS).map(function(k){var f=FORMATS[k],on=global.format===k;var vh=22,vw=Math.round(vh*(f.outputW/f.outputH));
-          return e("div",{key:k,onClick:function(){setG("format",k);},
-            style:{display:"flex",alignItems:"center",gap:8,padding:"7px 10px",borderRadius:6,cursor:"pointer",
-              border:on?"2px solid #1a1a1a":"2px solid #e8e8e8",background:on?"#f0efec":"#fafafa"}},
-            e("div",{style:{width:vw,height:vh,borderRadius:2,background:on?"#1a1a1a":"#ccc",flexShrink:0}}),
-            e("div",null,
-              e("div",{style:{fontWeight:700,fontSize:11,color:on?"#1a1a1a":"#333"}},f.label),
-              e("div",{style:{fontSize:9,color:"#888"}},f.outputW+"×"+f.outputH)));}))),
+  var activeSlide=slides[activeIdx]||null;
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Couleurs"),
-      e("div",{className:"grad-row"},Object.keys(GRADS).map(function(k){return e("div",{key:k,title:GRADS[k].label,className:"grad-sw"+(global.grad===k?" on":""),onClick:function(){setG("grad",k);},style:{backgroundImage:gradCss(k,90)}});})),
-      e("div",{className:"grad-active"},e("i",{style:{backgroundImage:GRAD_H}}),G.label," — ",G.from," → ",G.to),
-      e("div",{style:{height:6}}),
-      e("label",{className:"toggle"},e("input",{type:"checkbox",checked:global.lowCarbon,onChange:function(ev){setG("lowCarbon",ev.target.checked);}}),"Énergies bas carbone"),
-      charteWarn?e("div",{className:"charte-warn"},charteWarn):null),
+  /* ── Export ZIP ── */
+  function doExportZip(){
+    if(!window.JSZip||!window.domtoimage){
+      alert("Bibliothèques d'export non disponibles. Réessayez dans quelques secondes.");
+      return Promise.resolve();
+    }
+    if(!slides.length) return Promise.resolve();
+    setZipping(true);
+    var zip=new JSZip();
+    var holder=document.createElement("div");
+    holder.style.cssText="position:fixed;left:-9999px;top:0;z-index:-100;pointer-events:none;";
+    document.body.appendChild(holder);
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Pictogramme (toutes slides)"),
-      e("div",{id:"picto-gallery-container",key:"picto-gallery"}),
-      global.badgeIconCustom?e("button",{onClick:function(){setG("badgeIconCustom",null);},style:{marginTop:4,fontSize:10,fontWeight:700,padding:"3px 8px",borderRadius:4,border:"1px solid #ddd",background:"#fff0f0",color:"#c0392b",cursor:"pointer",fontFamily:"inherit"}},"Retirer"):null),
+    function finish(){
+      zip.generateAsync({type:"blob"}).then(function(blob){
+        var slug=(shell.save.currentName||st.badgeMain||"carrousel")
+          .toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
+        var a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download=(slug||"carrousel")+"-"+st.format+".zip";
+        a.click();
+        setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+        document.body.removeChild(holder);
+        setZipping(false);
+      });
+    }
+    function capture(i){
+      if(i>=slides.length) return finish();
+      var sl=slides[i], reg=SPGCards.get(sl.type), d=dims(sl);
+      var wrap=document.createElement("div");
+      wrap.style.cssText="display:inline-block;vertical-align:top;";
+      holder.appendChild(wrap);
+      var root=ReactDOM.createRoot(wrap);
+      /* Rendu à l'échelle 1 : exactement ce que produit la page génératrice */
+      root.render(e(reg.Card,{st:stateFor(sl,i),scale:1,cardId:"exp-"+i}));
+      setTimeout(function(){
+        var el=wrap.firstElementChild;
+        function next(){root.unmount();holder.removeChild(wrap);capture(i+1);}
+        if(!el) return next();
+        document.fonts.ready.then(function(){
+          return domtoimage.toPng(el,{width:d.w,height:d.h,useCORS:true});
+        }).then(function(png){
+          zip.file(String(i+1).padStart(2,"0")+"-"+sl.type+".png",
+            png.split(",")[1],{base64:true});
+          next();
+        }).catch(function(err){console.warn("export vignette "+i,err);next();});
+      },800);
+    }
+    capture(0);
+    return Promise.resolve();
+  }
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Cartouche (toutes slides)"),
-      e("input",{type:"text",spellCheck:true,value:global.badgeMain,placeholder:"Ex. SUSTAINABILITY",onChange:function(ev){setG("badgeMain",ev.target.value.toUpperCase());},style:{textTransform:"uppercase",marginBottom:5}}),
-      e("input",{type:"text",spellCheck:true,value:global.badgeSub,placeholder:"Lieu / précision (optionnel)",onChange:function(ev){setG("badgeSub",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}})),
+  var zipShell=Object.assign({},shell,{
+    busy:shell.busy||zipping, doExport:doExportZip});
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Slide #"+(activeIdx+1)),
+  /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
+  var panel=e("div",{className:"panel"},
 
-      e("div",{className:"section"},
-        e("label",{className:"field-label"},"Fond"),
-        segBtn(sl.bgMode,function(v){setSl("bgMode",v);},[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"}]),
-        sl.bgMode==="photo"?e(React.Fragment,null,
-          e("div",{style:{height:5}}),
-          e(FileDrop,{value:sl.bgImg,small:true,placeholder:"Photo de fond",onChange:function(v){setSl("bgImg",v);}}),
-          e("div",{style:{height:5}}),
-          e("label",{className:"field-label"},"Flou ("+sl.bgBlur+" px)"),
-          e("input",{type:"range",min:0,max:12,step:.5,value:sl.bgBlur,onChange:function(ev){setSl("bgBlur",parseFloat(ev.target.value));}}),
-          e("label",{className:"field-label"},"Assombrissement ("+Math.round(sl.bgDark*100)+"%)"),
-          e("input",{type:"range",min:0,max:.7,step:.05,value:sl.bgDark,onChange:function(ev){setSl("bgDark",parseFloat(ev.target.value));}}),
-          e("label",{className:"field-label"},"Zoom ("+Math.round(sl.bgZoom)+"%)"),
-          e("input",{type:"range",min:100,max:300,step:1,value:sl.bgZoom,onChange:function(ev){setSl("bgZoom",parseInt(ev.target.value,10));}}),
-          e("div",{className:"hint"},"Glisse sur l'image pour repositionner.")):null),
+    e(UI.Section,{title:"Format"},
+      e(UI.FormatPicker,{formats:CAR_FORMATS,value:st.format,onChange:shell.setFormat})),
 
-      e("div",{className:"section"},
-        e("div",{className:"upload-hint"},e("b",null,"**mot**")," = surlignage • ",e("b",null,"__mot__")," = soulignage"),
-        e("label",{className:"toggle",style:{marginBottom:6}},
-          e("input",{type:"checkbox",checked:sl.liveMode,onChange:function(ev){setSl("liveMode",ev.target.checked);}}),
-          e("span",{style:{display:"inline-flex",alignItems:"center",gap:4}},
-            e("span",{style:{width:8,height:8,borderRadius:"50%",background:"#E70000",display:"inline-block"}}),
-            "Mode LIVE")),
-        e("textarea",{spellCheck:true,rows:4,value:sl.text,onChange:function(ev){setSl("text",ev.target.value);},style:{fontSize:12,lineHeight:1.5,marginBottom:6}}),
-        e("label",{className:"field-label"},"Couleur du texte"),
-        segBtn(sl.textMode,function(v){setSl("textMode",v);},[{v:"uni",l:"Unie"},{v:"grad",l:"Dégradé"}]),
-        sl.textMode==="uni"?e("div",{style:{display:"flex",gap:6,marginTop:6}},
-          e("div",{title:G.label,onClick:function(){setSl("textColor",G.to);},style:{flex:1,height:24,borderRadius:4,cursor:"pointer",backgroundImage:GRAD_H,border:sl.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}}),
-          e("div",{title:"Gris foncé",onClick:function(){setSl("textColor",COLOR_GREY);},style:{flex:1,height:24,borderRadius:4,cursor:"pointer",background:COLOR_GREY,border:sl.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}})):null,
-        e("div",{style:{height:6}}),
-        e("label",{className:"field-label"},"Alignement"),
-        segBtn(sl.align,function(v){setSl("align",v);},[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]),
-        e("div",{style:{height:6}}),
-        e("label",{className:"field-label"},"Corps — "+Math.round((sl.fs||L.TEXT_DEF)/K)+" pt"),
-        e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:Math.round(sl.fs||L.TEXT_DEF),onChange:function(ev){setSl("fs",parseInt(ev.target.value,10));}}),
-        e("button",{onClick:function(){setSl("fs",0);setSl("w",0);setSl("b",-1);},style:{marginTop:6,fontSize:9,fontWeight:700,padding:"3px 7px",borderRadius:4,border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
-          "Réinit layout"))),
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Export"),
-      expSt.busy
-        ?e("div",null,e("div",{className:"hint",style:{marginBottom:5}},"Slide "+expSt.progress+"/"+expSt.total+"…"),e("div",{className:"prog-bar"},e("div",{className:"prog-fill",style:{width:Math.round(expSt.progress/Math.max(1,expSt.total)*100)+"%"}})))
-        :e("button",{className:"export-btn",onClick:doExport},
-            e("svg",{viewBox:"0 0 24 24",width:15,height:15,fill:"none",stroke:"currentColor",strokeWidth:2},e("path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"}),e("polyline",{points:"7 10 12 15 17 10"}),e("line",{x1:12,y1:15,x2:12,y2:3})),
-            "ZIP ("+slides.length+" slide"+(slides.length>1?"s":"")+")")),
+    /* ── Commun ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="commun"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Couleurs"},
+        e("label",{className:"field-label"},"Dégradé du carrousel"),
+        e(UI.GradPicker,{value:st.grad,onChange:function(v){set("grad",v);}}),
+        e("div",{className:"hint",style:{marginTop:8}},
+          "Appliqué à toutes les vignettes — charte 2026 : un seul dégradé par publication."),
+        e("div",{style:{height:12}}),
+        e("label",{className:"toggle"},
+          e("input",{type:"checkbox",checked:!!st.lowCarbon,
+            onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+          "Sujet énergie bas carbone")),
+      e(UI.Section,{title:"Cartouche"},
+        e("div",{className:"hint",style:{marginBottom:10}},
+          "Titre et pictogramme communs à toutes les vignettes."),
+        e(UI.BadgeEditor,{st:st,set:set,setSt:setSt,
+          active:activeTab==="commun",uppercase:true})),
+      e(UI.TabNav,{next:"Vignettes",onNext:function(){setActiveTab("vignettes");}})),
 
-    e("div",{className:"panel-section"},
-      e("h2",null,"Sauvegardes"),
-      e("div",{style:{display:"flex",gap:5,marginBottom:7}},
-        e("input",{type:"text",value:sname,placeholder:"Nom…",onChange:function(ev){setSname(ev.target.value);},style:{flex:1,fontSize:11,padding:"4px 7px"}}),
-        e("button",{onClick:save,style:{background:"#1a1a1a",color:"#fff",border:"none",borderRadius:5,padding:"4px 10px",cursor:"pointer",fontWeight:700,fontSize:11,fontFamily:"inherit"}},"OK")),
-      saves.length===0?e("div",{className:"hint",style:{marginBottom:7}},"Aucune sauvegarde."):
-        e("div",{className:"saves-list"},saves.map(function(v,i){return e("div",{key:i,className:"save-row"},
-          e("div",{style:{flex:1,minWidth:0}},
-            e("div",{style:{fontSize:11,fontWeight:700,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},v.name),
-            e("div",{className:"hint"},new Date(v.date).toLocaleString("fr-FR"))),
-          e("button",{onClick:function(){loadSave(v);},style:{background:"#f0efec",color:"#1a1a1a",border:"none",borderRadius:4,padding:"2px 7px",cursor:"pointer",fontWeight:700,fontSize:10,fontFamily:"inherit"}},"Charger"),
-          e("button",{onClick:function(){if(confirm("Supprimer ?"))delSave(v.name);},style:{background:"#fff0f0",color:"#c0392b",border:"none",borderRadius:4,padding:"2px 5px",cursor:"pointer",fontWeight:700,fontSize:10,fontFamily:"inherit"}},"×"));})),
-      e("div",{style:{display:"flex",gap:5}},
-        e("button",{onClick:expJson,style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:4,padding:4,cursor:"pointer",fontSize:10,fontWeight:600,fontFamily:"inherit"}},"Export .json"),
-        e("button",{onClick:function(){if(impRef.current)impRef.current.click();},style:{flex:1,background:"#f5f5f5",border:"1px solid #ddd",borderRadius:4,padding:4,cursor:"pointer",fontSize:10,fontWeight:600,fontFamily:"inherit"}},"Import .json"),
-        e("input",{ref:impRef,type:"file",accept:".json",style:{display:"none"},onChange:function(ev){impJson(ev.target.files&&ev.target.files[0]);}})))
+    /* ── Vignettes ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="vignettes"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Ordre des vignettes"},
+        slides.length===0
+          ? e("div",{className:"hint"},"Aucune vignette. Ajoutez-en une ci-dessous.")
+          : e("div",{className:"car-list"},
+              slides.map(function(sl,i){
+                var reg=SPGCards.get(sl.type);
+                return e("div",{key:sl.id,className:"car-row"+(activeIdx===i?" on":""),
+                    onClick:function(){setActiveIdx(i);setView("single");}},
+                  e("span",{className:"car-row-num"},("0"+(i+1)).slice(-2)),
+                  e("span",{className:"car-row-name"},reg.icon+"  "+reg.label),
+                  e("span",{className:"car-row-mark",
+                    title:i===slides.length-1?"Dernière vignette : point ●":"Flèche suivante →"},
+                    i===slides.length-1?"●":"→"),
+                  e("button",{disabled:i===0,title:"Monter",
+                    onClick:function(ev){ev.stopPropagation();moveSlide(i,-1);}},"↑"),
+                  e("button",{disabled:i===slides.length-1,title:"Descendre",
+                    onClick:function(ev){ev.stopPropagation();moveSlide(i,1);}},"↓"),
+                  e("button",{className:"del",title:"Supprimer",
+                    onClick:function(ev){ev.stopPropagation();delSlide(i);}},"×"));
+              })),
+        e("div",{className:"hint",style:{marginTop:10}},
+          "Repère automatique : flèche → partout, point ● sur la dernière.")),
+
+      e(UI.Section,{title:"Ajouter une vignette vierge"},
+        e("div",{className:"car-typegrid"},
+          TYPES.map(function(t){
+            return e("button",{key:t.key,className:"car-typebtn",
+              onClick:function(){addSlide(newSlide(t.key));}},
+              e("span",{className:"ico"},t.icon),t.label);
+          }))),
+
+      e(UI.Section,{title:"Importer une sauvegarde"},
+        e("div",{className:"hint",style:{marginBottom:10}},
+          "Reprend une version enregistrée dans un générateur, telle quelle. ",
+          "La vignette reste modifiable ici, indépendamment de l'original."),
+        e("div",{className:"car-typegrid"},
+          TYPES.map(function(t){
+            return e("button",{key:t.key,className:"car-typebtn",
+              onClick:function(){setImportType(t.key);}},
+              e("span",{className:"ico"},t.icon),t.label);
+          }))),
+
+      e(UI.TabNav,{prev:"Commun",onPrev:function(){setActiveTab("commun");},
+        next:"Contenu",onNext:function(){setActiveTab("contenu");}})),
+
+    /* ── Contenu ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="contenu"?" on":""),style:{paddingTop:16}},
+      activeSlide
+        ? e(React.Fragment,null,
+            e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:6}},
+              e("span",{style:{fontSize:11,fontWeight:800,color:"#0098E3",
+                letterSpacing:".05em",textTransform:"uppercase"}},
+                "Vignette "+(activeIdx+1)+" / "+slides.length),
+              e("span",{className:"hint",style:{marginLeft:"auto"}},
+                SPGCards.get(activeSlide.type).icon+" "+SPGCards.get(activeSlide.type).label)),
+            e("div",{style:{display:"flex",gap:6,marginBottom:6}},
+              e("button",{className:"mini-btn",style:{flex:1},disabled:activeIdx===0,
+                onClick:function(){setActiveIdx(activeIdx-1);}},"← Précédente"),
+              e("button",{className:"mini-btn",style:{flex:1},
+                disabled:activeIdx>=slides.length-1,
+                onClick:function(){setActiveIdx(activeIdx+1);}},"Suivante →")),
+            e(EDITORS[activeSlide.type]||function(){return null;},{
+              st:SPGCards.resolve(activeSlide.type,activeSlide.st,null),
+              onChange:function(k,v){updSlideState(activeIdx,k,v);}}),
+            e(UI.TabNav,{prev:"Vignettes",onPrev:function(){setActiveTab("vignettes");},
+              next:"Export",onNext:function(){setActiveTab("export");}}))
+        : e("div",{className:"hint"},
+            "Sélectionnez une vignette dans l'onglet ",e("b",null,"Vignettes"),
+            " ou dans la grille de droite.")),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
+      e(UI.ExportTab,{shell:zipShell,cardRef:null,
+        exportLabel:"Télécharger le ZIP ("+slides.length+")",
+        exportHint:"Chaque vignette est exportée en PNG à sa taille native, "+
+          "numérotée dans l'ordre, dans une archive .zip."}))
   );
 
-  /* ── Liste slides ────────────────────────── */
-  var slideList=e("div",{className:"slide-list-col"},
-    e("div",{className:"slide-list-header"},e("span",null,slides.length+" slide"+(slides.length>1?"s":""))),
-    e("div",{className:"slide-list"},
-      slides.map(function(s,i){return e(Thumb,{key:s.id,s:s,i:i});}),
-      e("button",{className:"add-btn",onClick:addSlide},"+ Ajouter")));
+  /* ═══ WORKSPACE ═════════════════════════════════════════════════════════ */
+  var THUMB_W=190;
+  var pScale=UI.previewScale(cf);
 
-  /* ── Preview ─────────────────────────────── */
-  var preview=e("div",{className:"preview-col"},
-    e("div",{style:{width:CARD_W*previewScale,height:L.CARD_H*previewScale,position:"relative",flexShrink:0}},
-      e("div",{style:{width:CARD_W,transform:"scale("+previewScale+")",transformOrigin:"top left",position:"absolute",top:0,left:0}},
-        e(SlideCard,{global:global,slide:sl,idx:activeIdx,total:slides.length,
-          cardRef:cardRef,paveRef:paveRef,paveH:paveH,
-          previewScale:previewScale,
-          onBgMove:function(x,y){setSl("bgX",x);setSl("bgY",y);}}))));
+  var workspace=e("div",{className:"car-work"},
 
-  return e("div",{className:"app-layout"},panel,slideList,preview);
+    e("div",{className:"car-toolbar"},
+      e("button",{className:"mini-btn",
+        style:view==="grid"?{background:"#0098E3",color:"#fff",borderColor:"#0098E3"}:null,
+        onClick:function(){setView("grid");}},"Grille"),
+      e("button",{className:"mini-btn",
+        style:view==="single"?{background:"#0098E3",color:"#fff",borderColor:"#0098E3"}:null,
+        onClick:function(){setView("single");}},"Vignette"),
+      e("span",{className:"car-count",style:{marginLeft:6}},
+        slides.length+" vignette"+(slides.length>1?"s":"")+"  ·  "+cf.label),
+      e("button",{className:"tab-nav-btn primary",style:{marginLeft:"auto"},
+        disabled:zipping||!slides.length,onClick:doExportZip},
+        zipping?"Export…":"↓ Exporter le ZIP")),
+
+    e("div",{className:"car-body"},
+      view==="grid"
+        ? e("div",{className:"car-grid"},
+            slides.map(function(sl,i){
+              var reg=SPGCards.get(sl.type), d=dims(sl);
+              var s=THUMB_W/d.w, th=Math.round(d.h*s);
+              return e("div",{key:sl.id,className:"car-thumb"+(activeIdx===i?" on":""),
+                  style:{width:THUMB_W,height:th},
+                  onClick:function(){setActiveIdx(i);setActiveTab("contenu");}},
+                e("div",{style:{width:THUMB_W,height:th,overflow:"hidden",position:"relative"}},
+                  e("div",{style:{width:d.w,height:d.h,transform:"scale("+s+")",
+                      transformOrigin:"top left",position:"absolute",top:0,left:0,
+                      pointerEvents:"none"}},
+                    e(reg.Card,{st:stateFor(sl,i),scale:s}))),
+                e("div",{className:"car-thumb-acts"},
+                  e("button",{disabled:i===0,title:"Déplacer à gauche",
+                    onClick:function(ev){ev.stopPropagation();moveSlide(i,-1);}},"←"),
+                  e("button",{disabled:i===slides.length-1,title:"Déplacer à droite",
+                    onClick:function(ev){ev.stopPropagation();moveSlide(i,1);}},"→"),
+                  e("button",{className:"del",title:"Supprimer",
+                    onClick:function(ev){ev.stopPropagation();delSlide(i);}},"×")),
+                e("div",{className:"car-thumb-tag"},
+                  (i+1)+" · "+reg.label+"  "+(i===slides.length-1?"●":"→")));
+            }),
+            e("div",{className:"car-add-tile",
+                style:{width:THUMB_W,height:Math.round(THUMB_W*(cf.outputH/cf.outputW)),
+                       position:"relative"},
+                onClick:function(ev){ev.stopPropagation();setAddMenu(!addMenu);}},
+              e("span",{className:"plus"},"+"),
+              e("span",null,"Ajouter"),
+              addMenu?e(React.Fragment,null,
+                e("div",{className:"car-menu-bg",
+                  onClick:function(ev){ev.stopPropagation();setAddMenu(false);}}),
+                e("div",{className:"car-menu"},
+                  TYPES.map(function(t){
+                    return e("button",{key:t.key,
+                      onClick:function(ev){ev.stopPropagation();addSlide(newSlide(t.key));}},
+                      t.icon,"  ",t.label);
+                  }))):null))
+        : slides.length===0
+          ? e("div",{className:"hint",style:{padding:"60px 20px"}},
+              "Aucune vignette — ajoutez-en une depuis l'onglet Vignettes.")
+          : (function(){
+              var sl=slides[activeIdx]||slides[0];
+              var reg=SPGCards.get(sl.type), d=dims(sl);
+              var s=Math.min(pScale,(window.innerHeight-260)/d.h);
+              return e("div",{className:"car-single"},
+                e("div",{className:"car-stepper"},
+                  e("button",{className:"mini-btn",disabled:activeIdx===0,
+                    onClick:function(){setActiveIdx(activeIdx-1);}},"← Précédent"),
+                  e("span",{className:"pos"},(activeIdx+1)+" / "+slides.length),
+                  e("button",{className:"mini-btn",disabled:activeIdx>=slides.length-1,
+                    onClick:function(){setActiveIdx(activeIdx+1);}},"Suivant →")),
+                e("div",{className:"car-stage",
+                    style:{width:Math.round(d.w*s),height:Math.round(d.h*s)}},
+                  e("div",{style:{width:d.w,height:d.h,transform:"scale("+s+")",
+                      transformOrigin:"top left",position:"absolute",top:0,left:0}},
+                    e(reg.Card,{st:stateFor(sl,activeIdx),scale:s,
+                      onBgMove:function(x,y){
+                        updSlideState(activeIdx,"bgX_"+st.format,x);
+                        updSlideState(activeIdx,"bgY_"+st.format,y);
+                      }}))),
+                e("div",{className:"hint"},
+                  reg.label+(activeIdx===slides.length-1
+                    ? "  ·  dernière vignette (repère ●)" : "  ·  repère →")));
+            })()));
+
+  /* ═══ RENDU ═════════════════════════════════════════════════════════════ */
+  return e("div",{className:"app-layout"},
+    panel,
+    workspace,
+    importType?e(ImportModal,{type:importType,
+      onClose:function(){setImportType(null);},
+      onPick:function(rec){
+        var t=importType;
+        setImportType(null);
+        /* Aucune conversion : l'état sauvegardé EST l'état de la vignette. */
+        var native=rec.state||{};
+        var reg=SPGCards.get(t);
+        if(reg.normalize) native=reg.normalize(native);
+        addSlide({id:sid(),type:t,st:native});
+      }}):null,
+    zipping?e("div",{className:"car-busy"},
+      e("div",{className:"ring"}),
+      e("div",null,"Export des vignettes en cours…")):null);
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));
-
 }
 </script>
 </body>

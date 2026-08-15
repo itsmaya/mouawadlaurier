@@ -6,6 +6,12 @@
            w, h, scale, natW, natH,
            brightness, saturation, contrast,
            onChange(x, y)
+
+   Fix B6 : useEffect enregistrait les listeners à chaque render (pas de [])
+             → sauts pendant le drag + verticale bloquée.
+             Fix : ref pattern + useEffect(fn,[]) → enregistrement unique.
+             Fix B6b : dx/dy divisés par props.scale pour corriger l'offset
+             CSS transform (preview ≠ export scale).
    ═══════════════════════════════════════════════════════════════════════════ */
 function DragImage(props){
   var e=React.createElement,useRef=React.useRef,useState=React.useState,
@@ -15,6 +21,9 @@ function DragImage(props){
   var last=useRef({x:0,y:0});
   var nat=useRef({w:0,h:0});
   var rnState=useState(0); var setRn=rnState[1];
+
+  /* Ref vivante vers onMove — mise à jour chaque render sans re-enregistrer */
+  var onMoveRef=useRef(null);
 
   function clamp(v,mn,mx){ return Math.max(mn,Math.min(mx,v)); }
 
@@ -44,12 +53,17 @@ function DragImage(props){
     var pt=ev.touches?ev.touches[0]:ev;
     last.current={x:pt.clientX,y:pt.clientY};
   }
+
+  /* onMove lit les props via ref — jamais stale, jamais re-enregistré */
   function onMove(ev){
     if(!dragging.current) return;
     ev.preventDefault();
     var pt=ev.touches?ev.touches[0]:ev;
-    var dx=pt.clientX-last.current.x;
-    var dy=pt.clientY-last.current.y;
+    /* Diviser par scale : les coordonnées souris sont en pixels écran,
+       le container DOM est à résolution pleine (ex. 1080px). */
+    var sc=props.scale||1;
+    var dx=(pt.clientX-last.current.x)/sc;
+    var dy=(pt.clientY-last.current.y)/sc;
     last.current={x:pt.clientX,y:pt.clientY};
     var n=nat.current;
     var nw=props.natW||n.w||0, nh=props.natH||n.h||0;
@@ -60,6 +74,8 @@ function DragImage(props){
     var pctY=clamp(props.y-(c.ry>0?dy/c.ry*100:0),0,100);
     props.onChange(pctX,pctY);
   }
+  onMoveRef.current=onMove;
+
   function onUp(){ dragging.current=false; }
 
   useEffect(function(){
@@ -72,18 +88,22 @@ function DragImage(props){
     im.src=props.src;
   },[props.src]);
 
+  /* Enregistrement unique ([] = une seule fois au mount) —
+     la ref onMoveRef.current est toujours à jour sans re-bind. */
   useEffect(function(){
-    window.addEventListener("mousemove",onMove);
-    window.addEventListener("mouseup",onUp);
-    window.addEventListener("touchmove",onMove,{passive:false});
-    window.addEventListener("touchend",onUp);
+    function handleMove(ev){ onMoveRef.current(ev); }
+    function handleUp(){ dragging.current=false; }
+    window.addEventListener("mousemove",handleMove);
+    window.addEventListener("mouseup",handleUp);
+    window.addEventListener("touchmove",handleMove,{passive:false});
+    window.addEventListener("touchend",handleUp);
     return function(){
-      window.removeEventListener("mousemove",onMove);
-      window.removeEventListener("mouseup",onUp);
-      window.removeEventListener("touchmove",onMove);
-      window.removeEventListener("touchend",onUp);
+      window.removeEventListener("mousemove",handleMove);
+      window.removeEventListener("mouseup",handleUp);
+      window.removeEventListener("touchmove",handleMove);
+      window.removeEventListener("touchend",handleUp);
     };
-  });
+  },[]);
 
   var nw=props.natW||nat.current.w||0, nh=props.natH||nat.current.h||0;
   var zf=(props.zoom||100)/100;

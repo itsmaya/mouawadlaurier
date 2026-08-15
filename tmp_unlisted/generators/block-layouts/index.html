@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Block Layouts — TotalEnergies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script>
+function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
+</script>
+<script>
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){boot();});});});
+</script>
+<script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
+<script src="../../assets/charte-2026.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/components-2026.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/block-layouts-card.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+function boot(){
+
+var e=React.createElement,useState=React.useState,useRef=React.useRef,
+    useEffect=React.useEffect,useLayoutEffect=React.useLayoutEffect;
+var UI=Shell.ui;
+
+/* ═══ Constantes ═══════════════════════════════════════════════════════════ */
+var PAGE_FORMATS=["1x1","4x5","9x16","16x9"];
+var BG_DIR="../../templates/block-layouts/";
+function bgCandidates(k){
+  var names=["TEMPLATE_BL_"+k,"TEMPLATE_BL","TEMPLATE_BACK"];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[]; names.forEach(function(n){exts.forEach(function(x){out.push(BG_DIR+n+x);});});
+  return out;
+}
+var CAL=chTypo("blockLayout","callout");   /* ExtraBold 90-125 */
+var BOD=chTypo("blockLayout","body");      /* SemiBold 40-60 */
+
+var BID=1;
+/* ═══ CARTE PARTAGÉE ══════════════════════════════════════════════════════
+   Visuel, mise en page et état par défaut : assets/cards/block-layouts-card.js
+   Rendu à l'identique par le Carrousel. Ne rien réimplémenter ici. */
+var CARD=SPGCards.get("blocklayouts");
+var DEFAULT=CARD.DEFAULT;
+var newBlock=CARD.newBlock;
+
+/* ═══ APP ══════════════════════════════════════════════════════════════════ */
+function App(){
+  var shell=Shell.useApp({
+    pageKey:"blocklayouts",
+    DEFAULT:DEFAULT,
+    bgCandidates:bgCandidates
+  });
+  var st=shell.st, set=shell.set, setSt=shell.setSt;
+  var cardRef=useRef(null);
+  var shState=useState(0), stackH=shState[0], setStackH=shState[1];
+
+  var tabState=useState("fond"),activeTab=tabState[0],setActiveTab=tabState[1];
+  var TABS=[{id:"fond",label:"Fond"},{id:"couleurs",label:"Couleurs"},
+            {id:"cartouche",label:"Cartouche"},{id:"blocs",label:"Blocs"},{id:"export",label:"Export"}];
+
+  /* PictoGallery — dans l'onglet Cartouche */
+  useEffect(function(){
+    window.PictoGallery.load(function(){
+      var keys=window.PictoGallery.getKeys();
+      setSt(function(p){var c=Object.assign({},p);
+        if(keys.indexOf(p.badgeIconKey)<0)c.badgeIconKey=keys[0];return c;});
+    });
+  },[]);
+  useEffect(function(){
+    if(activeTab!=="cartouche") return;
+    var ct=document.getElementById("picto-gallery-container");
+    if(ct&&!ct._pg){
+      ct._pg=window.PictoGallery.init(ct,{grad:chGrad(st.grad),
+        selected:st.badgeIconKey,custom:st.badgeIconCustom,
+        onChange:function(key){setSt(function(p){var c=Object.assign({},p);
+          c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
+        onCustom:function(d){setSt(function(p){var c=Object.assign({},p);
+          c.badgeIconCustom=d;return c;});}});
+    }
+    if(ct&&ct._pg)ct._pg.setGrad(chGrad(st.grad));
+  },[activeTab,st.grad]);
+
+  /* ═══ Valeurs dérivées (panneau + validateur) ═══ */
+  var g=CARD.geometry(st);
+  var cf=g.cf, CW=g.CW, CH_=g.CH, story=g.story, MARGIN=g.MARGIN;
+  var onGrad=g.onGrad, onWhite=g.onWhite, bgKind=g.bgKind;
+  var calloutSize=g.calloutSize, bodySize=g.bodySize;
+  var stackMaxW=g.stackMaxW, off=g.off, ctaBottom=g.ctaBottom;
+  var B=CHARTE.components.block;
+  var _f=st.format;
+
+  /* Validateur charte */
+  var gradsUsed={}; gradsUsed[st.grad]=1;
+  st.blocks.forEach(function(b){ if(b.gradKey&&b.gradKey!=="auto") gradsUsed[b.gradKey]=1; });
+  var warnings=Shell.validate({
+    lowCarbon:st.lowCarbon, gradKey:st.grad,
+    nBlocks:st.blocks.length, isStory:story,
+    gradientsUsed:Object.keys(gradsUsed).length,
+    bgKind:bgKind,
+    imageCoverage:(bgKind==="photo"&&stackH>0)
+      ? (stackH*stackMaxW)/(CW*CH_) : undefined
+  });
+
+  /* ═══ Export ═══ */
+  function doExport(){ shell.doExport(cardRef); }
+  useEffect(function(){ window.smDownloadTrigger=doExport; });
+  function doExportOne(state,fmt,filename){
+    return shell.doExport(cardRef,{stateOverride:state,formatKey:fmt,
+      filename:filename,download:false});
+  }
+
+  var previewScale=Shell.EXPORT_MODE?1
+    :Math.min(480/CW,(window.innerHeight-140)/CH_,1);
+
+  /* ═══ CARTE ═══
+     Composant partagé : voir assets/cards/block-layouts-card.js. */
+  var card=e(CARD.Card,{
+    st:st, cardRef:cardRef, exportTarget:true,
+    scale:previewScale, bgNat:shell.bgNat,
+    onMeasure:function(m){ setStackH(m.stackH); },
+    onBgMove:function(x,y){ setSt(function(p){var c=Object.assign({},p);
+      c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;}); }
+  });
+
+  var previewWrap=e("div",{style:{width:CW*previewScale,minHeight:CH_*previewScale,
+      position:"relative",flexShrink:0}},
+    e("div",{style:{width:CW,transform:"scale("+previewScale+")",
+      transformOrigin:"top left",position:"absolute",top:0,left:0}},card));
+
+  /* ═══ PANNEAU ═══ */
+  function blockEditor(b,i){
+    function upd(patch){
+      setSt(function(p){var c=Object.assign({},p);
+        c.blocks=p.blocks.map(function(x){return x.id===b.id?Object.assign({},x,patch):x;});
+        return c;});
+    }
+    function move(dir){
+      setSt(function(p){var c=Object.assign({},p);
+        var arr=p.blocks.slice(),j=i+dir;
+        if(j<0||j>=arr.length)return p;
+        var t=arr[i];arr[i]=arr[j];arr[j]=t;c.blocks=arr;return c;});
+    }
+    function remove(){
+      setSt(function(p){var c=Object.assign({},p);
+        c.blocks=p.blocks.filter(function(x){return x.id!==b.id;});return c;});
+    }
+    return e("div",{key:b.id,style:{border:"1px solid #e4e4e2",borderRadius:8,
+        padding:10,marginBottom:10,background:"#fbfbfa"}},
+      e("div",{style:{display:"flex",alignItems:"center",gap:6,marginBottom:8}},
+        e("span",{style:{fontSize:11,fontWeight:800,color:"#888",flex:1}},
+          "BLOC "+(i+1)),
+        e("button",{className:"mini-btn",onClick:function(){move(-1);}},"▲"),
+        e("button",{className:"mini-btn",onClick:function(){move(1);}},"▼"),
+        e("button",{className:"mini-btn",style:{color:"#c0392b"},
+          onClick:remove},"×")),
+      e(UI.SegButtons,{value:b.kind,onChange:function(v){upd({kind:v});},
+        options:[{v:"figure",l:"Chiffre clé"},{v:"body",l:"Texte"}]}),
+      b.kind==="figure"?e(React.Fragment,null,
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},"Chiffre / callout"),
+        e("input",{type:"text",value:b.callout,
+          onChange:function(ev){upd({callout:ev.target.value});}})):null,
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},
+        b.kind==="figure"?"Libellé (**mot** = surlignage)":"Texte (**mot** = surlignage)"),
+      e("textarea",{spellCheck:true,rows:2,value:b.text,
+        onChange:function(ev){upd({text:ev.target.value});}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Position"),
+      e(UI.SegButtons,{value:b.col||"full",onChange:function(v){upd({col:v});},
+        options:[{v:"full",l:"Pleine largeur"},{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
+      /* Slider de répartition sur le bloc gauche uniquement */
+      (b.col==="left")?e(React.Fragment,null,
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},
+          "Répartition — gauche "+(b.widthPct||50)+"  /  droite "+((b.widthPct?100-b.widthPct:50))+" %"),
+        e("input",{type:"range",min:30,max:70,step:5,value:b.widthPct||50,
+          onChange:function(ev){upd({widthPct:parseInt(ev.target.value,10)});}})):null,
+      /* Largeur optionnelle pour bloc pleine-largeur */
+      (b.col==="full")?e(React.Fragment,null,
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},
+          "Largeur "+(b.widthPct?b.widthPct+" %":"automatique")),
+        e("input",{type:"range",min:0,max:100,step:5,value:b.widthPct,
+          onChange:function(ev){upd({widthPct:parseInt(ev.target.value,10)});}})):null,
+      e("div",{style:{height:8}}),
+      e("label",{className:"toggle",style:{marginBottom:6}},
+        e("input",{type:"checkbox",checked:!!b.inverted,
+          onChange:function(ev){upd({inverted:ev.target.checked});}}),
+        "Inverser couleurs"),
+      e("label",{className:"field-label"},"Dégradé du bloc"),
+      e("select",{value:b.gradKey,
+        onChange:function(ev){upd({gradKey:ev.target.value});},
+        style:{width:"100%",fontSize:12,padding:"6px",borderRadius:6,
+          border:"1px solid #d4d4d4",fontFamily:"inherit"}},
+        e("option",{value:"auto"},"Auto (dégradé du visuel)"),
+        Object.keys(GRADS).map(function(k){
+          return e("option",{key:k,value:k},GRADS[k].label);})));
+  }
+
+  var panel=e("div",{className:"panel"},
+
+    e(UI.Section,{title:"Format",children:
+      e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
+        onChange:shell.setFormat})}),
+
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+
+    /* ── Onglet Fond ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="fond"?" on":"")},
+      e(UI.SegButtons,{value:st.bgMode,onChange:function(v){set("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Aplat dégradé"},{v:"white",l:"Fond blanc"}]}),
+      st.bgMode==="photo"
+        ? e(React.Fragment,null,
+            e("div",{style:{height:10}}),
+            e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
+              bgStatus:shell.bgStatus,bgNat:shell.bgNat,bgDir:BG_DIR,
+              maxZoom:shell.maxZoom}))
+        : e("div",{className:"hint",style:{marginTop:8}},
+            st.bgMode==="grad"
+              ?"Sur aplat dégradé, les blocs sont blancs avec typo dégradée, le cartouche et la flèche passent en filet blanc (charte p35)."
+              :"Sur fond blanc, les blocs prennent le dégradé et la typo passe en blanc (charte p35)."),
+      e(UI.TabNav,{next:"Couleurs",onNext:function(){setActiveTab("couleurs");}})),
+
+    /* ── Onglet Couleurs ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="couleurs"?" on":"")},
+      e("label",{className:"field-label"},"Dégradé du visuel"),
+      e(UI.GradPicker,{value:st.grad,onChange:function(v){set("grad",v);}}),
+      e("div",{style:{height:12}}),
+      e("label",{className:"toggle"},
+        e("input",{type:"checkbox",checked:!!st.lowCarbon,
+          onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+        "Sujet énergie bas-carbone"),
+      e(UI.Warnings,{items:warnings.filter(function(w){
+        return w.id!=="max-4-blocks";})}),
+      e(UI.TabNav,{prev:"Fond",onPrev:function(){setActiveTab("fond");},
+        next:"Cartouche",onNext:function(){setActiveTab("cartouche");}})),
+
+    /* ── Onglet Cartouche (picto + titre réunis, idée 14) ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="cartouche"?" on":"")},
+      e("label",{className:"field-label"},"Titre du cartouche"),
+      e("input",{type:"text",spellCheck:true,value:st.badgeMain,
+        onChange:function(ev){set("badgeMain",ev.target.value);}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Seconde partie ",
+        e("span",{className:"hint"},"(SemiBold, ex. lieu ou fonction, charte p17)")),
+      e("input",{type:"text",spellCheck:true,value:st.badgeSub,
+        onChange:function(ev){set("badgeSub",ev.target.value);}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Pictogramme"),
+      e("div",{id:"picto-gallery-container",key:"picto-gallery"}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Repère de carrousel"),
+      e(UI.SegButtons,{value:st.navMark,onChange:function(v){set("navMark",v);},
+        options:[{v:"arrow",l:"Flèche"},{v:"dot",l:"Point (fin)"},{v:"none",l:"Aucun"}]}),
+      e(UI.TabNav,{prev:"Couleurs",onPrev:function(){setActiveTab("couleurs");},
+        next:"Blocs",onNext:function(){setActiveTab("blocs");}})),
+
+    /* ── Onglet Blocs ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="blocs"?" on":"")},
+      e("div",{className:"upload-hint"},
+        e("b",null,"4 blocs max"),
+        " (2-3 en story). Positionnez un bloc en ",e("b",null,"← Gauche"),
+        " suivi d'un ",e("b",null,"Droite →"),
+        " pour les coller côte à côte — le slider de répartition ajuste la largeur sans superposition."),
+      st.blocks.map(blockEditor),
+      st.blocks.length<B.maxBlocks
+        ? e("div",{style:{display:"flex",gap:8,marginBottom:12}},
+            e("button",{className:"mini-btn",onClick:function(){
+              setSt(function(p){var c=Object.assign({},p);
+                c.blocks=p.blocks.concat([newBlock("figure")]);return c;});}},
+              "+ Chiffre clé"),
+            e("button",{className:"mini-btn",onClick:function(){
+              setSt(function(p){var c=Object.assign({},p);
+                c.blocks=p.blocks.concat([newBlock("body")]);return c;});}},
+              "+ Bloc texte"))
+        : e("div",{className:"hint",style:{marginBottom:10}},
+            "Maximum charte atteint (4 blocs)."),
+      e("label",{className:"field-label"},"Alignement des blocs"),
+      e(UI.SegButtons,{value:st.blocksAlign,
+        onChange:function(v){set("blocksAlign",v);},
+        options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
+      e("div",{style:{height:12}}),
+      e(UI.SliderField,{label:"Taille callout — "+calloutSize+" pt (charte "+CAL.min+"-"+CAL.max+")",
+        min:CAL.min,max:CAL.max,value:calloutSize,
+        onChange:function(v){set("cs_"+st.format,v);}}),
+      e("div",{style:{height:8}}),
+      e(UI.SliderField,{label:"Taille body — "+bodySize+" pt (charte "+BOD.min+"-"+BOD.max+")",
+        min:BOD.min,max:BOD.max,value:bodySize,
+        onChange:function(v){set("bs_"+st.format,v);}}),
+      e("div",{style:{height:8}}),
+      e(UI.SliderField,{label:"Remonter les blocs — "+off+" px",
+        min:0,max:Math.max(0,CH_-stackH-ctaBottom-200),value:off,
+        onChange:function(v){set("off_"+st.format,v);}}),
+      e(UI.Warnings,{items:warnings}),
+      e(UI.TabNav,{prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":"")},
+      e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
+  );
+
+  /* ── Sync live vers le Carrousel ── */
+  useEffect(function(){
+    var bk=st.bgMode==="grad"?"grad":st.bgMode==="white"?"white":"img";
+    var bi=bk==="img"&&st.bgImg&&st.bgImg.startsWith("data:")?st.bgImg:null;
+    if(bk==="img"&&!bi) bk="white";
+    try{localStorage.setItem("spg_live_blocklayouts",JSON.stringify({
+      bgKind:bk,bgImg:bi,
+      blocks:(st.blocks||[]).map(function(b){return {
+        id:b.id,kind:b.kind,col:b.col,
+        callout:b.callout||"",calloutSize:b.calloutSize||108,
+        text:b.text||"",bodySize:b.bodySize||48,
+        gradKey:b.gradKey||"auto",widthPct:b.widthPct||0,
+        iconSrc:null,inverted:!!b.inverted
+      };})
+    }));}catch(e){}
+  },[st]);
+
+  return e("div",{className:"app-layout"},panel,
+    e("div",{className:"preview-wrap"},previewWrap));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+</script>
+</body>
+</html>

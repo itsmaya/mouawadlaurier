@@ -539,5 +539,63 @@
     get Drawer(){    return getComponents().Drawer; }
   };
 
+  /* ═══ Languette fixe sur le bord droit ═══════════════════════════════════
+     Injectée au chargement, indépendante de React.
+     Contient : bouton disquette (drawer) + bouton téléchargement.
+     Branché sur window.smDrawerToggle et window.smDownloadTrigger.          */
+  function injectTab(){
+    if(document.getElementById("sm-side-tab")) return;
+    var style=document.createElement("style");
+    style.textContent=[
+      "#sm-side-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);",
+      "z-index:999;display:flex;flex-direction:column;gap:0;",
+      "border-radius:12px 0 0 12px;overflow:hidden;",
+      "box-shadow:-2px 0 16px rgba(0,0,0,.15);}",
+      ".sm-tab-btn{width:48px;height:56px;display:flex;flex-direction:column;",
+      "align-items:center;justify-content:center;gap:3px;",
+      "border:none;cursor:pointer;transition:background .15s;padding:0;}",
+      ".sm-tab-btn:hover{filter:brightness(.92);}",
+      ".sm-tab-btn svg{display:block;flex-shrink:0;}",
+      ".sm-tab-btn span{font-size:8px;font-weight:800;letter-spacing:.06em;",
+      "text-transform:uppercase;line-height:1;}"
+    ].join("");
+    document.head.appendChild(style);
+
+    var tab=document.createElement("div");
+    tab.id="sm-side-tab";
+
+    /* Bouton disquette */
+    var btnSave=document.createElement("button");
+    btnSave.className="sm-tab-btn";
+    btnSave.title="Sauvegardes";
+    btnSave.style.cssText="background:#1a1a1a;color:#fff;border-bottom:1px solid rgba(255,255,255,.1);";
+    btnSave.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+
+      '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>'+
+      '<polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>'+
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:1px"><polyline points="9 18 15 12 9 6"/></svg>';
+    btnSave.onclick=function(){ if(window.smDrawerToggle) window.smDrawerToggle(); };
+
+    /* Bouton téléchargement */
+    var btnDl=document.createElement("button");
+    btnDl.className="sm-tab-btn";
+    btnDl.id="sm-tab-download";
+    btnDl.title="Télécharger le PNG";
+    btnDl.style.cssText="background:#2a7a2a;color:#fff;";
+    btnDl.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+
+      '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>'+
+      '<polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+
+      '<span>PNG</span>';
+    btnDl.onclick=function(){ if(window.smDownloadTrigger) window.smDownloadTrigger(); };
+
+    tab.appendChild(btnSave);
+    tab.appendChild(btnDl);
+    document.body.appendChild(tab);
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded", injectTab);
+  } else {
+    injectTab();
+  }
 
 })();

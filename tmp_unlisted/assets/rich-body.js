@@ -1,7 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   RICH-BODY.JS — Composants React partagés
-   Dépend de : te-charte.js (T, TE_WHITE, parseRich)
+   RICH-BODY.JS — Composants React partagés (v2, charte 2026)
+   Dépend de : charte-2026.js + te-charte.js (T, TE_WHITE)
    Dépend de : React (window.React)
+
+   v2 — Surlignage conforme charte 2026 (p19) et correction du bug
+   d'alignement sur retour à la ligne :
+   - la largeur du surlignage = texte + UN espace insécable de chaque côté,
+     inséré DANS le flux (plus aucun padding dessiné en débordement) ;
+   - sur un segment surligné qui se replie sur plusieurs lignes, chaque
+     ligne reçoit son propre rectangle mesuré : le texte reste aligné au
+     fer avec le reste du paragraphe, rien ne déborde du bloc.
 
    Exporte sur window (via variables globales) :
      parseRich, RichBody, FileDrop, DownloadIcon, NavMark
@@ -77,18 +85,18 @@ function RichBody(props){
       parts.forEach(function(p,pi){
         var key=li+"-"+pi;
         if(p.t==="h"){
-          if(pi>0) out.push(e("span",{key:key+"a",
-            style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
+          /* Charte 2026 (p19) : le surlignage couvre le texte + un espace
+             de chaque côté — espaces insécables DANS le span mesuré. */
+          var hv=" "+p.v+" ";
           out.push(inv
             ? e("span",{key:key,"data-seg":"h",
                 style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
                        background:TE_WHITE,WebkitBackgroundClip:"text",backgroundClip:"text",
                        color:"transparent",WebkitTextFillColor:"transparent",
-                       backgroundImage:"linear-gradient(90deg,"+(props.gradFrom||"#0098E3")+" 0%,"+(props.gradTo||"#4632FF")+" 100%)"}},p.v)
+                       backgroundImage:"linear-gradient("+(window.CHARTE?CHARTE.gradientAngle:135)+"deg,"+(props.gradFrom||"#0098E3")+" 0%,"+(props.gradTo||"#4632FF")+" 100%)"}},hv)
             : e("span",{key:key,"data-seg":"h",
                 style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
-                       WebkitTextFillColor:TE_WHITE}},p.v));
-          out.push(e("span",{key:key+"b",style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT}},"\u00a0"));
+                       WebkitTextFillColor:TE_WHITE}},hv));
         } else if(p.t==="u"){
           out.push(e("span",{key:key,"data-seg":"u",
             style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_UNDERLINE,
@@ -110,7 +118,6 @@ function RichBody(props){
 
   var useGrad=(props.textMode==="grad");
   var inv=props.inverted||false;
-  var H_PAD_X=fs*T.HIGHLIGHT_PAD_X;
   var H_H=fs*T.HIGHLIGHT_H;
   var U_TH=Math.max(3,fs*T.UNDERLINE_TH);
   var U_OFF=fs*T.UNDERLINE_OFF;
@@ -118,9 +125,10 @@ function RichBody(props){
   return e("div",{style:{position:"relative"}},
     M.h.map(function(r,i){
       var cy=r.y+r.h/2;
-      var padL=r.isFirst?H_PAD_X:0, padR=r.isLast?H_PAD_X:0;
+      /* v2 : plus aucun padding externe — le rect mesuré inclut déjà les
+         espaces du flux. Chaque ligne d'un segment replié a son rectangle. */
       return e("div",{key:"h"+i,"data-hl":"1",style:{position:"absolute",
-        left:r.x-padL,top:cy-H_H/2,width:r.w+padL+padR,height:H_H,
+        left:r.x,top:cy-H_H/2,width:r.w,height:H_H,
         backgroundImage:inv?"none":grad,
         backgroundColor:inv?TE_WHITE:"transparent",
         borderRadius:2,zIndex:0}});

@@ -4,85 +4,26 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Split Screen — TotalEnergies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js"],function(){
-loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"],function(){
-loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){boot();});});});
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){boot();});});});
 </script>
-<style>
-*{box-sizing:border-box;}
-body{margin:0;font-family:'Nunito',sans-serif;background:#f0f0f0;}
-#root{min-height:100vh;}
-.app-layout{min-height:100vh;display:flex;flex-direction:column;gap:24px;padding:24px;padding-top:68px;padding-bottom:52px;}
-@media(min-width:1024px){.app-layout{flex-direction:row;}}
-.panel{width:100%;flex-shrink:0;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid #e5e5e5;padding:16px;height:fit-content;}
-@media(min-width:1024px){.panel{width:380px;}}
-.section{margin-bottom:20px;}.section:last-child{margin-bottom:0;}
-.section>h2{cursor:default;margin:0 -16px 12px;padding:8px 16px;background:#f5f5f3;border-bottom:1px solid #e8e8e8;border-top:1px solid #e8e8e8;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#aaa;}
-label.field-label{display:block;font-size:12px;font-weight:600;color:#404040;margin-bottom:4px;}
-.hint{font-size:11px;color:#737373;}
-input[type=text],textarea{width:100%;font-size:14px;border:1px solid #d4d4d4;border-radius:6px;padding:8px;font-family:'Nunito',sans-serif;}
-textarea{resize:vertical;}
-input[type=range]{width:100%;accent-color:#1a1a1a;}
-.file-drop{position:relative;cursor:pointer;border-radius:8px;border:2px dashed #d4d4d4;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fafafa;height:96px;}
-.file-drop.small{height:64px;}
-.file-drop:hover{border-color:#a3a3a3;}
-.file-drop img{width:100%;height:100%;object-fit:contain;padding:4px;}
-.file-drop-empty{display:flex;flex-direction:column;align-items:center;gap:4px;color:#a3a3a3;font-size:11px;text-align:center;padding:0 6px;}
-.file-drop .remove-btn{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px;border:none;cursor:pointer;display:flex;}
-.export-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#171717;color:#fff;font-size:14px;font-weight:600;border-radius:8px;padding:13px;border:none;cursor:pointer;margin-top:20px;font-family:inherit;}
-.export-btn:hover{background:#303030;}.export-btn:disabled{opacity:.6;cursor:default;}
-.preview-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;position:sticky;top:68px;align-self:flex-start;}
-@keyframes spin{to{transform:rotate(360deg);}}.spin{animation:spin 1s linear infinite;display:inline-flex;}
-.seg{display:flex;gap:6px;}
-.seg button{flex:1;padding:7px;font-size:12px;font-weight:700;border-radius:6px;border:1px solid #d4d4d4;background:#fff;cursor:pointer;font-family:inherit;}
-.seg button.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
-.upload-hint{font-size:11px;color:#737373;background:#f8f8f8;border:1px solid #e5e5e5;border-radius:6px;padding:8px 10px;margin-bottom:10px;}
-.upload-hint b{color:#404040;}
-.grad-row{display:flex;gap:8px;}
-.grad-sw{flex:1;height:38px;border-radius:8px;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .15s;}
-.grad-sw:hover{transform:translateY(-1px);}
-.grad-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset,0 2px 8px rgba(0,0,0,.18);}
-.col-sw{width:38px;height:30px;border-radius:6px;cursor:pointer;border:2px solid transparent;}
-.col-sw.on{border-color:#1a1a1a;box-shadow:0 0 0 2px #fff inset;}
-.charte-warn{font-size:11px;line-height:1.45;color:#8a4b00;background:#fff6e6;border:1px solid #f0d29a;border-radius:6px;padding:8px 10px;margin-top:10px;}
-.toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;}
-.toggle input{accent-color:#1a1a1a;}
-.toggle.off{opacity:.45;cursor:not-allowed;}
-/* Onglets */
-.panel-tabs-wrap{margin:-16px -16px 0;background:#e8e8e6;flex-shrink:0;}
-.panel-tabs{display:flex;align-items:flex-end;padding:0 12px;gap:3px;overflow-x:auto;scrollbar-width:none;}
-.panel-tabs::-webkit-scrollbar{display:none;}
-.panel-tab{padding:9px 16px 8px;font-size:11px;font-weight:700;color:#888;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-radius:6px 6px 0 0;background:#d8d8d6;border:1px solid #ccc;border-bottom:none;flex-shrink:0;position:relative;top:1px;transition:background .1s,color .1s;}
-.panel-tab:hover{background:#e4e4e2;color:#555;}
-.panel-tab.on{background:#fff;color:#1a1a1a;border-color:#ddd;box-shadow:0 -2px 6px rgba(0,0,0,.08);z-index:2;}
-.panel-tabs-progress{height:3px;background:#e0e0de;}
-.panel-tabs-progress-bar{height:100%;background:#1a1a1a;border-radius:0 2px 0 0;transition:width .2s;}
-.panel-tab-content{display:none;padding-top:16px;}
-.panel-tab-content.on{display:block;}
-.tab-nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0 4px;gap:8px;}
-.tab-nav-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;border:1px solid #ddd;background:#fafafa;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;color:#333;}
-.tab-nav-btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
-/* Languette droite */
-#sm-side-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:999;display:flex;flex-direction:column;gap:0;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-2px 0 16px rgba(0,0,0,.15);}
-.sm-tab-btn{width:48px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;cursor:pointer;padding:0;}
-.sm-tab-btn:hover{filter:brightness(.92);}
-.sm-tab-btn span{font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1;}
-</style>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
 <script src="../../assets/pictos.js"></script>
 <script src="../../assets/save-manager.js"></script>
+<script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
 <script src="../../assets/rich-body.js"></script>
 <script src="../../assets/drag-image.js"></script>
 <script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/split-screen-card.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -90,12 +31,12 @@ input[type=range]{width:100%;accent-color:#1a1a1a;}
 function boot(){
 
 var e=React.createElement,useState=React.useState,useRef=React.useRef,
-    useCallback=React.useCallback,useEffect=React.useEffect,
-    useLayoutEffect=React.useLayoutEffect;
+    useEffect=React.useEffect,useLayoutEffect=React.useLayoutEffect;
+var UI=Shell.ui;
 
-/* ═══ FOND PAR DÉFAUT ══════════════════════════════════════════════════════ */
+/* ═══ CONFIG ══════════════════════════════════════════════════════════════ */
+var PAGE_FORMATS=SPGCards.get("splitscreen").formats;
 var BG_DIR="../../templates/split-screen/";
-var BG_DEFAULT_FILE="template.png";
 function bgCandidates(k){
   var names=["TEMPLATE_SS_"+k,"template_"+k,"template"];
   var exts=[".png",".jpg",".jpeg",".webp"];
@@ -104,432 +45,179 @@ function bgCandidates(k){
   return out;
 }
 
+/* ═══ STATE ═══════════════════════════════════════════════════════════════
+   L'état par défaut vit dans le module de carte partagé : la page et le
+   Carrousel partent exactement du même point. */
+var CARD=SPGCards.get("splitscreen");
+var DEFAULT=CARD.DEFAULT;
 
-/* ═══ STATE ════════════════════════════════════════════════════════════════ */
-var DEFAULT={
-  format:"1x1", grad:"rouge", lowCarbon:false,
-  hasML:false, mlStyle:"grad",
-  layout:"left",
-  imgRatio:0.61,
-  badgeIconKey:"Electricity",
-  badgeIconCustom:null,
-  badgeMain:"MOBILITÉ ÉLECTRIQUE", badgeSub:"",
-  navMark:"arrow",
-  textMode:"grad",
-  textColor:"#E70000",
-  text:"TotalEnergies déploie **20 000 points de recharge**\nsur les autoroutes européennes d'ici 2028.",
-  /* image : voir BG_DEFAULT_STATE dans bg-controls.js */
-  fs_1x1:0, fs_4x5:0, fs_9x16:0
-};
-Object.assign(DEFAULT, BG_DEFAULT_STATE);
 
-/* ═══ APP ══════════════════════════════════════════════════════════════════ */
+/* ═══ APP ═════════════════════════════════════════════════════════════════ */
 function App(){
-  var a0=useState(DEFAULT),st=a0[0],_setSt=a0[1];
+  var shell=Shell.useApp({pageKey:"splitscreen",DEFAULT:DEFAULT,bgCandidates:bgCandidates});
+  var st=shell.st, _set=shell.set, setSt=shell.setSt;
 
-  /* Ctrl+Z */
-  var historyRef=useRef([]), historyIdx=useRef(-1);
-  function setSt(newSt){
-    _setSt(function(prev){
-      var next=typeof newSt==="function"?newSt(prev):newSt;
-      if(JSON.stringify(next)===JSON.stringify(prev)) return prev;
-      historyRef.current=historyRef.current.slice(0,historyIdx.current+1);
-      historyRef.current.push(prev);
-      if(historyRef.current.length>30) historyRef.current.shift();
-      historyIdx.current=historyRef.current.length-1;
-      return next;
-    });
-  }
-  function undo(){
-    if(historyIdx.current<0) return;
-    var prev=historyRef.current[historyIdx.current];
-    historyIdx.current--;
-    _setSt(prev);
-  }
-  useEffect(function(){
-    function onKey(ev){if((ev.ctrlKey||ev.metaKey)&&ev.key==="z"&&!ev.shiftKey){ev.preventDefault();undo();}}
-    window.addEventListener("keydown",onKey);
-    return function(){window.removeEventListener("keydown",onKey);};
-  },[]);
-
-  var a3=useState(false),busy=a3[0],setBusy=a3[1];
-  var a4=useState({w:0,h:0}); var bgNat=a4[0],setBgNat=a4[1];
-  var cardRef=useRef(null),paveRef=useRef(null);
-  var phState=useState(120); var paveH=phState[0],setPaveH=phState[1];
-  var bsState=useState({s:"loading",p:null}); var bgStatus=bsState[0],setBgStatus=bsState[1];
-
-  /* Sauvegarde */
-  var saveStore=useRef(null);
-  if(!saveStore.current) saveStore.current=SaveManager.createStore("splitscreen",{legacy:"splitscreen_saves"});
-  var smId=useState(null); var currentId=smId[0],setCurrentId=smId[1];
-  var smName=useState(""); var currentName=smName[0],setCurrentName=smName[1];
-  var smHash=useRef(null); var smFolder=useRef("");
-  var statusRootRef=useRef(null);
-  var smDrawer=useState(false); var drawerOpen=smDrawer[0],setDrawerOpen=smDrawer[1];
-  var dirty=currentId!==null&&smHash.current!==null&&SaveManager.hashState(st)!==smHash.current;
-
-  /* Onglets */
+  var cardRef=useRef(null);
   var tabState=useState("image"); var activeTab=tabState[0],setActiveTab=tabState[1];
-  var TABS=[{id:"image",label:"Image"},{id:"couleurs",label:"Couleurs"},{id:"cartouche",label:"Cartouche"},{id:"texte",label:"Texte"}];
+  var TABS=[
+    {id:"image",label:"Image"},{id:"couleurs",label:"Couleurs"},
+    {id:"cartouche",label:"Cartouche"},{id:"texte",label:"Texte"},{id:"export",label:"Export"}
+  ];
 
-  function set(k,v){setSt(function(p){
-    var c=Object.assign({},p); c[k]=v;
-    if(k==="grad"&&p.textMode==="uni"&&p.textColor!==COLOR_GREY)
-      c.textColor=GRADS[v]?GRADS[v].to:p.textColor;
-    return c;
-  });}
+  /* set local : sync dégradé → couleur texte si mode uni */
+  function set(k,v){
+    if(k==="grad"&&st.textMode==="uni"&&st.textColor!==COLOR_GREY){
+      setSt(function(p){var c=Object.assign({},p);c.grad=v;
+        c.textColor=GRADS[v]?GRADS[v].to:p.textColor;return c;});
+    } else { _set(k,v); }
+  }
 
-  function setFormat(k){setSt(function(p){var c=Object.assign({},p);c.format=k;if(k==="9x16")c.hasML=false;return c;});}
+  function setFormat(k){
+    setSt(function(p){var c=Object.assign({},p);c.format=k;
+      if(k==="9x16")c.hasML=false;return c;});
+  }
 
-  /* Fond par défaut */
-  useEffect(function(){
-    if(st.bgCustom) return;
-    var k=st.format;
-    setBgStatus({s:"loading",p:null});
-    tryLoadDefault(bgCandidates(k),
-      function(dataUrl,srcUrl){
-        setSt(function(p){if(p.bgCustom||p.format!==k)return p;var c=Object.assign({},p);c.bgImg=dataUrl;c.bgIsDefault=true;return c;});
-        setBgStatus({s:"ok",p:srcUrl});
-      },
-      function(){
-        setSt(function(p){if(p.bgCustom||p.format!==k)return p;var c=Object.assign({},p);c.bgImg=null;c.bgIsDefault=false;return c;});
-        setBgStatus({s:"missing",p:null});
-      });
-  },[st.format,st.bgCustom]);
 
-  /* PictoGallery */
-  useEffect(function(){
-    window.PictoGallery.load(function(){
-      var keys=window.PictoGallery.getKeys();
-      setSt(function(p){var c=Object.assign({},p);if(keys.indexOf(p.badgeIconKey)<0)c.badgeIconKey=keys[0];c._pgLoaded=true;return c;});
-      var container=document.getElementById("picto-gallery-container");
-      if(container&&!container._pg){
-        container._pg=window.PictoGallery.init(container,{grad:gradCss(st.grad,90),selected:st.badgeIconKey,custom:st.badgeIconCustom,
-          onChange:function(key){setSt(function(p){var c=Object.assign({},p);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});},
-          onCustom:function(d){setSt(function(p){var c=Object.assign({},p);c.badgeIconCustom=d;return c;});}});
-      }
-    });
-  },[]);
-  useEffect(function(){var ct=document.getElementById("picto-gallery-container");if(ct&&ct._pg)ct._pg.setGrad(gradCss(st.grad,90));},[st.grad]);
-
-  /* Dimensions naturelles image */
-  useEffect(function(){
-    if(!st.bgImg){setBgNat({w:0,h:0});return;}
-    var im=new Image();im.onload=function(){setBgNat({w:im.naturalWidth,h:im.naturalHeight});};im.onerror=function(){setBgNat({w:0,h:0});};im.src=st.bgImg;
-  },[st.bgImg]);
-
-  useLayoutEffect(function(){
-    if(!paveRef.current) return;
-    var h=Math.round(paveRef.current.offsetHeight||0);
-    if(h>0&&h!==paveH) setPaveH(h);
-  });
-
-  /* StatusBar */
-  useEffect(function(){
-    var slot=document.getElementById("sm-status-slot");
-    if(!slot||!SaveManager.StatusBar) return;
-    if(!statusRootRef.current) statusRootRef.current=ReactDOM.createRoot(slot);
-    statusRootRef.current.render(e(SaveManager.StatusBar,{
-      currentId:currentId,currentName:currentName,dirty:dirty,
-      onSave:function(){
-        var name=currentName||("Version "+new Date().toLocaleString("fr-FR"));
-        saveStore.current.save({id:currentId||undefined,name:name,folder:"",state:st},function(rec){
-          if(!rec)return;setCurrentId(rec.id);setCurrentName(rec.name);smHash.current=SaveManager.hashState(st);
-        });
-      }
-    }));
-    window.smDrawerToggle=function(){setDrawerOpen(function(o){return !o;});};
-    window.smDownloadTrigger=function(){doExport();};
-    if(currentId) localStorage.setItem("sm_last_id_splitscreen",currentId);
-  },[currentId,currentName,dirty]);
-
-  /* Dernier projet */
-  useEffect(function(){
-    var hash=window.location.hash;
-    if(hash&&hash.indexOf("#exportkey=")===0){
-      try{var key=hash.slice(12),raw=localStorage.getItem(key);if(raw){var d=JSON.parse(raw);setSt(Object.assign({},DEFAULT,d));localStorage.removeItem(key);return;}}catch(e){}
-    }
-    var lastId=localStorage.getItem("sm_last_id_splitscreen");
-    if(!lastId)return;
-    saveStore.current.get(lastId,function(rec){
-      if(!rec||!rec.state)return;
-      setSt(Object.assign({},DEFAULT,rec.state));
-      setCurrentId(rec.id);setCurrentName(rec.name);
-      smFolder.current=rec.folder||"";
-      smHash.current=SaveManager.hashState(Object.assign({},DEFAULT,rec.state));
-    });
-  },[]);
-
+  /* ═══ VALEURS DÉRIVÉES (panneau uniquement) ══════════════════════════ */
   var G=GRADS[st.grad]||GRADS.bleu;
   var GRAD_H=gradCss(st.grad,90);
-  var GRAD_V=gradCss(st.grad,180);
   var L=getLayout(st.format,{hasML:st.hasML});
   var CARD_H=L.CARD_H, EX=L.EXPORT_SCALE;
-  var _f=st.format;
-  var fs=st["fs_"+_f]||L.TEXT_DEF;
-  fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
+  var onML=st.hasML&&!L.STORY;
+  var cf=chFormat(st.format);
+  var previewScale=UI.previewScale(cf);
+  var bgNat=shell.bgNat;
 
-  /* Disposition Split Screen */
-  function computeRects(L2,CH,layout,imgRatio){
-    var m=L2.MARGIN,bt=L2.BOTTOM,rt=L2.RIGHT_MIN;
-    var left=m,top=m,right=CARD_W-m,bottom=CH-bt;
-    var cw=right-left,ch=bottom-top;
-    var gap=Math.round(0.04*CH);
-    var badgeClear=L2.BADGE_H+gap;
-    var img,txt;
-    if(layout==="bottom"){
-      var ih=Math.round(ch*imgRatio);var imgTop=bottom-ih;
-      img={x:left,y:imgTop,w:cw,h:ih};txt={x:left,y:top+badgeClear,w:cw,h:imgTop-gap-(top+badgeClear)};
-    } else if(layout==="top"){
-      var ih2=Math.round(ch*imgRatio);img={x:left,y:top,w:cw,h:ih2};
-      var txtTop=top+ih2+gap;txt={x:left,y:txtTop,w:cw,h:bottom-txtTop};
-    } else if(layout==="left"){
-      var iw=Math.round(cw*imgRatio);img={x:left,y:top,w:iw,h:ch};
-      var txtLeft=left+iw+gap;txt={x:txtLeft,y:top,w:CARD_W-m-rt-iw-gap,h:ch};
-    } else {
-      var iw2=Math.round(cw*imgRatio);img={x:right-iw2,y:top,w:iw2,h:ch};
-      txt={x:left,y:top+badgeClear,w:right-iw2-gap-left,h:ch-badgeClear};
-    }
-    return {img:img,txt:txt};
-  }
-  var R=computeRects(L,CARD_H,st.layout,st.imgRatio||0.55);
-
-  var bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
-  var bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
-  var bgZoom=st["bgZoom_"+st.format]||100;
-
+  /* maxZoom basé sur la zone image du split (≠ carte entière) */
+  var R=CARD.computeRects(L,CARD_H,st.layout,st.imgRatio||0.55);
   var maxZoom=300;
   if(bgNat.w>0&&bgNat.h>0){
     var outW=Math.round(R.img.w*EX),outH=Math.round(R.img.h*EX);
     var ir=bgNat.w/bgNat.h,cr=outW/outH;
     var coverW=(ir>cr)?outH*ir:outW,coverH=(ir>cr)?outH:outW/ir;
-    maxZoom=Math.max(100,Math.min(300,Math.min(Math.floor(bgNat.w/coverW*100),Math.floor(bgNat.h/coverH*100))));
+    maxZoom=Math.max(100,Math.min(300,Math.min(
+      Math.floor(bgNat.w/coverW*100),Math.floor(bgNat.h/coverH*100))));
   }
 
-  /* Export Puppeteer */
-  var doExport=useCallback(function(){
-    if(!cardRef.current)return;
-    setBusy(true);
-    var exportKey="wie_export_"+Date.now();
-    try{localStorage.setItem(exportKey,JSON.stringify(st));}catch(er){}
-    var fname=SaveManager.exportFilename(smFolder.current,currentName||(st.badgeSub||st.badgeMain||"split-screen"),st.format);
-    var outW=FORMATS[st.format].outputW,outH=FORMATS[st.format].outputH;
-    var currentUrl=window.location.href.split("#")[0]+"#exportkey="+exportKey;
-    var EXPORT_SERVER="http://localhost:3001";
-    fetch(EXPORT_SERVER+"/ping",{signal:AbortSignal.timeout(1500)})
-      .then(function(r){if(!r.ok)throw new Error("ping");
-        return fetch(EXPORT_SERVER+"/export",{method:"POST",headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({url:currentUrl,selector:"[data-export-card]",width:outW,height:outH,previewWidth:CARD_W,filename:fname,scale:1})});
-      }).then(function(r){return r.blob();})
-      .catch(function(){
-        return new Promise(function(res,rej){
-          document.fonts.ready.then(function(){
-            return window.domtoimage.toPng(cardRef.current,{width:CARD_W,height:CARD_H,scale:EX,useCORS:true});
-          }).then(function(d){fetch(d).then(function(r){return r.blob();}).then(res).catch(rej);}).catch(rej);
-        });
-      }).then(function(blob){
-        var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;a.click();
-      }).catch(function(er){console.error(er);})
-      .then(function(){setBusy(false);});
-  },[st,CARD_H,EX]);
+  /* Taille de police effective (le slider du panneau en a besoin) */
+  var fs=st["fs_"+st.format]||L.TEXT_DEF;
+  fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
 
-  var previewScale=Math.min(480/CARD_W,(window.innerHeight-140)/CARD_H,1);
+  var charteWarn=(st.lowCarbon&&!G.lowCarbonOK)
+    ?"Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone.":null;
 
-  /* Cartouche */
-  var badgeFont=L.BADGE_FONT;
-  (function(){try{
-    var avail=CARD_W-L.MARGIN*2-L.BADGE_ICON-L.BADGE_GAP-L.BADGE_PADX*2;
-    var cvs=document.createElement("canvas"),ctx=cvs.getContext("2d");
-    ctx.font="800 "+L.BADGE_FONT+"px Nunito";
-    var w1=ctx.measureText(st.badgeMain||"").width;
-    ctx.font="600 "+L.BADGE_FONT+"px Nunito";
-    var w2=ctx.measureText(st.badgeSub?(" \u2013 "+st.badgeSub):"").width;
-    var tot=w1+w2;
-    if(tot>avail&&tot>0) badgeFont=Math.max(9,L.BADGE_FONT*(avail/tot));
-  }catch(ex){}})();
+  /* ═══ CARTE ═══════════════════════════════════════════════════════════
+     Composant partagé : voir assets/cards/split-screen-card.js.
+     Ne PAS réimplémenter le visuel ici — le Carrousel rend le même. */
+  var card=e(CARD.Card,{
+    st:st, cardRef:cardRef, exportTarget:true,
+    scale:previewScale, bgNat:bgNat,
+    onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
+      c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); }
+  });
 
-  var badgeBoxStyle={height:L.BADGE_ICON,width:L.BADGE_ICON,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,backgroundImage:GRAD_H};
-  var pillStyle={height:L.BADGE_H,borderRadius:L.BADGE_RADIUS,display:"flex",alignItems:"center",padding:"0 "+L.BADGE_PADX+"px",color:TE_WHITE,fontSize:badgeFont,fontWeight:T.FW_BADGE_MAIN,letterSpacing:".04em",whiteSpace:"nowrap",textTransform:"uppercase",backgroundImage:GRAD_H};
-
-  var onML=st.hasML&&!L.STORY;
-  var badgeOnPhoto=(st.layout==="top"||st.layout==="left");
-  var badgeNudge=badgeOnPhoto?Math.round(0.035*CARD_H):0;
-  var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
-  var arrowOnPhoto=(st.layout==="bottom"||st.layout==="right");
-  var arrowNudge=arrowOnPhoto?Math.round(0.035*CARD_H):0;
-  var cardBgImg=onML&&st.mlStyle==="grad"?GRAD_V:"none";
-  var cardBgColor=onML&&st.mlStyle==="grad"?"transparent":"#FFFFFF";
-  var charteWarn=(st.lowCarbon&&!G.lowCarbonOK)?"Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone.":null;
-
-  var card=e("div",{ref:cardRef,"data-export-card":"1","data-ready":"1",style:{
-      width:CARD_W,height:CARD_H,position:"relative",overflow:"hidden",
-      fontFamily:"'Nunito',sans-serif",backgroundImage:cardBgImg,backgroundColor:cardBgColor}},
-
-    onML?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundColor:"#FFFFFF"}}):null,
-
-    e("div",{"data-layer":"bg",style:{position:"absolute",left:R.img.x,top:R.img.y,width:R.img.w,height:R.img.h,borderRadius:L.IMG_RADIUS,overflow:"hidden",backgroundColor:"#E4E4E4"}},
-      e(DragImage,{key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
-        flipH:st.bgFlipH,
-        w:R.img.w*previewScale,h:R.img.h*previewScale,scale:previewScale,natW:bgNat.w,natH:bgNat.h,
-        brightness:st.bgBrightness,saturation:st.bgSaturation,contrast:st.bgContrast,
-        onChange:function(x,y){setSt(function(p){var c=Object.assign({},p);c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;});}}),
-      st.bgDark>0?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null),
-
-    e("div",{ref:paveRef,style:{position:"absolute",left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
-      e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,gradFrom:G.from,gradTo:G.to,color:st.textColor,align:"left",textMode:st.textMode})),
-
-    e("div",{style:{position:"absolute",left:badgeXY.x,top:badgeXY.y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
-      (function(){
-        var src=st.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey))||null;
-        var hasSrc=!!(window.PictoGallery&&window.PictoGallery.getSrc(st.badgeIconKey));
-        var isOut=!st.badgeIconCustom&&hasSrc&&window.PictoGallery&&!window.PictoGallery.isWhite(st.badgeIconKey);
-        var bStyle=isOut?Object.assign({},badgeBoxStyle,{backgroundImage:"none",backgroundColor:"#FFFFFF"}):badgeBoxStyle;
-        return e("div",{style:bStyle},src
-          ?e("img",{src:src,alt:"",style:{width:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",height:L.BADGE_ICON*T.BADGE_ICON_RATIO+"px",objectFit:"contain"}})
-          :e("svg",{viewBox:"0 0 24 24",width:L.BADGE_ICON*0.5,height:L.BADGE_ICON*0.5,fill:"none",stroke:TE_WHITE,strokeWidth:2},e("path",{d:"M13 10V3L4 14h7v7l9-11h-7z"})));
-      })(),
-      e("div",{style:pillStyle},st.badgeMain,st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB}}," \u2013 "+st.badgeSub):null)),
-
-    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN+arrowNudge,bottom:L.MARGIN+arrowNudge}},
-      e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(18),grad:GRAD_H,from:G.from,to:G.to})):null
-  );
-
-  var previewWrap=e("div",{style:{width:CARD_W*previewScale,minHeight:CARD_H*previewScale,position:"relative",flexShrink:0}},
-    e("div",{style:{width:CARD_W,transform:"scale("+previewScale+")",transformOrigin:"top left",position:"absolute",top:0,left:0}},card));
-
-  function segBtn(val,key,opts){
-    return e("div",{className:"seg"},opts.map(function(o){
-      return e("button",{key:o.v,className:val===o.v?"on":"",onClick:function(){set(key,o.v);}},o.l);
-    }));
-  }
-
+  /* ═══ PANNEAU ════════════════════════════════════════════════════════= */
   var panel=e("div",{className:"panel"},
 
-    e("div",{className:"section"},e("h2",{"data-static":"1"},"Format"),
-      e("div",{style:{display:"flex",flexDirection:"column",gap:8}},
-        Object.keys(FORMATS).map(function(k){
-          var f=FORMATS[k],on=st.format===k;
-          var vh=30,vw=Math.round(vh*(f.outputW/f.outputH));
-          return e("div",{key:k,onClick:function(){setFormat(k);},style:{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",borderRadius:8,cursor:"pointer",border:on?"2px solid #1a1a1a":"2px solid #e8e8e8",background:on?"#f0efec":"#fafafa",transition:"all .15s"}},
-            e("div",{style:{width:vw,height:vh,borderRadius:3,background:on?"#1a1a1a":"#ccc",flexShrink:0}}),
-            e("div",null,e("div",{style:{fontWeight:700,fontSize:13,color:on?"#1a1a1a":"#333"}},f.label),e("div",{style:{fontSize:11,color:"#888",marginTop:1}},f.outputW+" × "+f.outputH+" px")));
-        }))),
+    e(UI.Section,{title:"Format"},
+      e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,onChange:setFormat})),
 
-    /* Barre d'onglets */
-    e("div",{className:"panel-tabs-wrap"},
-      e("div",{className:"panel-tabs"},
-        TABS.map(function(t){return e("div",{key:t.id,className:"panel-tab"+(activeTab===t.id?" on":""),onClick:function(){setActiveTab(t.id);}},t.label);})),
-      e("div",{className:"panel-tabs-progress"},
-        e("div",{className:"panel-tabs-progress-bar",style:{width:(((TABS.findIndex(function(t){return t.id===activeTab;})+1)/TABS.length)*100)+"%"}}))),
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
 
-    /* Onglet Image */
+    /* ── Image ── */
     e("div",{className:"panel-tab-content"+(activeTab==="image"?" on":""),style:{paddingTop:16}},
       e("label",{className:"field-label"},"Disposition"),
-      segBtn(st.layout,"layout",[{v:"bottom",l:"Bas"},{v:"top",l:"Haut"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]),
+      e(UI.SegButtons,{value:st.layout,onChange:function(v){set("layout",v);},
+        options:[{v:"bottom",l:"Bas"},{v:"top",l:"Haut"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]}),
       e("div",{style:{height:8}}),
-      e("label",{className:"field-label"},(st.layout==="left"||st.layout==="right"?"Largeur":"Hauteur")+" photo — "+Math.round((st.imgRatio||0.55)*100)+" %"),
-      e("input",{type:"range",min:30,max:72,step:1,value:Math.round((st.imgRatio||0.55)*100),onChange:function(ev){set("imgRatio",parseInt(ev.target.value,10)/100);}}),
+      e("label",{className:"field-label"},
+        (st.layout==="left"||st.layout==="right"?"Largeur":"Hauteur")+" photo — "+Math.round((st.imgRatio||0.55)*100)+" %"),
+      e("input",{type:"range",min:30,max:72,step:1,value:Math.round((st.imgRatio||0.55)*100),
+        onChange:function(ev){set("imgRatio",parseInt(ev.target.value,10)/100);}}),
       e("div",{style:{height:12}}),
       e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
-        bgStatus:bgStatus,bgNat:bgNat,bgDir:BG_DIR,maxZoom:maxZoom}),
+        bgStatus:shell.bgStatus,bgNat:bgNat,bgDir:BG_DIR,maxZoom:maxZoom}),
       e("div",{style:{marginTop:8}}),
       e("label",{className:"toggle"+(L.STORY?" off":"")},
-        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,onChange:function(ev){set("hasML",ev.target.checked);}}),
+        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,
+          onChange:function(ev){set("hasML",ev.target.checked);}}),
         "Encadré marie-louise"),
-      onML?e("div",{style:{marginTop:8}},segBtn(st.mlStyle,"mlStyle",[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}])):null,
-      e("div",{className:"tab-nav"},
-        e("div",null),
-        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("couleurs");}},"Couleurs"," →"))),
+      onML?e("div",{style:{marginTop:8}},
+        e(UI.SegButtons,{value:st.mlStyle,onChange:function(v){set("mlStyle",v);},
+          options:[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}]})):null,
+      e(UI.TabNav,{next:"Couleurs",onNext:function(){setActiveTab("couleurs");}})),
 
-    /* Onglet Couleurs */
+    /* ── Couleurs ── */
     e("div",{className:"panel-tab-content"+(activeTab==="couleurs"?" on":""),style:{paddingTop:16}},
       e("label",{className:"field-label"},"Dégradé actif"),
-      e("div",{className:"grad-row"},Object.keys(GRADS).map(function(k){
-        return e("div",{key:k,className:"grad-sw"+(st.grad===k?" on":""),onClick:function(){set("grad",k);},title:GRADS[k].label,style:{backgroundImage:gradCss(k,90)}});
-      })),
-      e("div",{style:{fontSize:11,color:"#404040",marginTop:8,display:"flex",alignItems:"center",gap:6}},
-        e("i",{style:{width:12,height:12,borderRadius:3,display:"inline-block",backgroundImage:GRAD_H}}),
-        G.label," — ",G.from," → ",G.to),
+      e(UI.GradPicker,{value:st.grad,onChange:function(v){set("grad",v);}}),
       e("div",{style:{height:14}}),
       e("label",{className:"field-label"},"Couleur du texte"),
-      e("div",{className:"seg",style:{marginBottom:10}},
-        [{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}].map(function(o){
-          return e("button",{key:o.v,className:st.textMode===o.v?"on":"",onClick:function(){set("textMode",o.v);}},o.l);
-        })),
+      e(UI.SegButtons,{value:st.textMode,onChange:function(v){set("textMode",v);},
+        options:[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}]}),
       st.textMode==="uni"?e(React.Fragment,null,
-        e("div",{style:{display:"flex",gap:8}},
-          e("div",{className:"col-sw"+(st.textColor!==COLOR_GREY?" on":""),onClick:function(){set("textColor",G.to);},
-            style:{background:GRAD_H,backgroundImage:GRAD_H,width:48,height:30,borderRadius:6,cursor:"pointer",border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}}),
-          e("div",{className:"col-sw"+(st.textColor===COLOR_GREY?" on":""),onClick:function(){set("textColor",COLOR_GREY);},
-            style:{background:COLOR_GREY,width:48,height:30,borderRadius:6,cursor:"pointer",border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"}})),
+        e("div",{style:{display:"flex",gap:8,marginTop:8}},
+          e("div",{style:{width:48,height:30,borderRadius:6,cursor:"pointer",
+              backgroundImage:GRAD_H,
+              border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+            onClick:function(){set("textColor",G.to);}}),
+          e("div",{style:{width:48,height:30,borderRadius:6,cursor:"pointer",
+              background:COLOR_GREY,
+              border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+            onClick:function(){set("textColor",COLOR_GREY);}})),
         e("div",{className:"hint",style:{marginTop:6}},"La couleur suit automatiquement le dégradé.")):null,
       e("div",{style:{height:12}}),
       e("label",{className:"toggle"},
-        e("input",{type:"checkbox",checked:st.lowCarbon,onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+        e("input",{type:"checkbox",checked:!!st.lowCarbon,
+          onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
         "Sujet énergie bas carbone"),
       charteWarn?e("div",{className:"charte-warn"},e("b",null,"Charte : "),charteWarn):null,
-      e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Pictogramme"),
-      e("div",{id:"picto-gallery-container",key:"picto-gallery"}),
-      e("div",{className:"tab-nav"},
-        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("image");}},"← ","Image"),
-        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("cartouche");}},"Cartouche"," →"))),
+      e(UI.TabNav,{
+        prev:"Image",onPrev:function(){setActiveTab("image");},
+        next:"Cartouche",onNext:function(){setActiveTab("cartouche");}})),
 
-    /* Onglet Cartouche */
+    /* ── Cartouche ── */
     e("div",{className:"panel-tab-content"+(activeTab==="cartouche"?" on":""),style:{paddingTop:16}},
-      e("label",{className:"field-label"},"Titre ",e("span",{className:"hint"},"(ExtraBold)")),
-      e("input",{type:"text",spellCheck:true,value:st.badgeMain,onChange:function(ev){set("badgeMain",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}}),
-      e("div",{style:{height:6}}),
-      e("label",{className:"field-label"},"Précision ",e("span",{className:"hint"},"(optionnel)")),
-      e("input",{type:"text",spellCheck:true,value:st.badgeSub||"",onChange:function(ev){set("badgeSub",ev.target.value.toUpperCase());},style:{textTransform:"uppercase"}}),
+      e(UI.BadgeEditor,{st:st,set:set,setSt:setSt,active:activeTab==="cartouche",uppercase:true}),
       e("div",{style:{height:12}}),
-      e("label",{className:"field-label"},"Repère de carrousel"),
-      segBtn(st.navMark,"navMark",[{v:"arrow",l:"Flèche"},{v:"dot",l:"Point"},{v:"none",l:"Aucun"}]),
-      e("div",{className:"tab-nav"},
-        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("couleurs");}},"← ","Couleurs"),
-        e("button",{className:"tab-nav-btn primary",onClick:function(){setActiveTab("texte");}},"Texte"," →"))),
+      e(UI.NavMarkPicker,{value:st.navMark,onChange:function(v){set("navMark",v);}}),
+      e(UI.TabNav,{
+        prev:"Couleurs",onPrev:function(){setActiveTab("couleurs");},
+        next:"Texte",onNext:function(){setActiveTab("texte");}})),
 
-    /* Onglet Texte */
+    /* ── Texte ── */
     e("div",{className:"panel-tab-content"+(activeTab==="texte"?" on":""),style:{paddingTop:16}},
       e("div",{className:"upload-hint",style:{marginBottom:6}},
         e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
-      e("textarea",{spellCheck:true,rows:5,value:st.text,onChange:function(ev){set("text",ev.target.value);},style:{fontSize:13,lineHeight:1.5}}),
+      e("textarea",{spellCheck:true,rows:5,value:st.text,
+        onChange:function(ev){set("text",ev.target.value);},
+        style:{fontSize:13,lineHeight:1.5}}),
       e("div",{style:{height:12}}),
-      e("label",{className:"field-label"},"Taille — "+(fs).toFixed(0)+" px"),
-      e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,onChange:function(ev){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
-      e("div",{className:"tab-nav"},
-        e("button",{className:"tab-nav-btn",onClick:function(){setActiveTab("cartouche");}},"← ","Cartouche"),
-        e("button",{className:"tab-nav-btn primary",onClick:doExport,disabled:busy},
-          busy?e("span",{className:"spin"},e(DownloadIcon)):e(DownloadIcon),
-          busy?"Export…":"Télécharger le PNG")))
+      e(UI.SliderField,{label:"Taille — "+fs.toFixed(0)+" px",
+        min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
+        onChange:function(v){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=Math.round(v);return c;});}}),
+      e(UI.TabNav,{
+        prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
+      e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
   );
 
-  /* Drawer */
-  var drawer=e(SaveManager.Drawer,{
-    store:saveStore.current,state:st,open:drawerOpen,
-    onClose:function(){setDrawerOpen(false);},
-    currentId:currentId,currentName:currentName,
-    onLoad:function(rec){setSt(Object.assign({},DEFAULT,rec.state));setCurrentId(rec.id);setCurrentName(rec.name);smFolder.current=rec.folder||"";smHash.current=SaveManager.hashState(Object.assign({},DEFAULT,rec.state));},
-    onSaved:function(rec){setCurrentId(rec.id);setCurrentName(rec.name);smFolder.current=rec.folder||"";smHash.current=SaveManager.hashState(st);},
-    doExportOne:function(savedState,fmt,filename){
-      return new Promise(function(resolve,reject){
-        var prevSt=st;
-        setSt(Object.assign({},DEFAULT,savedState,{format:fmt}));
-        setTimeout(function(){
-          var EXPORT_SERVER="http://localhost:3001";
-          var outW=FORMATS[fmt].outputW,outH=FORMATS[fmt].outputH;
-          fetch(EXPORT_SERVER+"/ping",{signal:AbortSignal.timeout(1500)})
-            .then(function(){return fetch(EXPORT_SERVER+"/export",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:window.location.href.split("#")[0],selector:"[data-export-card]",width:outW,height:outH,previewWidth:CARD_W,filename:filename,scale:1})});})
-            .then(function(r){return r.blob();})
-            .catch(function(){return new Promise(function(res,rej){document.fonts.ready.then(function(){return window.domtoimage.toPng(cardRef.current,{width:CARD_W,height:CARD_H,scale:EX,useCORS:true});}).then(function(d){fetch(d).then(function(r){return r.blob();}).then(res).catch(rej);}).catch(rej);});})
-            .then(resolve).catch(reject)
-            .then(function(){setTimeout(function(){setSt(prevSt);},100);});
-        },400);
-      });
-    }
-  });
+  /* Sync live → Carrousel */
+  useEffect(function(){
+    try{localStorage.setItem("spg_live_splitscreen",JSON.stringify({
+      layout:st.layout||"left",imgRatio:st.imgRatio||0.55,
+      textMode:st.textMode||"grad",textColor:st.textColor||"#E70000",
+      text:st.text||"",
+      bgImg:st.bgImg&&st.bgImg.startsWith("data:")?st.bgImg:null
+    }));}catch(err){}
+  },[st]);
 
-  return e("div",{className:"app-layout"},panel,e("div",{className:"preview-wrap"},previewWrap),drawer);
+  return e("div",{className:"app-layout"},
+    panel,
+    e("div",{className:"preview-wrap"},e(UI.Stage,{cf:cf},card)));
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));

@@ -28,14 +28,30 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
   letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;}
 .page-header-sub{font-size:11px;font-weight:400;color:#a0a0a0;white-space:nowrap;}
 
-/* La nav accueille N générateurs : elle défile plutôt que de casser la barre */
-.page-header-nav{margin-left:auto;display:flex;gap:8px;overflow-x:auto;
-  scrollbar-width:none;-ms-overflow-style:none;padding-left:12px;}
-.page-header-nav::-webkit-scrollbar{display:none;}
-.page-header-nav a{font-size:11px;font-weight:700;color:#333;text-decoration:none;
-  padding:5px 12px;border-radius:2px;border:1px solid #dadada;background:#fafafa;
-  letter-spacing:.03em;text-transform:uppercase;transition:all .18s;white-space:nowrap;}
-.page-header-nav a:hover{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+/* ══ NAV + MENU DÉROULANT ══ */
+.page-header-nav{margin-left:auto;display:flex;align-items:center;gap:8px;padding-left:12px;position:relative;}
+/* Bouton principal */
+.hdr-menu-btn{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;
+  color:#333;text-decoration:none;padding:5px 12px;border-radius:2px;border:1px solid #dadada;
+  background:#fafafa;letter-spacing:.06em;text-transform:uppercase;transition:all .18s;
+  cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.hdr-menu-btn:hover,.hdr-menu-btn.open{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.hdr-menu-btn svg{transition:transform .2s;}
+.hdr-menu-btn.open svg{transform:rotate(180deg);}
+/* Dropdown */
+.hdr-dd{position:absolute;top:calc(100% + 6px);right:0;background:#fff;
+  border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.14);border:1px solid #e0e0e0;
+  min-width:200px;overflow:hidden;z-index:9999;
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .16s,transform .16s;}
+.hdr-dd.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+.hdr-dd a{display:flex;align-items:center;gap:10px;padding:10px 16px;
+  font-size:12px;font-weight:700;color:#333;text-decoration:none;letter-spacing:.03em;
+  text-transform:uppercase;transition:background .12s;border-bottom:1px solid #f0f0f0;}
+.hdr-dd a:last-child{border-bottom:none;}
+.hdr-dd a:hover{background:#f5f5f3;color:#1a1a1a;}
+.hdr-dd a .new-badge{font-size:9px;font-weight:800;letter-spacing:.06em;
+  background:#1a1a1a;color:#fff;padding:2px 5px;border-radius:3px;margin-left:auto;}
 
 /* ══ ZONE PRINCIPALE ══
    Reprise du plan de la barre du haut, étalé sur toute la page :
@@ -145,13 +161,43 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
   <div class="page-header-sep"></div>
   <span class="page-header-title">Static Posts Generator</span>
   <span class="page-header-sub">for TotalEnergies</span>
-  <nav class="page-header-nav">
-    <a href="generators/fiche-metier/index.html">Fiche Métier</a>
-    <a href="generators/citation/index.html">Citation Post</a>
-    <a href="generators/latest-news/index.html">Latest News</a>
-    <a href="generators/split-screen/index.html">Split Screen</a>
-    <a href="generators/carrousel/index.html">Carrousel</a>
+  <nav class="page-header-nav" id="hdr-nav">
+    <button class="hdr-menu-btn" id="hdr-menu-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleMenu()">
+      Générateurs
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div class="hdr-dd" id="hdr-dd" role="menu">
+      <a href="generators/fiche-metier/index.html" role="menuitem">Fiche Métier</a>
+      <a href="generators/citation/index.html" role="menuitem">Citation Post</a>
+      <a href="generators/latest-news/index.html" role="menuitem">Latest News</a>
+      <a href="generators/split-screen/index.html" role="menuitem">Split Screen</a>
+      <a href="generators/carrousel/index.html" role="menuitem">Carrousel</a>
+      <a href="generators/block-layouts/index.html" role="menuitem">Block Layouts <span class="new-badge">NEW</span></a>
+    </div>
   </nav>
+  <script>
+  (function(){
+    var btn=document.getElementById("hdr-menu-btn");
+    var dd=document.getElementById("hdr-dd");
+    var open=false;
+    window.toggleMenu=function(){
+      open=!open;
+      btn.classList.toggle("open",open);
+      dd.classList.toggle("open",open);
+      btn.setAttribute("aria-expanded",open?"true":"false");
+    };
+    document.addEventListener("click",function(ev){
+      if(!document.getElementById("hdr-nav").contains(ev.target)&&open){
+        open=false;btn.classList.remove("open");dd.classList.remove("open");btn.setAttribute("aria-expanded","false");
+      }
+    });
+    document.addEventListener("keydown",function(ev){
+      if(ev.key==="Escape"&&open){open=false;btn.classList.remove("open");dd.classList.remove("open");btn.setAttribute("aria-expanded","false");btn.focus();}
+    });
+  })();
+  </script>
 </header>
 
 <main class="hero">
@@ -250,8 +296,31 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
       </div>
     </a>
 
-    <a href="generators/carrousel/index.html" class="tool-card">
+    <a href="generators/block-layouts/index.html" class="tool-card">
       <span class="tool-card-num">05</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Block Layouts · Charte 2026</span>
+        <div class="tool-card-title">Block<br/><em>Layouts</em></div>
+        <p class="tool-card-desc">
+          Chiffres clés et statistiques en blocs empilés, template 05 de la
+          charte 2026. Jusqu'à 4 blocs, callouts géants, 4 formats dont 16:9.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_BLOCKLAYOUTS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/carrousel/index.html" class="tool-card">
+      <span class="tool-card-num">06</span>
       <div class="tool-card-body">
         <span class="tool-card-label">Carrousel</span>
         <div class="tool-card-title">Carrousel<br/><em>Slides</em></div>
