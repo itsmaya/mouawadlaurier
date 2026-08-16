@@ -4,16 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Carrousel — TotalEnergies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
 <style>
-@font-face { font-family:'Nunito'; font-weight:400; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-regular.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:500; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-500.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:600; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-600.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:700; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-700.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:800; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-800.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:900; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-900.woff2') format('woff2'); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CSS SPÉCIFIQUE AU CARROUSEL UNIQUEMENT — tout préfixé car-*.
@@ -133,6 +127,9 @@
   .car-body{padding:18px 12px;}
 }
 </style>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
@@ -143,7 +140,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 /* JSZip en parallèle : l'interface ne doit pas dépendre de sa disponibilité,
    seul l'export ZIP l'exige (doExportZip vérifie window.JSZip). */
 loadScript(["https://unpkg.com/jszip@3.10.1/dist/jszip.min.js","https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js","../../assets/vendor/jszip.min.js"],function(){});
-boot();});});});
+SPGBoot.libsReady();});});});
 </script>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
@@ -526,11 +523,7 @@ function App(){
       zip.generateAsync({type:"blob"}).then(function(blob){
         var slug=(shell.save.currentName||st.badgeMain||"carrousel")
           .toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
-        var a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download=(slug||"carrousel")+"-"+st.format+".zip";
-        a.click();
-        setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+        SaveManager.downloadBlob(blob,(slug||"carrousel")+"-"+st.format+".zip");
         document.body.removeChild(holder);
         setZipping(false);
       });
@@ -779,6 +772,9 @@ function App(){
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
 </script>
 </body>
 </html>

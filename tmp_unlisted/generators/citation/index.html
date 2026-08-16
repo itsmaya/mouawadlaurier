@@ -4,16 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Citation Post — TotalEnergies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
-loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){boot();});});});
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
 </script>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
@@ -42,9 +45,7 @@ var UI=Shell.ui;
    assets/cards/citation-card.js — rendu à l'identique par le Carrousel.
    Ne rien réimplémenter ici. */
 var CARD=SPGCards.get("citation");
-var CITE_S=CARD_W/600;
 var CITE_FORMATS=CARD.formats;
-var getCiteLayout=CARD.getLayout;
 
 /* ═══ FOND PAR DÉFAUT ══════════════════════════════════════════════════════ */
 var BG_DIR="../../templates/citation/";
@@ -101,8 +102,9 @@ function App(){
 
 
   /* ─── Dérivés (panneau uniquement) ── */
-  var G=GRADS[st.grad]||GRADS.bleu;
-  var GRAD_H=gradCss(st.grad,90),GRAD_V=gradCss(st.grad,180);
+  /* Seul GRAD_V sert encore ici (fond de l'aperçu du panneau) : la carte
+     calcule ses propres dégradés dans assets/cards/citation-card.js. */
+  var GRAD_V=gradCss(st.grad,180);
   var cf=chFormat(st.format);
   var previewScale=UI.previewScale(cf);
 
@@ -276,16 +278,6 @@ function App(){
       e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
   );
 
-  /* Sync live → Carrousel */
-  useEffect(function(){
-    try{localStorage.setItem("spg_live_citation",JSON.stringify({
-      quote:st.quote||"",
-      personName:st.name||"",
-      personTitle:st.title||"",
-      personPhoto:st.photo&&st.photo.startsWith("data:")?st.photo:null,
-      bgImg:st.bgImg&&st.bgImg.startsWith("data:")?st.bgImg:null
-    }));}catch(err){}
-  },[st]);
 
   return e("div",{className:"app-layout"},panel,
     e("div",{className:"preview-wrap"},e(UI.Stage,{cf:cf},card)));
@@ -293,6 +285,9 @@ function App(){
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
 </script>
 </body>
 </html>

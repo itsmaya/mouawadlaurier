@@ -4,13 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Split Screen — TotalEnergies</title>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
-loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){boot();});});});
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
 </script>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
@@ -205,15 +211,6 @@ function App(){
       e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
   );
 
-  /* Sync live → Carrousel */
-  useEffect(function(){
-    try{localStorage.setItem("spg_live_splitscreen",JSON.stringify({
-      layout:st.layout||"left",imgRatio:st.imgRatio||0.55,
-      textMode:st.textMode||"grad",textColor:st.textColor||"#E70000",
-      text:st.text||"",
-      bgImg:st.bgImg&&st.bgImg.startsWith("data:")?st.bgImg:null
-    }));}catch(err){}
-  },[st]);
 
   return e("div",{className:"app-layout"},
     panel,
@@ -222,6 +219,9 @@ function App(){
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
 </script>
 </body>
 </html>

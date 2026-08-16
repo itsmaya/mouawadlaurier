@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Diagnostic — Static Posts Generator</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  DIAGNOSTIC.HTML — À ouvrir directement sur le téléphone
+
+  Pourquoi cette page : sur iPhone, lire la console du navigateur impose de
+  brancher l'appareil à un Mac et d'activer l'inspecteur web. Ici, tout
+  s'affiche à l'écran.
+
+  Elle est VOLONTAIREMENT autonome : aucune dépendance, aucun script externe,
+  pas de React. Si le reste du site ne démarre pas, cette page, elle, marche.
+
+  Mode d'emploi :
+   1. ouvrir un générateur sur le téléphone, laisser échouer ;
+   2. revenir ici : les erreurs enregistrées s'affichent en haut ;
+   3. appuyer sur « Copier le rapport » et l'envoyer.
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<style>
+:root{ --bleu:#0098E3; --vert:#2a9d4a; --rouge:#c0392b; --orange:#e0a020; }
+*{box-sizing:border-box;-webkit-text-size-adjust:100%;}
+body{margin:0;padding:16px 14px 60px;background:#f0f2f5;color:#1a1a1a;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;}
+h1{font-size:19px;margin:0 0 4px;}
+.sous{color:#777;font-size:13px;margin:0 0 18px;}
+section{background:#fff;border:1px solid #e4e4e4;border-radius:12px;
+  padding:14px;margin-bottom:14px;}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:#888;
+  margin:0 0 10px;display:flex;align-items:center;gap:7px;}
+h2::before{content:"";width:3px;height:13px;border-radius:2px;flex-shrink:0;
+  background:linear-gradient(135deg,#0098E3,#4632FF);}
+.ligne{display:flex;align-items:flex-start;gap:9px;padding:7px 0;
+  border-bottom:1px solid #f4f4f4;font-size:14px;}
+.ligne:last-child{border-bottom:none;}
+.ligne .nom{flex:1;min-width:0;word-break:break-word;}
+.ligne .val{flex-shrink:0;font-weight:700;font-variant-numeric:tabular-nums;}
+.ok{color:var(--vert);} .ko{color:var(--rouge);} .attente{color:var(--orange);}
+.puce{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.puce.ok{background:var(--vert);} .puce.ko{background:var(--rouge);}
+.puce.attente{background:var(--orange);}
+.err{background:#fdeaea;border:1px solid #f3c9c9;border-radius:8px;
+  padding:9px 11px;margin-bottom:7px;font-size:13px;}
+.err b{color:var(--rouge);display:block;margin-bottom:2px;}
+.err code{font-size:11.5px;color:#666;word-break:break-all;display:block;}
+.err .quand{font-size:11px;color:#aaa;}
+button{font:inherit;font-weight:700;border:none;border-radius:9px;
+  padding:13px 16px;cursor:pointer;width:100%;margin-top:9px;
+  -webkit-appearance:none;}
+.primaire{background:var(--bleu);color:#fff;}
+.second{background:#f0f0f0;color:#444;}
+.vide{color:#999;font-size:13.5px;padding:6px 0;}
+textarea{width:100%;height:170px;font:11.5px/1.45 ui-monospace,Menlo,monospace;
+  border:1px solid #ddd;border-radius:8px;padding:9px;margin-top:9px;
+  background:#fafafa;color:#333;}
+.aide{font-size:12.5px;color:#777;line-height:1.55;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<h1>Diagnostic</h1>
+<p class="sous">Static Posts Generator — à ouvrir sur l'appareil qui pose problème.</p>
+
+<section>
+  <h2>Erreurs enregistrées</h2>
+  <div id="journal"><div class="vide">Lecture…</div></div>
+  <p class="aide">Ces erreurs proviennent des pages du site visitées sur cet
+     appareil. <b>Ouvrez d'abord un générateur</b>, laissez-le échouer, puis
+     revenez ici.</p>
+  <button class="second" onclick="viderJournal()">Vider le journal</button>
+</section>
+
+<section>
+  <h2>Appareil et navigateur</h2>
+  <div id="env"></div>
+</section>
+
+<section>
+  <h2>Fichiers du site</h2>
+  <div id="fichiers"><div class="vide">Test en cours…</div></div>
+</section>
+
+<section>
+  <h2>Police Nunito</h2>
+  <div id="polices"><div class="vide">Test en cours…</div></div>
+</section>
+
+<section>
+  <h2>Capacités d'export</h2>
+  <div id="capacites"><div class="vide">Test en cours…</div></div>
+</section>
+
+<section>
+  <h2>Stockage</h2>
+  <div id="stockage"><div class="vide">Test en cours…</div></div>
+</section>
+
+<section>
+  <h2>Rapport</h2>
+  <button class="primaire" onclick="copier()">Copier le rapport</button>
+  <textarea id="rapport" readonly></textarea>
+  <p class="aide">Si le bouton ne fonctionne pas, sélectionnez le texte
+     ci-dessus et copiez-le à la main.</p>
+</section>
+
+<script>
+/* Page volontairement sans aucune dépendance : elle doit fonctionner même
+   quand tout le reste échoue. */
+var R = [];                                   /* lignes du rapport texte */
+function note(s){ R.push(s); }
+
+function ligne(hote, nom, etat, valeur){
+  var d = document.createElement("div");
+  d.className = "ligne";
+  d.innerHTML = '<span class="puce ' + etat + '"></span>'
+    + '<span class="nom">' + nom + '</span>'
+    + '<span class="val ' + etat + '">' + valeur + '</span>';
+  var h = document.getElementById(hote);
+  if(h.querySelector(".vide")) h.innerHTML = "";
+  h.appendChild(d);
+  note(("[" + (etat==="ok"?"OK":etat==="ko"?"KO":"..") + "] " + nom + " — " + valeur));
+}
+
+/* ── 1. Journal d'erreurs laissé par les pages du site ─────────────────── */
+function afficherJournal(){
+  var h = document.getElementById("journal");
+  var j = [];
+  try{ j = JSON.parse(localStorage.getItem("spg_diag_log") || "[]"); }catch(e){}
+  note("=== ERREURS ENREGISTRÉES (" + j.length + ") ===");
+  if(!j.length){
+    h.innerHTML = '<div class="vide">Aucune erreur enregistrée pour l\'instant.</div>';
+    note("(aucune)");
+    return;
+  }
+  h.innerHTML = "";
+  j.slice().reverse().forEach(function(e){
+    var d = document.createElement("div");
+    d.className = "err";
+    d.innerHTML = '<b>' + e.page + ' · ' + e.type + '</b>'
+      + '<code>' + (e.msg||"") + '</code>'
+      + (e.detail ? '<code>' + e.detail + '</code>' : '')
+      + '<span class="quand">' + (e.t||"").replace("T"," ").slice(0,19) + '</span>';
+    h.appendChild(d);
+    note("- [" + e.page + "/" + e.type + "] " + e.msg + (e.detail?("  {"+e.detail+"}"):""));
+  });
+}
+
+/* ── 2. Environnement ──────────────────────────────────────────────────── */
+function env(){
+  note("=== APPAREIL ===");
+  var ua = navigator.userAgent;
+  var ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  var v = (ua.match(/OS (\d+[_\d]*) like Mac/) || [])[1];
+  ligne("env","Système", "ok", ios ? ("iOS " + (v ? v.replace(/_/g,".") : "?")) : "non-iOS");
+  ligne("env","Navigateur","ok",
+    /CriOS/.test(ua) ? "Chrome iOS" : /FxiOS/.test(ua) ? "Firefox iOS"
+    : /Safari/.test(ua) ? "Safari" : "autre");
+  ligne("env","Écran","ok", screen.width + "×" + screen.height
+    + " @" + (window.devicePixelRatio||1) + "x");
+  ligne("env","Connexion","ok",
+    (navigator.connection && navigator.connection.effectiveType) || "inconnue");
+  ligne("env","Mode privé possible","ok", (function(){
+    try{ localStorage.setItem("_t","1"); localStorage.removeItem("_t"); return "non"; }
+    catch(e){ return "OUI — le stockage est refusé"; }
+  })());
+  ligne("env","Adresse","ok", location.protocol + "//" + location.host);
+  note("UA: " + ua);
+}
+
+/* ── 3. Accessibilité des fichiers, avec durée ─────────────────────────── */
+var FICHIERS = [
+  "assets/boot-gate.js", "assets/app-shell.js", "assets/save-manager.js",
+  "assets/charte-2026.js", "assets/te-charte.js", "assets/rich-body.js",
+  "assets/components-2026.js", "assets/pictos.js", "assets/drag-image.js",
+  "assets/bg-controls.js", "assets/header.js",
+  "assets/cards/registry.js", "assets/cards/citation-card.js",
+  "assets/fonts.css", "assets/fonts/nunito-v32-latin-800.woff2",
+  "assets/vendor/react.production.min.js",
+  "assets/vendor/react-dom.production.min.js",
+  "assets/vendor/dom-to-image-more.min.js",
+  "assets/vendor/jszip.min.js", "assets/vendor/html2canvas.min.js",
+  "assets/pictos.json"
+];
+function fichiers(){
+  note("=== FICHIERS ===");
+  var restants = FICHIERS.length;
+  FICHIERS.forEach(function(f){
+    var t0 = Date.now();
+    fetch(f, {cache:"no-store"})
+      .then(function(r){
+        var ms = Date.now() - t0;
+        ligne("fichiers", f, r.ok ? "ok" : "ko",
+          r.ok ? (ms + " ms") : ("HTTP " + r.status));
+      })
+      .catch(function(){
+        ligne("fichiers", f, "ko", "injoignable");
+      })
+      .then(function(){ if(!--restants) polices(); });
+  });
+}
+
+/* ── 4. Police ─────────────────────────────────────────────────────────── */
+function polices(){
+  note("=== POLICE ===");
+  var graisses = [400,600,700,800,900];
+  function verifier(){
+    graisses.forEach(function(w){
+      var ok = document.fonts.check(w + " 40px Nunito");
+      ligne("polices", "Nunito " + w, ok ? "ok" : "ko", ok ? "chargée" : "ABSENTE");
+    });
+    /* Comparaison de largeur : preuve que ce n'est pas une police de repli */
+    var c = document.createElement("canvas").getContext("2d");
+    c.font = "800 40px Nunito";      var a = c.measureText("Energies").width;
+    c.font = "800 40px sans-serif";  var b = c.measureText("Energies").width;
+    ligne("polices", "Différente du repli système", (Math.abs(a-b) > 1) ? "ok" : "ko",
+      Math.round(a) + " vs " + Math.round(b) + " px");
+    capacites();
+  }
+  if(document.fonts && document.fonts.ready){
+    Promise.all(graisses.map(function(w){
+      return document.fonts.load(w + " 40px Nunito").catch(function(){});
+    })).then(function(){ return document.fonts.ready; }).then(verifier);
+  } else {
+    ligne("polices","API des polices","ko","non disponible");
+    capacites();
+  }
+}
+
+/* ── 5. Capacités d'export ─────────────────────────────────────────────── */
+function capacites(){
+  note("=== EXPORT ===");
+  /* a. canvas → data:URL */
+  try{
+    var c = document.createElement("canvas"); c.width = c.height = 20;
+    c.getContext("2d").fillRect(0,0,20,20);
+    var d = c.toDataURL("image/png");
+    ligne("capacites","Canvas → PNG", d.indexOf("data:image/png")===0 ? "ok":"ko",
+      d.indexOf("data:image/png")===0 ? "possible" : "refusé");
+  }catch(e){ ligne("capacites","Canvas → PNG","ko", e.message); }
+
+  /* b. canvas → Blob (l'export s'en sert) */
+  try{
+    var c2 = document.createElement("canvas"); c2.width = c2.height = 20;
+    c2.getContext("2d").fillRect(0,0,20,20);
+    if(c2.toBlob){
+      c2.toBlob(function(b){
+        ligne("capacites","Canvas → Blob", b ? "ok":"ko", b ? (b.size + " o") : "échec");
+      });
+    } else ligne("capacites","Canvas → Blob","ko","non disponible");
+  }catch(e){ ligne("capacites","Canvas → Blob","ko", e.message); }
+
+  /* c. incorporation d'une image du site (le point qui casse l'export) */
+  var im = new Image();
+  im.onload = function(){
+    try{
+      var cc = document.createElement("canvas");
+      cc.width = im.naturalWidth || 1; cc.height = im.naturalHeight || 1;
+      cc.getContext("2d").drawImage(im,0,0);
+      cc.toDataURL("image/png");
+      ligne("capacites","Image du site incorporable","ok","oui");
+    }catch(e){
+      ligne("capacites","Image du site incorporable","ko","canvas bloqué : " + e.name);
+    }
+    stockage();
+  };
+  im.onerror = function(){
+    ligne("capacites","Image du site incorporable","ko","logo introuvable");
+    stockage();
+  };
+  im.src = "assets/logos/fisheye-gallery-logo-vector.png";
+
+  /* d. téléchargement de fichier */
+  var a = document.createElement("a");
+  ligne("capacites","Téléchargement de fichier", ("download" in a) ? "ok":"ko",
+    ("download" in a) ? "supporté" : "NON SUPPORTÉ");
+}
+
+/* ── 6. Stockage ───────────────────────────────────────────────────────── */
+function stockage(){
+  note("=== STOCKAGE ===");
+  try{
+    localStorage.setItem("_diag","1"); localStorage.removeItem("_diag");
+    ligne("stockage","localStorage","ok","accessible");
+  }catch(e){ ligne("stockage","localStorage","ko","REFUSÉ (" + e.name + ")"); }
+
+  if(!window.indexedDB){
+    ligne("stockage","IndexedDB","ko","non disponible");
+    terminer(); return;
+  }
+  var q = indexedDB.open("wie_db");
+  q.onsuccess = function(){
+    var db = q.result;
+    ligne("stockage","IndexedDB","ok","version " + db.version);
+    var n = 0;
+    try{
+      for(var i=0;i<db.objectStoreNames.length;i++){
+        if(db.objectStoreNames[i].indexOf("sm_")===0) n++;
+      }
+    }catch(e){}
+    ligne("stockage","Espaces de sauvegarde","ok", n + " présents");
+    db.close(); terminer();
+  };
+  q.onerror = function(){
+    ligne("stockage","IndexedDB","ko","ouverture refusée"); terminer();
+  };
+  if(navigator.storage && navigator.storage.estimate){
+    navigator.storage.estimate().then(function(e){
+      ligne("stockage","Espace disponible","ok",
+        Math.round((e.quota||0)/1048576) + " Mo (utilisé "
+        + Math.round((e.usage||0)/1048576) + " Mo)");
+    });
+  }
+}
+
+function terminer(){
+  setTimeout(function(){
+    document.getElementById("rapport").value = R.join("\n");
+  }, 700);
+}
+
+function copier(){
+  var t = document.getElementById("rapport");
+  t.select(); t.setSelectionRange(0, 999999);
+  var ok = false;
+  try{ ok = document.execCommand("copy"); }catch(e){}
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(t.value).then(function(){
+      alert("Rapport copié.");
+    }).catch(function(){ if(!ok) alert("Copie refusée : sélectionnez le texte à la main."); });
+  } else alert(ok ? "Rapport copié." : "Sélectionnez le texte à la main.");
+}
+
+function viderJournal(){
+  try{ localStorage.removeItem("spg_diag_log"); }catch(e){}
+  document.getElementById("journal").innerHTML =
+    '<div class="vide">Journal vidé. Ouvrez un générateur, puis revenez.</div>';
+}
+
+/* Enchaînement : journal → environnement → fichiers → police → export → stockage */
+afficherJournal();
+env();
+note("=== HORODATAGE " + new Date().toISOString() + " ===");
+fichiers();
+</script>
+</body>
+</html>

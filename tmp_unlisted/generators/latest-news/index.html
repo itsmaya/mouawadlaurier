@@ -4,25 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Latest News — TotalEnergies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<style>
-/* Fallback fontes locales pour Puppeteer (placer les woff2 dans assets/fonts/) */
-@font-face { font-family:'Nunito'; font-weight:400; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-regular.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:500; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-500.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:600; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-600.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:700; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-700.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:800; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-800.woff2') format('woff2'); }
-@font-face { font-family:'Nunito'; font-weight:900; font-style:normal; src:url('../../assets/fonts/nunito-v32-latin-900.woff2') format('woff2'); }
-</style>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
 <script>
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
-loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){boot();});});});
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
 </script>
 <script src="../../assets/header.js"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
@@ -374,23 +368,15 @@ function App(){
         }}))
   );
 
-  /* Sync live → Carrousel */
-  useEffect(function(){
-    var blocs=st.blocs||[];
-    var title=blocs[0]?blocs[0].text:"";
-    var body=blocs.slice(1).map(function(b){return b.text;}).filter(Boolean).join("\n");
-    try{localStorage.setItem("spg_live_latestnews",JSON.stringify({
-      label:"",title:title,body:body,
-      bgImg:st.bgImg&&st.bgImg.startsWith("data:")?st.bgImg:null
-    }));}catch(err){}
-  },[st]);
-
   return e("div",{className:"app-layout"},panel,
     e("div",{className:"preview-wrap"},e(UI.Stage,{cf:{outputW:CARD_W,outputH:CARD_H}},card)));
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
 </script>
 </body>
 </html>

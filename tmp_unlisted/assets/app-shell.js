@@ -185,16 +185,63 @@ Shell.useApp = function(cfg){
   var R=global.React, e=R.createElement;
   var useState=R.useState, useRef=R.useRef, useEffect=R.useEffect;
 
-  /* ── State + undo (Ctrl/Cmd+Z, pile bornée à 30) ── */
+  /* ── State + annulation (Ctrl/Cmd+Z) ──────────────────────────────────────
+     La pile est bornée DEUX FOIS : en nombre d'entrées et en poids mémoire.
+
+     Pourquoi le poids : les images (fond, portrait, picto personnalisé) vivent
+     dans l'état sous forme de data:URL base64, soit plusieurs Mo chacune. Les
+     instantanés partagent leurs références tant que l'image ne change pas,
+     mais dès qu'on remplace un fond, l'ancien base64 reste retenu par la pile.
+     Trente remplacements = trente images en mémoire, pour rien.
+     On plafonne donc la charge base64 cumulée ; au-delà, les entrées les plus
+     anciennes sont libérées (on garde toujours quelques crans d'annulation). */
+  var HIST_MAX_ENTRIES = 30;
+  var HIST_MAX_BYTES   = 48 * 1024 * 1024;   /* ~48 Mo de base64 cumulés */
+  var HIST_MIN_KEEP    = 5;                  /* jamais moins de 5 annulations */
+
+  /* Poids base64 d'un état. Mémoïsé par identité d'objet : un instantané n'est
+     jamais muté, son poids est donc stable, et les sous-objets non modifiés sont
+     partagés entre instantanés — le calcul reste négligeable. */
+  var weightCache = (typeof WeakMap!=="undefined") ? new WeakMap() : null;
+  function stateWeight(o, depth){
+    if(o===null || o===undefined) return 0;
+    var t = typeof o;
+    if(t==="string") return (o.length>256 && o.lastIndexOf("data:",0)===0) ? o.length : 0;
+    if(t!=="object") return 0;
+    if(depth>5) return 0;                      /* garde-fou anti-récursion */
+    if(weightCache){ var c=weightCache.get(o); if(c!==undefined) return c; }
+    var total=0, i;
+    if(Array.isArray(o)){
+      for(i=0;i<o.length;i++) total+=stateWeight(o[i],depth+1);
+    } else {
+      for(var k in o) if(Object.prototype.hasOwnProperty.call(o,k))
+        total+=stateWeight(o[k],depth+1);
+    }
+    if(weightCache) weightCache.set(o,total);
+    return total;
+  }
+
   var a0=useState(cfg.DEFAULT), st=a0[0], _setSt=a0[1];
   var histRef=useRef([]), histIdx=useRef(-1);
+
+  function trimHistory(){
+    var h=histRef.current;
+    if(h.length>HIST_MAX_ENTRIES) h.splice(0, h.length-HIST_MAX_ENTRIES);
+    var total=0, i;
+    for(i=0;i<h.length;i++) total+=stateWeight(h[i],0);
+    while(h.length>HIST_MIN_KEEP && total>HIST_MAX_BYTES){
+      total-=stateWeight(h[0],0);
+      h.shift();
+    }
+  }
+
   function setSt(fn){
     _setSt(function(prev){
       var next = typeof fn==="function" ? fn(prev) : fn;
       if(next===prev) return prev;
       histRef.current=histRef.current.slice(0,histIdx.current+1);
       histRef.current.push(prev);
-      if(histRef.current.length>30) histRef.current.shift();
+      trimHistory();
       histIdx.current=histRef.current.length-1;
       return next;
     });
@@ -225,7 +272,6 @@ Shell.useApp = function(cfg){
   var shSt=useState(null), smHash=shSt[0], setSmHash=shSt[1];
   var smFolder=useRef("");
   var statusRootRef=useRef(null);
-  var s3=useState(false), drawerOpen=s3[0], setDrawerOpen=s3[1];
   var dirty = currentId!==null && smHash!==null &&
               global.SaveManager.hashState(st)!==smHash;
 
@@ -286,7 +332,6 @@ Shell.useApp = function(cfg){
         }
       }));
     }
-    global.smDrawerToggle=function(){ setDrawerOpen(function(o){return !o;}); };
     if(currentId) localStorage.setItem("sm_last_id_"+cfg.pageKey,currentId);
   },[currentId,currentName,dirty,st]);
 
@@ -346,17 +391,24 @@ Shell.useApp = function(cfg){
       })
       .then(function(r){ if(!r.ok) throw new Error("export server "+r.status); return r.blob(); })
       .catch(function(){
-        /* Fallback dom-to-image : capture le DOM local */
-        return document.fonts.ready.then(function(){
-          return global.domtoimage.toPng(cardRef.current,{
-            width:cardRef.current.offsetWidth,height:cardRef.current.offsetHeight,useCORS:true});
-        }).then(function(d){ return fetch(d); }).then(function(r){ return r.blob(); });
+        /* Repli dom-to-image : capture le DOM local.
+           On incorpore d'abord les images externes (voir Shell.inlineImages),
+           et on attend que les polices soient réellement prêtes — sans quoi le
+           PNG sortirait dans la police de repli du système. */
+        var restaurer = null;
+        return document.fonts.ready
+          .then(function(){ return Shell.inlineImages(cardRef.current); })
+          .then(function(fn){
+            restaurer = fn;
+            return global.domtoimage.toPng(cardRef.current,{
+              width:cardRef.current.offsetWidth,height:cardRef.current.offsetHeight,useCORS:true});
+          })
+          .then(function(d){ if(restaurer) restaurer(); return fetch(d); })
+          .then(function(r){ return r.blob(); })
+          .catch(function(err){ if(restaurer) restaurer(); throw err; });
       });
     return p.then(function(blob){
-        if(opts.download!==false){
-          var a=document.createElement("a");
-          a.href=URL.createObjectURL(blob); a.download=fname; a.click();
-        }
+        if(opts.download!==false) global.SaveManager.downloadBlob(blob,fname);
         setBusy(false); return blob;
       })
       .catch(function(er){
@@ -378,7 +430,6 @@ Shell.useApp = function(cfg){
     save:{
       store:saveStore.current,
       currentId:currentId, currentName:currentName, dirty:dirty,
-      drawerOpen:drawerOpen, setDrawerOpen:setDrawerOpen,
       folder:smFolder,
       onLoad:function(rec){
         var loaded=normalizeLoaded(rec.state);
@@ -393,8 +444,103 @@ Shell.useApp = function(cfg){
         setSmHash(global.SaveManager.hashState(st));
       }
     },
-    doExport:doExport
+    doExport:doExport,
+
+    /* Diagnostic : état courant de la pile d'annulation (nombre d'entrées et
+       charge base64 retenue). Utile pour vérifier que le plafond mémoire fait
+       son travail — sans effet de bord. */
+    historyInfo:function(){
+      var h=histRef.current, total=0, i;
+      for(i=0;i<h.length;i++) total+=stateWeight(h[i],0);
+      return {entries:h.length, bytes:total};
+    }
   };
+};
+
+
+/* ═══ 3 bis. Incorporation des images avant export ════════════════════════
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │  POURQUOI                                                               │
+   │  Une carte contient des <img> qui pointent vers des fichiers du site :   │
+   │  les pictogrammes du cartouche et les guillemets de la citation.         │
+   │  À l'écran, le navigateur les affiche normalement.                       │
+   │                                                                          │
+   │  Au moment de fabriquer le PNG, l'exporteur doit relire ces images       │
+   │  lui-même pour les incorporer. S'il n'y parvient pas — requête refusée,  │
+   │  cache capricieux, connexion mobile qui coupe — il abandonne l'image     │
+   │  SANS ERREUR. D'où le symptôme « les images ne sont pas dans l'export    │
+   │  alors qu'on les voit à l'écran ».                                       │
+   │                                                                          │
+   │  On ne lui laisse plus ce travail : avant capture, chaque <img> externe  │
+   │  est converti en data:URL (donc autonome), puis restauré ensuite.        │
+   │  Le résultat ne dépend plus de ce que l'exporteur arrive à retélécharger.│
+   └─────────────────────────────────────────────────────────────────────────┘ */
+
+/* Cache : une même image n'est convertie qu'une fois par session. */
+var _inlineCache = {};
+
+/* Convertit une <img> DÉJÀ AFFICHÉE en data:URL, sans aucune requête réseau.
+   C'est le point essentiel : l'image est déjà décodée par le navigateur, on
+   se contente de la peindre dans un canvas. Re-télécharger l'image (ce que
+   fait l'exporteur, et ce que faisait une première version de ce code) échoue
+   précisément dans les situations qu'on veut couvrir — réseau mobile coupé,
+   fichier devenu inaccessible, cache capricieux. */
+function liveImgToDataUrl(im){
+  var cle = im.currentSrc || im.src;
+  if(_inlineCache[cle]) return _inlineCache[cle];
+  if(!im.complete || !im.naturalWidth) return null;   /* pas encore décodée */
+  try{
+    var c = document.createElement("canvas");
+    c.width  = im.naturalWidth;
+    c.height = im.naturalHeight;
+    c.getContext("2d").drawImage(im, 0, 0);
+    var d = c.toDataURL("image/png");
+    _inlineCache[cle] = d;
+    return d;
+  }catch(err){
+    /* Canvas « teinté » : image d'un autre domaine sans en-tête CORS.
+       On renonce à celle-ci plutôt que de faire échouer tout l'export. */
+    console.warn("Image non incorporable (origine externe) :", cle);
+    return null;
+  }
+}
+
+/* Incorpore les <img> externes du nœud ; renvoie la fonction de restauration. */
+Shell.inlineImages = function(node){
+  if(!node) return Promise.resolve(function(){});
+  var cibles = Array.prototype.slice.call(node.querySelectorAll("img"))
+    .filter(function(im){
+      var src = im.getAttribute("src") || "";
+      return src && src.lastIndexOf("data:",0) !== 0;
+    });
+  if(!cibles.length) return Promise.resolve(function(){});
+
+  /* Attendre que les images en cours de chargement soient décodées : sans ça,
+     naturalWidth vaut 0 et on ne pourrait rien peindre. */
+  var attentes = cibles.map(function(im){
+    if(im.complete && im.naturalWidth) return Promise.resolve();
+    return new Promise(function(res){
+      var fini = false;
+      function stop(){ if(!fini){ fini=true; res(); } }
+      im.addEventListener("load", stop, {once:true});
+      im.addEventListener("error", stop, {once:true});
+      setTimeout(stop, 3000);            /* jamais bloquer l'export */
+    });
+  });
+
+  return Promise.all(attentes).then(function(){
+    var anciens = [];
+    cibles.forEach(function(im){
+      var d = liveImgToDataUrl(im);
+      anciens.push(d ? im.getAttribute("src") : null);
+      if(d) im.setAttribute("src", d);
+    });
+    return function(){
+      cibles.forEach(function(im,i){
+        if(anciens[i]!==null) im.setAttribute("src", anciens[i]);
+      });
+    };
+  });
 };
 
 /* ═══ 4. UI kit ══════════════════════════════════════════════════════════ */

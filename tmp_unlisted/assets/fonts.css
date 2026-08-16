@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FONTS.CSS — Nunito, servie depuis le site lui-même
+   Static Posts Generator Fisheye × TotalEnergies
+
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │  POURQUOI EN LOCAL ET PLUS DEPUIS GOOGLE FONTS                          │
+   │                                                                          │
+   │  1. L'EXPORT. dom-to-image et html2canvas fabriquent le PNG en relisant  │
+   │     les feuilles de style de la page pour y incorporer les polices.      │
+   │     Une feuille servie par fonts.googleapis.com appartient à un autre    │
+   │     domaine : lire ses règles depuis JavaScript lève une erreur de       │
+   │     sécurité, l'exporteur l'ignore en silence, et le PNG sort avec la    │
+   │     police de repli du système. C'est exactement le symptôme « l'image   │
+   │     que je récupère n'intègre pas la police ».                           │
+   │                                                                          │
+   │  2. LE MOBILE. Le lien Google bloque le premier rendu le temps d'un      │
+   │     aller-retour vers un domaine tiers, souvent lent en 4G et parfois    │
+   │     filtré sur les réseaux d'entreprise. En local : aucune dépendance    │
+   │     externe, et l'outil fonctionne hors ligne.                           │
+   │                                                                          │
+   │  Ces fichiers sont donc indispensables, pas optionnels. Les huit .woff2  │
+   │  pèsent 152 Ko au total, mis en cache une fois pour toutes.              │
+   └─────────────────────────────────────────────────────────────────────────┘
+
+   Les graisses utilisées par la charte : 400 (courant), 600/700
+   (intertitres), 800 (cartouches), 900 (noms). font-display:block évite
+   d'afficher une première frappe en police de repli, ce qui ferait sauter la
+   mise en page mesurée au pixel par les cartes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:block;
+  src:url('fonts/nunito-v32-latin-regular.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:500;font-display:block;
+  src:url('fonts/nunito-v32-latin-500.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:block;
+  src:url('fonts/nunito-v32-latin-600.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:block;
+  src:url('fonts/nunito-v32-latin-700.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:block;
+  src:url('fonts/nunito-v32-latin-800.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:900;font-display:block;
+  src:url('fonts/nunito-v32-latin-900.woff2') format('woff2');}
+@font-face{font-family:'Nunito';font-style:italic;font-weight:400;font-display:block;
+  src:url('fonts/nunito-v32-latin-italic.woff2') format('woff2');}
