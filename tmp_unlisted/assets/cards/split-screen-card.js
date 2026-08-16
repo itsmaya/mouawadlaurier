@@ -182,6 +182,7 @@ SPGCards.register("splitscreen",{
   DEFAULT:DEFAULT,
   shared:SPGCards.COMMON_SHARED,
   cardHeight:cardHeight,
+  getLayout:getLayout,         /* exposé : le Carrousel y lit TEXT_MIN/MAX/DEF */
   computeRects:computeRects,   /* exposé : le panneau en a besoin pour maxZoom */
   Card:SplitScreenCard
 });

@@ -197,7 +197,11 @@ function geometry(st,quoteH){
   var L=getCiteLayout(st.format), CARD_H=L.CARD_H;
   var _cfs=st["fs_"+st.format]||0;
   var isT03=(st.template==="t03");
-  var QUOTE_FONT_MIN=isT03?30:45, QUOTE_FONT_MAX=isT03?60:80;
+  /* Plancher abaissé à 15 pt : demandé pour les citations longues, qui
+     dépassaient du bloc au minimum précédent (30/45). Le plafond ne bouge
+     pas. Ces valeurs sont exprimées dans l'unité de dessin de la carte —
+     la même que celle affichée par le curseur du panneau. */
+  var QUOTE_FONT_MIN=15, QUOTE_FONT_MAX=isT03?60:80;
   var cfs=_cfs?Math.max(QUOTE_FONT_MIN,Math.min(QUOTE_FONT_MAX,_cfs)):L.QUOTE_FONT;
 
   var _fmt=st.format;

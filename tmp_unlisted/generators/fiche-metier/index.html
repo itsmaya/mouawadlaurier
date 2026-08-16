@@ -792,8 +792,12 @@ var TRAIT_ORIGIN_GAP = 20;
       });
     }
 
-    // 0) Au montage : tente de charger les fichiers template par défaut
+    // 0) Au montage : tente de charger les fichiers template par défaut.
+    //    Sauf pendant un export serveur (#exportkey) : la page rouverte a déjà
+    //    reçu les vraies images de l'utilisateur, et ces chargements — qui
+    //    arrivent plus tard, en asynchrone — les écraseraient par les templates.
     useEffect(function () {
+      if (/exportkey=/.test(location.hash || "")) return;
       function tryLoad(filename, onSuccess) {
         var img = new Image();
         img.onload = function () {
@@ -929,8 +933,28 @@ var TRAIT_ORIGIN_GAP = 20;
       if(currentId) localStorage.setItem("sm_last_id_fichemetier", currentId);
     },[currentId,currentName,dirty,state]);
 
-    /* Restauration du dernier projet ouvert */
+    /* Restauration de l'état : #exportkey d'abord, puis dernier projet ouvert.
+
+       #EXPORTKEY — INDISPENSABLE DEPUIS LE PASSAGE AU MOTEUR COMMUN.
+       Le serveur d'export (Puppeteer) ne photographie pas cette page-ci : il
+       ROUVRE l'URL dans un Chrome à part, avec « #exportkey=… » qui désigne
+       l'état déposé dans localStorage. Une page qui ignore ce fragment
+       redémarre sur son état par défaut — donc sans aucune image — et c'est
+       exactement cette carte vide que le serveur capture. Les autres
+       générateurs lisent le fragment via Shell.useApp ; Fiche Métier a son
+       propre état, il doit donc le lire lui-même. */
     React.useEffect(function(){
+      var m = (location.hash||"").match(/exportkey=([^&#]+)/);
+      if(m){
+        try{
+          var raw = localStorage.getItem(decodeURIComponent(m[1]));
+          if(raw){
+            setState(Object.assign({}, DEFAULT_STATE, JSON.parse(raw), { portraitTraits: null }));
+            localStorage.removeItem(decodeURIComponent(m[1]));
+            return;   /* export en cours : ne pas écraser avec le dernier projet */
+          }
+        }catch(err){}
+      }
       var lastId = localStorage.getItem("sm_last_id_fichemetier");
       if(!lastId) return;
       smStore.get(lastId, function(rec){
@@ -1027,7 +1051,22 @@ var TRAIT_ORIGIN_GAP = 20;
 
         e("div", { className: "section" },
           e("h2", null, "Citation"),
-          e("textarea", { spellCheck: true, rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } }))
+          e("textarea", { spellCheck: true, rows: 3, value: state.quote, onChange: function (ev) { set("quote", ev.target.value); } })),
+
+        /* TRADUCTION — placée ici, au bout de l'onglet Contenu : elle réécrit
+           les champs juste au-dessus (badge, poste, missions, citation). Elle
+           vivait dans l'onglet Export, loin de ce qu'elle modifie. */
+        e("div", { className: "section" },
+          e("h2", null, "Traduction IA"),
+          e("div", { className: "hint", style: { marginBottom: 10 } },
+            "Traduit badge, poste, missions et citation via DeepL Free."),
+          e("button", { onClick: translate, disabled: isTranslating,
+            style: { width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+              gap: 8, fontSize: 13, fontWeight: 700, padding: "10px", borderRadius: 7,
+              border: "1px solid #d4d4d4", background: isTranslating ? "#f5f5f5" : "#fff",
+              cursor: isTranslating ? "default" : "pointer", fontFamily: "inherit" } },
+            isTranslating ? "🌐 Traduction en cours…" : ("🌐 Traduire → " + (state.langTarget || "FR"))
+          ))
 
       ), /* /onglet Contenu */
 
@@ -1083,21 +1122,9 @@ var TRAIT_ORIGIN_GAP = 20;
       ), /* /onglet Médias */
 
       /* ══════════════════════════════════════════
-         ONGLET 3 — Export (traduction, sauvegardes, téléchargement)
+         ONGLET 3 — Export (sauvegardes, téléchargement)
          ══════════════════════════════════════════ */
       e("div", { className: "panel-tab-content" + (activeTab === "export" ? " on" : "") },
-
-        e("div", { className: "section" },
-          e("h2", null, "Traduction IA"),
-          e("div", { className: "hint", style: { marginBottom: 10 } },
-            "Traduit badge, poste, missions et citation via DeepL Free."),
-          e("button", { onClick: translate, disabled: isTranslating,
-            style: { width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-              gap: 8, fontSize: 13, fontWeight: 700, padding: "10px", borderRadius: 7,
-              border: "1px solid #d4d4d4", background: isTranslating ? "#f5f5f5" : "#fff",
-              cursor: isTranslating ? "default" : "pointer", fontFamily: "inherit" } },
-            isTranslating ? "🌐 Traduction en cours…" : ("🌐 Traduire → " + (state.langTarget || "FR"))
-          )),
 
         e(Shell.ui.ExportTab, { shell: fmShell, cardRef: cardRef })
 
@@ -1264,10 +1291,24 @@ var TRAIT_ORIGIN_GAP = 20;
           background: badgeGrad
         }
       },
-        e("svg", { viewBox: "0 0 24 24", width: BADGE_ICON_SIZE, height: BADGE_ICON_SIZE, fill: "none", stroke: "white", strokeWidth: 2 },
-          (state.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(state.badgeIconKey)))
-            ?e("image",{href:state.badgeIconCustom||(window.PictoGallery&&window.PictoGallery.getSrc(state.badgeIconKey)),x:0,y:0,width:24,height:24})
-            :e("g",null,e("path", { d: "M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" }), e("circle", { cx: 12, cy: 12, r: 3 })))),
+        /* PICTOGRAMME DU CARTOUCHE.
+           On utilise un <img>, exactement comme les cartes partagées
+           (assets/cards/*.js). L'ancienne version dessinait un <image href>
+           à l'intérieur d'un <svg> : aucun moteur d'export ne sait incorporer
+           la source d'un <image> SVG — ni html2canvas, ni dom-to-image, qui
+           ne parcourent que les <img> et les url() CSS. Le pictogramme
+           disparaissait donc systématiquement du PNG téléchargé, quel que
+           soit le moteur. Avec un <img>, Shell.inlineImages le convertit en
+           data:URL avant capture, comme partout ailleurs. */
+        (function(){
+          var src = state.badgeIconCustom
+            || (window.PictoGallery && window.PictoGallery.getSrc(state.badgeIconKey))
+            || null;
+          if (src) return e("img", { src: src, alt: "", crossOrigin: "anonymous",
+            style: { width: BADGE_ICON_SIZE + "px", height: BADGE_ICON_SIZE + "px", objectFit: "contain" } });
+          return e("svg", { viewBox: "0 0 24 24", width: BADGE_ICON_SIZE, height: BADGE_ICON_SIZE, fill: "none", stroke: "white", strokeWidth: 2 },
+            e("path", { d: "M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" }), e("circle", { cx: 12, cy: 12, r: 3 }));
+        })()),
       e("div", {
         style: {
           borderRadius: 10, overflow: "hidden",

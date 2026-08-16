@@ -561,9 +561,24 @@ Shell.exportNode = function(node, opts){
 
   /* ── 1. Serveur Puppeteer, uniquement en local ── */
   var viaServeur;
+  /* Le dépôt de l'état dans localStorage doit RÉUSSIR pour que le serveur ait
+     quelque chose à rouvrir. Un état qui contient des images en data:URL pèse
+     vite plusieurs mégaoctets et dépasse le quota (~5 Mo) : l'écriture échoue,
+     et si on continuait quand même, le serveur rouvrirait la page sur son état
+     par défaut et renverrait une carte sans images. On repasse donc au repli
+     local, qui lui photographie la carte réellement affichée. */
+  var etatDepose = false, cle = null;
   if(serveurJoignable() && opts.stateForServer){
-    var cle = "wie_export_" + Date.now();
-    try{ localStorage.setItem(cle, JSON.stringify(opts.stateForServer)); }catch(er){}
+    cle = "wie_export_" + Date.now();
+    try{
+      localStorage.setItem(cle, JSON.stringify(opts.stateForServer));
+      etatDepose = !!localStorage.getItem(cle);
+    }catch(er){
+      etatDepose = false;
+      try{ localStorage.removeItem(cle); }catch(e2){}
+    }
+  }
+  if(etatDepose){
     var url = global.location.href.split("#")[0] + "#exportkey=" + cle;
     viaServeur = fetch(Shell.EXPORT_SERVER + "/ping", {signal:AbortSignal.timeout(1500)})
       .then(function(r){
@@ -605,7 +620,12 @@ Shell.exportNode = function(node, opts){
       .catch(function(err){ if(restaurer) restaurer(); throw err; });
   }
 
-  return viaServeur.catch(viaDomToImage).then(function(blob){
+  return viaServeur.catch(function(err){
+    /* Le serveur n'a pas répondu : la clé déposée ne sera jamais consommée par
+       la page rouverte, on la retire pour ne pas encombrer localStorage. */
+    if(cle){ try{ localStorage.removeItem(cle); }catch(e){} }
+    return viaDomToImage();
+  }).then(function(blob){
     if(opts.download !== false) global.SaveManager.downloadBlob(blob, fname);
     return blob;
   });
@@ -963,6 +983,21 @@ Shell.ui.ExportTab = function(p){
 
   return e(R.Fragment,null,
 
+    /* ORDRE DES SECTIONS — le téléchargement en premier.
+       C'est le geste le plus fréquent une fois la carte prête ; le placer
+       sous la liste des sauvegardes obligeait à faire défiler tout le
+       panneau à chaque export. */
+    /* Section Export PNG */
+    e(Shell.ui.Section,{title:"Export"},
+      p.exportHint?e("div",{className:"hint",style:{marginBottom:8}},p.exportHint):null,
+      e("button",{className:"tab-nav-btn primary",
+        style:{width:"100%",justifyContent:"center",padding:"10px",marginTop:4},
+        onClick:function(){p.shell.doExport(p.cardRef);},
+        disabled:p.shell.busy},
+        p.shell.busy?e("span",{className:"spin"},e(IcoDl)):e(IcoDl),
+        "\xa0",
+        p.shell.busy?"Export\u2026":(p.exportLabel||"T\xe9l\xe9charger le PNG"))),
+
     /* Section Sauvegardes */
     e(Shell.ui.Section,{title:"Sauvegardes"},
 
@@ -1041,18 +1076,7 @@ Shell.ui.ExportTab = function(p){
           onChange:function(ev){
             var f=ev.target.files&&ev.target.files[0];
             if(f) store.importJson(f,function(){ refresh(); });
-          }}))),
-
-    /* Section Export PNG */
-    e(Shell.ui.Section,{title:"Export"},
-      p.exportHint?e("div",{className:"hint",style:{marginBottom:8}},p.exportHint):null,
-      e("button",{className:"tab-nav-btn primary",
-        style:{width:"100%",justifyContent:"center",padding:"10px",marginTop:4},
-        onClick:function(){p.shell.doExport(p.cardRef);},
-        disabled:p.shell.busy},
-        p.shell.busy?e("span",{className:"spin"},e(IcoDl)):e(IcoDl),
-        "\xa0",
-        p.shell.busy?"Export\u2026":(p.exportLabel||"T\xe9l\xe9charger le PNG")))
+          }})))
   );
 };
 
