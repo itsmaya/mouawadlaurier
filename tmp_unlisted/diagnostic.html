@@ -93,6 +93,14 @@ textarea{width:100%;height:170px;font:11.5px/1.45 ui-monospace,Menlo,monospace;
 </section>
 
 <section>
+  <h2>Essai réel des générateurs</h2>
+  <div id="pages"><div class="vide">En attente…</div></div>
+  <p class="aide">Chaque générateur est ouvert pour de vrai dans un cadre
+     invisible, puis on vérifie que sa carte contient bien du texte. C'est le
+     test le plus proche de ce que vous voyez à l'écran.</p>
+</section>
+
+<section>
   <h2>Police Nunito</h2>
   <div id="polices"><div class="vide">Test en cours…</div></div>
 </section>
@@ -185,7 +193,9 @@ var FICHIERS = [
   "assets/charte-2026.js", "assets/te-charte.js", "assets/rich-body.js",
   "assets/components-2026.js", "assets/pictos.js", "assets/drag-image.js",
   "assets/bg-controls.js", "assets/header.js",
-  "assets/cards/registry.js", "assets/cards/citation-card.js",
+  "assets/cards/registry.js",
+  "assets/cards/citation-card.js", "assets/cards/latest-news-card.js",
+  "assets/cards/split-screen-card.js", "assets/cards/block-layouts-card.js",
   "assets/fonts.css", "assets/fonts/nunito-v32-latin-800.woff2",
   "assets/vendor/react.production.min.js",
   "assets/vendor/react-dom.production.min.js",
@@ -224,22 +234,81 @@ function pictos(){
       /* Vérifier réellement un pictogramme de chaque catégorie : c'est ce que
          fait le générateur au démarrage, mais lui en teste la totalité. */
       var reste = cats.length;
-      if(!reste){ polices(); return; }
+      if(!reste){ pages(); return; }
       cats.forEach(function(cat){
         var premier = data[cat][0];
         var im = new Image();
         var t0 = Date.now();
         im.onload  = function(){ ligne("pictos", cat, "ok", (Date.now()-t0) + " ms");
-                                 if(!--reste) polices(); };
+                                 if(!--reste) pages(); };
         im.onerror = function(){ ligne("pictos", cat, "ko", "« " + premier + " » introuvable");
-                                 if(!--reste) polices(); };
+                                 if(!--reste) pages(); };
         im.src = "assets/pictos/" + cat + "/" + premier + ".png";
       });
     })
     .catch(function(e){
       ligne("pictos","Manifeste","ko", e.message + " — aucun pictogramme ne s'affichera");
-      polices();
+      pages();
     });
+}
+
+/* ── 3 ter. Essai réel de chaque générateur ────────────────────────────────
+   On ouvre la page dans un <iframe> de même origine : on peut donc inspecter
+   son contenu. C'est le seul test qui reproduise exactement ce que voit
+   l'utilisateur, y compris un module de carte manquant sur le serveur. */
+var PAGES = ["fiche-metier","citation","latest-news","split-screen",
+             "block-layouts","carrousel"];
+function pages(){
+  note("=== ESSAI RÉEL DES GÉNÉRATEURS ===");
+  var i = 0;
+  function suivant(){
+    if(i >= PAGES.length){ polices(); return; }
+    var nom = PAGES[i++];
+    var cadre = document.createElement("iframe");
+    cadre.style.cssText = "position:absolute;left:-9999px;width:900px;height:1200px;border:0;";
+    var fini = false;
+    var t0 = Date.now();
+    function verdict(etat, txt){
+      if(fini) return; fini = true;
+      ligne("pages", nom, etat, txt);
+      try{ cadre.remove(); }catch(e){}
+      suivant();
+    }
+    cadre.onload = function(){
+      /* Laisser le temps à React de monter et aux polices d'arriver. */
+      setTimeout(function(){
+        try{
+          var d = cadre.contentDocument;
+          var carte = d.querySelector("[data-export-card]");
+          var racine = d.getElementById("root");
+          if(!racine || !racine.children.length)
+            return verdict("ko","page vide — rien ne s'est affiché");
+          /* Un démarrage échoué laisse un message d'erreur dans #root */
+          var msg = racine.querySelector("code");
+          if(msg && /pas pu démarrer|n'a pas pu/i.test(racine.innerText))
+            return verdict("ko", msg.textContent.slice(0,90));
+          /* Le visuel n'a pas la même forme partout : le Carrousel affiche des
+             vignettes, fiche-métier compose sa carte autrement et ne pose pas
+             data-export-card. On accepte donc plusieurs points d'ancrage,
+             sinon on signalerait une panne là où tout va bien. */
+          var cible = carte
+            || d.querySelector(".car-thumb")
+            || d.querySelector(".car-stage")
+            || d.querySelector(".preview-wrap")
+            || d.querySelector(".workspace");
+          if(!cible) return verdict("ko","aucun visuel rendu");
+          var t = (cible.innerText||"").replace(/\s+/g," ").trim();
+          if(!t) return verdict("ko","visuel SANS TEXTE");
+          verdict("ok", (Date.now()-t0) + " ms · « " + t.slice(0,28) + "… »");
+        }catch(e){ verdict("ko","inspection impossible : " + e.name); }
+      }, 5000);
+    };
+    cadre.onerror = function(){ verdict("ko","page introuvable"); };
+    setTimeout(function(){ verdict("ko","délai dépassé (>15 s)"); }, 15000);
+    cadre.src = "generators/" + nom + "/index.html";
+    document.body.appendChild(cadre);
+  }
+  suivant();
 }
 
 /* ── 4. Police ─────────────────────────────────────────────────────────── */
