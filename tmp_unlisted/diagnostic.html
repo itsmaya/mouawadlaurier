@@ -85,6 +85,14 @@ textarea{width:100%;height:170px;font:11.5px/1.45 ui-monospace,Menlo,monospace;
 </section>
 
 <section>
+  <h2>Pictogrammes</h2>
+  <div id="pictos"><div class="vide">Test en cours…</div></div>
+  <p class="aide">Le manifeste liste les pictogrammes disponibles ; chacun est
+     ensuite vérifié par le générateur. S'il manque, le cartouche s'affiche
+     sans icône.</p>
+</section>
+
+<section>
   <h2>Police Nunito</h2>
   <div id="polices"><div class="vide">Test en cours…</div></div>
 </section>
@@ -183,7 +191,7 @@ var FICHIERS = [
   "assets/vendor/react-dom.production.min.js",
   "assets/vendor/dom-to-image-more.min.js",
   "assets/vendor/jszip.min.js", "assets/vendor/html2canvas.min.js",
-  "assets/pictos.json"
+  "assets/manifest.json"
 ];
 function fichiers(){
   note("=== FICHIERS ===");
@@ -199,8 +207,39 @@ function fichiers(){
       .catch(function(){
         ligne("fichiers", f, "ko", "injoignable");
       })
-      .then(function(){ if(!--restants) polices(); });
+      .then(function(){ if(!--restants) pictos(); });
   });
+}
+
+/* ── 3 bis. Pictogrammes ───────────────────────────────────────────────── */
+function pictos(){
+  note("=== PICTOGRAMMES ===");
+  fetch("assets/manifest.json", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(data){
+      var cats = Object.keys(data).filter(function(k){ return Array.isArray(data[k]); });
+      var total = cats.reduce(function(n,k){ return n + data[k].length; }, 0);
+      ligne("pictos","Manifeste","ok", cats.length + " catégories, " + total + " pictos");
+      note("catégories : " + cats.join(", "));
+      /* Vérifier réellement un pictogramme de chaque catégorie : c'est ce que
+         fait le générateur au démarrage, mais lui en teste la totalité. */
+      var reste = cats.length;
+      if(!reste){ polices(); return; }
+      cats.forEach(function(cat){
+        var premier = data[cat][0];
+        var im = new Image();
+        var t0 = Date.now();
+        im.onload  = function(){ ligne("pictos", cat, "ok", (Date.now()-t0) + " ms");
+                                 if(!--reste) polices(); };
+        im.onerror = function(){ ligne("pictos", cat, "ko", "« " + premier + " » introuvable");
+                                 if(!--reste) polices(); };
+        im.src = "assets/pictos/" + cat + "/" + premier + ".png";
+      });
+    })
+    .catch(function(e){
+      ligne("pictos","Manifeste","ko", e.message + " — aucun pictogramme ne s'affichera");
+      polices();
+    });
 }
 
 /* ── 4. Police ─────────────────────────────────────────────────────────── */
