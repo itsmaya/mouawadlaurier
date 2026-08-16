@@ -27,7 +27,8 @@ function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("Auc
 <script>
 loadScript(["../../assets/vendor/react.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"],function(){
 loadScript(["../../assets/vendor/react-dom.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"],function(){
-loadScript(["../../assets/vendor/html2canvas.min.js","https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"],function(){
+/* dom-to-image remplace html2canvas : voir Shell.exportNode. 193 Ko en moins. */
+loadScript(["../../assets/vendor/dom-to-image-more.min.js","https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){
   SPGBoot.libsReady();
 });});});
 </script>
@@ -388,8 +389,9 @@ function boot() {
   // =========================================================================
   // Ajoute un contour blanc épais autour d'une photo détourée (PNG transparent).
   // On dessine le contour "en dur" sur un <canvas> (pixels réels) plutôt que
-  // via un filtre CSS, car l'outil d'export (html2canvas) ne restitue pas les
-  // filtres de façon fiable — c'est ce qui causait le bug du point 1 par le passé.
+  // via un filtre CSS. Ce choix précède la bascule sur dom-to-image (qui,
+  // lui, respecte les filtres) : on le conserve car dessiner le contour en
+  // pixels réels reste plus prévisible d'un moteur à l'autre.
   // =========================================================================
   function addWhiteOutline(dataUrl, ratio) {
     return new Promise(function (resolve, reject) {
@@ -874,105 +876,34 @@ var TRAIT_ORIGIN_GAP = 20;
       for (var j = 0; j < lines.length; j++) { ctx.fillText(lines[j], 0, startY + j * lineH); }
     }, [state.quote, cLight, cDark, QUOTE_FONT, EXPORT_SCALE, QUOTE_W, BLOCK_H]);
 
+    /* ── Export ────────────────────────────────────────────────────────────
+       Passe désormais par Shell.exportNode, comme tous les autres
+       générateurs : serveur Puppeteer si disponible, sinon dom-to-image.
+
+       Les contournements que réclamait html2canvas ont été supprimés :
+        - le pré-floutage du fond sur un canvas (html2canvas ignore
+          filter:blur(), dom-to-image le respecte) ;
+        - le clonage manuel du nœud et la recopie des pixels de <canvas>
+          (dom-to-image sérialise les canvas correctement).
+       C'est aussi ce qui devrait faire réapparaître le pictogramme, que
+       html2canvas perdait faute de savoir incorporer l'image. */
     var handleExport = useCallback(function () {
       if (!cardRef.current) return;
       setExporting(true);
-
-      // Pré-blur l'image de fond sur un canvas, car html2canvas ignore filter:blur()
-      function applyBlurToCanvas(imgSrc, w, h, blurPx, onDone) {
-        if (!imgSrc) return onDone(null);
-        var img = new Image();
-        img.onload = function () {
-          var OW=Math.round(w*EXPORT_SCALE), OH=Math.round(h*EXPORT_SCALE);
-          var c2 = document.createElement("canvas");
-          c2.width = OW; c2.height = OH;
-          var cx = c2.getContext("2d");
-          cx.imageSmoothingEnabled=true; cx.imageSmoothingQuality="high";
-          if(blurPx>0) cx.filter="blur("+Math.round(blurPx*EXPORT_SCALE)+"px) saturate(0.72) contrast(1.04)";
-          else cx.filter="saturate(0.72) contrast(1.04)";
-          var ir=img.naturalWidth/img.naturalHeight,cr=OW/OH,dw,dh;
-          if(ir>cr){dh=OH*1.06;dw=dh*ir;}else{dw=OW*1.06;dh=dw/ir;}
-          cx.drawImage(img,(OW-dw)/2,(OH-dh)/2,dw,dh);
-          onDone(c2.toDataURL("image/png"));
-        };
-        img.onerror = function () { onDone(null); };
-        img.src = imgSrc;
-      }
-
-      // Blur : on pré-rend le fond à la taille de la carte (CARD_W × CARD_H),
-      // pas à la taille d'export, car c'est la carte qu'html2canvas va capturer.
-      var blurPx = 4; // blur en px à l'échelle de la carte (600px de large)
-
-      // Calcul de la couleur de citation pour le onclone
-
-      applyBlurToCanvas(state.bgImg, CARD_W, L.CARD_H, blurPx, function (blurredDataUrl) {
-        // ─── Cloner la carte dans un conteneur hors-écran SANS transform ───
-        var offscreen = document.createElement("div");
-        offscreen.style.cssText = [
-          "position:fixed",
-          "left:-99999px",
-          "top:0",
-          "width:" + CARD_W + "px",
-          "height:" + L.CARD_H + "px",
-          "overflow:hidden",
-          "pointer-events:none",
-          "z-index:-1"
-        ].join(";");
-        var clone = cardRef.current.cloneNode(true);
-        clone.style.transform = "none";
-        clone.style.position = "absolute";
-        clone.style.top = "0";
-        clone.style.left = "0";
-        clone.style.width = CARD_W + "px";
-        clone.style.height = L.CARD_H + "px";
-        offscreen.appendChild(clone);
-        document.body.appendChild(offscreen);
-
-        // ─── Copier le contenu du canvas de citation dans le clone ───
-        // cloneNode(true) clone le DOM mais pas les pixels d'un <canvas>.
-        var srcCanvases = cardRef.current.querySelectorAll("canvas");
-        var dstCanvases = clone.querySelectorAll("canvas");
-        srcCanvases.forEach(function (src, i) {
-          var dst = dstCanvases[i];
-          if (!dst) return;
-          dst.width = src.width;
-          dst.height = src.height;
-          var ctx = dst.getContext("2d");
-          if (ctx && src.width > 0 && src.height > 0) {
-            ctx.drawImage(src, 0, 0);
-          }
-        });
-
-        // ─── Injecter le fond bluré directement dans le clone ───
-        // On ne passe PAS par onclone : html2canvas reçoit notre clone directement,
-        // donc on modifie le bgLayer dans le clone avant l'appel.
-        if (blurredDataUrl) {
-          var bgEl = clone.querySelector("[data-layer='bg']");
-          if (bgEl) {
-            bgEl.style.backgroundImage = "url(" + blurredDataUrl + ")";
-            bgEl.style.backgroundSize = "cover";
-            bgEl.style.backgroundPosition = "center";
-            bgEl.style.filter = "none";
-          }
-        }
-
-        window.html2canvas(clone, {
-          scale: EXPORT_SCALE, useCORS: true, backgroundColor: "#ffffff",
-          width: CARD_W, height: L.CARD_H
-        }).then(function (canvas) {
-          var fname = (state.personName || "post").toLowerCase().replace(/\s+/g, "-") + ".png";
-          /* Passe par SaveManager.downloadBlob : lien attaché au document et
-             URL libérée tardivement, sinon Firefox laisse des fichiers .part. */
-          canvas.toBlob(function(blob){
-            if(blob) SaveManager.downloadBlob(blob, fname);
-          }, "image/png");
-        }).catch(function (err) { console.error(err); alert("Erreur lors de l'export."); })
-          .finally(function () {
-            document.body.removeChild(offscreen);
-            setExporting(false);
-          });
-      });
-    }, [state.personName, state.bgImg, state.format, cLight, L.CARD_H]);
+      var fmt = FORMATS[state.format] || FORMATS.portrait;
+      var fname = SaveManager.exportFilename(
+        smFolder.current, currentName || (state.personName || "fiche-metier"), state.format);
+      Shell.exportNode(cardRef.current, {
+        filename: fname,
+        outputW: fmt.outputW, outputH: fmt.outputH,
+        stateForServer: state
+      })
+      .catch(function (err) {
+        console.error("Export :", err);
+        alert("L'export a échoué : " + (err && err.message ? err.message : err));
+      })
+      .then(function () { setExporting(false); });
+    }, [state, currentName, L.CARD_H]);
 
     /* ── Barre de statut dans le header (nom, pastille, Enregistrer /
           Mettre à jour) — même comportement que les autres générateurs ── */
@@ -1536,6 +1467,8 @@ var TRAIT_ORIGIN_GAP = 20;
 
     var card = e("div", {
       ref: cardRef,
+      /* Cible du serveur d'export Puppeteer, comme les autres générateurs. */
+      "data-export-card": "1", "data-ready": "1",
       style: { width: CARD_W, height: CARD_H, position: "relative", fontFamily: "Nunito, sans-serif", overflow: "hidden", background: "#333" }
     },
       bgLayer, tintLayer, portraitLayer, bottomShadow, missionsBlock, quoteBlock, badge, logoSlot, flagSlot, titleBlock, frame
@@ -1593,7 +1526,7 @@ var TRAIT_ORIGIN_GAP = 20;
   ReactDOM.createRoot(document.getElementById("root")).render(e(App));
 }
 
-/* React et html2canvas sont maintenant chargés en asynchrone : on ne démarre
+/* React et dom-to-image sont maintenant chargés en asynchrone : on ne démarre
    que lorsque la chaîne est prête. Le drapeau couvre les deux ordres possibles
    (libs prêtes avant ce script, ou l'inverse). */
 SPGBoot.run(boot);

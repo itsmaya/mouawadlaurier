@@ -377,40 +377,12 @@ Shell.useApp = function(cfg){
     var fname=opts.filename||global.SaveManager.exportFilename(
       smFolder.current,currentName||cfg.pageKey,fk);
     setBusy(true);
-    var exportKey="wie_export_"+Date.now();
-    try{ localStorage.setItem(exportKey,JSON.stringify(
-      Object.assign({},stx,{format:fk}))); }catch(er){}
-    var currentUrl=global.location.href.split("#")[0]+"#exportkey="+exportKey;
-    var SRV="http://localhost:3001";
-    var p=fetch(SRV+"/ping",{signal:AbortSignal.timeout(1500)})
-      .then(function(r){ if(!r.ok) throw new Error("ping");
-        return fetch(SRV+"/export",{method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({url:currentUrl,selector:"[data-export-card]",
-            width:cf.outputW,height:cf.outputH,filename:fname})});
-      })
-      .then(function(r){ if(!r.ok) throw new Error("export server "+r.status); return r.blob(); })
-      .catch(function(){
-        /* Repli dom-to-image : capture le DOM local.
-           On incorpore d'abord les images externes (voir Shell.inlineImages),
-           et on attend que les polices soient réellement prêtes — sans quoi le
-           PNG sortirait dans la police de repli du système. */
-        var restaurer = null;
-        return document.fonts.ready
-          .then(function(){ return Shell.inlineImages(cardRef.current); })
-          .then(function(fn){
-            restaurer = fn;
-            return global.domtoimage.toPng(cardRef.current,{
-              width:cardRef.current.offsetWidth,height:cardRef.current.offsetHeight,useCORS:true});
-          })
-          .then(function(d){ if(restaurer) restaurer(); return fetch(d); })
-          .then(function(r){ return r.blob(); })
-          .catch(function(err){ if(restaurer) restaurer(); throw err; });
-      });
-    return p.then(function(blob){
-        if(opts.download!==false) global.SaveManager.downloadBlob(blob,fname);
-        setBusy(false); return blob;
-      })
+    /* Chemin unique : voir Shell.exportNode. */
+    return Shell.exportNode(cardRef.current, {
+      filename:fname, outputW:cf.outputW, outputH:cf.outputH,
+      stateForServer:Object.assign({},stx,{format:fk}),
+      download:opts.download
+    }).then(function(blob){ setBusy(false); return blob; })
       .catch(function(er){
         setBusy(false);
         console.error("Export :",er);
@@ -540,6 +512,102 @@ Shell.inlineImages = function(node){
         if(anciens[i]!==null) im.setAttribute("src", anciens[i]);
       });
     };
+  });
+};
+
+
+/* ═══ 3 ter. Export d'un nœud — chemin UNIQUE de toute l'application ═══════
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │  Deux moteurs, dans cet ordre :                                         │
+   │                                                                          │
+   │  1. LE SERVEUR PUPPETEER (localhost:3001). C'est lui qui donne la        │
+   │     meilleure qualité : il rouvre la page dans un vrai Chrome et capture │
+   │     à la résolution de sortie. Il n'est joignable que depuis la machine  │
+   │     où il tourne — jamais depuis un téléphone, où « localhost » désigne  │
+   │     le téléphone lui-même. On ne le sollicite donc que si l'adresse est  │
+   │     locale, sinon on perdrait 1,5 s d'attente à chaque export mobile.    │
+   │                                                                          │
+   │  2. dom-to-image, en repli. Il sérialise le DOM avec ses styles calculés │
+   │     et respecte les filtres CSS et les <canvas>, ce que html2canvas ne   │
+   │     fait pas — d'où l'unification sur ce moteur.                        │
+   │                                                                          │
+   │  Avant capture, les <img> externes sont converties en data:URL (voir     │
+   │  Shell.inlineImages) et l'on attend document.fonts.ready : sans ça le    │
+   │  PNG sort sans pictogramme et dans la police de repli.                   │
+   └─────────────────────────────────────────────────────────────────────────┘
+
+   Shell.exportNode(node, {
+     filename,          nom du fichier téléchargé
+     outputW, outputH,  taille de sortie voulue (défaut : taille du nœud)
+     stateForServer,    état à réinjecter dans la page rouverte par Puppeteer
+     download           false pour récupérer le Blob sans le télécharger
+   }) → Promise<Blob>                                                        */
+
+Shell.EXPORT_SERVER = "http://localhost:3001";
+
+/* Le serveur d'export ne peut répondre que si la page est servie localement. */
+function serveurJoignable(){
+  var h = global.location.hostname;
+  return h === "localhost" || h === "127.0.0.1" || h === "" || h === "[::1]";
+}
+
+Shell.exportNode = function(node, opts){
+  opts = opts || {};
+  if(!node) return Promise.reject(new Error("aucun élément à exporter"));
+
+  var w = opts.outputW || node.offsetWidth;
+  var h = opts.outputH || node.offsetHeight;
+  var fname = opts.filename || "export.png";
+
+  /* ── 1. Serveur Puppeteer, uniquement en local ── */
+  var viaServeur;
+  if(serveurJoignable() && opts.stateForServer){
+    var cle = "wie_export_" + Date.now();
+    try{ localStorage.setItem(cle, JSON.stringify(opts.stateForServer)); }catch(er){}
+    var url = global.location.href.split("#")[0] + "#exportkey=" + cle;
+    viaServeur = fetch(Shell.EXPORT_SERVER + "/ping", {signal:AbortSignal.timeout(1500)})
+      .then(function(r){
+        if(!r.ok) throw new Error("ping");
+        return fetch(Shell.EXPORT_SERVER + "/export", {method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({url:url, selector:"[data-export-card]",
+            width:w, height:h, filename:fname})});
+      })
+      .then(function(r){ if(!r.ok) throw new Error("serveur d'export " + r.status); return r.blob(); });
+  } else {
+    viaServeur = Promise.reject(new Error("serveur non sollicité"));
+  }
+
+  /* ── 2. Repli dom-to-image ──
+     L'échelle est obtenue par un transform sur le nœud cloné : c'est le seul
+     moyen d'obtenir une sortie plus grande que l'élément à l'écran (la carte
+     Fiche Métier fait 600 px de large pour une sortie à 2250). */
+  function viaDomToImage(){
+    var restaurer = null;
+    var echelle = w / (node.offsetWidth || w);
+    var reglages = {width:w, height:h, useCORS:true};
+    if(Math.abs(echelle - 1) > 0.01){
+      reglages.style = {
+        transform: "scale(" + echelle + ")",
+        transformOrigin: "top left",
+        width:  node.offsetWidth + "px",
+        height: node.offsetHeight + "px"
+      };
+    }
+    return document.fonts.ready
+      .then(function(){ return Shell.inlineImages(node); })
+      .then(function(fn){
+        restaurer = fn;
+        return global.domtoimage.toPng(node, reglages);
+      })
+      .then(function(d){ if(restaurer) restaurer(); return fetch(d); })
+      .then(function(r){ return r.blob(); })
+      .catch(function(err){ if(restaurer) restaurer(); throw err; });
+  }
+
+  return viaServeur.catch(viaDomToImage).then(function(blob){
+    if(opts.download !== false) global.SaveManager.downloadBlob(blob, fname);
+    return blob;
   });
 };
 
