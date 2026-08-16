@@ -116,6 +116,27 @@ textarea{width:100%;height:170px;font:11.5px/1.45 ui-monospace,Menlo,monospace;
 </section>
 
 <section>
+  <h2>Moteurs d'export</h2>
+  <div id="moteurs"><div class="vide">Test en cours…</div></div>
+  <div id="apercus" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"></div>
+  <p class="aide">Une carte témoin (texte + image + dégradé) est fabriquée puis
+     rendue par les deux moteurs. Celui qui perd du contenu est le coupable.
+     Les vignettes ci-dessus montrent le résultat réel de chacun.</p>
+</section>
+
+<section>
+  <h2>Repartir d'un document vierge</h2>
+  <p class="aide" style="margin-top:0">Au démarrage, chaque générateur recharge
+     votre dernier projet enregistré. Si l'un d'eux s'ouvre vide ou de travers,
+     c'est peut-être cet état restauré qui est en cause, pas la page.
+     Ce bouton oublie seulement « quel projet rouvrir » —
+     <b>aucune sauvegarde n'est supprimée</b>, elles restent toutes dans
+     l'onglet Export de chaque générateur.</p>
+  <div id="oubli"></div>
+  <button class="second" onclick="oublierDerniers()">Oublier les derniers projets ouverts</button>
+</section>
+
+<section>
   <h2>Rapport</h2>
   <button class="primaire" onclick="copier()">Copier le rapport</button>
   <textarea id="rapport" readonly></textarea>
@@ -373,11 +394,11 @@ function capacites(){
     }catch(e){
       ligne("capacites","Image du site incorporable","ko","canvas bloqué : " + e.name);
     }
-    stockage();
+    chargerMoteurs();
   };
   im.onerror = function(){
     ligne("capacites","Image du site incorporable","ko","logo introuvable");
-    stockage();
+    chargerMoteurs();
   };
   im.src = "assets/logos/fisheye-gallery-logo-vector.png";
 
@@ -385,6 +406,124 @@ function capacites(){
   var a = document.createElement("a");
   ligne("capacites","Téléchargement de fichier", ("download" in a) ? "ok":"ko",
     ("download" in a) ? "supporté" : "NON SUPPORTÉ");
+}
+
+/* ── 5 bis. Comparaison des deux moteurs d'export ──────────────────────────
+   Fiche Métier utilise html2canvas, les autres générateurs dom-to-image.
+   Sur iOS, dom-to-image passe par un SVG <foreignObject> que Safari rasterise
+   parfois de façon incomplète — texte ou images manquants, sans erreur.
+   On fabrique donc une carte témoin et on regarde ce que chacun en fait. */
+function carteTemoin(){
+  var d = document.createElement("div");
+  d.id = "carte-temoin";
+  d.style.cssText = "position:absolute;left:-9999px;top:0;width:400px;height:400px;"
+    + "background:linear-gradient(135deg,#0098E3,#4632FF);font-family:'Nunito',sans-serif;"
+    + "overflow:hidden;";
+  /* Texte blanc — s'il disparaît, le moteur perd le texte */
+  var t = document.createElement("div");
+  t.textContent = "TEXTE TEMOIN";
+  t.style.cssText = "position:absolute;left:20px;top:20px;color:#fff;font-size:38px;"
+    + "font-weight:800;letter-spacing:.02em;";
+  d.appendChild(t);
+  /* Carré rouge plein — s'il disparaît, le moteur perd les images */
+  var c = document.createElement("canvas");
+  c.width = c.height = 100;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FF0000"; x.fillRect(0,0,100,100);
+  var im = document.createElement("img");
+  im.src = c.toDataURL("image/png");
+  im.style.cssText = "position:absolute;left:20px;top:110px;width:150px;height:150px;";
+  d.appendChild(im);
+  document.body.appendChild(d);
+  return d;
+}
+
+/* Compte les pixels d'une couleur donnée dans un data:URL PNG. */
+function analyser(dataUrl){
+  return new Promise(function(res){
+    var im = new Image();
+    im.onload = function(){
+      var c = document.createElement("canvas");
+      c.width = im.width; c.height = im.height;
+      var x = c.getContext("2d");
+      x.drawImage(im,0,0);
+      var d;
+      try{ d = x.getImageData(0,0,c.width,c.height).data; }
+      catch(e){ return res({err:"lecture refusée"}); }
+      var rouge=0, blanc=0, total=c.width*c.height;
+      for(var i=0;i<d.length;i+=4){
+        if(d[i]>180 && d[i+1]<80 && d[i+2]<80) rouge++;
+        if(d[i]>230 && d[i+1]>230 && d[i+2]>230) blanc++;
+      }
+      res({w:im.width,h:im.height,rouge:rouge,blanc:blanc,total:total,src:dataUrl});
+    };
+    im.onerror = function(){ res({err:"image illisible"}); };
+    im.src = dataUrl;
+  });
+}
+
+function vignette(titre, src){
+  var w = document.createElement("div");
+  w.style.cssText = "flex:1;min-width:120px;text-align:center;font-size:11px;color:#777";
+  w.innerHTML = '<img src="' + src + '" style="width:100%;border:1px solid #ddd;'
+    + 'border-radius:6px;display:block;margin-bottom:4px">' + titre;
+  document.getElementById("apercus").appendChild(w);
+}
+
+function moteurs(){
+  note("=== MOTEURS D'EXPORT ===");
+  var noeud = carteTemoin();
+  var fini = 0;
+  function suite(){ if(++fini >= 2){ try{noeud.remove();}catch(e){} stockage(); } }
+
+  function verdict(nom, r){
+    if(r.err){ ligne("moteurs", nom, "ko", r.err); return; }
+    var aTexte  = r.blanc > 200;      /* le texte blanc occupe des milliers de px */
+    var aImage  = r.rouge > 200;      /* le carré rouge fait 150×150 */
+    var etat = (aTexte && aImage) ? "ok" : "ko";
+    var manque = [];
+    if(!aTexte) manque.push("TEXTE MANQUANT");
+    if(!aImage) manque.push("IMAGE MANQUANTE");
+    ligne("moteurs", nom, etat,
+      etat==="ok" ? (r.w + "×" + r.h + " complet") : manque.join(" + "));
+    note("   " + nom + " : blancs=" + r.blanc + " rouges=" + r.rouge);
+    vignette(nom, r.src);
+  }
+
+  /* dom-to-image — utilisé par citation, latest-news, split-screen, block-layouts */
+  if(window.domtoimage){
+    domtoimage.toPng(noeud,{width:400,height:400})
+      .then(analyser).then(function(r){ verdict("dom-to-image", r); suite(); })
+      .catch(function(e){ ligne("moteurs","dom-to-image","ko","échec : " + e.message); suite(); });
+  } else {
+    ligne("moteurs","dom-to-image","ko","non chargé"); suite();
+  }
+
+  /* html2canvas — utilisé par fiche-métier */
+  if(window.html2canvas){
+    html2canvas(noeud,{backgroundColor:null,scale:1,logging:false})
+      .then(function(cv){ return analyser(cv.toDataURL("image/png")); })
+      .then(function(r){ verdict("html2canvas", r); suite(); })
+      .catch(function(e){ ligne("moteurs","html2canvas","ko","échec : " + e.message); suite(); });
+  } else {
+    ligne("moteurs","html2canvas","ko","non chargé"); suite();
+  }
+}
+
+/* Charge les deux bibliothèques d'export puis lance la comparaison. */
+function chargerMoteurs(){
+  var reste = 2;
+  function unDePlus(){ if(!--reste) moteurs(); }
+  [["assets/vendor/dom-to-image-more.min.js", function(){return window.domtoimage;}],
+   ["assets/vendor/html2canvas.min.js",       function(){return window.html2canvas;}]]
+  .forEach(function(pair){
+    if(pair[1]()){ unDePlus(); return; }
+    var sc = document.createElement("script");
+    sc.src = pair[0];
+    sc.onload = unDePlus;
+    sc.onerror = function(){ unDePlus(); };
+    document.head.appendChild(sc);
+  });
 }
 
 /* ── 6. Stockage ───────────────────────────────────────────────────────── */
@@ -440,6 +579,23 @@ function copier(){
       alert("Rapport copié.");
     }).catch(function(){ if(!ok) alert("Copie refusée : sélectionnez le texte à la main."); });
   } else alert(ok ? "Rapport copié." : "Sélectionnez le texte à la main.");
+}
+
+/* N'efface QUE le pointeur « dernier projet ouvert » de chaque générateur.
+   Les sauvegardes vivent dans IndexedDB et ne sont pas touchées. */
+function oublierDerniers(){
+  var cles = ["citation","latestnews","splitscreen","blocklayouts",
+              "carrousel","fichemetier"];
+  var n = 0;
+  cles.forEach(function(k){
+    var cle = "sm_last_id_" + k;
+    try{ if(localStorage.getItem(cle)){ localStorage.removeItem(cle); n++; } }catch(e){}
+  });
+  document.getElementById("oubli").innerHTML =
+    '<div class="ligne"><span class="puce ok"></span><span class="nom">'
+    + (n ? (n + " générateur(s) repartiront d\'un document vierge")
+         : "aucun projet à oublier — ils démarrent déjà vierges")
+    + '</span></div>';
 }
 
 function viderJournal(){
