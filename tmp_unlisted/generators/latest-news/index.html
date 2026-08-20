@@ -311,8 +311,8 @@ function App(){
                 ?e("div",{className:"hint",style:{marginBottom:8,color:"#999",fontSize:11}},
                   "** Le texte est entièrement surligné sur fond photo."):null,
               e("label",{className:"field-label"},"Alignement"),
-              e(UI.SegButtons,{value:bloc.align,onChange:function(v){setBloc(bloc.id,"align",v);},
-                options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
+              e(UI.SegButtons,{value:bloc.align||"left",onChange:function(v){setBloc(bloc.id,"align",v);},
+                options:[{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}]}),
               e("div",{style:{height:8}}),
               (function(){
                 var bfs=bloc["fs_"+_f]||L.TEXT_DEF;

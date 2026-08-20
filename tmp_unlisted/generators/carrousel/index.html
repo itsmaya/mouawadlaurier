@@ -394,7 +394,7 @@ function LatestNewsEditor(p){
           e("div",{style:{height:8}}),
           e("label",{className:"field-label"},"Alignement"),
           e(UI.SegButtons,{value:b.align||"left",onChange:function(v){updBloc(i,"align",v);},
-            options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
+            options:[{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}]}),
           e("div",{style:{height:8}}),
           e("label",{className:"field-label"},"Couleur du texte"),
           e(UI.SegButtons,{value:b.textMode||"uni",onChange:function(v){updBloc(i,"textMode",v);},
@@ -718,7 +718,14 @@ function App(){
     setActiveIdx(slides.length);
     setActiveTab("contenu"); setView("single"); setAddMenu(false);
   }
+  /* La confirmation est posée DANS delSlide, pas sur chaque bouton : la
+     suppression est appelée depuis la liste de l'onglet Vignettes et depuis
+     la grille, et une garde par bouton finirait par diverger. */
   function delSlide(i){
+    var sl=slides[i];
+    var nom=sl?(SPGCards.get(sl.type).label):"cette vignette";
+    if(!confirm("Supprimer la vignette "+(i+1)+" « "+nom+" » ?\n\nCette action est annulable avec Ctrl+Z."))
+      return;
     setSt(function(p){var a=p.slides.slice();a.splice(i,1);
       return Object.assign({},p,{slides:a});});
     setActiveIdx(function(c){return Math.max(0,Math.min(c,slides.length-2));});
@@ -914,7 +921,10 @@ function App(){
               var s=THUMB_W/d.w, th=Math.round(d.h*s);
               return e("div",{key:sl.id,className:"car-thumb"+(activeIdx===i?" on":""),
                   style:{width:THUMB_W,height:th},
-                  onClick:function(){setActiveIdx(i);setActiveTab("contenu");}},
+                  onClick:function(){setActiveIdx(i);setActiveTab("contenu");},
+                  /* Double-clic : bascule en vue Vignette sur celle qu'on vient
+                     d'ouvrir — le simple clic garde son rôle de sélection. */
+                  onDoubleClick:function(){setActiveIdx(i);setView("single");}},
                 e("div",{style:{width:THUMB_W,height:th,overflow:"hidden",position:"relative"}},
                   e("div",{style:{width:d.w,height:d.h,transform:"scale("+s+")",
                       transformOrigin:"top left",position:"absolute",top:0,left:0,

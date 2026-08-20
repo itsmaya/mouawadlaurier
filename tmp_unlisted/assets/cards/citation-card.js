@@ -79,8 +79,18 @@ var GID=0;
 function Guil(p){
   var e=React.createElement;
   if(p.qstyle!=="chevron"){
-    return e("img",{src:p.close?"../../templates/citation/ferme.png":"../../templates/citation/ouvert.png",
-      alt:"",style:{height:p.h+"px",width:"auto",display:"block"}});
+    /* GUILLEMETS COURBES — le PNG ne sert plus que de forme.
+       Ces fichiers contiennent le dégradé BLEU cuit dans les pixels (deux
+       couleurs seulement : #0098E3 et #4632FF) : affichés tels quels, ils
+       restaient bleus quel que soit le dégradé choisi. On les utilise donc
+       comme masque alpha sur un aplat dégradé — le dessin est strictement le
+       même, seule la couleur suit la charte. */
+    var url=p.close?"../../templates/citation/ferme.png":"../../templates/citation/ouvert.png";
+    var masque="url("+url+") no-repeat center / contain";
+    var degrade="linear-gradient(90deg,"+(p.gradFrom||"#0098E3")+" 0%,"+(p.gradTo||"#4632FF")+" 100%)";
+    return e("div",{style:{height:p.h+"px",width:(p.h*1.28)+"px",display:"block",
+      backgroundImage:degrade,
+      mask:masque,WebkitMask:masque}});
   }
   var id="gc"+(++GID);
   var VW=108,VH=74,SW=19;
@@ -407,6 +417,10 @@ function CitationCard(p){
         padding:L.QUOTE_PAD+"px",paddingBottom:(L.QUOTE_PAD+6)+"px",boxSizing:"border-box"}},
       e(QuoteBody,{text:st.quote,fs:cfs,lh:L.QUOTE_LH,
         qstyle:st.quoteStyle,guilH:L.GUIL_H,width:QW-L.QUOTE_PAD*2,
+        /* Texte sur bloc blanc : couleur du dégradé actif (charte p12).
+           Auparavant QuoteBody retombait sur un #2B5AF1 codé en dur, jamais
+           transmis par le générateur : la citation restait bleue. */
+        textColor:st.textColor||G.to,
         gradFrom:G.from,gradTo:G.to}),
       st.showLogo&&st.logoImg?e("div",{style:{marginTop:14,textAlign:"right"}},
         e("img",{src:st.logoImg,alt:"",style:{height:L.LOGO_H+"px",objectFit:"contain"}})):null):null,
@@ -434,6 +448,7 @@ function CitationCard(p){
           e("div",{style:{flex:1,minWidth:0}},
             e(QuoteBody,{text:st.quote,fs:cfs,lh:L.QUOTE_LH,
               qstyle:st.quoteStyle,guilH:L.GUIL_H,fw:400,
+              textColor:st.textColor||G.to,
               width:st.avatarSrc?(t03W-T03_PAD_FULL*2-AVTR_D-T03_GAP):(t03W-T03_PAD_FULL*2),
               gradFrom:G.from,gradTo:G.to}),
             st.source?e("div",{style:{marginTop:Math.round(14*CITE_S),fontStyle:"italic",

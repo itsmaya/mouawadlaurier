@@ -58,7 +58,19 @@ function blocLayout(bloc,L,fmt){
   var bwRaw=bloc["w_"+fmt]||0;
   var BW=bwRaw?Math.round(CARD_W*bwRaw/100):autoW;
   BW=Math.max(Math.round(CARD_W*0.30),Math.min(CARD_W-L.MARGIN*2,BW));
-  return {fs:bfs,w:BW,align:(bloc.align==="right")?"right":"left"};
+  /* Trois alignements possibles : gauche (défaut), centre, droite. */
+  var al=(bloc.align==="right"||bloc.align==="center")?bloc.align:"left";
+  return {fs:bfs,w:BW,align:al};
+}
+
+/* Position du bloc dans la pile verticale. Le texte À L'INTÉRIEUR du bloc est
+   aligné par RichBody (textAlign) ; ici on place le bloc lui-même, qui est
+   souvent plus étroit que la carte. Les deux doivent suivre le même réglage,
+   sinon un bloc centré contiendrait du texte fer à gauche. */
+function placementBloc(align){
+  if(align==="right")  return "flex-end";
+  if(align==="center") return "center";
+  return "flex-start";
 }
 
 /* ── Géométrie dérivée (partagée carte ↔ panneau) ────────────────────────── */
@@ -156,13 +168,13 @@ function LatestNewsCard(p){
     if(bloc.type==="texte"&&onGrad&&bloc.inverted) tMode="uni";
     if(bloc.type==="texte"){
       var colorTexte=(onWhite&&!bloc.inverted)?COLOR_GREY:TE_WHITE;
-      return e("div",{key:bloc.id,style:{width:bl.w,alignSelf:(bloc.align==="right")?"flex-end":"flex-start"}},
+      return e("div",{key:bloc.id,style:{width:bl.w,alignSelf:placementBloc(bloc.align)}},
         e(RichBody,{text:bloc.text,fs:bl.fs,lh:L.TEXT_LH,grad:GRAD_H,
           color:colorTexte,align:bl.align,live:bloc.liveMode,
           textMode:tMode,inverted:bloc.inverted,gradFrom:G.from,gradTo:G.to}));
     }
     return e("div",{key:bloc.id,style:{
-        width:bl.w,alignSelf:(bloc.align==="right")?"flex-end":"flex-start",
+        width:bl.w,alignSelf:placementBloc(bloc.align),
         background:bloc.inverted?"none":TE_WHITE,
         backgroundImage:bloc.inverted?GRAD_H:"none",
         borderRadius:L.PAVE_RADIUS,padding:L.PAVE_PAD,boxSizing:"border-box"}},

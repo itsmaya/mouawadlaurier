@@ -16,8 +16,10 @@
     { label: "Citation Post", href: "generators/citation/index.html"      },
     { label: "Latest News",   href: "generators/latest-news/index.html"   },
     { label: "Split Screen",  href: "generators/split-screen/index.html"  },
-    { label: "Carrousel",     href: "generators/carrousel/index.html"     },
     { label: "Block Layouts", href: "generators/block-layouts/index.html", isNew: true },
+    /* Carrousel en dernier : il se nourrit des autres générateurs, sa place
+       est au bout de la liste, pas au milieu. */
+    { label: "Carrousel",     href: "generators/carrousel/index.html"     },
   ];
 
   /* Répertoire de ce script (assets/) */
@@ -138,11 +140,20 @@
     burger.innerHTML = "<span></span><span></span><span></span>";
     header.appendChild(burger);
 
+    /* Logo cliquable : retour à l'accueil. Enveloppé dans un <a> plutôt que
+       piloté par un onClick, pour garder le comportement natif du navigateur
+       (clic milieu, ouverture dans un nouvel onglet, aperçu du lien). */
+    var logoLien = document.createElement("a");
+    logoLien.href = pageUrl("index.html");
+    logoLien.title = "Retour à l'accueil";
+    logoLien.style.display = "block";
+    logoLien.style.flexShrink = "0";
     var logo = document.createElement("img");
     logo.className = "page-header-logo";
     logo.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
-    logo.alt = "Fisheye";
-    header.appendChild(logo);
+    logo.alt = "Fisheye — accueil";
+    logoLien.appendChild(logo);
+    header.appendChild(logoLien);
 
     var sep = document.createElement("div");
     sep.className = "page-header-sep";
@@ -208,10 +219,15 @@
 
     var dHead = document.createElement("div");
     dHead.className = "mob-drawer-head";
+    var dLogoLien = document.createElement("a");
+    dLogoLien.href = pageUrl("index.html");
+    dLogoLien.title = "Retour à l'accueil";
+    dLogoLien.style.display = "block";
     var dLogo = document.createElement("img");
     dLogo.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
-    dLogo.alt = "Fisheye";
-    dHead.appendChild(dLogo);
+    dLogo.alt = "Fisheye — accueil";
+    dLogoLien.appendChild(dLogo);
+    dHead.appendChild(dLogoLien);
     var dClose = document.createElement("button");
     dClose.className = "close";
     dClose.innerHTML = "×";
