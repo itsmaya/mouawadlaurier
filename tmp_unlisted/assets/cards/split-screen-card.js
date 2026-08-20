@@ -29,7 +29,16 @@ function computeRects(L2,CH,layout,imgRatio){
   var badgeClear=L2.BADGE_H+gap;
   var img,txt;
   if(layout==="bottom"){
-    var ih=Math.round(ch*imgRatio);var imgTop=bottom-ih;
+    /* L'IMAGE DESCEND JUSQU'À LA MARGE, PAS JUSQU'À LA RÉSERVE DU CTA.
+       « bottom » (100 px en 1:1 et 4:5, 230 px en story) est la zone de
+       sécurité du bouton → / ● : elle s'applique au TEXTE, pas au cadre
+       image. La charte impose une marge de 50 px tout autour du template 01
+       (Split Screen, p24/p45). L'image s'arrêtait à 100 px du bord et
+       flottait donc au-dessus du bouton, alors que ses côtés étaient bien à
+       50 px. Le CTA se superpose à l'image, c'est le comportement prévu.
+       La hauteur reste calculée sur la même zone de contenu : le curseur
+       « Hauteur photo » garde exactement la même signification. */
+    var ih=Math.round(ch*imgRatio);var imgTop=(CH-m)-ih;
     img={x:left,y:imgTop,w:cw,h:ih};
     txt={x:left,y:top+badgeClear,w:cw,h:imgTop-gap-(top+badgeClear)};
   } else if(layout==="top"){
@@ -104,7 +113,16 @@ function SplitScreenCard(p){
   var badgeOnPhoto=(st.layout==="top"||st.layout==="left");
   var badgeNudge=badgeOnPhoto?Math.round(0.035*CARD_H):0;
   var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
-  var arrowOnPhoto=(st.layout==="bottom"||st.layout==="right");
+  /* CÔTÉ DU REPÈRE DE CARROUSEL — charte p33 : « the arrow is flush with the
+     same side as the blocks », c'est-à-dire du côté du texte.
+     En disposition « right » la photo est à droite et le texte à gauche : la
+     flèche passe donc à gauche. Ailleurs elle reste à droite, qui est déjà le
+     côté du texte (disposition « left ») ou un coin libre.
+     Conséquence : en « right » la flèche n'est plus sur la photo, donc plus
+     de décalage de 3,5 % ni de rognage de l'image pour lui faire de la place
+     (voir la règle supprimée plus bas). */
+  var arrowSide=(st.layout==="right")?"left":"right";
+  var arrowOnPhoto=(st.layout==="bottom");
   var arrowNudge=arrowOnPhoto?Math.round(0.035*CARD_H):0;
 
   /* Règles avancées de disposition (évitent le chevauchement cartouche/zones) */
@@ -115,13 +133,38 @@ function SplitScreenCard(p){
       var br=(am+badgeNudge)+bi+bg+2*bp+_badgeTextW;
       if(R.txt.x-br<20){var nty=bt+badgeNudge+bh+20;R.txt.h=Math.max(0,(R.img.y+R.img.h)-nty);R.txt.y=nty;}
     }
-    if(st.layout==="bottom"&&st.navMark!=="none"){
-      var res=ah+am+arrowNudge+10;R.img.y=Math.max(R.txt.y+40,R.img.y-res);
+    /* NE PLUS REMONTER L'IMAGE POUR LIBÉRER LA PLACE DE LA FLÈCHE.
+       Cette règle translatait le cadre vers le haut de la hauteur du CTA
+       (169 px en 1:1) SANS réduire sa hauteur : l'image ne touchait donc
+       jamais le bas, quelle que soit la marge calculée par computeRects.
+       C'est la vraie cause du « l'image n'est pas alignée en bas, juste
+       au-dessus du bouton » — corriger computeRects seul ne suffisait pas.
+       Le code prévoit déjà la flèche PAR-DESSUS la photo en disposition
+       bottom (voir arrowOnPhoto plus haut, qui la décale de 3,5 %) : les
+       deux règles se contredisaient. On garde arrowOnPhoto.               */
+    /* LE TEXTE S'ARRÊTE JUSTE AU-DESSUS DU BOUTON SUIVANT.
+       La flèche → / le point ● sont posés en bas à DROITE, à MARGIN du bord.
+       Ils occupent donc jusqu'à MARGIN + ARROW_H = 121 px en 1:1 et 4:5,
+       alors que la zone de texte descendait jusqu'à BOTTOM = 100 px : les
+       deux se chevauchaient de 21 px. On réserve MARGIN + ARROW_H + 20 px
+       de respiration, et on garde la plus contraignante des deux limites
+       (en story, BOTTOM = 230 px reste plus bas, donc rien ne change).
+       Concerne les dispositions où le texte passe sous la flèche :
+        - « top »  : le texte occupe toute la largeur en bas ;
+        - « left »  : le texte est à droite, donc pile sous la flèche ;
+        - « right » : le texte est à gauche, et la flèche l'y a rejoint (p33).
+       En « bottom », la flèche est sur la photo (arrowOnPhoto) et le texte
+       est au-dessus : rien à réserver.                                      */
+    if((st.layout==="top"||st.layout==="left"||st.layout==="right")&&st.navMark!=="none"){
+      var basAutorise=CARD_H-Math.max(L.BOTTOM,am+ah+20);
+      if(R.txt.y+R.txt.h>basAutorise) R.txt.h=Math.max(0,basAutorise-R.txt.y);
     }
     if(st.layout==="right"){
       var brR=am+bi+bg+2*bp+_badgeTextW;
       if(R.img.x-brR<20){var niy=bt+bh+20;R.img.h=Math.max(0,R.img.h-(niy-R.img.y));R.img.y=niy;}
-      if(st.navMark!=="none"){var resR=ah+am+arrowNudge+10;R.img.h=Math.max(0,R.img.h-resR);}
+      /* Plus de rognage pour la flèche : elle est désormais du côté du texte
+         (à gauche), donc elle ne recouvre plus la photo. L'image retrouve
+         toute sa hauteur, comme en disposition « left ». */
     }
   })();
 
@@ -139,8 +182,31 @@ function SplitScreenCard(p){
 
     onML?e("div",{style:{position:"absolute",left:L.ML,top:L.ML,right:L.ML,bottom:L.ML,backgroundColor:"#FFFFFF"}}):null,
 
+    /* CADRE IMAGE — le découpage arrondi doit résister à la composition GPU.
+       « overflow:hidden + border-radius » seul n'est PAS fiable : dès qu'un
+       ancêtre est promu en couche composite (la vignette du carrousel se
+       soulève au survol avec un transform, et la carte est déjà dans un
+       transform:scale), le navigateur peut peindre l'enfant sans appliquer
+       l'arrondi du parent — les coins redeviennent carrés, et le restent une
+       fois la couche promue. C'est le symptôme « au survol elle passe
+       d'arrondie à carrée puis reste carrée ».
+       contain:paint garantit explicitement le découpage sur la boîte, coins
+       arrondis compris, quel que soit le statut de composition ; isolation
+       crée le contexte d'empilement qui empêche l'enfant d'en sortir.
+       Aucun effet sur la mise en page ni sur les mesures de DragImage.     */
     e("div",{"data-layer":"bg",style:{position:"absolute",left:R.img.x,top:R.img.y,
-        width:R.img.w,height:R.img.h,borderRadius:L.IMG_RADIUS,overflow:"hidden",backgroundColor:"#E4E4E4"}},
+        width:R.img.w,height:R.img.h,borderRadius:L.IMG_RADIUS,overflow:"hidden",
+        contain:"paint",isolation:"isolate",
+        /* clip-path EN PLUS du border-radius : c'est la seule forme de
+           découpage qui s'applique à la peinture elle-même, sans dépendre du
+           statut de composition de l'élément ni de ses ancêtres. Là où
+           « overflow:hidden + border-radius » peut être ignoré quand une
+           couche GPU est créée (survol de la vignette du carrousel), inset()
+           ne l'est jamais. Les deux sont conservés : le border-radius reste
+           nécessaire pour les moteurs qui ignoreraient clip-path. */
+        clipPath:"inset(0 round "+L.IMG_RADIUS+"px)",
+        WebkitClipPath:"inset(0 round "+L.IMG_RADIUS+"px)",
+        backgroundColor:"#E4E4E4"}},
       e(DragImage,{key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
         blur:st.bgBlur,flipH:st.bgFlipH,
         w:R.img.w*scale,h:R.img.h*scale,scale:scale,
@@ -167,7 +233,11 @@ function SplitScreenCard(p){
       e("div",{style:pillStyle},st.badgeMain,
         st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB}}," – "+st.badgeSub):null)),
 
-    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN+arrowNudge,bottom:L.MARGIN+arrowNudge}},
+    st.navMark!=="none"?e("div",{style:(function(){
+        var pos={position:"absolute",bottom:L.MARGIN+arrowNudge};
+        pos[arrowSide]=L.MARGIN+arrowNudge;
+        return pos;
+      })()},
       e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(18),grad:GRAD_H,from:G.from,to:G.to})):null
   );
 }

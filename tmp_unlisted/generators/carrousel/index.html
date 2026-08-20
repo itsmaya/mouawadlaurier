@@ -24,10 +24,17 @@
 
 .car-grid{display:flex;flex-wrap:wrap;gap:18px;align-content:flex-start;
   justify-content:center;align-items:flex-start;}
-.car-thumb{position:relative;cursor:pointer;border-radius:8px;overflow:hidden;
+/* isolation : contexte d'empilement propre à chaque vignette, pour que les
+   cadres internes de la carte ne puissent pas échapper à leur découpage. */
+.car-thumb{position:relative;cursor:pointer;border-radius:8px;overflow:hidden;isolation:isolate;
   box-shadow:0 2px 10px rgba(0,0,0,.12);border:2px solid transparent;
-  transition:box-shadow .15s,transform .15s,border-color .15s;flex-shrink:0;background:#fff;}
-.car-thumb:hover{box-shadow:0 6px 20px rgba(0,0,0,.18);transform:translateY(-2px);}
+  transition:box-shadow .15s,border-color .15s;flex-shrink:0;background:#fff;}
+/* SURVOL SANS TRANSFORM — un transform, même de 2 px, promeut la vignette en
+   couche composite GPU. C'est ce basculement qui faisait lâcher le découpage
+   arrondi du cadre image de Split Screen (coins carrés au survol, puis
+   définitivement carrés une fois la couche promue). L'effet de relief est
+   reproduit avec une ombre plus marquée, qui elle ne crée aucune couche. */
+.car-thumb:hover{box-shadow:0 8px 22px rgba(0,0,0,.22);border-color:#bfe3f7;}
 .car-thumb.on{border-color:#0098E3;box-shadow:0 4px 18px rgba(0,152,227,.28);}
 .car-thumb-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.58);
   color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:4px 6px;
@@ -249,6 +256,24 @@ var DEFAULT={
    Ils modifient l'état NATIF de la carte : les mêmes clés que le générateur.
    Un champ ajouté à un générateur se pilote donc ici sans traduction. */
 
+/* Marie-louise : encadré blanc ou dégradé autour de la carte. Interdit au
+   format story par la charte — même règle que dans les générateurs. */
+function MarieLouiseSection(p){
+  var st=p.st, story=(p.format==="9x16");
+  return e(UI.Section,{title:"Marie-louise"},
+    e("label",{className:"toggle"+(story?" off":"")},
+      e("input",{type:"checkbox",checked:!!st.hasML,disabled:story,
+        onChange:function(ev){p.onChange("hasML",ev.target.checked);}}),
+      "Encadré marie-louise"),
+    (st.hasML&&!story)
+      ? e("div",{style:{marginTop:8}},
+          e(UI.SegButtons,{value:st.mlStyle||"white",onChange:function(v){p.onChange("mlStyle",v);},
+            options:[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}]}))
+      : null,
+    story?e("div",{className:"hint",style:{marginTop:4}},
+      "La charte n'autorise pas la marie-louise au format story."):null);
+}
+
 function CitationEditor(p){
   var st=p.st; function u(k,v){p.onChange(k,v);}
   return e(React.Fragment,null,
@@ -272,12 +297,19 @@ function CitationEditor(p){
       e("label",{className:"field-label"},"Fonction"),
       e("textarea",{spellCheck:true,rows:2,value:st.title||"",
         onChange:function(ev){u("title",ev.target.value);}})),
-    e(UI.Section,{title:"Fond"},
-      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){u("bgMode",v);},
+    /* IMAGE — on réutilise BgPhotoPanel, le composant du panneau des
+       générateurs : cadrage, zoom, flip, flou, assombrissement, luminosité,
+       saturation, contraste. Le reproduire ici l'aurait fait diverger au
+       premier réglage ajouté ailleurs. */
+    e(UI.Section,{title:"Image"},
+      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){p.onChange("bgMode",v);},
         options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
-      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
-        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
-          onChange:function(v){u("bgImg",v);u("bgCustom",true);}})):null),
+      (st.bgMode!=="grad"&&st.bgMode!=="white")
+        ? e("div",{style:{marginTop:10}},
+            e(BgPhotoPanel,{st:st,set:p.set,setSt:p.setSt,format:p.format,
+              maxZoom:300,bgStatus:{s:"idle"},bgDir:"",
+              showHint:"Déposez une image, puis glissez-la sur la vignette pour la recadrer."}))
+        : null),
     (function(){
       /* Bornes et valeurs courantes lues dans le module de carte, jamais
          recopiées : si la charte change, ce panneau suit sans être touché. */
@@ -311,7 +343,26 @@ function CitationEditor(p){
                 onChange:function(v){u("blockPct_"+st.format,Math.round(v));}}),
               e("button",{className:"mini-btn",style:{marginTop:4},
                 onClick:function(){u("blockPct_"+st.format,0);}},"Largeur native")));
-    })());
+    })(),
+    e(UI.Section,{title:"Mentions"},
+      st.template==="t03"
+        ? e(React.Fragment,null,
+            e("label",{className:"field-label"},"Source — désignation en italique"),
+            e("input",{type:"text",spellCheck:true,value:st.source||"",
+              placeholder:"ex : Rapport Développement Durable 2025",
+              onChange:function(ev){u("source",ev.target.value);}}),
+            e("div",{style:{height:12}}))
+        : null,
+      e("label",{className:"toggle"},
+        e("input",{type:"checkbox",checked:!!st.showLogo,
+          onChange:function(ev){u("showLogo",ev.target.checked);}}),
+        "Logo en bas du bloc"),
+      st.showLogo
+        ? e("div",{style:{marginTop:8}},
+            e(FileDrop,{value:st.logoImg,small:true,placeholder:"Logo PNG transparent",
+              onChange:function(v){u("logoImg",v);}}))
+        : null),
+    e(MarieLouiseSection,p));
 }
 
 function LatestNewsEditor(p){
@@ -345,6 +396,10 @@ function LatestNewsEditor(p){
           e(UI.SegButtons,{value:b.align||"left",onChange:function(v){updBloc(i,"align",v);},
             options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
           e("div",{style:{height:8}}),
+          e("label",{className:"field-label"},"Couleur du texte"),
+          e(UI.SegButtons,{value:b.textMode||"uni",onChange:function(v){updBloc(i,"textMode",v);},
+            options:[{v:"uni",l:"Unie"},{v:"grad",l:"Dégradé"}]}),
+          e("div",{style:{height:8}}),
           (function(){
             var L=SPGCards.get("latestnews").geometry(st,0).L;
             var bfs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,b["fs_"+st.format]||L.TEXT_DEF));
@@ -362,12 +417,47 @@ function LatestNewsEditor(p){
       e("button",{className:"mini-btn",style:{width:"100%",padding:"8px 0"},
         onClick:function(){setBlocs(blocs.concat([SPGCards.get("latestnews").newBloc()]));}},
         "+ Ajouter un bloc")),
-    e(UI.Section,{title:"Fond"},
+    (function(){
+      /* POSITION DU BLOC DE TEXTE — clé b_<format>, en millièmes entre la
+         marge basse minimale et maximale calculées par la carte.
+         Nuance assumée : le générateur alimente geometry() avec la hauteur
+         MESURÉE du pavé ; ici la vignette n'est pas montée dans le panneau,
+         on passe 0. La borne haute est donc un peu plus permissive qu'en
+         page dédiée — la valeur enregistrée, elle, est identique. */
+      var g=SPGCards.get("latestnews").geometry(st,0);
+      var brut=(st["b_"+p.format]!==undefined)?st["b_"+p.format]:-1;
+      return e(UI.Section,{title:"Position du bloc"},
+        e("label",{className:"field-label"},
+          "Marge basse — "+g.bottomTarget+" px"+(brut<0?" (auto)":"")),
+        e("input",{type:"range",min:0,max:1000,step:1,
+          value:brut<0
+            ? Math.round((g.bottomTarget-g.BOTTOM_MIN)/Math.max(1,g.BOTTOM_MAX-g.BOTTOM_MIN)*1000)
+            : brut,
+          onChange:function(ev){p.onChange("b_"+p.format,parseInt(ev.target.value,10));}}),
+        e("button",{className:"mini-btn",style:{marginTop:6},
+          onClick:function(){p.onChange("b_"+p.format,-1);}},"Réinitialiser position"),
+        p.format==="4x5"
+          ? e("div",{style:{marginTop:10}},
+              e("label",{className:"toggle"},
+                e("input",{type:"checkbox",checked:!!st.firstSlide,
+                  onChange:function(ev){p.onChange("firstSlide",ev.target.checked);}}),
+                "Marge 84 px (portrait Instagram)"))
+          : null);
+    })(),
+    /* IMAGE — on réutilise BgPhotoPanel, le composant du panneau des
+       générateurs : cadrage, zoom, flip, flou, assombrissement, luminosité,
+       saturation, contraste. Le reproduire ici l'aurait fait diverger au
+       premier réglage ajouté ailleurs. */
+    e(UI.Section,{title:"Image"},
       e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){p.onChange("bgMode",v);},
         options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
-      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
-        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
-          onChange:function(v){p.onChange("bgImg",v);p.onChange("bgCustom",true);}})):null));
+      (st.bgMode!=="grad"&&st.bgMode!=="white")
+        ? e("div",{style:{marginTop:10}},
+            e(BgPhotoPanel,{st:st,set:p.set,setSt:p.setSt,format:p.format,
+              maxZoom:300,bgStatus:{s:"idle"},bgDir:"",
+              showHint:"Déposez une image, puis glissez-la sur la vignette pour la recadrer."}))
+        : null),
+    e(MarieLouiseSection,p));
 }
 
 function SplitScreenEditor(p){
@@ -377,20 +467,48 @@ function SplitScreenEditor(p){
       e(UI.SegButtons,{value:st.layout||"left",onChange:function(v){u("layout",v);},
         options:[{v:"bottom",l:"Bas"},{v:"top",l:"Haut"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]}),
       e("div",{style:{height:10}}),
-      e(UI.SliderField,{label:"Part de l'image — "+Math.round((st.imgRatio||0.61)*100)+" %",
-        min:30,max:72,step:1,value:Math.round((st.imgRatio||0.61)*100),
+      /* Libellé identique au générateur : selon la disposition, ce curseur
+         règle la LARGEUR (photo à gauche/droite) ou la HAUTEUR (photo en
+         haut/bas) de la photo. L'intitulé « part de l'image » masquait ça. */
+      e(UI.SliderField,{
+        label:((st.layout==="left"||st.layout==="right")?"Largeur":"Hauteur")
+              +" photo — "+Math.round((st.imgRatio||0.55)*100)+" %",
+        min:30,max:72,step:1,value:Math.round((st.imgRatio||0.55)*100),
         onChange:function(v){u("imgRatio",v/100);}})),
+    /* Split Screen : l'image occupe un pavé, pas le fond entier — mêmes
+       réglages, sans le choix Image/Dégradé/Blanc qui n'a pas de sens ici. */
     e(UI.Section,{title:"Image"},
-      e(FileDrop,{value:st.bgImg,placeholder:"Photo",
-        onChange:function(v){u("bgImg",v);u("bgCustom",true);}})),
+      e(BgPhotoPanel,{st:st,set:p.set,setSt:p.setSt,format:p.format,
+        maxZoom:300,bgStatus:{s:"idle"},bgDir:"",
+        showHint:"Déposez une image, puis glissez-la sur la vignette pour la recadrer."})),
     e(UI.Section,{title:"Texte"},
       e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**)")),
       e("textarea",{spellCheck:true,rows:4,value:st.text||"",
         onChange:function(ev){u("text",ev.target.value);}}),
       e("div",{style:{height:10}}),
-      e("label",{className:"field-label"},"Couleur du pavé"),
+      /* textMode pilote la couleur DU TEXTE (voir split-screen-card.js,
+         RichBody reçoit textMode) — l'ancien libellé « Couleur du pavé »
+         désignait la mauvaise chose. */
+      e("label",{className:"field-label"},"Couleur du texte"),
       e(UI.SegButtons,{value:st.textMode||"grad",onChange:function(v){u("textMode",v);},
-        options:[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé"}]}),
+        options:[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}]}),
+      (st.textMode||"grad")==="uni"
+        ? e("div",{style:{display:"flex",gap:8,marginTop:8}},
+            (function(){
+              var G=(window.GRADS||{})[st.grad]||{to:"#E70000"};
+              var GRIS=window.COLOR_GREY||"#374649";
+              return e(React.Fragment,null,
+                e("div",{title:"Couleur du dégradé",
+                  style:{width:48,height:30,borderRadius:6,cursor:"pointer",
+                    backgroundImage:gradCss(st.grad,90),
+                    border:st.textColor!==GRIS?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+                  onClick:function(){u("textColor",G.to);}}),
+                e("div",{title:"Gris foncé",
+                  style:{width:48,height:30,borderRadius:6,cursor:"pointer",background:GRIS,
+                    border:st.textColor===GRIS?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+                  onClick:function(){u("textColor",GRIS);}}));
+            })())
+        : null,
       e("div",{style:{height:12}}),
       (function(){
         var L=SPGCards.get("splitscreen").getLayout(st.format,{hasML:!!st.hasML});
@@ -398,7 +516,8 @@ function SplitScreenEditor(p){
         return e(UI.SliderField,{label:"Taille du texte — "+Math.round(fs)+" px",
           min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
           onChange:function(v){u("fs_"+st.format,Math.round(v));}});
-      })()));
+      })()),
+    e(MarieLouiseSection,p));
 }
 
 function BlockLayoutsEditor(p){
@@ -409,12 +528,19 @@ function BlockLayoutsEditor(p){
   function move(i,d){var a=blocks.slice(),j=i+d;if(j<0||j>=a.length)return;
     var t=a[i];a[i]=a[j];a[j]=t;setBlocks(a);}
   return e(React.Fragment,null,
-    e(UI.Section,{title:"Fond"},
+    /* IMAGE — on réutilise BgPhotoPanel, le composant du panneau des
+       générateurs : cadrage, zoom, flip, flou, assombrissement, luminosité,
+       saturation, contraste. Le reproduire ici l'aurait fait diverger au
+       premier réglage ajouté ailleurs. */
+    e(UI.Section,{title:"Image"},
       e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){p.onChange("bgMode",v);},
         options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
-      st.bgMode!=="grad"&&st.bgMode!=="white"?e("div",{style:{marginTop:10}},
-        e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
-          onChange:function(v){p.onChange("bgImg",v);p.onChange("bgCustom",true);}})):null),
+      (st.bgMode!=="grad"&&st.bgMode!=="white")
+        ? e("div",{style:{marginTop:10}},
+            e(BgPhotoPanel,{st:st,set:p.set,setSt:p.setSt,format:p.format,
+              maxZoom:300,bgStatus:{s:"idle"},bgDir:"",
+              showHint:"Déposez une image, puis glissez-la sur la vignette pour la recadrer."}))
+        : null),
     e(UI.Section,{title:"Blocs"},
       e("div",{className:"hint",style:{marginBottom:8}},"4 blocs maximum (3 en story) — charte 2026."),
       blocks.map(function(b,i){
@@ -562,6 +688,24 @@ function App(){
       a[i]=Object.assign({},a[i],{st:Object.assign({},a[i].st,{[k]:v})});
       return Object.assign({},p,{slides:a});
     });
+  }
+  /* ADAPTATEUR — permet de réutiliser TELS QUELS les composants partagés
+     (BgPhotoPanel notamment) qui attendent le couple set / setSt d'une page
+     autonome. Ici l'état n'est pas celui de la page mais celui d'UNE vignette.
+     Le format est injecté avant l'appel — les composants écrivent des clés
+     suffixées par le format (bgZoom_1x1…) et le liraient sinon à vide — puis
+     retiré : le format reste imposé globalement par le carrousel. */
+  function slideSetSt(i){
+    return function(fn){
+      setSt(function(p){
+        var a=p.slides.slice();
+        var courant=Object.assign({},a[i].st,{format:p.format});
+        var suivant=fn(courant)||courant;
+        suivant=Object.assign({},suivant); delete suivant.format;
+        a[i]=Object.assign({},a[i],{st:suivant});
+        return Object.assign({},p,{slides:a});
+      });
+    };
   }
   function moveSlide(i,d){
     var j=i+d; if(j<0||j>=slides.length) return;
@@ -724,8 +868,11 @@ function App(){
                 disabled:activeIdx>=slides.length-1,
                 onClick:function(){setActiveIdx(activeIdx+1);}},"Suivante →")),
             e(EDITORS[activeSlide.type]||function(){return null;},{
-              st:SPGCards.resolve(activeSlide.type,activeSlide.st,null),
-              onChange:function(k,v){updSlideState(activeIdx,k,v);}}),
+              st:SPGCards.resolve(activeSlide.type,activeSlide.st,{format:st.format}),
+              format:st.format,
+              onChange:function(k,v){updSlideState(activeIdx,k,v);},
+              set:function(k,v){updSlideState(activeIdx,k,v);},
+              setSt:slideSetSt(activeIdx)}),
             e(UI.TabNav,{prev:"Vignettes",onPrev:function(){setActiveTab("vignettes");},
               next:"Export",onNext:function(){setActiveTab("export");}}))
         : e("div",{className:"hint"},
