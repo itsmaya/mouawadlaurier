@@ -157,6 +157,10 @@ function BlockStack2026(p){
   var e=React.createElement;
   var B=CHARTE.components.block;
   var gapY=p.gapY!==undefined?p.gapY:B.marginMin;
+  /* Padding intérieur des blocs — charte : 40 px (p31/p40). Rendu réglable
+     pour resserrer le texte sur les visuels chargés ; la valeur de charte
+     reste la valeur par défaut. */
+  var padBloc=p.pad!==undefined?p.pad:B.pad;
   var gapX=40;   /* écart horizontal entre colonnes */
   /* blocksWhite global — peut être surchargé par b.inverted au niveau du bloc */
   var blocksWhiteGlobal=(p.bgKind!=="white"); /* p35 */
@@ -186,7 +190,7 @@ function BlockStack2026(p){
     var w=forcedW!==undefined?forcedW
       :(b.widthPct?Math.round(p.maxW*b.widthPct/100):undefined);
     var blockStyle={
-      padding:B.pad, borderRadius:B.radius, boxSizing:"border-box",
+      padding:padBloc, borderRadius:B.radius, boxSizing:"border-box",
       maxWidth:"100%",
       width:w!==undefined?w:"auto",
       flexShrink:forcedW!==undefined?0:1,
@@ -195,40 +199,56 @@ function BlockStack2026(p){
       display:"flex",alignItems:"center",gap:B.iconMargin
     };
     var typoGrad=blocksWhite;
+    /* Le texte suit l'alignement de la pile : un bloc calé à droite dont le
+       texte reste fer à gauche donne un bord droit irrégulier. Charte p24 :
+       « flush left or flush right ». */
+    var alignTexte=(p.align==="right")?"right":"left";
     function gradText(txt,size,weight,lh){
       return typoGrad
         ? e("div",{style:{fontFamily:"'Nunito',sans-serif",fontWeight:weight,
             fontSize:size,lineHeight:lh||1.1,
             backgroundImage:grad,WebkitBackgroundClip:"text",
-            backgroundClip:"text",color:"transparent",
+            backgroundClip:"text",color:"transparent",textAlign:alignTexte,
             WebkitTextFillColor:"transparent",whiteSpace:"pre-line"}},txt)
         : e("div",{style:{fontFamily:"'Nunito',sans-serif",fontWeight:weight,
-            fontSize:size,lineHeight:lh||1.1,color:TE_WHITE,
+            fontSize:size,lineHeight:lh||1.1,color:TE_WHITE,textAlign:alignTexte,
             whiteSpace:"pre-line"}},txt);
     }
     var content;
     if(b.kind==="figure"){
-      content=e("div",{style:{display:"flex",flexDirection:"column",gap:8}},
-        b.callout?gradText(b.callout,b.calloutSize||100,800,1.0):null,
-        b.text?e(RichBody,{text:b.text,fs:b.bodySize||48,lh:1.25,
+      /* Position du chiffre : au-dessus du texte (défaut, comme les exemples
+         de la charte p32-34) ou en dessous. On inverse simplement l'ordre de
+         la colonne — aucune autre métrique ne change. */
+      var chiffreEnBas=(b.calloutPos==="bottom");
+      var elChiffre=b.callout?gradText(b.callout,b.calloutSize||100,800,1.0):null;
+      var elTexte=b.text?e(RichBody,{text:b.text,fs:b.bodySize||48,lh:1.25,
           grad:grad,gradFrom:GRADS[gk].from,gradTo:GRADS[gk].to,
           color:typoGrad?GRADS[gk].to:TE_WHITE,
           textMode:typoGrad?"grad":"solid",inverted:!typoGrad,
-          align:"left"}):null);
+          align:alignTexte}):null;
+      content=e("div",{style:{display:"flex",flexDirection:"column",gap:8,
+          alignItems:alignTexte==="right"?"flex-end":"flex-start",
+          width:"100%"}},
+        chiffreEnBas?elTexte:elChiffre,
+        chiffreEnBas?elChiffre:elTexte);
     } else {
       content=e(RichBody,{text:b.text||"",fs:b.bodySize||48,lh:1.25,
         grad:grad,gradFrom:GRADS[gk].from,gradTo:GRADS[gk].to,
         color:typoGrad?GRADS[gk].to:TE_WHITE,
         textMode:typoGrad?"grad":"solid",inverted:!typoGrad,
-        align:"left"});
+        align:alignTexte});
     }
-    return e("div",{key:b.id,style:blockStyle},
-      content,
-      b.iconSrc?e("img",{src:b.iconSrc,alt:"",style:{
+    /* Icône : côté extérieur du bloc — à droite quand le texte est fer à
+       gauche, à gauche quand il est fer à droite. */
+    var icone=b.iconSrc?e("img",{key:"ico",src:b.iconSrc,alt:"",style:{
         width:b.calloutSize?b.calloutSize*0.9:64,
         height:b.calloutSize?b.calloutSize*0.9:64,
         objectFit:"contain",flexShrink:0,
-        filter:blocksWhite?"none":"brightness(0) invert(1)"}}):null);
+        filter:blocksWhite?"none":"brightness(0) invert(1)"}}):null;
+    return e("div",{key:b.id,style:blockStyle},
+      alignTexte==="right"?icone:null,
+      content,
+      alignTexte==="right"?null:icone);
   }
 
   /* ── Rendu d'une rangée ────────────────────────────────────────────── */

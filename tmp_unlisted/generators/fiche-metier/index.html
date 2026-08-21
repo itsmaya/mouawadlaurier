@@ -895,12 +895,17 @@ var TRAIT_ORIGIN_GAP = 20;
       if (!cardRef.current) return;
       setExporting(true);
       var fmt = FORMATS[state.format] || FORMATS.portrait;
+      /* Format de sortie choisi dans l'onglet Export. Fiche Métier a son propre
+         handleExport et ne passe pas par shell.doExport : sans cette lecture,
+         le sélecteur PNG/JPG restait sans effet ici. */
+      var sortie = Shell.formatSortie("fichemetier");
       var fname = SaveManager.exportFilename(
-        smFolder.current, currentName || (state.personName || "fiche-metier"), state.format);
+        smFolder.current, currentName || (state.personName || "fiche-metier"), state.format, sortie);
       Shell.exportNode(cardRef.current, {
         filename: fname,
         outputW: fmt.outputW, outputH: fmt.outputH,
-        stateForServer: state
+        stateForServer: state,
+        sortie: sortie
       })
       .catch(function (err) {
         console.error("Export :", err);
@@ -969,6 +974,9 @@ var TRAIT_ORIGIN_GAP = 20;
 
     /* Shell fiche-metier pour Shell.ui.ExportTab */
     var fmShell = {
+      /* pageKey : lu par Shell.ui.ExportTab pour mémoriser le format de sortie
+         au bon endroit (spg_fmt_fichemetier). */
+      pageKey: "fichemetier",
       st: state,
       save: {
         store: smStore,
@@ -985,7 +993,27 @@ var TRAIT_ORIGIN_GAP = 20;
           setCurrentId(rec.id); setCurrentName(rec.name);
           smFolder.current = rec.folder||"";
           setSmHash(SaveManager.hashState(loaded));
-        }
+        },
+        /* Même contrat que les générateurs bâtis sur Shell.useApp : sans ces
+           deux fonctions, les boutons Nouveau et Dupliquer ne s'affichent pas
+           ici et « Sauvegarder » réécrirait toujours le document ouvert. */
+        onNew: function(){
+          setState(Object.assign({}, DEFAULT_STATE));
+          setCurrentId(null); setCurrentName("");
+          smFolder.current = "";
+          setSmHash(null);
+          try{ localStorage.removeItem("sm_last_id_fichemetier"); }catch(e){}
+        },
+        onDuplicate: function(nom, dossier, cb){
+          smStore.save({name:nom, folder:dossier||"", state:state}, function(rec){
+            if(!rec) return cb && cb(null);
+            setCurrentId(rec.id); setCurrentName(rec.name);
+            smFolder.current = rec.folder||"";
+            setSmHash(SaveManager.hashState(state));
+            cb && cb(rec);
+          });
+        },
+        dirty: dirty
       },
       busy: exporting,
       doExport: function(ref){ handleExport(); }

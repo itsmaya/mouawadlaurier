@@ -275,6 +275,46 @@ Shell.useApp = function(cfg){
   var dirty = currentId!==null && smHash!==null &&
               global.SaveManager.hashState(st)!==smHash;
 
+  /* ═══ PROTECTION DES MODIFICATIONS NON ENREGISTRÉES ═══════════════════════
+     Deux mécanismes complémentaires, réglables par générateur.
+
+     1. ALERTE EN QUITTANT — beforeunload. Le navigateur affiche sa propre
+        confirmation ; le texte n'est pas personnalisable, c'est une décision
+        des navigateurs. On ne l'arme QUE si des modifications sont en cours,
+        sinon on impose un clic inutile à chaque fermeture.
+
+     2. AUTO-SAUVEGARDE — met à jour la version ouverte après une seconde
+        d'inactivité. Volontairement désactivée par défaut : elle écrase la
+        version enregistrée sans confirmation. Elle ne crée jamais de version :
+        sans document ouvert (currentId null), il n'y a rien à mettre à jour.
+        Quand elle est active, l'alerte devient inutile et se désarme. */
+  var autoState=useState(function(){
+    try{ return localStorage.getItem("spg_auto_"+cfg.pageKey)==="1"; }catch(e){ return false; }
+  });
+  var autoSave=autoState[0], setAutoSave=autoState[1];
+  function basculerAutoSave(v){
+    setAutoSave(v);
+    try{ localStorage.setItem("spg_auto_"+cfg.pageKey, v?"1":"0"); }catch(e){}
+  }
+
+  useEffect(function(){
+    if(!dirty||autoSave) return;
+    function avant(ev){ ev.preventDefault(); ev.returnValue=""; return ""; }
+    global.addEventListener("beforeunload",avant);
+    return function(){ global.removeEventListener("beforeunload",avant); };
+  },[dirty,autoSave]);
+
+  useEffect(function(){
+    if(!autoSave||!dirty||!currentId) return;
+    var t=setTimeout(function(){
+      saveStore.current.save({id:currentId,name:currentName,
+        folder:smFolder.current,state:st},function(rec){
+          if(rec) setSmHash(global.SaveManager.hashState(st));
+        });
+    },1000);
+    return function(){ clearTimeout(t); };
+  },[autoSave,dirty,currentId,currentName,st]);
+
   /* ── Fond par défaut ── */
   var s4=useState({s:"loading",p:null}), bgStatus=s4[0], setBgStatus=s4[1];
   useEffect(function(){
@@ -374,13 +414,16 @@ Shell.useApp = function(cfg){
     var stx=opts.stateOverride||st;
     var fk=opts.formatKey||stx.format;
     var cf=global.chFormat(fk);
+    /* Format de sortie choisi dans l'onglet Export, mémorisé par générateur. */
+    var sortie=opts.sortie||Shell.formatSortie(cfg.pageKey);
     var fname=opts.filename||global.SaveManager.exportFilename(
-      smFolder.current,currentName||cfg.pageKey,fk);
+      smFolder.current,currentName||cfg.pageKey,fk,sortie);
     setBusy(true);
     /* Chemin unique : voir Shell.exportNode. */
     return Shell.exportNode(cardRef.current, {
       filename:fname, outputW:cf.outputW, outputH:cf.outputH,
       stateForServer:Object.assign({},stx,{format:fk}),
+      sortie:sortie,
       download:opts.download
     }).then(function(blob){ setBusy(false); return blob; })
       .catch(function(er){
@@ -396,6 +439,8 @@ Shell.useApp = function(cfg){
   return {
     st:st, setSt:setSt, set:set,
     format:st.format,
+    pageKey:cfg.pageKey,
+    autoSave:autoSave, setAutoSave:basculerAutoSave,
     setFormat:function(k){ set("format",k); },
     bgStatus:bgStatus, bgNat:bgNat, maxZoom:maxZoom,
     busy:busy,
@@ -414,6 +459,30 @@ Shell.useApp = function(cfg){
         setCurrentId(rec.id); setCurrentName(rec.name);
         smFolder.current=rec.folder||"";
         setSmHash(global.SaveManager.hashState(st));
+      },
+
+      /* NOUVEAU DOCUMENT — repart de l'état par défaut et DÉTACHE la version
+         ouverte. Sans ça, « Sauvegarder » réécrivait toujours le document
+         courant (l'id était systématiquement réutilisé) : impossible d'en
+         commencer un second sans écraser le premier. */
+      onNew:function(){
+        setSt(Object.assign({},cfg.DEFAULT));
+        setCurrentId(null); setCurrentName("");
+        smFolder.current="";
+        setSmHash(null);
+        try{ localStorage.removeItem("sm_last_id_"+cfg.pageKey); }catch(e){}
+      },
+
+      /* DUPLIQUER — enregistre l'état courant sous un NOUVEL identifiant, en
+         laissant l'original intact. C'est le « enregistrer sous ». */
+      onDuplicate:function(nom, dossier, cb){
+        saveStore.current.save({name:nom,folder:dossier||"",state:st},function(rec){
+          if(!rec) return cb&&cb(null);
+          setCurrentId(rec.id); setCurrentName(rec.name);
+          smFolder.current=rec.folder||"";
+          setSmHash(global.SaveManager.hashState(st));
+          cb&&cb(rec);
+        });
       }
     },
     doExport:doExport,
@@ -551,13 +620,52 @@ function serveurJoignable(){
   return h === "localhost" || h === "127.0.0.1" || h === "" || h === "[::1]";
 }
 
+/* ═══ FORMAT DE SORTIE ════════════════════════════════════════════════════
+   PNG par défaut : sans perte, indispensable pour les aplats de couleur et les
+   bords nets des cartouches et des surlignés. JPG en option : sur une carte
+   dominée par une photo, il divise le poids par cinq à dix sans différence
+   visible. Le choix est mémorisé par générateur.                            */
+Shell.EXPORT_QUALITE_JPG = 0.9;
+
+Shell.formatSortie = function(pageKey){
+  try{ return localStorage.getItem("spg_fmt_"+pageKey)==="jpg" ? "jpg" : "png"; }
+  catch(e){ return "png"; }
+};
+Shell.setFormatSortie = function(pageKey, fmt){
+  try{ localStorage.setItem("spg_fmt_"+pageKey, fmt==="jpg"?"jpg":"png"); }catch(e){}
+};
+
+/* Un JPG n'a pas de transparence : sans fond blanc explicite, les zones
+   transparentes ressortent en noir. On repeint donc le blanc dessous. */
+function versJpeg(blob, qualite){
+  return new Promise(function(res, rej){
+    var url = URL.createObjectURL(blob);
+    var im = new Image();
+    im.onload = function(){
+      try{
+        var cv = document.createElement("canvas");
+        cv.width = im.naturalWidth; cv.height = im.naturalHeight;
+        var cx = cv.getContext("2d");
+        cx.fillStyle = "#FFFFFF"; cx.fillRect(0,0,cv.width,cv.height);
+        cx.drawImage(im,0,0);
+        URL.revokeObjectURL(url);
+        cv.toBlob(function(b){ b?res(b):rej(new Error("conversion JPG impossible")); },
+          "image/jpeg", qualite||Shell.EXPORT_QUALITE_JPG);
+      }catch(err){ URL.revokeObjectURL(url); rej(err); }
+    };
+    im.onerror = function(){ URL.revokeObjectURL(url); rej(new Error("image illisible")); };
+    im.src = url;
+  });
+}
+
 Shell.exportNode = function(node, opts){
   opts = opts || {};
   if(!node) return Promise.reject(new Error("aucun élément à exporter"));
 
   var w = opts.outputW || node.offsetWidth;
   var h = opts.outputH || node.offsetHeight;
-  var fname = opts.filename || "export.png";
+  var enJpg = (opts.sortie === "jpg");
+  var fname = opts.filename || ("export."+(enJpg?"jpg":"png"));
 
   /* ── 1. Serveur Puppeteer, uniquement en local ── */
   var viaServeur;
@@ -625,6 +733,10 @@ Shell.exportNode = function(node, opts){
        la page rouverte, on la retire pour ne pas encombrer localStorage. */
     if(cle){ try{ localStorage.removeItem(cle); }catch(e){} }
     return viaDomToImage();
+  }).then(function(blob){
+    /* La conversion se fait APRÈS la capture, quel que soit le moteur : le
+       serveur Puppeteer comme le repli local produisent un PNG. */
+    return enJpg ? versJpeg(blob, opts.qualite) : blob;
   }).then(function(blob){
     if(opts.download !== false) global.SaveManager.downloadBlob(blob, fname);
     return blob;
@@ -767,6 +879,39 @@ Shell.ui.NavMarkPicker = function(p){
       options:[{v:"arrow",l:"Flèche →"},{v:"dot",l:"Point (fin)"},{v:"none",l:"Aucun"}]}));
 };
 
+/* ─── PictoSelect — choix d'un pictogramme, version compacte ────────────────
+   La grande galerie (PictoGallery.init) est un widget DOM lourd, pensé pour
+   UN cartouche par page. Pour un pictogramme par bloc, il en faudrait autant
+   que de blocs : on utilise donc une liste déroulante avec aperçu.
+   La valeur stockée est la CLÉ du picto, pas son URL — une sauvegarde reste
+   valable même si les fichiers changent de place.
+   Props : value (clé | null), onChange(clé|null), label                     */
+Shell.ui.PictoSelect = function(p){
+  var e=React.createElement, useState=React.useState, useEffect=React.useEffect;
+  var s0=useState([]), keys=s0[0], setKeys=s0[1];
+  useEffect(function(){
+    if(!global.PictoGallery) return;
+    global.PictoGallery.load(function(){ setKeys(global.PictoGallery.getKeys()); });
+  },[]);
+  var src=(p.value&&global.PictoGallery)?global.PictoGallery.getSrc(p.value):null;
+  return e(React.Fragment,null,
+    e("label",{className:"field-label"},p.label||"Pictogramme"),
+    e("div",{style:{display:"flex",alignItems:"center",gap:8}},
+      e("div",{style:{width:34,height:34,borderRadius:7,flexShrink:0,
+          display:"flex",alignItems:"center",justifyContent:"center",
+          background:src?"linear-gradient(135deg,#0098E3,#4632FF)":"#f2f2f2",
+          border:"1px solid #e0e0e0"}},
+        src?e("img",{src:src,alt:"",style:{width:22,height:22,objectFit:"contain"}})
+           :e("span",{style:{fontSize:15,color:"#bbb"}},"\u2014")),
+      e("select",{value:p.value||"",
+        onChange:function(ev){ p.onChange(ev.target.value||null); },
+        style:{flex:1,minWidth:0,fontSize:12,padding:"6px 8px",borderRadius:6,
+          border:"1px solid #d4d4d4",background:"#fff",fontFamily:"inherit",
+          cursor:"pointer"}},
+        e("option",{value:""},"— aucun pictogramme —"),
+        keys.map(function(k){ return e("option",{key:k,value:k},k); }))));
+};
+
 /* ─── BadgeEditor ──────────────────────────────────────────────────────────
    Gère badge main/sub + PictoGallery (init + sync dégradé).
    Props : st, set, setSt, active (booléen : onglet visible ?),
@@ -862,6 +1007,7 @@ Shell.ui.ExportTab = function(p){
   var useState=R.useState, useEffect=R.useEffect, useRef=R.useRef;
   var store=p.shell.save.store;
   var currentId=p.shell.save.currentId;
+  var currentName=p.shell.save.currentName;
   var st=p.shell.st;
 
   var a1=useState([]); var records=a1[0],setRecords=a1[1];
@@ -870,6 +1016,8 @@ Shell.ui.ExportTab = function(p){
   var a4=useState({}); var folderCollapsed=a4[0],setFolderCollapsed=a4[1];
   var a5=useState(null); var renamingId=a5[0],setRenamingId=a5[1];
   var a6=useState(""); var renameVal=a6[0],setRenameVal=a6[1];
+  var a7=useState(Shell.formatSortie(p.shell.pageKey||""));
+  var sortie=a7[0], setSortie=a7[1];
   var impRef=useRef(null);
 
   function refresh(){
@@ -900,14 +1048,37 @@ Shell.ui.ExportTab = function(p){
   var folderNames=Object.keys(folders).sort();
   var allFolderNames=folderNames.slice();
 
+  /* ENREGISTRER — met à jour le document ouvert, ou en crée un si aucun.
+     Le libellé du bouton dit lequel des deux, pour ne pas écraser par erreur. */
   function doSave(){
-    var name=(newName||"").trim()||("Version "+new Date().toLocaleString("fr-FR"));
+    var name=(newName||"").trim()||currentName||("Version "+new Date().toLocaleString("fr-FR"));
     store.save({id:currentId||undefined,name:name,folder:newFolder||"",state:st},
       function(rec){
         if(!rec) return;
         setNewName(""); setNewFolder("");
         p.shell.save.onSaved(rec); refresh();
       });
+  }
+
+  /* NOUVEAU — repart d'une page blanche, sans toucher au document enregistré. */
+  function doNew(){
+    if(!p.shell.save.onNew) return;
+    if(p.shell.save.dirty &&
+       !confirm("Des modifications ne sont pas enregistrées.\n\nCommencer un nouveau document quand même ?"))
+      return;
+    p.shell.save.onNew();
+    setNewName(""); setNewFolder(""); refresh();
+  }
+
+  /* DUPLIQUER — « enregistrer sous » : l'original reste intact. */
+  function doDuplicate(){
+    if(!p.shell.save.onDuplicate) return;
+    var suggestion=(newName||"").trim()||((currentName||"Version")+" (copie)");
+    var nom=prompt("Nom de la nouvelle version :",suggestion);
+    if(!nom||!nom.trim()) return;
+    p.shell.save.onDuplicate(nom.trim(),newFolder||"",function(){
+      setNewName(""); setNewFolder(""); refresh();
+    });
   }
   function doLoad(rec){ (p.onLoad||p.shell.save.onLoad)(rec); }
 
@@ -990,16 +1161,63 @@ Shell.ui.ExportTab = function(p){
     /* Section Export PNG */
     e(Shell.ui.Section,{title:"Export"},
       p.exportHint?e("div",{className:"hint",style:{marginBottom:8}},p.exportHint):null,
+      /* CHOIX DU FORMAT DE FICHIER.
+         PNG : sans perte, à garder pour les aplats et les bords nets.
+         JPG : cinq à dix fois plus léger sur une carte dominée par une photo.
+         Le choix est mémorisé par générateur (localStorage). */
+      p.sansFormat?null:e(React.Fragment,null,
+        e("label",{className:"field-label"},"Format du fichier"),
+        e(Shell.ui.SegButtons,{value:sortie,
+          onChange:function(v){ Shell.setFormatSortie(p.shell.pageKey||"", v); setSortie(v); },
+          options:[{v:"png",l:"PNG"},{v:"jpg",l:"JPG"}]}),
+        e("div",{className:"hint",style:{margin:"6px 0 10px"}},
+          sortie==="jpg"
+            ? "Fichier léger. Déconseillé si la carte est surtout des aplats de couleur."
+            : "Sans perte. Fichier plus lourd, à privilégier pour l'archivage.")),
       e("button",{className:"tab-nav-btn primary",
         style:{width:"100%",justifyContent:"center",padding:"10px",marginTop:4},
-        onClick:function(){p.shell.doExport(p.cardRef);},
+        onClick:function(){p.shell.doExport(p.cardRef,{sortie:sortie});},
         disabled:p.shell.busy},
         p.shell.busy?e("span",{className:"spin"},e(IcoDl)):e(IcoDl),
         "\xa0",
-        p.shell.busy?"Export\u2026":(p.exportLabel||"T\xe9l\xe9charger le PNG"))),
+        p.shell.busy?"Export\u2026"
+          :(p.exportLabel||("T\xe9l\xe9charger le "+sortie.toUpperCase())))),
 
     /* Section Sauvegardes */
     e(Shell.ui.Section,{title:"Sauvegardes"},
+
+      /* Auto-sauvegarde — placée en tête de la section, avant les champs :
+         elle change le comportement de tout ce qui suit. */
+      (p.shell.setAutoSave&&p.shell.save.currentId)
+        ? e("div",{style:{marginBottom:12}},
+            e("label",{className:"toggle"},
+              e("input",{type:"checkbox",checked:!!p.shell.autoSave,
+                onChange:function(ev){ p.shell.setAutoSave(ev.target.checked); }}),
+              "Enregistrement automatique"),
+            e("div",{className:"hint",style:{marginTop:5}},
+              p.shell.autoSave
+                ? "« "+(p.shell.save.currentName||"la version ouverte")+" » est mise à jour à chaque modification."
+                : "Sinon, un avertissement s'affiche si vous quittez la page sans enregistrer."))
+        : null,
+
+      /* Document ouvert + actions Nouveau / Dupliquer.
+         Rendre visible CE QUI SERA ÉCRASÉ est le point essentiel : sans ce
+         bandeau, on ne savait pas qu'on travaillait encore sur la version
+         précédente. */
+      e("div",{style:{marginBottom:10,padding:"8px 10px",borderRadius:7,
+          background:currentId?"#eef5fb":"#fafafa",
+          border:"1px solid "+(currentId?"#cfe6f5":"#eee")}},
+        e("div",{style:{fontSize:11,color:"#666",marginBottom:6}},
+          currentId
+            ? ["Document ouvert : ",e("b",{key:"n",style:{color:"#0098E3"}},currentName||"sans nom")]
+            : "Nouveau document — pas encore enregistré."),
+        e("div",{style:{display:"flex",gap:6}},
+          e("button",{className:"mini-btn",style:{flex:1,fontSize:11},onClick:doNew},
+            "\uff0b Nouveau"),
+          currentId
+            ? e("button",{className:"mini-btn",style:{flex:1,fontSize:11},onClick:doDuplicate},
+                "\u29c9 Dupliquer")
+            : null)),
 
       /* Champs enregistrement */
       e("div",{style:{marginBottom:10}},
@@ -1016,7 +1234,9 @@ Shell.ui.ExportTab = function(p){
         e("button",{className:"mini-btn",onClick:doSave,
           style:{width:"100%",background:"#0098E3",color:"#fff",
             border:"none",padding:"7px 0",fontSize:12,borderRadius:6}},
-          "Sauvegarder")),
+          currentId
+            ? ("Mettre \u00e0 jour \u00ab "+(currentName||"sans nom")+" \u00bb")
+            : "Enregistrer une nouvelle version")),
 
       /* Liste des sauvegardes */
       records.length===0

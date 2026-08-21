@@ -148,7 +148,7 @@
   }
 
   /* Format de nom d'export : DOSSIER_NOM_FORMAT_AAAMMJJ_HHMM */
-  function exportFilename(folder, name, format){
+  function exportFilename(folder, name, format, extension){
     var now = new Date();
     var pad = function(n){ return String(n).padStart(2,"0"); };
     var date = ""+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())
@@ -159,7 +159,7 @@
     parts.push(slug(name)||"export");
     parts.push(format||"1x1");
     parts.push(date);
-    return parts.join("_")+".png";
+    return parts.join("_")+"."+((extension||"png").replace(/^\./,""));
   }
 
   /* ═══ createStore — API CRUD ══════════════════════════════════════════════ */

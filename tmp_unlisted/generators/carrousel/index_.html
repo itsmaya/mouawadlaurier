@@ -394,7 +394,7 @@ function LatestNewsEditor(p){
           e("div",{style:{height:8}}),
           e("label",{className:"field-label"},"Alignement"),
           e(UI.SegButtons,{value:b.align||"left",onChange:function(v){updBloc(i,"align",v);},
-            options:[{v:"left",l:"← Gauche"},{v:"center",l:"↔ Centre"},{v:"right",l:"Droite →"}]}),
+            options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
           e("div",{style:{height:8}}),
           e("label",{className:"field-label"},"Couleur du texte"),
           e(UI.SegButtons,{value:b.textMode||"uni",onChange:function(v){updBloc(i,"textMode",v);},
@@ -561,11 +561,6 @@ function BlockLayoutsEditor(p){
             e("label",{className:"field-label"},"Chiffre"),
             e("input",{type:"text",value:b.callout||"",
               onChange:function(ev){upd(i,"callout",ev.target.value);}}),
-            e("div",{style:{height:8}}),
-            e("label",{className:"field-label"},"Position du chiffre"),
-            e(UI.SegButtons,{value:b.calloutPos||"top",
-              onChange:function(v){upd(i,"calloutPos",v);},
-              options:[{v:"top",l:"↑ Au-dessus"},{v:"bottom",l:"↓ En dessous"}]}),
             e("div",{style:{height:8}})):null,
           e("label",{className:"field-label"},"Texte ",e("span",{className:"hint"},"(**gras**)")),
           e("textarea",{spellCheck:true,rows:2,value:b.text||"",
@@ -574,37 +569,6 @@ function BlockLayoutsEditor(p){
           e("label",{className:"field-label"},"Colonne"),
           e(UI.SegButtons,{value:b.col||"full",onChange:function(v){upd(i,"col",v);},
             options:[{v:"full",l:"Toute"},{v:"left",l:"Gauche"},{v:"right",l:"Droite"}]}),
-          e("div",{style:{height:8}}),
-          /* LARGEUR DU BLOC — même logique que le générateur :
-             rangée à deux colonnes = répartition (réglable des deux côtés,
-             valeur portée par le bloc de gauche) ; bloc seul = largeur simple. */
-          (function(){
-            var estGauche=(b.col==="left"), estDroite=(b.col==="right");
-            var appariee = estGauche
-              ? (i+1<blocks.length && blocks[i+1].col==="right")
-              : (estDroite && i>0 && blocks[i-1].col==="left");
-            if(appariee){
-              var iPorteur=estGauche?i:i-1;
-              var pct=blocks[iPorteur].widthPct||50;
-              return e(React.Fragment,null,
-                e(UI.SliderField,{label:"Répartition — gauche "+pct+" / droite "+(100-pct)+" %",
-                  min:30,max:70,step:5,value:pct,
-                  onChange:function(v){upd(iPorteur,"widthPct",Math.round(v));}}),
-                e("div",{style:{height:8}}));
-            }
-            return e(React.Fragment,null,
-              e(UI.SliderField,{
-                label:"Largeur du bloc — "+(b.widthPct?b.widthPct+" %":"automatique"),
-                min:0,max:100,step:5,value:b.widthPct||0,
-                onChange:function(v){upd(i,"widthPct",Math.round(v));}}),
-              (estGauche||estDroite)
-                ? e("div",{className:"hint",style:{marginBottom:8}},
-                    "Bloc seul sur sa rangée : associez-le à un bloc "+
-                    (estGauche?"« Droite »":"« Gauche »")+" pour obtenir deux colonnes.")
-                : e("div",{style:{height:8}}));
-          })(),
-          e(UI.PictoSelect,{value:b.iconKey||null,label:"Pictogramme du bloc",
-            onChange:function(k){ upd(i,"iconKey",k); upd(i,"iconSrc",null); }}),
           e("div",{style:{height:8}}),
           e("label",{className:"toggle"},
             e("input",{type:"checkbox",checked:!!b.inverted,
@@ -633,22 +597,7 @@ function BlockLayoutsEditor(p){
         e("div",{style:{height:8}}),
         e(UI.SliderField,{label:"Remonter les blocs — "+(st["off_"+st.format]||0)+" px",
           min:0,max:400,step:5,value:st["off_"+st.format]||0,
-          onChange:function(v){p.onChange("off_"+st.format,Math.round(v));}}),
-        e("div",{style:{height:8}}),
-        e(UI.SliderField,{
-          label:"Écart entre les blocs — "+g.gapY+" px"
-                +(g.gapY===g.gapCharte?" (charte)":" · charte "+g.gapCharte),
-          min:10,max:100,step:2,value:g.gapY,
-          onChange:function(v){p.onChange("gap_"+st.format,Math.round(v));}}),
-        e("div",{style:{height:8}}),
-        e(UI.SliderField,{
-          label:"Marge intérieure des blocs — "+g.padBloc+" px"
-                +(g.padBloc===g.padCharte?" (charte)":" · charte "+g.padCharte),
-          min:12,max:70,step:2,value:g.padBloc,
-          onChange:function(v){p.onChange("pad_"+st.format,Math.round(v));}}),
-        e("button",{className:"mini-btn",style:{marginTop:6},
-          onClick:function(){p.onChange("gap_"+st.format,0);p.onChange("pad_"+st.format,0);}},
-          "Revenir aux valeurs de charte"));
+          onChange:function(v){p.onChange("off_"+st.format,Math.round(v));}}));
     })());
 }
 
@@ -769,14 +718,7 @@ function App(){
     setActiveIdx(slides.length);
     setActiveTab("contenu"); setView("single"); setAddMenu(false);
   }
-  /* La confirmation est posée DANS delSlide, pas sur chaque bouton : la
-     suppression est appelée depuis la liste de l'onglet Vignettes et depuis
-     la grille, et une garde par bouton finirait par diverger. */
   function delSlide(i){
-    var sl=slides[i];
-    var nom=sl?(SPGCards.get(sl.type).label):"cette vignette";
-    if(!confirm("Supprimer la vignette "+(i+1)+" « "+nom+" » ?\n\nCette action est annulable avec Ctrl+Z."))
-      return;
     setSt(function(p){var a=p.slides.slice();a.splice(i,1);
       return Object.assign({},p,{slides:a});});
     setActiveIdx(function(c){return Math.max(0,Math.min(c,slides.length-2));});
@@ -792,11 +734,6 @@ function App(){
     }
     if(!slides.length) return Promise.resolve();
     setZipping(true);
-    /* Format de sortie choisi dans l'onglet Export. Le ZIP a son propre chemin
-       de capture (une vignette après l'autre), il doit donc appliquer le choix
-       lui-même : sans ça, le sélecteur PNG/JPG restait sans effet ici. */
-    var sortie=Shell.formatSortie("carrousel");
-    var enJpg=(sortie==="jpg");
     var zip=new JSZip();
     var holder=document.createElement("div");
     holder.style.cssText="position:fixed;left:-9999px;top:0;z-index:-100;pointer-events:none;";
@@ -825,14 +762,9 @@ function App(){
         function next(){root.unmount();holder.removeChild(wrap);capture(i+1);}
         if(!el) return next();
         document.fonts.ready.then(function(){
-          /* dom-to-image sait produire un JPEG directement ; bgcolor blanc,
-             sinon les zones transparentes ressortiraient en noir. */
-          return enJpg
-            ? domtoimage.toJpeg(el,{width:d.w,height:d.h,useCORS:true,
-                quality:Shell.EXPORT_QUALITE_JPG,bgcolor:"#FFFFFF"})
-            : domtoimage.toPng(el,{width:d.w,height:d.h,useCORS:true});
+          return domtoimage.toPng(el,{width:d.w,height:d.h,useCORS:true});
         }).then(function(png){
-          zip.file(String(i+1).padStart(2,"0")+"-"+sl.type+(enJpg?".jpg":".png"),
+          zip.file(String(i+1).padStart(2,"0")+"-"+sl.type+".png",
             png.split(",")[1],{base64:true});
           next();
         }).catch(function(err){console.warn("export vignette "+i,err);next();});
@@ -982,10 +914,7 @@ function App(){
               var s=THUMB_W/d.w, th=Math.round(d.h*s);
               return e("div",{key:sl.id,className:"car-thumb"+(activeIdx===i?" on":""),
                   style:{width:THUMB_W,height:th},
-                  onClick:function(){setActiveIdx(i);setActiveTab("contenu");},
-                  /* Double-clic : bascule en vue Vignette sur celle qu'on vient
-                     d'ouvrir — le simple clic garde son rôle de sélection. */
-                  onDoubleClick:function(){setActiveIdx(i);setView("single");}},
+                  onClick:function(){setActiveIdx(i);setActiveTab("contenu");}},
                 e("div",{style:{width:THUMB_W,height:th,overflow:"hidden",position:"relative"}},
                   e("div",{style:{width:d.w,height:d.h,transform:"scale("+s+")",
                       transformOrigin:"top left",position:"absolute",top:0,left:0,
@@ -1030,13 +959,7 @@ function App(){
                   e("span",{className:"pos"},(activeIdx+1)+" / "+slides.length),
                   e("button",{className:"mini-btn",disabled:activeIdx>=slides.length-1,
                     onClick:function(){setActiveIdx(activeIdx+1);}},"Suivant →")),
-                /* Double-clic sur la vignette agrandie : retour à la grille.
-                   Symétrique du double-clic sur une vignette de la grille, qui
-                   ouvre la vue Vignette. Le simple clic reste libre pour le
-                   déplacement de l'image (glisser-déposer du cadrage). */
                 e("div",{className:"car-stage",
-                    onDoubleClick:function(){setView("grid");},
-                    title:"Double-cliquez pour revenir à la grille",
                     style:{width:Math.round(d.w*s),height:Math.round(d.h*s)}},
                   e("div",{style:{width:d.w,height:d.h,transform:"scale("+s+")",
                       transformOrigin:"top left",position:"absolute",top:0,left:0}},

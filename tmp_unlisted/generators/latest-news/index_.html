@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Latest News — TotalEnergies</title>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
+<script>
+function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
+</script>
+<script>
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js","https://unpkg.com/react@18/umd/react.production.min.js","../../assets/vendor/react.production.min.js"],function(){
+loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
+loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
+</script>
+<script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/charte-2026.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/latest-news-card.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+function boot(){
+
+var e=React.createElement,useState=React.useState,useRef=React.useRef,
+    useEffect=React.useEffect,useLayoutEffect=React.useLayoutEffect;
+var UI=Shell.ui;
+
+/* ═══ FOND PAR DÉFAUT ══════════════════════════════════════════════════════ */
+var BG_DIR="../../templates/latest-news/";
+function bgCandidates(k){
+  var names=["TEMPLATE_LN_"+k,"TEMPLATE_LN_"+k.toUpperCase(),"TEMPLATE_"+k];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[];
+  for(var i=0;i<names.length;i++)
+    for(var j=0;j<exts.length;j++) out.push(BG_DIR+names[i]+exts[j]);
+  return out;
+}
+
+/* ═══ CARTE PARTAGÉE ══════════════════════════════════════════════════════
+   Visuel, mise en page et état par défaut : assets/cards/latest-news-card.js
+   Rendu à l'identique par le Carrousel. Ne rien réimplémenter ici. */
+var CARD=SPGCards.get("latestnews");
+var DEFAULT=CARD.DEFAULT;
+var newBloc=CARD.newBloc;
+var normalizeLoadedState=CARD.normalize;
+
+/* ═══ APP ══════════════════════════════════════════════════════════════════ */
+function App(){
+  var shell=Shell.useApp({pageKey:"latestnews",legacy:"latestnews_saves",normalize:normalizeLoadedState,
+    DEFAULT:DEFAULT,bgCandidates:bgCandidates});
+  var st=shell.st,setSt=shell.setSt,set=shell.set;
+
+  var cardRef=useRef(null);
+  var phState=useState(120),paveH=phState[0],setPaveH=phState[1];
+  var abState=useState(0),activeBloc=abState[0],setActiveBloc=abState[1];
+  var tabState=useState("fond"),activeTab=tabState[0],setActiveTab=tabState[1];
+  var TABS=[{id:"fond",label:"Fond"},{id:"couleurs",label:"Couleurs"},
+            {id:"cartouche",label:"Cartouche"},{id:"blocs",label:"Textes"},{id:"export",label:"Export"}];
+
+  /* setFormat override : interdit hasML sur 9x16 (charte) */
+  function setFormat(k){
+    setSt(function(p){
+      var c=Object.assign({},p);c.format=k;
+      if(k==="9x16") c.hasML=false;
+      return c;
+    });
+  }
+
+  /* Helpers blocs */
+  function setBloc(id,k,v){setSt(function(p){
+    return Object.assign({},p,{blocs:p.blocs.map(function(b){
+      return b.id===id?Object.assign({},b,typeof k==="object"?k:{[k]:v}):b;
+    })});
+  });}
+  function addBloc(){setSt(function(p){
+    var nb=newBloc();var arr=p.blocs.concat(nb);
+    setTimeout(function(){setActiveBloc(arr.length-1);},0);
+    return Object.assign({},p,{blocs:arr});
+  });}
+  function removeBloc(id){setSt(function(p){
+    var arr=p.blocs.filter(function(b){return b.id!==id;});
+    return Object.assign({},p,{blocs:arr});
+  });}
+  function moveBloc(fromIdx,toIdx){setSt(function(p){
+    var arr=p.blocs.slice();var item=arr.splice(fromIdx,1)[0];
+    arr.splice(toIdx,0,item);return Object.assign({},p,{blocs:arr});
+  });}
+
+  /* Hauteur réelle du stack */
+
+  /* ─── Dérivés (panneau uniquement) ── */
+  var G=GRADS[st.grad]||GRADS.bleu;
+  var GRAD_H=gradCss(st.grad,90),GRAD_V=gradCss(st.grad,180);
+  var cf=chFormat(st.format);
+  var previewScale=UI.previewScale(cf);
+
+  /* Géométrie : même source que la carte */
+  var g=CARD.geometry(st,paveH);
+  var L=g.L,CARD_H=g.CARD_H;
+  var onGrad=g.onGrad,onWhite=g.onWhite;
+  var _rawB=g.rawB,bottomTarget=g.bottomTarget;
+  var BOTTOM_MIN=g.BOTTOM_MIN,BOTTOM_MAX=g.BOTTOM_MAX;
+  var _f=st.format;
+
+  /* maxZoom tient compte de la marie-louise (réduction de la zone utile) */
+  var outW=cf.outputW-L.ML*2*L.EXPORT_SCALE;
+  var outH=cf.outputH-L.ML*2*L.EXPORT_SCALE;
+  var maxZoom=300;
+  if(shell.bgNat.w>0&&shell.bgNat.h>0){
+    var ir=shell.bgNat.w/shell.bgNat.h,cr=outW/outH;
+    var coverW=(ir>cr)?outH*ir:outW,coverH=(ir>cr)?outH:outW/ir;
+    maxZoom=Math.max(100,Math.min(300,Math.min(
+      Math.floor(shell.bgNat.w/coverW*100),Math.floor(shell.bgNat.h/coverH*100))));
+  }
+
+  /* ═══ CARTE ════════════════════════════════════════════════════════════
+     Composant partagé : voir assets/cards/latest-news-card.js. */
+  var card=e(CARD.Card,{
+    st:st, cardRef:cardRef, exportTarget:true,
+    scale:previewScale, bgNat:shell.bgNat,
+    onMeasure:function(m){ setPaveH(m.paveH); },
+    onBgMove:function(x,y){ setSt(function(p){var c=Object.assign({},p);
+      c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;}); }
+  });
+
+  /* ═══ PANNEAU ══════════════════════════════════════════════════════════════ */
+  var charteWarn=(st.lowCarbon&&!G.lowCarbonOK)
+    ?"Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations bas carbone : passe sur le dégradé vert."
+    :null;
+
+  var panel=e("div",{className:"panel"},
+
+    e(UI.Section,{title:"Format"},
+      e(UI.FormatPicker,{formats:Object.keys(FORMATS),value:st.format,onChange:setFormat}),
+      e("div",{style:{height:10}}),
+      st.format==="4x5"?e("label",{className:"toggle"},
+        e("input",{type:"checkbox",checked:st.firstSlide,
+          onChange:function(ev){set("firstSlide",ev.target.checked);}}),
+        "Marge 84 px (format portrait Instagram)"):null,
+      L.STORY?e("div",{className:"hint",style:{marginTop:4}},
+        "Marges story : 80 px de bord, cartouche à 180 px du haut."):null),
+
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+
+    /* Onglet Fond */
+    e("div",{className:"panel-tab-content"+(activeTab==="fond"?" on":""),style:{paddingTop:16}},
+      e(UI.SegButtons,{value:st.bgMode,onChange:function(v){set("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Aplat dégradé"},{v:"white",l:"Fond blanc"}]}),
+      st.bgMode==="photo"?e(React.Fragment,null,
+        e("div",{style:{height:10}}),
+        e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
+          bgStatus:shell.bgStatus,bgNat:shell.bgNat,bgDir:BG_DIR,maxZoom:maxZoom}))
+      :e("div",{className:"hint",style:{marginTop:8}},
+        "Sur aplat dégradé, la charte impose un cartouche transparent entouré d'un filet blanc de 2 px. C'est appliqué automatiquement."),
+      e("div",{style:{height:12}}),
+      e("label",{className:"toggle"+(L.STORY?" off":"")},
+        e("input",{type:"checkbox",checked:st.hasML,disabled:L.STORY,
+          onChange:function(ev){set("hasML",ev.target.checked);}}),
+        "Encadré marie-louise"),
+      (st.hasML&&!L.STORY)?e("div",{style:{marginTop:8}},
+        e(UI.SegButtons,{value:st.mlStyle,onChange:function(v){set("mlStyle",v);},
+          options:[{v:"white",l:"Blanche"},{v:"grad",l:"Dégradée"}]})):null,
+      L.STORY?e("div",{className:"hint",style:{marginTop:4}},
+        "La charte n'autorise pas la marie-louise au format story."):null,
+      e(UI.TabNav,{next:"Couleurs",onNext:function(){setActiveTab("couleurs");}})),
+
+    /* Onglet Couleurs */
+    e("div",{className:"panel-tab-content"+(activeTab==="couleurs"?" on":""),style:{paddingTop:16}},
+      e("label",{className:"field-label"},"Dégradé actif"),
+      e(UI.GradPicker,{value:st.grad,onChange:function(v){set("grad",v);}}),
+      e("div",{style:{height:14}}),
+      e("label",{className:"field-label"},"Couleur du texte"),
+      e(UI.SegButtons,{value:st.textMode||"uni",onChange:function(v){set("textMode",v);},
+        options:[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}]}),
+      e("div",{style:{height:10}}),
+      (st.textMode||"uni")==="uni"?e(React.Fragment,null,
+        e("div",{style:{display:"flex",gap:8}},
+          e("div",{title:G.label+" (couleur du dégradé)",
+            style:{background:GRAD_H,backgroundImage:GRAD_H,width:48,height:30,borderRadius:6,
+              cursor:"pointer",border:st.textColor!==COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+            onClick:function(){set("textColor",G.to);}}),
+          e("div",{title:"Gris foncé #374649",
+            style:{background:COLOR_GREY,width:48,height:30,borderRadius:6,
+              cursor:"pointer",border:st.textColor===COLOR_GREY?"2px solid #1a1a1a":"2px solid #e5e5e5"},
+            onClick:function(){set("textColor",COLOR_GREY);}})),
+        e("div",{className:"hint",style:{marginTop:6}},
+          "La couleur suit automatiquement le dégradé sélectionné."))
+      :e("div",{className:"hint"},"Le texte et les surlignages utilisent le même dégradé diagonal."),
+      e("div",{style:{height:10}}),
+      e("label",{className:"toggle"},
+        e("input",{type:"checkbox",checked:st.lowCarbon,
+          onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+        "Sujet énergie bas carbone"),
+      e("div",{className:"hint",style:{marginTop:4}},
+        "Active le contrôle charte : dégradé rouge interdit sur le bas carbone."),
+      charteWarn?e("div",{className:"charte-warn warn"},
+        e("span",null,"⚠"),e("span",null,charteWarn)):null,
+      e(UI.TabNav,{prev:"Fond",onPrev:function(){setActiveTab("fond");},
+        next:"Cartouche",onNext:function(){setActiveTab("cartouche");}})),
+
+    /* Onglet Cartouche */
+    e("div",{className:"panel-tab-content"+(activeTab==="cartouche"?" on":""),style:{paddingTop:16}},
+      e(UI.BadgeEditor,{st:st,set:set,setSt:setSt,active:activeTab==="cartouche",uppercase:true}),
+      e("div",{style:{height:12}}),
+      e(UI.NavMarkPicker,{value:st.navMark,onChange:function(v){set("navMark",v);}}),
+      e("div",{className:"hint",style:{marginTop:6}},
+        "Flèche sur les slides intermédiaires, point sur la dernière."),
+      e(UI.TabNav,{prev:"Couleurs",onPrev:function(){setActiveTab("couleurs");},
+        next:"Textes",onNext:function(){setActiveTab("blocs");}})),
+
+    /* Onglet Blocs */
+    e("div",{className:"panel-tab-content"+(activeTab==="blocs"?" on":""),style:{paddingTop:16}},
+      e("div",{className:"hint",style:{marginBottom:10}},
+        e("b",null,"**mot**")," = surlignage  •  ",e("b",null,"__mot__")," = soulignage"),
+
+      /* Liste des blocs */
+      e("div",{style:{display:"flex",flexDirection:"column",gap:6,marginBottom:10}},
+        (st.blocs||[]).map(function(bloc,idx){
+          var isActive=activeBloc===idx;
+          var total=(st.blocs||[]).length;
+          var label=(bloc.text||"").replace(/\*\*|__/g,"").substring(0,32)||(idx===0?"Bloc 1":"Bloc "+(idx+1));
+          return e("div",{key:bloc.id,
+            style:{border:"1px solid "+(isActive?"#1a1a1a":"#e0e0e0"),
+              borderRadius:8,overflow:"hidden",background:isActive?"#f9f9f7":"#fff"}},
+            e("div",{style:{display:"flex",alignItems:"center",gap:6,
+                padding:"8px 10px",cursor:"pointer"},
+              onClick:function(){setActiveBloc(isActive?-1:idx);}},
+              e("div",{style:{display:"flex",flexDirection:"column",gap:1},
+                  onClick:function(ev){ev.stopPropagation();}},
+                e("button",{disabled:idx===0,
+                  onClick:function(ev){ev.stopPropagation();moveBloc(idx,idx-1);setActiveBloc(idx-1);},
+                  style:{border:"none",background:"none",color:idx===0?"#ddd":"#888",
+                    fontSize:10,cursor:idx===0?"default":"pointer",padding:"0 2px",
+                    lineHeight:1,fontFamily:"inherit",display:"block"}},"▲"),
+                e("button",{disabled:idx===total-1,
+                  onClick:function(ev){ev.stopPropagation();moveBloc(idx,idx+1);setActiveBloc(idx+1);},
+                  style:{border:"none",background:"none",color:idx===total-1?"#ddd":"#888",
+                    fontSize:10,cursor:idx===total-1?"default":"pointer",padding:"0 2px",
+                    lineHeight:1,fontFamily:"inherit",display:"block"}},"▼")),
+              e("span",{style:{flex:1,fontSize:12,fontWeight:700,color:"#333",
+                overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                (bloc.type==="texte"?"✦ ":"▪ ")+label),
+              e("span",{style:{fontSize:10,color:"#aaa",fontWeight:600,
+                textTransform:"uppercase",letterSpacing:".05em"}},
+                bloc.type==="texte"?"Texte":"Encadré"),
+              e("button",{onClick:function(ev){ev.stopPropagation();
+                  if(confirm("Supprimer ce bloc ?"))removeBloc(bloc.id);},
+                style:{marginLeft:4,border:"none",background:"none",color:"#ccc",
+                  fontSize:14,cursor:"pointer",padding:"0 2px",lineHeight:1,fontFamily:"inherit"}},
+                "×")),
+            isActive?e("div",{style:{padding:"10px 10px 14px",borderTop:"1px solid #efefef"}},
+              e("label",{className:"field-label",style:{marginBottom:6}},"Type de bloc"),
+              e(UI.SegButtons,{value:bloc.type,onChange:function(v){
+                var updates={type:v};
+                if(st.bgMode==="photo"){
+                  var stripped=bloc.text.replace(/\*\*/g,"").replace(/__/g,"").trim();
+                  updates.text=(v==="texte")?"**"+stripped+"**":stripped;
+                }
+                setBloc(bloc.id,updates);},
+                options:[{v:"encadre",l:"Encadré"},{v:"texte",l:"Texte surligné"}]}),
+              e("div",{style:{height:8}}),
+              e("label",{className:"toggle",style:{marginBottom:10}},
+                e("input",{type:"checkbox",checked:bloc.inverted,
+                  onChange:function(ev){setBloc(bloc.id,{inverted:ev.target.checked});}}),
+                e("span",{style:{display:"inline-flex",alignItems:"center",gap:6}},
+                  e("span",{style:{display:"inline-block",width:16,height:10,borderRadius:3,
+                    backgroundImage:GRAD_H,flexShrink:0}}),
+                  bloc.type==="encadre"
+                    ?"Inverser — fond dégradé, texte blanc"
+                    :"Inverser — texte dégradé, surlignage blanc")),
+              !bloc.inverted?e(React.Fragment,null,
+                e("label",{className:"field-label",style:{marginBottom:6}},"Couleur du texte"),
+                e(UI.SegButtons,{value:bloc.textMode||"uni",
+                  onChange:function(v){setBloc(bloc.id,"textMode",v);},
+                  options:(onGrad&&bloc.type==="texte")
+                    ?[{v:"uni",l:"Couleur unie"}]
+                    :[{v:"uni",l:"Couleur unie"},{v:"grad",l:"Dégradé diagonal"}]})):null,
+              e("label",{className:"toggle",style:{marginBottom:10}},
+                e("input",{type:"checkbox",checked:bloc.liveMode,
+                  onChange:function(ev){setBloc(bloc.id,"liveMode",ev.target.checked);}}),
+                e("span",{style:{display:"inline-flex",alignItems:"center",gap:6}},
+                  e("span",{style:{width:10,height:10,borderRadius:"50%",background:"#E70000",
+                    display:"inline-block",flexShrink:0}}),
+                  "Mode LIVE — rond rouge")),
+              e("label",{className:"field-label"},"Texte"),
+              e("textarea",{spellCheck:true,rows:4,value:bloc.text,
+                onChange:function(ev){
+                  var val=ev.target.value;
+                  if(st.bgMode==="photo"&&bloc.type==="texte"){
+                    var stripped=val.replace(/\*\*/g,"").replace(/__/g,"");
+                    val="**"+stripped+"**";
+                  }
+                  setBloc(bloc.id,"text",val);
+                },style:{fontSize:13,lineHeight:1.5,marginBottom:4}}),
+              (st.bgMode==="photo"&&bloc.type==="texte")
+                ?e("div",{className:"hint",style:{marginBottom:8,color:"#999",fontSize:11}},
+                  "** Le texte est entièrement surligné sur fond photo."):null,
+              e("label",{className:"field-label"},"Alignement"),
+              e(UI.SegButtons,{value:bloc.align,onChange:function(v){setBloc(bloc.id,"align",v);},
+                options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
+              e("div",{style:{height:8}}),
+              (function(){
+                var bfs=bloc["fs_"+_f]||L.TEXT_DEF;
+                bfs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,bfs));
+                return e(React.Fragment,null,
+                  e("label",{className:"field-label"},
+                    "Taille — "+(bfs/K).toFixed(0)+" pt "+(bloc["fs_"+_f]?"":"(défaut)")),
+                  e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:bfs,
+                    onChange:function(ev){setBloc(bloc.id,"fs_"+_f,parseInt(ev.target.value,10));}}));
+              })(),
+              (function(){
+                var autoW2=CARD_W-L.MARGIN-L.RIGHT_MIN;
+                var bwRaw2=bloc["w_"+_f]||0;
+                var BW2=bwRaw2?Math.round(CARD_W*bwRaw2/100):autoW2;
+                BW2=Math.max(Math.round(CARD_W*0.30),Math.min(CARD_W-L.MARGIN*2,BW2));
+                var pct=Math.round(BW2/CARD_W*100);
+                return e(React.Fragment,null,
+                  e("label",{className:"field-label",style:{marginTop:8}},"Largeur — "+pct+"%"),
+                  e("input",{type:"range",min:30,max:90,step:1,value:pct,
+                    onChange:function(ev){setBloc(bloc.id,"w_"+_f,parseInt(ev.target.value,10));}}));
+              })()
+            ):null
+          );
+        })),
+
+      (st.blocs||[]).length<4
+        ?e("button",{onClick:addBloc,
+          style:{width:"100%",padding:"8px",border:"1px dashed #ccc",borderRadius:8,
+            background:"#fafafa",cursor:"pointer",fontSize:12,fontWeight:700,
+            color:"#888",fontFamily:"inherit"}},
+          "+ Ajouter un bloc")
+        :e("div",{className:"hint",style:{textAlign:"center"}},"Maximum 4 blocs"),
+
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},
+        _rawB<0?("Marge basse — "+bottomTarget+" px (auto)")
+               :("Marge basse — "+bottomTarget+" px")),
+      e("input",{type:"range",min:0,max:1000,step:1,
+        value:_rawB<0?Math.round((bottomTarget-BOTTOM_MIN)/Math.max(1,BOTTOM_MAX-BOTTOM_MIN)*1000):_rawB,
+        onChange:function(ev){set("b_"+st.format,parseInt(ev.target.value,10));}}),
+      e("button",{className:"mini-btn",style:{marginTop:6},
+        onClick:function(){set("b_"+st.format,-1);}},
+        "Réinitialiser position"),
+
+      e(UI.TabNav,{prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
+      e(UI.ExportTab,{shell:shell,cardRef:cardRef,
+        onLoad:function(rec){
+          shell.save.onLoad(Object.assign({},rec,{state:normalizeLoadedState(rec.state)}));
+        }}))
+  );
+
+  return e("div",{className:"app-layout"},panel,
+    e("div",{className:"preview-wrap"},e(UI.Stage,{cf:{outputW:CARD_W,outputH:CARD_H}},card)));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
+</script>
+</body>
+</html>

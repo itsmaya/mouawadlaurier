@@ -62,7 +62,15 @@ function geometry(st){
   var stackLeft  = story ? CHARTE.formats["9x16"].blockLeft : MARGIN;
   var stackRight = story ? cf.rightMin : MARGIN;
   var stackMaxW  = CW - stackLeft - stackRight;
-  var gapY       = story ? CHARTE.formats["9x16"].blockGap : 50;
+  /* Espacement entre blocs et padding intérieur : valeurs de charte par
+     défaut (50 px, 40 px en story ; padding 40), ajustables par format pour
+     resserrer une composition chargée. */
+  var gapCharte  = story ? CHARTE.formats["9x16"].blockGap : 50;
+  var gapY       = st["gap_"+_f]!==undefined && st["gap_"+_f]!==null && st["gap_"+_f]>0
+                   ? st["gap_"+_f] : gapCharte;
+  var padCharte  = CHARTE.components.block.pad;
+  var padBloc    = st["pad_"+_f]!==undefined && st["pad_"+_f]!==null && st["pad_"+_f]>0
+                   ? st["pad_"+_f] : padCharte;
 
   var CTA_=CHARTE.components.cta;
   var ctaBottom = story ? cf.bottom : MARGIN;
@@ -72,6 +80,7 @@ function geometry(st){
   return {cf:cf,CW:CW,CH:CH_,story:story,MARGIN:MARGIN,
     onGrad:onGrad,onWhite:onWhite,bgKind:bgKind,
     calloutSize:calloutSize,bodySize:bodySize,
+    gapCharte:gapCharte,padBloc:padBloc,padCharte:padCharte,
     stackLeft:stackLeft,stackRight:stackRight,stackMaxW:stackMaxW,gapY:gapY,
     ctaBottom:ctaBottom,stackBottom:stackBottom,off:off,
     capLeft:story?80:MARGIN, capTop:cf.captionTop};
@@ -148,10 +157,17 @@ function BlockLayoutsCard(p){
         left:g.stackLeft,right:g.stackRight,bottom:g.stackBottom}},
       e(BlockStack2026,{
         blocks:st.blocks.map(function(b){
-          return Object.assign({},b,{calloutSize:g.calloutSize,bodySize:g.bodySize});
+          /* L'icône est stockée par CLÉ (iconKey) et résolue ici, pour que la
+             sauvegarde ne dépende pas d'une URL. iconSrc reste accepté : les
+             anciennes versions enregistrées continuent de s'afficher. */
+          var src=b.iconSrc
+            ||(b.iconKey&&global.PictoGallery?PictoGallery.getSrc(b.iconKey):null)
+            ||null;
+          return Object.assign({},b,{calloutSize:g.calloutSize,bodySize:g.bodySize,
+            iconSrc:src});
         }),
         gradKey:st.grad,bgKind:bgKind,
-        align:st.blocksAlign,maxW:g.stackMaxW,gapY:g.gapY})),
+        align:st.blocksAlign,maxW:g.stackMaxW,gapY:g.gapY,pad:g.padBloc})),
 
     /* CTA */
     st.navMark!=="none"?e("div",{style:{position:"absolute",

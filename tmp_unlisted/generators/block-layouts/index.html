@@ -145,6 +145,16 @@ function App(){
 
   /* ═══ PANNEAU ═══ */
   function blockEditor(b,i){
+    /* Un bloc « Droite » n'a pas de largeur propre : elle se déduit de celle du
+       bloc « Gauche » qui le précède. Le curseur disparaissait donc dès qu'on
+       ouvrait le bloc de droite — c'est le « il n'apparaît pas à chaque fois ».
+       On l'affiche des deux côtés, en écrivant toujours dans le bloc gauche. */
+    var blocGauche=(b.col==="right"&&i>0&&(st.blocks[i-1].col==="left"))?st.blocks[i-1]:null;
+    function updBloc(id,patch){
+      setSt(function(p){var c=Object.assign({},p);
+        c.blocks=p.blocks.map(function(x){return x.id===id?Object.assign({},x,patch):x;});
+        return c;});
+    }
     function upd(patch){
       setSt(function(p){var c=Object.assign({},p);
         c.blocks=p.blocks.map(function(x){return x.id===b.id?Object.assign({},x,patch):x;});
@@ -175,7 +185,12 @@ function App(){
         e("div",{style:{height:8}}),
         e("label",{className:"field-label"},"Chiffre / callout"),
         e("input",{type:"text",value:b.callout,
-          onChange:function(ev){upd({callout:ev.target.value});}})):null,
+          onChange:function(ev){upd({callout:ev.target.value});}}),
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},"Position du chiffre"),
+        e(UI.SegButtons,{value:b.calloutPos||"top",
+          onChange:function(v){upd({calloutPos:v});},
+          options:[{v:"top",l:"↑ Au-dessus"},{v:"bottom",l:"↓ En dessous"}]})):null,
       e("div",{style:{height:8}}),
       e("label",{className:"field-label"},
         b.kind==="figure"?"Libellé (**mot** = surlignage)":"Texte (**mot** = surlignage)"),
@@ -185,20 +200,48 @@ function App(){
       e("label",{className:"field-label"},"Position"),
       e(UI.SegButtons,{value:b.col||"full",onChange:function(v){upd({col:v});},
         options:[{v:"full",l:"Pleine largeur"},{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
-      /* Slider de répartition sur le bloc gauche uniquement */
-      (b.col==="left")?e(React.Fragment,null,
-        e("div",{style:{height:8}}),
-        e("label",{className:"field-label"},
-          "Répartition — gauche "+(b.widthPct||50)+"  /  droite "+((b.widthPct?100-b.widthPct:50))+" %"),
-        e("input",{type:"range",min:30,max:70,step:5,value:b.widthPct||50,
-          onChange:function(ev){upd({widthPct:parseInt(ev.target.value,10)});}})):null,
-      /* Largeur optionnelle pour bloc pleine-largeur */
-      (b.col==="full")?e(React.Fragment,null,
-        e("div",{style:{height:8}}),
-        e("label",{className:"field-label"},
-          "Largeur "+(b.widthPct?b.widthPct+" %":"automatique")),
-        e("input",{type:"range",min:0,max:100,step:5,value:b.widthPct,
-          onChange:function(ev){upd({widthPct:parseInt(ev.target.value,10)});}})):null,
+      /* LARGEUR DU BLOC — deux cas, un seul endroit.
+         • Rangée à deux colonnes (un « Gauche » suivi d'un « Droite ») :
+           c'est une RÉPARTITION, réglable depuis l'un ou l'autre des deux
+           blocs, la valeur vivant toujours sur celui de gauche.
+         • Bloc seul sur sa rangée (pleine largeur, ou gauche/droite sans
+           partenaire) : c'est une LARGEUR simple, 0 = automatique.
+         Auparavant le curseur n'apparaissait que pour « Pleine largeur » et
+         pour le bloc de gauche : les deux autres cas n'avaient aucun réglage. */
+      (function(){
+        var estGauche=(b.col==="left"), estDroite=(b.col==="right");
+        var appariee = estGauche
+          ? (i+1<st.blocks.length && st.blocks[i+1].col==="right")
+          : (estDroite && i>0 && st.blocks[i-1].col==="left");
+
+        if(appariee){
+          var porteur=estGauche?b:st.blocks[i-1];
+          var pct=porteur.widthPct||50;
+          return e(React.Fragment,null,
+            e("div",{style:{height:8}}),
+            e("label",{className:"field-label"},
+              "Répartition — gauche "+pct+" / droite "+(100-pct)+" %"),
+            e("input",{type:"range",min:30,max:70,step:5,value:pct,
+              onChange:function(ev){updBloc(porteur.id,{widthPct:parseInt(ev.target.value,10)});}}),
+            e("div",{className:"hint",style:{marginTop:4}},
+              "Réglable depuis les deux blocs de la rangée."));
+        }
+
+        return e(React.Fragment,null,
+          e("div",{style:{height:8}}),
+          e("label",{className:"field-label"},
+            "Largeur du bloc — "+(b.widthPct?b.widthPct+" %":"automatique")),
+          e("input",{type:"range",min:0,max:100,step:5,value:b.widthPct||0,
+            onChange:function(ev){upd({widthPct:parseInt(ev.target.value,10)});}}),
+          (estGauche||estDroite)
+            ? e("div",{className:"hint",style:{marginTop:4}},
+                "Bloc seul sur sa rangée : associez-le à un bloc "+
+                (estGauche?"« Droite »":"« Gauche »")+" pour obtenir deux colonnes.")
+            : null);
+      })(),
+      e("div",{style:{height:8}}),
+      e(UI.PictoSelect,{value:b.iconKey||null,label:"Pictogramme du bloc",
+        onChange:function(k){ upd({iconKey:k,iconSrc:null}); }}),
       e("div",{style:{height:8}}),
       e("label",{className:"toggle",style:{marginBottom:6}},
         e("input",{type:"checkbox",checked:!!b.inverted,
@@ -308,6 +351,26 @@ function App(){
       e(UI.SliderField,{label:"Remonter les blocs — "+off+" px",
         min:0,max:Math.max(0,CH_-stackH-ctaBottom-200),value:off,
         onChange:function(v){set("off_"+st.format,v);}}),
+      e("div",{style:{height:8}}),
+      /* DENSITÉ — deux réglages distincts, souvent confondus :
+         l'écart ENTRE les blocs, et la marge du texte À L'INTÉRIEUR du bloc.
+         Les valeurs de charte (50/40 px et 40 px) restent les valeurs par
+         défaut ; le libellé les rappelle pour qu'on sache quand on s'en écarte. */
+      e(UI.SliderField,{
+        label:"Écart entre les blocs — "+g.gapY+" px"
+              +(g.gapY===g.gapCharte?" (charte)":" · charte "+g.gapCharte),
+        min:10,max:100,step:2,value:g.gapY,
+        onChange:function(v){set("gap_"+st.format,Math.round(v));}}),
+      e("div",{style:{height:8}}),
+      e(UI.SliderField,{
+        label:"Marge intérieure des blocs — "+g.padBloc+" px"
+              +(g.padBloc===g.padCharte?" (charte)":" · charte "+g.padCharte),
+        min:12,max:70,step:2,value:g.padBloc,
+        onChange:function(v){set("pad_"+st.format,Math.round(v));}}),
+      e("button",{className:"mini-btn",style:{marginTop:6},
+        onClick:function(){set("gap_"+st.format,0);set("pad_"+st.format,0);}},
+        "Revenir aux valeurs de charte"),
+      e("div",{style:{height:8}}),
       e(UI.Warnings,{items:warnings}),
       e(UI.TabNav,{prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
         next:"Export",onNext:function(){setActiveTab("export");}})),
