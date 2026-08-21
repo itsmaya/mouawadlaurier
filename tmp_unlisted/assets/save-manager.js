@@ -46,7 +46,41 @@
         encore, un .part dans le dossier Téléchargements.
      On libère donc tardivement, et au plus tard quand l'onglet se ferme. */
   var _pendingUrls = [];
+  /* iOS ne télécharge pas : Safari et Chrome iOS ignorent l'attribut download
+     d'un lien pointant vers un blob. Le clic ne produit rien, ou ouvre l'image
+     dans un onglet sans nom de fichier — c'est le « l'export ne fonctionne pas
+     sur téléphone ». Deux replis, dans l'ordre :
+       1. la feuille de partage native (navigator.share avec un fichier), qui
+          permet « Enregistrer dans Photos » — disponible sur iOS 15+ ;
+       2. à défaut, ouverture de l'image dans un nouvel onglet, où un appui long
+          permet de l'enregistrer.
+     Sur les autres plateformes, rien ne change : le lien download fonctionne. */
+  function estIOS(){
+    var ua = navigator.userAgent || "";
+    /* iPadOS 13+ se présente comme un Mac : on le distingue au tactile. */
+    return /iPad|iPhone|iPod/.test(ua)
+      || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  }
+
+  function partageIOS(blob, filename){
+    try{
+      var fichier = new File([blob], filename || "export.png", {type: blob.type || "image/png"});
+      if(navigator.canShare && navigator.canShare({files:[fichier]}) && navigator.share){
+        navigator.share({files:[fichier]}).catch(function(){ /* annulé : rien à faire */ });
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+
   function downloadBlob(blob, filename){
+    if(estIOS()){
+      if(partageIOS(blob, filename)) return null;
+      var urlIOS = URL.createObjectURL(blob);
+      window.open(urlIOS, "_blank");
+      setTimeout(function(){ URL.revokeObjectURL(urlIOS); }, 120000);
+      return urlIOS;
+    }
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;

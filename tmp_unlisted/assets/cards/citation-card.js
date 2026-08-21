@@ -239,7 +239,10 @@ function geometry(st,quoteH){
     autoPct:autoPct,curPct:curPct,QW:QW,dW:dW,
     TOP_MIN:TOP_MIN,TOP_MAX:TOP_MAX,targetTop:targetTop,dY:dY,
     blockX:blockX,personX:personX,rawY:_rawY,
-    onGrad:(st.bgMode==="grad"),onWhite:(st.bgMode==="white"),onML:!!st.hasML};
+    /* Marie-louise interdite au format story (charte p24/28, « inset frame :
+       jamais en story ») — Citation l'autorisait, contrairement aux autres. */
+    onGrad:(st.bgMode==="grad"),onWhite:(st.bgMode==="white"),
+    onML:(!!st.hasML && st.format!=="9x16")};
 }
 
 /* ── Pilule personne : adaptation de fonte (mesure canvas) ───────────────── */
@@ -349,23 +352,43 @@ function CitationCard(p){
   var t03Shadow=st.shadowT03!==false?"0 "+Math.round(10*CITE_S)+"px "+Math.round(5*CITE_S)+"px rgba(0,0,0,0.10)":"none";
   var t03GroupY=Math.max(L.BADGE_TOP+L.BADGE_H+Math.round(20*CITE_S),Math.round(CARD_H*0.22));
 
+  /* Largeur du cadre marie-louise et rayon de l'image insérée (charte : 20 px
+     sur une carte de 1080, mise à l'échelle du rendu). */
+  var ML_INSET=Math.round(CARD_W*0.046);
+  var ML_RADIUS_CITE=Math.round(20*(CARD_W/1080));
+
   var rootAttrs={style:{
     width:CARD_W,minHeight:CARD_H,position:"relative",
     fontFamily:"'Nunito',sans-serif",overflow:"hidden",
+    /* Avec marie-louise, le fond de la carte EST le cadre : blanc ou dégradé.
+       Sans elle, fond sombre de repli derrière la photo. */
     backgroundImage:onML&&st.mlStyle==="grad"?GRAD_V:"none",
-    backgroundColor:onML&&st.mlStyle==="grad"?"transparent":"#12203c"}};
+    backgroundColor:onML?(st.mlStyle==="grad"?"transparent":"#FFFFFF"):"#12203c"}};
   if(p.cardRef) rootAttrs.ref=p.cardRef;
   if(p.exportTarget){ rootAttrs["data-export-card"]="1"; rootAttrs["data-ready"]="1"; }
   if(p.cardId) rootAttrs.id=p.cardId;
 
   return e("div",rootAttrs,
 
-    /* Fond */
+    /* FOND — et marie-louise.
+       La marie-louise est un CADRE : le fond de carte porte sa couleur et
+       l'image est insérée à l'intérieur, avec le rayon de 20 px de la charte.
+       L'ancienne version faisait l'inverse — elle posait un rectangle blanc
+       PAR-DESSUS la photo, qui ne restait donc visible qu'en mince liseré sur
+       le pourtour. C'est le « marie-louise marche pas » : elle recouvrait
+       l'image au lieu de l'encadrer. */
     (onGrad||onWhite)
-      ?e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,
+      ?e("div",{"data-layer":"bg",style:Object.assign({position:"absolute"},
+          onML?{left:ML_INSET,top:ML_INSET,right:ML_INSET,bottom:ML_INSET,
+                borderRadius:ML_RADIUS_CITE}:{inset:0},{
           backgroundImage:onGrad?GRAD_V:"none",
-          backgroundColor:onWhite?"#FFFFFF":"transparent"}})
-      :e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,backgroundColor:"#12203c"}},
+          backgroundColor:onWhite?"#FFFFFF":"transparent"})})
+      :e("div",{"data-layer":"bg",style:Object.assign({position:"absolute",
+          backgroundColor:"#12203c",overflow:"hidden"},
+          onML?{left:ML_INSET,top:ML_INSET,right:ML_INSET,bottom:ML_INSET,
+                borderRadius:ML_RADIUS_CITE,
+                clipPath:"inset(0 round "+ML_RADIUS_CITE+"px)",
+                WebkitClipPath:"inset(0 round "+ML_RADIUS_CITE+"px)"}:{inset:0}),},
           e(DragImage,{key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
             flipH:st.bgFlipH,w:CARD_W*scale,h:CARD_H*scale,scale:scale,
             natW:bgNat.w,natH:bgNat.h,
@@ -374,11 +397,9 @@ function CitationCard(p){
         ),
     st.bgDark>0&&!onGrad&&!onWhite?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null,
 
-    /* Marie-louise */
-    onML?e("div",{style:{position:"absolute",
-      left:Math.round(CARD_W*0.046),top:Math.round(CARD_W*0.046),
-      right:Math.round(CARD_W*0.046),bottom:Math.round(CARD_W*0.046),
-      backgroundColor:st.mlStyle==="grad"?"transparent":"#FFFFFF"}}):null,
+    /* (Le rectangle blanc qui se posait ici par-dessus la photo a été
+       supprimé : le cadre est désormais rendu par le fond de carte, et la
+       photo insérée dedans — voir le calque « bg » ci-dessus.) */
 
     /* Cartouche légende */
     e("div",{style:{position:"absolute",left:L.BADGE_X,top:L.BADGE_TOP,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},

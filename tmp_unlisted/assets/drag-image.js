@@ -15,7 +15,8 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 function DragImage(props){
   var e=React.createElement,useRef=React.useRef,useState=React.useState,
-      useEffect=React.useEffect;
+      useEffect=React.useEffect,
+      useLayoutEffect=React.useLayoutEffect;
   var dragRef=useRef(null);
   var dragging=useRef(false);
   var last=useRef({x:0,y:0});
@@ -27,7 +28,26 @@ function DragImage(props){
 
   function clamp(v,mn,mx){ return Math.max(mn,Math.min(mx,v)); }
 
+  /* TAILLE DU CONTENEUR — mesurée APRÈS la mise en page, pas pendant le rendu.
+     Bug corrigé : on lisait dragRef.current.offsetWidth/Height directement dans
+     le corps du composant. Au rendu qui suit un changement de format, le DOM
+     porte encore l'ANCIENNE taille — React n'a pas encore appliqué la nouvelle
+     — et l'image était donc cadrée pour le format précédent. Sans autre raison
+     de re-rendre, elle y restait : d'où « il faut rafraîchir la page ».
+     Citation y échappait par hasard, son bloc de citation provoquant un second
+     rendu en mesurant le texte.
+     On mesure donc dans useLayoutEffect (après mise en page, avant peinture) et
+     on ne déclenche un nouveau rendu que si la taille a réellement changé. */
+  var tailleState=useState({w:0,h:0});
+  var taille=tailleState[0], setTaille=tailleState[1];
+  useLayoutEffect(function(){
+    var el=dragRef.current; if(!el) return;
+    var w=el.offsetWidth, h=el.offsetHeight;
+    if(w!==taille.w||h!==taille.h) setTaille({w:w,h:h});
+  });
+
   function getContainerSize(){
+    if(taille.w>0&&taille.h>0) return taille;
     if(!dragRef.current) return {w:props.w||300,h:props.h||300};
     return {w:dragRef.current.offsetWidth,h:dragRef.current.offsetHeight};
   }
