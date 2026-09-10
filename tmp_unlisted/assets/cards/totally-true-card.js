@@ -47,6 +47,11 @@ var DEFAULT = Object.assign({
   tailPos:50,         /* position du côté vertical, % de la largeur de la bulle */
   tailMirror:false,   /* true = côté vertical à droite */
 
+  /* Ombre portée de la bulle. Valeurs par défaut = celles relevées sur le
+     visuel de référence (voir BULLE plus bas). */
+  shadowSpread:5,     /* étendue, en px carte 1080 */
+  shadowOpacity:24,   /* intensité, en % */
+
   /* Tailles de texte par format (0 = valeur par défaut du format) */
   fs_1x1:0, fs_4x5:0, fs_9x16:0
 }, global.BG_DEFAULT_STATE||{});
@@ -67,8 +72,23 @@ var BULLE = {
   tailH:    u(68),   /* hauteur de la pointe */
   filet:    1,       /* filet de contour, 1 px à l'échelle 1080 */
   filetCol: "#E70000",
-  ombre:    "0 "+u(2)+"px "+u(5)+"px rgba(0,0,0,0.24)"
+  spread:   5,       /* étendue par défaut, px carte 1080 */
+  opacite:  24       /* intensité par défaut, % */
 };
+
+/* Construction de l'ombre.
+   drop-shadow() n'a PAS de paramètre « spread » comme box-shadow : ses trois
+   valeurs sont décalage X, décalage Y et flou. On pilote donc l'étendue par le
+   flou, et le décalage vertical en suit la proportion relevée sur la référence
+   (2 px de décalage pour 5 px de flou, soit 40 %). Un seul curseur d'étendue
+   déplace ainsi l'ombre de façon cohérente, au lieu de laisser un décalage fixe
+   qui paraîtrait collé sous une ombre très étalée. */
+function ombreBulle(st){
+  var sp = st.shadowSpread===undefined ? BULLE.spread : Math.max(0,Math.min(40,st.shadowSpread));
+  var op = st.shadowOpacity===undefined ? BULLE.opacite : Math.max(0,Math.min(60,st.shadowOpacity));
+  if(op<=0||sp<=0) return "none";
+  return "0 "+u(Math.round(sp*0.4))+"px "+u(sp)+"px rgba(0,0,0,"+(op/100)+")";
+}
 
 /* Tailles de texte par défaut, par format */
 function taillesTexte(format){
@@ -135,6 +155,9 @@ function geometry(st){
   return {L:L,CARD_H:CARD_H,fs:fs,replyFs:T.reply,
     bw:bw,bx:bx,by:by,
     QUOTE_MIN:QUOTE_MIN,QUOTE_MAX:QUOTE_MAX,quoteDefaut:T.quote,
+    spread:(st.shadowSpread===undefined?BULLE.spread:st.shadowSpread),
+    opacite:(st.shadowOpacity===undefined?BULLE.opacite:st.shadowOpacity),
+    spreadDefaut:BULLE.spread, opaciteDefaut:BULLE.opacite,
     onGrad:(st.bgMode==="grad"),onWhite:(st.bgMode==="white")};
 }
 function cardHeight(format){ return getLayout(format,{hasML:false}).CARD_H; }
@@ -231,7 +254,10 @@ function TotallyTrueCard(p){
         style:{position:"absolute",left:0,
           top:versLeHaut?-BULLE.tailH:0,
           overflow:"visible",
-          filter:"drop-shadow("+BULLE.ombre+")"}},
+          filter:(function(){
+            var o=ombreBulle(st);
+            return o==="none" ? "none" : "drop-shadow("+o+")";
+          })()}},
         e("path",{d:d,fill:"#FFFFFF",
           stroke:BULLE.filetCol,strokeWidth:BULLE.filet,
           strokeLinejoin:"miter",strokeMiterlimit:8})),
