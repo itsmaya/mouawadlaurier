@@ -3,26 +3,26 @@
    Static Posts Generator Fisheye × TotalEnergies
 
    ┌─────────────────────────────────────────────────────────────────────────┐
-   │  LE PROBLÈME QU'IL RÉSOUT                                               │
+   │  CE QU'IL FAIT                                                          │
    │                                                                          │
-   │  Une page charge ses dépendances de DEUX façons différentes :            │
+   │  Une page charge ses dépendances de DEUX façons :                        │
+   │   a) les <script src> écrits dans le HTML (app-shell.js, les cartes…) ;  │
+   │   b) React / ReactDOM / dom-to-image, injectés par loadScript(), donc     │
+   │      asynchrones.                                                        │
    │                                                                          │
-   │   a) les <script src> écrits dans le HTML (app-shell.js, les cartes…).   │
-   │      Ils sont insérés par l'analyseur, s'exécutent dans l'ordre, et      │
-   │      bloquent la construction du document.                              │
+   │  Le portail attend que les deux groupes soient prêts avant de démarrer.  │
    │                                                                          │
-   │   b) React / ReactDOM / dom-to-image, injectés à l'exécution par        │
-   │      loadScript(). Un <script> créé en JavaScript est ASYNCHRONE par     │
-   │      défaut : il s'exécute dès qu'il est arrivé, sans aucun rapport      │
-   │      avec la position des autres scripts dans la page.                   │
+   │  HONNÊTETÉ SUR SON UTILITÉ : on a d'abord soupçonné une course entre     │
+   │  ces deux groupes d'expliquer le symptôme « page à charger deux fois ».  │
+   │  La mesure de l'ordre réel d'exécution a réfuté cette hypothèse — le     │
+   │  navigateur donne la priorité aux scripts bloquants, les fichiers        │
+   │  locaux arrivent avant les bibliothèques. Ce portail n'est donc PAS le   │
+   │  correctif de ce symptôme : c'est une ceinture de sécurité, qui garantit │
+   │  l'ordre quelles que soient les conditions et remplace une page blanche  │
+   │  par un message lisible.                                                 │
    │                                                                          │
-   │  Sur un poste de bureau, les fichiers locaux du groupe (a) arrivent en   │
-   │  quelques millisecondes et gagnent toujours la course. Sur mobile, avec  │
-   │  une latence variable, un CDN déjà en cache peut répondre AVANT eux :    │
-   │  boot() démarrait alors que Shell ou SPGCards n'existaient pas encore.   │
-   │  Résultat : page blanche, puis tout fonctionne au second chargement      │
-   │  (les délais changent une fois le cache chaud). Symptôme classique :     │
-   │  « je dois charger la page deux fois ».                                  │
+   │  Il tient aussi le journal d'erreurs affiché par diagnostic.html — la    │
+   │  seule façon de lire une erreur sur iPhone sans brancher un Mac.         │
    └─────────────────────────────────────────────────────────────────────────┘
 
    Usage — dans <head>, AVANT tout le reste :
@@ -44,6 +44,52 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 (function(global){
 
+  /* ═══ Journal d'erreurs persistant ═══════════════════════════════════════
+     Sur iPhone, lire la console demande un Mac relié en USB. On enregistre
+     donc les erreurs dans localStorage : la page diagnostic.html les affiche
+     ensuite à l'écran du téléphone, sans aucun outil.
+     Journal borné à 40 entrées — il ne doit jamais grossir indéfiniment. */
+  var LOG_KEY = "spg_diag_log";
+  var LOG_MAX = 40;
+
+  function journaliser(type, message, detail){
+    try{
+      var j = JSON.parse(localStorage.getItem(LOG_KEY) || "[]");
+      j.push({
+        t: new Date().toISOString(),
+        /* Nom lisible : « citation », « carrousel »… plutôt que « index.html »
+           partout, sinon le journal ne dit pas de quelle page vient l'erreur. */
+        page: (function(){
+          var m = location.pathname.split("/").filter(Boolean);
+          var f = m[m.length-1] || "";
+          if(/^index\.html?$/i.test(f)) return m[m.length-2] || "accueil";
+          return f.replace(/\.html?$/i,"") || "accueil";
+        })(),
+        type: type,
+        msg: String(message||"").slice(0,300),
+        detail: String(detail||"").slice(0,200)
+      });
+      if(j.length > LOG_MAX) j = j.slice(-LOG_MAX);
+      localStorage.setItem(LOG_KEY, JSON.stringify(j));
+    }catch(e){ /* quota plein ou stockage refusé : on n'insiste pas */ }
+  }
+
+  /* Erreurs JavaScript non rattrapées */
+  global.addEventListener("error", function(ev){
+    if(ev.target && ev.target !== global && ev.target.tagName){
+      /* Échec de chargement d'une ressource (script, image, feuille de style) */
+      journaliser("ressource", (ev.target.src || ev.target.href || "?"), ev.target.tagName);
+    } else {
+      journaliser("js", ev.message, (ev.filename||"") + ":" + (ev.lineno||""));
+    }
+  }, true);   /* capture : indispensable pour voir les erreurs de ressources */
+
+  /* Promesses rejetées sans traitement */
+  global.addEventListener("unhandledrejection", function(ev){
+    var r = ev.reason;
+    journaliser("promesse", (r && r.message) || r, (r && r.stack || "").split("\n")[1] || "");
+  });
+
   var libsOk = false;   /* chaîne loadScript terminée */
   var domOk  = false;   /* document analysé : tous les <script src> ont tourné */
   var bootFn = null;    /* fonction de démarrage de la page */
@@ -56,6 +102,7 @@
       bootFn();
     }catch(err){
       console.error("Échec du démarrage :", err);
+      journaliser("demarrage", err && err.message || err, (err && err.stack || "").split("\n")[1] || "");
       var root = document.getElementById("root");
       if(root && !root.firstChild){
         root.innerHTML = '<div style="font:14px/1.6 system-ui,sans-serif;'
@@ -83,10 +130,18 @@
     libsReady: function(){ libsOk = true; attempt(); },
     /* Appelé par la page avec sa fonction de démarrage. */
     run: function(fn){ bootFn = fn; attempt(); },
-    /* Diagnostic (console) : où en est-on ? */
+    /* Diagnostic : où en est le démarrage ? */
     status: function(){
       return {librairies:libsOk, document:domOk, bootEnregistre:!!bootFn, demarre:started};
-    }
+    },
+    /* Journal des erreurs, lu par diagnostic.html */
+    journal: function(){
+      try{ return JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); }catch(e){ return []; }
+    },
+    viderJournal: function(){
+      try{ localStorage.removeItem(LOG_KEY); }catch(e){}
+    },
+    noter: journaliser
   };
 
 })(window);

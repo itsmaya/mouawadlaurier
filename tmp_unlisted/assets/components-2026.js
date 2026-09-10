@@ -102,10 +102,10 @@ function CtaMark2026(p){
     return e("div",{style:box},
       e("div",{style:{width:ds,height:ds,borderRadius:"50%",background:TE_WHITE}}));
   }
-  /* Même image que NavMark pour la cohérence visuelle avec les autres générateurs */
-  return e("div",{style:box},
-    e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",alt:"→",
-      style:{width:"59%",height:"auto",display:"block",objectFit:"contain"}}));
+  /* Même flèche que NavMark, avec repli SVG si le PNG manque (voir
+     FlecheSuivante dans rich-body.js). L'ancien alt:"→" affichait un glyphe
+     de police minuscule et noir dès que le fichier était absent. */
+  return e("div",{style:box}, e(FlecheSuivante,{taille:"59%"}));
 }
 
 /* ── InsetFrame2026 — cadre image inséré (charte p24, p28, p45) ─────────────

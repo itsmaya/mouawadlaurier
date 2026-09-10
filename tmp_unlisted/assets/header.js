@@ -16,7 +16,8 @@
     { label: "Citation Post", href: "generators/citation/index.html"      },
     { label: "Latest News",   href: "generators/latest-news/index.html"   },
     { label: "Split Screen",  href: "generators/split-screen/index.html"  },
-    { label: "Block Layouts", href: "generators/block-layouts/index.html", isNew: true },
+    { label: "Block Layouts", href: "generators/block-layouts/index.html" },
+    { label: "Totally True",  href: "generators/totally-true/index.html", isNew: true },
     /* Carrousel en dernier : il se nourrit des autres générateurs, sa place
        est au bout de la liste, pas au milieu. */
     { label: "Carrousel",     href: "generators/carrousel/index.html"     },

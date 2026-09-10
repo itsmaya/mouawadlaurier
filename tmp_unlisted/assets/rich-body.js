@@ -196,6 +196,34 @@ function DownloadIcon(){
 }
 
 /* ── NavMark (bouton carrousel) ────────────────────────────────────────── */
+/* ── Flèche « suivante » ───────────────────────────────────────────────────
+   Le repère de carrousel s'appuyait uniquement sur assets/pictos/arrow-next.png.
+   Quand ce fichier manque, le navigateur affiche le texte alternatif : une
+   flèche « → » de police, minuscule et noire, au milieu du cartouche dégradé.
+   C'est le symptôme « la flèche est toute petite et noire ».
+
+   On dessine donc la flèche en SVG, sans dépendance de fichier ni de réseau,
+   ce qui la rend aussi identique à l'écran et à l'export. Le PNG reste
+   prioritaire s'il existe : celui qui a une flèche dessinée par le studio la
+   garde, les autres ont une flèche correcte au lieu d'un glyphe cassé.       */
+function FlecheSuivante(p){
+  var e=React.createElement, useState=React.useState;
+  var s0=useState(true), pngOk=s0[0], setPngOk=s0[1];
+  var taille=p.taille||"59%";
+  if(pngOk){
+    return e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",
+      alt:"",   /* jamais de texte alternatif : c'est lui qu'on voyait */
+      onError:function(){ setPngOk(false); },
+      style:{width:taille,height:"auto",display:"block",objectFit:"contain"}});
+  }
+  return e("svg",{viewBox:"0 0 24 24",width:taille,height:"auto",
+      style:{display:"block",overflow:"visible"},
+      fill:"none",stroke:TE_WHITE,strokeWidth:2.6,
+      strokeLinecap:"round",strokeLinejoin:"round"},
+    e("path",{d:"M4 12h13"}),
+    e("path",{d:"M12.5 6.5 18 12l-5.5 5.5"}));
+}
+
 function NavMark(p){
   var e=React.createElement;
   var bw=p.w, bh=p.h, br=p.radius;
@@ -210,7 +238,5 @@ function NavMark(p){
     return e("div",{style:boxStyle},
       e("div",{style:{width:ds,height:ds,borderRadius:"50%",background:TE_WHITE}}));
   }
-  return e("div",{style:boxStyle},
-    e("img",{src:(window.PICTO_BASE||"../../assets/")+"pictos/arrow-next.png",alt:"",
-      style:{width:"59%",height:"auto",display:"block",objectFit:"contain"}}));
+  return e("div",{style:boxStyle}, e(FlecheSuivante,{taille:"59%"}));
 }

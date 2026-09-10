@@ -1,0 +1,13 @@
+ARCHIVE COMPLÈTE — Static Posts Generator (10 septembre 2026)
+=============================================================
+Tout le code du site à jour. Décompresser et copier par-dessus l'existant.
+
+NON INCLUS (jamais modifiés, ils vivent sur ton serveur) :
+  assets/pictos/   assets/logos/   templates/   previews/
+Ces dossiers étant absents de l'archive, la copie ne les efface pas.
+
+NOUVEAU : generators/totally-true/
+À AJOUTER QUAND TU L'AURAS : previews/PREVIEW_TOTALLYTRUE.png
+
+VÉRIFICATION : ouvre diagnostic.html, il démarre réellement les sept
+générateurs et teste fichiers, pictogrammes, polices et export.

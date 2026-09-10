@@ -70,7 +70,7 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
    plutôt qu'empilées en une seule colonne défilante. */
 .cards-grid{position:relative;z-index:1;flex:1;min-height:0;overflow-y:auto;
   overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.18) transparent;
-  display:grid;grid-template-columns:1fr 1fr;align-content:start;
+  display:grid;grid-template-columns:repeat(3,1fr);align-content:start;
   background:rgba(255,255,255,.62);backdrop-filter:blur(2px);}
 .cards-grid::-webkit-scrollbar{width:8px;}
 .cards-grid::-webkit-scrollbar-track{background:transparent;}
@@ -79,10 +79,13 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
 .cards-grid::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.3);background-clip:content-box;}
 
 .tool-card{position:relative;flex-shrink:0;display:grid;
-  grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;
-  padding:30px 36px;cursor:pointer;text-decoration:none;color:#1a1a1a;
+  grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;
+  padding:28px 28px;cursor:pointer;text-decoration:none;color:#1a1a1a;
   border-bottom:1px solid rgba(0,0,0,.08);overflow:hidden;transition:background .2s;}
-.cards-grid .tool-card:nth-child(odd){border-right:1px solid rgba(0,0,0,.08);}
+/* Separateur vertical : toutes les cartes SAUF celles de la derniere colonne.
+   En deux colonnes c'etait nth-child(odd) ; en trois, la regle devient
+   "pas un multiple de 3". Les media queries la reajustent plus bas. */
+.cards-grid .tool-card:not(:nth-child(3n)){border-right:1px solid rgba(0,0,0,.08);}
 .tool-card:hover{background:rgba(255,255,255,.85);}
 .tool-card:focus-visible{outline:2px solid #1a1a1a;outline-offset:-4px;
   background:rgba(255,255,255,.85);}
@@ -103,8 +106,10 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
 .tool-card:hover .tool-card-cta{gap:14px;}
 
 /* ══ VIGNETTE 1:1 ══ */
+/* La vignette retrecit avec la colonne : en trois colonnes une cellule fait
+   environ un tiers de la largeur, la borne haute passe donc de 190 a 150 px. */
 .tool-card-media{position:relative;flex-shrink:0;
-  width:clamp(130px,15vw,190px);aspect-ratio:1/1;}
+  width:clamp(110px,11vw,150px);aspect-ratio:1/1;}
 .tool-card-media::before,.tool-card-media::after{content:"";position:absolute;inset:0;border-radius:2px;}
 .tool-card-media::before{transform:translate(14px,14px);border:1px solid rgba(0,0,0,.10);}
 .tool-card-media::after{transform:translate(7px,7px);background:#e2e2e2;}
@@ -118,10 +123,13 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
 .tool-card-media.empty{background:repeating-linear-gradient(45deg,
   #eeeeee 0 10px,#e4e4e4 10px 20px);border:1px dashed #c4c4c4;border-radius:2px;}
 .tool-card-media.empty::before,.tool-card-media.empty::after{display:none;}
+/* Texte affiche quand l'apercu manque. En trois colonnes la vignette est plus
+   etroite : le chemin doit pouvoir se couper, sinon il deborde de la boite. */
 .tool-card-media .ph{display:none;position:absolute;inset:0;z-index:2;
   align-items:center;justify-content:center;text-align:center;
-  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:#a0a0a0;padding:0 12px;line-height:1.6;}
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#a0a0a0;padding:0 8px;line-height:1.6;
+  overflow-wrap:anywhere;word-break:break-word;}
 .tool-card-media.empty .ph{display:flex;}
 
 /* ══ FOOTER ══ */
@@ -134,6 +142,14 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
 .ftr-te{height:20px;display:block;}
 .ftr-logo{height:18px;}
 
+/* Trois colonnes au-dela de 1280px, deux entre 900 et 1280, une en dessous.
+   Le separateur suit le nombre de colonnes, sinon des filets apparaissent
+   au milieu des rangees. */
+@media(max-width:1280px){
+  .cards-grid{grid-template-columns:1fr 1fr;}
+  .cards-grid .tool-card:not(:nth-child(3n)){border-right:none;}
+  .cards-grid .tool-card:nth-child(odd){border-right:1px solid rgba(0,0,0,.08);}
+}
 @media(max-width:900px){
   .cards-grid{grid-template-columns:1fr;}
   .cards-grid .tool-card:nth-child(odd){border-right:none;}
@@ -174,7 +190,8 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
       <a href="generators/latest-news/index.html" role="menuitem">Latest News</a>
       <a href="generators/split-screen/index.html" role="menuitem">Split Screen</a>
       <a href="generators/carrousel/index.html" role="menuitem">Carrousel</a>
-      <a href="generators/block-layouts/index.html" role="menuitem">Block Layouts <span class="new-badge">NEW</span></a>
+      <a href="generators/block-layouts/index.html" role="menuitem">Block Layouts</a>
+      <a href="generators/totally-true/index.html" role="menuitem">Totally True <span class="new-badge">NEW</span></a>
     </div>
   </nav>
   <script>
@@ -299,7 +316,7 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
     <a href="generators/block-layouts/index.html" class="tool-card">
       <span class="tool-card-num">05</span>
       <div class="tool-card-body">
-        <span class="tool-card-label">Block Layouts · Charte 2026</span>
+        <span class="tool-card-label">Block Layouts</span>
         <div class="tool-card-title">Block<br/><em>Layouts</em></div>
         <p class="tool-card-desc">
           Chiffres clés et statistiques en blocs empilés, template 05 de la
@@ -319,8 +336,32 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
       </div>
     </a>
 
-    <a href="generators/carrousel/index.html" class="tool-card">
+    <a href="generators/totally-true/index.html" class="tool-card">
       <span class="tool-card-num">06</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Totally True</span>
+        <div class="tool-card-title">Totally<br/><em>True</em></div>
+        <p class="tool-card-desc">
+          Bulle de dialogue posée sur l'image, avec la citation du commentaire
+          et la mention du pseudo. Pointe orientable en haut ou en bas,
+          position et largeur libres.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_TOTALLYTRUE.png<br/>1080 × 1350</span>
+      </div>
+    </a>
+
+    <a href="generators/carrousel/index.html" class="tool-card">
+      <span class="tool-card-num">07</span>
       <div class="tool-card-body">
         <span class="tool-card-label">Carrousel</span>
         <div class="tool-card-title">Carrousel<br/><em>Slides</em></div>

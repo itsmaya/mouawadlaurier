@@ -169,6 +169,7 @@ SPGBoot.libsReady();});});});
 <script src="../../assets/cards/latest-news-card.js"></script>
 <script src="../../assets/cards/split-screen-card.js"></script>
 <script src="../../assets/cards/block-layouts-card.js"></script>
+<script src="../../assets/cards/totally-true-card.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -652,8 +653,73 @@ function BlockLayoutsEditor(p){
     })());
 }
 
+function TotallyTrueEditor(p){
+  var st=p.st; function u(k,v){p.onChange(k,v);}
+  var g=SPGCards.get("totallytrue").geometry(st);
+  return e(React.Fragment,null,
+    e(UI.Section,{title:"Affirmation"},
+      e("div",{className:"upload-hint",style:{marginBottom:6}},
+        "Les guillemets sont ajoutés automatiquement.  ",e("b",null,"**mot**")," = surlignage"),
+      e("textarea",{spellCheck:true,rows:4,value:st.quote||"",
+        onChange:function(ev){u("quote",ev.target.value);}}),
+      e("div",{style:{height:10}}),
+      e(UI.SliderField,{label:"Taille du texte — "+g.fs+" px"+(st["fs_"+st.format]?"":" (défaut)"),
+        min:g.QUOTE_MIN,max:g.QUOTE_MAX,step:1,value:g.fs,
+        onChange:function(v){u("fs_"+st.format,Math.round(v));}})),
+
+    e(UI.Section,{title:"Référence au commentaire"},
+      e("label",{className:"field-label"},"Avant le pseudo"),
+      e("input",{type:"text",spellCheck:true,value:st.replyPrefix||"",placeholder:"Replying to",
+        onChange:function(ev){u("replyPrefix",ev.target.value);}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Pseudo"),
+      e("input",{type:"text",value:st.replyHandle||"",placeholder:"@pseudo",
+        onChange:function(ev){u("replyHandle",ev.target.value);}}),
+      e("div",{style:{height:8}}),
+      e("label",{className:"field-label"},"Après le pseudo"),
+      e("input",{type:"text",spellCheck:true,value:st.replySuffix||"",placeholder:"comment",
+        onChange:function(ev){u("replySuffix",ev.target.value);}})),
+
+    e(UI.Section,{title:"Bulle"},
+      e(UI.SliderField,{label:"Horizontale — "+Math.round(st.bubbleX||0)+" %",
+        min:0,max:100,step:1,value:st.bubbleX||0,
+        onChange:function(v){u("bubbleX",Math.round(v));}}),
+      e("div",{style:{height:8}}),
+      e(UI.SliderField,{label:"Verticale — "+Math.round(st.bubbleY||0)+" %",
+        min:0,max:100,step:1,value:st.bubbleY||0,
+        onChange:function(v){u("bubbleY",Math.round(v));}}),
+      e("div",{style:{height:8}}),
+      e(UI.SliderField,{label:"Largeur — "+Math.round(st.bubbleW||70)+" %",
+        min:30,max:92,step:1,value:st.bubbleW||70,
+        onChange:function(v){u("bubbleW",Math.round(v));}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Côté de la pointe"),
+      e(UI.SegButtons,{value:st.tailSide||"bottom",onChange:function(v){u("tailSide",v);},
+        options:[{v:"top",l:"↑ En haut"},{v:"bottom",l:"↓ En bas"}]}),
+      e("div",{style:{height:10}}),
+      e(UI.SliderField,{label:"Pointe — "+Math.round(st.tailPos===undefined?50:st.tailPos)+" %",
+        min:0,max:100,step:1,value:st.tailPos===undefined?50:st.tailPos,
+        onChange:function(v){u("tailPos",Math.round(v));}}),
+      e("div",{style:{height:10}}),
+      e("label",{className:"field-label"},"Côté vertical de la pointe"),
+      e(UI.SegButtons,{value:st.tailMirror?"droite":"gauche",
+        onChange:function(v){u("tailMirror",v==="droite");},
+        options:[{v:"gauche",l:"À gauche"},{v:"droite",l:"À droite"}]})),
+
+    e(UI.Section,{title:"Image"},
+      e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){u("bgMode",v);},
+        options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
+      (st.bgMode!=="grad"&&st.bgMode!=="white")
+        ? e("div",{style:{marginTop:10}},
+            e(BgPhotoPanel,{st:st,set:p.set,setSt:p.setSt,format:p.format,
+              maxZoom:300,bgStatus:{s:"idle"},bgDir:"",
+              showHint:"Déposez une image, puis glissez-la sur la vignette pour la recadrer."}))
+        : null));
+}
+
 var EDITORS={citation:CitationEditor,latestnews:LatestNewsEditor,
-             splitscreen:SplitScreenEditor,blocklayouts:BlockLayoutsEditor};
+             splitscreen:SplitScreenEditor,blocklayouts:BlockLayoutsEditor,
+             totallytrue:TotallyTrueEditor};
 
 /* ═══ MODALE D'IMPORT ═════════════════════════════════════════════════════ */
 function ImportModal(p){

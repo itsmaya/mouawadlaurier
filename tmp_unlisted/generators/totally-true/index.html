@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Totally True — TotalEnergies</title>
+<!-- Nunito servie en local : indispensable pour que l'export intègre la
+     police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<!-- Portail de démarrage : évite la page blanche au premier chargement.
+     Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
+<script src="../../assets/boot-gate.js"></script>
+<script>
+function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
+</script>
+<script>
+loadScript(["../../assets/vendor/react.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"],function(){
+loadScript(["../../assets/vendor/react-dom.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"],function(){
+loadScript(["../../assets/vendor/dom-to-image-more.min.js","https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
+</script>
+<script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/charte-2026.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/components-2026.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/totally-true-card.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+function boot(){
+
+var e=React.createElement,useState=React.useState,useRef=React.useRef;
+var UI=Shell.ui;
+
+/* ═══ CONFIG ══════════════════════════════════════════════════════════════ */
+var CARD=SPGCards.get("totallytrue");
+var DEFAULT=CARD.DEFAULT;
+var PAGE_FORMATS=CARD.formats;
+var BG_DIR="../../templates/totally-true/";
+function bgCandidates(k){
+  var names=["TEMPLATE_TT_"+k,"template_"+k,"template"];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[];
+  names.forEach(function(n){exts.forEach(function(x){out.push(BG_DIR+n+x);});});
+  return out;
+}
+
+/* ═══ APP ═════════════════════════════════════════════════════════════════ */
+function App(){
+  var shell=Shell.useApp({pageKey:"totallytrue",DEFAULT:DEFAULT,bgCandidates:bgCandidates});
+  var st=shell.st, set=shell.set, setSt=shell.setSt;
+
+  var cardRef=useRef(null);
+  var tabState=useState("texte"); var activeTab=tabState[0],setActiveTab=tabState[1];
+  var TABS=[
+    {id:"texte",label:"Texte"},{id:"bulle",label:"Bulle"},
+    {id:"image",label:"Image"},{id:"cartouche",label:"Cartouche"},
+    {id:"export",label:"Export"}
+  ];
+
+  /* ═══ VALEURS DÉRIVÉES (panneau uniquement) ══════════════════════════ */
+  var g=CARD.geometry(st);
+  var cf=chFormat(st.format);
+  var previewScale=UI.previewScale(cf);
+  var bgNat=shell.bgNat;
+  var G=GRADS[st.grad]||GRADS.bleu;
+
+  var charteWarn=(st.lowCarbon&&!G.lowCarbonOK)
+    ?"Le dégradé rouge est réservé au pétrole. La charte l'interdit sur les créations traitant des énergies bas carbone.":null;
+
+  /* ═══ CARTE ═══════════════════════════════════════════════════════════
+     Composant partagé : voir assets/cards/totally-true-card.js.
+     Ne PAS réimplémenter le visuel ici — le Carrousel rend le même. */
+  var card=e(CARD.Card,{
+    st:st, cardRef:cardRef, exportTarget:true,
+    scale:previewScale, bgNat:bgNat,
+    onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
+      c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); }
+  });
+
+  /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
+  var panel=e("div",{className:"panel"},
+
+    e(UI.Section,{title:"Format"},
+      e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
+        onChange:function(k){ set("format",k); }})),
+
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+
+    /* ── Texte ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="texte"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Affirmation"},
+        e("div",{className:"upload-hint",style:{marginBottom:6}},
+          "Les guillemets sont ajoutés automatiquement.  ",
+          e("b",null,"**mot**")," = surlignage"),
+        e("textarea",{spellCheck:true,rows:4,value:st.quote||"",
+          onChange:function(ev){set("quote",ev.target.value);},
+          style:{fontSize:13,lineHeight:1.5}}),
+        e("div",{style:{height:12}}),
+        e(UI.SliderField,{label:"Taille du texte — "+g.fs+" px"
+            +(st["fs_"+st.format]?"":" (défaut)"),
+          min:g.QUOTE_MIN,max:g.QUOTE_MAX,step:1,value:g.fs,
+          onChange:function(v){set("fs_"+st.format,Math.round(v));}}),
+        e("button",{className:"mini-btn",style:{marginTop:4},
+          onClick:function(){set("fs_"+st.format,0);}},"Taille par défaut")),
+
+      e(UI.Section,{title:"Référence au commentaire"},
+        e("div",{className:"hint",style:{marginBottom:10}},
+          "Ligne grise sous l'affirmation. Le pseudo est mis en gras automatiquement."),
+        e("label",{className:"field-label"},"Avant le pseudo"),
+        e("input",{type:"text",spellCheck:true,value:st.replyPrefix||"",
+          placeholder:"Replying to",
+          onChange:function(ev){set("replyPrefix",ev.target.value);}}),
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},"Pseudo"),
+        e("input",{type:"text",value:st.replyHandle||"",
+          placeholder:"@dune.andink's",
+          onChange:function(ev){set("replyHandle",ev.target.value);}}),
+        e("div",{style:{height:8}}),
+        e("label",{className:"field-label"},"Après le pseudo"),
+        e("input",{type:"text",spellCheck:true,value:st.replySuffix||"",
+          placeholder:"comment",
+          onChange:function(ev){set("replySuffix",ev.target.value);}})),
+
+      e(UI.TabNav,{next:"Bulle",onNext:function(){setActiveTab("bulle");}})),
+
+    /* ── Bulle ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="bulle"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Position"},
+        e("div",{className:"hint",style:{marginBottom:10}},
+          "La hauteur s'adapte au texte. Position et largeur sont en pourcentage "+
+          "de la carte, donc conservées d'un format à l'autre."),
+        e(UI.SliderField,{label:"Horizontale — "+Math.round(st.bubbleX||0)+" %",
+          min:0,max:100,step:1,value:st.bubbleX||0,
+          onChange:function(v){set("bubbleX",Math.round(v));}}),
+        e("div",{style:{height:8}}),
+        e(UI.SliderField,{label:"Verticale — "+Math.round(st.bubbleY||0)+" %",
+          min:0,max:100,step:1,value:st.bubbleY||0,
+          onChange:function(v){set("bubbleY",Math.round(v));}}),
+        e("div",{style:{height:8}}),
+        e(UI.SliderField,{label:"Largeur — "+Math.round(st.bubbleW||70)+" %",
+          min:30,max:92,step:1,value:st.bubbleW||70,
+          onChange:function(v){set("bubbleW",Math.round(v));}}),
+        e("button",{className:"mini-btn",style:{marginTop:6},
+          onClick:function(){setSt(function(p){var c=Object.assign({},p);
+            c.bubbleX=DEFAULT.bubbleX;c.bubbleY=DEFAULT.bubbleY;c.bubbleW=DEFAULT.bubbleW;
+            return c;});}},
+          "Position par défaut")),
+
+      e(UI.Section,{title:"Pointe"},
+        e("label",{className:"field-label"},"Côté"),
+        e(UI.SegButtons,{value:st.tailSide||"bottom",
+          onChange:function(v){set("tailSide",v);},
+          options:[{v:"top",l:"↑ En haut"},{v:"bottom",l:"↓ En bas"}]}),
+        e("div",{style:{height:10}}),
+        e(UI.SliderField,{label:"Position sur la bulle — "+Math.round(st.tailPos===undefined?50:st.tailPos)+" %",
+          min:0,max:100,step:1,value:st.tailPos===undefined?50:st.tailPos,
+          onChange:function(v){set("tailPos",Math.round(v));}}),
+        e("div",{style:{height:10}}),
+        e("label",{className:"field-label"},"Côté vertical de la pointe"),
+        e(UI.SegButtons,{value:st.tailMirror?"droite":"gauche",
+          onChange:function(v){set("tailMirror",v==="droite");},
+          options:[{v:"gauche",l:"À gauche"},{v:"droite",l:"À droite"}]}),
+        e("div",{className:"hint",style:{marginTop:6}},
+          "La pointe est un triangle rectangle : un côté descend à la verticale, "+
+          "l'autre est l'hypoténuse. La position est conservée quand la pointe "+
+          "change de côté.")),
+
+      e(UI.TabNav,{prev:"Texte",onPrev:function(){setActiveTab("texte");},
+        next:"Image",onNext:function(){setActiveTab("image");}})),
+
+    /* ── Image ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="image"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Fond"},
+        e(UI.SegButtons,{value:st.bgMode||"photo",onChange:function(v){set("bgMode",v);},
+          options:[{v:"photo",l:"Image"},{v:"grad",l:"Dégradé"},{v:"white",l:"Blanc"}]}),
+        (st.bgMode!=="grad"&&st.bgMode!=="white")
+          ? e("div",{style:{marginTop:12}},
+              e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
+                bgStatus:shell.bgStatus,bgNat:bgNat,bgDir:BG_DIR,maxZoom:shell.maxZoom}))
+          : null),
+      e(UI.TabNav,{prev:"Bulle",onPrev:function(){setActiveTab("bulle");},
+        next:"Cartouche",onNext:function(){setActiveTab("cartouche");}})),
+
+    /* ── Cartouche ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="cartouche"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Couleurs"},
+        e("label",{className:"field-label"},"Dégradé actif"),
+        e(UI.GradPicker,{value:st.grad,onChange:function(v){set("grad",v);}}),
+        e("div",{style:{height:12}}),
+        e("label",{className:"toggle"},
+          e("input",{type:"checkbox",checked:!!st.lowCarbon,
+            onChange:function(ev){set("lowCarbon",ev.target.checked);}}),
+          "Sujet énergie bas carbone"),
+        charteWarn?e(UI.Warnings,{items:[charteWarn]}):null),
+      e(UI.Section,{title:"Cartouche"},
+        e(UI.BadgeEditor,{st:st,set:set,setSt:setSt,
+          active:activeTab==="cartouche",uppercase:true})),
+      e(UI.Section,{title:"Repère de carrousel"},
+        e(UI.SegButtons,{value:st.navMark||"arrow",onChange:function(v){set("navMark",v);},
+          options:[{v:"arrow",l:"Flèche →"},{v:"dot",l:"Point ●"},{v:"none",l:"Aucun"}]})),
+      e(UI.TabNav,{prev:"Image",onPrev:function(){setActiveTab("image");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
+      e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
+  );
+
+  return e("div",{className:"app-layout"},
+    panel,
+    e("div",{className:"preview-wrap"},e(UI.Stage,{cf:cf},card)));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+/* Le démarrage est confié au portail : il attend que les bibliothèques ET
+   tous les <script src> de la page soient prêts. Voir assets/boot-gate.js. */
+SPGBoot.run(boot);
+</script>
+</body>
+</html>
