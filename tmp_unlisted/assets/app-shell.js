@@ -823,6 +823,36 @@ Shell.ui.TabNav = function(p){
     (p.action||null));
 };
 
+/* Mention IA — bloc de contrôle. À placer dans la section Image/Fond, parce
+   que la mention qualifie l'image et pas le post : dans un carrousel elle se
+   règle vignette par vignette, selon l'image que porte chaque vignette. */
+Shell.ui.MentionIA = function(p){
+  var e=React.createElement;
+  var st=p.st||{}, set=p.set;
+  var actif=!!st.aiNotice;
+  return e(React.Fragment,null,
+    e("label",{className:"field-label",
+      style:{display:"flex",alignItems:"center",gap:8,marginTop:14}},
+      e("input",{type:"checkbox",checked:actif,
+        onChange:function(ev){ set("aiNotice",ev.target.checked); }}),
+      "Mention « image IA » sur cette image"),
+    e("div",{style:{fontSize:11,color:"#666",lineHeight:1.4,marginTop:2}},
+      "Transparence IA (règlement européen) : la mention s'affiche en bas au centre de l'image."),
+    actif?e(React.Fragment,null,
+      e("label",{className:"field-label"},"Formulation"),
+      e(Shell.ui.SegButtons,{value:st.aiNoticeKind||"generated",
+        options:[{v:"generated",l:"Générée par IA"},{v:"edited",l:"Modifiée par IA"}],
+        onChange:function(v){ set("aiNoticeKind",v); }}),
+      e("label",{className:"field-label"},"Langue"),
+      e(Shell.ui.SegButtons,{value:st.aiNoticeLang||"fr",
+        options:[{v:"fr",l:"Français"},{v:"en",l:"English"}],
+        onChange:function(v){ set("aiNoticeLang",v); }}),
+      e("div",{style:{fontSize:11,color:"#404040",marginTop:6}},
+        "Aperçu : ",e("b",null,(typeof mentionIATexte==="function")?mentionIATexte(st):""))
+    ):null
+  );
+};
+
 Shell.ui.SliderField = function(p){
   var e=React.createElement;
   return e(React.Fragment,null,

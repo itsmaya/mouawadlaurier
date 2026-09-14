@@ -153,6 +153,11 @@ function DragImage(props){
           if((props.contrast||100)!==100) f+="contrast("+(props.contrast||100)+"%) ";
           return f||"none";
         })(),
-        userSelect:"none",pointerEvents:"none"}}):null
+        userSelect:"none",pointerEvents:"none"}}):null,
+    /* Mention IA — dans le cadre de l'image, jamais sur la carte.
+       Elle ne s'affiche que s'il y a réellement une image à qualifier. */
+    (props.src && typeof MentionIA2026==="function")
+      ? e(MentionIA2026,{key:"ia",st:props.st||props,larg:sz.w,haut:sz.h})
+      : null
   );
 }

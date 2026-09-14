@@ -189,6 +189,12 @@ function BgPhotoPanel(props){
         c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});},
       style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
         border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
-      "Réinitialiser position et zoom")
+      "Réinitialiser position et zoom"),
+
+    /* Mention IA — ici et pas ailleurs : le réglage suit l'image. Dans le
+       carrousel ce panneau est instancié par vignette, donc chaque vignette
+       décide pour sa propre photo. */
+    (window.Shell && Shell.ui && Shell.ui.MentionIA)
+      ? e(Shell.ui.MentionIA,{st:st,set:set}) : null
   );
 }

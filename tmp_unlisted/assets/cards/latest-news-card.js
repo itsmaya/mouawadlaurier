@@ -205,7 +205,7 @@ function LatestNewsCard(p){
           left:L.ML,top:L.ML>0?L.ML:-1,right:L.ML,bottom:L.ML,
           backgroundColor:"#12203c",overflow:"hidden",
           borderRadius:L.ML>0?ML_RADIUS:0}},
-        e(DragImage,{key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
+        e(DragImage,{st:st,key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
           blur:st.bgBlur,flipH:st.bgFlipH,
           w:CARD_W*(1-2*L.ML/CARD_W)*scale,
           h:CARD_H*(1-2*L.ML/CARD_H)*scale,

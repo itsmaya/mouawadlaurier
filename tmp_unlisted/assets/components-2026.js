@@ -349,3 +349,51 @@ function LogoFrame2026(p){
     p.logoSrc?e("img",{src:p.logoSrc,alt:"",style:{maxWidth:"100%",
       maxHeight:horiz?(B.horizontal.h-B.pad*2):"none",objectFit:"contain"}}):null);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MENTION IA — transparence « contenu généré par IA » (AI Act, art. 50)
+   La mention appartient à L'IMAGE, pas au post : elle qualifie le visuel
+   lui-même. Elle est donc rendue par DragImage, dans le cadre de l'image,
+   toujours en bas au centre. Dans un carrousel, chaque vignette l'active
+   ou non selon sa propre image.
+   Taille : proportionnelle à la largeur du cadre image — assez lisible pour
+   valoir information, assez discrète pour ne pas manger le visuel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+var MENTION_IA_TEXTES = {
+  fr:{ generated:"Image générée par IA", edited:"Image modifiée par IA" },
+  en:{ generated:"AI-generated image",   edited:"AI-edited image" }
+};
+var MENTION_IA_DEFAUT = { aiNotice:false, aiNoticeKind:"generated", aiNoticeLang:"fr" };
+
+function mentionIATexte(st){
+  st=st||{};
+  var l=MENTION_IA_TEXTES[st.aiNoticeLang==="en"?"en":"fr"];
+  return l[st.aiNoticeKind==="edited"?"edited":"generated"];
+}
+
+function MentionIA2026(p){
+  var e=React.createElement;
+  var st=p.st||{};
+  if(!st.aiNotice) return null;
+  var larg=p.larg||0, haut=p.haut||0;
+  if(larg<40||haut<40) return null;           /* cadre pas encore mesuré */
+  var base=Math.min(larg,haut*1.6);
+  var taille=Math.max(10,Math.min(30,Math.round(base*0.026)));
+  var padV=Math.round(taille*0.34), padH=Math.round(taille*0.72);
+  return e("div",{"data-layer":"mention-ia",style:{
+      position:"absolute", left:"50%", bottom:Math.round(taille*0.9),
+      transform:"translateX(-50%)",
+      maxWidth:"90%", pointerEvents:"none", zIndex:5,
+      fontFamily:"'Nunito',sans-serif", fontSize:taille, lineHeight:1.2,
+      fontWeight:600, letterSpacing:".01em", whiteSpace:"nowrap",
+      color:"#FFFFFF", background:"rgba(0,0,0,0.45)",
+      padding:padV+"px "+padH+"px", borderRadius:Math.round(taille*1.2),
+      boxSizing:"border-box"}},
+    mentionIATexte(st));
+}
+
+if(typeof window!=="undefined"){
+  window.MentionIA2026=MentionIA2026;
+  window.mentionIATexte=mentionIATexte;
+  window.MENTION_IA_DEFAUT=MENTION_IA_DEFAUT;
+}

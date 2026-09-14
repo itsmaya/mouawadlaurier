@@ -226,7 +226,7 @@ function TotallyTrueCard(p){
     (g.onGrad||g.onWhite)
       ? null
       : e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,overflow:"hidden"}},
-          e(DragImage,{key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
+          e(DragImage,{st:st,key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
             flipH:st.bgFlipH,w:CARD_W*scale,h:CARD_H*scale,scale:scale,
             natW:bgNat.w,natH:bgNat.h,
             brightness:st.bgBrightness,saturation:st.bgSaturation,contrast:st.bgContrast,

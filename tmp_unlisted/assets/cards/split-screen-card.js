@@ -207,7 +207,7 @@ function SplitScreenCard(p){
         clipPath:"inset(0 round "+L.IMG_RADIUS+"px)",
         WebkitClipPath:"inset(0 round "+L.IMG_RADIUS+"px)",
         backgroundColor:"#E4E4E4"}},
-      e(DragImage,{key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
+      e(DragImage,{st:st,key:"drag-"+(st.hasML?"ml":"noml"),src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
         blur:st.bgBlur,flipH:st.bgFlipH,
         w:R.img.w*scale,h:R.img.h*scale,scale:scale,
         natW:bgNat.w,natH:bgNat.h,

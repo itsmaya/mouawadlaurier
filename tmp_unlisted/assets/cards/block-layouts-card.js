@@ -133,7 +133,7 @@ function BlockLayoutsCard(p){
           backgroundColor:onWhite?"#FFFFFF":"transparent"}})
       : e("div",{"data-layer":"bg",style:{position:"absolute",inset:0,
           backgroundColor:"#12203c"}},
-          e(DragImage,{key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
+          e(DragImage,{st:st,key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,
             blur:st.bgBlur,flipH:st.bgFlipH,
             w:CW*scale,h:CH_*scale,scale:scale,
             natW:bgNat.w,natH:bgNat.h,

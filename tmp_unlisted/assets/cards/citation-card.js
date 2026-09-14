@@ -389,7 +389,7 @@ function CitationCard(p){
                 borderRadius:ML_RADIUS_CITE,
                 clipPath:"inset(0 round "+ML_RADIUS_CITE+"px)",
                 WebkitClipPath:"inset(0 round "+ML_RADIUS_CITE+"px)"}:{inset:0}),},
-          e(DragImage,{key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
+          e(DragImage,{st:st,key:"drag",src:st.bgImg,x:bgX,y:bgY,zoom:bgZoom,blur:st.bgBlur,
             flipH:st.bgFlipH,w:CARD_W*scale,h:CARD_H*scale,scale:scale,
             natW:bgNat.w,natH:bgNat.h,
             brightness:st.bgBrightness,saturation:st.bgSaturation,contrast:st.bgContrast,
