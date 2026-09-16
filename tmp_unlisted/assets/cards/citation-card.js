@@ -483,6 +483,9 @@ function CitationCard(p){
 
 /* ── Enregistrement ──────────────────────────────────────────────────────── */
 SPGCards.register("citation",{
+  /* Le nom de la personne reste tel quel : on ne traduit pas un patronyme. */
+  textFields:["badge","title","quote","source"],
+
   label:"Citation",
   icon:"💬",
   pageKey:"citation",

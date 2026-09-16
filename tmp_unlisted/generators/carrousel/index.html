@@ -806,6 +806,66 @@ function App(){
             h:reg.cardHeight(st.format,full)};
   }
 
+  /* ── Traduction de tout le carrousel ──
+     Une seule requête pour l'ensemble : les champs de toutes les vignettes
+     sont mis bout à bout, puis redistribués dans le même ordre.
+     La langue de départ est détectée par DeepL, pas supposée. */
+  var tradToutState=useState(null);
+  var tradTout=tradToutState[0], setTradTout=tradToutState[1];
+  var tradNoteState=useState(""); var tradNote=tradNoteState[0], setTradNote=tradNoteState[1];
+  function traduireTout(cible){
+    var champsParSlide=slides.map(function(sl){ return SPGCards.textFields(sl.type); });
+    var etats=slides.map(function(sl){ return SPGCards.resolve(sl.type,sl.st,{}); });
+    var tailles=[], tous=[];
+    etats.forEach(function(e2,i){
+      var v=Shell.lireChamps(e2,champsParSlide[i]);
+      tailles.push(v.length); tous=tous.concat(v);
+    });
+    if(!tous.join("").trim()){ alert("Aucun texte à traduire."); return; }
+    setTradTout(cible); setTradNote("");
+    Shell.traduire(tous,cible).then(function(res){
+      /* La mention IA de chaque vignette suit la langue du carrousel, même
+         quand le texte n'a pas besoin d'être traduit. */
+      var langMention=(cible==="EN")?"en":"fr";
+      if(res.detecte===cible){
+        setSt(function(p){
+          var a=p.slides.map(function(sl){
+            return Object.assign({},sl,{st:Object.assign({},sl.st,
+              {langTarget:cible,aiNoticeLang:langMention})});
+          });
+          return Object.assign({},p,{slides:a,langTarget:cible});
+        });
+        setTradNote("Le carrousel est déjà en "+(cible==="EN"?"anglais":"français")+
+                    ", seules les mentions IA ont été alignées.");
+        setTradTout(null); return;
+      }
+      var out=res.textes;
+      setSt(function(p){
+        var a=p.slides.slice(), n=0;
+        a.forEach(function(sl,i){
+          var part=out.slice(n,n+tailles[i]); n+=tailles[i];
+          var base=SPGCards.resolve(sl.type,sl.st,{});
+          var maj=Shell.ecrireChamps(base,champsParSlide[i],part);
+          /* On ne réécrit que les clés de texte, pour ne pas figer dans la
+             vignette les défauts du type ni le format imposé globalement. */
+          var delta={};
+          Object.keys(maj).forEach(function(k){
+            if(maj[k]!==base[k]) delta[k]=maj[k];
+          });
+          delta.langTarget=cible;
+          delta.aiNoticeLang=langMention;
+          a[i]=Object.assign({},sl,{st:Object.assign({},sl.st,delta)});
+        });
+        return Object.assign({},p,{slides:a,langTarget:cible});
+      });
+      setTradNote("Traduit depuis "+(res.detecte||"la langue détectée")+".");
+      setTradTout(null);
+    }).catch(function(err){
+      alert("Traduction impossible : "+err.message);
+      setTradTout(null);
+    });
+  }
+
   /* ── Mutations ── */
   function updSlideState(i,k,v){
     setSt(function(p){
@@ -1015,6 +1075,23 @@ function App(){
               onChange:function(k,v){updSlideState(activeIdx,k,v);},
               set:function(k,v){updSlideState(activeIdx,k,v);},
               setSt:slideSetSt(activeIdx)}),
+            /* TRADUCTION — deux portées. La vignette courante seule, et tout
+               le carrousel en une requête : un carrousel se publie dans une
+               langue, pas vignette par vignette. */
+            e(UI.TraductionIA,{st:SPGCards.resolve(activeSlide.type,activeSlide.st,{}),
+              setSt:slideSetSt(activeIdx),
+              champs:SPGCards.textFields(activeSlide.type)}),
+            e("div",{className:"section"},
+              e("h2",null,"Tout le carrousel"),
+              e("div",{style:{display:"flex",gap:8}},
+                e("button",{className:"mini-btn",style:{flex:1},disabled:!!tradTout,
+                  onClick:function(){traduireTout("FR");}},
+                  tradTout==="FR"?"Traduction…":("🇫🇷 Les "+slides.length+" vignettes en français")),
+                e("button",{className:"mini-btn",style:{flex:1},disabled:!!tradTout,
+                  onClick:function(){traduireTout("EN");}},
+                  tradTout==="EN"?"Traduction…":("🇬🇧 Les "+slides.length+" vignettes en anglais"))),
+              e("div",{className:"hint",style:{marginTop:6}},
+                tradNote||"Chaque vignette est traduite selon son propre type.")),
             e(UI.TabNav,{prev:"Vignettes",onPrev:function(){setActiveTab("vignettes");},
               next:"Export",onNext:function(){setActiveTab("export");}}))
         : e("div",{className:"hint"},

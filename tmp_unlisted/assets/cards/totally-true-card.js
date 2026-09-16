@@ -290,6 +290,9 @@ function TotallyTrueCard(p){
 
 /* ── Enregistrement ──────────────────────────────────────────────────────── */
 SPGCards.register("totallytrue",{
+  /* replyHandle reste tel quel : c'est un pseudo, pas une phrase. */
+  textFields:["badgeMain","badgeSub","quote","replyPrefix","replySuffix"],
+
   label:"Totally True",
   icon:"❓",
   pageKey:"totallytrue",

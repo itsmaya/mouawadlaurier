@@ -76,6 +76,13 @@
       return d ? d.shared.slice() : [];
     },
 
+    /* ── Champs de texte traduisibles d'un type ──
+       Format : ["cle", {list:"blocs", fields:["text"]}] */
+    textFields: function(key){
+      var d = reg[key];
+      return (d && d.textFields) ? d.textFields.slice() : [];
+    },
+
     /* ── Rendu ── */
     render: function(key, props){
       var d = reg[key];

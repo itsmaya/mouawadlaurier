@@ -244,6 +244,8 @@ function SplitScreenCard(p){
 
 /* ── Enregistrement ──────────────────────────────────────────────────────── */
 SPGCards.register("splitscreen",{
+  textFields:["badgeMain","badgeSub","text"],
+
   label:"Split Screen",
   icon:"◧",
   pageKey:"splitscreen",

@@ -358,6 +358,9 @@ function App(){
         onClick:function(){set("b_"+st.format,-1);}},
         "Réinitialiser position"),
 
+      /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
+         champs juste au-dessus. */
+      e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("latestnews")}),
       e(UI.TabNav,{prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
         next:"Export",onNext:function(){setActiveTab("export");}})),
 

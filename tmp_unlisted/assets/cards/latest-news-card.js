@@ -254,6 +254,8 @@ function LatestNewsCard(p){
 
 /* ── Enregistrement ──────────────────────────────────────────────────────── */
 SPGCards.register("latestnews",{
+  textFields:["badgeMain","badgeSub",{list:"blocs",fields:["text"]}],
+
   label:"Latest News",
   icon:"📰",
   pageKey:"latestnews",

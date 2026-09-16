@@ -180,6 +180,10 @@ function BlockLayoutsCard(p){
 
 /* ── Enregistrement ──────────────────────────────────────────────────────── */
 SPGCards.register("blocklayouts",{
+  /* Champs de texte traduisibles. Le chiffre d'un bloc « figure » passe
+     aussi : DeepL adapte le séparateur de milliers (18 000 / 18,000). */
+  textFields:["badgeMain","badgeSub",{list:"blocks",fields:["callout","text"]}],
+
   label:"Block Layouts",
   icon:"📊",
   pageKey:"blocklayouts",

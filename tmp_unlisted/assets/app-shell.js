@@ -826,6 +826,172 @@ Shell.ui.TabNav = function(p){
 /* Mention IA — bloc de contrôle. À placer dans la section Image/Fond, parce
    que la mention qualifie l'image et pas le post : dans un carrousel elle se
    règle vignette par vignette, selon l'image que porte chaque vignette. */
+/* ═══ TRADUCTION FR ⇄ EN ═══════════════════════════════════════════════════
+   Un seul moteur pour tous les types de post. Chaque carte déclare ses champs
+   de texte (registry : textFields), le moteur fait le reste.
+
+   Deux précautions, apprises du texte réel de la charte :
+   - Le gras **…** et le souligné __…__ sont convertis en balises XML avant
+     l'envoi, avec tag_handling=xml : DeepL replace alors la balise autour du
+     mot traduit. Envoyer les astérisques tels quels les déplace ou les perd.
+   - Chaque retour à la ligne est traduit séparément. La mise en page des
+     cartes repose sur ces retours (« Chairman & CEO \n of TotalEnergies ») et
+     une traduction en bloc les recompose à sa guise.
+   ═══════════════════════════════════════════════════════════════════════════ */
+Shell.apiUrl = function(nom){
+  var p=global.location.pathname;
+  var i=p.indexOf("/generators/");
+  if(i>=0) return p.slice(0,i)+"/api/"+nom;
+  return "api/"+nom;
+};
+
+function protegerMarkdown(s){
+  return String(s)
+    .replace(/\*\*([\s\S]+?)\*\*/g,"<b>$1</b>")
+    .replace(/__([\s\S]+?)__/g,"<u>$1</u>");
+}
+function restaurerMarkdown(s){
+  /* Insensible à la casse et tolérant aux attributs : DeepL renvoie parfois la
+     balise sous une autre forme que celle envoyée. Le dernier remplacement
+     balaie les balises orphelines, pour qu'aucun < > ne finisse à l'écran. */
+  return String(s)
+    .replace(/<b\b[^>]*>([\s\S]*?)<\/b\s*>/gi,"**$1**")
+    .replace(/<u\b[^>]*>([\s\S]*?)<\/u\s*>/gi,"__$1__")
+    .replace(/<\/?[bu]\b[^>]*>/gi,"");
+}
+
+/* textes : tableau de chaînes. Résout avec un tableau de même longueur. */
+/* La langue de départ n'est jamais supposée : DeepL la détecte. Le générateur
+   sert autant à partir d'un texte français que d'un texte anglais, et deviner
+   à partir du dernier clic revenait à traduire à l'envers une fois sur deux.
+   Résout avec { textes, detecte } — detecte = code langue vu par DeepL. */
+Shell.traduire = function(textes, tgt){
+  /* Découpage ligne à ligne, en gardant la trace de l'origine de chaque ligne */
+  var segments=[], carte=[];
+  textes.forEach(function(t,iT){
+    var lignes=String(t==null?"":t).split("\n");
+    carte.push(lignes.map(function(l){
+      if(!l.trim()) return {vide:true,val:l};
+      var idx=segments.length;
+      segments.push(protegerMarkdown(l));
+      return {vide:false,idx:idx};
+    }));
+  });
+  if(!segments.length) return Promise.resolve({textes:textes.slice(),detecte:null});
+
+  return fetch(Shell.apiUrl("translate.php"),{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({texts:segments,target_lang:tgt,tag_handling:"xml"})
+  })
+  .then(function(r){ return r.text(); })
+  .then(function(txt){
+    var data;
+    try{ data=JSON.parse(txt); }
+    catch(err){ throw new Error("Réponse du proxy : "+txt.slice(0,200)); }
+    if(data.error) throw new Error(data.error);
+    if(!data.translations) throw new Error("Vérifier la clé DeepL dans api/translate.php");
+    var out=data.translations.map(function(x){ return restaurerMarkdown(x.text); });
+    var d=data.translations[0]&&data.translations[0].detected_source_language;
+    return {
+      detecte: d?String(d).toUpperCase():null,
+      textes: carte.map(function(lignes){
+        return lignes.map(function(l){
+          return l.vide ? l.val : (out[l.idx]!==undefined?out[l.idx]:"");
+        }).join("\n");
+      })
+    };
+  });
+};
+
+/* Lit / écrit les champs déclarés par une carte.
+   champs : ["quote","badge", {list:"blocs", fields:["text"]}] */
+function lireChamps(st, champs){
+  var vals=[];
+  champs.forEach(function(c){
+    if(typeof c==="string"){ vals.push(st[c]||""); return; }
+    (st[c.list]||[]).forEach(function(o){
+      c.fields.forEach(function(f){ vals.push((o&&o[f])||""); });
+    });
+  });
+  return vals;
+}
+function ecrireChamps(st, champs, vals){
+  var n=0, out=Object.assign({},st);
+  champs.forEach(function(c){
+    if(typeof c==="string"){ out[c]=vals[n++]; return; }
+    var liste=(st[c.list]||[]).map(function(o){ return Object.assign({},o); });
+    liste.forEach(function(o){ c.fields.forEach(function(f){ o[f]=vals[n++]; }); });
+    out[c.list]=liste;
+  });
+  return out;
+}
+Shell.lireChamps=lireChamps;
+Shell.ecrireChamps=ecrireChamps;
+
+/* Bloc de panneau. À poser au bout de l'onglet qui contient les textes :
+   il réécrit les champs juste au-dessus. */
+Shell.ui.TraductionIA = function(p){
+  var e=React.createElement, useState=React.useState;
+  var st=p.st, setSt=p.setSt, champs=p.champs||[];
+  var etat=useState(null), enCours=etat[0], setEnCours=etat[1];
+  var noteState=useState(""), note=noteState[0], setNote=noteState[1];
+
+  function lancer(cible){
+    var vals=lireChamps(st,champs);
+    if(!vals.join("").trim()){ alert("Aucun texte à traduire."); return; }
+    setEnCours(cible); setNote("");
+    Shell.traduire(vals,cible)
+      .then(function(res){
+        /* Déjà dans la langue demandée : on ne réécrit rien. DeepL renverrait
+           une paraphrase et ferait perdre le texte validé pour rien. */
+        /* La mention IA suit la langue du post : une image qualifiée en
+           français sous un texte anglais, c'est la mention qui devient fausse.
+           Elle est réalignée même quand le texte n'a pas besoin d'être traduit. */
+        var langMention=(cible==="EN")?"en":"fr";
+        if(res.detecte===cible){
+          setSt(function(prev){
+            return Object.assign({},prev,{langTarget:cible,aiNoticeLang:langMention});
+          });
+          setNote("Le texte est déjà en "+(cible==="EN"?"anglais":"français")+
+                  ", seule la mention IA a été alignée.");
+          setEnCours(null); return;
+        }
+        setSt(function(prev){
+          var maj=ecrireChamps(prev,champs,res.textes);
+          maj.langTarget=cible;
+          maj.aiNoticeLang=langMention;
+          return maj;
+        });
+        setNote("Traduit depuis "+(res.detecte||"la langue détectée")+".");
+        setEnCours(null);
+      })
+      .catch(function(err){
+        alert("Traduction impossible : "+err.message);
+        setEnCours(null);
+      });
+  }
+
+  function bouton(cible,libelle){
+    var actif=(enCours===cible), bloque=!!enCours;
+    return e("button",{onClick:function(){ lancer(cible); },disabled:bloque,
+      style:{flex:1,fontSize:13,fontWeight:700,padding:"10px 6px",borderRadius:7,
+        border:"1px solid #d4d4d4",background:bloque?"#f5f5f5":"#fff",
+        cursor:bloque?"default":"pointer",fontFamily:"inherit"}},
+      actif?"Traduction…":libelle);
+  }
+
+  return e("div",{className:"section"},
+    e("h2",null,"Traduction"),
+    e("div",{className:"hint",style:{marginBottom:10}},
+      "Réécrit les textes de ce post. La langue de départ est détectée automatiquement. "+
+      "Le gras, le souligné et les retours à la ligne sont conservés."),
+    e("div",{style:{display:"flex",gap:8}},
+      bouton("FR","🇫🇷 Traduire en français"),
+      bouton("EN","🇬🇧 Traduire en anglais")),
+    note?e("div",{className:"hint",style:{marginTop:8}},note):null);
+};
+
 Shell.ui.MentionIA = function(p){
   var e=React.createElement;
   var st=p.st||{}, set=p.set;

@@ -356,9 +356,18 @@ function LogoFrame2026(p){
    lui-même. Elle est donc rendue par DragImage, dans le cadre de l'image,
    toujours en bas au centre. Dans un carrousel, chaque vignette l'active
    ou non selon sa propre image.
-   Taille : proportionnelle à la largeur du cadre image — assez lisible pour
-   valoir information, assez discrète pour ne pas manger le visuel.
+   Taille : fixe, voir MENTION_IA_TAILLE ci-dessous.
    ═══════════════════════════════════════════════════════════════════════════ */
+/* ═══ TAILLE DE LA MENTION IA — LE SEUL ENDROIT À CHANGER ═══════════════════
+   Valeur en pixels de carte, base 1080 comme toute la charte. Elle ne dépend
+   plus du cadre de l'image : une mention qui change de taille d'un post à
+   l'autre se lit comme une erreur, et une obligation légale doit avoir une
+   forme constante.
+   Repère : le texte courant de la charte descend au minimum à 45 px
+   (TEXT_MIN_PT dans te-charte.js). La mention est donc un peu plus de deux
+   fois plus petite que le plus petit texte de contenu.                      */
+var MENTION_IA_TAILLE = 18;
+
 var MENTION_IA_TEXTES = {
   fr:{ generated:"Image générée par IA", edited:"Image modifiée par IA" },
   en:{ generated:"AI-generated image",   edited:"AI-edited image" }
@@ -377,8 +386,7 @@ function MentionIA2026(p){
   if(!st.aiNotice) return null;
   var larg=p.larg||0, haut=p.haut||0;
   if(larg<40||haut<40) return null;           /* cadre pas encore mesuré */
-  var base=Math.min(larg,haut*1.6);
-  var taille=Math.max(10,Math.min(30,Math.round(base*0.026)));
+  var taille=MENTION_IA_TAILLE;
   var padV=Math.round(taille*0.34), padH=Math.round(taille*0.72);
   return e("div",{"data-layer":"mention-ia",style:{
       position:"absolute", left:"50%", bottom:Math.round(taille*0.9),
@@ -396,4 +404,5 @@ if(typeof window!=="undefined"){
   window.MentionIA2026=MentionIA2026;
   window.mentionIATexte=mentionIATexte;
   window.MENTION_IA_DEFAUT=MENTION_IA_DEFAUT;
+  window.MENTION_IA_TAILLE=MENTION_IA_TAILLE;
 }

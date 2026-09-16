@@ -271,6 +271,9 @@ function App(){
         "Logo en bas du bloc"),
       st.showLogo?e("div",{style:{marginTop:8}},
         e(FileDrop,{value:st.logoImg,onChange:function(v){set("logoImg",v);},placeholder:"Logo PNG transparent",small:true})):null,
+      /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
+         champs juste au-dessus. */
+      e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("citation")}),
       e(UI.TabNav,{prev:"Personne",onPrev:function(){setActiveTab("personne");},
         next:"Export",onNext:function(){setActiveTab("export");}})),
 

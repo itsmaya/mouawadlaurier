@@ -203,6 +203,9 @@ function App(){
       e(UI.SliderField,{label:"Taille — "+fs.toFixed(0)+" px",
         min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
         onChange:function(v){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=Math.round(v);return c;});}}),
+      /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
+         champs juste au-dessus. */
+      e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("splitscreen")}),
       e(UI.TabNav,{
         prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
         next:"Export",onNext:function(){setActiveTab("export");}})),

@@ -372,6 +372,9 @@ function App(){
         "Revenir aux valeurs de charte"),
       e("div",{style:{height:8}}),
       e(UI.Warnings,{items:warnings}),
+      /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
+         champs juste au-dessus. */
+      e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("blocklayouts")}),
       e(UI.TabNav,{prev:"Cartouche",onPrev:function(){setActiveTab("cartouche");},
         next:"Export",onNext:function(){setActiveTab("export");}})),
 
