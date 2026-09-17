@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Static Posts Generator — Fisheye × TotalEnergies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Nunito',sans-serif;color:#1a1a1a;}
+body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
+
+/* ══ LOGO FISHEYE ══
+   Le fichier est blanc sur fond noir. invert() le passe en noir sur blanc,
+   multiply rend ensuite le blanc transparent : logo noir sur n'importe
+   quel fond clair, sans halo. */
+.fish{display:block;}
+
+/* ══ BARRE DU HAUT — identique aux générateurs ══ */
+.page-header{height:52px;flex-shrink:0;background:#fff;
+  border-bottom:1px solid #e0e0e0;display:flex;align-items:center;
+  padding:0 24px;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
+.page-header-logo{height:19px;}
+.page-header-sep{width:1px;height:18px;background:#dadada;flex-shrink:0;}
+.page-header-title{font-size:11px;font-weight:800;color:#111;
+  letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;}
+.page-header-sub{font-size:11px;font-weight:400;color:#a0a0a0;white-space:nowrap;}
+
+/* ══ NAV + MENU DÉROULANT ══ */
+.page-header-nav{margin-left:auto;display:flex;align-items:center;gap:8px;padding-left:12px;position:relative;}
+/* Bouton principal */
+.hdr-menu-btn{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;
+  color:#333;text-decoration:none;padding:5px 12px;border-radius:2px;border:1px solid #dadada;
+  background:#fafafa;letter-spacing:.06em;text-transform:uppercase;transition:all .18s;
+  cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.hdr-menu-btn:hover,.hdr-menu-btn.open{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.hdr-menu-btn svg{transition:transform .2s;}
+.hdr-menu-btn.open svg{transform:rotate(180deg);}
+/* Dropdown */
+.hdr-dd{position:absolute;top:calc(100% + 6px);right:0;background:#fff;
+  border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.14);border:1px solid #e0e0e0;
+  min-width:200px;overflow:hidden;z-index:9999;
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .16s,transform .16s;}
+.hdr-dd.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+.hdr-dd a{display:flex;align-items:center;gap:10px;padding:10px 16px;
+  font-size:12px;font-weight:700;color:#333;text-decoration:none;letter-spacing:.03em;
+  text-transform:uppercase;transition:background .12s;border-bottom:1px solid #f0f0f0;}
+.hdr-dd a:last-child{border-bottom:none;}
+.hdr-dd a:hover{background:#f5f5f3;color:#1a1a1a;}
+.hdr-dd a .new-badge{font-size:9px;font-weight:800;letter-spacing:.06em;
+  background:#1a1a1a;color:#fff;padding:2px 5px;border-radius:3px;margin-left:auto;}
+
+/* ══ ZONE PRINCIPALE ══
+   Reprise du plan de la barre du haut, étalé sur toute la page :
+   même blanc cassé, mêmes filets, en très basse opacité. */
+.hero{flex:1;min-height:0;display:flex;flex-direction:column;position:relative;
+  background:
+    /* filets horizontaux façon barres empilées */
+    repeating-linear-gradient(to bottom,
+      rgba(255,255,255,.55) 0 52px,
+      rgba(0,0,0,.028) 52px 53px),
+    /* dégradé de base désaturé */
+    linear-gradient(160deg,#f7f7f7 0%,#e6e6e6 55%,#dcdcdc 100%);}
+
+/* ══ GRILLE DE VIGNETTES — deux colonnes identiques ══
+   Toutes les cartes sont inchangées, simplement rangées 2 par 2
+   plutôt qu'empilées en une seule colonne défilante. */
+.cards-grid{position:relative;z-index:1;flex:1;min-height:0;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.18) transparent;
+  display:grid;grid-template-columns:repeat(3,1fr);align-content:start;
+  background:rgba(255,255,255,.62);backdrop-filter:blur(2px);}
+.cards-grid::-webkit-scrollbar{width:8px;}
+.cards-grid::-webkit-scrollbar-track{background:transparent;}
+.cards-grid::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16);border-radius:4px;
+  border:2px solid transparent;background-clip:content-box;}
+.cards-grid::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.3);background-clip:content-box;}
+
+.tool-card{position:relative;flex-shrink:0;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;
+  padding:28px 28px;cursor:pointer;text-decoration:none;color:#1a1a1a;
+  border-bottom:1px solid rgba(0,0,0,.08);overflow:hidden;transition:background .2s;}
+/* Separateur vertical : toutes les cartes SAUF celles de la derniere colonne.
+   En deux colonnes c'etait nth-child(odd) ; en trois, la regle devient
+   "pas un multiple de 3". Les media queries la reajustent plus bas. */
+.cards-grid .tool-card:not(:nth-child(3n)){border-right:1px solid rgba(0,0,0,.08);}
+.tool-card:hover{background:rgba(255,255,255,.85);}
+.tool-card:focus-visible{outline:2px solid #1a1a1a;outline-offset:-4px;
+  background:rgba(255,255,255,.85);}
+
+.tool-card-body{display:flex;flex-direction:column;min-width:0;}
+.tool-card-num{font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:56px;color:rgba(0,0,0,.05);position:absolute;top:12px;left:36px;
+  line-height:1;pointer-events:none;}
+.tool-card-label{font-size:10px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:#a0a0a0;margin-bottom:10px;}
+.tool-card-title{font-family:'DM Serif Display',serif;font-weight:400;
+  font-size:clamp(28px,2.6vw,40px);line-height:1.02;letter-spacing:-.01em;margin-bottom:10px;}
+.tool-card-title em{font-style:italic;color:#8d8d8d;}
+.tool-card-desc{font-size:12.5px;color:#6c6c6c;line-height:1.5;margin-bottom:16px;}
+.tool-card-cta{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#1a1a1a;border-bottom:1.5px solid #1a1a1a;padding-bottom:2px;transition:gap .2s;}
+.tool-card:hover .tool-card-cta{gap:14px;}
+
+/* ══ VIGNETTE 1:1 ══ */
+/* La vignette retrecit avec la colonne : en trois colonnes une cellule fait
+   environ un tiers de la largeur, la borne haute passe donc de 190 a 150 px. */
+.tool-card-media{position:relative;flex-shrink:0;
+  width:clamp(110px,11vw,150px);aspect-ratio:1/1;}
+.tool-card-media::before,.tool-card-media::after{content:"";position:absolute;inset:0;border-radius:2px;}
+.tool-card-media::before{transform:translate(14px,14px);border:1px solid rgba(0,0,0,.10);}
+.tool-card-media::after{transform:translate(7px,7px);background:#e2e2e2;}
+.tool-card-media img{position:relative;z-index:1;width:100%;height:100%;
+  object-fit:cover;display:block;border-radius:2px;border:1px solid rgba(0,0,0,.12);
+  box-shadow:0 8px 26px rgba(0,0,0,.13);
+  transition:transform .3s ease,box-shadow .3s ease;}
+.tool-card:hover .tool-card-media img{transform:translate(-3px,-3px);
+  box-shadow:0 14px 34px rgba(0,0,0,.19);}
+.tool-card-media.empty img{display:none;}
+.tool-card-media.empty{background:repeating-linear-gradient(45deg,
+  #eeeeee 0 10px,#e4e4e4 10px 20px);border:1px dashed #c4c4c4;border-radius:2px;}
+.tool-card-media.empty::before,.tool-card-media.empty::after{display:none;}
+/* Texte affiche quand l'apercu manque. En trois colonnes la vignette est plus
+   etroite : le chemin doit pouvoir se couper, sinon il deborde de la boite. */
+.tool-card-media .ph{display:none;position:absolute;inset:0;z-index:2;
+  align-items:center;justify-content:center;text-align:center;
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#a0a0a0;padding:0 8px;line-height:1.6;
+  overflow-wrap:anywhere;word-break:break-word;}
+.tool-card-media.empty .ph{display:flex;}
+
+/* ══ FOOTER ══ */
+.ftr{flex-shrink:0;padding:14px 48px;border-top:1px solid #e0e0e0;background:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.ftr-left{display:flex;flex-direction:column;gap:2px;}
+.ftr-copy{font-size:11px;font-weight:700;color:#555;letter-spacing:.04em;}
+.ftr-desc{font-size:11px;color:#a0a0a0;letter-spacing:.02em;}
+.ftr-right{display:flex;align-items:center;gap:16px;}
+.ftr-te{height:20px;display:block;}
+.ftr-logo{height:18px;}
+
+/* Trois colonnes au-dela de 1280px, deux entre 900 et 1280, une en dessous.
+   Le separateur suit le nombre de colonnes, sinon des filets apparaissent
+   au milieu des rangees. */
+@media(max-width:1280px){
+  .cards-grid{grid-template-columns:1fr 1fr;}
+  .cards-grid .tool-card:not(:nth-child(3n)){border-right:none;}
+  .cards-grid .tool-card:nth-child(odd){border-right:1px solid rgba(0,0,0,.08);}
+}
+@media(max-width:900px){
+  .cards-grid{grid-template-columns:1fr;}
+  .cards-grid .tool-card:nth-child(odd){border-right:none;}
+  .tool-card{grid-template-columns:1fr;gap:22px;}
+  .tool-card-media{width:clamp(150px,38vw,200px);}
+}
+@media(max-width:768px){
+  html,body{height:auto;}
+  .cards-grid{overflow:visible;}
+  .tool-card{padding:30px 24px;}
+  .tool-card-num{font-size:52px;top:14px;left:24px;}
+  .ftr{padding-left:20px;padding-right:20px;}
+  .page-header{padding-left:20px;padding-right:20px;}
+  .page-header-sub{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <img class="page-header-logo" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+  <div class="page-header-sep"></div>
+  <span class="page-header-title">Static Posts Generator</span>
+  <span class="page-header-sub">for TotalEnergies</span>
+  <nav class="page-header-nav" id="hdr-nav">
+    <button class="hdr-menu-btn" id="hdr-menu-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleMenu()">
+      Générateurs
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div class="hdr-dd" id="hdr-dd" role="menu">
+      <a href="generators/fiche-metier/index.html" role="menuitem">Fiche Métier</a>
+      <a href="generators/citation/index.html" role="menuitem">Citation Post</a>
+      <a href="generators/latest-news/index.html" role="menuitem">Latest News</a>
+      <a href="generators/split-screen/index.html" role="menuitem">Split Screen</a>
+      <a href="generators/carrousel/index.html" role="menuitem">Carrousel</a>
+      <a href="generators/block-layouts/index.html" role="menuitem">Block Layouts</a>
+      <a href="generators/totally-true/index.html" role="menuitem">Totally True</a>
+    <a href="generators/energy-talks/index.html" role="menuitem">Energy Talks <span class="new-badge">NEW</span></a>
+    </div>
+  </nav>
+  <script>
+  (function(){
+    var btn=document.getElementById("hdr-menu-btn");
+    var dd=document.getElementById("hdr-dd");
+    var open=false;
+    window.toggleMenu=function(){
+      open=!open;
+      btn.classList.toggle("open",open);
+      dd.classList.toggle("open",open);
+      btn.setAttribute("aria-expanded",open?"true":"false");
+    };
+    document.addEventListener("click",function(ev){
+      if(!document.getElementById("hdr-nav").contains(ev.target)&&open){
+        open=false;btn.classList.remove("open");dd.classList.remove("open");btn.setAttribute("aria-expanded","false");
+      }
+    });
+    document.addEventListener("keydown",function(ev){
+      if(ev.key==="Escape"&&open){open=false;btn.classList.remove("open");dd.classList.remove("open");btn.setAttribute("aria-expanded","false");btn.focus();}
+    });
+  })();
+  </script>
+</header>
+
+<main class="hero">
+
+  <div class="cards-grid">
+
+    <a href="generators/fiche-metier/index.html" class="tool-card">
+      <span class="tool-card-num">01</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Fiche Métier</span>
+        <div class="tool-card-title">Fiche<br/><em>Métier</em></div>
+        <p class="tool-card-desc">
+          Portraits de femmes du secteur énergétique.
+          Missions, citation, photo portrait sur fond personnalisé.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_WIE.png" alt="Aperçu Fiche Métier"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_WIE.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/citation/index.html" class="tool-card">
+      <span class="tool-card-num">02</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Citation Post</span>
+        <div class="tool-card-title">Citation<br/><em>Post</em></div>
+        <p class="tool-card-desc">
+          Visuels de citations pour dirigeants et experts.
+          Surlignage, soulignage et guillemets EN&nbsp;/&nbsp;FR.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_CITATION.png" alt="Aperçu Citation Post"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_CITATION.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/latest-news/index.html" class="tool-card">
+      <span class="tool-card-num">03</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Latest News</span>
+        <div class="tool-card-title">Latest<br/><em>News</em></div>
+        <p class="tool-card-desc">
+          Annonces et actualités localisées. Cartouche lieu, pavé texte
+          sur image, marie-louise et flèche de carrousel.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_LATESTNEWS.png" alt="Aperçu Latest News"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_LATESTNEWS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/split-screen/index.html" class="tool-card">
+      <span class="tool-card-num">04</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Split Screen</span>
+        <div class="tool-card-title">Split<br/><em>Screen</em></div>
+        <p class="tool-card-desc">
+          Annonces avec photo et texte côte à côte. Disposition libre
+          (haut, bas, colonne gauche ou droite), cartouche et dégradés charte.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_SPLITSCREEN.png" alt="Aperçu Split Screen"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_SPLITSCREEN.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/block-layouts/index.html" class="tool-card">
+      <span class="tool-card-num">05</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Block Layouts</span>
+        <div class="tool-card-title">Block<br/><em>Layouts</em></div>
+        <p class="tool-card-desc">
+          Chiffres clés et statistiques en blocs empilés, template 05 de la
+          charte 2026. Jusqu'à 4 blocs, callouts géants, 4 formats dont 16:9.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_BLOCKLAYOUTS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/totally-true/index.html" class="tool-card">
+      <span class="tool-card-num">06</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Totally True</span>
+        <div class="tool-card-title">Totally<br/><em>True</em></div>
+        <p class="tool-card-desc">
+          Bulle de dialogue posée sur l'image, avec la citation du commentaire
+          et la mention du pseudo. Pointe orientable en haut ou en bas,
+          position et largeur libres.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_TOTALLYTRUE.png<br/>1080 × 1350</span>
+      </div>
+    </a>
+
+    <a href="generators/energy-talks/index.html" class="tool-card">
+      <span class="tool-card-num">07</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Energy Talks</span>
+        <div class="tool-card-title">Energy<br/><em>Talks</em></div>
+        <p class="tool-card-desc">
+          Annonces Live et Podcast. De 1 à 4 intervenants détourés
+          automatiquement, dégradé réglable sur la photo de plateau,
+          formats carré et paysage.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_ENERGYTALKS.png" alt="Aperçu Energy Talks"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_ENERGYTALKS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/carrousel/index.html" class="tool-card">
+      <span class="tool-card-num">08</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Carrousel</span>
+        <div class="tool-card-title">Carrousel<br/><em>Slides</em></div>
+        <p class="tool-card-desc">
+          Séquence de slides Latest News avec numérotation automatique,
+          flèche et point de navigation. Export ZIP multi-formats.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_CARROUSEL.png" alt="Aperçu Carrousel"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_CARROUSEL.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+  </div>
+
+</main>
+
+<footer class="ftr">
+  <div class="ftr-left">
+    <span class="ftr-copy">Static Posts Generator — Developed by Fisheye</span>
+    <span class="ftr-desc">Formats 1:1, 4:5, story 9:16 · Export PNG haute résolution, conforme à la charte Social Media.</span>
+  </div>
+  <div class="ftr-right">
+    <img class="ftr-te" src="https://upload.wikimedia.org/wikipedia/fr/thumb/f/f7/Logo_TotalEnergies.svg/960px-Logo_TotalEnergies.svg.png" alt="TotalEnergies"/>
+    <img class="ftr-logo" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+  </div>
+</footer>
+
+</body>
+</html>
