@@ -65,30 +65,50 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
     /* dégradé de base désaturé */
     linear-gradient(160deg,#f7f7f7 0%,#e6e6e6 55%,#dcdcdc 100%);}
 
-/* ══ GRILLE DE VIGNETTES — deux colonnes identiques ══
-   Toutes les cartes sont inchangées, simplement rangées 2 par 2
-   plutôt qu'empilées en une seule colonne défilante. */
+/* ══ MOSAÏQUE D'ACCUEIL ══
+   Le Carrousel occupe une grande tuile, colonne 1 sur deux rangées : c'est
+   l'outil ouvert le plus souvent, sa taille le dit. Les sept autres se rangent
+   autour, les deux posts autonomes d'abord puisqu'ils ne dépendent de rien.
+
+   Les filets viennent du gap de la grille et non de bordures par carte : avec
+   une tuile qui s'étend sur deux rangées, un `nth-child` ne tombe plus jamais
+   juste. Le fond de la grille fait la ligne, les cartes la recouvrent. */
 .cards-grid{position:relative;z-index:1;flex:1;min-height:0;overflow-y:auto;
   overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.18) transparent;
   display:grid;grid-template-columns:repeat(3,1fr);align-content:start;
-  background:rgba(255,255,255,.62);backdrop-filter:blur(2px);}
+  /* max-content : sans ça, la grille ayant une hauteur définie (flex:1), les
+     rangées se répartissaient la place et écrasaient les cartes dès qu'on
+     passait à une ou deux colonnes. Chaque rangée fait désormais la hauteur de
+     son contenu, et c'est la grille qui défile. */
+  grid-auto-rows:max-content;
+  gap:1px;background:rgba(0,0,0,.09);}
 .cards-grid::-webkit-scrollbar{width:8px;}
 .cards-grid::-webkit-scrollbar-track{background:transparent;}
 .cards-grid::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16);border-radius:4px;
   border:2px solid transparent;background-clip:content-box;}
 .cards-grid::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.3);background-clip:content-box;}
 
+/* La grande tuile */
+.phare-card{position:relative;grid-column:1;grid-row:span 2;
+  display:flex;flex-direction:column;justify-content:flex-start;gap:6px;
+  padding:34px 36px;text-decoration:none;color:#1a1a1a;cursor:pointer;
+  background:rgba(255,255,255,.72);transition:background .2s;overflow:hidden;}
+.phare-card:hover{background:rgba(255,255,255,.96);}
+.phare-card:focus-visible{outline:2px solid #1a1a1a;outline-offset:-4px;}
+.phare-card .tool-card-title{font-size:clamp(30px,3.6vw,46px);margin-bottom:14px;}
+.phare-card .tool-card-desc{font-size:14px;max-width:44ch;margin-bottom:18px;}
+.phare-card .tool-card-media{width:clamp(160px,17vw,240px);margin-top:auto;}
+.phare-card .tool-card-cta{color:#0077b4;}
 .tool-card{position:relative;flex-shrink:0;display:grid;
   grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;
   padding:28px 28px;cursor:pointer;text-decoration:none;color:#1a1a1a;
-  border-bottom:1px solid rgba(0,0,0,.08);overflow:hidden;transition:background .2s;}
+  background:rgba(255,255,255,.62);overflow:hidden;transition:background .2s;}
 /* Separateur vertical : toutes les cartes SAUF celles de la derniere colonne.
    En deux colonnes c'etait nth-child(odd) ; en trois, la regle devient
    "pas un multiple de 3". Les media queries la reajustent plus bas. */
-.cards-grid .tool-card:not(:nth-child(3n)){border-right:1px solid rgba(0,0,0,.08);}
-.tool-card:hover{background:rgba(255,255,255,.85);}
+.tool-card:hover{background:rgba(255,255,255,.96);}
 .tool-card:focus-visible{outline:2px solid #1a1a1a;outline-offset:-4px;
-  background:rgba(255,255,255,.85);}
+  background:rgba(255,255,255,.96);}
 
 .tool-card-body{display:flex;flex-direction:column;min-width:0;}
 .tool-card-num{font-family:'DM Serif Display',serif;font-style:italic;
@@ -147,12 +167,12 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
    au milieu des rangees. */
 @media(max-width:1280px){
   .cards-grid{grid-template-columns:1fr 1fr;}
-  .cards-grid .tool-card:not(:nth-child(3n)){border-right:none;}
-  .cards-grid .tool-card:nth-child(odd){border-right:1px solid rgba(0,0,0,.08);}
+  .phare-card{padding:28px 26px;}
 }
 @media(max-width:900px){
   .cards-grid{grid-template-columns:1fr;}
-  .cards-grid .tool-card:nth-child(odd){border-right:none;}
+  /* En une colonne, la grande tuile redevient une carte comme les autres. */
+  .phare-card{grid-column:auto;grid-row:auto;}
   .tool-card{grid-template-columns:1fr;gap:22px;}
   .tool-card-media{width:clamp(150px,38vw,200px);}
 }
@@ -222,6 +242,29 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
 
   <div class="cards-grid">
 
+    <a href="generators/carrousel/index.html" class="phare-card">
+      <div class="tool-card-body">
+        <span class="tool-card-label">Carrousel</span>
+        <div class="tool-card-title">Carrousel<br/><em>Slides</em></div>
+        <p class="tool-card-desc">
+          Le point de départ d'une série. Assemble les cinq types de vignettes,
+          numérotation, flèches et point final automatiques, export ZIP
+          multi-formats.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_CARROUSEL.png" alt="Aperçu Carrousel"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_CARROUSEL.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
     <a href="generators/fiche-metier/index.html" class="tool-card">
       <span class="tool-card-num">01</span>
       <div class="tool-card-body">
@@ -245,124 +288,8 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
       </div>
     </a>
 
-    <a href="generators/citation/index.html" class="tool-card">
-      <span class="tool-card-num">02</span>
-      <div class="tool-card-body">
-        <span class="tool-card-label">Citation Post</span>
-        <div class="tool-card-title">Citation<br/><em>Post</em></div>
-        <p class="tool-card-desc">
-          Visuels de citations pour dirigeants et experts.
-          Surlignage, soulignage et guillemets EN&nbsp;/&nbsp;FR.
-        </p>
-        <span class="tool-card-cta">
-          Ouvrir
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </div>
-      <div class="tool-card-media">
-        <img src="previews/PREVIEW_CITATION.png" alt="Aperçu Citation Post"
-             onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_CITATION.png<br/>1080 × 1080</span>
-      </div>
-    </a>
-
-    <a href="generators/latest-news/index.html" class="tool-card">
-      <span class="tool-card-num">03</span>
-      <div class="tool-card-body">
-        <span class="tool-card-label">Latest News</span>
-        <div class="tool-card-title">Latest<br/><em>News</em></div>
-        <p class="tool-card-desc">
-          Annonces et actualités localisées. Cartouche lieu, pavé texte
-          sur image, marie-louise et flèche de carrousel.
-        </p>
-        <span class="tool-card-cta">
-          Ouvrir
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </div>
-      <div class="tool-card-media">
-        <img src="previews/PREVIEW_LATESTNEWS.png" alt="Aperçu Latest News"
-             onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_LATESTNEWS.png<br/>1080 × 1080</span>
-      </div>
-    </a>
-
-    <a href="generators/split-screen/index.html" class="tool-card">
-      <span class="tool-card-num">04</span>
-      <div class="tool-card-body">
-        <span class="tool-card-label">Split Screen</span>
-        <div class="tool-card-title">Split<br/><em>Screen</em></div>
-        <p class="tool-card-desc">
-          Annonces avec photo et texte côte à côte. Disposition libre
-          (haut, bas, colonne gauche ou droite), cartouche et dégradés charte.
-        </p>
-        <span class="tool-card-cta">
-          Ouvrir
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </div>
-      <div class="tool-card-media">
-        <img src="previews/PREVIEW_SPLITSCREEN.png" alt="Aperçu Split Screen"
-             onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_SPLITSCREEN.png<br/>1080 × 1080</span>
-      </div>
-    </a>
-
-    <a href="generators/block-layouts/index.html" class="tool-card">
-      <span class="tool-card-num">05</span>
-      <div class="tool-card-body">
-        <span class="tool-card-label">Block Layouts</span>
-        <div class="tool-card-title">Block<br/><em>Layouts</em></div>
-        <p class="tool-card-desc">
-          Chiffres clés et statistiques en blocs empilés, template 05 de la
-          charte 2026. Jusqu'à 4 blocs, callouts géants, 4 formats dont 16:9.
-        </p>
-        <span class="tool-card-cta">
-          Ouvrir
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </div>
-      <div class="tool-card-media">
-        <img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts"
-             onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_BLOCKLAYOUTS.png<br/>1080 × 1080</span>
-      </div>
-    </a>
-
-    <a href="generators/totally-true/index.html" class="tool-card">
-      <span class="tool-card-num">06</span>
-      <div class="tool-card-body">
-        <span class="tool-card-label">Totally True</span>
-        <div class="tool-card-title">Totally<br/><em>True</em></div>
-        <p class="tool-card-desc">
-          Bulle de dialogue posée sur l'image, avec la citation du commentaire
-          et la mention du pseudo. Pointe orientable en haut ou en bas,
-          position et largeur libres.
-        </p>
-        <span class="tool-card-cta">
-          Ouvrir
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </div>
-      <div class="tool-card-media">
-        <img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True"
-             onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_TOTALLYTRUE.png<br/>1080 × 1350</span>
-      </div>
-    </a>
-
     <a href="generators/energy-talks/index.html" class="tool-card">
-      <span class="tool-card-num">07</span>
+      <span class="tool-card-num">02</span>
       <div class="tool-card-body">
         <span class="tool-card-label">Energy Talks</span>
         <div class="tool-card-title">Energy<br/><em>Talks</em></div>
@@ -385,14 +312,14 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
       </div>
     </a>
 
-    <a href="generators/carrousel/index.html" class="tool-card">
-      <span class="tool-card-num">08</span>
+    <a href="generators/citation/index.html" class="tool-card">
+      <span class="tool-card-num">03</span>
       <div class="tool-card-body">
-        <span class="tool-card-label">Carrousel</span>
-        <div class="tool-card-title">Carrousel<br/><em>Slides</em></div>
+        <span class="tool-card-label">Citation Post</span>
+        <div class="tool-card-title">Citation<br/><em>Post</em></div>
         <p class="tool-card-desc">
-          Séquence de slides Latest News avec numérotation automatique,
-          flèche et point de navigation. Export ZIP multi-formats.
+          Visuels de citations pour dirigeants et experts.
+          Surlignage, soulignage et guillemets EN&nbsp;/&nbsp;FR.
         </p>
         <span class="tool-card-cta">
           Ouvrir
@@ -402,9 +329,102 @@ body{min-height:100vh;display:flex;flex-direction:column;background:#ebebeb;}
         </span>
       </div>
       <div class="tool-card-media">
-        <img src="previews/PREVIEW_CARROUSEL.png" alt="Aperçu Carrousel"
+        <img src="previews/PREVIEW_CITATION.png" alt="Aperçu Citation Post"
              onerror="this.parentNode.classList.add('empty')"/>
-        <span class="ph">previews/PREVIEW_CARROUSEL.png<br/>1080 × 1080</span>
+        <span class="ph">previews/PREVIEW_CITATION.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/latest-news/index.html" class="tool-card">
+      <span class="tool-card-num">04</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Latest News</span>
+        <div class="tool-card-title">Latest<br/><em>News</em></div>
+        <p class="tool-card-desc">
+          Annonces et actualités localisées. Cartouche lieu, pavé texte
+          sur image, marie-louise et flèche de carrousel.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_LATESTNEWS.png" alt="Aperçu Latest News"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_LATESTNEWS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/split-screen/index.html" class="tool-card">
+      <span class="tool-card-num">05</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Split Screen</span>
+        <div class="tool-card-title">Split<br/><em>Screen</em></div>
+        <p class="tool-card-desc">
+          Annonces avec photo et texte côte à côte. Disposition libre
+          (haut, bas, colonne gauche ou droite), cartouche et dégradés charte.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_SPLITSCREEN.png" alt="Aperçu Split Screen"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_SPLITSCREEN.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/block-layouts/index.html" class="tool-card">
+      <span class="tool-card-num">06</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Block Layouts</span>
+        <div class="tool-card-title">Block<br/><em>Layouts</em></div>
+        <p class="tool-card-desc">
+          Chiffres clés et statistiques en blocs empilés, template 05 de la
+          charte 2026. Jusqu'à 4 blocs, callouts géants, 4 formats dont 16:9.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_BLOCKLAYOUTS.png<br/>1080 × 1080</span>
+      </div>
+    </a>
+
+    <a href="generators/totally-true/index.html" class="tool-card">
+      <span class="tool-card-num">07</span>
+      <div class="tool-card-body">
+        <span class="tool-card-label">Totally True</span>
+        <div class="tool-card-title">Totally<br/><em>True</em></div>
+        <p class="tool-card-desc">
+          Bulle de dialogue posée sur l'image, avec la citation du commentaire
+          et la mention du pseudo. Pointe orientable en haut ou en bas,
+          position et largeur libres.
+        </p>
+        <span class="tool-card-cta">
+          Ouvrir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+      <div class="tool-card-media">
+        <img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True"
+             onerror="this.parentNode.classList.add('empty')"/>
+        <span class="ph">previews/PREVIEW_TOTALLYTRUE.png<br/>1080 × 1350</span>
       </div>
     </a>
 
