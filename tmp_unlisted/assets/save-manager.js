@@ -16,11 +16,11 @@
      plus. Sans le passage de version, onupgradeneeded ne se déclenche pas, le
      store n'est jamais créé, et la page échoue avec « One of the specified
      object stores was not found » dès la première lecture de sauvegardes. */
-  var DB_VERSION = 8;   /* v8 : ajout du store Totally True */
+  var DB_VERSION = 9;   /* v9 : ajout du store Energy Talks */
   var ALL_STORES = [
     "saves","citation_saves","latestnews_saves","carrousel_saves","splitscreen_saves",
     "sm_fichemetier","sm_citation","sm_latestnews","sm_carrousel","sm_splitscreen",
-    "sm_blocklayouts","sm_totallytrue"
+    "sm_blocklayouts","sm_totallytrue","sm_energytalks"
   ];
 
   function openDB(ok, ko){

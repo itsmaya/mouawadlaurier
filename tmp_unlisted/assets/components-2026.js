@@ -366,18 +366,32 @@ function LogoFrame2026(p){
    Repère : le texte courant de la charte descend au minimum à 45 px
    (TEXT_MIN_PT dans te-charte.js). La mention est donc un peu plus de deux
    fois plus petite que le plus petit texte de contenu.                      */
-var MENTION_IA_TAILLE = 18;
+var MENTION_IA_TAILLE = 20;
 
+/* Formulations validées par l'équipe charte (retour du 16 septembre) :
+   « AI-generated content » et « AI-enhanced content », volontairement
+   génériques pour couvrir image, vidéo et audio d'une seule phrase, et
+   parce qu'une formulation courte tient mieux dans le visuel.
+   Le fautif « IA-generated » signalé dans leur relecture n'a jamais existé
+   ici : l'anglais est écrit AI, le français IA. */
 var MENTION_IA_TEXTES = {
-  fr:{ generated:"Image générée par IA", edited:"Image modifiée par IA" },
-  en:{ generated:"AI-generated image",   edited:"AI-edited image" }
+  fr:{ generated:"Contenu généré par IA",  enhanced:"Contenu amélioré par IA" },
+  en:{ generated:"AI-generated content",   enhanced:"AI-enhanced content"    }
 };
-var MENTION_IA_DEFAUT = { aiNotice:false, aiNoticeKind:"generated", aiNoticeLang:"fr" };
+var MENTION_IA_DEFAUT = { aiNotice:false, aiNoticeKind:"generated",
+                          aiNoticeLang:"fr", aiNoticeFond:"pastille" };
+
+/* Gris foncé de la charte, imposé par l'équipe pour l'accessibilité. */
+var MENTION_IA_GRIS = (typeof CHARTE!=="undefined" && CHARTE.text && CHARTE.text.darkGray)
+  ? CHARTE.text.darkGray : "#374649";
 
 function mentionIATexte(st){
   st=st||{};
   var l=MENTION_IA_TEXTES[st.aiNoticeLang==="en"?"en":"fr"];
-  return l[st.aiNoticeKind==="edited"?"edited":"generated"];
+  /* "edited" est l'ancien nom de la seconde formulation, conservé pour que
+     les projets enregistrés avant le 16 septembre continuent de s'ouvrir. */
+  var k=(st.aiNoticeKind==="enhanced"||st.aiNoticeKind==="edited")?"enhanced":"generated";
+  return l[k];
 }
 
 function MentionIA2026(p){
@@ -386,18 +400,32 @@ function MentionIA2026(p){
   if(!st.aiNotice) return null;
   var larg=p.larg||0, haut=p.haut||0;
   if(larg<40||haut<40) return null;           /* cadre pas encore mesuré */
+
   var taille=MENTION_IA_TAILLE;
-  var padV=Math.round(taille*0.34), padH=Math.round(taille*0.72);
-  return e("div",{"data-layer":"mention-ia",style:{
-      position:"absolute", left:"50%", bottom:Math.round(taille*0.9),
-      transform:"translateX(-50%)",
-      maxWidth:"90%", pointerEvents:"none", zIndex:5,
-      fontFamily:"'Nunito',sans-serif", fontSize:taille, lineHeight:1.2,
-      fontWeight:600, letterSpacing:".01em", whiteSpace:"nowrap",
-      color:"#FFFFFF", background:"rgba(0,0,0,0.45)",
-      padding:padV+"px "+padH+"px", borderRadius:Math.round(taille*1.2),
-      boxSizing:"border-box"}},
-    mentionIATexte(st));
+  var padV=Math.round(taille*0.40), padH=Math.round(taille*0.75);
+  var rayon=Math.round(taille*0.55);          /* coins franchement arrondis */
+  var nu=(st.aiNoticeFond==="texte");
+
+  var style={
+    position:"absolute", left:"50%", bottom:Math.round(taille*0.9),
+    transform:"translateX(-50%)",
+    maxWidth:"92%", pointerEvents:"none", zIndex:5,
+    fontFamily:"'Nunito',sans-serif", fontSize:taille, lineHeight:1.2,
+    fontWeight:700, letterSpacing:".01em", whiteSpace:"nowrap",
+    color:MENTION_IA_GRIS, boxSizing:"border-box",
+    padding:padV+"px "+padH+"px", borderRadius:rayon
+  };
+  if(nu){
+    /* Texte seul : réservé aux fonds clairs et unis. */
+    style.background="transparent"; style.padding="0";
+  } else {
+    /* Pastille blanche à filet, sur le principe du cadre des logos partenaires :
+       elle garde le gris foncé lisible sur une photo, et reste visible sur un
+       fond blanc grâce au contour. */
+    style.background="#FFFFFF";
+    style.border="1px solid rgba(55,70,73,0.35)";
+  }
+  return e("div",{"data-layer":"mention-ia",style:style}, mentionIATexte(st));
 }
 
 if(typeof window!=="undefined"){
@@ -405,4 +433,5 @@ if(typeof window!=="undefined"){
   window.mentionIATexte=mentionIATexte;
   window.MENTION_IA_DEFAUT=MENTION_IA_DEFAUT;
   window.MENTION_IA_TAILLE=MENTION_IA_TAILLE;
+  window.MENTION_IA_TEXTES=MENTION_IA_TEXTES;
 }

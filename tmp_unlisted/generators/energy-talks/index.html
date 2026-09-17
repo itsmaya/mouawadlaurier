@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Energy Talks — TotalEnergies</title>
+<link rel="stylesheet" href="../../assets/fonts.css"/>
+<script src="../../assets/boot-gate.js"></script>
+<script>
+function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
+</script>
+<script>
+loadScript(["../../assets/vendor/react.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"],function(){
+loadScript(["../../assets/vendor/react-dom.production.min.js","https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"],function(){
+loadScript(["../../assets/vendor/dom-to-image-more.min.js","https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
+</script>
+<!-- Détourage IA : le module est chargé ici, la logique vit dans assets/rmbg.js -->
+<script type="module">
+import { pipeline, env } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/transformers.min.js";
+env.allowLocalModels = false;
+window.__transformers = { pipeline, env };
+window.__transformersReady = true;
+</script>
+<script src="../../assets/header.js"></script>
+<script>window.PICTO_BASE="../../assets/";</script>
+<script src="../../assets/pictos.js"></script>
+<script src="../../assets/save-manager.js"></script>
+<script src="../../assets/charte-2026.js"></script>
+<script src="../../assets/te-charte.js"></script>
+<script src="../../assets/rich-body.js"></script>
+<script src="../../assets/drag-image.js"></script>
+<script src="../../assets/bg-controls.js"></script>
+<script src="../../assets/components-2026.js"></script>
+<script src="../../assets/rmbg.js"></script>
+<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/cards/registry.js"></script>
+<script src="../../assets/cards/energy-talks-card.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+function boot(){
+
+var e=React.createElement,useState=React.useState,useRef=React.useRef;
+var UI=Shell.ui;
+
+var CARD=SPGCards.get("energytalks");
+var DEFAULT=CARD.DEFAULT;
+var PAGE_FORMATS=CARD.formats;
+var BG_DIR="../../templates/energy-talks/";
+var ET_DIR="../../templates/energy-talks/";
+/* Le logo et la vignette sont extraits du fichier Illustrator fourni par le
+   client. On les charge au démarrage si l'état ne porte rien. */
+function chargerAssetsParDefaut(st,setSt){
+  function essai(url,cle){
+    if(st[cle]) return;
+    var im=new Image();
+    im.onload=function(){ setSt(function(p){ if(p[cle]) return p;
+      var c=Object.assign({},p); c[cle]=url; return c; }); };
+    im.src=url;
+  }
+  essai(ET_DIR+"logo-energytalks.png","logoSrc");
+  essai(ET_DIR+((st.variante==="live")?"badge-live.png":"badge-podcast.png"),"badgeSrc");
+}
+
+function bgCandidates(k){
+  var names=["TEMPLATE_ET_"+k,"template_"+k,"template"];
+  var exts=[".png",".jpg",".jpeg",".webp"];
+  var out=[];
+  names.forEach(function(n){exts.forEach(function(x){out.push(BG_DIR+n+x);});});
+  return out;
+}
+
+/* ═══ APP ═════════════════════════════════════════════════════════════════ */
+function App(){
+  var shell=Shell.useApp({pageKey:"energytalks",DEFAULT:DEFAULT,bgCandidates:bgCandidates});
+  var st=shell.st, set=shell.set, setSt=shell.setSt;
+  var cardRef=useRef(null);
+  var tabState=useState("contenu"); var activeTab=tabState[0],setActiveTab=tabState[1];
+  var TABS=[
+    {id:"contenu",label:"Contenu"},{id:"intervenants",label:"Intervenants"},
+    {id:"image",label:"Image"},{id:"export",label:"Export"}
+  ];
+  var detourState=useState(null); var detourEnCours=detourState[0], setDetour=detourState[1];
+
+  /* Chargement des visuels officiels, une fois, au montage. */
+  React.useEffect(function(){ chargerAssetsParDefaut(st,setSt); },[]);
+  /* Changement Live / Podcast : la vignette suit. */
+  React.useEffect(function(){
+    var url=ET_DIR+((st.variante==="live")?"badge-live.png":"badge-podcast.png");
+    var im=new Image();
+    im.onload=function(){ setSt(function(p){ var c=Object.assign({},p); c.badgeSrc=url; return c; }); };
+    im.onerror=function(){ setSt(function(p){ var c=Object.assign({},p); c.badgeSrc=null; return c; }); };
+    im.src=url;
+  },[st.variante]);
+
+  var cf=chFormat(st.format);
+  var LDEF=CARD.LAYOUT[st.format]||CARD.LAYOUT["1x1"];
+  var previewScale=UI.previewScale(cf);
+  var gens=(st.intervenants||[]);
+
+  /* ── Mutations sur la liste d'intervenants ──
+     Toujours par copie : l'undo du shell compare les références. */
+  function majIntervenant(i,cle,val){
+    setSt(function(p){
+      var a=(p.intervenants||[]).slice();
+      a[i]=Object.assign({},a[i],{[cle]:val});
+      return Object.assign({},p,{intervenants:a});
+    });
+  }
+  function ajouterIntervenant(){
+    if(gens.length>=4) return;
+    setSt(function(p){
+      return Object.assign({},p,{intervenants:(p.intervenants||[]).concat([etNouvelIntervenant()])});
+    });
+  }
+  function supprimerIntervenant(i){
+    if(gens.length<=1) return;
+    if(!confirm("Supprimer l'intervenant "+(i+1)+" ?")) return;
+    setSt(function(p){
+      var a=(p.intervenants||[]).slice(); a.splice(i,1);
+      return Object.assign({},p,{intervenants:a});
+    });
+  }
+  function deplacerIntervenant(i,d){
+    var j=i+d; if(j<0||j>=gens.length) return;
+    setSt(function(p){
+      var a=(p.intervenants||[]).slice(); var t=a[i]; a[i]=a[j]; a[j]=t;
+      return Object.assign({},p,{intervenants:a});
+    });
+  }
+
+  /* ── Détourage : même moteur que Fiche Métier, extrait dans rmbg.js ── */
+  function detourer(i){
+    var it=gens[i];
+    var src=it.photoRaw||it.photo;
+    if(!src){ alert("Charge d'abord une photo."); return; }
+    if(!SPGRmbg.disponible()){ alert("Le module de détourage n'est pas encore chargé, réessaie dans quelques secondes."); return; }
+    setDetour(i);
+    SPGRmbg.detourer(src)
+      /* Contour blanc épais, dessiné en pixels réels comme dans Fiche Métier :
+         un filtre CSS ne se comporte pas pareil d'un moteur d'export à l'autre. */
+      .then(function(png){ return SPGRmbg.contourBlanc(png, 0.012); })
+      .then(function(png){
+        setSt(function(p){
+          var a=(p.intervenants||[]).slice();
+          a[i]=Object.assign({},a[i],{photo:png,photoRaw:a[i].photoRaw||src});
+          return Object.assign({},p,{intervenants:a});
+        });
+        setDetour(null);
+      })
+      .catch(function(err){ alert("Détourage impossible : "+err.message); setDetour(null); });
+  }
+
+  var G=st.etGrad||CARD.GRAD_DEFAUT;
+  function majGrad(cle,val){
+    setSt(function(p){
+      return Object.assign({},p,{etGrad:Object.assign({},p.etGrad||CARD.GRAD_DEFAUT,{[cle]:val})});
+    });
+  }
+
+  var card=e(CARD.Card,{
+    st:st, cardRef:cardRef, exportTarget:true, scale:previewScale,
+    onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
+      c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); }
+  });
+
+  /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
+  var panel=e("div",{className:"panel"},
+
+    e(UI.Section,{title:"Format"},
+      e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
+        onChange:function(k){ set("format",k); }})),
+
+    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+
+    /* ── Contenu ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="contenu"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Type d'émission"},
+        e(UI.SegButtons,{value:st.variante||"podcast",
+          options:[{v:"podcast",l:"🎙️ Podcast"},{v:"live",l:"🔴 Live"}],
+          onChange:function(v){ set("variante",v); }})),
+
+      e(UI.Section,{title:"Position de la vignette"},
+        e("div",{className:"hint",style:{marginBottom:8}},
+          "La vignette se cale sur le coin haut-droit du logo. Ajuste ici si elle n'est pas exactement au bon endroit."),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
+          e("div",null,
+            e("label",{className:"field-label"},"Décalage X — "+(st.badgeDX!==undefined?st.badgeDX:LDEF.badgeDX)+" px"),
+            e("input",{type:"range",min:-200,max:600,step:2,
+              value:st.badgeDX!==undefined?st.badgeDX:LDEF.badgeDX,
+              onChange:function(ev){ set("badgeDX",parseInt(ev.target.value,10)); }})),
+          e("div",null,
+            e("label",{className:"field-label"},"Décalage Y — "+(st.badgeDY!==undefined?st.badgeDY:LDEF.badgeDY)+" px"),
+            e("input",{type:"range",min:-150,max:300,step:2,
+              value:st.badgeDY!==undefined?st.badgeDY:LDEF.badgeDY,
+              onChange:function(ev){ set("badgeDY",parseInt(ev.target.value,10)); }}))),
+        e("label",{className:"field-label"},"Inclinaison — "+(st.badgeRot!==undefined?st.badgeRot:(st.variante==="live"?-12:0))+"°"),
+        e("input",{type:"range",min:-30,max:30,step:1,
+          value:st.badgeRot!==undefined?st.badgeRot:(st.variante==="live"?-12:0),
+          onChange:function(ev){ set("badgeRot",parseInt(ev.target.value,10)); }}),
+        e("label",{className:"field-label"},"Taille — "+(st.badgeEchelle||100)+" %"),
+        e("input",{type:"range",min:50,max:180,step:2,value:st.badgeEchelle||100,
+          onChange:function(ev){ set("badgeEchelle",parseInt(ev.target.value,10)); }}),
+        e("button",{className:"mini-btn",style:{marginTop:6},
+          onClick:function(){ setSt(function(p){ var c=Object.assign({},p);
+            delete c.badgeDX; delete c.badgeDY; delete c.badgeRot;
+            c.badgeEchelle=100; return c; }); }},
+          "Réinitialiser la vignette")),
+
+      e(UI.Section,{title:"Édition"},
+        e("label",{className:"field-label"},"Style de la pilule"),
+        e(UI.SegButtons,{value:st.editionStyle||"degrade",
+          options:[{v:"degrade",l:"Dégradé bleu"},{v:"blanc",l:"Blanc + drapeau"}],
+          onChange:function(v){ set("editionStyle",v); }}),
+        e("label",{className:"field-label"},"Texte"),
+        e("input",{type:"text",spellCheck:true,value:st.editionTexte||"",
+          onChange:function(ev){ set("editionTexte",ev.target.value); },
+          placeholder:"ex : U.S. Edition"}),
+        (st.editionStyle==="blanc")?e(React.Fragment,null,
+          e("label",{className:"field-label"},"Drapeau (emoji)"),
+          e("input",{type:"text",value:st.editionDrapeau||"",
+            onChange:function(ev){ set("editionDrapeau",ev.target.value); },
+            placeholder:"🇺🇸"})):null,
+        e("div",{className:"hint",style:{marginTop:6}},
+          "Laisse le texte vide pour masquer la pilule.")),
+
+      e(UI.Section,{title:"Logo Energy Talks"},
+        e("div",{className:"hint",style:{marginBottom:8}},
+          "Dépose ici le logo officiel en PNG transparent. Tant qu'il est absent, "+
+          "le lettrage est reconstruit typographiquement, ce qui reste approchant."),
+        e(FileDrop,{value:st.logoSrc,placeholder:"Logo ENERGYTALKS",
+          onChange:function(v){ set("logoSrc",v||null); }})),
+
+      e(UI.Section,{title:"Vignette Live / Podcast"},
+        e("div",{className:"hint",style:{marginBottom:8}},
+          "Extraite du fichier Illustrator. Dépose ici la version Live quand tu l'auras."),
+        e(FileDrop,{value:st.badgeSrc,placeholder:"Pastille",
+          onChange:function(v){ set("badgeSrc",v||null); }})),
+
+      e(UI.Section,{title:"Titre"},
+        e("div",{className:"upload-hint",style:{marginBottom:6}},
+          "Entrée = retour à la ligne. Deux lignes sur les visuels de référence."),
+        e("textarea",{spellCheck:true,rows:3,value:st.titre||"",
+          onChange:function(ev){ set("titre",ev.target.value); },
+          style:{fontSize:13,lineHeight:1.5}}),
+        e("label",{className:"field-label"},"Sous-titre (optionnel)"),
+        e("input",{type:"text",spellCheck:true,value:st.sousTitre||"",
+          onChange:function(ev){ set("sousTitre",ev.target.value); },
+          placeholder:"ex : L'innovation pour répondre aux enjeux…"})),
+
+      e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("energytalks")}),
+
+      e(UI.TabNav,{next:"Intervenants",onNext:function(){setActiveTab("intervenants");}})),
+
+    /* ── Intervenants ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="intervenants"?" on":""),style:{paddingTop:16}},
+      e("div",{className:"hint",style:{marginBottom:10}},
+        "De 1 à 4 intervenants. Les portraits se répartissent automatiquement en bas à droite, les noms s'empilent en bas à gauche."),
+
+      gens.map(function(it,i){
+        return e("div",{key:it.id||i,className:"section"},
+          e("h2",null,"Intervenant "+(i+1)),
+          e("div",{style:{display:"flex",gap:6,marginBottom:8}},
+            e("button",{className:"mini-btn",disabled:i===0,
+              onClick:function(){deplacerIntervenant(i,-1);}},"↑"),
+            e("button",{className:"mini-btn",disabled:i>=gens.length-1,
+              onClick:function(){deplacerIntervenant(i,1);}},"↓"),
+            e("button",{className:"mini-btn",style:{marginLeft:"auto"},
+              disabled:gens.length<=1,
+              onClick:function(){supprimerIntervenant(i);}},"Supprimer")),
+
+          e(FileDrop,{value:it.photo,placeholder:"Portrait",
+            onChange:function(v){
+              setSt(function(p){
+                var a=(p.intervenants||[]).slice();
+                a[i]=Object.assign({},a[i],{photo:v||null,photoRaw:v||null});
+                return Object.assign({},p,{intervenants:a});
+              });
+            }}),
+
+          e("button",{onClick:function(){detourer(i);},disabled:detourEnCours!==null,
+            style:{width:"100%",marginTop:8,fontSize:13,fontWeight:700,padding:"9px",
+              borderRadius:7,border:"1px solid #d4d4d4",
+              background:(detourEnCours===i)?"#f5f5f5":"#fff",
+              cursor:(detourEnCours!==null)?"default":"pointer",fontFamily:"inherit"}},
+            (detourEnCours===i)?"⏳ Détourage en cours…":"✨ Détourer le portrait (IA)"),
+          (it.photoRaw&&it.photo!==it.photoRaw)
+            ?e("button",{className:"mini-btn",style:{marginTop:6},
+                onClick:function(){ majIntervenant(i,"photo",it.photoRaw); }},
+                "Revenir à la photo d'origine"):null,
+
+          e("label",{className:"field-label"},"Nom"),
+          e("input",{type:"text",spellCheck:true,value:it.nom||"",
+            onChange:function(ev){ majIntervenant(i,"nom",ev.target.value); }}),
+          e("label",{className:"field-label"},"Fonction"),
+          e("input",{type:"text",spellCheck:true,value:it.fonction||"",
+            onChange:function(ev){ majIntervenant(i,"fonction",ev.target.value); }}),
+
+          e("label",{className:"field-label"},"Zoom du portrait — "+(it.zoom||100)+" %"),
+          e("input",{type:"range",min:60,max:200,step:1,value:it.zoom||100,
+            onChange:function(ev){ majIntervenant(i,"zoom",parseInt(ev.target.value,10)); }}),
+          e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
+            e("div",null,
+              e("label",{className:"field-label"},"Position X — "+(it.x||50)+" %"),
+              e("input",{type:"range",min:0,max:100,step:1,value:it.x||50,
+                onChange:function(ev){ majIntervenant(i,"x",parseInt(ev.target.value,10)); }})),
+            e("div",null,
+              e("label",{className:"field-label"},"Position Y — "+(it.y||50)+" %"),
+              e("input",{type:"range",min:0,max:100,step:1,value:it.y||50,
+                onChange:function(ev){ majIntervenant(i,"y",parseInt(ev.target.value,10)); }}))));
+      }),
+
+      e("button",{className:"mini-btn",style:{width:"100%",marginTop:4},
+        disabled:gens.length>=4,onClick:ajouterIntervenant},
+        gens.length>=4?"Maximum atteint (4)":"+ Ajouter un intervenant"),
+
+      e(UI.TabNav,{prev:"Contenu",onPrev:function(){setActiveTab("contenu");},
+        next:"Image",onNext:function(){setActiveTab("image");}})),
+
+    /* ── Image ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="image"?" on":""),style:{paddingTop:16}},
+      e(UI.Section,{title:"Photo de fond"},
+        e(BgPhotoPanel,{st:st,set:set,setSt:setSt,format:st.format,
+          bgDir:BG_DIR,bgStatus:shell.bgStatus,
+          showHint:"Dépose une photo de studio ou de plateau."})),
+
+      e(UI.Section,{title:"Dégradé transparent"},
+        e("div",{className:"hint",style:{marginBottom:8}},
+          "Posé par dessus la photo. Les valeurs par défaut sont celles relevées sur les visuels Energy Talks."),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
+          e("div",null,
+            e("label",{className:"field-label"},"Couleur de départ"),
+            e("input",{type:"color",value:G.de||CARD.GRAD_DEFAUT.de,
+              style:{width:"100%",height:34,padding:0,border:"1px solid #ddd",borderRadius:6},
+              onChange:function(ev){ majGrad("de",ev.target.value); }})),
+          e("div",null,
+            e("label",{className:"field-label"},"Couleur d'arrivée"),
+            e("input",{type:"color",value:G.vers||CARD.GRAD_DEFAUT.vers,
+              style:{width:"100%",height:34,padding:0,border:"1px solid #ddd",borderRadius:6},
+              onChange:function(ev){ majGrad("vers",ev.target.value); }}))),
+        e("label",{className:"field-label"},"Angle — "+(G.angle!==undefined?G.angle:CARD.GRAD_DEFAUT.angle)+"°"),
+        e("input",{type:"range",min:0,max:360,step:1,
+          value:G.angle!==undefined?G.angle:CARD.GRAD_DEFAUT.angle,
+          onChange:function(ev){ majGrad("angle",parseInt(ev.target.value,10)); }}),
+        e("label",{className:"field-label"},"Intensité — "+(G.opacite!==undefined?G.opacite:CARD.GRAD_DEFAUT.opacite)+" %"),
+        e("input",{type:"range",min:0,max:100,step:1,
+          value:G.opacite!==undefined?G.opacite:CARD.GRAD_DEFAUT.opacite,
+          onChange:function(ev){ majGrad("opacite",parseInt(ev.target.value,10)); }}),
+        e("button",{className:"mini-btn",style:{marginTop:6},
+          onClick:function(){ set("etGrad",Object.assign({},CARD.GRAD_DEFAUT)); }},
+          "Réinitialiser le dégradé")),
+
+      e(UI.TabNav,{prev:"Intervenants",onPrev:function(){setActiveTab("intervenants");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
+    /* ── Export ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
+      e(UI.ExportTab,{shell:shell,cardRef:cardRef}))
+  );
+
+  return e("div",{className:"app-layout"},
+    panel,
+    e("div",{className:"preview-wrap"},e(UI.Stage,{cf:cf},card)));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+}
+SPGBoot.run(boot);
+</script>
+</body>
+</html>

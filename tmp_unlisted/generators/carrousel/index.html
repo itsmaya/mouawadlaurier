@@ -183,7 +183,7 @@ var UI=Shell.ui;
 /* ═══ TYPES DISPONIBLES ═══════════════════════════════════════════════════
    Dérivés du registre : ajouter un module de carte dans assets/cards/ le
    rend automatiquement disponible ici, sans toucher à ce fichier. */
-var TYPES=SPGCards.all();
+var TYPES=SPGCards.all().filter(function(d){ return d.carrousel!==false; });   /* Energy Talks a sa logique propre, jamais une vignette */
 
 /* Formats communs à TOUS les types (un carrousel a un seul format) */
 var CAR_FORMATS=(function(){
@@ -866,6 +866,28 @@ function App(){
     });
   }
 
+  /* ── Mention IA : propagation à toutes les vignettes ──
+     Exigence de l'équipe charte : la mention doit figurer sur CHAQUE vignette
+     qui utilise de l'IA, pas seulement sur la première. Elle reste liée à
+     l'image, donc on ne la pose que sur les vignettes qui en ont une. */
+  function propagerMentionIA(){
+    var src=activeSlide?SPGCards.resolve(activeSlide.type,activeSlide.st,{}):null;
+    if(!src||!src.aiNotice){ alert("Active d'abord la mention sur cette vignette."); return; }
+    var n=0;
+    setSt(function(p){
+      var a=p.slides.map(function(sl){
+        var plein=SPGCards.resolve(sl.type,sl.st,{});
+        if(!plein.bgImg) return sl;          /* pas d'image : rien à qualifier */
+        n++;
+        return Object.assign({},sl,{st:Object.assign({},sl.st,{
+          aiNotice:true, aiNoticeKind:src.aiNoticeKind,
+          aiNoticeLang:src.aiNoticeLang, aiNoticeFond:src.aiNoticeFond})});
+      });
+      return Object.assign({},p,{slides:a});
+    });
+    setTradNote("Mention IA appliquée aux vignettes qui portent une image.");
+  }
+
   /* ── Mutations ── */
   function updSlideState(i,k,v){
     setSt(function(p){
@@ -1091,7 +1113,14 @@ function App(){
                   onClick:function(){traduireTout("EN");}},
                   tradTout==="EN"?"Traduction…":("🇬🇧 Les "+slides.length+" vignettes en anglais"))),
               e("div",{className:"hint",style:{marginTop:6}},
-                tradNote||"Chaque vignette est traduite selon son propre type.")),
+                tradNote||"Chaque vignette est traduite selon son propre type."),
+              e("div",{style:{height:10}}),
+              e("button",{className:"mini-btn",style:{width:"100%"},
+                onClick:propagerMentionIA},
+                "Appliquer la mention IA à toutes les vignettes"),
+              e("div",{className:"hint",style:{marginTop:6}},
+                "La mention doit figurer sur chaque vignette qui utilise de l'IA. "+
+                "Seules les vignettes portant une image sont concernées.")),
             e(UI.TabNav,{prev:"Vignettes",onPrev:function(){setActiveTab("vignettes");},
               next:"Export",onNext:function(){setActiveTab("export");}}))
         : e("div",{className:"hint"},
