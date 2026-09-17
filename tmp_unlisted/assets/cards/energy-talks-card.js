@@ -276,24 +276,34 @@ function EnergyTalksCard(props){
       pointerEvents:"none"}}),
 
     /* Portraits détourés, au dessus du dégradé et sous les textes */
-    gens.map(function(it,i){
-      var r=rects[i]; if(!r||!it.photo) return null;
-      /* Pas d'overflow:hidden ici : le détourage produit une silhouette dont
-         les épaules débordent volontiers du pavé calculé. La couper en deux
-         était le défaut de la première version. */
-      return e("div",{key:it.id||i,style:{position:"absolute",
-        left:r.x,top:r.y,width:r.w,height:r.h,zIndex:r.z,
-        display:"flex",alignItems:"flex-end",justifyContent:"center"}},
-        e("img",{src:it.photo,alt:"",style:{
-          /* La silhouette peut déborder du pavé (épaules), mais pas avaler la
-             carte : un portrait très large est ramené à 160 % de son pavé. */
-          maxWidth:"160%",
-          height:(it.zoom||100)+"%",
-          width:"auto",
-          objectFit:"contain",
-          transform:"translate("+(((it.x||50)-50)*0.9)+"%,"+(((it.y||50)-50)*0.4)+"%)",
-          display:"block"}}));
-    }),
+    /* Portraits. Chaque silhouette est ANCRÉE EN BAS AU CENTRE de son pavé :
+       le zoom la fait grandir vers le haut, les pieds restent posés, et le
+       cadrage ne saute pas. La version précédente laissait le flex recalculer
+       la position à chaque changement de taille, d'où l'impression que le zoom
+       déplaçait l'image au lieu de l'agrandir. */
+    e("div",{"data-layer":"portraits",style:{position:"absolute",inset:0,
+        overflow:"hidden",zIndex:1}},
+      gens.map(function(it,i){
+        var r=rects[i]; if(!r||!it.photo) return null;
+        var zoom=Math.max(20,Math.min(300,it.zoom||100));
+        var hauteur=Math.round(r.h*zoom/100);
+        /* Les curseurs X et Y déplacent en pixels de carte, amplitude bornée à
+           une demi-largeur et un quart de hauteur de pavé. */
+        var dx=Math.round(((it.x||50)-50)/50 * r.w*0.5);
+        var dy=Math.round(((it.y||50)-50)/50 * r.h*0.25);
+        return e("div",{key:it.id||i,style:{position:"absolute",
+            left:r.x, top:r.y, width:r.w, height:r.h, zIndex:r.z}},
+          e("img",{src:it.photo,alt:"",style:{
+            position:"absolute", left:"50%", bottom:0,
+            height:hauteur, width:"auto", maxWidth:"none",
+            transform:"translateX(-50%) translate("+dx+"px,"+dy+"px)",
+            display:"block"}}));
+      })),
+
+    /* HABILLAGE — un calque au dessus des portraits. Textes et pastilles
+       passent toujours devant la photo, jamais derrière. */
+    e("div",{"data-layer":"habillage",style:{position:"absolute",inset:0,
+        zIndex:10, pointerEvents:"none"}},
 
     /* Logo et vignette : un seul bloc solidaire. La vignette est posée sur le
        logo aux rapports relevés dans le fichier source, donc son placement est
@@ -337,6 +347,8 @@ function EnergyTalksCard(props){
       display:"flex",flexDirection:"column",gap:Math.round(L.nomH*0.28),
       alignItems:"flex-start"}},
       gens.map(function(it,i){ return e(BlocNom,{key:it.id||i,L:L,it:it}); }))
+
+    ) /* /habillage */
   );
 }
 
