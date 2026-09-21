@@ -1,287 +1,354 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   HEADER & FOOTER PARTAGÉS v2 — Static Posts Generator Fisheye × TotalEnergies
+   HEADER PARTAGÉ v3 — Static Posts Generator Fisheye × TotalEnergies
 
-   v2 :
-   - menu déroulant "Générateurs" dans le header (accès à toutes les pages)
-   - drawer mobile sortant par la gauche (bouton hamburger)
-   - slot StatusBar conservé (#sm-status-slot)
+   UN SEUL OBJET POUR TOUTES LES PAGES.
+   L'accueil et les huit générateurs chargent ce fichier : la barre du haut
+   est donc strictement identique partout, et une modification faite ici se
+   voit sur tout le site.
 
-   Pour ajouter un générateur : ajouter une entrée dans NAV_ITEMS.
+   Ce que la barre contient, de gauche à droite :
+     1. le logotype Static Post Generator (retour à l'accueil) ;
+     2. la navigation : Accueil, Carrousel, Fiche métier, EnergyTalks,
+        puis un menu déroulant « Vignettes » pour les cinq types de slides ;
+     3. le slot #sm-status-slot, où app-shell.js monte la StatusBar du
+        SaveManager : pastille d'état, nom de la version ouverte, bouton
+        Enregistrer / Mettre à jour. C'est ce qui dit, sur chaque page, quel
+        document est en cours d'édition et s'il est à jour ;
+     4. le logo Fisheye.
+
+   HAUTEUR : 52 px, et cette valeur n'est pas libre. app-shell.js et les
+   générateurs calculent leurs colonnes avec calc(100vh - 52px) et un
+   padding-top de 52px. Changer HAUTEUR ici impose de changer ces règles.
+
+   TAILLE DU MENU : la constante MENU_TAILLE ci-dessous, et rien d'autre.
+   Une page peut encore la surcharger avec :root{--menu-taille:…} .
    ═══════════════════════════════════════════════════════════════════════════ */
 (function(){
-  /* La config client (config/clients/*.js) peut surcharger la navigation :
-     window.CLIENT_CONFIG.nav — sinon, liste par défaut ci-dessous. */
-  var NAV_ITEMS = (window.CLIENT_CONFIG && window.CLIENT_CONFIG.nav) || [
-    { label: "Fiche Métier",  href: "generators/fiche-metier/index.html"  },
+
+  var HAUTEUR = 52;          /* px — voir l'avertissement ci-dessus */
+  var MENU_TAILLE = "11px";  /* taille par défaut des entrées du menu */
+
+  /* ── Navigation ────────────────────────────────────────────────────────
+     PRINCIPAUX : les outils qui produisent un post complet.
+     VIGNETTES  : les types de slides, regroupés dans le menu déroulant,
+     parce qu'ils s'utilisent le plus souvent depuis le Carrousel.
+     window.CLIENT_CONFIG.nav reste prioritaire (config/clients/*.js) : s'il
+     existe, il remplace la liste principale. */
+  var PRINCIPAUX = (window.CLIENT_CONFIG && window.CLIENT_CONFIG.nav) || [
+    { label: "Carrousel",    href: "generators/carrousel/index.html"    },
+    { label: "Fiche métier", href: "generators/fiche-metier/index.html" },
+    { label: "EnergyTalks",  href: "generators/energy-talks/index.html" }
+  ];
+  var VIGNETTES = (window.CLIENT_CONFIG && window.CLIENT_CONFIG.vignettes) || [
+    { label: "Totally True",  href: "generators/totally-true/index.html"  },
     { label: "Citation Post", href: "generators/citation/index.html"      },
     { label: "Latest News",   href: "generators/latest-news/index.html"   },
     { label: "Split Screen",  href: "generators/split-screen/index.html"  },
-    { label: "Block Layouts", href: "generators/block-layouts/index.html" },
-    { label: "Totally True",  href: "generators/totally-true/index.html" },
-    { label: "Energy Talks",  href: "generators/energy-talks/index.html", isNew: true },
-    /* Carrousel en dernier : il se nourrit des autres générateurs, sa place
-       est au bout de la liste, pas au milieu. */
-    { label: "Carrousel",     href: "generators/carrousel/index.html"     },
+    { label: "Block Layouts", href: "generators/block-layouts/index.html" }
   ];
 
-  /* Répertoire de ce script (assets/) */
-  function scriptBase() {
-    var scripts = document.querySelectorAll("script[src]");
-    for (var i = 0; i < scripts.length; i++) {
-      if (scripts[i].src && scripts[i].src.indexOf("header.js") >= 0)
-        return scripts[i].src.replace(/header\.js.*$/, "");
-    }
+  /* ── Chemins : tout est résolu depuis l'URL de ce script, donc la barre
+        marche aussi bien à la racine que dans generators/xxx/. ────────── */
+  function scriptBase(){
+    var s = document.querySelectorAll("script[src]");
+    for (var i=0;i<s.length;i++)
+      if (s[i].src && s[i].src.indexOf("header.js")>=0)
+        return s[i].src.replace(/header\.js.*$/,"");
     return "";
   }
-  function rootBase() { return scriptBase().replace(/assets\/?$/, ""); }
-  function assetUrl(rel) { return scriptBase() + rel; }
-  function pageUrl(rel)  { return rootBase()   + rel; }
+  function rootBase(){ return scriptBase().replace(/assets\/?$/,""); }
+  function assetUrl(r){ return scriptBase()+r; }
+  function pageUrl(r){ return rootBase()+r; }
 
-  var currentHref = window.location.href.replace(/[#?].*$/, "");
-  function isCurrent(href) {
-    var abs = pageUrl(href).replace(/^https?:\/\/[^/]+/, "");
-    return currentHref.replace(/^https?:\/\/[^/]+/, "").indexOf(abs) >= 0;
+  var ici = window.location.href.replace(/[#?].*$/,"").replace(/^https?:\/\/[^/]+/,"");
+  function estCourant(href){
+    var abs = pageUrl(href).replace(/^https?:\/\/[^/]+/,"");
+    /* L'accueil ne doit pas s'allumer sur toutes les pages : son chemin se
+       termine par index.html, présent partout. On exige l'égalité. */
+    if (href === "index.html")
+      return ici === abs || ici === abs.replace(/index\.html$/,"") ;
+    return ici.indexOf(abs) >= 0;
   }
 
-  function injectStyles() {
+  function styles(){
     if (document.getElementById("site-header-styles")) return;
     var s = document.createElement("style");
     s.id = "site-header-styles";
     s.textContent = [
-      ".page-header{position:fixed;top:0;left:0;right:0;height:52px;z-index:200;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:0 24px;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);}",
-      ".page-header-logo{height:19px;display:block;}",
-      ".page-header-sep{width:1px;height:18px;background:#e0e0e0;flex-shrink:0;}",
-      ".page-header-title{font-size:11px;font-weight:800;color:#111;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;}",
-      ".page-header-sub{font-size:11px;font-weight:400;color:#aaa;white-space:nowrap;}",
+      /* ── Barre ── */
+      ".page-header{position:fixed;top:0;left:0;right:0;height:"+HAUTEUR+"px;z-index:200;",
+        "background:#000;display:flex;align-items:center;gap:18px;padding:0 18px;",
+        "font-family:'Nunito',sans-serif;}",
+      ".page-header a{text-decoration:none;}",
+      ".hdr-mark{display:flex;align-items:center;flex-shrink:0;}",
+      ".hdr-mark img{height:22px;display:block;}",
 
-      /* ── Menu déroulant desktop ── */
-      ".hdr-menu-wrap{position:relative;flex-shrink:0;}",
-      ".hdr-menu-btn{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#1a1a1a;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border-radius:2px;border:1px solid #dadada;background:#fafafa;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;}",
-      ".hdr-menu-btn:hover,.hdr-menu-btn.open{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}",
-      ".hdr-menu-btn svg{transition:transform .18s;}",
-      ".hdr-menu-btn.open svg{transform:rotate(180deg);}",
-      ".hdr-menu-dd{position:absolute;top:calc(100% + 8px);right:0;min-width:230px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 10px 34px rgba(0,0,0,.14);padding:6px;display:none;z-index:300;}",
-      ".hdr-menu-dd.open{display:block;}",
-      ".hdr-menu-dd a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700;color:#333;text-decoration:none;letter-spacing:.03em;}",
-      ".hdr-menu-dd a:hover{background:#f2f2ef;}",
-      ".hdr-menu-dd a.active{background:#1a1a1a;color:#fff;}",
-      ".hdr-menu-dd a .num{font-size:10px;font-weight:800;color:#bbb;width:18px;}",
-      ".hdr-menu-dd a.active .num{color:rgba(255,255,255,.5);}",
-      ".hdr-menu-dd a .new-badge{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.06em;padding:2px 6px;border-radius:99px;background:linear-gradient(135deg,#0098E3,#4632FF);color:#fff;}",
-      ".hdr-menu-dd .dd-sep{height:1px;background:#efefef;margin:6px 4px;}",
+      /* ── Navigation ── */
+      ".hdr-nav{display:flex;align-items:center;gap:6px;min-width:0;}",
+      ".hdr-nav a,.hdr-vign-btn{font-size:var(--menu-taille,"+MENU_TAILLE+");font-weight:500;",
+        "color:#9aa3ae;white-space:nowrap;padding:.62em 1.05em;border-radius:.55em;",
+        "background:none;border:none;font-family:inherit;cursor:pointer;",
+        "display:flex;align-items:center;gap:.5em;transition:color .18s,background .18s;}",
+      ".hdr-nav a:hover,.hdr-vign-btn:hover{color:#e8ebef;}",
+      ".hdr-nav a.actif,.hdr-vign-btn.actif{color:#fff;background:#1b212c;}",
+      ".hdr-vign-btn svg{transition:transform .18s;}",
+      ".hdr-vign-btn.ouvert svg{transform:rotate(180deg);}",
+      ".hdr-vign-btn.ouvert{color:#fff;background:#1b212c;}",
 
-      /* ── Hamburger + drawer mobile (sort par la gauche) ── */
-      ".hdr-burger{display:flex;flex-direction:column;justify-content:center;gap:4px;width:36px;height:36px;padding:8px;border:1px solid #dadada;border-radius:2px;background:#fafafa;cursor:pointer;flex-shrink:0;}",
-      ".hdr-burger span{display:block;height:2px;background:#1a1a1a;border-radius:1px;transition:all .2s;}",
-      ".mob-drawer{position:fixed;top:0;left:0;bottom:0;width:270px;max-width:82vw;background:#fff;z-index:400;transform:translateX(-100%);transition:transform .22s ease;box-shadow:4px 0 32px rgba(0,0,0,.18);display:flex;flex-direction:column;}",
-      ".mob-drawer.open{transform:translateX(0);}",
-      ".mob-drawer-head{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid #efefef;}",
-      ".mob-drawer-head img{height:18px;}",
-      ".mob-drawer-head .close{margin-left:auto;background:none;border:none;font-size:22px;color:#aaa;cursor:pointer;line-height:1;}",
-      ".mob-drawer nav{padding:10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}",
-      ".mob-drawer nav a{display:flex;align-items:center;gap:10px;padding:12px 12px;border-radius:8px;font-size:13px;font-weight:700;color:#333;text-decoration:none;}",
-      ".mob-drawer nav a:hover{background:#f2f2ef;}",
-      ".mob-drawer nav a.active{background:#1a1a1a;color:#fff;}",
-      ".mob-drawer nav a .new-badge{margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:99px;background:linear-gradient(135deg,#0098E3,#4632FF);color:#fff;}",
-      ".mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:390;opacity:0;pointer-events:none;transition:opacity .2s;}",
-      ".mob-overlay.open{opacity:1;pointer-events:auto;}",
-      ".hdr-menu-wrap{display:none;}",
-      "@media(max-width:768px){",
-        ".page-header{padding:0 14px;gap:10px;}",
-        ".page-header-sub{display:none;}",
+      /* ── Déroulant Vignettes : même grammaire que la barre, en plus sombre
+            que le fond de page pour rester lisible sur l'accueil clair. ── */
+      ".hdr-vign{position:relative;flex-shrink:0;}",
+      ".hdr-vign-dd{position:absolute;top:calc(100% + 7px);left:0;min-width:190px;",
+        "background:#11161f;border:1px solid rgba(255,255,255,.10);border-radius:10px;",
+        "box-shadow:0 14px 38px rgba(0,0,0,.45);padding:6px;display:none;z-index:300;}",
+      ".hdr-vign-dd.ouvert{display:block;}",
+      ".hdr-vign-dd a{display:flex;align-items:center;gap:9px;padding:.62em .8em;",
+        "border-radius:7px;font-size:var(--menu-taille,"+MENU_TAILLE+");font-weight:500;color:#9aa3ae;",
+        "white-space:nowrap;transition:color .15s,background .15s;}",
+      ".hdr-vign-dd a:hover{background:#1b212c;color:#fff;}",
+      ".hdr-vign-dd a.actif{background:#1b212c;color:#fff;}",
+      ".hdr-vign-dd .num{font-size:.85em;font-weight:800;color:#4f5865;width:1.5em;}",
+      ".hdr-vign-dd a.actif .num{color:rgba(255,255,255,.45);}",
+
+      /* ── Zone de droite : état du document, puis logo ── */
+      "#sm-status-slot{display:flex;align-items:center;height:100%;margin-left:auto;",
+        "min-width:0;overflow:hidden;}",
+      ".hdr-fish{display:flex;align-items:center;flex-shrink:0;padding-left:4px;}",
+      ".hdr-fish img{height:14px;display:block;filter:invert(1);}",
+
+      /* ── Mobile : la navigation passe dans un tiroir ── */
+      ".hdr-burger{display:none;flex-direction:column;justify-content:center;gap:4px;",
+        "width:32px;height:32px;padding:7px;border:1px solid rgba(255,255,255,.18);",
+        "border-radius:6px;background:none;cursor:pointer;flex-shrink:0;}",
+      ".hdr-burger span{display:block;height:2px;background:#fff;border-radius:1px;}",
+      ".hdr-drawer{position:fixed;top:0;left:0;bottom:0;width:250px;max-width:80vw;",
+        "background:#0b0f16;z-index:400;transform:translateX(-100%);",
+        "transition:transform .22s ease;display:flex;flex-direction:column;",
+        "box-shadow:4px 0 32px rgba(0,0,0,.5);}",
+      ".hdr-drawer.ouvert{transform:translateX(0);}",
+      ".hdr-drawer-head{display:flex;align-items:center;padding:14px 16px;",
+        "border-bottom:1px solid rgba(255,255,255,.08);}",
+      ".hdr-drawer-head img{height:20px;}",
+      ".hdr-drawer-head .fermer{margin-left:auto;background:none;border:none;",
+        "font-size:22px;color:#6b7482;cursor:pointer;line-height:1;}",
+      ".hdr-drawer nav{padding:10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}",
+      ".hdr-drawer nav a{padding:11px 12px;border-radius:8px;font-size:13px;",
+        "font-weight:600;color:#9aa3ae;}",
+      ".hdr-drawer nav a:hover{background:#1b212c;color:#fff;}",
+      ".hdr-drawer nav a.actif{background:#1b212c;color:#fff;}",
+      ".hdr-drawer .groupe{font-size:9px;font-weight:800;letter-spacing:.18em;",
+        "text-transform:uppercase;color:#4f5865;padding:14px 12px 6px;}",
+      ".hdr-voile{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:390;",
+        "opacity:0;pointer-events:none;transition:opacity .2s;}",
+      ".hdr-voile.ouvert{opacity:1;pointer-events:auto;}",
+      "@media(max-width:900px){",
+        ".page-header{gap:12px;padding:0 12px;}",
+        ".hdr-nav{display:none;}",
+        ".hdr-burger{display:flex;}",
+      "}",
+      /* Téléphone : la barre débordait de quelques dizaines de pixels et
+         faisait défiler toute la page en largeur. On retire le logo Fisheye
+         (il reste dans le pied), on réduit le logotype, et le nom du document
+         se tronque au lieu de pousser. */
+      "@media(max-width:600px){",
+        ".page-header{gap:8px;padding:0 8px;}",
+        ".hdr-mark img{height:17px;}",
+        ".hdr-fish{display:none;}",
+        "#sm-statusbar{padding:0 6px!important;gap:6px!important;}",
+        "#sm-statusbar>div{max-width:34vw;}",
       "}",
 
-      /* ── Footer ── */
-      ".page-footer{position:fixed;bottom:0;right:0;z-index:200;display:flex;align-items:center;gap:8px;padding:7px 14px;background:#fff;border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:10px 0 0 0;}",
-      ".page-footer-label{font-size:10px;font-weight:700;color:#bbb;letter-spacing:.06em;text-transform:uppercase;}",
+      /* ── Pastille Fisheye en bas à droite (pages générateurs) ── */
+      ".page-footer{position:fixed;bottom:0;right:0;z-index:200;display:flex;",
+        "align-items:center;gap:8px;padding:7px 14px;background:#fff;",
+        "border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;border-radius:10px 0 0 0;}",
+      ".page-footer-label{font-size:10px;font-weight:700;color:#bbb;",
+        "letter-spacing:.06em;text-transform:uppercase;}",
       ".page-footer-logo{height:15px;opacity:.4;}"
     ].join("");
     document.head.appendChild(s);
   }
 
-  function navLink(item, idx, forDrawer) {
+  function lien(item, numero){
     var a = document.createElement("a");
     a.href = pageUrl(item.href);
-    if (isCurrent(item.href)) a.className = "active";
-    var num = document.createElement("span");
-    num.className = "num";
-    num.textContent = ("0" + (idx + 1)).slice(-2);
-    if (!forDrawer) a.appendChild(num);
-    var lbl = document.createElement("span");
-    lbl.textContent = item.label;
-    a.appendChild(lbl);
-    if (item.isNew) {
-      var b = document.createElement("span");
-      b.className = "new-badge";
-      b.textContent = "NEW";
-      a.appendChild(b);
+    if (estCourant(item.href)) a.className = "actif";
+    if (numero){
+      var n = document.createElement("span");
+      n.className = "num";
+      n.textContent = numero;
+      a.appendChild(n);
     }
+    var l = document.createElement("span");
+    l.textContent = item.label;
+    a.appendChild(l);
     return a;
   }
 
-  function buildHeader() {
-    var existing = document.querySelector(".page-header");
-    var title = "", sub = "Static Posts Generator";
-    if (existing) {
-      var t = existing.querySelector(".page-header-title");
-      var s = existing.querySelector(".page-header-sub");
-      title = t ? t.textContent : "";
-      sub   = s ? s.textContent : sub;
-      existing.parentNode.removeChild(existing);
-    } else {
-      title = document.title.replace(/\s*[–—-].*$/, "").trim();
-    }
+  function construireBarre(){
+    var ancien = document.querySelector(".page-header");
+    if (ancien) ancien.parentNode.removeChild(ancien);
 
     var header = document.createElement("header");
     header.className = "page-header";
 
-    /* Hamburger mobile */
+    /* Hamburger (mobile) */
     var burger = document.createElement("button");
     burger.className = "hdr-burger";
-    burger.setAttribute("aria-label", "Menu");
+    burger.setAttribute("aria-label","Menu");
     burger.innerHTML = "<span></span><span></span><span></span>";
     header.appendChild(burger);
 
-    /* Logo cliquable : retour à l'accueil. Enveloppé dans un <a> plutôt que
-       piloté par un onClick, pour garder le comportement natif du navigateur
-       (clic milieu, ouverture dans un nouvel onglet, aperçu du lien). */
-    var logoLien = document.createElement("a");
-    logoLien.href = pageUrl("index.html");
-    logoLien.title = "Retour à l'accueil";
-    logoLien.style.display = "block";
-    logoLien.style.flexShrink = "0";
-    var logo = document.createElement("img");
-    logo.className = "page-header-logo";
-    logo.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
-    logo.alt = "Fisheye — accueil";
-    logoLien.appendChild(logo);
-    header.appendChild(logoLien);
+    /* Logotype */
+    var mark = document.createElement("a");
+    mark.className = "hdr-mark";
+    mark.href = pageUrl("index.html");
+    mark.title = "Retour à l'accueil";
+    var mimg = document.createElement("img");
+    mimg.src = assetUrl("logos/logotype-spg-blanc.png");
+    mimg.alt = "Static Post Generator";
+    /* Repli : si le logotype n'a pas été déposé sur le serveur, on écrit le
+       nom plutôt que d'afficher une image cassée. */
+    mimg.onerror = function(){
+      var t = document.createElement("span");
+      t.textContent = "Static Post Generator";
+      t.style.cssText = "font-family:'DM Serif Display',serif;font-size:15px;color:#fff;";
+      mark.replaceChild(t, mimg);
+    };
+    mark.appendChild(mimg);
+    header.appendChild(mark);
 
-    var sep = document.createElement("div");
-    sep.className = "page-header-sep";
-    header.appendChild(sep);
+    /* Navigation */
+    var nav = document.createElement("nav");
+    nav.className = "hdr-nav";
+    nav.appendChild(lien({label:"Accueil",href:"index.html"}));
+    PRINCIPAUX.forEach(function(it){ nav.appendChild(lien(it)); });
+    header.appendChild(nav);
 
-    if (title) {
-      var titleEl = document.createElement("span");
-      titleEl.className = "page-header-title";
-      titleEl.textContent = title;
-      header.appendChild(titleEl);
-    }
-
-    var subEl = document.createElement("span");
-    subEl.className = "page-header-sub";
-    subEl.textContent = sub;
-    header.appendChild(subEl);
-
-    /* Slot pour la StatusBar React (nom + statut), avant le menu */
-    var statusSlot = document.createElement("div");
-    statusSlot.id = "sm-status-slot";
-    statusSlot.style.cssText = "display:flex;align-items:center;height:100%;margin-left:auto;min-width:0;overflow:hidden;";
-    header.appendChild(statusSlot);
-
-    /* ── Menu déroulant desktop ── */
-    var menuWrap = document.createElement("div");
-    menuWrap.className = "hdr-menu-wrap";
+    /* Déroulant Vignettes — placé DANS la nav, sinon le gap de 18 px de la
+       barre l'écartait des autres entrées comme s'il n'en faisait pas partie. */
+    var vign = document.createElement("div");
+    vign.className = "hdr-vign";
     var btn = document.createElement("button");
-    btn.className = "hdr-menu-btn";
-    btn.innerHTML = 'Générateurs <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>';
+    btn.className = "hdr-vign-btn";
+    btn.type = "button";
+    btn.setAttribute("aria-haspopup","true");
+    btn.setAttribute("aria-expanded","false");
+    btn.innerHTML = 'Vignettes <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>';
     var dd = document.createElement("div");
-    dd.className = "hdr-menu-dd";
+    dd.className = "hdr-vign-dd";
+    var actifDansLeMenu = false;
+    VIGNETTES.forEach(function(it,i){
+      if (estCourant(it.href)) actifDansLeMenu = true;
+      dd.appendChild(lien(it, ("0"+(i+1)).slice(-2)));
+    });
+    if (actifDansLeMenu) btn.classList.add("actif");
 
-    var home = document.createElement("a");
-    home.href = pageUrl("index.html");
-    home.innerHTML = "<span class='num'>⌂</span><span>Accueil</span>";
-    dd.appendChild(home);
-    var ddSep = document.createElement("div");
-    ddSep.className = "dd-sep";
-    dd.appendChild(ddSep);
-    NAV_ITEMS.forEach(function(item, i) { dd.appendChild(navLink(item, i, false)); });
-
-    btn.addEventListener("click", function(ev) {
+    function ouvrir(o){
+      dd.classList.toggle("ouvert",o);
+      btn.classList.toggle("ouvert",o);
+      btn.setAttribute("aria-expanded",o?"true":"false");
+    }
+    btn.addEventListener("click",function(ev){
       ev.stopPropagation();
-      var open = dd.classList.toggle("open");
-      btn.classList.toggle("open", open);
+      ouvrir(!dd.classList.contains("ouvert"));
     });
-    document.addEventListener("click", function() {
-      dd.classList.remove("open");
-      btn.classList.remove("open");
+    document.addEventListener("click",function(){ ouvrir(false); });
+    document.addEventListener("keydown",function(ev){
+      if (ev.key === "Escape") ouvrir(false);
     });
+    vign.appendChild(btn);
+    vign.appendChild(dd);
+    nav.appendChild(vign);
 
-    menuWrap.appendChild(btn);
-    menuWrap.appendChild(dd);
-    header.appendChild(menuWrap);
+    /* Slot de la StatusBar : nom de la version ouverte + bouton d'enregistrement.
+       app-shell.js y monte SaveManager.StatusBar au premier rendu ; sur
+       l'accueil il reste vide, ce qui est normal : rien n'y est édité. */
+    var slot = document.createElement("div");
+    slot.id = "sm-status-slot";
+    header.appendChild(slot);
+
+    /* Logo Fisheye */
+    var fish = document.createElement("a");
+    fish.className = "hdr-fish";
+    fish.href = "https://fisheye.fr";
+    fish.target = "_blank";
+    fish.rel = "noopener";
+    var fimg = document.createElement("img");
+    fimg.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
+    fimg.alt = "Fisheye";
+    fish.appendChild(fimg);
+    header.appendChild(fish);
 
     document.body.insertBefore(header, document.body.firstChild);
 
-    /* ── Drawer mobile (gauche) ── */
-    var overlay = document.createElement("div");
-    overlay.className = "mob-overlay";
-    var drawer = document.createElement("div");
-    drawer.className = "mob-drawer";
+    /* ── Tiroir mobile ── */
+    var voile = document.createElement("div");
+    voile.className = "hdr-voile";
+    var tiroir = document.createElement("div");
+    tiroir.className = "hdr-drawer";
 
-    var dHead = document.createElement("div");
-    dHead.className = "mob-drawer-head";
-    var dLogoLien = document.createElement("a");
-    dLogoLien.href = pageUrl("index.html");
-    dLogoLien.title = "Retour à l'accueil";
-    dLogoLien.style.display = "block";
-    var dLogo = document.createElement("img");
-    dLogo.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
-    dLogo.alt = "Fisheye — accueil";
-    dLogoLien.appendChild(dLogo);
-    dHead.appendChild(dLogoLien);
-    var dClose = document.createElement("button");
-    dClose.className = "close";
-    dClose.innerHTML = "×";
-    dHead.appendChild(dClose);
-    drawer.appendChild(dHead);
+    var tHead = document.createElement("div");
+    tHead.className = "hdr-drawer-head";
+    var tLien = document.createElement("a");
+    tLien.href = pageUrl("index.html");
+    var tImg = document.createElement("img");
+    tImg.src = assetUrl("logos/logotype-spg-blanc.png");
+    tImg.alt = "Static Post Generator";
+    tLien.appendChild(tImg);
+    tHead.appendChild(tLien);
+    var tClose = document.createElement("button");
+    tClose.className = "fermer";
+    tClose.innerHTML = "×";
+    tHead.appendChild(tClose);
+    tiroir.appendChild(tHead);
 
-    var dNav = document.createElement("nav");
-    var dHome = document.createElement("a");
-    dHome.href = pageUrl("index.html");
-    dHome.textContent = "Accueil";
-    dNav.appendChild(dHome);
-    NAV_ITEMS.forEach(function(item, i) { dNav.appendChild(navLink(item, i, true)); });
-    drawer.appendChild(dNav);
+    var tNav = document.createElement("nav");
+    tNav.appendChild(lien({label:"Accueil",href:"index.html"}));
+    PRINCIPAUX.forEach(function(it){ tNav.appendChild(lien(it)); });
+    var grp = document.createElement("div");
+    grp.className = "groupe";
+    grp.textContent = "Vignettes";
+    tNav.appendChild(grp);
+    VIGNETTES.forEach(function(it){ tNav.appendChild(lien(it)); });
+    tiroir.appendChild(tNav);
 
-    function openDrawer(o) {
-      drawer.classList.toggle("open", o);
-      overlay.classList.toggle("open", o);
+    function ouvrirTiroir(o){
+      tiroir.classList.toggle("ouvert",o);
+      voile.classList.toggle("ouvert",o);
     }
-    burger.addEventListener("click", function() { openDrawer(true); });
-    dClose.addEventListener("click", function() { openDrawer(false); });
-    overlay.addEventListener("click", function() { openDrawer(false); });
+    burger.addEventListener("click",function(){ ouvrirTiroir(true); });
+    tClose.addEventListener("click",function(){ ouvrirTiroir(false); });
+    voile.addEventListener("click",function(){ ouvrirTiroir(false); });
 
-    document.body.appendChild(overlay);
-    document.body.appendChild(drawer);
+    document.body.appendChild(voile);
+    document.body.appendChild(tiroir);
   }
 
-  function buildFooter() {
-    var existing = document.querySelector(".page-footer");
-    if (existing) existing.parentNode.removeChild(existing);
-    var footer = document.createElement("footer");
-    footer.className = "page-footer";
-    var label = document.createElement("span");
-    label.className = "page-footer-label";
-    label.textContent = "Developed by";
-    footer.appendChild(label);
-    var logo = document.createElement("img");
-    logo.className = "page-footer-logo";
-    logo.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
-    logo.alt = "Fisheye";
-    footer.appendChild(logo);
-    document.body.appendChild(footer);
+  /* La pastille « Developed by Fisheye » n'a de sens que sur les générateurs :
+     l'accueil a son propre pied de page, en pleine largeur. */
+  function construirePastille(){
+    if (document.querySelector(".ftr")) return;
+    var ancien = document.querySelector(".page-footer");
+    if (ancien) ancien.parentNode.removeChild(ancien);
+    var f = document.createElement("footer");
+    f.className = "page-footer";
+    var l = document.createElement("span");
+    l.className = "page-footer-label";
+    l.textContent = "Developed by";
+    f.appendChild(l);
+    var img = document.createElement("img");
+    img.className = "page-footer-logo";
+    img.src = assetUrl("logos/fisheye-gallery-logo-vector.png");
+    img.alt = "Fisheye";
+    f.appendChild(img);
+    document.body.appendChild(f);
   }
 
-  function init() {
-    injectStyles();
-    buildHeader();
-    buildFooter();
-  }
+  function init(){ styles(); construireBarre(); construirePastille(); }
 
-  if (document.readyState === "loading") {
+  if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", init);
-  } else {
+  else
     init();
-  }
 })();

@@ -9,181 +9,200 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 /* ══════════════════════════════════════════════════════════════════
-   ACCUEIL — tient dans un écran, sans défilement
-   Bandeau noir, colonne blanche du Carrousel à gauche sur toute la
-   hauteur, zone claire à droite : deux posts autonomes en haut, les
-   cinq vignettes sur une seule rangée, pied noir.
-   Les hauteurs sont pilotées par la grille, les corps de texte par des
-   clamp() en vw : la page se resserre au lieu de déborder.
+   ACCUEIL
+   Trois zones : bandeau sombre pleine largeur, colonne blanche du
+   Carrousel à gauche sur toute la hauteur, zone claire à droite qui
+   porte les deux posts autonomes, les vignettes et le pied.
+   Le pied s'arrête au bord de la colonne blanche, il appartient à la
+   zone de droite.
    ══════════════════════════════════════════════════════════════════ */
 :root{
   --nuit:#000000;         /* bandeau et pied */
-  --nuit-2:#191919;       /* blocs logos */
+  --nuit-2:#000000;       /* blocs logos, un cran plus clair que le noir */
   --papier:#f7f7f7;       /* zone de droite */
   --encre:#12181c;
   --gris:#5f6367;
   --filet:#e6e6e6;
   --fantome:#eeeeee;      /* numéros en filigrane */
-  --colonne:25%;          /* largeur de la colonne Carrousel */
-  /* La taille du menu se règle dans assets/header.js (MENU_TAILLE),
-     puisque la barre est maintenant commune à toutes les pages. */
+  --colonne:26%;          /* largeur de la colonne Carrousel */
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;}
-/* La barre du haut est fixe et haute de 52 px : le corps se décale d'autant.
-   box-sizing:border-box fait que le padding est pris DANS les 100vh. */
-body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
-  display:flex;flex-direction:column;background:#fff;
+body{min-height:100vh;display:flex;flex-direction:column;background:#fff;
   font-family:'Nunito',sans-serif;color:var(--encre);}
 
-/* Le bandeau vit dans assets/header.js — rien à styler ici. */
+/* ══ BANDEAU ══════════════════════════════════════════════════════ */
+.bar{flex-shrink:0;height:72px;background:var(--nuit);display:flex;align-items:stretch;}
+/* Le logotype est l'image fournie, passée en blanc sur transparent et
+   posée sur un aplat noir. C'est le dessin d'origine, pas une
+   recomposition typographique. */
+.bar-mark{display:flex;align-items:center;background:var(--nuit-2);
+  margin:6px 0 6px 10px;padding:0 18px;flex-shrink:0;text-decoration:none;}
+.bar-mark img{height:42px;display:block;}
+.bar-nav{display:flex;align-items:center;gap:34px;padding:0 26px 0 46px;
+  flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;}
+.bar-nav::-webkit-scrollbar{display:none;}
+.bar-nav a{font-size:15px;font-weight:600;color:rgba(255,255,255,.88);
+  text-decoration:none;white-space:nowrap;transition:color .18s;}
+.bar-nav a:hover{color:#fff;}
+.bar-nav a.actif{font-weight:800;color:#fff;}
+/* Le fichier Fisheye importé est noir : c'est lui, et lui seul, qui
+   passe en négatif pour les fonds sombres. */
+.bar-fish{display:flex;align-items:center;justify-content:center;
+  background:var(--nuit-2);padding:0 42px;flex-shrink:0;}
+.bar-fish img{height:22px;display:block;filter:invert(1);}
 
-/* ══ CORPS ════════════════════════════════════════════════════════ */
-.corps{flex:1;min-height:0;display:grid;
-  grid-template-columns:var(--colonne) minmax(0,1fr);align-items:stretch;}
+/* ══ CORPS : colonne blanche + zone claire ════════════════════════ */
+.corps{flex:1;display:grid;grid-template-columns:var(--colonne) minmax(0,1fr);
+  align-items:stretch;}
 
 /* ── Colonne Carrousel ── */
-.colonne{background:#fff;padding:26px 28px 24px;display:flex;flex-direction:column;
-  align-items:flex-start;text-decoration:none;color:var(--encre);min-height:0;}
-.col-label{font-size:10px;font-weight:800;letter-spacing:.2em;
-  text-transform:uppercase;color:#8d8d8d;margin-bottom:10px;}
+.colonne{background:#fff;padding:52px 40px 60px;display:flex;flex-direction:column;
+  align-items:flex-start;text-decoration:none;color:var(--encre);}
+.col-label{font-size:13px;font-weight:800;letter-spacing:.22em;
+  text-transform:uppercase;color:#8d8d8d;margin-bottom:22px;}
 .col-titre{font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(26px,2.3vw,40px);line-height:1.02;letter-spacing:-.015em;
-  margin-bottom:12px;}
+  font-size:clamp(40px,3.4vw,64px);line-height:1.0;letter-spacing:-.015em;
+  margin-bottom:26px;}
 .col-titre em{font-style:italic;color:#8d8d8d;}
-.col-desc{font-size:12px;line-height:1.5;color:#3d4348;margin-bottom:14px;max-width:32ch;}
-.col-cta,.c-cta{display:inline-flex;align-items:center;gap:8px;
-  font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--encre);text-decoration:none;border-bottom:1.5px solid var(--encre);
-  padding-bottom:2px;transition:gap .2s;}
-.col-cta{align-self:flex-start;}
-.colonne:hover .col-cta,.carte:hover .c-cta{gap:14px;}
-/* L'aperçu prend la hauteur restante de la colonne, jamais plus. */
-.col-apercu{margin-top:auto;padding-top:18px;flex:0 1 auto;min-height:0;width:100%;
-  display:flex;justify-content:flex-start;}
-.col-apercu .apercu{height:100%;width:auto;min-width:0;max-width:100%;aspect-ratio:1/1;flex:0 1 auto;}
+.col-desc{font-size:15px;line-height:1.6;color:#3d4348;margin-bottom:30px;max-width:34ch;}
+.col-cta{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+  font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--encre);text-decoration:none;border-bottom:2px solid var(--encre);
+  padding-bottom:3px;transition:gap .2s;}
+.colonne:hover .col-cta,.carte:hover .c-cta{gap:16px;}
 
 /* ── Zone claire ── */
-.zone{background:var(--papier);display:flex;flex-direction:column;min-height:0;}
-/* Les deux posts autonomes prennent la place qui reste : c'est là que
-   l'aperçu peut grandir, plutôt que de laisser un vide sous les vignettes. */
-.autonomes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;}
+.zone{background:var(--papier);display:flex;flex-direction:column;}
+
+/* Deux posts autonomes, séparés par un filet vertical. */
+.autonomes{display:grid;grid-template-columns:1fr 1fr;}
 .autonomes>*+*{border-left:1px solid var(--filet);}
-.bloc-vignettes{border-top:1px solid var(--filet);flex:0 0 auto;
-  padding:12px 0 0;display:flex;flex-direction:column;gap:8px;}
-.vignettes-titre{font-family:'DM Serif Display',serif;font-size:16px;
-  color:#6f7276;padding:0 22px;flex:0 0 auto;}
-/* Les cinq vignettes tiennent sur une seule rangée. */
-.grille{background:#fff;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));}
-.grille>*+*{border-left:1px solid var(--filet);}
-.grille{border-top:1px solid var(--filet);}
+.bloc-vignettes{border-top:1px solid var(--filet);flex:1;
+  padding:26px 0 40px;display:flex;flex-direction:column;gap:18px;}
+.vignettes-titre{font-family:'DM Serif Display',serif;font-size:21px;
+  color:#6f7276;padding:0 34px;}
+.grille{background:#fff;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+.grille .carte{border-right:1px solid var(--filet);border-bottom:1px solid var(--filet);}
 
 /* ══ CARTE ════════════════════════════════════════════════════════ */
 .carte{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;
-  gap:18px;align-items:start;padding:20px 22px 18px;min-height:0;
+  gap:26px;align-items:start;padding:34px 34px 30px;
   text-decoration:none;color:var(--encre);background:transparent;
   transition:background .2s;}
 .carte:hover{background:rgba(0,0,0,.022);}
 .carte:focus-visible{outline:2px solid var(--encre);outline-offset:-3px;}
-.c-num{position:absolute;top:12px;left:20px;z-index:0;
-  font-family:'DM Serif Display',serif;font-style:italic;font-size:38px;
+/* Numéro en filigrane, calé derrière le petit label. */
+.c-num{position:absolute;top:18px;left:32px;z-index:0;
+  font-family:'DM Serif Display',serif;font-style:italic;font-size:54px;
   line-height:1;color:var(--fantome);pointer-events:none;}
 .c-txt{position:relative;z-index:1;min-width:0;}
-.c-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:.18em;
-  text-transform:uppercase;color:#9a9a9a;margin-bottom:8px;}
+.c-label{display:block;font-size:11px;font-weight:800;letter-spacing:.2em;
+  text-transform:uppercase;color:#9a9a9a;margin-bottom:14px;}
 .c-titre{font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(20px,1.55vw,30px);line-height:1.02;letter-spacing:-.015em;
-  margin-bottom:9px;}
+  font-size:clamp(28px,2.4vw,44px);line-height:1.0;letter-spacing:-.015em;
+  margin-bottom:18px;}
 .c-titre em{font-style:italic;color:#8d8d8d;}
-.c-desc{font-size:11.5px;line-height:1.45;color:var(--gris);margin-bottom:11px;
-  max-width:44ch;}
-
-/* Vignettes : carte verticale compacte, aperçu sous le texte. */
-.grille .carte{display:flex;flex-direction:column;gap:0;padding:16px 14px 26px;}
-.grille .c-num{font-size:30px;top:10px;left:14px;}
-.grille .c-label{font-size:8.5px;letter-spacing:.14em;margin-bottom:6px;}
-.grille .c-titre{font-size:clamp(17px,1.25vw,24px);margin-bottom:7px;}
-/* Trois lignes au maximum : au-delà, la rangée ne tiendrait plus. */
-.grille .c-desc{font-size:10.5px;line-height:1.4;margin-bottom:9px;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.grille .c-cta{font-size:9.5px;}
-.grille .c-cta{align-self:flex-start;margin-bottom:14px;}
-/* L'aperçu suit le texte : bloqué en bas de carte, il laissait un vide
-   de plusieurs centimètres depuis que les vignettes ont maigri. */
-.grille .apercu{margin-top:2px;width:min(100%,142px);aspect-ratio:1/1;}
+.c-desc{font-size:14px;line-height:1.55;color:var(--gris);margin-bottom:20px;
+  max-width:46ch;}
+.c-cta{display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--encre);border-bottom:2px solid var(--encre);padding-bottom:3px;
+  transition:gap .2s;}
+.grille .c-titre{font-size:clamp(24px,1.9vw,34px);}
+.grille .c-desc{font-size:12.5px;margin-bottom:16px;}
+.grille .c-num{font-size:46px;top:20px;}
+.grille .carte{padding:28px 26px 26px;gap:18px;}
 
 /* ══ APERÇU ═══════════════════════════════════════════════════════
    Deux cartes blanches décalées derrière l'image donnent la pile de
-   slides : dessinées en pseudo-éléments, rien à charger. */
+   slides. Elles sont dessinées en pseudo-éléments : rien à charger. */
 .apercu{position:relative;flex-shrink:0;}
 .apercu::before,.apercu::after{content:"";position:absolute;inset:0;
   background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:2px;
-  box-shadow:0 5px 14px rgba(0,0,0,.05);}
-.apercu::before{transform:translate(13px,13px);}
-.apercu::after{transform:translate(6.5px,6.5px);}
-.apercu img{position:relative;z-index:1;display:block;width:100%;height:100%;
-  object-fit:cover;border-radius:2px;box-shadow:0 8px 20px rgba(0,0,0,.14);
+  box-shadow:0 6px 18px rgba(0,0,0,.05);}
+.apercu::before{transform:translate(18px,18px);}
+.apercu::after{transform:translate(9px,9px);}
+.apercu img{position:relative;z-index:1;display:block;width:100%;height:auto;
+  border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.14);
   transition:transform .3s ease,box-shadow .3s ease;}
-.carte:hover .apercu img,.colonne:hover .apercu img{transform:translate(-3px,-3px);
-  box-shadow:0 13px 28px rgba(0,0,0,.18);}
+.carte:hover .apercu img{transform:translate(-3px,-3px);
+  box-shadow:0 16px 34px rgba(0,0,0,.18);}
 .apercu.vide img{display:none;}
 .apercu.vide::before,.apercu.vide::after{display:none;}
 .apercu.vide{background:repeating-linear-gradient(45deg,#f1f1f1 0 10px,#e8e8e8 10px 20px);
   border:1px dashed #cfcfcf;border-radius:2px;}
 .apercu.vide::after{content:attr(data-ph);display:flex;position:static;
-  transform:none;background:none;border:none;box-shadow:none;height:100%;
+  transform:none;background:none;border:none;box-shadow:none;
   align-items:center;justify-content:center;text-align:center;
-  font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#a9a9a9;padding:8px;line-height:1.6;overflow-wrap:anywhere;}
-/* Les deux posts autonomes gardent l'aperçu à droite du texte. */
-.autonomes .apercu{width:clamp(96px,14vw,230px);aspect-ratio:1/1;align-self:center;}
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#a9a9a9;padding:10px;line-height:1.7;overflow-wrap:anywhere;}
+/* Tailles d'aperçu : grand dans la colonne, moyen pour les deux posts
+   autonomes, petit pour les vignettes. */
+.col-apercu{margin-top:36px;width:88%;}
+.col-apercu .apercu{width:100%;aspect-ratio:1/1;}
+.col-apercu .apercu img{height:100%;object-fit:cover;}
+.col-apercu .apercu.vide{aspect-ratio:1/1;}
+.autonomes .apercu{width:clamp(150px,13vw,200px);aspect-ratio:1/1;}
+.autonomes .apercu img{height:100%;object-fit:cover;}
+.grille .apercu{width:clamp(110px,9.5vw,140px);aspect-ratio:1/1;}
+.grille .apercu img{height:100%;object-fit:cover;}
 
 /* ══ PIED ═════════════════════════════════════════════════════════ */
-.ftr{flex:0 0 auto;background:var(--nuit);color:#fff;padding:6px 26px;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.ftr-left{display:flex;align-items:baseline;gap:12px;min-width:0;}
-.ftr-copy{font-size:10.5px;font-weight:800;letter-spacing:.02em;white-space:nowrap;}
-.ftr-desc{font-size:9.5px;color:rgba(255,255,255,.5);overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;}
-.ftr-right{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.ftr-te{height:18px;display:block;}
-.ftr-fish{height:11px;display:block;filter:invert(1);}
+.ftr{flex-shrink:0;background:var(--nuit);color:#fff;padding:20px 34px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  flex-wrap:wrap;}
+.ftr-copy{font-size:13px;font-weight:800;letter-spacing:.02em;}
+.ftr-desc{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;}
+.ftr-right{display:flex;align-items:center;gap:26px;}
+/* TotalEnergies garde ses couleurs : le fichier a simplement été
+   détouré de son fond blanc, aucune inversion. */
+.ftr-te{height:30px;display:block;}
+.ftr-fish{height:17px;display:block;filter:invert(1);}
 
-/* ══ RESPONSIVE ═══════════════════════════════════════════════════
-   En dessous de 1150 px de large ou de 640 px de haut, la page passe
-   en défilement : tenir dans l'écran à tout prix reviendrait à rendre
-   les textes illisibles. */
-@media(max-width:1150px),(max-height:640px){
-  body{height:auto;min-height:100vh;overflow:auto;}
+/* ══ RESPONSIVE ═══════════════════════════════════════════════════ */
+@media(max-width:1500px){
+  .grille{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:1100px){
   .corps{grid-template-columns:minmax(0,1fr);}
-  .colonne{padding:32px 26px;}
-  .col-apercu{flex:none;max-width:360px;}
-  .col-apercu .apercu{height:auto;width:100%;}
+  .colonne{padding:40px 30px 44px;}
+  .col-apercu{max-width:420px;}
   .autonomes{grid-template-columns:minmax(0,1fr);}
   .autonomes>*+*{border-left:none;border-top:1px solid var(--filet);}
-  .grille{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .grille>*+*{border-left:none;}
-  .grille .carte{border-right:1px solid var(--filet);border-bottom:1px solid var(--filet);}
-  .grille .apercu{height:auto;width:clamp(110px,22vw,160px);}
-  .grille .c-desc{-webkit-line-clamp:unset;}
 }
-@media(max-width:700px){
-  .ftr{flex-wrap:wrap;}
-  .ftr-left{flex-direction:column;gap:2px;}
-  .ftr-desc{white-space:normal;}
+@media(max-width:760px){
+  .bar{height:auto;flex-wrap:wrap;}
+  .bar-mark{margin:8px 0 8px 10px;}
+  .bar-mark img{height:34px;}
+  .bar-fish{margin-left:auto;padding:0 20px;}
+  .bar-nav{order:3;width:100%;flex:none;gap:22px;padding:0 16px 12px;}
   .grille{grid-template-columns:minmax(0,1fr);}
-  .carte{grid-template-columns:minmax(0,1fr);}
-  .autonomes .apercu{width:min(200px,50vw);}
-  .ftr{flex-wrap:wrap;}
+  .carte{grid-template-columns:minmax(0,1fr);gap:20px;}
+  .autonomes .apercu,.grille .apercu{width:min(240px,60vw);}
+  .vignettes-titre{padding:0 22px;}
+  .carte,.grille .carte{padding:26px 22px;}
+  .ftr{padding:20px 22px;}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
-
-<script src="assets/header.js"></script>
 </head>
 <body>
 
-<!-- La barre du haut est construite par assets/header.js, commune à toutes les pages. -->
+<header class="bar">
+  <a class="bar-mark" href="index.html">
+    <img src="assets/logos/logotype-spg-blanc.png" alt="Static Post Generator"/>
+  </a>
+  <nav class="bar-nav">
+    <a href="index.html" class="actif">Accueil</a>
+    <a href="generators/carrousel/index.html">Carrousel</a>
+    <a href="generators/fiche-metier/index.html">Fiche métier</a>
+    <a href="generators/energy-talks/index.html">EnergyTalks</a>
+  </nav>
+  <div class="bar-fish">
+    <img src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+  </div>
+</header>
 
 <div class="corps">
 
@@ -365,20 +384,20 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
       </div>
     </section>
 
+    <footer class="ftr">
+      <div>
+        <div class="ftr-copy">Static Posts Generator — Developed by Fisheye</div>
+        <div class="ftr-desc">Formats 1:1, 4:5, story 9:16 · Export PNG haute résolution, conforme à la charte Social Media.</div>
+      </div>
+      <div class="ftr-right">
+        <img class="ftr-te" src="assets/logos/logo-totalenergies-transparent.png" alt="TotalEnergies"/>
+        <img class="ftr-fish" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+      </div>
+    </footer>
+
   </div>
 
 </div>
-
-<footer class="ftr">
-  <div class="ftr-left">
-    <span class="ftr-copy">Static Posts Generator — Developed by Fisheye</span>
-    <span class="ftr-desc">Formats 1:1, 4:5, story 9:16 · Export PNG haute résolution, conforme à la charte Social Media.</span>
-  </div>
-  <div class="ftr-right">
-    <img class="ftr-te" src="assets/logos/logo-totalenergies-transparent.png" alt="TotalEnergies"/>
-    <img class="ftr-fish" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
-  </div>
-</footer>
 
 </body>
 </html>

@@ -25,18 +25,33 @@
   --filet:#e6e6e6;
   --fantome:#eeeeee;      /* numéros en filigrane */
   --colonne:25%;          /* largeur de la colonne Carrousel */
-  /* La taille du menu se règle dans assets/header.js (MENU_TAILLE),
-     puisque la barre est maintenant commune à toutes les pages. */
+  --menu-taille:10px;     /* ← TAILLE DU MENU DU HAUT : le seul endroit à changer */
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;}
-/* La barre du haut est fixe et haute de 52 px : le corps se décale d'autant.
-   box-sizing:border-box fait que le padding est pris DANS les 100vh. */
-body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
+body{height:100vh;height:100dvh;overflow:hidden;
   display:flex;flex-direction:column;background:#fff;
   font-family:'Nunito',sans-serif;color:var(--encre);}
 
-/* Le bandeau vit dans assets/header.js — rien à styler ici. */
+/* ══ BANDEAU ══════════════════════════════════════════════════════ */
+.bar{flex:0 0 auto;height:58px;background:var(--nuit);display:flex;align-items:center;
+  padding:0 26px 0 22px;gap:28px;}
+/* Les deux logos sont posés à même le noir : pas de pastille, pas d'aplat
+   autour, c'est la transparence des fichiers qui fait le travail. */
+.bar-mark{display:flex;align-items:center;flex-shrink:0;text-decoration:none;}
+.bar-mark img{height:30px;display:block;}
+.bar-nav{display:flex;align-items:center;gap:10px;flex:1;min-width:0;
+  overflow-x:auto;scrollbar-width:none;}
+.bar-nav::-webkit-scrollbar{display:none;}
+/* Onglets du modèle : gris clair au repos, blanc sur pastille sombre pour
+   la page en cours, coins arrondis. */
+.bar-nav a{font-size:var(--menu-taille);font-weight:500;letter-spacing:.005em;
+  color:#9aa3ae;text-decoration:none;white-space:nowrap;
+  padding:.55em 1em;border-radius:.5em;transition:color .18s,background .18s;}
+.bar-nav a:hover{color:#e8ebef;}
+.bar-nav a.actif{color:#fff;background:#1b212c;}
+.bar-fish{display:flex;align-items:center;flex-shrink:0;}
+.bar-fish img{height:17px;display:block;filter:invert(1);}
 
 /* ══ CORPS ════════════════════════════════════════════════════════ */
 .corps{flex:1;min-height:0;display:grid;
@@ -168,6 +183,10 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
   .grille .c-desc{-webkit-line-clamp:unset;}
 }
 @media(max-width:700px){
+  .bar{height:auto;flex-wrap:wrap;padding:10px 16px;gap:14px;}
+  .bar-fish{margin-left:auto;}
+  .bar-nav{order:3;width:100%;flex:none;gap:6px;}
+  .bar-nav a{font-size:calc(var(--menu-taille) - 3px);}
   .ftr{flex-wrap:wrap;}
   .ftr-left{flex-direction:column;gap:2px;}
   .ftr-desc{white-space:normal;}
@@ -179,11 +198,23 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
 
-<script src="assets/header.js"></script>
 </head>
 <body>
 
-<!-- La barre du haut est construite par assets/header.js, commune à toutes les pages. -->
+<header class="bar">
+  <a class="bar-mark" href="index.html">
+    <img src="assets/logos/logotype-spg-blanc.png" alt="Static Post Generator"/>
+  </a>
+  <nav class="bar-nav">
+    <a href="index.html" class="actif">Accueil</a>
+    <a href="generators/carrousel/index.html">Carrousel</a>
+    <a href="generators/fiche-metier/index.html">Fiche métier</a>
+    <a href="generators/energy-talks/index.html">EnergyTalks</a>
+  </nav>
+  <div class="bar-fish">
+    <img src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
+  </div>
+</header>
 
 <div class="corps">
 

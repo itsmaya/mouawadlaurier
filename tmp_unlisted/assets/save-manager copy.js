@@ -304,9 +304,7 @@
           e("span",{style:{width:8,height:8,borderRadius:"50%",
             background:dot,flexShrink:0,
             boxShadow:dirty?"0 0 0 2px rgba(224,160,32,.25)":"none"}}),
-          /* Barre du haut noire depuis le header v3 : le nom passe en blanc,
-             le bouton en négatif. */
-          e("span",{style:{fontSize:12,fontWeight:700,color:"#fff",
+          e("span",{style:{fontSize:12,fontWeight:700,color:"#1a1a1a",
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
             label)),
         /* Bouton Enregistrer / Mettre à jour
@@ -315,8 +313,8 @@
            évidemment pouvoir être enregistré. */
         e("button",{onClick:props.onSave,
           title:isNew?"Enregistrer ce projet":(dirty?"Enregistrer les modifications":"Aucune modification depuis le dernier enregistrement"),
-          style:{background:(isNew||dirty)?"#fff":"rgba(255,255,255,.13)",
-            color:(isNew||dirty)?"#000":"#7c8794",border:"none",borderRadius:6,
+          style:{background:(isNew||dirty)?"#1a1a1a":"#e8e8e8",
+            color:(isNew||dirty)?"#fff":"#999",border:"none",borderRadius:6,
             padding:"5px 14px",cursor:"pointer",fontWeight:700,
             fontSize:12,fontFamily:"inherit",flexShrink:0,
             transition:"all .15s"}},
