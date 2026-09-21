@@ -70,11 +70,17 @@ var BADGE_RATIO = { dx:0.6634, dy:0.0967, w:0.3968, h:0.1126 };
    démarrage ; un fichier déposé dans le panneau les remplace. */
 var ET_ASSETS = {
   logo:  "logo-energytalks.png",
-  badge: { podcast:"badge-podcast.png", live:"badge-live.png" }
+  badge: { podcast:"badge-podcast.png", live:"badge-live.png" },
+  /* Portrait du template par défaut, extrait de la version « 17/09 15:40 »
+     validée par le client : déjà détouré, contour blanc compris. Le fichier
+     source (avant détourage) est gardé à côté pour pouvoir relancer le
+     détourage si besoin. */
+  portrait: "intervenant-defaut.png",
+  portraitSource: "intervenant-defaut-source.png"
 };
 
 /* ── Couleurs du dégradé, relevées sur les références ─────────────────────── */
-var ET_GRAD_DEFAUT = { de:"#0E2366", vers:"#8A0B6E", angle:110, opacite:78 };
+var ET_GRAD_DEFAUT = { de:"#0E2366", vers:"#8A0B6E", angle:102, opacite:72 };
 
 /* Bleus du lettrage et des pilules */
 var ET_BLEU_CLAIR = "#1FA2F2";
@@ -99,16 +105,22 @@ var DEFAULT = Object.assign({
   variante:"podcast",            /* "podcast" | "live" */
   etGrad: Object.assign({},ET_GRAD_DEFAUT),
 
-  editionTexte:"U.S. Edition",
-  editionDrapeau:"🇺🇸",
+  /* ── Template par défaut ──────────────────────────────────────────────
+     Reprise exacte de la version « 17/09 15:40 » validée par le client :
+     textes, cadrage du portrait et réglages du dégradé. Les images ne sont
+     pas embarquées ici (elles pèseraient plusieurs méga-octets dans chaque
+     sauvegarde) : le générateur charge les fichiers de templates/energy-talks
+     au démarrage, tant que l'utilisateur n'a rien déposé. */
+  editionTexte:"Live",
+  editionDrapeau:"",
   editionStyle:"degrade",        /* "degrade" (pilule bleue) | "blanc" */
 
-  titre:"Low-Cost, Low-Carbon\nOil Projects in the U.S.",
+  titre:"Low-Cost\nOil Projects",
 
   /* Les intervenants portent chacun leur portrait détouré. */
   intervenants:[
-    { id:"i1", nom:"Todd Lee", fonction:"President and CEO of TotalEnergies E&P USA",
-      photo:null, photoRaw:null, x:50, y:50, zoom:100 }
+    { id:"i1", nom:"Jessica Williams", fonction:"President and CEO",
+      photo:null, photoRaw:null, x:34, y:55, zoom:99 }
   ],
 
   /* Sous-titre, utilisé surtout par la variante Live */

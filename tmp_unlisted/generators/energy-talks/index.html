@@ -61,6 +61,27 @@ function chargerAssetsParDefaut(st,setSt){
   }
   essai(ET_DIR+"logo-energytalks.png","logoSrc");
   essai(ET_DIR+((st.variante==="live")?"badge-live.png":"badge-podcast.png"),"badgeSrc");
+
+  /* Portrait du template par défaut. Même règle que le logo : on ne le pose
+     que si la place est libre, donc jamais par-dessus une photo déposée ni
+     par-dessus un projet rouvert. Deux fichiers : celui déjà détouré, qui
+     s'affiche, et sa source avant détourage, gardée pour pouvoir relancer le
+     détourage depuis le panneau. */
+  var premier=(st.intervenants||[])[0];
+  if(premier && !premier.photo){
+    var im=new Image();
+    im.onload=function(){
+      setSt(function(p){
+        var a=(p.intervenants||[]).slice();
+        if(!a[0] || a[0].photo) return p;
+        a[0]=Object.assign({},a[0],{
+          photo:ET_DIR+"intervenant-defaut.png",
+          photoRaw:ET_DIR+"intervenant-defaut-source.png"});
+        return Object.assign({},p,{intervenants:a});
+      });
+    };
+    im.src=ET_DIR+"intervenant-defaut.png";
+  }
 }
 
 function bgCandidates(k){
