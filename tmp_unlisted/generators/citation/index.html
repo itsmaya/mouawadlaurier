@@ -177,8 +177,15 @@ function App(){
             background:isT03?"#1a1a1a":"#f0f0f0",color:isT03?"#fff":"#555",transition:"all .15s"}},
           "Template 03",e("br"),
           e("span",{style:{fontWeight:600,opacity:.7,fontSize:10}},"Charte 2026"))),
-      e("label",{className:"field-label"},"Badge / Titre"),
-      e("input",{type:"text",spellCheck:true,value:st.badge,onChange:function(ev){set("badge",ev.target.value);}}),
+      /* La cartouche de titre peut être retirée : le template 03 de la
+         charte commence souvent directement par le nom. */
+      e("label",{className:"toggle",style:{marginBottom:10}},
+        e("input",{type:"checkbox",checked:!st.hideBadge,
+          onChange:function(ev){ set("hideBadge",!ev.target.checked); }}),
+        "Afficher la cartouche de titre"),
+      st.hideBadge?null:e(React.Fragment,null,
+        e("label",{className:"field-label"},"Badge / Titre"),
+        e("input",{type:"text",spellCheck:true,value:st.badge,onChange:function(ev){set("badge",ev.target.value);}})),
       e("div",{style:{height:10}}),
       e("label",{className:"field-label"},"Pictogramme"),
       e("div",{id:"spg-picto-gallery"}),

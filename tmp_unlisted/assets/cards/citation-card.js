@@ -26,6 +26,10 @@ var DEFAULT = Object.assign({
   navMark:"arrow",showLogo:false,logoImg:null,
   template:"libre",
   avatarSrc:null,source:"",
+  /* La cartouche de titre peut être retirée : sur le modèle du template 03
+     de la charte, le visuel commence directement par la pastille guillemet
+     et le nom. */
+  hideBadge:false,
   blockW_t03_1x1:0,blockW_t03_4x5:0,blockW_t03_9x16:0,
   shadowT03:true
 }, global.BG_DEFAULT_STATE||{});
@@ -38,11 +42,11 @@ function getCiteLayout(format){
     var ch=Math.round(f.cardH*(CARD_W/f.outputW));
     return{
       CARD_H:ch,EXPORT_SCALE:EX,
-      BADGE_X:Math.round(32*S),BADGE_TOP:Math.round(31*S),
+      BADGE_X:chFormat("4x5").margin,BADGE_TOP:chFormat("4x5").captionTop,
       BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
       BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12.5*S),
       BADGE_PADX:Math.round(18*S),BADGE_RADIUS:Math.round(9*S),
-      MARGIN:Math.round(32*S),
+      MARGIN:chFormat("4x5").margin,
       PERSON_X:Math.round(70*S),PERSON_Y:Math.round(136*S),
       PHOTO_W:Math.round(87*S),PHOTO_H:Math.round(96*S),PHOTO_R:Math.round(10*S),
       PERSON_GAP:Math.round(7*S),PERSON_PADX:Math.round(22*S),
@@ -57,11 +61,11 @@ function getCiteLayout(format){
   var ch2=(format==="9x16")?Math.round(CARD_W*(f.outputH/f.outputW)):CARD_W;
   return{
     CARD_H:ch2,EXPORT_SCALE:EX,
-    BADGE_X:Math.round(30*S),BADGE_TOP:Math.round(28*S),
+    BADGE_X:chFormat(format).margin,BADGE_TOP:chFormat(format).captionTop,
     BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
     BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12*S),
     BADGE_PADX:Math.round(17*S),BADGE_RADIUS:Math.round(9*S),
-    MARGIN:Math.round(30*S),
+    MARGIN:chFormat(format).margin,
     PERSON_X:Math.round(106*S),PERSON_Y:Math.round(129*S),
     PHOTO_W:Math.round(71*S),PHOTO_H:Math.round(90*S),PHOTO_R:Math.round(10*S),
     PERSON_GAP:Math.round(9*S),PERSON_PADX:Math.round(20*S),
@@ -157,12 +161,23 @@ function QuoteBody(props){
   });
   var parts=parseRich(props.text||"");
   var H_H=fs*1.12;
+  var H_PAD=fs*0.12;          /* débord du surligné : moitié d'une espace */
+  /* Rognage typographique : demi-interligne + vide au-dessus des capitales
+     (0,12 em pour Nunito), et sous la ligne de base (0,10 em). */
+  var DEMI_INTERLIGNE=Math.max(0,(fs*lh-fs)/2);
+  var TRIM_HAUT=Math.round(DEMI_INTERLIGNE+fs*0.12);
+  var TRIM_BAS =Math.round(DEMI_INTERLIGNE+fs*0.10);
   var U_TH=Math.max(2,fs*0.17),U_OFF=fs*0.03;
   return e("div",{style:{position:"relative"}},
-    M.h.map(function(r,i){
+    /* Le surligné déborde du texte d'un demi-espace de chaque côté, comme
+       la charte le demande. Avant, cet espace était injecté DANS le texte,
+       ce qui mangeait l'espace tapé par l'utilisateur : le mot surligné se
+       retrouvait collé au mot d'à côté. Maintenant c'est le rectangle qui
+       s'élargit, le texte n'est pas touché. */
+    (props.hlStyle==="gras"?[]:M.h).map(function(r,i){
       var cy=r.y+r.h/2;
       return e("div",{key:"h"+i,style:{position:"absolute",
-        left:r.x,top:cy-H_H/2,width:r.w,height:H_H,
+        left:r.x-H_PAD,top:cy-H_H/2,width:r.w+H_PAD*2,height:H_H,
         background:grad,borderRadius:1,zIndex:0}});
     }),
     M.u.map(function(r,i){
@@ -171,12 +186,26 @@ function QuoteBody(props){
         background:grad,borderRadius:U_TH/2,zIndex:0}});
     }),
     e("div",{ref:hostRef,style:{position:"relative",zIndex:1,
-        color:props.textColor||"#2B5AF1",fontSize:fs,lineHeight:lh,fontWeight:props.fw||600}},
+        color:props.textColor||"#2B5AF1",fontSize:fs,lineHeight:lh,fontWeight:props.fw||600,
+        /* pre-wrap : les espaces multiples et les retours à la ligne tapés
+           dans l'éditeur arrivent tels quels dans le visuel. */
+        whiteSpace:"pre-wrap",
+        /* La boîte d'une ligne est plus haute que les lettres : sans ce
+           rognage, la marge visible en haut et en bas valait le padding
+           PLUS la demi-interligne, d'où un bloc qui paraissait trop grand
+           au-dessus du texte. */
+        marginTop:-TRIM_HAUT, marginBottom:-TRIM_BAS}},
       e("span",{"data-anchor":"open",style:{display:"inline-block",
         width:qs!=="none"?ANCHOR:0,height:0,verticalAlign:"baseline"}}),
       parts.map(function(p,i){
+        /* Template 03 de la charte : les mots mis en avant passent en
+           SemiBold dans la couleur du texte, sans fond coloré. C'est la
+           règle « surlignés SemiBold » de la page 29, et c'est ce que montre
+           la planche de référence. */
         if(p.t==="h") return e("span",{key:i,"data-seg":"h","data-part":"1",
-          style:{color:TE_WHITE,fontWeight:800}}," "+p.v+" ");
+          style:props.hlStyle==="gras"
+            ?{fontWeight:700}
+            :{color:TE_WHITE,fontWeight:800}},p.v);
         if(p.t==="u") return e("span",{key:i,"data-seg":"u","data-part":"1"},p.v);
         return e("span",{key:i,"data-part":"1"},p.v);
       }),
@@ -198,6 +227,9 @@ function QuoteBody(props){
     })()
   );
 }
+
+/* Écart imposé entre le bas du bloc citation et la flèche de carrousel. */
+var ARROW_GAP_CITE=30;
 
 /* ── Géométrie dérivée ───────────────────────────────────────────────────────
    Partagée entre la carte et le panneau du générateur (sliders position /
@@ -221,8 +253,19 @@ function geometry(st,quoteH){
   var curPct=Math.max(30,Math.min(90,_rawW||autoPct));
   var QW=Math.round(CARD_W*curPct/100), dW=QW-L.QUOTE_W;
 
-  var TOP_MIN=L.BADGE_TOP+L.BADGE_H+10+L.PHOTO_H+10;
-  var TOP_MAX=CARD_H-20-(quoteH||0);
+  /* ── Bornes verticales ────────────────────────────────────────────────
+     En haut : 100 px sous la cartouche de titre, plus la place du bloc
+     personne qui vit juste au-dessus de la citation.
+     En bas : la marge de charte du format (100 px en 1:1 et 4:5, 230 en
+     story) ; et quand la flèche de carrousel est là, on réserve en plus sa
+     hauteur et son écart, sinon la citation lui passerait dessus. */
+  var GAP_TITRE=100;
+  var cfFmt=chFormat(st.format);
+  var zoneFleche=(st.navMark&&st.navMark!=="none")
+    ? L.MARGIN+L.ARROW_H+ARROW_GAP_CITE : 0;
+  var reserveBas=Math.max(cfFmt.bottom, zoneFleche);
+  var TOP_MIN=L.BADGE_TOP+L.BADGE_H+GAP_TITRE+L.PHOTO_H+Math.max(0,L.QUOTE_Y-L.PERSON_Y-L.PHOTO_H);
+  var TOP_MAX=CARD_H-reserveBas-(quoteH||0);
   if(TOP_MAX<TOP_MIN) TOP_MAX=TOP_MIN;
   var targetTop=(_rawY<0)
     ?Math.max(TOP_MIN,Math.min(TOP_MAX,L.QUOTE_Y))
@@ -311,8 +354,18 @@ function CitationCard(p){
   var bgY=st["bgY_"+_fmt]!==undefined?st["bgY_"+_fmt]:50;
   var bgZoom=st["bgZoom_"+_fmt]||100;
 
+  /* Cartouche du nom : elle épouse son texte, avec la même marge à gauche
+     et à droite, au lieu de s'aligner sur la largeur du bloc citation en
+     dessous. pillW ne sert donc plus que de garde-fou : c'est la largeur
+     maximale, celle qui reste entre la photo et le bord de la carte. */
+  /* Écart entre le bas du bloc personne et le haut du bloc citation. On
+     reprend exactement l'écart d'origine, pour que les projets déjà
+     enregistrés gardent la même allure. */
+  var GAP_PERSONNE=Math.max(0,L.QUOTE_Y-L.PERSON_Y-L.PHOTO_H);
+
   var pillW=QW-L.PHOTO_W-L.PERSON_GAP;
-  var fp=fitPerson(st,L,pillW);
+  var pillMax=CARD_W-personX-L.PHOTO_W-L.PERSON_GAP-L.MARGIN;
+  var fp=fitPerson(st,L,pillMax);
   var nFont=fp.nFont,tFont=fp.tFont,nameDisplay=fp.nameDisplay,nameWrap=fp.nameWrap;
 
   /* Badge — font adaptative */
@@ -342,11 +395,20 @@ function CitationCard(p){
        letterSpacing:".055em",textTransform:"uppercase",backgroundImage:GRAD_H,whiteSpace:"nowrap"};
 
   /* Template 03 */
-  var t03WPct=st["blockW_t03_"+st.format]||75;
+  /* Cotes relevées sur la planche de référence, ramenées en px carte 1080 :
+     bloc large de 723 px (67 %), corps 40 px, interligne 46 px (1,15). */
+  var t03WPct=st["blockW_t03_"+st.format]||67;
   var t03W=Math.round(CARD_W*t03WPct/100),t03Xp=Math.round((CARD_W-t03W)/2);
-  var AVTR_D=Math.round(80*CITE_S);
-  var T03_R=Math.round(25*CITE_S),T03_PAD_FULL=Math.round(40*CITE_S);
-  var T03_GAP=Math.round(15*CITE_S),T03_N_F=Math.round(17*CITE_S);
+  /* ⚠ Les cotes du bloc citation de la charte (rayon 25, padding 40, avatar
+     80, écart 15) sont DÉJÀ exprimées en pixels de carte 1080. Elles étaient
+     multipliées par CITE_S (1,8), l'échelle interne héritée de la V8 : le
+     bloc sortait donc avec un rayon de 45 px et un padding de 72, d'où un
+     encadré bien plus arrondi et plus épais que celui de la charte. */
+  var Q=CHARTE.components.quote;
+  var AVTR_D=Q.avatar;
+  var T03_R=Q.radius, T03_PAD_FULL=Q.pad;
+  var T03_GAP=Q.gap,T03_N_F=Math.round(17*CITE_S);
+  var T03_PASTILLE=CHARTE.components.caption.iconBox||70;
   var T03_T_F=Math.round(13*CITE_S),T03_CART_H=Math.round(52*CITE_S);
   var T03_CART_PX=Math.round(20*CITE_S),T03_CART_GAP=Math.round(8*CITE_S);
   var t03Shadow=st.shadowT03!==false?"0 "+Math.round(10*CITE_S)+"px "+Math.round(5*CITE_S)+"px rgba(0,0,0,0.10)":"none";
@@ -355,6 +417,11 @@ function CitationCard(p){
   /* Largeur du cadre marie-louise et rayon de l'image insérée (charte : 20 px
      sur une carte de 1080, mise à l'échelle du rendu). */
   var ML_INSET=Math.round(CARD_W*0.046);
+  /* Décalage de l'avant-plan quand la marie-louise est active. Le cadre
+     était dessiné correctement, mais la cartouche, la personne, le bloc
+     citation et la flèche restaient calés sur le bord de la carte : ils
+     mordaient donc sur le cadre, et la flèche en débordait. */
+  var mlDec = onML ? ML_INSET : 0;
   var ML_RADIUS_CITE=Math.round(20*(CARD_W/1080));
 
   var rootAttrs={style:{
@@ -402,7 +469,8 @@ function CitationCard(p){
        photo insérée dedans — voir le calque « bg » ci-dessus.) */
 
     /* Cartouche légende */
-    e("div",{style:{position:"absolute",left:L.BADGE_X,top:L.BADGE_TOP,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
+    st.hideBadge?null:
+    e("div",{style:{position:"absolute",left:L.BADGE_X+mlDec,top:L.BADGE_TOP+mlDec,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
       (function(){
         var src=st.badgeIconCustom||(global.PictoGallery&&PictoGallery.getSrc(st.badgeIconKey))||null;
         var isOut=!st.badgeIconCustom&&!!(global.PictoGallery&&PictoGallery.getSrc(st.badgeIconKey))&&global.PictoGallery&&!PictoGallery.isWhite(st.badgeIconKey);
@@ -415,7 +483,15 @@ function CitationCard(p){
       e("div",{style:pillStyle},st.badge)),
 
     /* Style libre : personne */
-    !isT03?e("div",{style:{position:"absolute",left:personX,top:L.PERSON_Y+dY,display:"flex",alignItems:"stretch",gap:L.PERSON_GAP}},
+    /* MISE EN PAGE DYNAMIQUE — le bloc personne est ancré PAR LE BAS, à un
+       écart constant au-dessus du bloc citation, et non à une ordonnée fixe.
+       Conséquence : quand la cartouche du nom gagne une ligne, elle pousse
+       le bloc vers le HAUT et l'écart avec la citation ne bouge pas. Avec
+       une position haute figée, c'est l'inverse qui se produisait : le bloc
+       s'allongeait vers le bas et venait coller la citation. */
+    !isT03?e("div",{style:{position:"absolute",left:personX+mlDec,
+        bottom:(CARD_H-(L.QUOTE_Y+dY)+GAP_PERSONNE)-mlDec,
+        display:"flex",alignItems:"flex-end",gap:L.PERSON_GAP}},
       e("div",{style:{width:L.PHOTO_W+"px",height:L.PHOTO_H+"px",borderRadius:L.PHOTO_R+"px",
           overflow:"hidden",flexShrink:0,position:"relative",background:"rgba(255,255,255,.14)"}},
         st.photo
@@ -424,16 +500,24 @@ function CitationCard(p){
                      width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top",display:"block"}})
           :e("div",{style:{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",
               color:"rgba(255,255,255,.4)",fontSize:10,fontWeight:700,letterSpacing:".08em"}},"PHOTO")),
-      e("div",{style:{height:L.PHOTO_H+"px",borderRadius:L.PHOTO_R+"px",width:pillW+"px",
+      /* Hauteur : la cartouche fait TOUJOURS la hauteur de son texte plus la
+         marge haute et basse, quelle que soit la photo. Quand elle est plus
+         courte que la photo, c'est son bas qui s'aligne sur le bas de la
+         photo (la rangée est calée en flex-end), jamais son haut. */
+      e("div",{style:{height:"auto",
+          borderRadius:L.PHOTO_R+"px",
+          width:"max-content",maxWidth:pillMax+"px",
           backgroundImage:GRAD_H,display:"flex",flexDirection:"column",justifyContent:"center",
-          padding:"0 "+L.PERSON_PADX+"px",boxSizing:"border-box",overflow:"hidden"}},
+          padding:Math.round(L.PERSON_PADX*0.7)+"px "+L.PERSON_PADX+"px",
+          boxSizing:"border-box"}},
         e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:nFont,lineHeight:1.16,
             letterSpacing:".01em",whiteSpace:nameWrap}},nameDisplay),
         e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:tFont,lineHeight:1.28,
             whiteSpace:"pre-line",marginTop:3,overflow:"hidden"}},st.title))):null,
 
     /* Style libre : bloc citation */
-    !isT03?e("div",{ref:quoteBlockRef,style:{position:"absolute",left:blockX,top:L.QUOTE_Y+dY,width:QW,
+    !isT03?e("div",{ref:quoteBlockRef,style:{position:"absolute",left:blockX+mlDec,top:L.QUOTE_Y+dY+mlDec,
+        width:Math.min(QW,CARD_W-2*mlDec-blockX),
         background:TE_WHITE,borderRadius:L.QUOTE_R+"px",
         padding:L.QUOTE_PAD+"px",paddingBottom:(L.QUOTE_PAD+6)+"px",boxSizing:"border-box"}},
       e(QuoteBody,{text:st.quote,fs:cfs,lh:L.QUOTE_LH,
@@ -447,18 +531,35 @@ function CitationCard(p){
         e("img",{src:st.logoImg,alt:"",style:{height:L.LOGO_H+"px",objectFit:"contain"}})):null):null,
 
     /* Template 03 : bloc central */
-    isT03?e("div",{style:{position:"absolute",left:t03Xp,top:t03GroupY,
+    isT03?e("div",{style:{position:"absolute",left:t03Xp+mlDec,top:t03GroupY+mlDec,
         width:t03W,display:"flex",flexDirection:"column",alignItems:"flex-start"}},
-      (st.name||st.title)?e("div",{style:{
-          display:"inline-flex",flexDirection:"column",justifyContent:"center",
-          backgroundImage:GRAD_H,borderRadius:T03_CART_H+"px",
-          paddingLeft:T03_CART_PX+"px",paddingRight:T03_CART_PX+"px",
-          height:T03_CART_H+"px",maxWidth:"100%",
-          boxSizing:"border-box",marginBottom:T03_CART_GAP+"px",overflow:"hidden"}},
-        st.name?e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:T03_N_F,lineHeight:1.2,letterSpacing:".01em"}},st.name):null,
-        st.title?e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:T03_T_F,lineHeight:1.3}},st.title):null):null,
+      /* Rangée d'en-tête : pastille guillemet, puis pilule nom et fonction.
+         C'est le dessin de la charte : le guillemet sort du bloc blanc et
+         sert de repère, au lieu d'être posé dans le texte. */
+      /* Cotes relevées sur la planche : pastille carrée de 71 px, calée en
+         HAUT de la pilule et non centrée sur elle, et arrondis identiques à
+         ceux de l'autre version de Citation (rayon de la photo et du bloc),
+         pas le 25 px du bloc ni une pilule complètement ronde. */
+      e("div",{style:{display:"flex",alignItems:"flex-start",gap:T03_GAP,
+          marginBottom:T03_CART_GAP,maxWidth:"100%"}},
+        (st.quoteStyle&&st.quoteStyle!=="none")
+          ? e("div",{style:{width:T03_PASTILLE,height:T03_PASTILLE,
+              borderRadius:L.PHOTO_R,
+              backgroundImage:GRAD_H,display:"flex",alignItems:"center",
+              justifyContent:"center",flexShrink:0}},
+              e(Guil,{qstyle:st.quoteStyle,h:Math.round(T03_PASTILLE*0.42),close:false,
+                gradFrom:"#FFFFFF",gradTo:"#FFFFFF"}))
+          : null,
+        (st.name||st.title)?e("div",{style:{
+            display:"inline-flex",flexDirection:"column",justifyContent:"center",
+            backgroundImage:GRAD_H,borderRadius:L.PHOTO_R+"px",
+            paddingLeft:T03_CART_PX+"px",paddingRight:T03_CART_PX+"px",
+            minHeight:T03_CART_H+"px",maxWidth:"100%",
+            boxSizing:"border-box",overflow:"hidden"}},
+          st.name?e("div",{style:{color:TE_WHITE,fontWeight:900,fontSize:T03_N_F,lineHeight:1.2,letterSpacing:".01em"}},st.name):null,
+          st.title?e("div",{style:{color:TE_WHITE,fontWeight:400,fontSize:T03_T_F,lineHeight:1.3}},st.title):null):null),
       e("div",{ref:quoteBlockRef,style:{
-          width:"100%",background:TE_WHITE,borderRadius:T03_R+"px",
+          width:"100%",background:TE_WHITE,borderRadius:L.QUOTE_R+"px",
           padding:T03_PAD_FULL+"px",boxSizing:"border-box",boxShadow:t03Shadow}},
         e("div",{style:{display:"flex",gap:T03_GAP+"px",alignItems:"flex-start"}},
           st.avatarSrc?e("div",{style:{
@@ -467,8 +568,11 @@ function CitationCard(p){
             e("img",{src:st.avatarSrc,alt:"",style:{width:"100%",height:"100%",
               objectFit:"cover",objectPosition:"center top",display:"block"}})):null,
           e("div",{style:{flex:1,minWidth:0}},
-            e(QuoteBody,{text:st.quote,fs:cfs,lh:L.QUOTE_LH,
-              qstyle:st.quoteStyle,guilH:L.GUIL_H,fw:400,
+            e(QuoteBody,{text:st.quote,
+              fs:(st["fs_"+st.format]||40),lh:1.15,hlStyle:"gras",
+              /* Le guillemet vit dans la pastille d'en-tête : on ne le
+                 redessine pas autour du texte. */
+              qstyle:"none",guilH:L.GUIL_H,fw:400,
               textColor:st.textColor||G.to,
               width:st.avatarSrc?(t03W-T03_PAD_FULL*2-AVTR_D-T03_GAP):(t03W-T03_PAD_FULL*2),
               gradFrom:G.from,gradTo:G.to}),
@@ -476,7 +580,7 @@ function CitationCard(p){
               fontSize:Math.round(13*CITE_S),color:"#7a8a8d",fontWeight:400}},"— "+st.source):null)))):null,
 
     /* Repère carrousel */
-    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN,bottom:L.MARGIN}},
+    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN+mlDec,bottom:L.MARGIN+mlDec}},
       e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(T.ARROW_RADIUS_PT),grad:GRAD_H,from:G.from,to:G.to,onGrad:onGrad})):null
   );
 }
