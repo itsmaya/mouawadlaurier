@@ -1437,7 +1437,7 @@ Shell.ui.ExportTab = function(p){
           style:{width:"100%",background:"#0098E3",color:"#fff",
             border:"none",padding:"7px 0",fontSize:12,borderRadius:6}},
           currentId
-            ? ("Mettre \u00e0 jour \u00ab "+(currentName||"sans nom")+" \u00bb")
+            ? ("Sauvegarder \u00ab "+(currentName||"sans nom")+" \u00bb")
             : "Enregistrer une nouvelle version")),
 
       /* Liste des sauvegardes */

@@ -209,7 +209,12 @@ function BlockStack2026(p){
             fontSize:size,lineHeight:lh||1.1,
             backgroundImage:grad,WebkitBackgroundClip:"text",
             backgroundClip:"text",color:"transparent",textAlign:alignTexte,
-            WebkitTextFillColor:"transparent",whiteSpace:"pre-line"}},txt)
+            WebkitTextFillColor:"transparent",whiteSpace:"pre-line"}},
+            /* Le chiffre d'un bloc passe par ce rendu-là, pas par RichBody :
+               un emoji écrit dans le callout se faisait donc remplir par le
+               dégradé, exactement comme dans le corps de texte. Même
+               traitement, même fonction. */
+            (window.decoupeEmojis?decoupeEmojis(txt):txt))
         : e("div",{style:{fontFamily:"'Nunito',sans-serif",fontWeight:weight,
             fontSize:size,lineHeight:lh||1.1,color:TE_WHITE,textAlign:alignTexte,
             whiteSpace:"pre-line"}},txt);

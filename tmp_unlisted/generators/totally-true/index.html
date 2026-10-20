@@ -128,7 +128,20 @@ function App(){
         e("label",{className:"field-label"},"Après le pseudo"),
         e("input",{type:"text",spellCheck:true,value:st.replySuffix||"",
           placeholder:"comment",
-          onChange:function(ev){set("replySuffix",ev.target.value);}})),
+          onChange:function(ev){set("replySuffix",ev.target.value);}}),
+
+        /* Photo ronde de l'auteur, facultative. */
+        e("div",{style:{height:14}}),
+        e("label",{className:"field-label"},"Photo de l'auteur (facultatif)"),
+        e(FileDrop,{value:st.avatar,placeholder:"Photo ronde",
+          onChange:function(v){ set("avatar",v||null); }}),
+        st.avatar
+          ? e("div",{style:{marginTop:8}},
+              e(UI.SliderField,{label:"Diamètre — "+(st.avatarTaille||72)+" px",
+                value:st.avatarTaille||72,min:40,max:140,step:2,
+                onChange:function(v){ set("avatarTaille",v); }}))
+          : e("div",{className:"hint",style:{marginTop:6}},
+              "Sans photo, la ligne reste telle quelle.")),
 
       /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
          champs juste au-dessus. */

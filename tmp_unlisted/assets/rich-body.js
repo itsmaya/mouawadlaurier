@@ -77,6 +77,34 @@ function RichBody(props){
     if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
   });
 
+  /* ── Emojis ────────────────────────────────────────────────────────────
+     Le texte en mode dégradé est peint avec background-clip:text et un
+     text-fill transparent. Un emoji est un glyphe comme un autre : il se
+     fait donc remplir par le dégradé et perd ses couleurs, d'où le casque
+     de chantier qui ressortait en aplat vert. On isole chaque emoji dans
+     un span qui remet le remplissage d'origine. En mode inversé (texte
+     blanc sur dégradé) rien n'est clippé, l'emoji était déjà correct. */
+  var RE_EMOJI = /(?:\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)+/gu;
+  function avecEmojis(texte, style, cle){
+    if(!texte) return null;
+    var bouts=[], dernier=0, m, i=0;
+    RE_EMOJI.lastIndex=0;
+    while((m=RE_EMOJI.exec(texte))!==null){
+      if(m.index>dernier)
+        bouts.push(e("span",{key:cle+"t"+(i++),style:style},texte.slice(dernier,m.index)));
+      bouts.push(e("span",{key:cle+"e"+(i++),"data-emoji":"1",
+        style:Object.assign({},style,{
+          color:"initial",WebkitTextFillColor:"initial",
+          backgroundImage:"none",WebkitBackgroundClip:"initial",backgroundClip:"initial"})},
+        m[0]));
+      dernier=m.index+m[0].length;
+    }
+    if(!bouts.length) return e("span",{key:cle+"t0",style:style},texte);
+    if(dernier<texte.length)
+      bouts.push(e("span",{key:cle+"t"+(i++),style:style},texte.slice(dernier)));
+    return bouts;
+  }
+
   function renderParts(text,useGrad,color,inv){
     var lines=text.split("\n"), out=[];
     lines.forEach(function(line,li){
@@ -93,7 +121,8 @@ function RichBody(props){
                 style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
                        background:TE_WHITE,WebkitBackgroundClip:"text",backgroundClip:"text",
                        color:"transparent",WebkitTextFillColor:"transparent",
-                       backgroundImage:"linear-gradient("+(window.CHARTE?CHARTE.gradientAngle:135)+"deg,"+(props.gradFrom||"#0098E3")+" 0%,"+(props.gradTo||"#4632FF")+" 100%)"}},hv)
+                       backgroundImage:"linear-gradient("+(window.CHARTE?CHARTE.gradientAngle:135)+"deg,"+(props.gradFrom||"#0098E3")+" 0%,"+(props.gradTo||"#4632FF")+" 100%)"}},
+                avecEmojis(hv,{},key+"h"))
             : e("span",{key:key,"data-seg":"h",
                 style:{color:TE_WHITE,fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
                        WebkitTextFillColor:TE_WHITE}},hv));
@@ -101,12 +130,14 @@ function RichBody(props){
           out.push(e("span",{key:key,"data-seg":"u",
             style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_UNDERLINE,
                    color:useGrad?"transparent":(inv?TE_WHITE:color),
-                   WebkitTextFillColor:useGrad?"transparent":undefined}},p.v));
+                   WebkitTextFillColor:useGrad?"transparent":undefined}},
+            avecEmojis(p.v,{},key+"u")));
         } else {
           out.push(useGrad
             ? e("span",{key:key,"data-seg":"n",
                 style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
-                       color:"transparent",WebkitTextFillColor:"transparent"}},p.v)
+                       color:"transparent",WebkitTextFillColor:"transparent"}},
+                avecEmojis(p.v,{},key+"n"))
             : e("span",{key:key,
                 style:{fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
                        color:color,WebkitTextFillColor:color}},p.v));
@@ -155,6 +186,28 @@ function RichBody(props){
       renderParts(props.text,useGrad,props.color,inv))
   );
 }
+
+/* ── Emojis, version réutilisable ───────────────────────────────────────
+   Même principe que dans RichBody, pour tout texte peint en dégradé hors
+   RichBody (le chiffre des blocs de Block Layouts, notamment). */
+var RE_EMOJI_G = /(?:\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)+/gu;
+window.decoupeEmojis = function(texte){
+  var e=React.createElement;
+  if(!texte||typeof texte!=="string") return texte;
+  RE_EMOJI_G.lastIndex=0;
+  if(!RE_EMOJI_G.test(texte)) return texte;
+  RE_EMOJI_G.lastIndex=0;
+  var out=[], dernier=0, m, i=0;
+  while((m=RE_EMOJI_G.exec(texte))!==null){
+    if(m.index>dernier) out.push(texte.slice(dernier,m.index));
+    out.push(e("span",{key:"e"+(i++),"data-emoji":"1",style:{
+      color:"initial",WebkitTextFillColor:"initial",
+      backgroundImage:"none",WebkitBackgroundClip:"initial",backgroundClip:"initial"}},m[0]));
+    dernier=m.index+m[0].length;
+  }
+  if(dernier<texte.length) out.push(texte.slice(dernier));
+  return out;
+};
 
 /* ── FileDrop ──────────────────────────────────────────────────────────── */
 function FileDrop(p){

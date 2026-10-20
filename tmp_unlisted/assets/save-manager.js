@@ -309,18 +309,18 @@
           e("span",{style:{fontSize:12,fontWeight:700,color:"#fff",
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
             label)),
-        /* Bouton Enregistrer / Mettre à jour
+        /* Bouton Enregistrer / Sauvegarder
            Actionnable dès qu'il y a quelque chose à écrire : un document neuf
            n'est jamais « dirty » (rien n'a encore été enregistré), mais il doit
            évidemment pouvoir être enregistré. */
         e("button",{onClick:props.onSave,
-          title:isNew?"Enregistrer ce projet":(dirty?"Enregistrer les modifications":"Aucune modification depuis le dernier enregistrement"),
+          title:isNew?"Enregistrer ce projet":(dirty?"Sauvegarder les modifications":"Aucune modification depuis la dernière sauvegarde"),
           style:{background:(isNew||dirty)?"#fff":"rgba(255,255,255,.13)",
             color:(isNew||dirty)?"#000":"#7c8794",border:"none",borderRadius:6,
             padding:"5px 14px",cursor:"pointer",fontWeight:700,
             fontSize:12,fontFamily:"inherit",flexShrink:0,
             transition:"all .15s"}},
-          isNew?"Enregistrer":"Mettre à jour"));
+          isNew?"Enregistrer":"Sauvegarder"));
     }
 
     return {StatusBar:StatusBar};

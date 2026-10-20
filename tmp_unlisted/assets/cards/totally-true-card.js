@@ -38,6 +38,11 @@ var DEFAULT = Object.assign({
   replyHandle:"@dune.andink's",
   replySuffix:"comment",
 
+  /* Photo ronde de l'auteur du commentaire, à gauche de la ligne de réponse.
+     Facultative : sans fichier, la ligne reste exactement comme avant. */
+  avatar:null,
+  avatarTaille:72,    /* diamètre, px carte 1080 */
+
   /* Bulle : position et forme. Les valeurs sont des POURCENTAGES de la carte,
      pour rester justes quel que soit le format. */
   bubbleX:5,          /* bord gauche, % de la largeur */
@@ -270,14 +275,26 @@ function TotallyTrueCard(p){
           fs:g.fs,lh:1.28,grad:GRAD_H,
           gradFrom:G.from,gradTo:G.to,color:G.to,
           textMode:"grad",align:"left"}),
-        (st.replyHandle||st.replyPrefix)
-          ? e("div",{style:{marginTop:u(10),fontSize:g.replyFs,lineHeight:1.3,
-              color:COLOR_GREY,fontWeight:400}},
-              st.replyPrefix?(st.replyPrefix+" "):null,
-              st.replyHandle
-                ? e("span",{style:{fontWeight:800,color:COLOR_GREY}},st.replyHandle)
+        (st.replyHandle||st.replyPrefix||st.avatar)
+          ? e("div",{style:{marginTop:u(10),display:"flex",alignItems:"center",
+              gap:st.avatar?u(14):0}},
+              /* La photo est dans le flux de la ligne : la bulle est mesurée
+                 après coup, sa hauteur s'adapte donc toute seule. */
+              st.avatar
+                ? e("div",{"data-layer":"avatar",style:{
+                    width:u(st.avatarTaille||72),height:u(st.avatarTaille||72),
+                    borderRadius:"50%",overflow:"hidden",flexShrink:0,
+                    background:"#e8e8e8"}},
+                    e("img",{src:st.avatar,alt:"",style:{width:"100%",height:"100%",
+                      objectFit:"cover",objectPosition:"center top",display:"block"}}))
                 : null,
-              st.replySuffix?(" "+st.replySuffix):null)
+              e("div",{style:{fontSize:g.replyFs,lineHeight:1.3,
+                  color:COLOR_GREY,fontWeight:400,minWidth:0}},
+                st.replyPrefix?(st.replyPrefix+" "):null,
+                st.replyHandle
+                  ? e("span",{style:{fontWeight:800,color:COLOR_GREY}},st.replyHandle)
+                  : null,
+                st.replySuffix?(" "+st.replySuffix):null))
           : null)),
 
     /* Repère carrousel */
