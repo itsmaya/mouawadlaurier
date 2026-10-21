@@ -24,6 +24,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 <script src="../../assets/save-manager.js"></script>
 <script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/rich-body.js"></script>
 <script src="../../assets/drag-image.js"></script>
 <script src="../../assets/bg-controls.js"></script>
@@ -67,6 +68,7 @@ function App(){
 
   var cardRef=useRef(null);
   var qhState=useState(100),quoteH=qhState[0],setQuoteH=qhState[1];
+  var fgState=useState(null),faitsGarde=fgState[0],setFaitsGarde=fgState[1];
   var tabState=useState("fond"),activeTab=tabState[0],setActiveTab=tabState[1];
   var TABS=[{id:"fond",label:"Fond"},{id:"couleurs",label:"Couleurs"},
             {id:"cartouche",label:"Cartouche"},
@@ -117,12 +119,17 @@ function App(){
   var TOP_MIN=g.TOP_MIN,TOP_MAX=g.TOP_MAX;
   var onGrad=g.onGrad,onWhite=g.onWhite,onML=g.onML;
 
+  /* Garde-fou charte : verdict publié pour le contrôle d'export du shell. */
+  var verdict=window.SPGGuard?SPGGuard.evaluer(faitsGarde):[];
+  if(window.SPGGuard) SPGGuard.publier(verdict);
+
   /* ═══ CARTE ════════════════════════════════════════════════════════════
      Composant partagé : voir assets/cards/citation-card.js. */
   var card=e(CARD.Card,{
     st:st, cardRef:cardRef, exportTarget:true,
     scale:previewScale, bgNat:shell.bgNat,
     onMeasure:function(m){ setQuoteH(m.quoteH); },
+    onGarde:setFaitsGarde,
     onBgMove:function(x,y){ setSt(function(p){var c=Object.assign({},p);
       c["bgX_"+p.format]=x;c["bgY_"+p.format]=y;return c;}); }
   });
@@ -130,6 +137,7 @@ function App(){
   /* ═══ PANNEAU ══════════════════════════════════════════════════════════════ */
   var panel=e("div",{className:"panel"},
 
+    verdict.length?e("div",{style:{padding:"10px 16px 0"}},e(UI.Warnings,{items:verdict})):null,
     e(UI.Section,{title:"Format"},
       e(UI.FormatPicker,{formats:CITE_FORMATS,value:st.format,onChange:shell.setFormat})),
 

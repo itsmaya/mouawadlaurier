@@ -411,6 +411,11 @@ Shell.useApp = function(cfg){
   var busyState=useState(false), busy=busyState[0], setBusy=busyState[1];
   function doExport(cardRef, opts){
     opts=opts||{};
+    /* Garde-fou charte : bloque l'export d'un visuel non conforme et demande
+       confirmation pour une dérogation (voir assets/charte-guard.js). Il juge
+       l'état affiché : les exports par lot (stateOverride) n'y passent pas. */
+    if(!opts.stateOverride && global.SPGGuard && !global.SPGGuard.controleExport())
+      return Promise.resolve(null);
     var stx=opts.stateOverride||st;
     var fk=opts.formatKey||stx.format;
     var cf=global.chFormat(fk);

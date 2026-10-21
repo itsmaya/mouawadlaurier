@@ -111,7 +111,15 @@ function SplitScreenCard(p){
 
   var onML=st.hasML&&!L.STORY;
   var badgeOnPhoto=(st.layout==="top"||st.layout==="left");
-  var badgeNudge=badgeOnPhoto?Math.round(0.035*CARD_H):0;
+  /* Cartouche posé SUR la photo. Charte p16 : 50 px du bord, et 100 px quand
+     il y a un cadre image inséré (marginInset). La photo démarre déjà à la
+     marge de 50 : le cartouche est donc décalé de marginInset - margin, soit
+     50 px, à l'intérieur de la photo. Avant : 3,5 % de la hauteur (38 px en
+     1:1), une valeur sans lien avec la charte. En story le cadre inséré est
+     interdit par la charte : ancien décalage conservé. */
+  var cfSS=chFormat(st.format);
+  var decalagePhoto=L.STORY?Math.round(0.035*CARD_H):(cfSS.marginInset-cfSS.margin);
+  var badgeNudge=badgeOnPhoto?decalagePhoto:0;
   var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
   /* CÔTÉ DU REPÈRE DE CARROUSEL — charte p33 : « the arrow is flush with the
      same side as the blocks », c'est-à-dire du côté du texte.
@@ -123,7 +131,7 @@ function SplitScreenCard(p){
      (voir la règle supprimée plus bas). */
   var arrowSide=(st.layout==="right")?"left":"right";
   var arrowOnPhoto=(st.layout==="bottom");
-  var arrowNudge=arrowOnPhoto?Math.round(0.035*CARD_H):0;
+  var arrowNudge=arrowOnPhoto?decalagePhoto:0;
 
   /* Règles avancées de disposition (évitent le chevauchement cartouche/zones) */
   (function(){

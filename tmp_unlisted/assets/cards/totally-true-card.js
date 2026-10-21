@@ -213,6 +213,22 @@ function TotallyTrueCard(p){
   var d=cheminBulle(g.bw,hBulle,BULLE.radius,BULLE.tailW,BULLE.tailH,
                     tailleX,versLeHaut?"top":"bottom",st.tailMirror===true);
 
+  /* Faits remontés au garde-fou charte : la bulle est placée librement, elle
+     peut donc recouvrir la cartouche titre ou la flèche de carrousel. */
+  var faitsGarde=(function(){
+    var Zg=window.SPGLayout.zones(st.format,{navMark:st.navMark,cote:"left"});
+    var haut=g.by-(versLeHaut?BULLE.tailH:0);
+    var bas=g.by+hBulle+(versLeHaut?0:BULLE.tailH);
+    var gap=st.badgeMain||st.badgeSub ? haut-(Zg.cartouche.y+Zg.cartouche.h) : null;
+    var debord=0;
+    /* Recouvrement de la flèche : seulement si la bulle la croise à l'horizontale. */
+    if(Zg.fleche.visible && g.bx<Zg.fleche.x+Zg.fleche.w && g.bx+g.bw>Zg.fleche.x)
+      debord=Math.max(0,bas-Zg.fleche.y);
+    return {gapTitre:hTexte?gap:null, debord:hTexte?debord:0};
+  })();
+  var faitsJson=JSON.stringify(faitsGarde);
+  useEffect(function(){ if(p.onGarde) p.onGarde(JSON.parse(faitsJson)); },[faitsJson]);
+
   /* ── Cartouche et repère ── */
   /* Cartouche et flèche : positions calculées par SPGLayout, comme pour les
      autres cartes. La flèche passe à la marge basse de la charte (230 px en

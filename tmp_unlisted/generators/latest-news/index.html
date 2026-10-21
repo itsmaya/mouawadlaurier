@@ -24,6 +24,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 <script src="../../assets/save-manager.js"></script>
 <script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/rich-body.js"></script>
 <script src="../../assets/drag-image.js"></script>
 <script src="../../assets/bg-controls.js"></script>
@@ -120,6 +121,14 @@ function App(){
   var BOTTOM_MIN=g.BOTTOM_MIN,BOTTOM_MAX=g.BOTTOM_MAX;
   var _f=st.format;
 
+  /* Garde-fou charte (assets/charte-guard.js) : écart entre la cartouche titre
+     et le haut de la pile de blocs, mesuré sur le rendu. */
+  var verdict=window.SPGGuard?SPGGuard.evaluer({
+    gapTitre:(st.blocs&&st.blocs.length&&paveH>0)
+      ? ((CARD_H-g.stackBottom-paveH)-(L.BADGE_TOP+L.BADGE_H)) : null
+  }):[];
+  if(window.SPGGuard) SPGGuard.publier(verdict);
+
   /* maxZoom tient compte de la marie-louise (réduction de la zone utile) */
   var outW=cf.outputW-L.ML*2*L.EXPORT_SCALE;
   var outH=cf.outputH-L.ML*2*L.EXPORT_SCALE;
@@ -148,6 +157,7 @@ function App(){
 
   var panel=e("div",{className:"panel"},
 
+    verdict.length?e("div",{style:{padding:"10px 16px 0"}},e(UI.Warnings,{items:verdict})):null,
     e(UI.Section,{title:"Format"},
       e(UI.FormatPicker,{formats:Object.keys(FORMATS),value:st.format,onChange:setFormat}),
       e("div",{style:{height:10}}),

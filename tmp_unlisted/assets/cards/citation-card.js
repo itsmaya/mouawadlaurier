@@ -35,6 +35,8 @@ var DEFAULT = Object.assign({
 }, global.BG_DEFAULT_STATE||{});
 
 /* ── Layout spécifique Citation ──────────────────────────────────────────── */
+/* Cartouche : cotes lues dans la charte (70 / 15 / 25 / 30), comme les autres
+   cartes. Elles étaient multipliées par CITE_S (1,8) : 65 px au lieu de 70. */
 function getCiteLayout(format){
   var f=FORMATS[format]||FORMATS["1x1"];
   var S=CITE_S, EX=f.outputW/CARD_W;
@@ -43,9 +45,9 @@ function getCiteLayout(format){
     return{
       CARD_H:ch,EXPORT_SCALE:EX,
       BADGE_X:chFormat("4x5").margin,BADGE_TOP:chFormat("4x5").captionTop,
-      BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
-      BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12.5*S),
-      BADGE_PADX:Math.round(18*S),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
+      BADGE_ICON:px(T.BADGE_ICON_PT),BADGE_GAP:px(T.BADGE_GAP_PT),
+      BADGE_H:px(T.BADGE_H_PT),BADGE_FONT:px(T.BADGE_FONT_PT),
+      BADGE_PADX:px(T.BADGE_PADX_PT),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
       MARGIN:chFormat("4x5").margin,
       PERSON_X:Math.round(70*S),PERSON_Y:Math.round(136*S),
       PHOTO_W:Math.round(87*S),PHOTO_H:Math.round(96*S),PHOTO_R:Math.round(10*S),
@@ -62,9 +64,9 @@ function getCiteLayout(format){
   return{
     CARD_H:ch2,EXPORT_SCALE:EX,
     BADGE_X:chFormat(format).margin,BADGE_TOP:chFormat(format).captionTop,
-    BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
-    BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12*S),
-    BADGE_PADX:Math.round(17*S),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
+    BADGE_ICON:px(T.BADGE_ICON_PT),BADGE_GAP:px(T.BADGE_GAP_PT),
+    BADGE_H:px(T.BADGE_H_PT),BADGE_FONT:px(T.BADGE_FONT_PT),
+    BADGE_PADX:px(T.BADGE_PADX_PT),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
     MARGIN:chFormat(format).margin,
     PERSON_X:Math.round(106*S),PERSON_Y:Math.round(129*S),
     PHOTO_W:Math.round(71*S),PHOTO_H:Math.round(90*S),PHOTO_R:Math.round(10*S),
@@ -245,7 +247,12 @@ function geometry(st,quoteH){
      dépassaient du bloc au minimum précédent (30/45). Le plafond ne bouge
      pas. Ces valeurs sont exprimées dans l'unité de dessin de la carte —
      la même que celle affichée par le curseur du panneau. */
-  var QUOTE_FONT_MIN=15, QUOTE_FONT_MAX=isT03?60:80;
+  /* Plancher du curseur = charte moins la tolérance de 20 % : 30 px (template
+     03, Regular 30-60) -> 24 px. En dessous, on ne peut plus rien régler : un
+     texte plus petit se corrige en le raccourcissant. Entre 24 et 30, le
+     visuel est une dérogation signalée (voir assets/charte-guard.js). */
+  var QUOTE_FONT_CHARTE=30;
+  var QUOTE_FONT_MIN=Math.round(QUOTE_FONT_CHARTE*(1-((CHARTE.composition&&CHARTE.composition.tolerance)||0.2))), QUOTE_FONT_MAX=isT03?60:80;
   var cfs=_cfs?Math.max(QUOTE_FONT_MIN,Math.min(QUOTE_FONT_MAX,_cfs)):L.QUOTE_FONT;
 
   var _fmt=st.format;
@@ -289,7 +296,10 @@ function geometry(st,quoteH){
   else if(st.blockAlign==="right"){blockX=CARD_W-QW-ALIGN_MARGIN;personX=CARD_W-QW-ALIGN_MARGIN;}
   else{blockX=L.QUOTE_X-dW/2;personX=L.PERSON_X-dW/2;}
 
-  return {L:L,CARD_H:CARD_H,cfs:cfs,isT03:isT03,
+  /* Débordement du bloc citation sous la limite basse (flèche, marge, cadre). */
+  var debordBas=quoteH?Math.max(0,Math.round(targetTop+quoteH-(CARD_H-reserveBas))):0;
+  return {L:L,CARD_H:CARD_H,cfs:cfs,isT03:isT03,debordBas:debordBas,
+    QUOTE_FONT_CHARTE:QUOTE_FONT_CHARTE,
     QUOTE_FONT_MIN:QUOTE_FONT_MIN,QUOTE_FONT_MAX:QUOTE_FONT_MAX,
     autoPct:autoPct,curPct:curPct,QW:QW,dW:dW,
     TOP_MIN:TOP_MIN,TOP_MAX:TOP_MAX,targetTop:targetTop,dY:dY,
@@ -344,6 +354,13 @@ function CitationCard(p){
      remontée au panneau via onMeasure pour ses libellés de slider. */
   var quoteBlockRef=useRef(null);
   var t03Ref=useRef(null);
+  var personRef=useRef(null);
+  var phS=useState(0), personH=phS[0], setPersonH=phS[1];
+  React.useLayoutEffect(function(){
+    if(!personRef.current) return;
+    var h=Math.round(personRef.current.offsetHeight||0);
+    if(h>0&&h!==personH) setPersonH(h);
+  });
   var t03S=useState(0), t03H=t03S[0], setT03H=t03S[1];
   React.useLayoutEffect(function(){
     if(!t03Ref.current) return;
@@ -453,6 +470,28 @@ function CitationCard(p){
     hautLimite+Math.round((zoneH-(t03H||0))/2));
   if(t03GroupY+(t03H||0)>basLimite) t03GroupY=Math.max(hautLimite,basLimite-(t03H||0));
 
+  /* Faits remontés au garde-fou charte : écart sous la cartouche titre,
+     taille du texte, débordement en bas. Mesurés sur le rendu réel. */
+  var faitsGarde=(function(){
+    var badgeBas=L.BADGE_TOP+L.BADGE_H;
+    var gap=null, debord=0;
+    if(isT03){
+      if(!st.hideBadge) gap=t03GroupY-badgeBas;
+      debord=Math.max(0,t03GroupY+(t03H||0)-basLimite);
+    } else {
+      if(!st.hideBadge&&personH){
+        var personTop=(L.QUOTE_Y+dY-GAP_PERSONNE)-personH;
+        gap=personTop-badgeBas;
+      }
+      debord=g.debordBas;
+    }
+    return {gapTitre:gap, texte:{taille:cfs, min:g.QUOTE_FONT_CHARTE}, debord:debord};
+  })();
+  var faitsJson=JSON.stringify(faitsGarde);
+  React.useEffect(function(){
+    if(p.onGarde) p.onGarde(JSON.parse(faitsJson));
+  },[faitsJson]);
+
   /* Largeur du cadre marie-louise et rayon de l'image insérée (charte : 20 px
      sur une carte de 1080, mise à l'échelle du rendu). */
   var ML_INSET=Math.round(CARD_W*0.046);
@@ -528,7 +567,7 @@ function CitationCard(p){
        le bloc vers le HAUT et l'écart avec la citation ne bouge pas. Avec
        une position haute figée, c'est l'inverse qui se produisait : le bloc
        s'allongeait vers le bas et venait coller la citation. */
-    !isT03?e("div",{style:{position:"absolute",left:personX+mlDec,
+    !isT03?e("div",{ref:personRef,style:{position:"absolute",left:personX+mlDec,
         bottom:(CARD_H-(L.QUOTE_Y+dY)+GAP_PERSONNE),
         display:"flex",alignItems:"flex-end",gap:L.PERSON_GAP}},
       e("div",{style:{width:L.PHOTO_W+"px",height:L.PHOTO_H+"px",borderRadius:L.PHOTO_R+"px",

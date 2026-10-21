@@ -23,6 +23,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 <script src="../../assets/pictos.js"></script>
 <script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/layout-zones.js"></script>
 <script src="../../assets/save-manager.js"></script>
 <script src="../../assets/rich-body.js"></script>
@@ -105,6 +106,7 @@ function App(){
   var calloutSize=g.calloutSize, bodySize=g.bodySize;
   var stackMaxW=g.stackMaxW, off=g.off, ctaBottom=g.ctaBottom;
   var B=CHARTE.components.block;
+  var TOL=(CHARTE.composition&&CHARTE.composition.tolerance)||0.2;   /* plage des curseurs = charte +/- tolérance */
 
   /* Validateur charte */
   var gradsUsed={}; gradsUsed[st.grad]=1;
@@ -117,6 +119,23 @@ function App(){
     imageCoverage:(bgKind==="photo"&&stackH>0)
       ? (stackH*stackMaxW)/(CW*CH_) : undefined
   });
+
+  /* Garde-fou charte (assets/charte-guard.js) : écarts mesurés sur le rendu. */
+  var capBas=g.zones?(g.zones.cartouche.y+g.zones.cartouche.h):null;
+  var stackHaut=(stackH>0)?(CH_-g.stackBottom-stackH):null;
+  var verdict=window.SPGGuard?SPGGuard.evaluer({
+    gapTitre:(stackHaut!==null&&capBas!==null)?(stackHaut-capBas):null,
+    mesures:[
+      {id:"tailleCallout",label:"Taille du chiffre",valeur:calloutSize,regle:{min:CAL.min,max:CAL.max},sens:"plage",
+       conseil:"Raccourcis le chiffre ou réduis le nombre de blocs."},
+      {id:"tailleCorps",label:"Taille du texte",valeur:bodySize,regle:{min:BOD.min,max:BOD.max},sens:"plage",
+       conseil:"Raccourcis le texte."},
+      {id:"ecartBlocs",label:"Écart entre blocs",valeur:g.gapY,regle:g.gapCharte,sens:"egal"},
+      {id:"paddingBloc",label:"Marge intérieure des blocs",valeur:g.padBloc,regle:g.padCharte,sens:"egal"}
+    ]
+  }):[];
+  if(window.SPGGuard) SPGGuard.publier(verdict);
+  warnings=warnings.concat(verdict);
 
   /* ═══ Export ═══ */
   function doExport(){ shell.doExport(cardRef); }
@@ -260,6 +279,7 @@ function App(){
 
   var panel=e("div",{className:"panel"},
 
+    verdict.length?e("div",{style:{padding:"10px 16px 0"}},e(UI.Warnings,{items:verdict})):null,
     e(UI.Section,{title:"Format",children:
       e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
         onChange:shell.setFormat})}),
@@ -342,11 +362,11 @@ function App(){
         options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
       e("div",{style:{height:12}}),
       e(UI.SliderField,{label:"Taille callout — "+calloutSize+" pt (charte "+CAL.min+"-"+CAL.max+")",
-        min:CAL.min,max:CAL.max,value:calloutSize,
+        min:Math.round(CAL.min*(1-TOL)),max:Math.round(CAL.max*(1+TOL)),value:calloutSize,
         onChange:function(v){set("cs_"+st.format,v);}}),
       e("div",{style:{height:8}}),
       e(UI.SliderField,{label:"Taille body — "+bodySize+" pt (charte "+BOD.min+"-"+BOD.max+")",
-        min:BOD.min,max:BOD.max,value:bodySize,
+        min:Math.round(BOD.min*(1-TOL)),max:Math.round(BOD.max*(1+TOL)),value:bodySize,
         onChange:function(v){set("bs_"+st.format,v);}}),
       e("div",{style:{height:8}}),
       e(UI.SliderField,{label:"Remonter les blocs — "+off+" px",
@@ -360,13 +380,13 @@ function App(){
       e(UI.SliderField,{
         label:"Écart entre les blocs — "+g.gapY+" px"
               +(g.gapY===g.gapCharte?" (charte)":" · charte "+g.gapCharte),
-        min:10,max:100,step:2,value:g.gapY,
+        min:Math.round(g.gapCharte*(1-TOL)),max:Math.round(g.gapCharte*(1+TOL)),step:2,value:g.gapY,
         onChange:function(v){set("gap_"+st.format,Math.round(v));}}),
       e("div",{style:{height:8}}),
       e(UI.SliderField,{
         label:"Marge intérieure des blocs — "+g.padBloc+" px"
               +(g.padBloc===g.padCharte?" (charte)":" · charte "+g.padCharte),
-        min:12,max:70,step:2,value:g.padBloc,
+        min:Math.round(g.padCharte*(1-TOL)),max:Math.round(g.padCharte*(1+TOL)),step:2,value:g.padBloc,
         onChange:function(v){set("pad_"+st.format,Math.round(v));}}),
       e("button",{className:"mini-btn",style:{marginTop:6},
         onClick:function(){set("gap_"+st.format,0);set("pad_"+st.format,0);}},

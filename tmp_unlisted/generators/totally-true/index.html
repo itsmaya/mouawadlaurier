@@ -24,6 +24,7 @@ loadScript(["../../assets/vendor/dom-to-image-more.min.js","https://cdn.jsdelivr
 <script src="../../assets/save-manager.js"></script>
 <script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/layout-zones.js"></script>
 <script src="../../assets/rich-body.js"></script>
 <script src="../../assets/drag-image.js"></script>
@@ -60,6 +61,7 @@ function App(){
   var st=shell.st, set=shell.set, setSt=shell.setSt;
 
   var cardRef=useRef(null);
+  var fgState=useState(null),faitsGarde=fgState[0],setFaitsGarde=fgState[1];
   var tabState=useState("texte"); var activeTab=tabState[0],setActiveTab=tabState[1];
   var TABS=[
     {id:"texte",label:"Texte"},{id:"bulle",label:"Bulle"},
@@ -80,7 +82,12 @@ function App(){
   /* ═══ CARTE ═══════════════════════════════════════════════════════════
      Composant partagé : voir assets/cards/totally-true-card.js.
      Ne PAS réimplémenter le visuel ici — le Carrousel rend le même. */
+  /* Garde-fou charte : verdict publié pour le contrôle d'export du shell. */
+  var verdict=window.SPGGuard?SPGGuard.evaluer(faitsGarde):[];
+  if(window.SPGGuard) SPGGuard.publier(verdict);
+
   var card=e(CARD.Card,{
+    onGarde:setFaitsGarde,
     st:st, cardRef:cardRef, exportTarget:true,
     scale:previewScale, bgNat:bgNat,
     onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
@@ -90,6 +97,7 @@ function App(){
   /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
   var panel=e("div",{className:"panel"},
 
+    verdict.length?e("div",{style:{padding:"10px 16px 0"}},e(UI.Warnings,{items:verdict})):null,
     e(UI.Section,{title:"Format"},
       e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
         onChange:function(k){ set("format",k); }})),
