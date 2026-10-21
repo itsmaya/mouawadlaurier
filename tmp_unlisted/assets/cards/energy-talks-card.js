@@ -116,6 +116,10 @@ var DEFAULT = Object.assign({
   editionStyle:"degrade",        /* "degrade" (pilule bleue) | "blanc" */
 
   titre:"Low-Cost\nOil Projects",
+  titreTaille:undefined,         /* px de carte ; undefined = valeur du format */
+  sousTitreTaille:undefined,
+  editionGrad:"bleu",
+  editionTexteGrad:"",           /* "" = bleu Energy Talks ; sinon clé de dégradé charte (style blanc) */
 
   /* Les intervenants portent chacun leur portrait détouré. */
   intervenants:[
@@ -234,11 +238,22 @@ function PiluleEdition(p){
     fontFamily:"'Nunito',sans-serif",fontWeight:800,fontSize:L.pilFont,
     letterSpacing:"0.005em",whiteSpace:"nowrap",boxSizing:"border-box"};
   if(blanc){ style.background="#FFFFFF"; style.color=ET_BLEU_CLAIR; }
+  else if(st.editionStyle==="charte"){
+    /* Dégradé de la charte (bleu, cyan, vert, rouge), angle 135° */
+    style.backgroundImage=chGrad(st.editionGrad||"bleu"); style.color="#FFFFFF"; }
   else { style.backgroundImage="linear-gradient(90deg,"+ET_BLEU_CLAIR+" 0%,"+ET_BLEU_VIF+" 100%)";
          style.color="#FFFFFF"; }
   return e("div",{style:style},
-    (blanc&&st.editionDrapeau)?e("span",{style:{fontSize:L.pilFont}},st.editionDrapeau):null,
-    e("span",null,st.editionTexte));
+    st.editionDrapeau?e("span",{style:{fontSize:L.pilFont}},st.editionDrapeau):null,
+    (blanc && st.editionTexteGrad)
+      /* Texte en dégradé de la charte. Les emojis sont isolés dans des spans
+         qui remettent le remplissage d'origine : sinon le dégradé les
+         repeint en aplat. */
+      ? e("span",{style:{backgroundImage:chGrad(st.editionTexteGrad),
+          WebkitBackgroundClip:"text",backgroundClip:"text",
+          color:"transparent",WebkitTextFillColor:"transparent"}},
+          global.decoupeEmojis?global.decoupeEmojis(st.editionTexte):st.editionTexte)
+      : e("span",null,st.editionTexte));
 }
 
 /* ── Bloc nom + fonction ──────────────────────────────────────────────────── */
@@ -342,17 +357,20 @@ function EnergyTalksCard(props){
 
     e(PiluleEdition,{st:st,L:L}),
 
-    /* Titre */
-    e("div",{style:{position:"absolute",left:L.margeG,top:L.titreY,
-      maxWidth:L.titreMaxW,
-      color:"#FFFFFF",fontWeight:800,fontSize:L.titreFont,
-      lineHeight:L.titreLH,whiteSpace:"pre-wrap"}}, st.titre||""),
-
-    /* Sous-titre optionnel (variante Live) */
-    st.sousTitre?e("div",{style:{position:"absolute",left:L.margeG,
-      top:L.titreY+Math.round(L.titreFont*L.titreLH*2.3),
-      maxWidth:Math.round(L.W*0.5),color:"#FFFFFF",fontWeight:600,
-      fontSize:Math.round(L.titreFont*0.48),lineHeight:1.3}},st.sousTitre):null,
+    /* Titre et sous-titre : un seul bloc vertical. Le sous-titre se place
+       sous la dernière ligne du titre, quel que soit le nombre de lignes
+       (sauts de ligne compris) et la taille choisie. */
+    (function(){
+      var tf = st.titreTaille || L.titreFont;
+      var sf = st.sousTitreTaille || Math.round(L.titreFont*0.48);
+      return e("div",{style:{position:"absolute",left:L.margeG,top:L.titreY,
+          maxWidth:L.titreMaxW,display:"flex",flexDirection:"column",
+          gap:Math.round(tf*0.3),color:"#FFFFFF"}},
+        e("div",{style:{fontWeight:800,fontSize:tf,lineHeight:L.titreLH,
+          whiteSpace:"pre-wrap"}}, st.titre||""),
+        st.sousTitre?e("div",{style:{fontWeight:600,fontSize:sf,lineHeight:1.3,
+          whiteSpace:"pre-wrap",maxWidth:Math.round(L.W*0.5)}},st.sousTitre):null);
+    })(),
 
     /* Noms, empilés en bas à gauche */
     e("div",{style:{position:"absolute",left:L.margeG,top:L.nomY,
