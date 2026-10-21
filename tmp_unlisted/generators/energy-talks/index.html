@@ -183,8 +183,17 @@ function App(){
   var card=e(CARD.Card,{
     st:st, cardRef:cardRef, exportTarget:true, scale:previewScale,
     onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
-      c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); }
+      c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); },
+    onPortraitMove:function(id,x,y){ setSt(function(p){
+      var a=(p.intervenants||[]).map(function(it){ return it.id===id?Object.assign({},it,{x:x,y:y}):it; });
+      return Object.assign({},p,{intervenants:a}); }); }
   });
+  var TITRE_W_MAX=LDEF.W-2*LDEF.margeG;
+  var POIDS=[{v:400,l:"Normal"},{v:600,l:"Semi-gras"},{v:700,l:"Gras"}];
+  function selPoids(cle,defaut){
+    return e(UI.SegButtons,{value:(st[cle]||defaut),options:POIDS,
+      onChange:function(v){ set(cle,v); }});
+  }
 
   /* ═══ PANNEAU ═══════════════════════════════════════════════════════════ */
   var panel=e("div",{className:"panel"},
@@ -207,12 +216,12 @@ function App(){
           "La vignette se cale sur le coin haut-droit du logo. Ajuste ici si elle n'est pas exactement au bon endroit."),
         e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
           e("div",null,
-            e("label",{className:"field-label"},"Décalage X — "+(st.badgeDX!==undefined?st.badgeDX:LDEF.badgeDX)+" px"),
+            e("label",{className:"field-label"},"Décalage X — "+(st.badgeDX!==undefined?st.badgeDX:(LDEF.badgeDX||0))+" px"),
             e("input",{type:"range",min:-200,max:600,step:2,
               value:st.badgeDX!==undefined?st.badgeDX:LDEF.badgeDX,
               onChange:function(ev){ set("badgeDX",parseInt(ev.target.value,10)); }})),
           e("div",null,
-            e("label",{className:"field-label"},"Décalage Y — "+(st.badgeDY!==undefined?st.badgeDY:LDEF.badgeDY)+" px"),
+            e("label",{className:"field-label"},"Décalage Y — "+(st.badgeDY!==undefined?st.badgeDY:(LDEF.badgeDY||0))+" px"),
             e("input",{type:"range",min:-150,max:300,step:2,
               value:st.badgeDY!==undefined?st.badgeDY:LDEF.badgeDY,
               onChange:function(ev){ set("badgeDY",parseInt(ev.target.value,10)); }}))),
@@ -249,6 +258,8 @@ function App(){
             "Texte en dégradé"),
           st.editionTexteGrad?e(UI.GradPicker,{value:st.editionTexteGrad,
             onChange:function(v){ set("editionTexteGrad",v); set("editionGrad",v); }}):null):null,
+        e("label",{className:"field-label"},"Graisse du texte"),
+        selPoids("editionGraisse",600),
         e("label",{className:"field-label"},"Drapeau (emoji, optionnel)"),
         e("input",{type:"text",value:st.editionDrapeau||"",
           onChange:function(ev){ set("editionDrapeau",ev.target.value); },
@@ -278,6 +289,9 @@ function App(){
         e("label",{className:"field-label"},"Taille du titre — "+(st.titreTaille||LDEF.titreFont)+" px"),
         e("input",{type:"range",min:40,max:110,step:1,value:st.titreTaille||LDEF.titreFont,
           onChange:function(ev){ set("titreTaille",parseInt(ev.target.value,10)); }}),
+        e("label",{className:"field-label"},"Largeur du titre — "+(st.titreLargeur||LDEF.titreMaxW)+" px"),
+        e("input",{type:"range",min:300,max:TITRE_W_MAX,step:5,value:Math.min(st.titreLargeur||LDEF.titreMaxW,TITRE_W_MAX),
+          onChange:function(ev){ set("titreLargeur",parseInt(ev.target.value,10)); }}),
         e("label",{className:"field-label"},"Sous-titre (optionnel)"),
         e("textarea",{spellCheck:true,rows:2,value:st.sousTitre||"",
           onChange:function(ev){ set("sousTitre",ev.target.value); },
@@ -288,7 +302,7 @@ function App(){
           onChange:function(ev){ set("sousTitreTaille",parseInt(ev.target.value,10)); }}),
         e("button",{className:"mini-btn",style:{marginTop:6},
           onClick:function(){ setSt(function(p){ var c=Object.assign({},p);
-            delete c.titreTaille; delete c.sousTitreTaille; return c; }); }},
+            delete c.titreTaille; delete c.sousTitreTaille; delete c.titreLargeur; return c; }); }},
           "Tailles par défaut")),
 
       e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("energytalks")}),
@@ -339,17 +353,28 @@ function App(){
           e("input",{type:"text",spellCheck:true,value:it.fonction||"",
             onChange:function(ev){ majIntervenant(i,"fonction",ev.target.value); }}),
 
+          e("label",{className:"toggle",style:{margin:"8px 0"}},
+            e("input",{type:"checkbox",checked:!!st.fonctionDegrade,
+              onChange:function(ev){ set("fonctionDegrade",ev.target.checked); }}),
+            "Fonction en texte dégradé (cartouche, tous les intervenants)"),
+          st.fonctionDegrade?e(UI.GradPicker,{value:st.fonctionGrad||"bleu",
+            onChange:function(v){ set("fonctionGrad",v); }}):null,
+          e("label",{className:"field-label"},"Graisse du nom"),
+          selPoids("nomGraisse",700),
+          e("label",{className:"field-label"},"Graisse de la fonction"),
+          selPoids("fonctionGraisse",700),
+
           e("label",{className:"field-label"},"Zoom du portrait — "+(it.zoom||100)+" %"),
-          e("input",{type:"range",min:60,max:200,step:1,value:it.zoom||100,
+          e("input",{type:"range",min:60,max:300,step:1,value:it.zoom||100,
             onChange:function(ev){ majIntervenant(i,"zoom",parseInt(ev.target.value,10)); }}),
           e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
             e("div",null,
-              e("label",{className:"field-label"},"Position X — "+(it.x||50)+" %"),
-              e("input",{type:"range",min:0,max:100,step:1,value:it.x||50,
+              e("label",{className:"field-label"},"Position X — "+(it.x==null?50:it.x)+" %"),
+              e("input",{type:"range",min:-50,max:150,step:1,value:(it.x==null?50:it.x),
                 onChange:function(ev){ majIntervenant(i,"x",parseInt(ev.target.value,10)); }})),
             e("div",null,
-              e("label",{className:"field-label"},"Position Y — "+(it.y||50)+" %"),
-              e("input",{type:"range",min:0,max:100,step:1,value:it.y||50,
+              e("label",{className:"field-label"},"Position Y — "+(it.y==null?50:it.y)+" %"),
+              e("input",{type:"range",min:-100,max:200,step:1,value:(it.y==null?50:it.y),
                 onChange:function(ev){ majIntervenant(i,"y",parseInt(ev.target.value,10)); }}))));
       }),
 

@@ -116,6 +116,10 @@ var DEFAULT = Object.assign({
   editionStyle:"degrade",        /* "degrade" (pilule bleue) | "blanc" */
 
   titre:"Low-Cost\nOil Projects",
+  titreLargeur:undefined,        /* px de carte ; undefined = valeur du format */
+  editionGraisse:600,            /* graisse du texte de la pilule d'édition */
+  nomGraisse:700, fonctionGraisse:700,
+  fonctionDegrade:false,         /* texte de l'intitulé métier en dégradé bleu */
   titreTaille:undefined,         /* px de carte ; undefined = valeur du format */
   sousTitreTaille:undefined,
   editionGrad:"bleu",
@@ -235,7 +239,7 @@ function PiluleEdition(p){
   var style={position:"absolute",left:L.pilX,top:L.pilY,height:L.pilH,
     borderRadius:L.pilH/2,display:"inline-flex",alignItems:"center",
     gap:Math.round(L.pilH*0.22),padding:"0 "+Math.round(L.pilH*0.42)+"px",
-    fontFamily:"'Nunito',sans-serif",fontWeight:800,fontSize:L.pilFont,
+    fontFamily:"'Nunito',sans-serif",fontWeight:(st.editionGraisse||600),fontSize:L.pilFont,
     letterSpacing:"0.005em",whiteSpace:"nowrap",boxSizing:"border-box"};
   if(blanc){ style.background="#FFFFFF"; style.color=ET_BLEU_CLAIR; }
   else if(st.editionStyle==="charte"){
@@ -258,18 +262,31 @@ function PiluleEdition(p){
 
 /* ── Bloc nom + fonction ──────────────────────────────────────────────────── */
 function BlocNom(p){
-  var L=p.L, it=p.it;
+  var L=p.L, it=p.it, st=p.st||{};
   if(!it.nom && !it.fonction) return null;
+  var gNom=st.nomGraisse||700, gFct=st.fonctionGraisse||700;
+  /* Intitulé métier : bleu uni, ou dégradé bleu clair -> bleu vif. Le texte en
+     dégradé est peint en background-clip:text ; les emojis sont isolés dans
+     un span qui remet le remplissage d'origine, sinon ils perdraient leurs
+     couleurs. */
+  var degr=!!st.fonctionDegrade;
+  var styleFct=degr
+    ? {backgroundImage:(st.fonctionGrad?chGrad(st.fonctionGrad):"linear-gradient(90deg,"+ET_BLEU_CLAIR+" 0%,"+ET_BLEU_VIF+" 100%)"),
+       WebkitBackgroundClip:"text",backgroundClip:"text",color:"transparent",
+       WebkitTextFillColor:"transparent"}
+    : {color:ET_BLEU_VIF};
   return e("div",{style:{display:"flex",flexDirection:"column",alignItems:"flex-start"}},
     it.nom?e("div",{style:{height:L.nomH,display:"flex",alignItems:"center",
       padding:"0 "+Math.round(L.nomH*0.28)+"px",
       backgroundImage:"linear-gradient(90deg,"+ET_BLEU_CLAIR+" 0%,"+ET_BLEU_VIF+" 100%)",
-      color:"#FFFFFF",fontFamily:"'Nunito',sans-serif",fontWeight:700,
+      color:"#FFFFFF",fontFamily:"'Nunito',sans-serif",fontWeight:gNom,
       fontSize:L.nomFont,whiteSpace:"nowrap"}},it.nom):null,
     it.fonction?e("div",{style:{height:L.fonctionH,display:"flex",alignItems:"center",
       padding:"0 "+Math.round(L.fonctionH*0.3)+"px",background:"#FFFFFF",
-      color:ET_BLEU_VIF,fontFamily:"'Nunito',sans-serif",fontWeight:700,
-      fontSize:L.fonctionFont,whiteSpace:"nowrap"}},it.fonction):null);
+      fontFamily:"'Nunito',sans-serif",fontWeight:gFct,
+      fontSize:L.fonctionFont,whiteSpace:"nowrap"}},
+      e("span",{style:styleFct},
+        (degr&&global.decoupeEmojis)?global.decoupeEmojis(it.fonction):it.fonction)):null);
 }
 
 /* ── Carte ────────────────────────────────────────────────────────────────── */
@@ -309,22 +326,48 @@ function EnergyTalksCard(props){
        la position à chaque changement de taille, d'où l'impression que le zoom
        déplaçait l'image au lieu de l'agrandir. */
     e("div",{"data-layer":"portraits",style:{position:"absolute",inset:0,
-        overflow:"hidden",zIndex:1}},
+        overflow:"hidden",zIndex:1,pointerEvents:"none"}},
       gens.map(function(it,i){
         var r=rects[i]; if(!r||!it.photo) return null;
         var zoom=Math.max(20,Math.min(300,it.zoom||100));
         var hauteur=Math.round(r.h*zoom/100);
         /* Les curseurs X et Y déplacent en pixels de carte, amplitude bornée à
            une demi-largeur et un quart de hauteur de pavé. */
-        var dx=Math.round(((it.x||50)-50)/50 * r.w*0.5);
-        var dy=Math.round(((it.y||50)-50)/50 * r.h*0.25);
+        var px_=(it.x===undefined||it.x===null)?50:it.x, py_=(it.y===undefined||it.y===null)?50:it.y;
+        var dx=Math.round((px_-50)/50 * r.w*0.5);
+        var dy=Math.round((py_-50)/50 * r.h*0.25);
         return e("div",{key:it.id||i,style:{position:"absolute",
             left:r.x, top:r.y, width:r.w, height:r.h, zIndex:r.z}},
           e("img",{src:it.photo,alt:"",style:{
             position:"absolute", left:"50%", bottom:0,
             height:hauteur, width:"auto", maxWidth:"none",
             transform:"translateX(-50%) translate("+dx+"px,"+dy+"px)",
-            display:"block"}}));
+            display:"block",
+            /* Le portrait se déplace à la souris, comme la photo de fond :
+               seules les images captent le pointeur, le reste du calque laisse
+               passer le glisser vers le fond. */
+            pointerEvents:props.onPortraitMove?"auto":"none",
+            cursor:props.onPortraitMove?"grab":"default",
+            touchAction:"none",userSelect:"none"},
+          draggable:false,
+          onPointerDown:props.onPortraitMove?function(ev){
+            ev.preventDefault();
+            var sc=props.scale||1, x0=ev.clientX, y0=ev.clientY, ox=px_, oy=py_;
+            var cible=ev.currentTarget; try{cible.setPointerCapture(ev.pointerId);}catch(_){}
+            function bouger(m){
+              /* pixels écran -> pixels carte -> valeurs X / Y du curseur */
+              var ddx=(m.clientX-x0)/sc, ddy=(m.clientY-y0)/sc;
+              props.onPortraitMove(it.id,
+                Math.round((ox + ddx*100/r.w)*10)/10,
+                Math.round((oy + ddy*200/r.h)*10)/10);
+            }
+            function fin(){ cible.removeEventListener("pointermove",bouger);
+              cible.removeEventListener("pointerup",fin);
+              cible.removeEventListener("pointercancel",fin); }
+            cible.addEventListener("pointermove",bouger);
+            cible.addEventListener("pointerup",fin);
+            cible.addEventListener("pointercancel",fin);
+          }:undefined}));
       })),
 
     /* HABILLAGE — un calque au dessus des portraits. Textes et pastilles
@@ -364,7 +407,7 @@ function EnergyTalksCard(props){
       var tf = st.titreTaille || L.titreFont;
       var sf = st.sousTitreTaille || Math.round(L.titreFont*0.48);
       return e("div",{style:{position:"absolute",left:L.margeG,top:L.titreY,
-          maxWidth:L.titreMaxW,display:"flex",flexDirection:"column",
+          maxWidth:(st.titreLargeur||L.titreMaxW),display:"flex",flexDirection:"column",
           gap:Math.round(tf*0.3),color:"#FFFFFF"}},
         e("div",{style:{fontWeight:800,fontSize:tf,lineHeight:L.titreLH,
           whiteSpace:"pre-wrap"}}, st.titre||""),
@@ -376,7 +419,7 @@ function EnergyTalksCard(props){
     e("div",{style:{position:"absolute",left:L.margeG,top:L.nomY,
       display:"flex",flexDirection:"column",gap:Math.round(L.nomH*0.28),
       alignItems:"flex-start"}},
-      gens.map(function(it,i){ return e(BlocNom,{key:it.id||i,L:L,it:it}); }))
+      gens.map(function(it,i){ return e(BlocNom,{key:it.id||i,L:L,it:it,st:st}); }))
 
     ) /* /habillage */
   );
