@@ -29,6 +29,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 <script src="../../assets/bg-controls.js"></script>
 <script src="../../assets/components-2026.js"></script>
 <script src="../../assets/app-shell.js"></script>
+<script src="../../assets/captions.js"></script>
 <script src="../../assets/cards/registry.js"></script>
 <script src="../../assets/cards/latest-news-card.js"></script>
 </head>
@@ -71,7 +72,8 @@ function App(){
   var abState=useState(0),activeBloc=abState[0],setActiveBloc=abState[1];
   var tabState=useState("fond"),activeTab=tabState[0],setActiveTab=tabState[1];
   var TABS=[{id:"fond",label:"Fond"},{id:"couleurs",label:"Couleurs"},
-            {id:"cartouche",label:"Cartouche"},{id:"blocs",label:"Textes"},{id:"export",label:"Export"}];
+            {id:"cartouche",label:"Cartouche"},{id:"blocs",label:"Textes"},
+            {id:"caption",label:"Légende"},{id:"export",label:"Export"}];
 
   /* setFormat override : interdit hasML sur 9x16 (charte) */
   function setFormat(k){
@@ -365,6 +367,14 @@ function App(){
         next:"Export",onNext:function(){setActiveTab("export");}})),
 
     /* ── Export ── */
+    /* ── Légende (Copy.ai) ── */
+    e("div",{className:"panel-tab-content"+(activeTab==="caption"?" on":""),style:{paddingTop:16}},
+      (Shell.ui.PanneauCaption
+        ? e(Shell.ui.PanneauCaption,{st:st,set:set,pageKey:"latestnews",libelle:"Latest News"})
+        : e("div",{className:"hint"},"Module de légende non chargé.")),
+      e(UI.TabNav,{prev:"Textes",onPrev:function(){setActiveTab("blocs");},
+        next:"Export",onNext:function(){setActiveTab("export");}})),
+
     e("div",{className:"panel-tab-content"+(activeTab==="export"?" on":""),style:{paddingTop:16}},
       e(UI.ExportTab,{shell:shell,cardRef:cardRef,
         onLoad:function(rec){

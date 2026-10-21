@@ -45,7 +45,7 @@ function getCiteLayout(format){
       BADGE_X:chFormat("4x5").margin,BADGE_TOP:chFormat("4x5").captionTop,
       BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
       BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12.5*S),
-      BADGE_PADX:Math.round(18*S),BADGE_RADIUS:Math.round(9*S),
+      BADGE_PADX:Math.round(18*S),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
       MARGIN:chFormat("4x5").margin,
       PERSON_X:Math.round(70*S),PERSON_Y:Math.round(136*S),
       PHOTO_W:Math.round(87*S),PHOTO_H:Math.round(96*S),PHOTO_R:Math.round(10*S),
@@ -64,7 +64,7 @@ function getCiteLayout(format){
     BADGE_X:chFormat(format).margin,BADGE_TOP:chFormat(format).captionTop,
     BADGE_ICON:Math.round(36*S),BADGE_GAP:Math.round(10*S),
     BADGE_H:Math.round(36*S),BADGE_FONT:Math.round(12*S),
-    BADGE_PADX:Math.round(17*S),BADGE_RADIUS:Math.round(9*S),
+    BADGE_PADX:Math.round(17*S),BADGE_RADIUS:px(T.BADGE_RADIUS_PT),
     MARGIN:chFormat(format).margin,
     PERSON_X:Math.round(106*S),PERSON_Y:Math.round(129*S),
     PHOTO_W:Math.round(71*S),PHOTO_H:Math.round(90*S),PHOTO_R:Math.round(10*S),
@@ -230,6 +230,8 @@ function QuoteBody(props){
 
 /* Écart imposé entre le bas du bloc citation et la flèche de carrousel. */
 var ARROW_GAP_CITE=30;
+/* Écart imposé entre la cartouche de titre et ce qui vient en dessous. */
+var GAP_TITRE=100;
 
 /* ── Géométrie dérivée ───────────────────────────────────────────────────────
    Partagée entre la carte et le panneau du générateur (sliders position /
@@ -259,14 +261,24 @@ function geometry(st,quoteH){
      En bas : la marge de charte du format (100 px en 1:1 et 4:5, 230 en
      story) ; et quand la flèche de carrousel est là, on réserve en plus sa
      hauteur et son écart, sinon la citation lui passerait dessus. */
-  var GAP_TITRE=100;
   var cfFmt=chFormat(st.format);
+  var mlIns=(st.hasML&&st.format!=="9x16")?Math.round(CARD_W*0.046):0;
   var zoneFleche=(st.navMark&&st.navMark!=="none")
     ? L.MARGIN+L.ARROW_H+ARROW_GAP_CITE : 0;
-  var reserveBas=Math.max(cfFmt.bottom, zoneFleche);
+  /* La marie-louise rogne la carte : sa largeur s'ajoute à la réserve
+     basse, sinon le bloc descend jusque dans le cadre. */
+  var reserveBas=Math.max(cfFmt.bottom, zoneFleche)+mlIns;
   var TOP_MIN=L.BADGE_TOP+L.BADGE_H+GAP_TITRE+L.PHOTO_H+Math.max(0,L.QUOTE_Y-L.PERSON_Y-L.PHOTO_H);
   var TOP_MAX=CARD_H-reserveBas-(quoteH||0);
-  if(TOP_MAX<TOP_MIN) TOP_MAX=TOP_MIN;
+  /* Quand le contenu ne tient pas entre les deux bornes, c'est la borne
+     BASSE qui gagne : un bloc qui passe sous la flèche de carrousel se voit
+     tout de suite, un écart un peu court sous la cartouche de titre non.
+     Plancher absolu : on ne remonte jamais dans la cartouche. */
+  if(TOP_MAX<TOP_MIN){
+    var plancher=L.BADGE_TOP+L.BADGE_H+Math.round(GAP_TITRE*0.2)+mlIns;
+    TOP_MIN=Math.max(plancher,TOP_MAX);
+    if(TOP_MAX<TOP_MIN) TOP_MAX=TOP_MIN;
+  }
   var targetTop=(_rawY<0)
     ?Math.max(TOP_MIN,Math.min(TOP_MAX,L.QUOTE_Y))
     :TOP_MIN+(_rawY/1000)*(TOP_MAX-TOP_MIN);
@@ -331,6 +343,13 @@ function CitationCard(p){
   /* Hauteur réelle du bloc citation — mesurée par la carte elle-même,
      remontée au panneau via onMeasure pour ses libellés de slider. */
   var quoteBlockRef=useRef(null);
+  var t03Ref=useRef(null);
+  var t03S=useState(0), t03H=t03S[0], setT03H=t03S[1];
+  React.useLayoutEffect(function(){
+    if(!t03Ref.current) return;
+    var h=Math.round(t03Ref.current.offsetHeight||0);
+    if(h>0&&h!==t03H) setT03H(h);
+  });
   var qhState=useState(100), quoteH=qhState[0], setQuoteH=qhState[1];
   useLayoutEffect(function(){
     if(!quoteBlockRef.current) return;
@@ -412,7 +431,23 @@ function CitationCard(p){
   var T03_T_F=Math.round(13*CITE_S),T03_CART_H=Math.round(52*CITE_S);
   var T03_CART_PX=Math.round(20*CITE_S),T03_CART_GAP=Math.round(8*CITE_S);
   var t03Shadow=st.shadowT03!==false?"0 "+Math.round(10*CITE_S)+"px "+Math.round(5*CITE_S)+"px rgba(0,0,0,0.10)":"none";
-  var t03GroupY=Math.max(L.BADGE_TOP+L.BADGE_H+Math.round(20*CITE_S),Math.round(CARD_H*0.22));
+  /* Le groupe du template 03 (pastille + nom + bloc) est CENTRÉ dans la
+     zone utile, comme le demande la charte, au lieu d'être posé à une
+     ordonnée fixe. La zone utile tient compte de la cartouche de titre
+     quand elle est affichée, de la marge basse de charte, de la flèche de
+     carrousel, et du cadre marie-louise qui rogne la carte de tous les
+     côtés. Sans ça, le groupe sortait du cadre par le bas. */
+  var cfBas=chFormat(st.format);
+  var reserveBas=Math.max(cfBas.bottom,
+    (st.navMark&&st.navMark!=="none")?L.MARGIN+L.ARROW_H+ARROW_GAP_CITE:0);
+  var mlIns=(st.hasML&&st.format!=="9x16")?Math.round(CARD_W*0.046):0;
+  var hautLimite=(st.hideBadge?0:(L.BADGE_TOP+L.BADGE_H+GAP_TITRE))||L.MARGIN;
+  if(st.hideBadge) hautLimite=L.MARGIN;
+  var basLimite=CARD_H-2*mlIns-reserveBas;
+  var zoneH=Math.max(0,basLimite-hautLimite);
+  var t03GroupY=Math.max(hautLimite,
+    hautLimite+Math.round((zoneH-(t03H||0))/2));
+  if(t03GroupY+(t03H||0)>basLimite) t03GroupY=Math.max(hautLimite,basLimite-(t03H||0));
 
   /* Largeur du cadre marie-louise et rayon de l'image insérée (charte : 20 px
      sur une carte de 1080, mise à l'échelle du rendu). */
@@ -490,7 +525,7 @@ function CitationCard(p){
        une position haute figée, c'est l'inverse qui se produisait : le bloc
        s'allongeait vers le bas et venait coller la citation. */
     !isT03?e("div",{style:{position:"absolute",left:personX+mlDec,
-        bottom:(CARD_H-(L.QUOTE_Y+dY)+GAP_PERSONNE)-mlDec,
+        bottom:(CARD_H-(L.QUOTE_Y+dY)+GAP_PERSONNE),
         display:"flex",alignItems:"flex-end",gap:L.PERSON_GAP}},
       e("div",{style:{width:L.PHOTO_W+"px",height:L.PHOTO_H+"px",borderRadius:L.PHOTO_R+"px",
           overflow:"hidden",flexShrink:0,position:"relative",background:"rgba(255,255,255,.14)"}},
@@ -516,7 +551,7 @@ function CitationCard(p){
             whiteSpace:"pre-line",marginTop:3,overflow:"hidden"}},st.title))):null,
 
     /* Style libre : bloc citation */
-    !isT03?e("div",{ref:quoteBlockRef,style:{position:"absolute",left:blockX+mlDec,top:L.QUOTE_Y+dY+mlDec,
+    !isT03?e("div",{ref:quoteBlockRef,style:{position:"absolute",left:blockX+mlDec,top:L.QUOTE_Y+dY,
         width:Math.min(QW,CARD_W-2*mlDec-blockX),
         background:TE_WHITE,borderRadius:L.QUOTE_R+"px",
         padding:L.QUOTE_PAD+"px",paddingBottom:(L.QUOTE_PAD+6)+"px",boxSizing:"border-box"}},
@@ -531,7 +566,7 @@ function CitationCard(p){
         e("img",{src:st.logoImg,alt:"",style:{height:L.LOGO_H+"px",objectFit:"contain"}})):null):null,
 
     /* Template 03 : bloc central */
-    isT03?e("div",{style:{position:"absolute",left:t03Xp+mlDec,top:t03GroupY+mlDec,
+    isT03?e("div",{ref:t03Ref,style:{position:"absolute",left:t03Xp+mlDec,top:t03GroupY+mlDec,
         width:t03W,display:"flex",flexDirection:"column",alignItems:"flex-start"}},
       /* Rangée d'en-tête : pastille guillemet, puis pilule nom et fonction.
          C'est le dessin de la charte : le guillemet sort du bloc blanc et

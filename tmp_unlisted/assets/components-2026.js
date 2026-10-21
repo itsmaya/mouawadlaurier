@@ -187,11 +187,14 @@ function BlockStack2026(p){
     var blocksWhite=b.inverted?!blocksWhiteGlobal:blocksWhiteGlobal;
     var gk=(b.gradKey&&b.gradKey!=="auto")?b.gradKey:p.gradKey;
     var grad=chGrad(gk);
-    var w=forcedW!==undefined?forcedW
-      :(b.widthPct?Math.round(p.maxW*b.widthPct/100):undefined);
+    /* Bloc seul : widthPct est un PLAFOND, pas une largeur imposée. La boîte
+       épouse son texte (voir RichBody hug) et ne dépasse jamais ce plafond.
+       Dans une paire gauche/droite, la largeur reste celle de la colonne. */
+    var w=forcedW!==undefined?forcedW:undefined;
+    var plafond=(forcedW===undefined&&b.widthPct)?Math.round(p.maxW*b.widthPct/100):null;
     var blockStyle={
       padding:padBloc, borderRadius:B.radius, boxSizing:"border-box",
-      maxWidth:"100%",
+      maxWidth:plafond!==null?plafond:"100%",
       width:w!==undefined?w:"auto",
       flexShrink:forcedW!==undefined?0:1,
       background:blocksWhite?"#FFFFFF":undefined,
@@ -214,7 +217,7 @@ function BlockStack2026(p){
                un emoji écrit dans le callout se faisait donc remplir par le
                dégradé, exactement comme dans le corps de texte. Même
                traitement, même fonction. */
-            (window.decoupeEmojis?decoupeEmojis(txt):txt))
+            (window.decoupeEmojis?decoupeEmojis(String(txt).replace(/[ \t]+$/gm,"")):txt))
         : e("div",{style:{fontFamily:"'Nunito',sans-serif",fontWeight:weight,
             fontSize:size,lineHeight:lh||1.1,color:TE_WHITE,textAlign:alignTexte,
             whiteSpace:"pre-line"}},txt);
@@ -226,7 +229,7 @@ function BlockStack2026(p){
          la colonne — aucune autre métrique ne change. */
       var chiffreEnBas=(b.calloutPos==="bottom");
       var elChiffre=b.callout?gradText(b.callout,b.calloutSize||100,800,1.0):null;
-      var elTexte=b.text?e(RichBody,{text:b.text,fs:b.bodySize||48,lh:1.25,
+      var elTexte=b.text?e(RichBody,{hug:true,hugKey:p.maxW+"|"+plafond,text:b.text,fs:b.bodySize||48,lh:1.25,
           grad:grad,gradFrom:GRADS[gk].from,gradTo:GRADS[gk].to,
           color:typoGrad?GRADS[gk].to:TE_WHITE,
           textMode:typoGrad?"grad":"solid",inverted:!typoGrad,
@@ -237,7 +240,7 @@ function BlockStack2026(p){
         chiffreEnBas?elTexte:elChiffre,
         chiffreEnBas?elChiffre:elTexte);
     } else {
-      content=e(RichBody,{text:b.text||"",fs:b.bodySize||48,lh:1.25,
+      content=e(RichBody,{hug:true,hugKey:p.maxW+"|"+plafond,text:b.text||"",fs:b.bodySize||48,lh:1.25,
         grad:grad,gradFrom:GRADS[gk].from,gradTo:GRADS[gk].to,
         color:typoGrad?GRADS[gk].to:TE_WHITE,
         textMode:typoGrad?"grad":"solid",inverted:!typoGrad,

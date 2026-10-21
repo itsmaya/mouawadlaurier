@@ -43,6 +43,11 @@ function RichBody(props){
   var hostRef=useRef(null);
   var s0=useState({h:[],u:[],n:[]}); var M=s0[0],setM=s0[1];
   var s1=useState(0); var setTick=s1[1];
+  /* Option hug : la boîte épouse la ligne la plus large. Un texte qui passe
+     à la ligne remplit sinon toute la largeur disponible et laisse un vide à
+     droite. On mesure la ligne la plus large puis on fige la largeur. */
+  var hg=useState(null); var hugW=hg[0], setHugW=hg[1];
+  var hugKeyRef=useRef(null);
 
   useEffect(function(){
     if(document.fonts&&document.fonts.ready){
@@ -75,6 +80,29 @@ function RichBody(props){
       }
     }
     if(JSON.stringify(res)!==JSON.stringify(M)) setM(res);
+  });
+
+  useLayoutEffect(function(){
+    if(!props.hug) return;
+    var host=hostRef.current; if(!host) return;
+    var key=props.text+"|"+fs+"|"+(props.hugKey||"");
+    if(hugKeyRef.current!==key){
+      hugKeyRef.current=key;
+      if(hugW!==null){ setHugW(null); return; }
+    }
+    if(hugW!==null) return;
+    var base=host.getBoundingClientRect();
+    var SC=host.offsetWidth?(base.width/host.offsetWidth):1;
+    if(!SC||!isFinite(SC)||SC<=0) SC=1;
+    var rg=document.createRange(); rg.selectNodeContents(host);
+    var rs=rg.getClientRects(), maxR=0;
+    for(var i=0;i<rs.length;i++){
+      if(rs[i].width>=0.5 && rs[i].right>maxR) maxR=rs[i].right;
+    }
+    var w=(maxR-base.left)/SC;
+    /* aligné à droite, le surligné déborde de H_PAD vers l'extérieur du texte,
+       donc vers le bord de la boîte : on garde cette marge. */
+    if(w>0) setHugW(Math.ceil(w)+1+(props.align==="right"?Math.ceil(fs*0.12):0));
   });
 
   /* ── Emojis ────────────────────────────────────────────────────────────
@@ -110,12 +138,22 @@ function RichBody(props){
     lines.forEach(function(line,li){
       if(li>0) out.push(e("br",{key:"br"+li}));
       var parts=parseRich(line);
+      /* Les espaces en fin de ligne ne se voient pas mais élargissaient la
+         boîte qui épouse le texte : on les retire du dernier segment. */
+      while(parts.length){
+        var dv=parts[parts.length-1].v.replace(/[ \t\u00a0]+$/,"");
+        if(dv===""&&parts.length>1){ parts.pop(); continue; }
+        parts[parts.length-1].v=dv; break;
+      }
       parts.forEach(function(p,pi){
         var key=li+"-"+pi;
         if(p.t==="h"){
           /* Charte 2026 (p19) : le surlignage couvre le texte + un espace
              de chaque côté — espaces insécables DANS le span mesuré. */
-          var hv=" "+p.v+" ";
+          /* Plus d'espaces insécables postiches : ils écrasaient l'espace
+             tapé par l'utilisateur et le surligné se retrouvait collé au mot
+             voisin. C'est le rectangle dessiné qui déborde, voir H_PAD. */
+          var hv=p.v;
           out.push(inv
             ? e("span",{key:key,"data-seg":"h",
                 style:{fontWeight:T.FW_HIGHLIGHT,fontFamily:"'Nunito',sans-serif",
@@ -150,6 +188,7 @@ function RichBody(props){
   var useGrad=(props.textMode==="grad");
   var inv=props.inverted||false;
   var H_H=fs*T.HIGHLIGHT_H;
+  var H_PAD=fs*0.12;      /* débord du surligné : une demi-espace */
   var U_TH=Math.max(3,fs*T.UNDERLINE_TH);
   var U_OFF=fs*T.UNDERLINE_OFF;
 
@@ -159,7 +198,7 @@ function RichBody(props){
       /* v2 : plus aucun padding externe — le rect mesuré inclut déjà les
          espaces du flux. Chaque ligne d'un segment replié a son rectangle. */
       return e("div",{key:"h"+i,"data-hl":"1",style:{position:"absolute",
-        left:r.x,top:cy-H_H/2,width:r.w,height:H_H,
+        left:r.x-H_PAD,top:cy-H_H/2,width:r.w+H_PAD*2,height:H_H,
         backgroundImage:inv?"none":grad,
         backgroundColor:inv?TE_WHITE:"transparent",
         borderRadius:2,zIndex:0}});
@@ -173,6 +212,10 @@ function RichBody(props){
     }),
     e("div",{ref:hostRef,"data-richhost":"1",style:{position:"relative",zIndex:2,
         fontFamily:"'Nunito',sans-serif",fontWeight:T.FW_TEXT,
+        /* pre-wrap : tout espace et tout retour à la ligne tapés dans
+           l'éditeur arrivent tels quels dans le visuel. */
+        whiteSpace:"pre-wrap",
+        width:(props.hug&&hugW!==null)?hugW:undefined,
         backgroundImage:useGrad?grad:undefined,
         WebkitBackgroundClip:useGrad?"text":undefined,
         backgroundClip:useGrad?"text":undefined,
