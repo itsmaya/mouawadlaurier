@@ -79,7 +79,7 @@ function geometry(st,paveH){
   var CARD_H=L.CARD_H;
   var _f=st.format;
   var _rawB=(st["b_"+_f]!==undefined)?st["b_"+_f]:-1;
-  var BLOC_GAP=px(20);
+  var BLOC_GAP=px(CHARTE.components.block.gapY);   /* 50 — charte p31 (était 20 en dur) */
   var markH=(st.navMark!=="none")?L.ARROW_H+L.ARROW_GAP:0;
   var BOTTOM_MIN=Math.max(L.MARGIN,st.navMark==="none"?px(100):px(50));
   var BOTTOM_MAX=Math.max(BOTTOM_MIN,CARD_H-L.BADGE_TOP-L.BADGE_H-px(60)-(paveH||0)-markH);
@@ -173,12 +173,14 @@ function LatestNewsCard(p){
           color:colorTexte,align:bl.align,live:bloc.liveMode,
           textMode:tMode,inverted:bloc.inverted,gradFrom:G.from,gradTo:G.to}));
     }
+    /* La boîte épouse son texte (+ padding) ; la largeur réglée dans le panneau
+       devient un plafond, comme dans Block Layouts. */
     return e("div",{key:bloc.id,style:{
-        width:bl.w,alignSelf:placementBloc(bloc.align),
+        width:"auto",maxWidth:bl.w,alignSelf:placementBloc(bloc.align),
         background:bloc.inverted?"none":TE_WHITE,
         backgroundImage:bloc.inverted?GRAD_H:"none",
         borderRadius:L.PAVE_RADIUS,padding:L.PAVE_PAD,boxSizing:"border-box"}},
-      e(RichBody,{text:bloc.text,fs:bl.fs,lh:L.TEXT_LH,grad:GRAD_H,
+      e(RichBody,{hug:true,hugKey:bl.w+"|"+bl.align,text:bloc.text,fs:bl.fs,lh:L.TEXT_LH,grad:GRAD_H,
         color:bloc.inverted?TE_WHITE:(tMode==="grad"?"transparent":COLOR_GREY),
         align:bl.align,live:bloc.liveMode,
         textMode:tMode,inverted:bloc.inverted,gradFrom:G.from,gradTo:G.to}));

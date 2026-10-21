@@ -130,6 +130,32 @@ var CHARTE = {
     }
   },
 
+  /* ── Règles de composition ──────────────────────────────────────────────
+     UNE seule définition des règles que chaque carte appliquait jusqu'ici
+     avec sa propre copie. Lues par assets/layout-zones.js (positions) et, à
+     terme, par le module de contrôle (alertes et blocage d'export).
+     Toute valeur ci-dessous marquée « à confirmer » vient d'une consigne de
+     Maya ou d'un relevé, pas d'une cote lue dans le PDF de la charte. */
+  composition: {
+    /* Écart de dérogation toléré hors charte (décision du 21/10/2026) :
+       au-delà, l'export est bloqué ; en deçà, alerte + confirmation. */
+    tolerance: 0.20,
+    /* Cartouche titre -> premier élément de contenu.
+       100 : consigne de Maya pour Citation. À confirmer dans le PDF pour les
+       autres cartes (Block Layouts mesuré à 13 px sur une carte réelle). */
+    gapSousCartouche: 100,
+    /* Dernier élément de contenu -> flèche carrousel. 30 (50 en story) :
+       valeur historique de te-charte.js. À confirmer. */
+    gapContenuFleche: 30,
+    gapContenuFlecheStory: 50,
+    /* Côté de la flèche : celui des blocs (alignement du contenu). Par
+       défaut à gauche quand il n'y a pas de blocs. À confirmer. */
+    flecheCoteDefaut: "left",
+    /* La marge basse de la flèche est cta.gapBottom (50) / gapBottomStory
+       (230). L'audit d'août notait 100 en 1:1 et 4:5 : à confirmer. */
+    aConfirmer: ["gapSousCartouche","gapContenuFleche","flecheCoteDefaut","cta.gapBottom"]
+  },
+
   /* ── Plages typographiques par template (p37, 44-48, 60) ─────────────
      Valeurs en pt charte = px sur carte 1080. [min, max]. */
   typo: {

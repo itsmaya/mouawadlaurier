@@ -73,7 +73,7 @@ var T = {
   BADGE_PADX_PT   : CPT.padX,         /* 25 */
   BADGE_FONT_PT   : CPT.fontPt,       /* 30 */
   BADGE_LEADING_PT: CPT.leadingPt,    /* 35 (p16) */
-  PAVE_PAD_PT     : 30,
+  PAVE_PAD_PT     : CH.components.block.pad,   /* 40 — charte p31 (était 30 en dur) */
   PAVE_RADIUS_PT  : CH.components.block.radius,   /* 20 */
   ARROW_W_PT      : CTA.w,            /* 90 */
   ARROW_H_PT      : CTA.h,            /* 71 */

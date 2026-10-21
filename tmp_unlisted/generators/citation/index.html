@@ -199,7 +199,12 @@ function App(){
       isT03
         ?e(React.Fragment,null,
           e("div",{className:"upload-hint"},"Format idéal : ",e("b",null,"Portrait carré (~400×400 px)")),
-          e(FileDrop,{value:st.avatarSrc,onChange:function(v){set("avatarSrc",v);},placeholder:"Avatar rond",small:true}),
+          e(FileDrop,{value:st.avatarSrc||st.photo,placeholder:"Photo (ronde dans le bloc)",small:true,
+            onChange:function(v){ setSt(function(p){var c=Object.assign({},p);c.photo=v||null;c.avatarSrc=null;return c;}); }}),
+          e("label",{className:"toggle",style:{margin:"8px 0"}},
+            e("input",{type:"checkbox",checked:!st.hideAvatar,
+              onChange:function(ev){ set("hideAvatar",!ev.target.checked); }}),
+            "Afficher la photo dans le bloc"),
           e("div",{style:{height:10}}),
           e("label",{className:"field-label"},"Nom"),
           e("input",{type:"text",spellCheck:true,value:st.name,

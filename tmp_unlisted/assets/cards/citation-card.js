@@ -425,6 +425,10 @@ function CitationCard(p){
      encadré bien plus arrondi et plus épais que celui de la charte. */
   var Q=CHARTE.components.quote;
   var AVTR_D=Q.avatar;
+  /* Template 03 : la photo ronde est la MÊME image que celle du style libre
+     (st.photo). avatarSrc ne sert plus que de remplacement hérité d'anciennes
+     sauvegardes. Décochable avec hideAvatar. */
+  var avtSrc=st.hideAvatar?null:(st.avatarSrc||st.photo||null);
   var T03_R=Q.radius, T03_PAD_FULL=Q.pad;
   var T03_GAP=Q.gap,T03_N_F=Math.round(17*CITE_S);
   var T03_PASTILLE=CHARTE.components.caption.iconBox||70;
@@ -597,10 +601,10 @@ function CitationCard(p){
           width:"100%",background:TE_WHITE,borderRadius:L.QUOTE_R+"px",
           padding:T03_PAD_FULL+"px",boxSizing:"border-box",boxShadow:t03Shadow}},
         e("div",{style:{display:"flex",gap:T03_GAP+"px",alignItems:"flex-start"}},
-          st.avatarSrc?e("div",{style:{
+          avtSrc?e("div",{style:{
               width:AVTR_D+"px",height:AVTR_D+"px",borderRadius:"50%",
               overflow:"hidden",flexShrink:0,background:"rgba(0,0,0,.08)"}},
-            e("img",{src:st.avatarSrc,alt:"",style:{width:"100%",height:"100%",
+            e("img",{src:avtSrc,alt:"",style:{width:"100%",height:"100%",
               objectFit:"cover",objectPosition:"center top",display:"block"}})):null,
           e("div",{style:{flex:1,minWidth:0}},
             e(QuoteBody,{text:st.quote,
@@ -609,7 +613,7 @@ function CitationCard(p){
                  redessine pas autour du texte. */
               qstyle:"none",guilH:L.GUIL_H,fw:400,
               textColor:st.textColor||G.to,
-              width:st.avatarSrc?(t03W-T03_PAD_FULL*2-AVTR_D-T03_GAP):(t03W-T03_PAD_FULL*2),
+              width:avtSrc?(t03W-T03_PAD_FULL*2-AVTR_D-T03_GAP):(t03W-T03_PAD_FULL*2),
               gradFrom:G.from,gradTo:G.to}),
             st.source?e("div",{style:{marginTop:Math.round(14*CITE_S),fontStyle:"italic",
               fontSize:Math.round(13*CITE_S),color:"#7a8a8d",fontWeight:400}},"— "+st.source):null)))):null,
