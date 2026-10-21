@@ -59,8 +59,13 @@ function geometry(st){
   var calloutSize=st["cs_"+_f]||Math.round((CAL.min+CAL.max)/2);   /* ~108 */
   var bodySize=st["bs_"+_f]||48;
 
-  var stackLeft  = story ? CHARTE.formats["9x16"].blockLeft : MARGIN;
-  var stackRight = story ? cf.rightMin : MARGIN;
+  /* Positions de cartouche et de flèche : calculées par SPGLayout (une seule
+     définition pour toutes les cartes). Les clés hasML et firstSlide sont
+     transmises pour le jour où cette carte les proposera. */
+  var Z = global.SPGLayout.zones(st.format,{firstSlide:!!st.firstSlide,hasML:!!st.hasML,
+            navMark:st.navMark,cote:st.blocksAlign});
+  var stackLeft  = story ? CHARTE.formats["9x16"].blockLeft : Z.contenu.left;
+  var stackRight = story ? cf.rightMin : (Z.W - Z.contenu.right);
   var stackMaxW  = CW - stackLeft - stackRight;
   /* Espacement entre blocs et padding intérieur : valeurs de charte par
      défaut (50 px, 40 px en story ; padding 40), ajustables par format pour
@@ -73,8 +78,11 @@ function geometry(st){
                    ? st["pad_"+_f] : padCharte;
 
   var CTA_=CHARTE.components.cta;
-  var ctaBottom = story ? cf.bottom : MARGIN;
+  var ctaBottom = Z.H - (Z.fleche.y + Z.fleche.h);    /* marge basse de la flèche, vue des zones */
   var off=st["off_"+_f]||0;
+  /* 40 px entre le dernier bloc et la flèche : valeur historique de cette
+     carte, conservée à l'identique. La règle centrale (composition.
+     gapContenuFleche) vaut 30 : à unifier quand la charte aura tranché. */
   var stackBottom = ctaBottom + (st.navMark!=="none"?CTA_.h+40:0) + off;
 
   return {cf:cf,CW:CW,CH:CH_,story:story,MARGIN:MARGIN,
@@ -83,7 +91,7 @@ function geometry(st){
     gapCharte:gapCharte,padBloc:padBloc,padCharte:padCharte,
     stackLeft:stackLeft,stackRight:stackRight,stackMaxW:stackMaxW,gapY:gapY,
     ctaBottom:ctaBottom,stackBottom:stackBottom,off:off,
-    capLeft:story?80:MARGIN, capTop:cf.captionTop};
+    capLeft:Z.cartouche.x, capTop:Z.cartouche.y, zones:Z};
 }
 
 /* ═══ COMPOSANT ═══════════════════════════════════════════════════════════ */

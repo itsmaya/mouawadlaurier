@@ -214,7 +214,11 @@ function TotallyTrueCard(p){
                     tailleX,versLeHaut?"top":"bottom",st.tailMirror===true);
 
   /* ── Cartouche et repère ── */
-  var badgeXY={x:L.MARGIN,y:L.BADGE_TOP};
+  /* Cartouche et flèche : positions calculées par SPGLayout, comme pour les
+     autres cartes. La flèche passe à la marge basse de la charte (230 px en
+     story ; elle était à 80 px). */
+  var Z=window.SPGLayout.zones(st.format,{navMark:st.navMark,cote:"left"});
+  var badgeXY={x:Z.cartouche.x,y:Z.cartouche.y};
 
   var rootAttrs={style:{
     width:CARD_W,height:CARD_H,position:"relative",overflow:"hidden",
@@ -299,7 +303,7 @@ function TotallyTrueCard(p){
 
     /* Repère carrousel */
     st.navMark!=="none"
-      ? e("div",{style:{position:"absolute",left:L.MARGIN,bottom:L.MARGIN}},
+      ? e("div",{style:{position:"absolute",left:Z.fleche.x,top:Z.fleche.y}},
           e(CtaMark2026,{kind:st.navMark,gradKey:st.grad,bgKind:bgKind}))
       : null
   );
