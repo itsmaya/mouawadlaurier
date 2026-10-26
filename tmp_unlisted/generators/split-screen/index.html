@@ -28,6 +28,7 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 <script src="../../assets/drag-image.js"></script>
 <script src="../../assets/bg-controls.js"></script>
 <script src="../../assets/components-2026.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/app-shell.js"></script>
 <script src="../../assets/cards/registry.js"></script>
 <script src="../../assets/cards/split-screen-card.js"></script>
@@ -65,6 +66,7 @@ function App(){
   var st=shell.st, _set=shell.set, setSt=shell.setSt;
 
   var cardRef=useRef(null);
+  var fgState=useState(null),faitsGarde=fgState[0],setFaitsGarde=fgState[1];
   var tabState=useState("image"); var activeTab=tabState[0],setActiveTab=tabState[1];
   var TABS=[
     {id:"image",label:"Image"},{id:"couleurs",label:"Couleurs"},
@@ -116,7 +118,12 @@ function App(){
   /* ═══ CARTE ═══════════════════════════════════════════════════════════
      Composant partagé : voir assets/cards/split-screen-card.js.
      Ne PAS réimplémenter le visuel ici — le Carrousel rend le même. */
+  /* Garde-fou charte : verdict publié pour le contrôle d'export du shell. */
+  var verdict=window.SPGGuard?SPGGuard.evaluer(faitsGarde):[];
+  if(window.SPGGuard) SPGGuard.publier(verdict);
+
   var card=e(CARD.Card,{
+    onGarde:setFaitsGarde,
     st:st, cardRef:cardRef, exportTarget:true,
     scale:previewScale, bgNat:bgNat,
     onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
@@ -126,10 +133,12 @@ function App(){
   /* ═══ PANNEAU ════════════════════════════════════════════════════════= */
   var panel=e("div",{className:"panel"},
 
+    verdict.length?e("div",{style:{padding:"10px 16px 0"}},e(UI.Warnings,{items:verdict})):null,
+
     e(UI.Section,{title:"Format"},
       e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,onChange:setFormat})),
 
-    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+    e(UI.Tabs,{tabs:SPGGuard.marquer(TABS,verdict,"texte"),active:activeTab,onChange:setActiveTab}),
 
     /* ── Image ── */
     e("div",{className:"panel-tab-content"+(activeTab==="image"?" on":""),style:{paddingTop:16}},
@@ -200,7 +209,7 @@ function App(){
         onChange:function(ev){set("text",ev.target.value);},
         style:{fontSize:13,lineHeight:1.5}}),
       e("div",{style:{height:12}}),
-      e(UI.SliderField,{label:"Taille — "+fs.toFixed(0)+" px",
+      e(UI.SliderField,{alerte:SPGGuard.pour(verdict,["debordTexte"]),label:"Taille — "+fs.toFixed(0)+" px",
         min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
         onChange:function(v){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=Math.round(v);return c;});}}),
       /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les

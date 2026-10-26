@@ -117,6 +117,24 @@ function BlockLayoutsCard(p){
 
   var g=geometry(st);
   var CW=g.CW, CH_=g.CH, MARGIN=g.MARGIN, bgKind=g.bgKind;
+
+  /* Faits pour le garde-fou charte (même mesures que la page du générateur) :
+     permet au Carrousel de contrôler chaque vignette avant l'export. */
+  var faitsGarde=null;
+  if(stackH>0 && g.zones){
+    var _CAL=chTypo("blockLayout","callout"), _BOD=chTypo("blockLayout","body");
+    faitsGarde={
+      gapTitre:(CH_-g.stackBottom-stackH)-(g.zones.cartouche.y+g.zones.cartouche.h),
+      mesures:[
+        {id:"tailleCallout",label:"Taille du chiffre",valeur:g.calloutSize,regle:{min:_CAL.min,max:_CAL.max},sens:"plage",
+         conseil:"Raccourcis le chiffre ou réduis le nombre de blocs."},
+        {id:"tailleCorps",label:"Taille du texte",valeur:g.bodySize,regle:{min:_BOD.min,max:_BOD.max},sens:"plage",
+         conseil:"Raccourcis le texte."},
+        {id:"ecartBlocs",label:"Écart entre blocs",valeur:g.gapY,regle:g.gapCharte,sens:"egal"},
+        {id:"paddingBloc",label:"Marge intérieure des blocs",valeur:g.padBloc,regle:g.padCharte,sens:"egal"}]};
+  }
+  var faitsJson=JSON.stringify(faitsGarde);
+  React.useEffect(function(){ if(p.onGarde&&faitsGarde) p.onGarde(JSON.parse(faitsJson)); },[faitsJson]);
   var onGrad=g.onGrad, onWhite=g.onWhite;
 
   var _f=st.format;

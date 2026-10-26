@@ -141,7 +141,7 @@ function App(){
     e(UI.Section,{title:"Format"},
       e(UI.FormatPicker,{formats:CITE_FORMATS,value:st.format,onChange:shell.setFormat})),
 
-    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+    e(UI.Tabs,{tabs:SPGGuard.marquer(TABS,verdict,"citation"),active:activeTab,onChange:setActiveTab}),
 
     /* Onglet Fond */
     e("div",{className:"panel-tab-content"+(activeTab==="fond"?" on":""),style:{paddingTop:16}},
@@ -250,10 +250,14 @@ function App(){
       e("textarea",{spellCheck:true,rows:7,value:st.quote,
         onChange:function(ev){set("quote",ev.target.value);},style:{fontSize:13,lineHeight:1.5}}),
       e("div",{style:{height:12}}),
-      e("label",{className:"field-label"},
-        "Taille du texte — "+cfs+" pt"+(st["fs_"+st.format]?"":" (défaut)")),
-      e("input",{type:"range",min:QUOTE_FONT_MIN,max:QUOTE_FONT_MAX,step:1,value:cfs,
-        onChange:function(ev){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
+      (function(){
+        var al=SPGGuard.pour(verdict,["tailleTexte"].concat(SPGGuard.CAUSES_HAUTEUR));
+        return e(UI.Alerte,{item:al},
+          e("label",{className:"field-label"},(al?(al.level==="block"?"⛔ ":"⚠ "):"")+
+            "Taille du texte — "+cfs+" pt"+(st["fs_"+st.format]?"":" (défaut)")),
+        e("input",{type:"range",min:QUOTE_FONT_MIN,max:QUOTE_FONT_MAX,step:1,value:cfs,
+        onChange:function(ev){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=parseInt(ev.target.value,10);return c;});}}));
+      })(),
       e("button",{className:"mini-btn",style:{marginTop:4},
         onClick:function(){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=0;return c;});}},
         "Réinitialiser"),

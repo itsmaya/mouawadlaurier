@@ -156,6 +156,7 @@ SPGBoot.libsReady();});});});
 <script src="../../assets/charte-2026.js"></script>
 <script src="../../assets/te-charte.js"></script>
 <script src="../../assets/layout-zones.js"></script>
+<script src="../../assets/charte-guard.js"></script>
 <script src="../../assets/rich-body.js"></script>
 <script src="../../assets/components-2026.js"></script>
 <script src="../../assets/drag-image.js"></script>
@@ -941,6 +942,38 @@ function App(){
 
   var activeSlide=slides[activeIdx]||null;
 
+  /* ── Contrôle charte avant export ──
+     Chaque vignette est rendue hors écran à l'échelle 1 ; les cartes
+     remontent leurs mesures (onGarde), SPGGuard en tire un verdict par
+     vignette. Bloquant : l'export s'arrête. Dérogation : confirmation. */
+  function controleCharte(){
+    if(!window.SPGGuard) return Promise.resolve(true);
+    var holder=document.createElement("div");
+    holder.style.cssText="position:fixed;left:-9999px;top:0;z-index:-100;pointer-events:none;";
+    document.body.appendChild(holder);
+    var faits=slides.map(function(){return null;});
+    var roots=slides.map(function(sl,i){
+      var wrap=document.createElement("div"); holder.appendChild(wrap);
+      var root=ReactDOM.createRoot(wrap);
+      root.render(e(SPGCards.get(sl.type).Card,{st:stateFor(sl,i),scale:1,cardId:"chk-"+i,
+        onGarde:function(f){ faits[i]=f; }}));
+      return root;
+    });
+    return new Promise(function(res){ setTimeout(res,900); }).then(function(){
+      roots.forEach(function(r){ try{r.unmount();}catch(_){} });
+      document.body.removeChild(holder);
+      var items=[];
+      slides.forEach(function(sl,i){
+        if(!faits[i]) return;
+        SPGGuard.evaluer(faits[i]).forEach(function(it){
+          items.push(Object.assign({},it,{msg:"Vignette "+(i+1)+" : "+it.msg}));
+        });
+      });
+      SPGGuard.publier(items);
+      return SPGGuard.controleExport();
+    });
+  }
+
   /* ── Export ZIP ── */
   function doExportZip(){
     if(!window.JSZip||!window.domtoimage){
@@ -949,6 +982,12 @@ function App(){
     }
     if(!slides.length) return Promise.resolve();
     setZipping(true);
+    return controleCharte().then(function(ok){
+      if(!ok){ setZipping(false); return; }
+      lancerZip();
+    });
+  }
+  function lancerZip(){
     /* Format de sortie choisi dans l'onglet Export. Le ZIP a son propre chemin
        de capture (une vignette après l'autre), il doit donc appliquer le choix
        lui-même : sans ça, le sélecteur PNG/JPG restait sans effet ici. */

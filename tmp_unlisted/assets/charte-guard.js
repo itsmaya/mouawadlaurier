@@ -106,6 +106,14 @@ function evaluer(f){
       msg:"Le contenu recouvre la cartouche titre de "+px(-f.gapTitre)+" px. Raccourcis le texte ou réduis sa taille."});
   }
 
+  /* 2 quater. Le texte dépasse de sa zone (Split Screen) : il recouvre l'image
+     ou la cartouche. Chevauchement, donc bloqué. */
+  if(f.debordTexte && f.debordTexte>2){
+    out.push({id:"debordTexte", level:"block", derog:false,
+      msg:"Le texte dépasse de "+px(f.debordTexte)+" px de sa zone : il recouvre l'image ou la cartouche. "+
+          "Réduis la taille du texte, raccourcis-le ou donne plus de place à la zone texte."});
+  }
+
   /* 3. Débordement : le contenu empiète sur la marge basse ou la flèche.
         Ce n'est pas une tolérance de style, c'est un chevauchement : bloqué. */
   if(f.debord && f.debord>2){
@@ -119,6 +127,21 @@ function evaluer(f){
 var G={ items:[], niveau:niveau, evaluer:evaluer };
 
 G.publier=function(items){ G.items=items||[]; };
+
+/* Premier élément du verdict portant l'un des ids donnés (le bloquant d'abord) :
+   sert à signaler le curseur responsable dans le panneau. */
+G.pour=function(items,ids){
+  var m=(items||[]).filter(function(i){ return ids.indexOf(i.id)>=0; });
+  for(var k=0;k<m.length;k++) if(m[k].level==="block") return m[k];
+  return m[0]||null;
+};
+/* Marque en rouge l'onglet qui porte les curseurs concernés. */
+G.marquer=function(tabs,items,idOnglet){
+  var bad=(items||[]).length>0;
+  return tabs.map(function(t){ return t.id===idOnglet&&bad?Object.assign({},t,{alerte:true}):t; });
+};
+var CAUSES_HAUTEUR=["gapSousCartouche","recouvreCartouche","debordement","debordTexte"];
+G.CAUSES_HAUTEUR=CAUSES_HAUTEUR;
 
 /* Contrôle appelé juste avant l'export. */
 G.controleExport=function(){

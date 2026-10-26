@@ -175,6 +175,74 @@ function dispositionPhotos(L, n){
   return out;
 }
 
+
+/* ── Géométrie d'un portrait ───────────────────────────────────────────────
+   Règles simples, pour qu'on ne puisse pas "perdre" un intervenant :
+   - la silhouette est détourée en bas : ses pieds ne montent jamais au dessus
+     du bord bas de la carte (elle peut seulement DESCENDRE, donc être coupée
+     davantage) ;
+   - elle ne sort jamais de la carte, ni à gauche, ni à droite, ni par le haut ;
+   - la position horizontale (posX, 0 = collée à gauche, 100 = collée à droite)
+     et la descente (0-100 % de la descente possible) sont des pourcentages de
+     la course disponible, donc elles restent valides quel que soit le zoom. */
+var _aspects={};
+var _ASP_DEF={asp:0.75,bx0:0,bx1:1,by0:0,by1:1};
+/* Les PNG détourés ont souvent de la marge transparente : on mesure la boîte
+   des pixels réellement visibles (alpha), et c'est elle qui doit rester dans la
+   carte, pas la toile du fichier. */
+function mesurePortrait(src){
+  if(!src) return _ASP_DEF;
+  if(_aspects[src]) return _aspects[src];
+  _aspects[src]=_ASP_DEF;
+  var im=new Image();
+  im.onload=function(){
+    var m={asp:im.naturalWidth/Math.max(1,im.naturalHeight),bx0:0,bx1:1,by0:0,by1:1};
+    try{
+      var k=Math.min(1,200/Math.max(im.naturalWidth,im.naturalHeight));
+      var cw=Math.max(1,Math.round(im.naturalWidth*k)), ch=Math.max(1,Math.round(im.naturalHeight*k));
+      var cv=document.createElement("canvas"); cv.width=cw; cv.height=ch;
+      var cx=cv.getContext("2d"); cx.drawImage(im,0,0,cw,ch);
+      var d=cx.getImageData(0,0,cw,ch).data, x0=cw,x1=-1,y0=ch,y1=-1;
+      for(var y=0;y<ch;y++) for(var x=0;x<cw;x++){
+        if(d[(y*cw+x)*4+3]>24){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+      }
+      if(x1>=0){ m.bx0=x0/cw; m.bx1=(x1+1)/cw; m.by0=y0/ch; m.by1=(y1+1)/ch; }
+    }catch(_){}
+    _aspects[src]=m;
+    global.dispatchEvent(new Event("et-aspect"));
+  };
+  im.src=src;
+  return _ASP_DEF;
+}
+function geomPortrait(L, r, it){
+  var M=mesurePortrait(it.photo);
+  var zoom=Math.max(40,Math.min(250,it.zoom||100));
+  var h=Math.round(r.h*zoom/100);
+  var w=Math.round(h*M.asp);
+  var vw=(M.bx1-M.bx0)*w, vh=(M.by1-M.by0)*h, ox=M.bx0*w;
+  var course=L.W-vw;
+  var posX;
+  if(it.posX===undefined||it.posX===null){
+    var vleft0=r.x+r.w/2-vw/2;
+    posX = course>0 ? Math.max(0,Math.min(100,vleft0/course*100)) : 50;
+  } else posX=Math.max(0,Math.min(100,it.posX));
+  var vleft = course>0 ? posX/100*course : course/2;
+  var left=Math.round(vleft-ox);
+  /* Descente : au plus 40 % de la silhouette ; au moins ce qu'il faut pour que
+     le haut de la tête reste dans la carte. */
+  var descenteMax=Math.round(vh*0.40);
+  var minDrop=Math.max(0,Math.round(vh-L.H));
+  var pc=Math.max(0,Math.min(100,it.descente||0));
+  var drop=Math.max(minDrop, Math.round(pc/100*descenteMax));
+  /* pieds de la silhouette posés sur le bord bas (marge transparente rattrapée) */
+  var bottom=-Math.round((1-M.by1)*h)-drop;
+  return {h:h,w:w,left:left,bottom:bottom,posX:posX,
+          descente:descenteMax?Math.min(100,Math.round(drop/descenteMax*1000)/10):0,
+          descenteMax:descenteMax,minDescente:descenteMax?Math.min(100,Math.ceil(minDrop/descenteMax*100)):0};
+}
+global.etGeomPortrait=geomPortrait;
+global.etDispositionPhotos=dispositionPhotos;
+
 /* ── Logo ENERGYTALKS ─────────────────────────────────────────────────────
    Composé typographiquement plutôt que posé en image : le lettrage doit
    pouvoir changer de taille selon le format sans perte, et un PNG de plus
@@ -291,6 +359,12 @@ function BlocNom(p){
 
 /* ── Carte ────────────────────────────────────────────────────────────────── */
 function EnergyTalksCard(props){
+  var _tick=React.useState(0), setTick=_tick[1];
+  React.useEffect(function(){
+    function f(){ setTick(function(n){return n+1;}); }
+    global.addEventListener("et-aspect",f);
+    return function(){ global.removeEventListener("et-aspect",f); };
+  },[]);
   var st = props.st || DEFAULT;
   var L  = LAYOUT[st.format] || LAYOUT["1x1"];
   var gens = (st.intervenants||[]).slice(0,4);
@@ -329,22 +403,12 @@ function EnergyTalksCard(props){
         overflow:"hidden",zIndex:1,pointerEvents:"none"}},
       gens.map(function(it,i){
         var r=rects[i]; if(!r||!it.photo) return null;
-        var zoom=Math.max(20,Math.min(300,it.zoom||100));
-        var hauteur=Math.round(r.h*zoom/100);
-        /* Les curseurs X et Y déplacent en pixels de carte, amplitude bornée à
-           une demi-largeur et un quart de hauteur de pavé. */
-        var px_=(it.x===undefined||it.x===null)?50:it.x, py_=(it.y===undefined||it.y===null)?50:it.y;
-        var dx=Math.round((px_-50)/50 * r.w*0.5);
-        var dy=Math.round((py_-50)/50 * r.h*0.25);
-        return e("div",{key:it.id||i,style:{position:"absolute",
-            left:r.x, top:r.y, width:r.w, height:r.h, zIndex:r.z}},
-          e("img",{src:it.photo,alt:"",style:{
-            position:"absolute", left:"50%", bottom:0,
-            height:hauteur, width:"auto", maxWidth:"none",
-            transform:"translateX(-50%) translate("+dx+"px,"+dy+"px)",
+        var g=geomPortrait(L, r, it);
+        return e("img",{key:it.id||i,src:it.photo,alt:"",style:{
+            position:"absolute", left:g.left, bottom:g.bottom,
+            height:g.h, width:g.w, maxWidth:"none", zIndex:r.z,
             display:"block",
-            /* Le portrait se déplace à la souris, comme la photo de fond :
-               seules les images captent le pointeur, le reste du calque laisse
+            /* Seules les images captent le pointeur : le reste du calque laisse
                passer le glisser vers le fond. */
             pointerEvents:props.onPortraitMove?"auto":"none",
             cursor:props.onPortraitMove?"grab":"default",
@@ -352,14 +416,16 @@ function EnergyTalksCard(props){
           draggable:false,
           onPointerDown:props.onPortraitMove?function(ev){
             ev.preventDefault();
-            var sc=props.scale||1, x0=ev.clientX, y0=ev.clientY, ox=px_, oy=py_;
+            var sc=props.scale||1, x0=ev.clientX, y0=ev.clientY;
+            var px0=g.posX, d0=g.descente;
             var cible=ev.currentTarget; try{cible.setPointerCapture(ev.pointerId);}catch(_){}
             function bouger(m){
-              /* pixels écran -> pixels carte -> valeurs X / Y du curseur */
+              /* pixels écran -> pixels carte -> position (0-100) et descente (0-100) */
               var ddx=(m.clientX-x0)/sc, ddy=(m.clientY-y0)/sc;
+              var course=Math.max(1,L.W-g.w), dmax=Math.max(1,g.descenteMax);
               props.onPortraitMove(it.id,
-                Math.round((ox + ddx*100/r.w)*10)/10,
-                Math.round((oy + ddy*200/r.h)*10)/10);
+                Math.max(0,Math.min(100,Math.round((px0 + ddx*100/course)*10)/10)),
+                Math.max(0,Math.min(100,Math.round((d0 + ddy*100/dmax)*10)/10)));
             }
             function fin(){ cible.removeEventListener("pointermove",bouger);
               cible.removeEventListener("pointerup",fin);
@@ -367,7 +433,7 @@ function EnergyTalksCard(props){
             cible.addEventListener("pointermove",bouger);
             cible.addEventListener("pointerup",fin);
             cible.addEventListener("pointercancel",fin);
-          }:undefined}));
+          }:undefined});
       })),
 
     /* HABILLAGE — un calque au dessus des portraits. Textes et pastilles
@@ -383,8 +449,11 @@ function EnergyTalksCard(props){
       /* Cotes exactes du fichier source, pas les rapports arrondis : le
          placement tombe au pixel dans les deux formats. */
       var bw = L.badgeW, bh = L.badgeH;
-      var bdx = (st.badgeDX!==undefined) ? st.badgeDX : (L.badgeX - L.logoX);
-      var bdy = (st.badgeDY!==undefined) ? st.badgeDY : (L.badgeY - L.logoY);
+      /* Décalages propres à chaque format (le logo et la carte n'ont pas les
+         mêmes dimensions en 1:1 et en 16:9). */
+      var dxF = st["badgeDX_"+st.format], dyF = st["badgeDY_"+st.format];
+      var bdx = (dxF!==undefined) ? dxF : (L.badgeX - L.logoX);
+      var bdy = (dyF!==undefined) ? dyF : (L.badgeY - L.logoY);
       var ech = (st.badgeEchelle||100)/100;
       var badgeSrc = st.badgeSrc || null;
       return e("div",{key:"logo",style:{position:"absolute",
@@ -406,13 +475,21 @@ function EnergyTalksCard(props){
     (function(){
       var tf = st.titreTaille || L.titreFont;
       var sf = st.sousTitreTaille || Math.round(L.titreFont*0.48);
+      /* Largeur et retours à la ligne sont propres à chaque format : un saut
+         voulu en 1:1 peut être inutile en 16:9. Quand les retours sont
+         ignorés, le texte passe à la ligne tout seul selon la largeur. */
+      var f=st.format;
+      var tw=st["titreLargeur_"+f]||st.titreLargeur||L.titreMaxW;
+      var sw=st["sousTitreLargeur_"+f]||Math.round(L.W*0.5);
+      var garde=st["retours_"+f]!==false;
+      function txt(t){ return garde?(t||""):String(t||"").replace(/\s*\n+\s*/g," "); }
       return e("div",{style:{position:"absolute",left:L.margeG,top:L.titreY,
-          maxWidth:(st.titreLargeur||L.titreMaxW),display:"flex",flexDirection:"column",
+          width:Math.max(tw,sw),display:"flex",flexDirection:"column",
           gap:Math.round(tf*0.3),color:"#FFFFFF"}},
-        e("div",{style:{fontWeight:800,fontSize:tf,lineHeight:L.titreLH,
-          whiteSpace:"pre-wrap"}}, st.titre||""),
+        e("div",{style:{fontWeight:800,fontSize:tf,lineHeight:L.titreLH,maxWidth:tw,
+          whiteSpace:garde?"pre-wrap":"normal"}}, txt(st.titre)),
         st.sousTitre?e("div",{style:{fontWeight:600,fontSize:sf,lineHeight:1.3,
-          whiteSpace:"pre-wrap",maxWidth:Math.round(L.W*0.5)}},st.sousTitre):null);
+          whiteSpace:garde?"pre-wrap":"normal",maxWidth:sw}},txt(st.sousTitre)):null);
     })(),
 
     /* Noms, empilés en bas à gauche */

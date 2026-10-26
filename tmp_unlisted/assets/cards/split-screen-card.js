@@ -95,6 +95,16 @@ function SplitScreenCard(p){
 
   var R=computeRects(L,CARD_H,st.layout,st.imgRatio||0.55);
 
+  /* Garde-fou charte : le texte doit tenir dans sa zone. On mesure la hauteur
+     réellement rendue et on remonte le dépassement (Carrousel et page). */
+  var txtRef=React.useRef(null), lastGarde=React.useRef(null);
+  React.useLayoutEffect(function(){
+    if(!p.onGarde||!txtRef.current) return;
+    var h=txtRef.current.offsetHeight||0;
+    var d=Math.max(0,Math.round(h-R.txt.h));
+    if(lastGarde.current!==d){ lastGarde.current=d; p.onGarde({debordTexte:d}); }
+  });
+
   var bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
   var bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
   var bgZoom=st["bgZoom_"+st.format]||100;
@@ -223,7 +233,7 @@ function SplitScreenCard(p){
         onChange:onBgMove}),
       st.bgDark>0?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null),
 
-    e("div",{style:{position:"absolute",left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
+    e("div",{ref:txtRef,style:{position:"absolute",left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
       e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,
         gradFrom:G.from,gradTo:G.to,color:st.textColor,align:"left",textMode:st.textMode})),
 

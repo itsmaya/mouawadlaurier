@@ -168,7 +168,7 @@ function App(){
       L.STORY?e("div",{className:"hint",style:{marginTop:4}},
         "Marges story : 80 px de bord, cartouche à 180 px du haut."):null),
 
-    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+    e(UI.Tabs,{tabs:SPGGuard.marquer(TABS,verdict,"blocs"),active:activeTab,onChange:setActiveTab}),
 
     /* Onglet Fond */
     e("div",{className:"panel-tab-content"+(activeTab==="fond"?" on":""),style:{paddingTop:16}},
@@ -330,8 +330,9 @@ function App(){
               (function(){
                 var bfs=bloc["fs_"+_f]||L.TEXT_DEF;
                 bfs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,bfs));
-                return e(React.Fragment,null,
-                  e("label",{className:"field-label"},
+                var al=SPGGuard.pour(verdict,SPGGuard.CAUSES_HAUTEUR);
+                return e(UI.Alerte,{item:al},
+                  e("label",{className:"field-label"},(al?(al.level==="block"?"⛔ ":"⚠ "):"")+
                     "Taille — "+(bfs/K).toFixed(0)+" pt "+(bloc["fs_"+_f]?"":"(défaut)")),
                   e("input",{type:"range",min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:bfs,
                     onChange:function(ev){setBloc(bloc.id,"fs_"+_f,parseInt(ev.target.value,10));}}));

@@ -284,7 +284,7 @@ function App(){
       e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
         onChange:shell.setFormat})}),
 
-    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+    e(UI.Tabs,{tabs:SPGGuard.marquer(TABS,verdict,"blocs"),active:activeTab,onChange:setActiveTab}),
 
     /* ── Onglet Fond ── */
     e("div",{className:"panel-tab-content"+(activeTab==="fond"?" on":"")},
@@ -362,10 +362,12 @@ function App(){
         options:[{v:"left",l:"← Gauche"},{v:"right",l:"Droite →"}]}),
       e("div",{style:{height:12}}),
       e(UI.SliderField,{label:"Taille callout — "+calloutSize+" pt (charte "+CAL.min+"-"+CAL.max+")",
+        alerte:SPGGuard.pour(verdict,["tailleCallout"].concat(SPGGuard.CAUSES_HAUTEUR)),
         min:Math.round(CAL.min*(1-TOL)),max:Math.round(CAL.max*(1+TOL)),value:calloutSize,
         onChange:function(v){set("cs_"+st.format,v);}}),
       e("div",{style:{height:8}}),
       e(UI.SliderField,{label:"Taille body — "+bodySize+" pt (charte "+BOD.min+"-"+BOD.max+")",
+        alerte:SPGGuard.pour(verdict,["tailleCorps"]),
         min:Math.round(BOD.min*(1-TOL)),max:Math.round(BOD.max*(1+TOL)),value:bodySize,
         onChange:function(v){set("bs_"+st.format,v);}}),
       e("div",{style:{height:8}}),
@@ -380,12 +382,14 @@ function App(){
       e(UI.SliderField,{
         label:"Écart entre les blocs — "+g.gapY+" px"
               +(g.gapY===g.gapCharte?" (charte)":" · charte "+g.gapCharte),
+        alerte:SPGGuard.pour(verdict,["ecartBlocs"]),
         min:Math.round(g.gapCharte*(1-TOL)),max:Math.round(g.gapCharte*(1+TOL)),step:2,value:g.gapY,
         onChange:function(v){set("gap_"+st.format,Math.round(v));}}),
       e("div",{style:{height:8}}),
       e(UI.SliderField,{
         label:"Marge intérieure des blocs — "+g.padBloc+" px"
               +(g.padBloc===g.padCharte?" (charte)":" · charte "+g.padCharte),
+        alerte:SPGGuard.pour(verdict,["paddingBloc"]),
         min:Math.round(g.padCharte*(1-TOL)),max:Math.round(g.padCharte*(1+TOL)),step:2,value:g.padBloc,
         onChange:function(v){set("pad_"+st.format,Math.round(v));}}),
       e("button",{className:"mini-btn",style:{marginTop:6},

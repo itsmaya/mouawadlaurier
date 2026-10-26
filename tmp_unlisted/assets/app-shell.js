@@ -150,6 +150,16 @@ function injectStyles(){
 ".charte-warn.info{background:#eef5fb;color:#2a5a8a;border:1px solid #d5e6f5;}",
 ".charte-warn.warn{background:#fdf3e4;color:#8a5a1a;border:1px solid #f3e0bd;}",
 ".charte-warn.block{background:#fdeaea;color:#a02a2a;border:1px solid #f3c9c9;}",
+/* Garde-fou : tout écart à la charte est en rouge (dérogation : rouge clair,
+   bloquant : rouge plein) et le réglage fautif est signalé sur son curseur. */
+".charte-warn.garde{background:#fdeaea;color:#b3261e;border:1px solid #f0b4b0;}",
+".charte-warn.garde.block{background:#b3261e;color:#fff;border-color:#b3261e;font-weight:600;}",
+".panel-tab.alerte{color:#d32f2f !important;font-weight:700;}",
+".champ-alerte{border-left:3px solid #d32f2f;padding-left:8px;margin-left:-11px;}",
+".champ-alerte .field-label{color:#b3261e;font-weight:700;}",
+".champ-alerte input[type=range]{accent-color:#d32f2f;}",
+".champ-alerte-msg{font-size:11px;line-height:1.4;color:#b3261e;margin:3px 0 4px;}",
+".champ-alerte.block .champ-alerte-msg{font-weight:700;}",
 /* ── Mini boutons utilitaires ── */
 ".mini-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;",
   "border:1px solid #ddd;background:#fff;cursor:pointer;font-family:inherit;",
@@ -181,6 +191,97 @@ function injectStyles(){
 Shell.injectStyles = injectStyles;
 
 /* ═══ 3. Hook principal ══════════════════════════════════════════════════ */
+
+/* ═══ Héritage entre formats ═════════════════════════════════════════════════
+   Les réglages propres à un format (taille de texte, position/zoom du fond,
+   largeur et position des blocs…) sont stockés avec un suffixe : fs_1x1,
+   bgX_9x16… Un format que tu n'as PAS encore réglé suit automatiquement le
+   format de référence, jusqu'à ce que tu touches à un réglage : celui-là
+   devient propre au format (surcharge par réglage, pas tout ou rien).
+   Rien n'est écrit dans l'état sauvegardé : l'héritage est calculé à
+   l'affichage et à l'export, donc les anciennes sauvegardes en profitent.
+   Le format de référence est, par défaut, celui où tu as le plus réglé ;
+   tu peux le choisir (état : formatSource). */
+var SPGInherit=(function(){
+  var FORMATS=["1x1","4x5","9x16","16x9"];
+  /* préfixe -> valeur « non réglée » */
+  var PREFIXES={"blockW_t03_":0,"blockYPct_":null,"blockPct_":null,"bgZoom_":100,"bgX_":50,"bgY_":50,
+    "titreLargeur_":0,"sousTitreLargeur_":0,"retours_":null,"fs_":0,"cs_":0,"bs_":0,"gap_":0,"pad_":0,"off_":0,"w_":0,"b_":0};
+  var LISTES=["blocs","blocks"];
+  var ORDRE=Object.keys(PREFIXES).sort(function(a,b){return b.length-a.length;});
+  function parse(k){
+    for(var i=0;i<ORDRE.length;i++){
+      var pf=ORDRE[i];
+      if(k.indexOf(pf)===0){ var f=k.slice(pf.length); if(FORMATS.indexOf(f)>=0) return {pf:pf,f:f}; }
+    }
+    return null;
+  }
+  function explicite(o,pf,f){
+    var v=o[pf+f]; if(v===undefined||v===null) return false;
+    var dflt=PREFIXES[pf]; return dflt===null ? true : v!==dflt;
+  }
+  function cles(o){
+    var out=[]; for(var k in o) if(Object.prototype.hasOwnProperty.call(o,k)){ var pk=parse(k); if(pk) out.push({k:k,pf:pk.pf,f:pk.f}); }
+    return out;
+  }
+  function compte(st){
+    var n={}; FORMATS.forEach(function(f){n[f]=0;});
+    function vers(o){ cles(o).forEach(function(c){ if(explicite(o,c.pf,c.f)) n[c.f]++; }); }
+    vers(st);
+    LISTES.forEach(function(l){ (st[l]||[]).forEach(function(b){ if(b&&typeof b==="object") vers(b); }); });
+    return n;
+  }
+  function source(st){
+    if(st.formatSource&&FORMATS.indexOf(st.formatSource)>=0) return st.formatSource;
+    var n=compte(st), best=null, max=0;
+    FORMATS.forEach(function(f){ if(n[f]>max){ max=n[f]; best=f; } });
+    return best;
+  }
+  function remplit(o,fmt,src){
+    var c=null, nb=0;
+    cles(o).forEach(function(x){
+      if(x.f!==src) return;
+      if(!explicite(o,x.pf,x.f)) return;
+      if(explicite(o,x.pf,fmt)) return;
+      if(!c) c=Object.assign({},o);
+      c[x.pf+fmt]=o[x.k]; nb++;
+    });
+    return {o:c||o,n:nb};
+  }
+  function resolve(st,fmt,compteur){
+    if(!st) return st;
+    fmt=fmt||st.format;
+    var src=source(st);
+    if(!src||src===fmt||FORMATS.indexOf(fmt)<0) return st;
+    var r=remplit(st,fmt,src), out=r.o, total=r.n;
+    LISTES.forEach(function(l){
+      if(!Array.isArray(st[l])) return;
+      var chg=false, arr=st[l].map(function(b){
+        if(!b||typeof b!=="object") return b;
+        var rb=remplit(b,fmt,src); if(rb.n){ chg=true; total+=rb.n; } return rb.o;
+      });
+      if(chg){ if(out===st) out=Object.assign({},st); out[l]=arr; }
+    });
+    if(compteur) compteur.n=total;
+    return out;
+  }
+  /* Remet le format en automatique : supprime ses réglages propres. */
+  function reinitialise(st,fmt){
+    var c=Object.assign({},st);
+    function nettoie(o){
+      var d=Object.assign({},o);
+      cles(o).forEach(function(x){ if(x.f===fmt) delete d[x.k]; });
+      return d;
+    }
+    c=nettoie(c);
+    LISTES.forEach(function(l){ if(Array.isArray(st[l])) c[l]=st[l].map(function(b){ return (b&&typeof b==="object")?nettoie(b):b; }); });
+    return c;
+  }
+  return {FORMATS:FORMATS,source:source,compte:compte,resolve:resolve,reinitialise:reinitialise,
+          info:null,setSt:null};
+})();
+global.SPGInherit=SPGInherit;
+
 Shell.useApp = function(cfg){
   var R=global.React, e=R.createElement;
   var useState=R.useState, useRef=R.useRef, useEffect=R.useEffect;
@@ -418,6 +519,7 @@ Shell.useApp = function(cfg){
       return Promise.resolve(null);
     var stx=opts.stateOverride||st;
     var fk=opts.formatKey||stx.format;
+    stx=SPGInherit.resolve(stx,fk);
     var cf=global.chFormat(fk);
     /* Format de sortie choisi dans l'onglet Export, mémorisé par générateur. */
     var sortie=opts.sortie||Shell.formatSortie(cfg.pageKey);
@@ -441,8 +543,23 @@ Shell.useApp = function(cfg){
   useEffect(function(){ global.smDownloadTrigger=function(){
     if(cfg.onDownload) cfg.onDownload(); }; });
 
+  /* Héritage entre formats : la page et la carte voient l'état résolu ; les
+     écritures (setSt) portent toujours sur l'état réel. */
+  var cpt={n:0};
+  var stEff=SPGInherit.resolve(st,st.format,cpt);
+  SPGInherit.info={source:SPGInherit.source(st),format:st.format,n:cpt.n,explicite:!!st.formatSource};
+  SPGInherit.setSt=setSt;
+  /* Le format de référence est figé dès que des réglages existent : il ne
+     doit plus changer quand on règle un autre format. Écrit sans entrée
+     d'annulation (c'est de la comptabilité, pas une action de l'utilisateur). */
+  useEffect(function(){
+    if(st.formatSource) return;
+    var f=SPGInherit.source(st);
+    if(f) _setSt(function(p){ return p.formatSource?p:Object.assign({},p,{formatSource:f}); });
+  },[st]);
+
   return {
-    st:st, setSt:setSt, set:set,
+    st:stEff, stRaw:st, setSt:setSt, set:set,
     format:st.format,
     pageKey:cfg.pageKey,
     autoSave:autoSave, setAutoSave:basculerAutoSave,
@@ -785,7 +902,31 @@ Shell.ui.GradPicker = function(p){
 
 Shell.ui.FormatPicker = function(p){
   var e=React.createElement;
+  var inf=SPGInherit.info;
+  var note=null;
+  if(inf&&inf.source&&inf.source!==p.value&&p.formats.indexOf(inf.source)>=0){
+    var fs=window.chFormat(inf.source);
+    note=e("div",{className:"charte-warn info",style:{width:"100%",flexDirection:"column",gap:4}},
+      e("span",null,inf.n>0
+        ?("Ce format reprend automatiquement les réglages de « "+fs.label+" » ("+inf.n+" réglage"+(inf.n>1?"s":"")+
+           ") tant que tu ne les modifies pas ici. Ce que tu changes ici ne concerne plus que ce format."
+          )
+        :("Format de référence : « "+fs.label+" ». Ce format le suivra pour tout ce que tu ne règles pas ici.")),
+      e("span",{style:{display:"flex",gap:6,flexWrap:"wrap"}},
+        inf.n>=0&&SPGInherit.setSt?e("button",{className:"mini-btn",onClick:function(){
+          if(confirm("Remettre ce format en automatique ?\n\nSes réglages propres seront supprimés, il suivra de nouveau « "+fs.label+" »."))
+            SPGInherit.setSt(function(s){ return SPGInherit.reinitialise(s,p.value); });
+        }},"Remettre ce format en automatique"):null,
+        SPGInherit.setSt?e("button",{className:"mini-btn",onClick:function(){
+          SPGInherit.setSt(function(s){ var c=Object.assign({},s); c.formatSource=p.value; return c; });
+        }},"Prendre ce format comme référence"):null));
+  } else if(inf&&inf.source&&inf.source===p.value&&p.formats.length>1){
+    note=e("div",{className:"charte-warn info",style:{width:"100%"}},
+      e("span",null,"Format de référence : les autres formats suivent ce que tu règles ici, jusqu'à ce que tu les règles à leur tour."+
+        (inf.explicite?" (le premier que tu as réglé, ou celui que tu as choisi)":"")));
+  }
   return e("div",{style:{display:"flex",gap:4,flexWrap:"wrap"}},
+    note,
     p.formats.map(function(k){
       var f=window.chFormat(k), on=p.value===k;
       var vh=14, vw=Math.round(vh*(f.outputW/f.outputH));
@@ -809,8 +950,8 @@ Shell.ui.Tabs = function(p){
     e("div",{className:"panel-tabs"},
       p.tabs.map(function(t){
         return e("div",{key:t.id,
-          className:"panel-tab"+(p.active===t.id?" on":""),
-          onClick:function(){ p.onChange(t.id); }},t.label);
+          className:"panel-tab"+(p.active===t.id?" on":"")+(t.alerte?" alerte":""),
+          onClick:function(){ p.onChange(t.id); }},t.alerte?("● "+t.label):t.label);
       })),
     e("button",{
       className:"panel-close-btn",
@@ -1030,10 +1171,20 @@ Shell.ui.MentionIA = function(p){
   );
 };
 
+/* Enveloppe rouge autour d'un réglage fautif. item = élément du verdict
+   SPGGuard (ou null) : { level, msg }. Le message est affiché sous le curseur. */
+Shell.ui.Alerte = function(p){
+  var e=React.createElement;
+  if(!p.item) return e(React.Fragment,null,p.children);
+  return e("div",{className:"champ-alerte"+(p.item.level==="block"?" block":"")},
+    p.children,
+    e("div",{className:"champ-alerte-msg"},(p.item.level==="block"?"⛔ ":"⚠ ")+p.item.msg));
+};
+
 Shell.ui.SliderField = function(p){
   var e=React.createElement;
-  return e(React.Fragment,null,
-    e("label",{className:"field-label"},p.label),
+  return e(Shell.ui.Alerte,{item:p.alerte},
+    e("label",{className:"field-label"},(p.alerte?(p.alerte.level==="block"?"⛔ ":"⚠ "):"")+p.label),
     e("input",{type:"range",min:p.min,max:p.max,step:p.step||1,value:p.value,
       onChange:function(ev){ p.onChange(parseFloat(ev.target.value)); }}));
 };
@@ -1070,7 +1221,7 @@ Shell.ui.Warnings = function(p){
   var e=React.createElement;
   if(!p.items||!p.items.length) return null;
   return e(React.Fragment,null,p.items.map(function(w,i){
-    return e("div",{key:i,className:"charte-warn "+w.level},
+    return e("div",{key:i,className:"charte-warn "+w.level+(w.id?" garde":"")},
       e("span",{style:{flexShrink:0}},w.level==="info"?"ℹ":w.level==="warn"?"⚠":"⛔"),
       e("span",null,w.msg));
   }));

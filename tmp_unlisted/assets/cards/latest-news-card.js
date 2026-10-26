@@ -118,6 +118,12 @@ function LatestNewsCard(p){
 
   var g=geometry(st,paveH);
   var L=g.L, CARD_H=g.CARD_H;
+
+  /* Faits pour le garde-fou charte (voir block-layouts-card.js). */
+  var faitsGarde=(st.blocs&&st.blocs.length&&paveH>0&&p.onGarde)
+    ? {gapTitre:(CARD_H-g.stackBottom-paveH)-(L.BADGE_TOP+L.BADGE_H)} : null;
+  var faitsJson=JSON.stringify(faitsGarde);
+  React.useEffect(function(){ if(p.onGarde&&faitsGarde) p.onGarde(JSON.parse(faitsJson)); },[faitsJson]);
   var onGrad=g.onGrad, onWhite=g.onWhite;
   var BLOC_GAP=g.BLOC_GAP, bottomTarget=g.bottomTarget, stackBottom=g.stackBottom;
   var stackContainerLeft=g.stackContainerLeft, stackContainerW=g.stackContainerW;

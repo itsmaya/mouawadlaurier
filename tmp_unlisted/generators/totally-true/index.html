@@ -102,7 +102,7 @@ function App(){
       e(UI.FormatPicker,{formats:PAGE_FORMATS,value:st.format,
         onChange:function(k){ set("format",k); }})),
 
-    e(UI.Tabs,{tabs:TABS,active:activeTab,onChange:setActiveTab}),
+    e(UI.Tabs,{tabs:SPGGuard.marquer(TABS,verdict,"texte"),active:activeTab,onChange:setActiveTab}),
 
     /* ── Texte ── */
     e("div",{className:"panel-tab-content"+(activeTab==="texte"?" on":""),style:{paddingTop:16}},
@@ -114,7 +114,8 @@ function App(){
           onChange:function(ev){set("quote",ev.target.value);},
           style:{fontSize:13,lineHeight:1.5}}),
         e("div",{style:{height:12}}),
-        e(UI.SliderField,{label:"Taille du texte — "+g.fs+" px"
+        e(UI.SliderField,{alerte:SPGGuard.pour(verdict,["tailleTexte"].concat(SPGGuard.CAUSES_HAUTEUR)),
+          label:"Taille du texte — "+g.fs+" px"
             +(st["fs_"+st.format]?"":" (défaut)"),
           min:g.QUOTE_MIN,max:g.QUOTE_MAX,step:1,value:g.fs,
           onChange:function(v){set("fs_"+st.format,Math.round(v));}}),

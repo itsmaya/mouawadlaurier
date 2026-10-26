@@ -185,7 +185,7 @@ function App(){
     onBgMove:function(x,y){ setSt(function(p){ var c=Object.assign({},p);
       c["bgX_"+p.format]=x; c["bgY_"+p.format]=y; return c; }); },
     onPortraitMove:function(id,x,y){ setSt(function(p){
-      var a=(p.intervenants||[]).map(function(it){ return it.id===id?Object.assign({},it,{x:x,y:y}):it; });
+      var a=(p.intervenants||[]).map(function(it){ return it.id===id?Object.assign({},it,{posX:x,descente:y}):it; });
       return Object.assign({},p,{intervenants:a}); }); }
   });
   var TITRE_W_MAX=LDEF.W-2*LDEF.margeG;
@@ -214,17 +214,25 @@ function App(){
       e(UI.Section,{title:"Position de la vignette"},
         e("div",{className:"hint",style:{marginBottom:8}},
           "La vignette se cale sur le coin haut-droit du logo. Ajuste ici si elle n'est pas exactement au bon endroit."),
-        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
-          e("div",null,
-            e("label",{className:"field-label"},"Décalage X — "+(st.badgeDX!==undefined?st.badgeDX:(LDEF.badgeDX||0))+" px"),
-            e("input",{type:"range",min:-200,max:600,step:2,
-              value:st.badgeDX!==undefined?st.badgeDX:LDEF.badgeDX,
-              onChange:function(ev){ set("badgeDX",parseInt(ev.target.value,10)); }})),
-          e("div",null,
-            e("label",{className:"field-label"},"Décalage Y — "+(st.badgeDY!==undefined?st.badgeDY:(LDEF.badgeDY||0))+" px"),
-            e("input",{type:"range",min:-150,max:300,step:2,
-              value:st.badgeDY!==undefined?st.badgeDY:LDEF.badgeDY,
-              onChange:function(ev){ set("badgeDY",parseInt(ev.target.value,10)); }}))),
+        (function(){
+          var fm=st.format, ech=(st.badgeEchelle||100)/100;
+          var dx0=LDEF.badgeX-LDEF.logoX, dy0=LDEF.badgeY-LDEF.logoY;
+          var dx=st["badgeDX_"+fm]!==undefined?st["badgeDX_"+fm]:dx0;
+          var dy=st["badgeDY_"+fm]!==undefined?st["badgeDY_"+fm]:dy0;
+          /* Course : de la marge gauche au bord droit de la carte (la vignette
+             reste dans le cadre), et du haut au bas. */
+          var xMin=-LDEF.logoX, xMax=Math.round(LDEF.W-LDEF.badgeW*ech-LDEF.logoX);
+          var yMin=-LDEF.logoY, yMax=Math.round(LDEF.H-LDEF.badgeH*ech-LDEF.logoY);
+          return e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
+            e("div",null,
+              e("label",{className:"field-label"},"Décalage X — "+Math.round(dx)+" px"),
+              e("input",{type:"range",min:xMin,max:xMax,step:2,value:Math.max(xMin,Math.min(xMax,dx)),
+                onChange:function(ev){ set("badgeDX_"+fm,parseInt(ev.target.value,10)); }})),
+            e("div",null,
+              e("label",{className:"field-label"},"Décalage Y — "+Math.round(dy)+" px"),
+              e("input",{type:"range",min:yMin,max:yMax,step:2,value:Math.max(yMin,Math.min(yMax,dy)),
+                onChange:function(ev){ set("badgeDY_"+fm,parseInt(ev.target.value,10)); }})));
+        })(),
         e("label",{className:"field-label"},"Inclinaison — "+(st.badgeRot!==undefined?st.badgeRot:(st.variante==="live"?-12:0))+"°"),
         e("input",{type:"range",min:-30,max:30,step:1,
           value:st.badgeRot!==undefined?st.badgeRot:(st.variante==="live"?-12:0),
@@ -234,7 +242,7 @@ function App(){
           onChange:function(ev){ set("badgeEchelle",parseInt(ev.target.value,10)); }}),
         e("button",{className:"mini-btn",style:{marginTop:6},
           onClick:function(){ setSt(function(p){ var c=Object.assign({},p);
-            delete c.badgeDX; delete c.badgeDY; delete c.badgeRot;
+            delete c.badgeDX; delete c.badgeDY; delete c["badgeDX_"+p.format]; delete c["badgeDY_"+p.format]; delete c.badgeRot;
             c.badgeEchelle=100; return c; }); }},
           "Réinitialiser la vignette")),
 
@@ -289,20 +297,28 @@ function App(){
         e("label",{className:"field-label"},"Taille du titre — "+(st.titreTaille||LDEF.titreFont)+" px"),
         e("input",{type:"range",min:40,max:110,step:1,value:st.titreTaille||LDEF.titreFont,
           onChange:function(ev){ set("titreTaille",parseInt(ev.target.value,10)); }}),
-        e("label",{className:"field-label"},"Largeur du titre — "+(st.titreLargeur||LDEF.titreMaxW)+" px"),
-        e("input",{type:"range",min:300,max:TITRE_W_MAX,step:5,value:Math.min(st.titreLargeur||LDEF.titreMaxW,TITRE_W_MAX),
-          onChange:function(ev){ set("titreLargeur",parseInt(ev.target.value,10)); }}),
+        e("label",{className:"field-label"},"Largeur du titre ("+st.format+") — "+(st["titreLargeur_"+st.format]||st.titreLargeur||LDEF.titreMaxW)+" px"),
+        e("input",{type:"range",min:300,max:TITRE_W_MAX,step:5,value:Math.min(st["titreLargeur_"+st.format]||st.titreLargeur||LDEF.titreMaxW,TITRE_W_MAX),
+          onChange:function(ev){ set("titreLargeur_"+st.format,parseInt(ev.target.value,10)); }}),
+        e("label",{className:"toggle",style:{margin:"8px 0"}},
+          e("input",{type:"checkbox",checked:st["retours_"+st.format]!==false,
+            onChange:function(ev){ set("retours_"+st.format,ev.target.checked); }}),
+          "Respecter mes retours à la ligne (ce format)"),
+        e("div",{className:"hint"},"Décoché : le texte passe à la ligne tout seul selon la largeur. Réglé séparément pour chaque format."),
         e("label",{className:"field-label"},"Sous-titre (optionnel)"),
         e("textarea",{spellCheck:true,rows:2,value:st.sousTitre||"",
           onChange:function(ev){ set("sousTitre",ev.target.value); },
           style:{fontSize:13,lineHeight:1.5},
           placeholder:"ex : L'innovation pour répondre aux enjeux…"}),
+        e("label",{className:"field-label"},"Largeur du sous-titre ("+st.format+") — "+(st["sousTitreLargeur_"+st.format]||Math.round(LDEF.W*0.5))+" px"),
+        e("input",{type:"range",min:300,max:TITRE_W_MAX,step:5,value:Math.min(st["sousTitreLargeur_"+st.format]||Math.round(LDEF.W*0.5),TITRE_W_MAX),
+          onChange:function(ev){ set("sousTitreLargeur_"+st.format,parseInt(ev.target.value,10)); }}),
         e("label",{className:"field-label"},"Taille du sous-titre — "+(st.sousTitreTaille||Math.round(LDEF.titreFont*0.48))+" px"),
         e("input",{type:"range",min:20,max:70,step:1,value:st.sousTitreTaille||Math.round(LDEF.titreFont*0.48),
           onChange:function(ev){ set("sousTitreTaille",parseInt(ev.target.value,10)); }}),
         e("button",{className:"mini-btn",style:{marginTop:6},
           onClick:function(){ setSt(function(p){ var c=Object.assign({},p);
-            delete c.titreTaille; delete c.sousTitreTaille; delete c.titreLargeur; return c; }); }},
+            delete c.titreTaille; delete c.sousTitreTaille; delete c.titreLargeur; delete c["titreLargeur_"+p.format]; delete c["sousTitreLargeur_"+p.format]; return c; }); }},
           "Tailles par défaut")),
 
       e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("energytalks")}),
@@ -364,18 +380,24 @@ function App(){
           e("label",{className:"field-label"},"Graisse de la fonction"),
           selPoids("fonctionGraisse",700),
 
-          e("label",{className:"field-label"},"Zoom du portrait — "+(it.zoom||100)+" %"),
-          e("input",{type:"range",min:60,max:300,step:1,value:it.zoom||100,
-            onChange:function(ev){ majIntervenant(i,"zoom",parseInt(ev.target.value,10)); }}),
-          e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 12px"}},
-            e("div",null,
-              e("label",{className:"field-label"},"Position X — "+(it.x==null?50:it.x)+" %"),
-              e("input",{type:"range",min:-50,max:150,step:1,value:(it.x==null?50:it.x),
-                onChange:function(ev){ majIntervenant(i,"x",parseInt(ev.target.value,10)); }})),
-            e("div",null,
-              e("label",{className:"field-label"},"Position Y — "+(it.y==null?50:it.y)+" %"),
-              e("input",{type:"range",min:-100,max:200,step:1,value:(it.y==null?50:it.y),
-                onChange:function(ev){ majIntervenant(i,"y",parseInt(ev.target.value,10)); }}))));
+          (function(){
+            var gp=window.etGeomPortrait(LDEF,window.etDispositionPhotos(LDEF,gens.length)[i],it);
+            return e(React.Fragment,null,
+              e("label",{className:"field-label"},"Taille du portrait — "+(it.zoom||100)+" %"),
+              e("input",{type:"range",min:40,max:200,step:1,value:it.zoom||100,
+                onChange:function(ev){ majIntervenant(i,"zoom",parseInt(ev.target.value,10)); }}),
+              e("label",{className:"field-label"},"Position horizontale — "+Math.round(gp.posX)+" %  (0 = gauche, 100 = droite)"),
+              e("input",{type:"range",min:0,max:100,step:1,value:Math.round(gp.posX),
+                onChange:function(ev){ majIntervenant(i,"posX",parseInt(ev.target.value,10)); }}),
+              e("label",{className:"field-label"},"Descendre le portrait — "+Math.round(gp.descente)+" %"),
+              e("input",{type:"range",min:gp.minDescente,max:100,step:1,value:Math.round(gp.descente),
+                onChange:function(ev){ majIntervenant(i,"descente",parseInt(ev.target.value,10)); }}),
+              e("div",{className:"hint",style:{marginTop:4}},
+                "Le portrait reste toujours posé en bas et dans la carte : il peut seulement être coupé davantage vers le bas."),
+              (it.posX!=null||it.descente)?e("button",{className:"mini-btn",style:{marginTop:6},
+                onClick:function(){ majIntervenant(i,"posX",null); majIntervenant(i,"descente",0); }},
+                "Position automatique"):null);
+          })());
       }),
 
       e("button",{className:"mini-btn",style:{width:"100%",marginTop:4},

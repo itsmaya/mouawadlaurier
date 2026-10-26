@@ -148,7 +148,7 @@
   }
 
   function hashState(s){
-    try{ return JSON.stringify(s); } catch(e){ return ""+Math.random(); }
+    try{ return JSON.stringify(s,function(k,v){ return k==="formatSource"?undefined:v; }); } catch(e){ return ""+Math.random(); }
   }
 
   /* Format de nom d'export : DOSSIER_NOM_FORMAT_AAAMMJJ_HHMM */
