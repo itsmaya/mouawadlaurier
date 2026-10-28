@@ -6,7 +6,7 @@
 <title>Carrousel — TotalEnergies</title>
 <!-- Nunito servie en local : indispensable pour que l'export intègre la
      police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
-<link rel="stylesheet" href="../../assets/fonts.css"/>
+<link rel="stylesheet" href="../../assets/fonts.css?v=202610281407"/>
 <style>
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -136,7 +136,7 @@
 </style>
 <!-- Portail de démarrage : évite la page blanche au premier chargement.
      Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
-<script src="../../assets/boot-gate.js"></script>
+<script src="../../assets/boot-gate.js?v=202610281407"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
@@ -149,29 +149,29 @@ loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-im
 loadScript(["https://unpkg.com/jszip@3.10.1/dist/jszip.min.js","https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js","../../assets/vendor/jszip.min.js"],function(){});
 SPGBoot.libsReady();});});});
 </script>
-<script src="../../assets/header.js"></script>
+<script src="../../assets/header.js?v=202610281407"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
-<script src="../../assets/pictos.js"></script>
-<script src="../../assets/save-manager.js"></script>
-<script src="../../assets/charte-2026.js"></script>
-<script src="../../assets/te-charte.js"></script>
-<script src="../../assets/layout-zones.js"></script>
-<script src="../../assets/charte-guard.js"></script>
-<script src="../../assets/rich-body.js"></script>
-<script src="../../assets/components-2026.js"></script>
-<script src="../../assets/drag-image.js"></script>
-<script src="../../assets/bg-controls.js"></script>
-<script src="../../assets/app-shell.js"></script>
+<script src="../../assets/pictos.js?v=202610281407"></script>
+<script src="../../assets/save-manager.js?v=202610281407"></script>
+<script src="../../assets/charte-2026.js?v=202610281407"></script>
+<script src="../../assets/te-charte.js?v=202610281407"></script>
+<script src="../../assets/layout-zones.js?v=202610281407"></script>
+<script src="../../assets/charte-guard.js?v=202610281407"></script>
+<script src="../../assets/rich-body.js?v=202610281407"></script>
+<script src="../../assets/components-2026.js?v=202610281407"></script>
+<script src="../../assets/drag-image.js?v=202610281407"></script>
+<script src="../../assets/bg-controls.js?v=202610281407"></script>
+<script src="../../assets/app-shell.js?v=202610281407"></script>
 <!-- ═══ CARTES PARTAGÉES ═══════════════════════════════════════════════════
      Le Carrousel ne dessine AUCUNE vignette lui-même : il monte exactement
      les mêmes composants que les pages génératrices. Toute retouche faite
      dans un module ci-dessous apparaît ici sans aucune modification. -->
-<script src="../../assets/cards/registry.js"></script>
-<script src="../../assets/cards/citation-card.js"></script>
-<script src="../../assets/cards/latest-news-card.js"></script>
-<script src="../../assets/cards/split-screen-card.js"></script>
-<script src="../../assets/cards/block-layouts-card.js"></script>
-<script src="../../assets/cards/totally-true-card.js"></script>
+<script src="../../assets/cards/registry.js?v=202610281407"></script>
+<script src="../../assets/cards/citation-card.js?v=202610281407"></script>
+<script src="../../assets/cards/latest-news-card.js?v=202610281407"></script>
+<script src="../../assets/cards/split-screen-card.js?v=202610281407"></script>
+<script src="../../assets/cards/block-layouts-card.js?v=202610281407"></script>
+<script src="../../assets/cards/totally-true-card.js?v=202610281407"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -799,7 +799,10 @@ function App(){
   }
   /* État complet rendu par la carte : défauts du type ← état vignette ← commun */
   function stateFor(sl,idx){
-    return SPGCards.resolve(sl.type,sl.st,overridesFor(sl.type,idx));
+    var full=SPGCards.resolve(sl.type,sl.st,overridesFor(sl.type,idx));
+    /* Héritage entre formats : un format non réglé suit le format de référence
+       du carrousel (voir SPGInherit dans app-shell.js). */
+    return SPGInherit.resolve(full,full.format,null,SPGInherit.source(st));
   }
   function dims(sl){
     var reg=SPGCards.get(sl.type);
@@ -941,6 +944,19 @@ function App(){
   }
 
   var activeSlide=slides[activeIdx]||null;
+
+  /* Compteur affiché sous le choix de format : réglages repris du format de
+     référence, toutes vignettes confondues. */
+  (function(){
+    var src=SPGInherit.source(st), tot=0;
+    if(SPGInherit.info) SPGInherit.info.source=src;
+    if(src&&src!==st.format) slides.forEach(function(sl,i){
+      var c={n:0};
+      SPGInherit.resolve(SPGCards.resolve(sl.type,sl.st,overridesFor(sl.type,i)),st.format,c,src);
+      tot+=c.n;
+    });
+    if(SPGInherit.info) SPGInherit.info.n=tot;
+  })();
 
   /* ── Contrôle charte avant export ──
      Chaque vignette est rendue hors écran à l'échelle 1 ; les cartes
@@ -1132,7 +1148,7 @@ function App(){
                 disabled:activeIdx>=slides.length-1,
                 onClick:function(){setActiveIdx(activeIdx+1);}},"Suivante →")),
             e(EDITORS[activeSlide.type]||function(){return null;},{
-              st:SPGCards.resolve(activeSlide.type,activeSlide.st,{format:st.format}),
+              st:SPGInherit.resolve(SPGCards.resolve(activeSlide.type,activeSlide.st,{format:st.format}),st.format,null,SPGInherit.source(st)),
               format:st.format,
               onChange:function(k,v){updSlideState(activeIdx,k,v);},
               set:function(k,v){updSlideState(activeIdx,k,v);},

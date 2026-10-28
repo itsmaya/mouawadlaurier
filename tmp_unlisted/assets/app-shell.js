@@ -64,8 +64,8 @@ function injectStyles(){
 /* ── Sections ── */
 ".section{margin-bottom:16px;}.section:last-child{margin-bottom:0;}",
 ".section>h2{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;",
-  "color:#888;margin:0 -16px 12px;padding:10px 16px;",
-  "border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;",
+  "color:#3a3f4b;margin:0 -16px 12px;padding:10px 16px;background:#eceef2;",
+  "border-top:1px solid #dfe2e8;border-bottom:1px solid #dfe2e8;",
   "display:flex;align-items:center;gap:6px;}",
 ".section>h2::before{content:'';display:block;width:3px;height:12px;",
   "background:linear-gradient(135deg,#0098E3,#4632FF);border-radius:2px;flex-shrink:0;}",
@@ -229,6 +229,8 @@ var SPGInherit=(function(){
     function vers(o){ cles(o).forEach(function(c){ if(explicite(o,c.pf,c.f)) n[c.f]++; }); }
     vers(st);
     LISTES.forEach(function(l){ (st[l]||[]).forEach(function(b){ if(b&&typeof b==="object") vers(b); }); });
+    /* Carrousel : les réglages vivent dans l'état de chaque vignette. */
+    (st.slides||[]).forEach(function(sl){ if(sl&&sl.st&&typeof sl.st==="object") vers(sl.st); });
     return n;
   }
   function source(st){
@@ -248,10 +250,10 @@ var SPGInherit=(function(){
     });
     return {o:c||o,n:nb};
   }
-  function resolve(st,fmt,compteur){
+  function resolve(st,fmt,compteur,srcForce){
     if(!st) return st;
     fmt=fmt||st.format;
-    var src=source(st);
+    var src=srcForce||source(st);
     if(!src||src===fmt||FORMATS.indexOf(fmt)<0) return st;
     var r=remplit(st,fmt,src), out=r.o, total=r.n;
     LISTES.forEach(function(l){
@@ -275,6 +277,8 @@ var SPGInherit=(function(){
     }
     c=nettoie(c);
     LISTES.forEach(function(l){ if(Array.isArray(st[l])) c[l]=st[l].map(function(b){ return (b&&typeof b==="object")?nettoie(b):b; }); });
+    if(Array.isArray(st.slides)) c.slides=st.slides.map(function(sl){
+      return (sl&&sl.st)?Object.assign({},sl,{st:nettoie(sl.st)}):sl; });
     return c;
   }
   return {FORMATS:FORMATS,source:source,compte:compte,resolve:resolve,reinitialise:reinitialise,
