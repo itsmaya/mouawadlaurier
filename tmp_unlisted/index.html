@@ -1,411 +1,238 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Static Posts Generator — Fisheye × TotalEnergies</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Static Post Generator a déménagé</title>
+<meta name="robots" content="noindex"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-/* ══════════════════════════════════════════════════════════════════
-   ACCUEIL — tient dans un écran, sans défilement
-   Bandeau noir, colonne blanche du Carrousel à gauche sur toute la
-   hauteur, zone claire à droite : deux posts autonomes en haut, les
-   cinq vignettes sur une seule rangée, pied noir.
-   Les hauteurs sont pilotées par la grille, les corps de texte par des
-   clamp() en vw : la page se resserre au lieu de déborder.
-   ══════════════════════════════════════════════════════════════════ */
-:root{
-  --nuit:#000000;         /* bandeau et pied */
-  --nuit-2:#191919;       /* blocs logos */
-  --papier:#f7f7f7;       /* zone de droite */
-  --encre:#12181c;
-  --gris:#5f6367;
-  --filet:#e6e6e6;
-  --fantome:#eeeeee;      /* numéros en filigrane */
-  --colonne:25%;          /* largeur de la colonne Carrousel */
-  /* La taille du menu se règle dans assets/header.js (MENU_TAILLE),
-     puisque la barre est maintenant commune à toutes les pages. */
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-text-size-adjust:100%;}
-/* La barre du haut est fixe et haute de 52 px : le corps se décale d'autant.
-   box-sizing:border-box fait que le padding est pris DANS les 100vh. */
-body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
-  display:flex;flex-direction:column;background:#fff;
-  font-family:'Nunito',sans-serif;color:var(--encre);}
-
-/* Le bandeau vit dans assets/header.js — rien à styler ici. */
-
-/* ══ CORPS ════════════════════════════════════════════════════════ */
-.corps{flex:1;min-height:0;display:grid;
-  grid-template-columns:var(--colonne) minmax(0,1fr);align-items:stretch;}
-
-/* ── Colonne Carrousel ── */
-.colonne{background:#fff;padding:26px 28px 24px;display:flex;flex-direction:column;
-  align-items:flex-start;text-decoration:none;color:var(--encre);min-height:0;}
-.col-label{font-size:10px;font-weight:800;letter-spacing:.2em;
-  text-transform:uppercase;color:#8d8d8d;margin-bottom:10px;}
-.col-titre{font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(26px,2.3vw,40px);line-height:1.02;letter-spacing:-.015em;
-  margin-bottom:12px;}
-.col-titre em{font-style:italic;color:#8d8d8d;}
-.col-desc{font-size:12px;line-height:1.5;color:#3d4348;margin-bottom:14px;max-width:32ch;}
-.col-cta,.c-cta{display:inline-flex;align-items:center;gap:8px;
-  font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--encre);text-decoration:none;border-bottom:1.5px solid var(--encre);
-  padding-bottom:2px;transition:gap .2s;}
-.col-cta{align-self:flex-start;}
-.colonne:hover .col-cta,.carte:hover .c-cta{gap:14px;}
-/* L'aperçu se place juste sous le texte (et non plus en bas de colonne),
-   comme sur les autres cartes. Il rétrécit si la hauteur manque. */
-.col-apercu{margin-top:0;padding-top:24px;flex:0 1 auto;min-height:0;width:100%;
-  display:flex;justify-content:flex-start;}
-.col-apercu .apercu{width:100%;height:auto;max-height:100%;min-width:0;aspect-ratio:1/1;flex:0 1 auto;}
-
-/* ── Zone claire ── */
-.zone{background:var(--papier);display:flex;flex-direction:column;min-height:0;}
-/* Les deux posts autonomes prennent la place qui reste : c'est là que
-   l'aperçu peut grandir, plutôt que de laisser un vide sous les vignettes. */
-.autonomes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;}
-.autonomes>*+*{border-left:1px solid var(--filet);}
-.bloc-vignettes{border-top:1px solid var(--filet);flex:0 0 auto;
-  padding:12px 0 0;display:flex;flex-direction:column;gap:8px;}
-.vignettes-titre{font-family:'DM Serif Display',serif;font-size:16px;
-  color:#6f7276;padding:0 22px;flex:0 0 auto;}
-/* Les cinq vignettes tiennent sur une seule rangée. */
-.grille{background:#fff;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));}
-.grille>*+*{border-left:1px solid var(--filet);}
-.grille{border-top:1px solid var(--filet);}
-
-/* ══ CARTE ════════════════════════════════════════════════════════ */
-.carte{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;
-  gap:18px;align-items:start;padding:20px 22px 18px;min-height:0;
-  text-decoration:none;color:var(--encre);background:transparent;
-  transition:background .2s;}
-.carte:hover{background:rgba(0,0,0,.022);}
-.carte:focus-visible{outline:2px solid var(--encre);outline-offset:-3px;}
-.c-num{position:absolute;top:12px;left:20px;z-index:0;
-  font-family:'DM Serif Display',serif;font-style:italic;font-size:38px;
-  line-height:1;color:var(--fantome);pointer-events:none;}
-.c-txt{position:relative;z-index:1;min-width:0;}
-.c-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:.18em;
-  text-transform:uppercase;color:#9a9a9a;margin-bottom:8px;}
-.c-titre{font-family:'DM Serif Display',serif;font-weight:400;
-  font-size:clamp(20px,1.55vw,30px);line-height:1.02;letter-spacing:-.015em;
-  margin-bottom:9px;}
-.c-titre em{font-style:italic;color:#8d8d8d;}
-.c-desc{font-size:11.5px;line-height:1.45;color:var(--gris);margin-bottom:11px;
-  max-width:44ch;}
-
-/* Vignettes : carte verticale compacte, aperçu sous le texte. */
-.grille .carte{display:flex;flex-direction:column;gap:0;padding:16px 14px 26px;}
-.grille .c-num{font-size:30px;top:10px;left:14px;}
-.grille .c-label{font-size:8.5px;letter-spacing:.14em;margin-bottom:6px;}
-.grille .c-titre{font-size:clamp(17px,1.25vw,24px);margin-bottom:7px;}
-/* Trois lignes au maximum : au-delà, la rangée ne tiendrait plus. */
-.grille .c-desc{font-size:10.5px;line-height:1.4;margin-bottom:9px;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.grille .c-cta{font-size:9.5px;}
-.grille .c-cta{align-self:flex-start;margin-bottom:14px;}
-/* L'aperçu suit le texte : bloqué en bas de carte, il laissait un vide
-   de plusieurs centimètres depuis que les vignettes ont maigri. */
-.grille .apercu{margin-top:2px;width:min(100%,142px);aspect-ratio:1/1;}
-/* Sur une même rangée, les aperçus s'alignent : le bouton « Ouvrir » et
-   l'aperçu sont calés en bas de carte, quelle que soit la longueur du texte. */
-.grille .carte{height:100%;}
-.grille .c-txt{flex:1 1 auto;display:flex;flex-direction:column;align-items:flex-start;}
-.grille .c-cta{margin-top:auto;}
-
-/* ══ APERÇU ═══════════════════════════════════════════════════════
-   Deux cartes blanches décalées derrière l'image donnent la pile de
-   slides : dessinées en pseudo-éléments, rien à charger. */
-.apercu{position:relative;flex-shrink:0;}
-.apercu::before,.apercu::after{content:"";position:absolute;inset:0;
-  background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:2px;
-  box-shadow:0 5px 14px rgba(0,0,0,.05);}
-.apercu::before{transform:translate(13px,13px);}
-.apercu::after{transform:translate(6.5px,6.5px);}
-.apercu img{position:relative;z-index:1;display:block;width:100%;height:100%;
-  object-fit:cover;border-radius:2px;box-shadow:0 8px 20px rgba(0,0,0,.14);
-  transition:transform .3s ease,box-shadow .3s ease;}
-.carte:hover .apercu img,.colonne:hover .apercu img{transform:translate(-3px,-3px);
-  box-shadow:0 13px 28px rgba(0,0,0,.18);}
-.apercu.vide img{display:none;}
-.apercu.vide::before,.apercu.vide::after{display:none;}
-.apercu.vide{background:repeating-linear-gradient(45deg,#f1f1f1 0 10px,#e8e8e8 10px 20px);
-  border:1px dashed #cfcfcf;border-radius:2px;}
-.apercu.vide::after{content:attr(data-ph);display:flex;position:static;
-  transform:none;background:none;border:none;box-shadow:none;height:100%;
-  align-items:center;justify-content:center;text-align:center;
-  font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#a9a9a9;padding:8px;line-height:1.6;overflow-wrap:anywhere;}
-/* Les deux posts autonomes gardent l'aperçu à droite du texte. */
-.autonomes .apercu{width:clamp(96px,14vw,230px);aspect-ratio:1/1;align-self:center;}
-
-/* ══ PIED ═════════════════════════════════════════════════════════ */
-.ftr{flex:0 0 auto;background:var(--nuit);color:#fff;padding:6px 26px;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.ftr-left{display:flex;align-items:baseline;gap:12px;min-width:0;}
-.ftr-copy{font-size:10.5px;font-weight:800;letter-spacing:.02em;white-space:nowrap;}
-.ftr-desc{font-size:9.5px;color:rgba(255,255,255,.5);overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;}
-.ftr-right{display:flex;align-items:center;gap:18px;flex-shrink:0;}
-.ftr-te{height:18px;display:block;}
-.ftr-fish{height:11px;display:block;filter:invert(1);}
-
-/* ══ RESPONSIVE ═══════════════════════════════════════════════════
-   Trois paliers, pour ne jamais « sauter » brutalement en mise en page
-   téléphone sur un écran d'ordinateur :
-   - grand écran : tout tient dans la fenêtre, sans défilement ;
-   - écran moyen (≤ 1300 px de large ou ≤ 780 px de haut) : la page défile,
-     mais on garde la colonne Carrousel à gauche et les deux posts côte à
-     côte ; les vignettes passent sur 3 colonnes ;
-   - tablette (≤ 900 px) : une seule colonne, le Carrousel devient une
-     carte comme les autres (texte à gauche, aperçu à droite) ;
-   - téléphone (≤ 600 px) : tout empilé. */
-@media(max-width:1300px),(max-height:780px){
-  body{height:auto;min-height:100vh;overflow:auto;}
-  .corps{grid-template-columns:minmax(250px,27%) minmax(0,1fr);}
-  .colonne{padding:28px 24px;}
-  .col-apercu{flex:none;}
-  .col-apercu .apercu{width:100%;max-width:300px;height:auto;max-height:none;}
-  .autonomes{flex:none;}
-  .autonomes .apercu{width:clamp(110px,13vw,190px);}
-  .grille{grid-template-columns:repeat(3,minmax(0,1fr));}
-  .grille>*+*{border-left:none;}
-  .grille .carte{border-right:1px solid var(--filet);border-bottom:1px solid var(--filet);}
-  .grille .c-desc{-webkit-line-clamp:4;}
-}
-@media(max-width:900px){
-  .corps{grid-template-columns:minmax(0,1fr);}
-  .colonne{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:22px;
-    align-items:start;border-bottom:1px solid var(--filet);}
-  .colonne>*:not(.col-apercu){grid-column:1;}
-  .colonne>*{justify-self:start;}
-  .col-apercu{grid-column:2;grid-row:1 / span 4;padding-top:0;width:auto;}
-  .col-apercu .apercu{width:clamp(130px,26vw,220px);}
-  .grille{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .grille .apercu{width:clamp(110px,26vw,160px);}
-}
-@media(max-width:600px){
-  .ftr{flex-wrap:wrap;}
-  .ftr-left{flex-direction:column;gap:2px;}
-  .ftr-desc{white-space:normal;}
-  .colonne{display:flex;}
-  .col-apercu{padding-top:20px;}
-  .col-apercu .apercu{width:min(100%,280px);}
-  .autonomes{grid-template-columns:minmax(0,1fr);}
-  .autonomes>*+*{border-left:none;border-top:1px solid var(--filet);}
-  .grille{grid-template-columns:minmax(0,1fr);}
-  .carte{grid-template-columns:minmax(0,1fr);}
-  .autonomes .apercu{width:min(200px,50vw);}
-  .grille .c-desc{-webkit-line-clamp:unset;}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+:root{--nuit:#000;--encre:#12181c;--gris:#5f6367;--filet:#e6e6e6;--papier:#f7f7f7;
+  --grad:linear-gradient(135deg,#0098E3 0%,#4632FF 100%);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column;background:#fff;color:var(--encre);
+  font-family:'Nunito',system-ui,sans-serif}
+header{background:var(--nuit);color:#fff;height:52px;display:flex;align-items:center;padding:0 26px}
+.marque{font-family:'DM Serif Display',serif;font-size:17px;line-height:.95}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:0}
+.gauche{padding:clamp(32px,6vw,80px) clamp(24px,5vw,72px);display:flex;flex-direction:column;justify-content:center;gap:22px}
+.label{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#8d8d8d}
+h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(40px,5.2vw,76px);line-height:.98;letter-spacing:-.02em}
+h1 em{font-style:italic;color:#8d8d8d}
+.texte{font-size:15px;line-height:1.6;color:#3d4348;max-width:46ch}
+.adresse{display:inline-flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border:1px solid var(--filet);
+  border-radius:999px;font-weight:700;font-size:14px;width:fit-content;max-width:100%;word-break:break-all;background:#fff}
+.adresse i{width:10px;height:10px;border-radius:50%;background:var(--grad);flex-shrink:0;box-shadow:0 0 0 4px rgba(70,50,255,.12)}
+.droite{background:var(--papier);border-left:1px solid var(--filet);padding:clamp(28px,5vw,64px) clamp(22px,4vw,56px);
+  display:flex;flex-direction:column;justify-content:center;gap:18px;position:relative;overflow:hidden}
+.droite::before{content:"";position:absolute;inset:-40% -30% auto auto;width:520px;height:520px;border-radius:50%;
+  background:var(--grad);opacity:.07;filter:blur(10px)}
+.carte{position:relative;background:#fff;border:1px solid var(--filet);border-radius:14px;padding:24px;
+  box-shadow:0 12px 34px rgba(0,0,0,.06)}
+.carte h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:26px;margin-bottom:6px}
+.carte p{font-size:13.5px;line-height:1.55;color:var(--gris)}
+.liste{list-style:none;margin:16px 0 4px;display:grid;gap:6px}
+.liste li{display:flex;justify-content:space-between;font-size:13.5px;padding:8px 12px;border-radius:8px;background:var(--papier)}
+.liste b{font-weight:800}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+button,.bouton{font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  border-radius:10px;padding:14px 18px;cursor:pointer;border:1px solid var(--filet);background:#fff;color:var(--encre);
+  text-decoration:none;text-align:center;transition:transform .15s ease,box-shadow .15s ease}
+button:hover,.bouton:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.prim{background:var(--grad);color:#fff;border:0}
+.lien{background:none;border:0;padding:6px;font-size:11.5px;color:var(--gris);text-decoration:underline;text-transform:none;letter-spacing:0;font-weight:600}
+.lien:hover{transform:none;box-shadow:none;color:var(--encre)}
+.barre{height:6px;border-radius:6px;background:#eceef2;overflow:hidden;margin-top:14px}
+.barre span{display:block;height:100%;width:0;background:var(--grad);transition:width .4s ease}
+.etat{font-size:13px;margin-top:10px;color:var(--gris);min-height:18px}
+.ok{color:#00884A;font-weight:700}
+.err{color:#b3261e;font-weight:700}
+.note{font-size:12px;line-height:1.5;color:#8d8d8d;position:relative}
+footer{background:var(--nuit);color:rgba(255,255,255,.6);font-size:10.5px;padding:8px 26px}
+@media(max-width:860px){main{grid-template-columns:1fr}.droite{border-left:0;border-top:1px solid var(--filet)}}
 </style>
-
-<script src="assets/header.js?v=202610281645"></script>
 </head>
 <body>
+<header><div class="marque">Static Post<br/>Generator</div></header>
+<main>
+  <section class="gauche">
+    <span class="label">Nouvelle adresse</span>
+    <h1>Le générateur<br/><em>a déménagé</em></h1>
+    <p class="texte">Static Post Generator vit maintenant sur le serveur de Fisheye Manufacture. Mets à jour tes favoris :</p>
+    <a class="adresse" id="adresse" href="#"><i></i><span id="adresseTxt"></span></a>
+    <p class="texte" style="font-size:13px">Tes projets enregistrés sont gardés <b>dans ce navigateur</b>, pas sur un serveur.
+      Avant de partir, transfère-les vers la nouvelle adresse : c'est automatique et ça ne prend que quelques secondes.</p>
+  </section>
 
-<!-- La barre du haut est construite par assets/header.js, commune à toutes les pages. -->
-
-<div class="corps">
-
-  <a class="colonne" href="generators/carrousel/index.html">
-    <span class="col-label">Carrousel</span>
-    <div class="col-titre">Carrousel<br/><em>Slides</em></div>
-    <p class="col-desc">
-      Le point de départ d'une série. Assemble les cinq vignettes,
-      numérotation, flèches et point final automatiques,
-      export ZIP multi-formats.
-    </p>
-    <span class="col-cta">
-      Ouvrir
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </span>
-    <div class="col-apercu">
-      <div class="apercu" data-ph="previews/PREVIEW_CARROUSEL.png — 1080 × 1080">
-        <img src="previews/PREVIEW_CARROUSEL.png" alt="Aperçu Carrousel"
-             onerror="this.parentNode.classList.add('vide')"/>
-      </div>
+  <section class="droite">
+    <div class="carte" id="carte">
+      <h2>Recherche de tes projets…</h2>
+      <p>Lecture des sauvegardes de ce navigateur.</p>
     </div>
-  </a>
+    <p class="note">À refaire sur chaque ordinateur et chaque navigateur où tu as utilisé le générateur.
+      Rien n'est effacé ici : tes projets restent aussi sur l'ancienne adresse.</p>
+  </section>
+</main>
+<footer>Static Posts Generator — Developed by Fisheye</footer>
 
-  <div class="zone">
+<script>
+(function(){
+/* ═══ Réglages ═══════════════════════════════════════════════════════════ */
+var NOUVELLE_URL = "http://fisheyemanufacture.com/posts_generator/";
+var PAGE_RECEPTION = NOUVELLE_URL + "migration/";
+var DB_NAME = "wie_db";
+/* Clés du navigateur à emporter : dernier projet ouvert par générateur,
+   format d'export, auto-sauvegarde, réglages Copy.ai, migrations déjà faites. */
+var PREFIXES_LOCAUX = ["sm_last_id_","sm_migrated_","spg_fmt_","spg_auto_","spg_copyai"];
+var NOMS = {sm_fichemetier:"Fiche métier",sm_citation:"Citation",sm_latestnews:"Latest News",
+  sm_carrousel:"Carrousel",sm_splitscreen:"Split Screen",sm_blocklayouts:"Block Layouts",
+  sm_totallytrue:"Totally True",sm_energytalks:"Energy Talks",
+  saves:"Fiche métier (ancien format)",citation_saves:"Citation (ancien format)",
+  latestnews_saves:"Latest News (ancien format)",carrousel_saves:"Carrousel (ancien format)",
+  splitscreen_saves:"Split Screen (ancien format)"};
 
-    <section class="autonomes">
+/* La nouvelle adresse peut répondre en http ou en https, avec ou sans www :
+   on reconnaît son nom de domaine, et on répond à l'origine exacte reçue. */
+var hoteNouveau = new URL(NOUVELLE_URL).hostname.replace(/^www\./,"");
+function estNouvelle(o){ try{ return new URL(o).hostname.replace(/^www\./,"")===hoteNouveau; }catch(e){ return false; } }
+document.getElementById("adresseTxt").textContent = NOUVELLE_URL.replace(/^https?:\/\//,"");
+document.getElementById("adresse").href = NOUVELLE_URL;
+var carte = document.getElementById("carte");
 
-      <a class="carte" href="generators/fiche-metier/index.html">
-        <span class="c-num">01</span>
-        <div class="c-txt">
-          <span class="c-label">Fiche métier</span>
-          <div class="c-titre">Fiche<br/><em>Métier</em></div>
-          <p class="c-desc">
-            Portraits de femmes du secteur énergétique. Missions, citation,
-            photo portrait sur fond personnalisé.
-          </p>
-          <span class="c-cta">
-            Ouvrir
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-        </div>
-        <div class="apercu" data-ph="previews/PREVIEW_WIE.png — 1080 × 1080">
-          <img src="previews/PREVIEW_WIE.png" alt="Aperçu Fiche Métier"
-               onerror="this.parentNode.classList.add('vide')"/>
-        </div>
-      </a>
+/* ═══ Lecture des sauvegardes (sans jamais créer ni modifier la base) ═══ */
+function lireBase(cb){
+  if(!window.indexedDB){ cb({}); return; }
+  var cree=false, q;
+  try{ q = indexedDB.open(DB_NAME); }catch(e){ cb({}); return; }
+  q.onupgradeneeded = function(ev){ cree=true; ev.target.transaction.abort(); };
+  q.onerror = function(ev){ if(ev&&ev.preventDefault) ev.preventDefault(); cb({}); };
+  q.onsuccess = function(ev){
+    var db = ev.target.result;
+    if(cree){ db.close(); cb({}); return; }
+    var noms = Array.prototype.slice.call(db.objectStoreNames), out = {}, reste = noms.length;
+    if(!reste){ db.close(); cb(out); return; }
+    noms.forEach(function(n){
+      var r = db.transaction(n,"readonly").objectStore(n).getAll();
+      r.onsuccess = function(){ if(r.result && r.result.length) out[n]=r.result; fin(); };
+      r.onerror = fin;
+    });
+    function fin(){ if(--reste===0){ db.close(); cb(out); } }
+  };
+}
+function lireLocaux(){
+  var o={};
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i);
+      if(PREFIXES_LOCAUX.some(function(p){ return k.indexOf(p)===0; })) o[k]=localStorage.getItem(k);
+    }
+  }catch(e){}
+  return o;
+}
 
-      <a class="carte" href="generators/energy-talks/index.html">
-        <span class="c-num">02</span>
-        <div class="c-txt">
-          <span class="c-label">Energy Talks</span>
-          <div class="c-titre">Energy<br/><em>Talks</em></div>
-          <p class="c-desc">
-            Annonces Live et Podcast. De 1 à 4 intervenants détourés
-            automatiquement, dégradé réglable sur la photo de plateau,
-            formats carré et paysage.
-          </p>
-          <span class="c-cta">
-            Ouvrir
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-        </div>
-        <div class="apercu" data-ph="previews/PREVIEW_ENERGYTALKS.png — 1080 × 1080">
-          <img src="previews/PREVIEW_ENERGYTALKS.png" alt="Aperçu Energy Talks"
-               onerror="this.parentNode.classList.add('vide')"/>
-        </div>
-      </a>
+var donnees=null;
+function nbProjets(stores){
+  /* les anciens formats déjà convertis (sm_migrated_*) ne comptent pas double */
+  return Object.keys(stores).reduce(function(n,k){
+    return n + (k.indexOf("sm_")===0 ? stores[k].length : 0); },0) ||
+    Object.keys(stores).reduce(function(n,k){ return n+stores[k].length; },0);
+}
 
-    </section>
+lireBase(function(stores){
+  donnees = {version:1, origine:location.origin, date:new Date().toISOString(),
+             stores:stores, locaux:lireLocaux()};
+  var n = nbProjets(stores);
+  if(!n){ vueAucun(); return; }
+  vueTrouves(stores, n);
+});
 
-    <section class="bloc-vignettes">
-      <h2 class="vignettes-titre">Vignettes</h2>
+/* ═══ Vues ═══════════════════════════════════════════════════════════════ */
+function vueAucun(){
+  /* Pas de redirection automatique : la personne choisit quand partir. */
+  carte.innerHTML = '<h2>Aucun projet ici</h2><p>Ce navigateur ne contient aucun projet enregistré. Tu peux aller directement sur la nouvelle adresse.</p>'+
+    '<div class="actions"><a class="bouton prim" href="'+NOUVELLE_URL+'">Aller sur la nouvelle adresse</a></div>';
+}
 
-      <div class="grille">
+function vueTrouves(stores, n){
+  var lignes = Object.keys(stores).filter(function(k){ return k.indexOf("sm_")===0 || !Object.keys(stores).some(function(x){return x.indexOf("sm_")===0;}); })
+    .map(function(k){ return '<li><span>'+(NOMS[k]||k)+'</span><b>'+stores[k].length+'</b></li>'; }).join("");
+  carte.innerHTML = '<h2>'+n+' projet'+(n>1?'s':'')+' trouvé'+(n>1?'s':'')+'</h2>'+
+    '<p>Sur ce navigateur, à l\'ancienne adresse.</p><ul class="liste">'+lignes+'</ul>'+
+    '<div class="actions">'+
+      '<button class="prim" id="transferer">Transférer et ouvrir la nouvelle adresse</button>'+
+      '<button id="fichier">Télécharger une copie de secours</button>'+
+      '<a class="lien" href="'+NOUVELLE_URL+'">Continuer sans transférer</a>'+
+    '</div><div class="barre"><span id="barre"></span></div><div class="etat" id="etat"></div>';
+  document.getElementById("transferer").onclick=transferer;
+  document.getElementById("fichier").onclick=telecharger;
+}
 
-        <a class="carte" href="generators/totally-true/index.html">
-          <span class="c-num">01</span>
-          <div class="c-txt">
-            <span class="c-label">Totally True</span>
-            <div class="c-titre">Totally<br/><em>True</em></div>
-            <p class="c-desc">
-              Bulle de dialogue posée sur l'image, avec la citation du
-              commentaire et la mention du pseudo. Pointe orientable en haut
-              ou en bas, position et largeur libres.
-            </p>
-            <span class="c-cta">
-              Ouvrir
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-          <div class="apercu" data-ph="previews/PREVIEW_TOTALLYTRUE.png — 1080 × 1350">
-            <img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True"
-                 onerror="this.parentNode.classList.add('vide')"/>
-          </div>
-        </a>
+function etat(t,cls,pct){
+  var e=document.getElementById("etat"); if(e){ e.className="etat "+(cls||""); e.textContent=t; }
+  if(pct!==undefined){ var b=document.getElementById("barre"); if(b) b.style.width=pct+"%"; }
+}
 
-        <a class="carte" href="generators/citation/index.html">
-          <span class="c-num">02</span>
-          <div class="c-txt">
-            <span class="c-label">Citation Post</span>
-            <div class="c-titre">Citation<br/><em>Post</em></div>
-            <p class="c-desc">
-              Visuels de citations pour dirigeants et experts. Surlignage,
-              soulignage et guillemets EN&nbsp;/&nbsp;FR.
-            </p>
-            <span class="c-cta">
-              Ouvrir
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-          <div class="apercu" data-ph="previews/PREVIEW_CITATION.png — 1080 × 1080">
-            <img src="previews/PREVIEW_CITATION.png" alt="Aperçu Citation Post"
-                 onerror="this.parentNode.classList.add('vide')"/>
-          </div>
-        </a>
+/* ═══ Transfert : la nouvelle adresse s'ouvre dans un onglet, se signale,
+   reçoit les projets et confirme. Les données vont directement d'un onglet à
+   l'autre dans ton navigateur : elles ne passent par aucun serveur. ═══════ */
+var fenetre=null, envoye=false, delai=null;
+function transferer(){
+  envoye=false;
+  fenetre = window.open(PAGE_RECEPTION, "spg_migration");
+  if(!fenetre){ etat("Ton navigateur a bloqué l'ouverture de l'onglet. Autorise les fenêtres pour ce site, ou utilise la copie de secours.","err"); return; }
+  etat("Ouverture de la nouvelle adresse…","",15);
+  clearTimeout(delai);
+  delai=setTimeout(function(){ if(!envoye) etat("La nouvelle adresse ne répond pas. Vérifie qu'elle s'est bien ouverte, ou utilise la copie de secours.","err"); },20000);
+}
+window.addEventListener("message",function(ev){
+  if(!estNouvelle(ev.origin) || !ev.data || typeof ev.data!=="object") return;
+  if(ev.data.type==="spg-pret" && fenetre && !envoye){
+    envoye=true; etat("Transfert des projets…","",55);
+    fenetre.postMessage({type:"spg-donnees", donnees:donnees}, ev.origin);
+  }
+  if(ev.data.type==="spg-fini"){
+    clearTimeout(delai);
+    var r=ev.data.resume||{};
+    try{ localStorage.setItem("spg_migration_faite", new Date().toISOString()); }catch(e){}
+    carte.innerHTML='<h2>C\'est fait</h2><p class="ok">'+(r.ajoutes||0)+' projet(s) ajouté(s)'+
+      (r.misAJour?', '+r.misAJour+' mis à jour':'')+(r.ignores?', '+r.ignores+' déjà présent(s)':'')+'.</p>'+
+      '<p style="margin-top:8px">Tes projets sont maintenant sur la nouvelle adresse. Tu peux fermer cet onglet.</p>'+
+      '<div class="actions"><a class="bouton prim" href="'+NOUVELLE_URL+'">Aller sur la nouvelle adresse</a></div>';
+  }
+  if(ev.data.type==="spg-erreur"){ clearTimeout(delai); etat("Erreur pendant le transfert : "+(ev.data.message||"inconnue")+". Utilise la copie de secours.","err",0); }
+});
 
-        <a class="carte" href="generators/latest-news/index.html">
-          <span class="c-num">03</span>
-          <div class="c-txt">
-            <span class="c-label">Latest News</span>
-            <div class="c-titre">Latest<br/><em>News</em></div>
-            <p class="c-desc">
-              Annonces et actualités localisées. Cartouche lieu, pavé texte
-              sur image, marie-louise et flèche de carrousel.
-            </p>
-            <span class="c-cta">
-              Ouvrir
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-          <div class="apercu" data-ph="previews/PREVIEW_LATESTNEWS.png — 1080 × 1080">
-            <img src="previews/PREVIEW_LATESTNEWS.png" alt="Aperçu Latest News"
-                 onerror="this.parentNode.classList.add('vide')"/>
-          </div>
-        </a>
-
-        <a class="carte" href="generators/split-screen/index.html">
-          <span class="c-num">04</span>
-          <div class="c-txt">
-            <span class="c-label">Split Screen</span>
-            <div class="c-titre">Split<br/><em>Screen</em></div>
-            <p class="c-desc">
-              Annonces avec photo et texte côte à côte. Disposition libre
-              (haut, bas, colonne gauche ou droite), cartouche et dégradés
-              charte.
-            </p>
-            <span class="c-cta">
-              Ouvrir
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-          <div class="apercu" data-ph="previews/PREVIEW_SPLITSCREEN.png — 1080 × 1080">
-            <img src="previews/PREVIEW_SPLITSCREEN.png" alt="Aperçu Split Screen"
-                 onerror="this.parentNode.classList.add('vide')"/>
-          </div>
-        </a>
-
-        <a class="carte" href="generators/block-layouts/index.html">
-          <span class="c-num">05</span>
-          <div class="c-txt">
-            <span class="c-label">Block Layouts</span>
-            <div class="c-titre">Block<br/><em>Layouts</em></div>
-            <p class="c-desc">
-              Chiffres clés et statistiques en blocs empilés, template 05 de
-              la charte 2026. Jusqu'à 4 blocs, callouts géants, 4 formats
-              dont 16:9.
-            </p>
-            <span class="c-cta">
-              Ouvrir
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-          <div class="apercu" data-ph="previews/PREVIEW_BLOCKLAYOUTS.png — 1080 × 1080">
-            <img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts"
-                 onerror="this.parentNode.classList.add('vide')"/>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-  </div>
-
-</div>
-
-<footer class="ftr">
-  <div class="ftr-left">
-    <span class="ftr-copy">Static Posts Generator — Developed by Fisheye</span>
-    <span class="ftr-desc">Formats 1:1, 4:5, story 9:16 · Export PNG haute résolution, conforme à la charte Social Media.</span>
-  </div>
-  <div class="ftr-right">
-    <img class="ftr-te" src="assets/logos/logo-totalenergies-transparent.png" alt="TotalEnergies"/>
-    <img class="ftr-fish" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/>
-  </div>
-</footer>
-
+/* ═══ Copie de secours : un fichier à importer sur la nouvelle adresse ═══ */
+function telecharger(){
+  var nom="projets-static-post-generator-"+new Date().toISOString().slice(0,10)+".json";
+  try{
+    if(!donnees){ etat("Lecture des projets pas encore terminée, réessaie dans une seconde.","err"); return; }
+    /* Fichier écrit PROJET PAR PROJET, une ligne par projet : les projets
+       contiennent leurs images, et transformer le tout en un seul texte
+       dépassait la mémoire du navigateur (erreur « undefined »). */
+    var morceaux=[JSON.stringify({type:"entete",version:2,origine:donnees.origine,date:donnees.date,locaux:donnees.locaux})+"\n"];
+    Object.keys(donnees.stores).forEach(function(st){
+      donnees.stores[st].forEach(function(rec){ morceaux.push(JSON.stringify({store:st,rec:rec})+"\n"); });
+    });
+    var blob=new Blob(morceaux,{type:"application/octet-stream"});
+    var url=URL.createObjectURL(blob);
+    /* Lien laissé dans la page : certains navigateurs bloquent le clic
+       programmé, on peut alors cliquer soi-même sur le lien affiché. */
+    var a=document.getElementById("lienSecours");
+    if(!a){ a=document.createElement("a"); a.id="lienSecours"; a.className="lien";
+      a.style.display="inline-block"; a.style.marginTop="8px";
+      var e=document.getElementById("etat"); e.parentNode.insertBefore(a,e.nextSibling); }
+    a.href=url; a.download=nom;
+    a.textContent="Le téléchargement ne démarre pas ? Clique ici ("+Math.max(1,Math.round(blob.size/1048576))+" Mo)";
+    a.click();
+    etat("Fichier « "+nom+" » téléchargé. Sur la nouvelle adresse, ouvre la page migration/ et importe-le.","ok");
+  }catch(err){
+    etat("Impossible de créer le fichier : "+((err&&err.message)||String(err))+". Utilise plutôt le bouton « Transférer ».","err");
+  }
+}
+})();
+</script>
 </body>
 </html>
