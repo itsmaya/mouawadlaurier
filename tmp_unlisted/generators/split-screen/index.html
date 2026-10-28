@@ -6,10 +6,10 @@
 <title>Split Screen — TotalEnergies</title>
 <!-- Nunito servie en local : indispensable pour que l'export intègre la
      police, et pour ne dépendre d'aucun domaine tiers. Voir assets/fonts.css -->
-<link rel="stylesheet" href="../../assets/fonts.css?v=202610281407"/>
+<link rel="stylesheet" href="../../assets/fonts.css?v=202610281645"/>
 <!-- Portail de démarrage : évite la page blanche au premier chargement.
      Voir assets/boot-gate.js pour le détail de la course qu'il neutralise. -->
-<script src="../../assets/boot-gate.js?v=202610281407"></script>
+<script src="../../assets/boot-gate.js?v=202610281645"></script>
 <script>
 function loadScript(u,d){var i=0;function n(){if(i>=u.length){console.error("No CDN",u);return;}var s=document.createElement("script");s.src=u[i++];s.onload=d;s.onerror=n;document.head.appendChild(s);}n();}
 </script>
@@ -18,20 +18,22 @@ loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.produ
 loadScript(["https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","../../assets/vendor/react-dom.production.min.js"],function(){
 loadScript(["https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js","../../assets/vendor/dom-to-image-more.min.js"],function(){SPGBoot.libsReady();});});});
 </script>
-<script src="../../assets/header.js?v=202610281407"></script>
+<script src="../../assets/header.js?v=202610281645"></script>
 <script>window.PICTO_BASE="../../assets/";</script>
-<script src="../../assets/pictos.js?v=202610281407"></script>
-<script src="../../assets/save-manager.js?v=202610281407"></script>
-<script src="../../assets/charte-2026.js?v=202610281407"></script>
-<script src="../../assets/te-charte.js?v=202610281407"></script>
-<script src="../../assets/rich-body.js?v=202610281407"></script>
-<script src="../../assets/drag-image.js?v=202610281407"></script>
-<script src="../../assets/bg-controls.js?v=202610281407"></script>
-<script src="../../assets/components-2026.js?v=202610281407"></script>
-<script src="../../assets/charte-guard.js?v=202610281407"></script>
-<script src="../../assets/app-shell.js?v=202610281407"></script>
-<script src="../../assets/cards/registry.js?v=202610281407"></script>
-<script src="../../assets/cards/split-screen-card.js?v=202610281407"></script>
+<script src="../../assets/pictos.js?v=202610281645"></script>
+<script src="../../assets/save-manager.js?v=202610281645"></script>
+<!-- Réglages graphistes : jamais en cache, pour qu'un fichier publié s'applique tout de suite -->
+<script>document.write('<script src="../../assets/charte-reglages.js?t='+Date.now()+'"><\/script>');</script>
+<script src="../../assets/charte-2026.js?v=202610281645"></script>
+<script src="../../assets/te-charte.js?v=202610281645"></script>
+<script src="../../assets/rich-body.js?v=202610281645"></script>
+<script src="../../assets/drag-image.js?v=202610281645"></script>
+<script src="../../assets/bg-controls.js?v=202610281645"></script>
+<script src="../../assets/components-2026.js?v=202610281645"></script>
+<script src="../../assets/charte-guard.js?v=202610281645"></script>
+<script src="../../assets/app-shell.js?v=202610281645"></script>
+<script src="../../assets/cards/registry.js?v=202610281645"></script>
+<script src="../../assets/cards/split-screen-card.js?v=202610281645"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -90,7 +92,7 @@ function App(){
   /* ═══ VALEURS DÉRIVÉES (panneau uniquement) ══════════════════════════ */
   var G=GRADS[st.grad]||GRADS.bleu;
   var GRAD_H=gradCss(st.grad,90);
-  var L=getLayout(st.format,{hasML:st.hasML});
+  var L=CARD.getLayout(st.format,{hasML:st.hasML});
   var CARD_H=L.CARD_H, EX=L.EXPORT_SCALE;
   var onML=st.hasML&&!L.STORY;
   var cf=chFormat(st.format);
@@ -209,9 +211,38 @@ function App(){
         onChange:function(ev){set("text",ev.target.value);},
         style:{fontSize:13,lineHeight:1.5}}),
       e("div",{style:{height:12}}),
-      e(UI.SliderField,{alerte:SPGGuard.pour(verdict,["debordTexte"]),label:"Taille — "+fs.toFixed(0)+" px",
-        min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
-        onChange:function(v){setSt(function(p){var c=Object.assign({},p);c["fs_"+p.format]=Math.round(v);return c;});}}),
+      (function(){
+        /* Taille : on règle la taille SOUHAITÉE ; la carte réduit toute seule
+           si le texte ne tient pas (jusqu'à -20 % sous la charte). */
+        var auto=faitsGarde&&faitsGarde.texteAuto;
+        var reelle=auto?auto.taille:fs;
+        var reduit=auto&&reelle<fs;
+        var fk=st.format;
+        function setF(k,v){ setSt(function(p){var c=Object.assign({},p);c[k+p.format]=Math.round(v);return c;}); }
+        return e(React.Fragment,null,
+          e(UI.SliderField,{alerte:SPGGuard.pour(verdict,["debordTexte","texteReduit"]),
+            label:"Taille du texte — "+fs.toFixed(0)+" px"+(reduit?"  (ajustée à "+reelle+" px pour tenir)":""),
+            min:L.TEXT_MIN,max:L.TEXT_MAX,step:1,value:fs,
+            onChange:function(v){setF("fs_",v);}}),
+          e("div",{className:"hint",style:{margin:"2px 0 10px"}},
+            "Charte : "+L.TEXT_MIN+" à "+L.TEXT_MAX+" px. Si le texte ne tient pas, il est réduit automatiquement, jusqu'à 20 % sous la charte."),
+          e("label",{className:"field-label"},"Texte ferré"),
+          e(UI.SegButtons,{value:st.textAlign||"left",onChange:function(v){set("textAlign",v);},
+            options:[{v:"left",l:"← À gauche"},{v:"right",l:"À droite →"}]}),
+          e("div",{className:"hint",style:{margin:"4px 0 10px"}},"Charte p24 et p44 : texte ferré à gauche ou à droite, à 50 px de la marge."),
+          e(UI.SliderField,{alerte:SPGGuard.pour(verdict,["motTropLarge"]),label:"Largeur du bloc texte — "+(st["txtW_"+fk]||100)+" % de la zone",
+            min:40,max:100,step:1,value:st["txtW_"+fk]||100,onChange:function(v){setF("txtW_",v);}}),
+          e(UI.SliderField,{label:"Position horizontale — "+(st["txtX_"+fk]||0)+" %  (0 = gauche, 100 = droite)",
+            min:0,max:100,step:1,value:st["txtX_"+fk]||0,onChange:function(v){setF("txtX_",v);}}),
+          e(UI.SliderField,{label:"Position verticale — "+(st["txtY_"+fk]||0)+" %  (0 = haut, 100 = bas)",
+            min:0,max:100,step:1,value:st["txtY_"+fk]||0,onChange:function(v){setF("txtY_",v);}}),
+          e("div",{className:"hint",style:{marginTop:4}},
+            "Le bloc texte reste toujours dans sa zone : il ne peut ni recouvrir l'image ni la cartouche."),
+          e("button",{className:"mini-btn",style:{marginTop:6},
+            onClick:function(){ setSt(function(p){var c=Object.assign({},p);
+              ["fs_","txtW_","txtX_","txtY_"].forEach(function(k){ delete c[k+p.format]; }); return c;}); }},
+            "Valeurs par défaut"));
+      })(),
       /* TRADUCTION — au bout de l'onglet des textes : elle réécrit les
          champs juste au-dessus. */
       e(UI.TraductionIA,{st:st,setSt:setSt,champs:SPGCards.textFields("splitscreen")}),

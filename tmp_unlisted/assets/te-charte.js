@@ -78,8 +78,8 @@ var T = {
   ARROW_W_PT      : CTA.w,            /* 90 */
   ARROW_H_PT      : CTA.h,            /* 71 */
   ARROW_RADIUS_PT : CTA.radius,       /* 18 */
-  ARROW_GAP_PT    : 30,
-  ARROW_GAP_STORY : 50,
+  ARROW_GAP_PT    : CH.composition.gapContenuFleche,        /* 50 (p31) */
+  ARROW_GAP_STORY : CH.composition.gapContenuFlecheStory,   /* 50 (p41) */
   TEXT_MIN_PT     : 45,
   TEXT_MAX_PT     : 80,
   TEXT_DEF_PT     : 48,

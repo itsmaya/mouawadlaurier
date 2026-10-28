@@ -58,10 +58,11 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
   padding-bottom:2px;transition:gap .2s;}
 .col-cta{align-self:flex-start;}
 .colonne:hover .col-cta,.carte:hover .c-cta{gap:14px;}
-/* L'aperçu prend la hauteur restante de la colonne, jamais plus. */
-.col-apercu{margin-top:auto;padding-top:18px;flex:0 1 auto;min-height:0;width:100%;
+/* L'aperçu se place juste sous le texte (et non plus en bas de colonne),
+   comme sur les autres cartes. Il rétrécit si la hauteur manque. */
+.col-apercu{margin-top:0;padding-top:24px;flex:0 1 auto;min-height:0;width:100%;
   display:flex;justify-content:flex-start;}
-.col-apercu .apercu{height:100%;width:auto;min-width:0;max-width:100%;aspect-ratio:1/1;flex:0 1 auto;}
+.col-apercu .apercu{width:100%;height:auto;max-height:100%;min-width:0;aspect-ratio:1/1;flex:0 1 auto;}
 
 /* ── Zone claire ── */
 .zone{background:var(--papier);display:flex;flex-direction:column;min-height:0;}
@@ -111,6 +112,11 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
 /* L'aperçu suit le texte : bloqué en bas de carte, il laissait un vide
    de plusieurs centimètres depuis que les vignettes ont maigri. */
 .grille .apercu{margin-top:2px;width:min(100%,142px);aspect-ratio:1/1;}
+/* Sur une même rangée, les aperçus s'alignent : le bouton « Ouvrir » et
+   l'aperçu sont calés en bas de carte, quelle que soit la longueur du texte. */
+.grille .carte{height:100%;}
+.grille .c-txt{flex:1 1 auto;display:flex;flex-direction:column;align-items:flex-start;}
+.grille .c-cta{margin-top:auto;}
 
 /* ══ APERÇU ═══════════════════════════════════════════════════════
    Deux cartes blanches décalées derrière l'image donnent la pile de
@@ -150,36 +156,57 @@ body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;
 .ftr-fish{height:11px;display:block;filter:invert(1);}
 
 /* ══ RESPONSIVE ═══════════════════════════════════════════════════
-   En dessous de 1150 px de large ou de 640 px de haut, la page passe
-   en défilement : tenir dans l'écran à tout prix reviendrait à rendre
-   les textes illisibles. */
-@media(max-width:1150px),(max-height:640px){
+   Trois paliers, pour ne jamais « sauter » brutalement en mise en page
+   téléphone sur un écran d'ordinateur :
+   - grand écran : tout tient dans la fenêtre, sans défilement ;
+   - écran moyen (≤ 1300 px de large ou ≤ 780 px de haut) : la page défile,
+     mais on garde la colonne Carrousel à gauche et les deux posts côte à
+     côte ; les vignettes passent sur 3 colonnes ;
+   - tablette (≤ 900 px) : une seule colonne, le Carrousel devient une
+     carte comme les autres (texte à gauche, aperçu à droite) ;
+   - téléphone (≤ 600 px) : tout empilé. */
+@media(max-width:1300px),(max-height:780px){
   body{height:auto;min-height:100vh;overflow:auto;}
-  .corps{grid-template-columns:minmax(0,1fr);}
-  .colonne{padding:32px 26px;}
-  .col-apercu{flex:none;max-width:360px;}
-  .col-apercu .apercu{height:auto;width:100%;}
-  .autonomes{grid-template-columns:minmax(0,1fr);}
-  .autonomes>*+*{border-left:none;border-top:1px solid var(--filet);}
-  .grille{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .corps{grid-template-columns:minmax(250px,27%) minmax(0,1fr);}
+  .colonne{padding:28px 24px;}
+  .col-apercu{flex:none;}
+  .col-apercu .apercu{width:100%;max-width:300px;height:auto;max-height:none;}
+  .autonomes{flex:none;}
+  .autonomes .apercu{width:clamp(110px,13vw,190px);}
+  .grille{grid-template-columns:repeat(3,minmax(0,1fr));}
   .grille>*+*{border-left:none;}
   .grille .carte{border-right:1px solid var(--filet);border-bottom:1px solid var(--filet);}
-  .grille .apercu{height:auto;width:clamp(110px,22vw,160px);}
-  .grille .c-desc{-webkit-line-clamp:unset;}
+  .grille .c-desc{-webkit-line-clamp:4;}
 }
-@media(max-width:700px){
+@media(max-width:900px){
+  .corps{grid-template-columns:minmax(0,1fr);}
+  .colonne{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:22px;
+    align-items:start;border-bottom:1px solid var(--filet);}
+  .colonne>*:not(.col-apercu){grid-column:1;}
+  .colonne>*{justify-self:start;}
+  .col-apercu{grid-column:2;grid-row:1 / span 4;padding-top:0;width:auto;}
+  .col-apercu .apercu{width:clamp(130px,26vw,220px);}
+  .grille{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .grille .apercu{width:clamp(110px,26vw,160px);}
+}
+@media(max-width:600px){
   .ftr{flex-wrap:wrap;}
   .ftr-left{flex-direction:column;gap:2px;}
   .ftr-desc{white-space:normal;}
+  .colonne{display:flex;}
+  .col-apercu{padding-top:20px;}
+  .col-apercu .apercu{width:min(100%,280px);}
+  .autonomes{grid-template-columns:minmax(0,1fr);}
+  .autonomes>*+*{border-left:none;border-top:1px solid var(--filet);}
   .grille{grid-template-columns:minmax(0,1fr);}
   .carte{grid-template-columns:minmax(0,1fr);}
   .autonomes .apercu{width:min(200px,50vw);}
-  .ftr{flex-wrap:wrap;}
+  .grille .c-desc{-webkit-line-clamp:unset;}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
 
-<script src="assets/header.js?v=202610281407"></script>
+<script src="assets/header.js?v=202610281645"></script>
 </head>
 <body>
 

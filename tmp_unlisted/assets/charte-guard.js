@@ -108,10 +108,21 @@ function evaluer(f){
 
   /* 2 quater. Le texte dépasse de sa zone (Split Screen) : il recouvre l'image
      ou la cartouche. Chevauchement, donc bloqué. */
-  if(f.debordTexte && f.debordTexte>2){
+  if(f.motTropLarge){
+    out.push({id:"motTropLarge", level:"block", derog:false,
+      msg:"Un mot est plus large que le bloc texte, même réduit à "+px(f.texteAuto?f.texteAuto.plancher:0)+
+          " px. Élargis le bloc texte ou coupe le mot."});
+  } else if(f.debordTexte && f.debordTexte>2){
     out.push({id:"debordTexte", level:"block", derog:false,
-      msg:"Le texte dépasse de "+px(f.debordTexte)+" px de sa zone : il recouvre l'image ou la cartouche. "+
-          "Réduis la taille du texte, raccourcis-le ou donne plus de place à la zone texte."});
+      msg:(f.texteAuto?"Même réduit à "+px(f.texteAuto.plancher)+" px (limite de tolérance), le texte":"Le texte")+
+          " dépasse de "+px(f.debordTexte)+" px de sa zone. Raccourcis-le ou donne plus de place à la zone texte."});
+  } else if(f.texteAuto && f.texteAuto.taille<f.texteAuto.min){
+    /* Texte réduit automatiquement sous le minimum charte, dans la tolérance :
+       signalé en orange, sans confirmation à l'export (décision du 28/10). */
+    var ecartPct=Math.round((1-f.texteAuto.taille/f.texteAuto.min)*100);
+    out.push({id:"texteReduit", level:"warn", derog:false,
+      msg:"Texte réduit à "+px(f.texteAuto.taille)+" px pour tenir dans sa zone, soit "+ecartPct+
+          " % sous le minimum charte ("+f.texteAuto.min+" px). Accepté dans la tolérance de "+pc+" %."});
   }
 
   /* 3. Débordement : le contenu empiète sur la marge basse ou la flèche.
@@ -140,7 +151,7 @@ G.marquer=function(tabs,items,idOnglet){
   var bad=(items||[]).length>0;
   return tabs.map(function(t){ return t.id===idOnglet&&bad?Object.assign({},t,{alerte:true}):t; });
 };
-var CAUSES_HAUTEUR=["gapSousCartouche","recouvreCartouche","debordement","debordTexte"];
+var CAUSES_HAUTEUR=["gapSousCartouche","recouvreCartouche","debordement","debordTexte","texteReduit"];
 G.CAUSES_HAUTEUR=CAUSES_HAUTEUR;
 
 /* Contrôle appelé juste avant l'export. */
@@ -152,11 +163,8 @@ G.controleExport=function(){
       bloquants.map(function(i){return "• "+i.msg;}).join("\n"));
     return false;
   }
-  var derogs=items.filter(function(i){return i.derog;});
-  if(derogs.length){
-    return global.confirm("Ce visuel déroge à la charte (tolérance de "+Math.round(tolerance()*100)+" %) :\n\n"+
-      derogs.map(function(i){return "• "+i.msg;}).join("\n")+"\n\nExporter quand même ?");
-  }
+  /* Dérogations dans la tolérance : signalées en orange dans le panneau,
+     export libre, sans confirmation (décision du 28/10/2026). */
   return true;
 };
 

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Réglages charte — Graphistes</title>
+<link rel="stylesheet" href="../assets/fonts.css?v=202610281630"/>
+<!-- Réglages graphistes : jamais en cache, pour qu'un fichier publié s'applique tout de suite -->
+<script>document.write('<script src="../assets/charte-reglages.js?t='+Date.now()+'"><\/script>');</script>
+<script src="../assets/charte-2026.js?v=202610281630"></script>
+<style>
+:root{--bleu:#285AFF;--gris:#eceef2;--bord:#dfe2e8;--texte:#2b3140;--doux:#6b7385;--rouge:#b3261e;--orange:#a15c00}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;color:var(--texte);background:#f6f7f9}
+header{background:#111;color:#fff;display:flex;align-items:center;gap:16px;padding:12px 20px;position:sticky;top:0;z-index:10}
+header h1{font-size:15px;margin:0;font-weight:800}
+header a{color:#cfd5df;font-size:12px;text-decoration:none}
+header .esp{flex:1}
+button{font-family:inherit;font-size:12px;font-weight:700;border-radius:7px;padding:7px 12px;cursor:pointer;border:1px solid var(--bord);background:#fff;color:var(--texte)}
+button.prim{background:linear-gradient(135deg,#0098E3,#4632FF);color:#fff;border:0}
+button.danger{color:var(--rouge)}
+#verrou{max-width:380px;margin:12vh auto;background:#fff;border:1px solid var(--bord);border-radius:12px;padding:28px}
+#verrou h2{margin:0 0 6px;font-size:18px}
+#verrou p{color:var(--doux);font-size:13px;margin:0 0 16px}
+#verrou input{width:100%;padding:10px;font-size:14px;border:1px solid var(--bord);border-radius:8px;margin-bottom:10px}
+#verrou .err{color:var(--rouge);font-size:12px;min-height:16px}
+#app{display:none;grid-template-columns:minmax(360px,520px) 1fr;gap:0;min-height:calc(100vh - 48px)}
+#app.on{display:grid}
+#panneau{background:#fff;border-right:1px solid var(--bord);overflow-y:auto;height:calc(100vh - 48px)}
+.intro{padding:14px 18px;font-size:12px;color:var(--doux);line-height:1.5;border-bottom:1px solid var(--bord)}
+.intro b{color:var(--texte)}
+section h2{margin:0;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#3a3f4b;background:var(--gris);border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);padding:10px 18px}
+.ligne{display:grid;grid-template-columns:1fr 92px 26px;gap:8px;align-items:center;padding:7px 18px;border-bottom:1px solid #f2f3f6}
+.ligne label{font-size:12.5px;font-weight:600}
+.ligne small{display:block;font-weight:400;color:var(--doux);font-size:11px}
+.ligne input{width:100%;padding:6px 8px;border:1px solid var(--bord);border-radius:6px;font:600 13px Nunito,sans-serif;text-align:right}
+.ligne.modif{background:#fff7e8}
+.ligne.modif input{border-color:#e9b44c}
+.ligne .raz{border:0;background:none;padding:0;color:var(--doux);font-size:15px;visibility:hidden}
+.ligne.modif .raz{visibility:visible}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+#apercu{display:flex;flex-direction:column;height:calc(100vh - 48px)}
+#barre{display:flex;gap:8px;align-items:center;padding:10px 14px;background:#fff;border-bottom:1px solid var(--bord);flex-wrap:wrap}
+#barre select{font:600 12px Nunito,sans-serif;padding:6px;border-radius:6px;border:1px solid var(--bord)}
+#barre .etat{font-size:12px;color:var(--doux);margin-left:auto}
+iframe{flex:1;border:0;width:100%;background:#fff}
+#resume{font-size:12px;padding:10px 18px;color:var(--doux)}
+@media (max-width:900px){#app.on{grid-template-columns:1fr}#panneau,#apercu{height:auto}iframe{height:80vh}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Réglages de la charte</h1>
+  <a href="../index.html">← Retour au générateur</a>
+  <span class="esp"></span>
+  <button id="btnImporter" style="display:none">Importer un fichier</button>
+  <button id="btnTelecharger" class="prim" style="display:none">Télécharger charte-reglages.js</button>
+  <button id="btnVerrouiller" style="display:none">Verrouiller</button>
+  <input type="file" id="fichier" accept=".js,.json" style="display:none"/>
+</header>
+
+<div id="verrou">
+  <h2>Accès graphistes</h2>
+  <p>Cette page modifie les règles de la charte appliquées par tous les générateurs.</p>
+  <input type="password" id="mdp" placeholder="Mot de passe" autocomplete="current-password"/>
+  <button class="prim" id="btnEntrer" style="width:100%">Entrer</button>
+  <div class="err" id="errMdp"></div>
+</div>
+
+<div id="app">
+  <div id="panneau">
+    <div class="intro">
+      Chaque valeur part de la charte PDF (mai 2026). Une valeur modifiée passe en <b>orange</b> ; ↺ la remet à la valeur du PDF.<br/>
+      Les changements s'appliquent tout de suite à l'aperçu et aux générateurs <b>de ce navigateur uniquement</b> (mode test).
+      Pour les publier pour tout le monde : <b>Télécharger charte-reglages.js</b>, puis déposer le fichier dans le dossier <b>assets/</b> du site.
+    </div>
+    <div id="champs"></div>
+    <div id="resume"></div>
+    <div style="padding:12px 18px 24px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="danger" id="btnToutPdf">Tout remettre aux valeurs du PDF</button>
+      <button id="btnQuitterTest">Quitter le mode test</button>
+    </div>
+  </div>
+  <div id="apercu">
+    <div id="barre">
+      <label style="font-size:12px;font-weight:700">Aperçu</label>
+      <select id="gen">
+        <option value="block-layouts">Block Layouts</option>
+        <option value="citation">Citation</option>
+        <option value="latest-news">Latest News</option>
+        <option value="split-screen">Split Screen</option>
+        <option value="totally-true">Totally True</option>
+        <option value="carrousel">Carrousel</option>
+      </select>
+      <button id="btnRecharger">Recharger l'aperçu</button>
+      <span class="etat" id="etat"></span>
+    </div>
+    <iframe id="frame" title="Aperçu du générateur"></iframe>
+  </div>
+</div>
+
+<script>
+(function(){
+/* ═══ Mot de passe ════════════════════════════════════════════════════════
+   Empreinte SHA-256 du mot de passe (le mot de passe lui-même n'est pas dans
+   la page). Pour le changer : python3 outils/mot-de-passe.py "nouveau".
+   Limite à connaître : sur un site statique, ce verrou protège l'accès à la
+   page, pas les fichiers. Ce qui publie vraiment, c'est le dépôt du fichier
+   sur le serveur (étape 1), ou le service en ligne avec mot de passe vérifié
+   côté serveur (étape 2). */
+var MDP_HASH="143932c966062db08dc142f18f5ce08e805e9f59bba482f58df7fe1ca7d468de";
+var CLE_BROUILLON="spg_charte_brouillon", CLE_SESSION="spg_reglages_ok";
+
+function hex(buf){ return Array.prototype.map.call(new Uint8Array(buf),function(b){return ("0"+b.toString(16)).slice(-2);}).join(""); }
+function verifier(m){
+  if(!window.crypto||!crypto.subtle) return Promise.reject(new Error("Navigateur non sécurisé (https requis)."));
+  return crypto.subtle.digest("SHA-256",new TextEncoder().encode(m)).then(function(h){ return hex(h)===MDP_HASH; });
+}
+function ouvrir(){
+  document.getElementById("verrou").style.display="none";
+  document.getElementById("app").classList.add("on");
+  ["btnImporter","btnTelecharger","btnVerrouiller"].forEach(function(id){ document.getElementById(id).style.display=""; });
+  construire(); rechargerApercu();
+}
+function entrer(){
+  var m=document.getElementById("mdp").value;
+  verifier(m).then(function(ok){
+    if(ok){ try{sessionStorage.setItem(CLE_SESSION,"1");}catch(_){} ouvrir(); }
+    else document.getElementById("errMdp").textContent="Mot de passe incorrect.";
+  }).catch(function(e){ document.getElementById("errMdp").textContent=e.message; });
+}
+document.getElementById("btnEntrer").onclick=entrer;
+document.getElementById("mdp").addEventListener("keydown",function(e){ if(e.key==="Enter") entrer(); });
+document.getElementById("btnVerrouiller").onclick=function(){ try{sessionStorage.removeItem(CLE_SESSION);}catch(_){} location.reload(); };
+
+/* ═══ Champs ══════════════════════════════════════════════════════════════
+   chemin dans CHARTE, libellé, page du PDF. type "plage" = [min,max]. */
+var F=["1x1","4x5","9x16","16x9"], NOMS={"1x1":"Carré 1:1","4x5":"Portrait 4:5","9x16":"Story 9:16","16x9":"Paysage 16:9"};
+var SECTIONS=[
+  {titre:"Tolérance et composition", champs:[
+    {c:"composition.tolerance",l:"Tolérance hors charte",u:"%",pct:true,s:"Au-delà : export bloqué"},
+    {c:"composition.gapSousCartouche",l:"Cartouche titre → premier contenu",u:"px",s:"p31, 39, 48"},
+    {c:"composition.gapContenuFleche",l:"Dernier contenu → flèche",u:"px",s:"p31"},
+    {c:"composition.gapContenuFlecheStory",l:"Dernier contenu → flèche (story)",u:"px",s:"p41"},
+    {c:"composition.flecheSousPaveCentral",l:"Bloc citation → flèche (pavé central)",u:"px",s:"p29"}
+  ]},
+  {titre:"Marges par format", champs:[].concat.apply([],F.map(function(f){
+    var a=[
+      {c:"formats."+f+".margin",l:NOMS[f]+" · marge",u:"px"},
+      {c:"formats."+f+".marginInset",l:NOMS[f]+" · marge avec marie-louise",u:"px"},
+      {c:"formats."+f+".captionTop",l:NOMS[f]+" · haut du cartouche",u:"px"},
+      {c:"formats."+f+".bottom",l:NOMS[f]+" · marge basse du contenu",u:"px"},
+      {c:"formats."+f+".rightMin",l:NOMS[f]+" · marge droite minimum",u:"px"}];
+    if(f==="4x5") a.push({c:"formats.4x5.carouselFirstSlideMargin",l:"Portrait 4:5 · marge 1re slide carrousel",u:"px",s:"p45"});
+    if(f==="9x16"){ a.push({c:"formats.9x16.blockGap",l:"Story · écart entre blocs",u:"px",s:"p41"});
+                    a.push({c:"formats.9x16.blockLeft",l:"Story · marge gauche des blocs",u:"px",s:"p41"}); }
+    return a; }))},
+  {titre:"Cartouche titre", champs:[
+    {c:"components.caption.h",l:"Hauteur",u:"px",s:"p16"},
+    {c:"components.caption.gap",l:"Écart picto / texte",u:"px",s:"p16"},
+    {c:"components.caption.padX",l:"Marge intérieure du texte",u:"px",s:"p16"},
+    {c:"components.caption.radius",l:"Arrondi",u:"px",s:"p16"},
+    {c:"components.caption.fontPt",l:"Taille du texte",u:"pt",s:"p16"}
+  ]},
+  {titre:"Flèche de carrousel", champs:[
+    {c:"components.cta.w",l:"Largeur",u:"px"},
+    {c:"components.cta.h",l:"Hauteur",u:"px"},
+    {c:"components.cta.radius",l:"Arrondi",u:"px"},
+    {c:"components.cta.gapBottom",l:"Marge basse (1:1, 4:5)",u:"px",s:"p16, 31"},
+    {c:"components.cta.gapBottomStory",l:"Marge basse (story)",u:"px",s:"p41"},
+    {c:"components.cta.gapBottom16x9",l:"Marge basse (16:9)",u:"px"}
+  ]},
+  {titre:"Blocs", champs:[
+    {c:"components.block.pad",l:"Marge intérieure",u:"px",s:"p31"},
+    {c:"components.block.radius",l:"Arrondi",u:"px",s:"p31"},
+    {c:"components.block.gapY",l:"Écart entre blocs",u:"px",s:"p31"},
+    {c:"components.block.maxBlocks",l:"Nombre maximum",u:"",s:"p31"},
+    {c:"components.block.maxBlocksStory",l:"Nombre maximum en story",u:"",s:"p41"}
+  ]},
+  {titre:"Bloc citation (pavé central)", champs:[
+    {c:"components.quote.radius",l:"Arrondi",u:"px",s:"p29"},
+    {c:"components.quote.pad",l:"Marge intérieure",u:"px",s:"p29"},
+    {c:"components.quote.avatar",l:"Diamètre de la vignette",u:"px",s:"p29"}
+  ]},
+  {titre:"Typographie (min / max)", champs:[
+    {c:"typo.splitScreen.body.s",l:"Split Screen · texte",u:"pt",plage:true,s:"p44"},
+    {c:"typo.textOnImage.body.s",l:"Texte sur image · texte",u:"pt",plage:true,s:"p45"},
+    {c:"typo.centralBlock.body.s",l:"Pavé central · texte",u:"pt",plage:true,s:"p46"},
+    {c:"typo.textOnBg.body.s",l:"Texte sur fond · texte",u:"pt",plage:true,s:"p47"},
+    {c:"typo.textOnBg.keyFigure.s",l:"Texte sur fond · chiffre",u:"pt",plage:true,s:"p47"},
+    {c:"typo.blockLayout.callout.s",l:"Blocs · exergue",u:"pt",plage:true,s:"p37"},
+    {c:"typo.blockLayout.body.s",l:"Blocs · texte courant",u:"pt",plage:true,s:"p37"}
+  ]}
+];
+
+function lire(o,c){ return c.split(".").reduce(function(a,k){ return a==null?undefined:a[k]; },o); }
+function ecrire(o,c,v){ var k=c.split("."), x=o; for(var i=0;i<k.length-1;i++){ if(!x[k[i]]||typeof x[k[i]]!=="object") x[k[i]]={}; x=x[k[i]]; } x[k[k.length-1]]=v; }
+function egal(a,b){ return JSON.stringify(a)===JSON.stringify(b); }
+
+/* Valeurs en cours = charte actuelle (PDF + publié + brouillon). */
+var valeurs={};
+function initValeurs(){ SECTIONS.forEach(function(s){ s.champs.forEach(function(ch){ var v=lire(window.CHARTE,ch.c); valeurs[ch.c]=Array.isArray(v)?v.slice():v; }); }); }
+
+function diff(){
+  var o={}, n=0;
+  SECTIONS.forEach(function(s){ s.champs.forEach(function(ch){
+    var base=lire(window.CHARTE_BASE,ch.c), v=valeurs[ch.c];
+    if(v!==undefined && !egal(v,base)){ ecrire(o,ch.c,v); n++; }
+  }); });
+  return {o:o,n:n};
+}
+
+var minuteur=null;
+function changement(){
+  var d=diff();
+  /* Le brouillon contient TOUTES les valeurs du panneau (pas seulement les
+     écarts au PDF) : il doit pouvoir masquer aussi un fichier déjà publié. */
+  var complet={};
+  SECTIONS.forEach(function(s){ s.champs.forEach(function(ch){ if(valeurs[ch.c]!==undefined) ecrire(complet,ch.c,valeurs[ch.c]); }); });
+  var publie=window.CHARTE_REGLAGES&&Object.keys(window.CHARTE_REGLAGES).length;
+  try{ if(d.n||publie) localStorage.setItem(CLE_BROUILLON,JSON.stringify(complet)); else localStorage.removeItem(CLE_BROUILLON); }catch(_){}
+  document.getElementById("resume").textContent=d.n?(d.n+" valeur"+(d.n>1?"s":"")+" différente"+(d.n>1?"s":"")+" du PDF."):"Toutes les valeurs sont celles du PDF.";
+  document.getElementById("etat").textContent=d.n?"Mode test actif sur ce navigateur":"";
+  clearTimeout(minuteur); minuteur=setTimeout(rechargerApercu,500);
+}
+
+function construire(garder){
+  if(!garder) initValeurs();
+  var racine=document.getElementById("champs"); racine.innerHTML="";
+  SECTIONS.forEach(function(s){
+    var sec=document.createElement("section"); sec.innerHTML="<h2>"+s.titre+"</h2>";
+    s.champs.forEach(function(ch){
+      var base=lire(window.CHARTE_BASE,ch.c);
+      if(base===undefined && valeurs[ch.c]===undefined) return;
+      var li=document.createElement("div"); li.className="ligne";
+      var lab=document.createElement("label");
+      var baseTxt=ch.plage?(base?base.join(" à "):"–"):(ch.pct?Math.round(base*100):base);
+      lab.innerHTML=ch.l+"<small>PDF : "+baseTxt+" "+(ch.u||"")+(ch.s?" · "+ch.s:"")+"</small>";
+      var zone=document.createElement("div");
+      function maj(){ li.classList.toggle("modif",!egal(valeurs[ch.c],base)); }
+      if(ch.plage){
+        zone.className="duo";
+        [0,1].forEach(function(i){
+          var inp=document.createElement("input"); inp.type="number"; inp.step="1";
+          inp.value=(valeurs[ch.c]||[])[i];
+          inp.oninput=function(){ var a=(valeurs[ch.c]||base||[0,0]).slice(); a[i]=parseFloat(inp.value); if(!isNaN(a[i])){ valeurs[ch.c]=a; maj(); changement(); } };
+          zone.appendChild(inp);
+        });
+      } else {
+        var inp=document.createElement("input"); inp.type="number"; inp.step=ch.pct?"1":"1";
+        inp.value=ch.pct?Math.round(valeurs[ch.c]*100):valeurs[ch.c];
+        inp.oninput=function(){ var v=parseFloat(inp.value); if(isNaN(v)) return; valeurs[ch.c]=ch.pct?v/100:v; maj(); changement(); };
+        zone.appendChild(inp);
+      }
+      var raz=document.createElement("button"); raz.className="raz"; raz.title="Valeur du PDF"; raz.textContent="↺";
+      raz.onclick=function(){ valeurs[ch.c]=Array.isArray(base)?base.slice():base; construireLigne(); changement(); };
+      function construireLigne(){ var ins=zone.querySelectorAll("input"); if(ch.plage){ ins[0].value=valeurs[ch.c][0]; ins[1].value=valeurs[ch.c][1]; } else ins[0].value=ch.pct?Math.round(valeurs[ch.c]*100):valeurs[ch.c]; maj(); }
+      li.appendChild(lab); li.appendChild(zone); li.appendChild(raz); maj();
+      sec.appendChild(li);
+    });
+    racine.appendChild(sec);
+  });
+  changement();
+}
+
+function rechargerApercu(){
+  var g=document.getElementById("gen").value;
+  document.getElementById("frame").src="../generators/"+g+"/index.html?apercu=1&t="+Date.now();
+}
+document.getElementById("gen").onchange=rechargerApercu;
+document.getElementById("btnRecharger").onclick=rechargerApercu;
+
+document.getElementById("btnToutPdf").onclick=function(){
+  if(!confirm("Remettre toutes les valeurs à celles du PDF ?")) return;
+  SECTIONS.forEach(function(s){ s.champs.forEach(function(ch){ var b=lire(window.CHARTE_BASE,ch.c); valeurs[ch.c]=Array.isArray(b)?b.slice():b; }); });
+  construire(true);
+};
+document.getElementById("btnQuitterTest").onclick=function(){
+  try{ localStorage.removeItem(CLE_BROUILLON); }catch(_){}
+  location.reload();
+};
+/* Téléchargement du fichier à publier : uniquement les différences avec le PDF. */
+document.getElementById("btnTelecharger").onclick=function(){
+  var d=diff();
+  var txt="/* CHARTE-REGLAGES.JS — valeurs publiées par la page Réglages (graphistes).\n"+
+    "   Généré le "+new Date().toLocaleString("fr-FR")+". "+d.n+" valeur(s) différente(s) du PDF.\n"+
+    "   À déposer dans le dossier assets/ du site (remplace l'ancien). Effet immédiat. */\n"+
+    "window.CHARTE_REGLAGES = "+JSON.stringify(d.o,null,2)+";\n";
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt],{type:"text/javascript"}));
+  a.download="charte-reglages.js"; document.body.appendChild(a); a.click(); a.remove();
+};
+document.getElementById("btnImporter").onclick=function(){ document.getElementById("fichier").click(); };
+document.getElementById("fichier").onchange=function(ev){
+  var f=ev.target.files[0]; if(!f) return;
+  f.text().then(function(t){
+    var i=t.indexOf("{"), j=t.lastIndexOf("}");
+    var o=JSON.parse(t.slice(i,j+1));
+    SECTIONS.forEach(function(s){ s.champs.forEach(function(ch){
+      var v=lire(o,ch.c), b=lire(window.CHARTE_BASE,ch.c);
+      valeurs[ch.c]=(v!==undefined)?v:(Array.isArray(b)?b.slice():b);
+    }); });
+    construire(true);
+  }).catch(function(){ alert("Fichier illisible : choisis un charte-reglages.js généré par cette page."); });
+};
+
+try{ if(sessionStorage.getItem(CLE_SESSION)==="1") ouvrir(); }catch(_){}
+})();
+</script>
+</body>
+</html>

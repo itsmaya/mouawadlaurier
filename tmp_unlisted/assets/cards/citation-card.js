@@ -270,8 +270,12 @@ function geometry(st,quoteH){
      hauteur et son écart, sinon la citation lui passerait dessus. */
   var cfFmt=chFormat(st.format);
   var mlIns=(st.hasML&&st.format!=="9x16")?Math.round(CARD_W*0.046):0;
-  var zoneFleche=(st.navMark&&st.navMark!=="none")
-    ? L.MARGIN+L.ARROW_H+ARROW_GAP_CITE : 0;
+  /* Flèche (charte) : 100 px du bas (230 en story), 50 px sous le contenu.
+     En template 03 elle vit DANS le groupe centré, sous le bloc (p29) : la
+     réserve basse se limite alors à la marge du format. */
+  var FLc=chFleche(st.format);
+  var zoneFleche=(st.navMark&&st.navMark!=="none"&&!isT03)
+    ? FLc.bas+L.ARROW_H+FLc.gap : 0;
   /* La marie-louise rogne la carte : sa largeur s'ajoute à la réserve
      basse, sinon le bloc descend jusque dans le cadre. */
   var reserveBas=Math.max(cfFmt.bottom, zoneFleche)+mlIns;
@@ -298,7 +302,7 @@ function geometry(st,quoteH){
 
   /* Débordement du bloc citation sous la limite basse (flèche, marge, cadre). */
   var debordBas=quoteH?Math.max(0,Math.round(targetTop+quoteH-(CARD_H-reserveBas))):0;
-  return {L:L,CARD_H:CARD_H,cfs:cfs,isT03:isT03,debordBas:debordBas,
+  return {L:L,CARD_H:CARD_H,cfs:cfs,isT03:isT03,debordBas:debordBas,reserveBas:reserveBas,
     QUOTE_FONT_CHARTE:QUOTE_FONT_CHARTE,
     QUOTE_FONT_MIN:QUOTE_FONT_MIN,QUOTE_FONT_MAX:QUOTE_FONT_MAX,
     autoPct:autoPct,curPct:curPct,QW:QW,dW:dW,
@@ -380,6 +384,18 @@ function CitationCard(p){
   var g=geometry(st,quoteH);
   var L=g.L, CARD_H=g.CARD_H, cfs=g.cfs, isT03=g.isT03;
   var QW=g.QW, dY=g.dY, blockX=g.blockX, personX=g.personX;
+
+  /* ── TEXTE AUTO-AJUSTÉ (modèle unifié, voir split-screen-card.js) ──────
+     Taille visée : celle du curseur (ou le défaut). Si le contenu ne tient
+     pas entre la cartouche (100 px dessous) et la flèche / marge basse, la
+     taille baisse toute seule, jusqu'à -20 % sous le minimum charte (30 pt,
+     soit 24). Recherche par dichotomie, avant peinture. */
+  var cibleFs=isT03?Math.max(g.QUOTE_FONT_MIN,Math.min(60,st["fs_"+st.format]||40)):cfs;
+  var fitS=useState(null), fitC=fitS[0], setFitC=fitS[1];
+  var sigC=[st.quote,cibleFs,QW,st.format,st.template,st.navMark,st.hideBadge,st.hasML,st.name,st.title,
+            st.source,st.hideAvatar,st.blockW_t03_1x1,st["blockW_t03_"+st.format]].join("|");
+  var etatC=(fitC&&fitC.sig===sigC)?fitC:null;
+  var cfsRendu=etatC?etatC.cur:cibleFs;
   var onGrad=g.onGrad, onWhite=g.onWhite, onML=g.onML;
 
   var G=GRADS[st.grad]||GRADS.bleu;
@@ -459,8 +475,9 @@ function CitationCard(p){
      carrousel, et du cadre marie-louise qui rogne la carte de tous les
      côtés. Sans ça, le groupe sortait du cadre par le bas. */
   var cfBas=chFormat(st.format);
-  var reserveBas=Math.max(cfBas.bottom,
-    (st.navMark&&st.navMark!=="none")?L.MARGIN+L.ARROW_H+ARROW_GAP_CITE:0);
+  var FLt=chFleche(st.format);
+  var reserveBas=Math.max(cfBas.bottom, isT03?FLt.bas:0,
+    (st.navMark&&st.navMark!=="none"&&!isT03)?FLt.bas+L.ARROW_H+FLt.gap:0);
   var mlIns=(st.hasML&&st.format!=="9x16")?Math.round(CARD_W*0.046):0;
   var hautLimite=(st.hideBadge?0:(L.BADGE_TOP+L.BADGE_H+GAP_TITRE))||L.MARGIN;
   if(st.hideBadge) hautLimite=L.MARGIN;
@@ -485,8 +502,34 @@ function CitationCard(p){
       }
       debord=g.debordBas;
     }
-    return {gapTitre:gap, texte:{taille:cfs, min:g.QUOTE_FONT_CHARTE}, debord:debord};
+    return {gapTitre:gap, debord:debord,
+      texteAuto:{taille:cfsRendu, min:g.QUOTE_FONT_CHARTE, max:g.QUOTE_FONT_MAX, plancher:g.QUOTE_FONT_MIN}};
   })();
+
+  /* Pas de la recherche de taille : on attend que les mesures (bloc citation,
+     bloc personne, groupe 03) soient à jour pour ce rendu. */
+  React.useLayoutEffect(function(){
+    var badgeBas=st.hideBadge?L.MARGIN:(L.BADGE_TOP+L.BADGE_H+GAP_TITRE);
+    var h, dispo;
+    if(isT03){
+      if(!t03Ref.current) return;
+      h=Math.round(t03Ref.current.offsetHeight||0); if(h!==t03H) return;
+      dispo=basLimite-hautLimite;
+    } else {
+      if(!quoteBlockRef.current) return;
+      h=Math.round(quoteBlockRef.current.offsetHeight||0); if(h!==quoteH) return;
+      var ph=personRef.current?Math.round(personRef.current.offsetHeight||0):0;
+      if(ph!==personH) return;
+      dispo=CARD_H-g.reserveBas-badgeBas-(ph?ph+GAP_PERSONNE:0);
+    }
+    var f=etatC||{sig:sigC,lo:g.QUOTE_FONT_MIN-1,hi:cibleFs,cur:cibleFs,fini:false};
+    if(f.fini) return;
+    var n=Object.assign({},f);
+    if(h<=dispo) n.lo=f.cur; else n.hi=f.cur-1;
+    if(n.lo>=n.hi){ n.cur=Math.max(g.QUOTE_FONT_MIN,n.lo); n.fini=true; }
+    else n.cur=Math.ceil((n.lo+n.hi)/2);
+    setFitC(n);
+  });
   var faitsJson=JSON.stringify(faitsGarde);
   React.useEffect(function(){
     if(p.onGarde) p.onGarde(JSON.parse(faitsJson));
@@ -598,7 +641,7 @@ function CitationCard(p){
         width:Math.min(QW,CARD_W-2*mlDec-blockX),
         background:TE_WHITE,borderRadius:L.QUOTE_R+"px",
         padding:L.QUOTE_PAD+"px",paddingBottom:(L.QUOTE_PAD+6)+"px",boxSizing:"border-box"}},
-      e(QuoteBody,{text:st.quote,fs:cfs,lh:L.QUOTE_LH,
+      e(QuoteBody,{text:st.quote,fs:cfsRendu,lh:L.QUOTE_LH,
         qstyle:st.quoteStyle,guilH:L.GUIL_H,width:QW-L.QUOTE_PAD*2,
         /* Texte sur bloc blanc : couleur du dégradé actif (charte p12).
            Auparavant QuoteBody retombait sur un #2B5AF1 codé en dur, jamais
@@ -647,7 +690,7 @@ function CitationCard(p){
               objectFit:"cover",objectPosition:"center top",display:"block"}})):null,
           e("div",{style:{flex:1,minWidth:0}},
             e(QuoteBody,{text:st.quote,
-              fs:(st["fs_"+st.format]||40),lh:1.15,hlStyle:"gras",
+              fs:cfsRendu,lh:1.15,hlStyle:"gras",
               /* Le guillemet vit dans la pastille d'en-tête : on ne le
                  redessine pas autour du texte. */
               qstyle:"none",guilH:L.GUIL_H,fw:400,
@@ -655,10 +698,18 @@ function CitationCard(p){
               width:avtSrc?(t03W-T03_PAD_FULL*2-AVTR_D-T03_GAP):(t03W-T03_PAD_FULL*2),
               gradFrom:G.from,gradTo:G.to}),
             st.source?e("div",{style:{marginTop:Math.round(14*CITE_S),fontStyle:"italic",
-              fontSize:Math.round(13*CITE_S),color:"#7a8a8d",fontWeight:400}},"— "+st.source):null)))):null,
+              fontSize:Math.round(13*CITE_S),color:"#7a8a8d",fontWeight:400}},"— "+st.source):null))),
+      /* Template 03 : la flèche est sous le bloc, ferrée à gauche avec lui (p29). */
+      st.navMark!=="none"?e("div",{style:{marginTop:CHARTE.composition.flecheSousPaveCentral}},
+        e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(T.ARROW_RADIUS_PT),grad:GRAD_H,from:G.from,to:G.to,onGrad:onGrad})):null):null,
 
     /* Repère carrousel */
-    st.navMark!=="none"?e("div",{style:{position:"absolute",right:L.MARGIN+mlDec,bottom:L.MARGIN+mlDec}},
+    /* Style libre : flèche à 100 px du bas (230 en story), du côté du bloc. */
+    (st.navMark!=="none"&&!isT03)?e("div",{style:(function(){
+        var o={position:"absolute",bottom:chFleche(st.format).bas+mlDec};
+        if(st.blockAlign==="right") o.right=L.MARGIN+mlDec;
+        else o.left=(st.blockAlign==="left"?L.MARGIN:Math.max(L.MARGIN,Math.round(blockX)))+mlDec;   /* centré : ferrée sous le bord gauche du bloc */
+        return o; })()},
       e(NavMark,{kind:st.navMark,w:L.ARROW_W,h:L.ARROW_H,radius:px(T.ARROW_RADIUS_PT),grad:GRAD_H,from:G.from,to:G.to,onGrad:onGrad})):null
   );
 }

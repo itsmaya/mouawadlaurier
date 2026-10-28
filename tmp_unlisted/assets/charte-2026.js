@@ -70,11 +70,12 @@ var CHARTE = {
               captionTop:50, carouselFirstSlideMargin:84 },            /* p45 */
     "9x16": { label:"Story 9:16",     outputW:1080, outputH:1920,
               margin:80, marginInset:100, bottom:230, rightMin:160,
-              captionTop:180, blockGap:40, blockLeft:50,
+              captionTop:180, blockGap:40, blockLeft:80,   /* p41 : blocs alignés sur la marge de 80 */
               insetForbidden:true, maxBlocks:3 },                   /* p26,41 */
     "16x9": { label:"Paysage 16:9",   outputW:1920, outputH:1080,
-              margin:80, marginInset:100, bottom:100, rightMin:100,
-              captionTop:80 }                                          /* p22 */
+              margin:80, marginInset:100, bottom:80, rightMin:80,
+              captionTop:80 }    /* p22 : pas de page de construction ; marges 80 reprises de la
+                                    zone de sécurité vidéo p50-51 (décision Maya 28/10/2026) */
   },
 
   /* ── Composants normalisés ──────────────────────────────────────────── */
@@ -119,7 +120,11 @@ var CHARTE = {
     },
 
     cta: {                     /* flèche carrousel / point de fin (p16,105) */
-      w:90, h:71, radius:18, gapBottom:50, gapBottomStory:230,
+      w:90, h:71, radius:18,
+      /* marge basse de la flèche : 100 px (p16, 28, 31, 35-39), 230 en story
+         (p41), 80 en 16:9 (décision du 28/10/2026). Taille 90 x 71 : non cotée
+         dans le PDF, reprise des fichiers sources. */
+      gapBottom:100, gapBottomStory:230, gapBottom16x9:80,
       onGradient:"outline-white", endMark:"dot"
     },
 
@@ -137,29 +142,28 @@ var CHARTE = {
      Toute valeur ci-dessous marquée « à confirmer » vient d'une consigne de
      Maya ou d'un relevé, pas d'une cote lue dans le PDF de la charte. */
   composition: {
-    /* Écart de dérogation toléré hors charte (décision du 21/10/2026) :
-       au-delà, l'export est bloqué ; en deçà, alerte + confirmation. */
+    /* Écart toléré hors charte pour faire rentrer le contenu (décision du
+       28/10/2026) : jusqu'à 20 %, signalé en orange ; au-delà, export bloqué. */
     tolerance: 0.20,
-    /* Cartouche titre -> premier élément de contenu.
-       100 : consigne de Maya pour Citation. À confirmer dans le PDF pour les
-       autres cartes (Block Layouts mesuré à 13 px sur une carte réelle). */
+    /* Cartouche titre -> premier contenu : 100 px minimum (p31, 37, 39, 48,
+       confirmé par Maya ; même règle en story). */
     gapSousCartouche: 100,
-    /* Dernier élément de contenu -> flèche carrousel. 30 (50 en story) :
-       valeur historique de te-charte.js. À confirmer. */
-    gapContenuFleche: 30,
+    /* Dernier contenu -> flèche : 50 px (p31, p41 ; les exemples p35-38
+       montrent 40, la page de construction fait foi). */
+    gapContenuFleche: 50,
     gapContenuFlecheStory: 50,
-    /* Côté de la flèche : celui des blocs (alignement du contenu). Par
-       défaut à gauche quand il n'y a pas de blocs. À confirmer. */
+    /* Côté de la flèche : celui des blocs / du texte (p31-34). */
     flecheCoteDefaut: "left",
-    /* La marge basse de la flèche est cta.gapBottom (50) / gapBottomStory
-       (230). L'audit d'août notait 100 en 1:1 et 4:5 : à confirmer. */
-    aConfirmer: ["gapSousCartouche","gapContenuFleche","flecheCoteDefaut","cta.gapBottom"]
+    /* Pavé central (p29, 46) : la flèche est SOUS le bloc, ferrée à gauche
+       avec lui, et fait partie du groupe centré. */
+    flecheSousPaveCentral: 15,
+    aConfirmer: []
   },
 
   /* ── Plages typographiques par template (p37, 44-48, 60) ─────────────
      Valeurs en pt charte = px sur carte 1080. [min, max]. */
   typo: {
-    splitScreen:   { body:{w:400, s:[40,60],  lh:[47,70]  },
+    splitScreen:   { body:{w:400, s:[40,60],  lh:[47,70]  },   /* lh ≈ 1,17 x taille */
                      hl:  {w:700, s:[45,80]              } },          /* p44 */
     textOnImage:   { body:{w:600, s:[45,80],  lh:[55,95]  },
                      hl:  {w:800, s:[45,80]              } },          /* p45 */
@@ -167,6 +171,9 @@ var CHARTE = {
                      hl:  {w:600                          } },         /* p46 */
     textOnBg:      { body:{w:400, s:[60,80],  lh:[70,80]  },
                      keyFigure:{w:800, s:[100,160]        } },         /* p47 */
+    /* Totally True : template maison, absent du PDF. Minimum aligné sur le
+       texte courant des autres posts (40), décision de Maya du 28/10/2026. */
+    totallyTrue:   { body:{w:400, s:[40,72]} },
     blockLayout:   { callout:{w:800, s:[90,125] },
                      body:   {w:600, s:[40,60]  } },                   /* p37 */
     reelThumb:     { body:{w:600, s:[90], lh:[90] },
@@ -269,7 +276,56 @@ function chTypo(template, role){
   };
 }
 
+/* ── Réglages des graphistes ───────────────────────────────────────────
+   1. assets/charte-reglages.js (chargé AVANT ce fichier) peut définir
+      window.CHARTE_REGLAGES : valeurs publiées par la page Réglages.
+   2. En mode test (page Réglages), un brouillon dans le navigateur du
+      graphiste s'applique par-dessus, pour lui seul.
+   CHARTE_BASE garde les valeurs du PDF, pour comparaison. */
+function fusion(cible, src){
+  for(var k in src){ if(!Object.prototype.hasOwnProperty.call(src,k)) continue;
+    var v=src[k];
+    if(v && typeof v==="object" && !Array.isArray(v) && cible[k] && typeof cible[k]==="object" && !Array.isArray(cible[k]))
+      fusion(cible[k], v);
+    else cible[k]=v;
+  }
+  return cible;
+}
+var CHARTE_BASE = JSON.parse(JSON.stringify(CHARTE));
+if(global.CHARTE_REGLAGES && typeof global.CHARTE_REGLAGES==="object") fusion(CHARTE, global.CHARTE_REGLAGES);
+var brouillon=null;
+try{ brouillon=JSON.parse(global.localStorage.getItem("spg_charte_brouillon")||"null"); }catch(_){}
+if(brouillon && typeof brouillon==="object"){ fusion(CHARTE, brouillon); CHARTE.__modeTest=true; }
+/* Bandeau visible tant que le mode test est actif, pour ne jamais exporter
+   un post avec une charte de test sans le savoir. Masqué dans l'aperçu de
+   la page Réglages (elle a son propre bandeau). */
+if(CHARTE.__modeTest && !/[?&]apercu=1/.test(global.location.search)){
+  global.addEventListener("DOMContentLoaded",function(){
+    var d=document.createElement("div");
+    d.style.cssText="position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:99999;"+
+      "background:#b3261e;color:#fff;font:600 12px/1.3 Nunito,sans-serif;padding:8px 14px;border-radius:8px;"+
+      "box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center";
+    d.innerHTML="Mode test : charte modifiée, visible sur ce navigateur seulement";
+    var b=document.createElement("button");
+    b.textContent="Quitter le mode test";
+    b.style.cssText="border:0;border-radius:6px;padding:4px 8px;font:600 11px Nunito,sans-serif;cursor:pointer";
+    b.onclick=function(){ try{global.localStorage.removeItem("spg_charte_brouillon");}catch(_){} global.location.reload(); };
+    d.appendChild(b); document.body.appendChild(d);
+  });
+}
+global.CHARTE_BASE = CHARTE_BASE;
+
+/* Flèche de carrousel pour un format : marge basse, taille, écart avec le
+   contenu. Seule source à utiliser par les cartes. */
+function chFleche(format){
+  var c = CHARTE.components.cta, C = CHARTE.composition;
+  var bas = format === "9x16" ? c.gapBottomStory : (format === "16x9" ? c.gapBottom16x9 : c.gapBottom);
+  return { w:c.w, h:c.h, radius:c.radius, bas:bas,
+           gap: format === "9x16" ? C.gapContenuFlecheStory : C.gapContenuFleche };
+}
+
 global.CHARTE = CHARTE;
+global.chFleche = chFleche;
 global.chGrad = chGrad;
 global.chFormat = chFormat;
 global.chTypo = chTypo;

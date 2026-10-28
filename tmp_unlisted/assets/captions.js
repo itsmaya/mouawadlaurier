@@ -45,6 +45,20 @@ function urlRelais(){
   return base + "api/caption.php";
 }
 
+/* Le relais doit répondre en JSON. S'il renvoie autre chose (page d'erreur
+   du serveur, code PHP brut), c'est que PHP ne s'exécute pas sur ce chemin :
+   on le dit clairement au lieu de l'obscur « JSON.parse: unexpected character ». */
+function lireJson(rep){
+  return rep.text().then(function(t){
+    try{ return {ok:rep.ok, j:JSON.parse(t)}; }
+    catch(_){
+      var php=/<\?php/.test(t), html=/<html|<!doctype/i.test(t);
+      throw new Error("Le relais api/caption.php ne répond pas correctement (code "+rep.status+(php?", PHP non exécuté":html?", page d'erreur du serveur":"")+
+        "). Le serveur doit exécuter PHP sur le dossier api/.");
+    }
+  });
+}
+
 /* ── Appel du workflow : lancement puis attente ────────────────────────── */
 function lancer(variables, cb){
   var r = lireReglages();
@@ -55,7 +69,7 @@ function lancer(variables, cb){
 
   fetch(urlRelais(), {method:"POST", headers:entetes,
     body:JSON.stringify({action:"run", workflowId:r.workflowId, variables:variables})})
-   .then(function(rep){ return rep.json().then(function(j){ return {ok:rep.ok, j:j}; }); })
+   .then(lireJson)
    .then(function(res){
       if(!res.ok || !res.j.runId) throw new Error(res.j.error || "Lancement refusé par Copy.ai.");
       attendre(res.j.runId, 0, cb);
@@ -72,8 +86,8 @@ function attendre(runId, essai, cb){
   if(r.cle) entetes["X-CopyAI-Key"] = r.cle;
   fetch(urlRelais(), {method:"POST", headers:entetes,
     body:JSON.stringify({action:"status", workflowId:r.workflowId, runId:runId})})
-   .then(function(rep){ return rep.json(); })
-   .then(function(j){
+   .then(lireJson)
+   .then(function(res){ var j=res.j;
       if(j.error) throw new Error(j.error);
       if(j.status === "COMPLETE"){ cb(null, j); return; }
       setTimeout(function(){ attendre(runId, essai+1, cb); }, 1500);
@@ -193,6 +207,9 @@ function monterUI(){
 
           e("div",{style:{height:6}}),
           e("label",{className:"field-label"},"Identifiant du workflow"),
+          e("div",{className:"hint",style:{marginBottom:4}},
+            "Ni l'identifiant de connexion, ni celui de la clé : l'identifiant du WORKFLOW, ",
+            "dans l'onglet API du workflow sur Copy.ai (il commence en général par WCPC-)."),
           e("input",{type:"text",value:reg.workflowId||"",placeholder:"ex. 0f3a…",
             onChange:function(ev){ majReg("workflowId", ev.target.value); }}),
 

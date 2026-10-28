@@ -41,7 +41,7 @@ function zones(format, opts){
   var cart = { x:L.MARGIN, y:L.BADGE_TOP, w:null, h:cap.h, visible:!opts.hideBadge };
 
   /* Flèche : coin bas, à la marge de la charte. */
-  var margeBas = (story ? cta.gapBottomStory : cta.gapBottom) + ml;
+  var margeBas = global.chFleche(format).bas + ml;
   var fl = { w:cta.w, h:cta.h, cote:cote, visible:avecFleche };
   fl.y = H - margeBas - cta.h;
   fl.x = (cote === "right") ? (W - L.MARGIN - cta.w) : L.MARGIN;

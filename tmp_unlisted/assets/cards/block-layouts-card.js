@@ -83,7 +83,7 @@ function geometry(st){
   /* 40 px entre le dernier bloc et la flèche : valeur historique de cette
      carte, conservée à l'identique. La règle centrale (composition.
      gapContenuFleche) vaut 30 : à unifier quand la charte aura tranché. */
-  var stackBottom = ctaBottom + (st.navMark!=="none"?CTA_.h+40:0) + off;
+  var stackBottom = ctaBottom + (st.navMark!=="none"?CTA_.h+chFleche(st.format).gap:0) + off;
 
   return {cf:cf,CW:CW,CH:CH_,story:story,MARGIN:MARGIN,
     onGrad:onGrad,onWhite:onWhite,bgKind:bgKind,

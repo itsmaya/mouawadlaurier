@@ -206,7 +206,7 @@ var SPGInherit=(function(){
   var FORMATS=["1x1","4x5","9x16","16x9"];
   /* préfixe -> valeur « non réglée » */
   var PREFIXES={"blockW_t03_":0,"blockYPct_":null,"blockPct_":null,"bgZoom_":100,"bgX_":50,"bgY_":50,
-    "titreLargeur_":0,"sousTitreLargeur_":0,"retours_":null,"fs_":0,"cs_":0,"bs_":0,"gap_":0,"pad_":0,"off_":0,"w_":0,"b_":0};
+    "titreLargeur_":0,"txtW_":100,"txtX_":0,"txtY_":0,"sousTitreLargeur_":0,"retours_":null,"fs_":0,"cs_":0,"bs_":0,"gap_":0,"pad_":0,"off_":0,"w_":0,"b_":0};
   var LISTES=["blocs","blocks"];
   var ORDRE=Object.keys(PREFIXES).sort(function(a,b){return b.length-a.length;});
   function parse(k){

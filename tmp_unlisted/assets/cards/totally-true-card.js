@@ -101,7 +101,9 @@ function taillesTexte(format){
   if(format==="1x1")  return {quote:u(44), reply:u(30)};
   return {quote:u(46), reply:u(31)};       /* 4:5 */
 }
-var QUOTE_MIN=u(24), QUOTE_MAX=u(72);
+/* Plage du texte : lue dans la charte (modifiable dans la page Réglages). */
+var _TTY=(global.chTypo&&chTypo("totallyTrue","body"))||{min:40,max:72};
+var QUOTE_MIN=u(_TTY.min), QUOTE_MAX=u(_TTY.max);
 
 /* ── Tracé de la bulle ────────────────────────────────────────────────────
    Un seul chemin fermé : coins arrondis + pointe.

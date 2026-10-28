@@ -73,6 +73,16 @@ function measureBadge(st,L){
   return {font:badgeFont,textW:textW};
 }
 
+/* Typo Split Screen (charte p44) : Regular 40-60 pt. Le getLayout commun
+   donne la plage de « Texte sur image » (45-80) : on la remplace ici, et
+   c'est cette version que lisent la page et le Carrousel. */
+function getLayoutSS(format,opts){
+  var L=Object.assign({},getLayout(format,opts));
+  var TY=chTypo("splitScreen","body");
+  if(TY){ L.TEXT_MIN=TY.min; L.TEXT_MAX=TY.max; L.TEXT_DEF=Math.max(TY.min,Math.min(TY.max,L.TEXT_DEF)); }
+  return L;
+}
+
 /* ── Hauteur de carte ────────────────────────────────────────────────────── */
 function cardHeight(format,st){
   return getLayout(format,{hasML:(st&&st.hasML)||false}).CARD_H;
@@ -88,22 +98,37 @@ function SplitScreenCard(p){
   var G=GRADS[st.grad]||GRADS.bleu;
   var GRAD_H=gradCss(st.grad,90);
   var GRAD_V=gradCss(st.grad,180);
-  var L=getLayout(st.format,{hasML:st.hasML});
+  var L=getLayoutSS(st.format,{hasML:st.hasML});
+  var FL=chFleche(st.format);
   var CARD_H=L.CARD_H;
   var fs=st["fs_"+st.format]||L.TEXT_DEF;
   fs=Math.max(L.TEXT_MIN,Math.min(L.TEXT_MAX,fs));
 
-  var R=computeRects(L,CARD_H,st.layout,st.imgRatio||0.55);
+  /* Texte ferré à droite : il s'aligne sur la marge de 50 px (p24), la
+     réserve droite de 100 px ne vaut que pour un texte ferré à gauche. */
+  var R=computeRects(st.textAlign==="right"?Object.assign({},L,{RIGHT_MIN:L.MARGIN}):L,
+    CARD_H,st.layout,st.imgRatio||0.55);
 
   /* Garde-fou charte : le texte doit tenir dans sa zone. On mesure la hauteur
      réellement rendue et on remonte le dépassement (Carrousel et page). */
+  /* ── BOÎTE TEXTE (modèle unifié « boîte dans une zone ») ─────────────────
+     La zone texte (R.txt) vient de la disposition. Dans cette zone, la boîte
+     a trois réglages, propres à chaque format :
+       txtW_  largeur en % de la zone (défaut 100)
+       txtX_  position horizontale en % de la course libre (0 = gauche)
+       txtY_  position verticale  en % de la course libre (0 = haut)
+     La taille du texte s'ajuste toute seule pour tenir dans la zone :
+       1. on vise la taille choisie (fs_, défaut charte), bornée à la plage charte ;
+       2. si elle ne tient pas, on réduit, d'abord dans la charte,
+          puis jusqu'à -20 % sous le minimum charte (tolérance) ;
+       3. si même le plancher ne tient pas : texte trop long, export bloqué.
+     La recherche est une dichotomie faite avant peinture (useLayoutEffect) :
+     aucun clignotement, et l'export hors écran obtient le même résultat. */
+  var TOL=(global.CHARTE&&CHARTE.composition&&CHARTE.composition.tolerance)||0.2;
+  var PLANCHER=Math.round(L.TEXT_MIN*(1-TOL));
+  var cible=fs;
   var txtRef=React.useRef(null), lastGarde=React.useRef(null);
-  React.useLayoutEffect(function(){
-    if(!p.onGarde||!txtRef.current) return;
-    var h=txtRef.current.offsetHeight||0;
-    var d=Math.max(0,Math.round(h-R.txt.h));
-    if(lastGarde.current!==d){ lastGarde.current=d; p.onGarde({debordTexte:d}); }
-  });
+  var _fit=React.useState(null), fit=_fit[0], setFit=_fit[1];
 
   var bgX=st["bgX_"+st.format]!==undefined?st["bgX_"+st.format]:50;
   var bgY=st["bgY_"+st.format]!==undefined?st["bgY_"+st.format]:50;
@@ -128,7 +153,8 @@ function SplitScreenCard(p){
      1:1), une valeur sans lien avec la charte. En story le cadre inséré est
      interdit par la charte : ancien décalage conservé. */
   var cfSS=chFormat(st.format);
-  var decalagePhoto=L.STORY?Math.round(0.035*CARD_H):(cfSS.marginInset-cfSS.margin);
+  /* Story : cartouche à 20 px dans l'image (p26). */
+  var decalagePhoto=L.STORY?20:(cfSS.marginInset-cfSS.margin);
   var badgeNudge=badgeOnPhoto?decalagePhoto:0;
   var badgeXY={x:L.MARGIN+badgeNudge,y:L.BADGE_TOP+badgeNudge};
   /* CÔTÉ DU REPÈRE DE CARROUSEL — charte p33 : « the arrow is flush with the
@@ -139,7 +165,10 @@ function SplitScreenCard(p){
      Conséquence : en « right » la flèche n'est plus sur la photo, donc plus
      de décalage de 3,5 % ni de rognage de l'image pour lui faire de la place
      (voir la règle supprimée plus bas). */
-  var arrowSide=(st.layout==="right")?"left":"right";
+  /* Mise à jour 28/10 : texte ferré à droite -> flèche à droite ; sinon elle
+     suit le texte (à gauche), sauf en disposition « left » où la colonne de
+     texte est à droite. */
+  var arrowSide=(st.textAlign==="right")?"right":((st.layout==="left")?"right":"left");
   var arrowOnPhoto=(st.layout==="bottom");
   var arrowNudge=arrowOnPhoto?decalagePhoto:0;
 
@@ -174,7 +203,9 @@ function SplitScreenCard(p){
        En « bottom », la flèche est sur la photo (arrowOnPhoto) et le texte
        est au-dessus : rien à réserver.                                      */
     if((st.layout==="top"||st.layout==="left"||st.layout==="right")&&st.navMark!=="none"){
-      var basAutorise=CARD_H-Math.max(L.BOTTOM,am+ah+20);
+      /* flèche à FL.bas du bas (100, 230 en story), plus l'écart charte de
+         50 px entre le contenu et la flèche */
+      var basAutorise=CARD_H-Math.max(L.BOTTOM,FL.bas+L.ML+ah+FL.gap);
       if(R.txt.y+R.txt.h>basAutorise) R.txt.h=Math.max(0,basAutorise-R.txt.y);
     }
     if(st.layout==="right"){
@@ -185,6 +216,50 @@ function SplitScreenCard(p){
          toute sa hauteur, comme en disposition « left ». */
     }
   })();
+
+  var fmtK=st.format;
+  var boxWpct=Math.max(40,Math.min(100,st["txtW_"+fmtK]||100));
+  var boxW=Math.round(R.txt.w*boxWpct/100);
+  var sig=[st.text,cible,boxW,R.txt.h,fmtK,st.layout,st.hasML].join("|");
+  var etat=(fit&&fit.sig===sig)?fit:null;
+  /* taille utilisée pour ce rendu : celle testée par la recherche en cours */
+  var fsRendu=etat?etat.cur:cible;
+  React.useLayoutEffect(function(){
+    if(!txtRef.current) return;
+    /* Un mot plus large que la boîte compte comme un dépassement : on le
+       traduit en hauteur pour garder un seul critère. */
+    var el=txtRef.current, H=R.txt.h;
+    /* marge d'un demi-caractère : espace de fin de ligne et débord du surlignage */
+    var deborde=Math.max(0,(el.scrollWidth||0)-boxW-Math.round((fit&&fit.sig===sig?fit.cur:cible)*0.5));
+    var hReel=el.offsetHeight||0;
+    var h=hReel+(deborde>0?H+deborde:0);   /* critère unique pour la recherche */
+    var f=(fit&&fit.sig===sig)?fit:{sig:sig,lo:PLANCHER-1,hi:cible,cur:cible,fini:false};
+    if(f.fini && h>H+1 && f.cur>PLANCHER){
+      /* le rendu a grossi après coup (police chargée, surlignage) : on reprend */
+      setFit({sig:sig,lo:PLANCHER-1,hi:f.cur-1,cur:f.cur-1,fini:false}); return;
+    }
+    if(f.fini){
+      /* recherche terminée : on publie la mesure et la hauteur réelle */
+      if(f.h!==hReel){ setFit(Object.assign({},f,{h:hReel})); return; }
+      var faits={texteAuto:{taille:f.cur,min:L.TEXT_MIN,max:L.TEXT_MAX,plancher:PLANCHER},
+                 debordTexte:Math.max(0,Math.round(hReel-H)), motTropLarge:deborde>0};
+      var j=JSON.stringify(faits);
+      if(p.onGarde&&lastGarde.current!==j){ lastGarde.current=j; p.onGarde(faits); }
+      return;
+    }
+    var n=Object.assign({},f);
+    if(h<=H) n.lo=f.cur; else n.hi=f.cur-1;
+    if(n.lo>=n.hi){
+      n.cur=Math.max(PLANCHER,n.lo>=PLANCHER?n.lo:PLANCHER); n.fini=true; n.h=null;
+    } else n.cur=Math.ceil((n.lo+n.hi)/2);
+    setFit(n);
+  });
+  var hMes=(etat&&etat.fini&&etat.h)?etat.h:null;
+  var courseX=Math.max(0,R.txt.w-boxW);
+  var courseY=hMes!==null?Math.max(0,R.txt.h-hMes):0;
+  var pX=st["txtX_"+fmtK]||0, pY=st["txtY_"+fmtK]||0;
+  var boxLeft=R.txt.x+Math.round(courseX*Math.max(0,Math.min(100,pX))/100);
+  var boxTop=R.txt.y+Math.round(courseY*Math.max(0,Math.min(100,pY))/100);
 
   var cardBgImg=onML&&st.mlStyle==="grad"?GRAD_V:"none";
   var cardBgColor=onML&&st.mlStyle==="grad"?"transparent":"#FFFFFF";
@@ -233,9 +308,9 @@ function SplitScreenCard(p){
         onChange:onBgMove}),
       st.bgDark>0?e("div",{style:{position:"absolute",inset:0,background:"rgba(10,20,45,"+st.bgDark+")"}}):null),
 
-    e("div",{ref:txtRef,style:{position:"absolute",left:R.txt.x,top:R.txt.y,width:R.txt.w,color:st.textColor}},
-      e(RichBody,{text:st.text,fs:fs,lh:L.TEXT_LH,grad:GRAD_H,
-        gradFrom:G.from,gradTo:G.to,color:st.textColor,align:"left",textMode:st.textMode})),
+    e("div",{ref:txtRef,"data-zone":"texte",style:{position:"absolute",left:boxLeft,top:boxTop,width:boxW,color:st.textColor}},
+      e(RichBody,{text:st.text,fs:fsRendu,lh:L.TEXT_LH,grad:GRAD_H,
+        gradFrom:G.from,gradTo:G.to,color:st.textColor,align:(st.textAlign==="right"?"right":"left"),textMode:st.textMode})),
 
     e("div",{style:{position:"absolute",left:badgeXY.x,top:badgeXY.y,display:"flex",alignItems:"center",gap:L.BADGE_GAP}},
       (function(){
@@ -252,7 +327,7 @@ function SplitScreenCard(p){
         st.badgeSub?e("span",{style:{fontWeight:T.FW_BADGE_SUB}}," – "+st.badgeSub):null)),
 
     st.navMark!=="none"?e("div",{style:(function(){
-        var pos={position:"absolute",bottom:L.MARGIN+arrowNudge};
+        var pos={position:"absolute",bottom:FL.bas+L.ML};
         pos[arrowSide]=L.MARGIN+arrowNudge;
         return pos;
       })()},
@@ -272,7 +347,7 @@ SPGCards.register("splitscreen",{
   DEFAULT:DEFAULT,
   shared:SPGCards.COMMON_SHARED,
   cardHeight:cardHeight,
-  getLayout:getLayout,         /* exposé : le Carrousel y lit TEXT_MIN/MAX/DEF */
+  getLayout:getLayoutSS,       /* exposé : le Carrousel y lit TEXT_MIN/MAX/DEF */
   computeRects:computeRects,   /* exposé : le panneau en a besoin pour maxZoom */
   Card:SplitScreenCard
 });
