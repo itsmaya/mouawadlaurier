@@ -126,6 +126,19 @@ function BgPhotoPanel(props){
   var format=props.format||st.format;
   var bgZoom=st["bgZoom_"+format]||100;
   var maxZoom=props.maxZoom||300;
+  var Info=(window.Shell&&Shell.ui&&Shell.ui.Info)||function(){return null;};
+  var ouvState=React.useState(false), ouvert=ouvState[0], setOuvert=ouvState[1];
+
+  /* Retouches modifiées ? (pastille sur le menu replié) */
+  var retouche=(st.bgBlur||0)>0||(st.bgDark||0)>0||(st.bgBrightness||100)!==100||
+    (st.bgSaturation||100)!==100||(st.bgContrast||100)!==100;
+
+  function curseur(label, cle, min, max, pas, val, conv){
+    return e("div",null,
+      e("label",{className:"field-label"},label),
+      e("input",{type:"range",min:min,max:max,step:pas,value:val,
+        onChange:function(ev){ set(cle, conv(ev.target.value)); }}));
+  }
 
   return e(React.Fragment,null,
     e("div",{className:"upload-hint"},
@@ -133,68 +146,52 @@ function BgPhotoPanel(props){
       e("br",null),
       st.bgCustom?"Image personnalisée en cours d'utilisation."
       :st.bgIsDefault?["Fond par défaut : ",e("b",{key:"p"},props.bgStatus&&props.bgStatus.p?props.bgStatus.p.replace(props.bgDir||"",""):"")]
-      :(props.bgStatus&&props.bgStatus.s==="loading")?"Recherche du fond par défaut\u2026"
+      :(props.bgStatus&&props.bgStatus.s==="loading")?"Recherche du fond par défaut…"
       :props.showHint||"Aucun fond par défaut trouvé."),
 
     e(FileDrop,{value:st.bgImg,placeholder:"Photo de fond",
       onChange:function(v){setSt(function(p){var c=Object.assign({},p);
         c.bgImg=v||null;c.bgCustom=!!v;c.bgIsDefault=!v&&p.bgIsDefault;return c;});}}),
 
-    e("div",{style:{display:"flex",gap:16,marginTop:6,marginBottom:4}},
-      e("label",{className:"toggle"},
-        e("input",{type:"checkbox",checked:!!st.bgFlipH,
-          onChange:function(ev){set("bgFlipH",ev.target.checked);}}),
-        "Flip horizontal")),
+    /* 1. Flip, puis zoom juste en dessous */
+    e("label",{className:"toggle",style:{marginTop:10,marginBottom:10}},
+      e("input",{type:"checkbox",checked:!!st.bgFlipH,
+        onChange:function(ev){set("bgFlipH",ev.target.checked);}}),
+      "Flip horizontal"),
 
-    e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 16px",marginBottom:8}},
-      e("div",null,
-        e("label",{className:"field-label"},"Flou ("+st.bgBlur+" px)"),
-        e("input",{type:"range",min:0,max:12,step:0.5,value:st.bgBlur,
-          onChange:function(ev){set("bgBlur",parseFloat(ev.target.value));}})),
-      e("div",null,
-        e("label",{className:"field-label"},"Assombrissement ("+Math.round(st.bgDark*100)+" %)"),
-        e("input",{type:"range",min:0,max:0.7,step:0.05,value:st.bgDark,
-          onChange:function(ev){set("bgDark",parseFloat(ev.target.value));}})),
-      e("div",null,
-        e("label",{className:"field-label"},"Luminosité ("+(st.bgBrightness||100)+" %)"),
-        e("input",{type:"range",min:20,max:200,step:5,value:st.bgBrightness||100,
-          onChange:function(ev){set("bgBrightness",parseInt(ev.target.value,10));}})),
-      e("div",null,
-        e("label",{className:"field-label"},"Saturation ("+(st.bgSaturation||100)+" %)"),
-        e("input",{type:"range",min:0,max:200,step:5,value:st.bgSaturation||100,
-          onChange:function(ev){set("bgSaturation",parseInt(ev.target.value,10));}})),
-      e("div",null,
-        e("label",{className:"field-label"},"Contraste ("+(st.bgContrast||100)+" %)"),
-        e("input",{type:"range",min:20,max:200,step:5,value:st.bgContrast||100,
-          onChange:function(ev){set("bgContrast",parseInt(ev.target.value,10));}})),
-      e("button",{
-        onClick:function(){setSt(function(p){var c=Object.assign({},p);
-          c.bgBlur=0;c.bgDark=0;c.bgBrightness=100;c.bgSaturation=100;c.bgContrast=100;return c;});},
-        style:{alignSelf:"end",fontSize:10,fontWeight:700,padding:"3px 8px",
-          borderRadius:5,border:"1px solid #ddd",background:"#f5f5f5",
-          cursor:"pointer",fontFamily:"inherit"}},
-        "Reset")),
-
-    e("label",{className:"field-label"},
+    e("label",{className:"field-label",style:{display:"flex",alignItems:"center",gap:6}},
       "Zoom image — "+Math.round(bgZoom)+" %",
-      maxZoom<300?e("span",{className:"hint",style:{marginLeft:6}},"(max "+maxZoom+"% sans perte)"):null),
+      maxZoom<300?e("span",{className:"hint"},"(max "+maxZoom+" % sans perte)"):null,
+      e(Info,{texte:"Glisse directement sur l'image pour la repositionner. Au-delà du maximum indiqué, l'image perd en netteté."})),
     e("input",{type:"range",min:100,max:maxZoom,step:1,
       value:Math.min(Math.round(bgZoom),maxZoom),
       onChange:function(ev){setSt(function(p){var c=Object.assign({},p);
         c["bgZoom_"+p.format]=parseInt(ev.target.value,10);return c;});}}),
-    e("div",{className:"hint",style:{marginTop:4}},
-      "Glisse directement sur l'image pour la repositionner."),
-    e("button",{
-      onClick:function(){setSt(function(p){var c=Object.assign({},p);
-        c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});},
-      style:{marginTop:8,fontSize:11,fontWeight:700,padding:"4px 10px",borderRadius:5,
-        border:"1px solid #ddd",background:"#f5f5f5",cursor:"pointer",fontFamily:"inherit"}},
-      "Réinitialiser position et zoom"),
 
-    /* Mention IA — ici et pas ailleurs : le réglage suit l'image. Dans le
-       carrousel ce panneau est instancié par vignette, donc chaque vignette
-       décide pour sa propre photo. */
+    /* 2. Mention IA, juste après. Elle suit l'image : dans le carrousel ce
+       panneau est instancié par vignette, chaque vignette décide pour sa photo. */
     (window.Shell && Shell.ui && Shell.ui.MentionIA)
-      ? e(Shell.ui.MentionIA,{st:st,set:set}) : null
+      ? e(Shell.ui.MentionIA,{st:st,set:set}) : null,
+
+    /* 3. Retouches dans un menu déroulant, fermé par défaut */
+    e("div",{className:"repli"+(ouvert?" on":"")},
+      e("button",{type:"button",className:"repli-tete",onClick:function(){setOuvert(!ouvert);}},
+        e("span",{className:"repli-fleche"},ouvert?"▾":"▸"),
+        "Retouches de l'image",
+        retouche?e("span",{className:"repli-pastille"},"modifiée"):null),
+      ouvert?e("div",{className:"repli-corps"},
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 16px"}},
+          curseur("Flou ("+(st.bgBlur||0)+" px)","bgBlur",0,12,0.5,st.bgBlur||0,parseFloat),
+          curseur("Assombrir ("+Math.round((st.bgDark||0)*100)+" %)","bgDark",0,0.7,0.05,st.bgDark||0,parseFloat),
+          curseur("Luminosité ("+(st.bgBrightness||100)+" %)","bgBrightness",20,200,5,st.bgBrightness||100,function(v){return parseInt(v,10);}),
+          curseur("Saturation ("+(st.bgSaturation||100)+" %)","bgSaturation",0,200,5,st.bgSaturation||100,function(v){return parseInt(v,10);}),
+          curseur("Contraste ("+(st.bgContrast||100)+" %)","bgContrast",20,200,5,st.bgContrast||100,function(v){return parseInt(v,10);}))):null),
+
+    /* 4. Un seul bouton : remet l'image à zéro (retouches, flip, cadrage). */
+    e("button",{type:"button",className:"mini-btn",style:{width:"100%",marginTop:10},
+      onClick:function(){setSt(function(p){var c=Object.assign({},p);
+        c.bgBlur=0;c.bgDark=0;c.bgBrightness=100;c.bgSaturation=100;c.bgContrast=100;c.bgFlipH=false;
+        c["bgX_"+p.format]=50;c["bgY_"+p.format]=50;c["bgZoom_"+p.format]=100;return c;});}},
+      "↺ Réinitialiser l'image")
   );
 }

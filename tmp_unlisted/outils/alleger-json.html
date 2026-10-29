@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Alléger une sauvegarde</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f7f7f7;
+  font-family:'Nunito',system-ui,sans-serif;color:#12181c;padding:20px}
+.carte{width:min(520px,100%);background:#fff;border:1px solid #e6e6e6;border-radius:14px;padding:28px;
+  box-shadow:0 14px 36px rgba(0,0,0,.07)}
+h1{font-size:22px;margin:0 0 8px}
+p{font-size:13.5px;line-height:1.55;color:#3d4348;margin:0 0 14px}
+.zone{border:2px dashed #c9d3e0;border-radius:10px;padding:26px;text-align:center;cursor:pointer;color:#5f6367;font-size:13px}
+.zone.survol{border-color:#0098E3;background:#f0f8ff}
+.etat{margin-top:14px;font-size:13px;font-weight:700}
+.ok{color:#00884A}.err{color:#b3261e}
+</style>
+</head>
+<body>
+<div class="carte">
+  <h1>Alléger une sauvegarde</h1>
+  <p>Dépose ici un fichier <b>.json</b> exporté depuis un générateur (onglet Export, « Export .json »).
+     Les images sont retirées, tous les réglages de mise en page sont gardés.
+     Le fichier allégé se télécharge tout seul : c'est lui qu'il faut envoyer.</p>
+  <p>Rien ne quitte ton ordinateur : tout se fait dans cette page.</p>
+  <div class="zone" id="zone">Glisse le fichier ici, ou clique pour le choisir</div>
+  <input type="file" id="fichier" accept=".json,application/json" style="display:none"/>
+  <div class="etat" id="etat"></div>
+</div>
+<script>
+(function(){
+var zone=document.getElementById("zone"), entree=document.getElementById("fichier"), etat=document.getElementById("etat");
+function ko(n){ return n>1048576 ? (n/1048576).toFixed(1)+" Mo" : Math.round(n/1024)+" ko"; }
+/* Toute chaîne « data:… » un peu longue est une image (ou une police) : on
+   la remplace par une mention qui garde sa taille d'origine. */
+function alleger(v, compte){
+  if(typeof v==="string"){
+    if(/^data:/.test(v) && v.length>200){ compte.n++; return "[image retirée, "+ko(v.length*0.75)+"]"; }
+    return v;
+  }
+  if(Array.isArray(v)) return v.map(function(x){ return alleger(x, compte); });
+  if(v && typeof v==="object"){
+    var o={}; Object.keys(v).forEach(function(k){ o[k]=alleger(v[k], compte); }); return o;
+  }
+  return v;
+}
+function traiter(f){
+  etat.className="etat"; etat.textContent="Lecture…";
+  f.text().then(function(t){
+    var d;
+    try{ d=JSON.parse(t); }
+    catch(e){
+      /* Copie de secours ligne par ligne (page de migration) */
+      d=t.split("\n").filter(function(l){ return l.trim(); }).map(function(l){ return JSON.parse(l); });
+    }
+    var compte={n:0};
+    var leger=alleger(d, compte);
+    var sortie=JSON.stringify(leger, null, 1);
+    var nom=f.name.replace(/\.json$/i,"")+"-leger.json";
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([sortie],{type:"application/json"}));
+    a.download=nom; document.body.appendChild(a); a.click(); a.remove();
+    etat.className="etat ok";
+    etat.textContent=compte.n+" image(s) retirée(s) : "+ko(t.length)+" → "+ko(sortie.length)+". Fichier « "+nom+" » téléchargé.";
+  }).catch(function(e){ etat.className="etat err"; etat.textContent="Fichier illisible : "+e.message; });
+}
+zone.onclick=function(){ entree.click(); };
+entree.onchange=function(ev){ if(ev.target.files[0]) traiter(ev.target.files[0]); };
+zone.addEventListener("dragover",function(ev){ ev.preventDefault(); zone.classList.add("survol"); });
+zone.addEventListener("dragleave",function(){ zone.classList.remove("survol"); });
+zone.addEventListener("drop",function(ev){ ev.preventDefault(); zone.classList.remove("survol");
+  if(ev.dataTransfer.files[0]) traiter(ev.dataTransfer.files[0]); });
+})();
+</script>
+</body>
+</html>

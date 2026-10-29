@@ -114,6 +114,10 @@
       "#sm-status-slot{display:flex;align-items:center;height:100%;margin-left:auto;",
         "min-width:0;overflow:hidden;}",
       ".hdr-fish{display:flex;align-items:center;flex-shrink:0;padding-left:4px;}",
+      /* Accès graphistes (réglages de charte, protégé par mot de passe) */
+      ".hdr-reglages{display:flex;align-items:center;justify-content:center;width:28px;height:28px;",
+        "border-radius:7px;color:#8b93a1;text-decoration:none;flex-shrink:0;transition:color .15s,background .15s;}",
+      ".hdr-reglages:hover,.hdr-reglages.actif{color:#fff;background:#1b212c;}",
       ".hdr-fish img{height:14px;display:block;filter:invert(1);}",
 
       /* ── Mobile : la navigation passe dans un tiroir ── */
@@ -268,6 +272,15 @@
     slot.id = "sm-status-slot";
     header.appendChild(slot);
 
+    /* Réglages de la charte : réservé aux graphistes (mot de passe). */
+    var regl = document.createElement("a");
+    regl.className = "hdr-reglages" + (estCourant("reglages/index.html") ? " actif" : "");
+    regl.href = pageUrl("reglages/index.html");
+    regl.title = "Réglages de la charte (graphistes)";
+    regl.setAttribute("aria-label", "Réglages de la charte");
+    regl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+    header.appendChild(regl);
+
     /* Logo Fisheye */
     var fish = document.createElement("a");
     fish.className = "hdr-fish";
@@ -311,6 +324,11 @@
     grp.textContent = "Vignettes";
     tNav.appendChild(grp);
     VIGNETTES.forEach(function(it){ tNav.appendChild(lien(it)); });
+    var grp2 = document.createElement("div");
+    grp2.className = "groupe";
+    grp2.textContent = "Graphistes";
+    tNav.appendChild(grp2);
+    tNav.appendChild(lien({label:"Réglages de la charte",href:"reglages/index.html"}));
     tiroir.appendChild(tNav);
 
     function ouvrirTiroir(o){

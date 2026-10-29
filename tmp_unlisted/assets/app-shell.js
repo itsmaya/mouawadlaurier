@@ -161,6 +161,43 @@ function injectStyles(){
 ".champ-alerte-msg{font-size:11px;line-height:1.4;color:#b3261e;margin:3px 0 4px;}",
 ".champ-alerte.block .champ-alerte-msg{font-weight:700;}",
 /* ── Mini boutons utilitaires ── */
+/* ── Titres de bloc à l'intérieur d'un onglet (Mise en page, Contenu) ── */
+".panel-tab-content>h2.bloc-titre{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;",
+  "color:#3a3f4b;margin:22px -16px 12px;padding:10px 16px;background:#eceef2;",
+  "border-top:1px solid #dfe2e8;border-bottom:1px solid #dfe2e8;display:flex;align-items:center;gap:6px;}",
+".panel-tab-content>h2.bloc-titre:first-child{margin-top:0;}",
+".panel-tab-content>h2.bloc-titre::before{content:'';display:block;width:3px;height:12px;",
+  "background:linear-gradient(135deg,#0098E3,#4632FF);border-radius:2px;flex-shrink:0;}",
+/* ── Sections Contenu / Mise en page d'une vignette (Carrousel) ── */
+".vignette-section{position:sticky;top:-16px;z-index:6;margin:18px -16px 0;padding:11px 16px;",
+  "background:#12181c;color:#fff;display:flex;align-items:baseline;gap:8px;}",
+".vignette-section-titre{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;}",
+".vignette-section-sous{font-size:11px;color:#9aa3ad;margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}",
+".vignette-section+h2.bloc-titre{margin-top:0;}",
+/* ── Menu déroulant (retouches de l'image…) ── */
+".repli{border:1px solid #e3e6eb;border-radius:8px;margin-top:12px;background:#fafbfc;}",
+".repli-tete{width:100%;display:flex;align-items:center;gap:7px;border:0;background:none;cursor:pointer;",
+  "padding:9px 11px;font-family:inherit;font-size:12px;font-weight:700;color:#333;text-align:left;}",
+".repli-fleche{color:#8a8f98;width:10px;}",
+".repli-pastille{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;",
+  "color:#0098E3;}",
+".repli-corps{padding:4px 11px 11px;border-top:1px solid #eceef2;}",
+/* ── Info-bulle (i) ── */
+".info-i{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;",
+  "border:1.3px solid #9aa1ab;color:#7a818c;font:italic 700 10px/1 Georgia,serif;cursor:help;flex-shrink:0;",
+  "user-select:none;vertical-align:middle;}",
+".info-i:hover,.info-i.on{border-color:#0098E3;color:#0098E3;}",
+".info-bulle{position:fixed;z-index:400;max-width:240px;background:#1d222b;color:#f2f4f7;font-size:11.5px;",
+  "font-weight:500;line-height:1.45;padding:8px 10px;border-radius:7px;box-shadow:0 6px 18px rgba(0,0,0,.25);",
+  "pointer-events:none;text-transform:none;letter-spacing:0;font-style:normal;font-family:'Nunito',sans-serif;}",
+/* ── Repère de carrousel : boutons à l'image des vrais repères ── */
+".navmark-row{display:flex;gap:6px;}",
+".navmark-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 4px 7px;",
+  "border:2px solid #e8e8e8;border-radius:9px;background:#fafafa;cursor:pointer;font-family:inherit;",
+  "font-size:11px;font-weight:700;color:#555;transition:border-color .12s,background .12s;}",
+".navmark-opt:hover{border-color:#cfd5de;}",
+".navmark-opt.on{border-color:#1a1a1a;background:#fff;color:#1a1a1a;}",
+".navmark-vide{width:44px;height:30px;border-radius:15px;border:1.5px dashed #c5cad3;}",
 ".mini-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;",
   "border:1px solid #ddd;background:#fff;cursor:pointer;font-family:inherit;",
   "transition:background .1s;}.mini-btn:hover{background:#f5f5f5;}",
@@ -547,6 +584,61 @@ Shell.useApp = function(cfg){
   useEffect(function(){ global.smDownloadTrigger=function(){
     if(cfg.onDownload) cfg.onDownload(); }; });
 
+  /* ── Tous les formats d'un coup ──
+     La carte affichée est photographiée format après format : on bascule le
+     format (sans entrée d'annulation), on laisse la carte se recomposer, on
+     exporte, puis on revient au format de départ. Un format bloqué par la
+     charte est sauté et signalé ; les autres partent dans un seul .zip. */
+  var stRef=useRef(st); stRef.current=st;
+  function exportTous(cardRef, formats, opts){
+    opts=opts||{};
+    formats=(formats||[]).filter(Boolean);
+    if(!formats.length) return Promise.resolve(null);
+    var depart=stRef.current.format;
+    var sortie=opts.sortie||Shell.formatSortie(cfg.pageKey);
+    var fichiers=[], refuses=[];
+    setBusy(true);
+    var chaine=Shell.chargerJSZip();
+    formats.forEach(function(fk){
+      chaine=chaine.then(function(){
+        _setSt(function(p){ return p.format===fk?p:Object.assign({},p,{format:fk}); });
+        return Shell.attendreRendu(900);
+      }).then(function(){
+        var items=(global.SPGGuard&&global.SPGGuard.items)||[];
+        var bloque=items.filter(function(i){return i.level==="block";});
+        if(bloque.length){ refuses.push({fk:fk,msg:bloque.map(function(i){return i.msg;}).join(" ; ")}); return; }
+        var cf=global.chFormat(fk);
+        var stx=SPGInherit.resolve(stRef.current,fk);
+        var nom=global.SaveManager.exportFilename(smFolder.current,currentName||cfg.pageKey,fk,sortie);
+        return Shell.exportNode(cardRef.current,{filename:nom,outputW:cf.outputW,outputH:cf.outputH,
+          stateForServer:Object.assign({},stx,{format:fk}),sortie:sortie,download:false})
+          .then(function(blob){ fichiers.push({nom:nom,blob:blob}); });
+      });
+    });
+    return chaine.then(function(){
+      _setSt(function(p){ return Object.assign({},p,{format:depart}); });
+      if(!fichiers.length) return null;
+      var zip=new global.JSZip();
+      fichiers.forEach(function(f){ zip.file(f.nom,f.blob); });
+      return zip.generateAsync({type:"blob"});
+    }).then(function(zipBlob){
+      setBusy(false);
+      if(zipBlob){
+        var slug=(currentName||cfg.pageKey).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"export";
+        global.SaveManager.downloadBlob(zipBlob,slug+"_tous-formats.zip");
+      }
+      if(refuses.length) global.alert("Formats non exportés (hors charte) :\n\n"+
+        refuses.map(function(r){ return "• "+global.chFormat(r.fk).label+" : "+r.msg; }).join("\n")+
+        "\n\nCorrige-les dans leur format puis relance.");
+      return zipBlob;
+    }).catch(function(er){
+      _setSt(function(p){ return Object.assign({},p,{format:depart}); });
+      setBusy(false);
+      console.error("Export tous formats :",er);
+      global.alert("L'export a échoué : "+(er&&er.message?er.message:er));
+    });
+  }
+
   /* Héritage entre formats : la page et la carte voient l'état résolu ; les
      écritures (setSt) portent toujours sur l'état réel. */
   var cpt={n:0};
@@ -612,6 +704,7 @@ Shell.useApp = function(cfg){
       }
     },
     doExport:doExport,
+    exportTous:exportTous,
 
     /* Diagnostic : état courant de la pile d'annulation (nombre d'entrées et
        charge base64 retenue). Utile pour vérifier que le plafond mémoire fait
@@ -784,6 +877,32 @@ function versJpeg(blob, qualite){
   });
 }
 
+/* Attend que React ait recomposé la carte (mesures, ajustement du texte,
+   polices) avant de la photographier. */
+Shell.attendreRendu = function(ms){
+  return new Promise(function(res){ setTimeout(res, ms||800); })
+    .then(function(){ return document.fonts ? document.fonts.ready : null; })
+    .then(function(){ return new Promise(function(res){
+      requestAnimationFrame(function(){ requestAnimationFrame(res); }); }); });
+};
+/* JSZip à la demande (seul l'export multi-fichiers en a besoin). */
+Shell.chargerJSZip = function(){
+  if(global.JSZip) return Promise.resolve(global.JSZip);
+  var base="";
+  var ss=document.querySelectorAll("script[src]");
+  for(var i=0;i<ss.length;i++) if(ss[i].src.indexOf("app-shell.js")>=0) base=ss[i].src.replace(/app-shell\.js.*$/,"");
+  var urls=["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js", base+"vendor/jszip.min.js"];
+  return new Promise(function(res,rej){
+    (function essai(k){
+      if(k>=urls.length){ rej(new Error("JSZip introuvable")); return; }
+      var sc=document.createElement("script"); sc.src=urls[k];
+      sc.onload=function(){ global.JSZip?res(global.JSZip):essai(k+1); };
+      sc.onerror=function(){ essai(k+1); };
+      document.head.appendChild(sc);
+    })(0);
+  });
+};
+
 Shell.exportNode = function(node, opts){
   opts = opts || {};
   if(!node) return Promise.reject(new Error("aucun élément à exporter"));
@@ -879,6 +998,25 @@ Shell.ui.Section = function(p){
     p.children);
 };
 
+/* Info-bulle : un petit « i » qui affiche l'explication au survol (ou au
+   toucher). Position fixe calculée à l'affichage, pour ne jamais être coupée
+   par le défilement du panneau. */
+Shell.ui.Info = function(p){
+  var e=React.createElement, useState=React.useState;
+  var s0=useState(null), pos=s0[0], setPos=s0[1];
+  function montrer(ev){
+    var r=ev.currentTarget.getBoundingClientRect();
+    var x=Math.max(8,Math.min(r.left-110,(global.innerWidth||800)-250));
+    setPos({x:x,y:r.bottom+6});
+  }
+  return e("span",{className:"info-i"+(pos?" on":""),tabIndex:0,role:"note","aria-label":p.texte,
+      onMouseEnter:montrer,onMouseLeave:function(){setPos(null);},
+      onFocus:montrer,onBlur:function(){setPos(null);},
+      onClick:function(ev){ ev.preventDefault(); ev.stopPropagation(); if(pos) setPos(null); else montrer(ev); }},
+    "i",
+    pos?e("span",{className:"info-bulle",style:{left:pos.x,top:pos.y}},p.texte):null);
+};
+
 Shell.ui.SegButtons = function(p){
   var e=React.createElement;
   return e("div",{className:"seg"},p.options.map(function(o){
@@ -906,6 +1044,7 @@ Shell.ui.GradPicker = function(p){
 
 Shell.ui.FormatPicker = function(p){
   var e=React.createElement;
+  Shell._formatsPage = p.formats;   /* lu par « Tous les formats » (onglet Export) */
   var inf=SPGInherit.info;
   var note=null;
   if(inf&&inf.source&&inf.source!==p.value&&p.formats.indexOf(inf.source)>=0){
@@ -1034,13 +1173,25 @@ Shell.traduire = function(textes, tgt){
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({texts:segments,target_lang:tgt,tag_handling:"xml"})
   })
-  .then(function(r){ return r.text(); })
-  .then(function(txt){
-    var data;
+  .then(function(r){ return r.text().then(function(t){ return {code:r.status,txt:t}; }); },
+        function(){ throw new Error("le serveur ne répond pas (connexion ou adresse de api/translate.php)."); })
+  .then(function(rep){
+    var txt=rep.txt, code=rep.code, data;
+    /* Diagnostic lisible : chaque cause connue a son message. */
     try{ data=JSON.parse(txt); }
-    catch(err){ throw new Error("Réponse du proxy : "+txt.slice(0,200)); }
+    catch(err){
+      if(code===404) throw new Error("le fichier api/translate.php est absent du serveur (erreur 404). Dépose-le dans le dossier api/.");
+      if(/<\?php/.test(txt)) throw new Error("PHP ne s'exécute pas sur le dossier api/ (le code du fichier est renvoyé tel quel).");
+      throw new Error("réponse inattendue du serveur (code "+code+") : "+txt.replace(/<[^>]+>/g," ").trim().slice(0,160));
+    }
     if(data.error) throw new Error(data.error);
-    if(!data.translations) throw new Error("Vérifier la clé DeepL dans api/translate.php");
+    if(!data.translations){
+      var m=data.message||data.detail||"";
+      if(code===403) throw new Error("DeepL refuse la clé (403). Vérifie la clé dans api/translate.php, ou génère-en une nouvelle sur deepl.com.");
+      if(code===456) throw new Error("le quota mensuel DeepL est épuisé (456). Il se recharge le mois prochain, ou passe sur une offre payante.");
+      if(code===429) throw new Error("trop de demandes envoyées à DeepL (429). Réessaie dans une minute.");
+      throw new Error("DeepL a répondu sans traduction (code "+code+")"+(m?" : "+m:"")+".");
+    }
     var out=data.translations.map(function(x){ return restaurerMarkdown(x.text); });
     var d=data.translations[0]&&data.translations[0].detected_source_language;
     return {
@@ -1147,25 +1298,23 @@ Shell.ui.MentionIA = function(p){
   var st=p.st||{}, set=p.set;
   var actif=!!st.aiNotice;
   return e(React.Fragment,null,
-    e("label",{className:"field-label",
-      style:{display:"flex",alignItems:"center",gap:8,marginTop:14}},
+    e("label",{className:"toggle",
+      style:{marginTop:12,marginBottom:4}},
       e("input",{type:"checkbox",checked:actif,
         onChange:function(ev){ set("aiNotice",ev.target.checked); }}),
-      "Mention « image IA » sur cette image"),
-    e("div",{style:{fontSize:11,color:"#666",lineHeight:1.4,marginTop:2}},
-      "Transparence IA (règlement européen) : la mention s'affiche en bas au centre de l'image."),
+      "Mention « image IA »",
+      e(Shell.ui.Info,{texte:"Transparence IA (règlement européen) : la mention s'affiche en bas au centre de l'image. À activer dès que l'image est générée ou retouchée par IA."})),
     actif?e(React.Fragment,null,
-      e("label",{className:"field-label"},"Formulation"),
+      e("label",{className:"field-label",style:{marginTop:8}},"Formulation"),
       e(Shell.ui.SegButtons,{value:(st.aiNoticeKind==="enhanced"||st.aiNoticeKind==="edited")?"enhanced":"generated",
         options:[{v:"generated",l:"Généré par IA"},{v:"enhanced",l:"Amélioré par IA"}],
         onChange:function(v){ set("aiNoticeKind",v); }}),
-      e("label",{className:"field-label"},"Habillage"),
+      e("label",{className:"field-label",style:{display:"flex",alignItems:"center",gap:6,marginTop:8}},"Habillage",
+        e(Shell.ui.Info,{texte:"Texte gris foncé de la charte, en Nunito. La pastille blanche à filet garde la mention lisible sur une photo comme sur un fond blanc ; le texte seul est réservé aux fonds clairs et unis."})),
       e(Shell.ui.SegButtons,{value:st.aiNoticeFond==="texte"?"texte":"pastille",
         options:[{v:"pastille",l:"Pastille blanche"},{v:"texte",l:"Texte seul"}],
         onChange:function(v){ set("aiNoticeFond",v); }}),
-      e("div",{style:{fontSize:11,color:"#666",lineHeight:1.4,marginTop:2}},
-        "Texte gris foncé de la charte, en Nunito. La pastille blanche à filet garde la mention lisible sur une photo comme sur un fond blanc ; le texte seul est réservé aux fonds clairs et unis."),
-      e("label",{className:"field-label"},"Langue"),
+      e("label",{className:"field-label",style:{marginTop:8}},"Langue"),
       e(Shell.ui.SegButtons,{value:st.aiNoticeLang||"fr",
         options:[{v:"fr",l:"Français"},{v:"en",l:"English"}],
         onChange:function(v){ set("aiNoticeLang",v); }}),
@@ -1227,18 +1376,35 @@ Shell.ui.Warnings = function(p){
   return e(React.Fragment,null,p.items.map(function(w,i){
     return e("div",{key:i,className:"charte-warn "+w.level+(w.id?" garde":"")},
       e("span",{style:{flexShrink:0}},w.level==="info"?"ℹ":w.level==="warn"?"⚠":"⛔"),
-      e("span",null,w.msg));
+      e("span",null,w.msg,
+        (w.correction&&p.onCorriger)?e("button",{className:"mini-btn",
+          style:{display:"block",marginTop:6,background:"#fff",color:"#b3261e",borderColor:"#f0b4b0"},
+          onClick:function(){ p.onCorriger(w.correction); }},w.correction.libelle||"Corriger"):null));
   }));
 };
 
 /* ─── NavMarkPicker ────────────────────────────────────────────────────────
    Props : value, onChange                                                  */
+/* Les options reprennent le dessin des vrais repères posés sur la carte
+   (CtaMark2026), réduits : on choisit ce qu'on voit. */
 Shell.ui.NavMarkPicker = function(p){
   var e=React.createElement;
+  var C=(global.CHARTE&&CHARTE.components&&CHARTE.components.cta)||{w:120,h:80};
+  var ech=30/C.h;
+  function apercu(kind){
+    if(kind==="none"||typeof global.CtaMark2026!=="function") return e("div",{className:"navmark-vide"});
+    return e("div",{style:{width:Math.round(C.w*ech),height:30,position:"relative",overflow:"hidden",flexShrink:0}},
+      e("div",{style:{position:"absolute",left:0,top:0,transform:"scale("+ech+")",transformOrigin:"top left"}},
+        e(global.CtaMark2026,{kind:kind,gradKey:p.grad||"bleu",bgKind:"white"})));
+  }
+  var opts=[{v:"arrow",l:"Flèche"},{v:"dot",l:"Point (fin)"},{v:"none",l:"Aucun"}];
   return e(React.Fragment,null,
-    e("label",{className:"field-label"},"Repère de carrousel"),
-    e(Shell.ui.SegButtons,{value:p.value,onChange:p.onChange,
-      options:[{v:"arrow",l:"Flèche →"},{v:"dot",l:"Point (fin)"},{v:"none",l:"Aucun"}]}));
+    e("label",{className:"field-label",style:{display:"flex",alignItems:"center",gap:6}},"Repère de carrousel",
+      e(Shell.ui.Info,{texte:"Flèche sur les vignettes intermédiaires, point sur la dernière."})),
+    e("div",{className:"navmark-row"},opts.map(function(o){
+      return e("button",{key:o.v,type:"button",className:"navmark-opt"+(p.value===o.v?" on":""),
+        onClick:function(){ p.onChange(o.v); }},apercu(o.v),o.l);
+    })));
 };
 
 /* ─── PictoSelect — choix d'un pictogramme, version compacte ────────────────
@@ -1274,65 +1440,8 @@ Shell.ui.PictoSelect = function(p){
         keys.map(function(k){ return e("option",{key:k,value:k},k); }))));
 };
 
-/* ─── BadgeEditor ──────────────────────────────────────────────────────────
-   Gère badge main/sub + PictoGallery (init + sync dégradé).
-   Props : st, set, setSt, active (booléen : onglet visible ?),
-           uppercase (booléen optionnel : forcer MAJUSCULES sur les inputs)  */
-Shell.ui.BadgeEditor = function(p){
-  var e=React.createElement,useEffect=React.useEffect;
-  /* Chargement pictos une seule fois */
-  useEffect(function(){
-    global.PictoGallery.load(function(){
-      var keys=global.PictoGallery.getKeys();
-      p.setSt(function(prev){
-        var c=Object.assign({},prev);
-        if(keys.indexOf(prev.badgeIconKey)<0) c.badgeIconKey=keys[0];
-        return c;
-      });
-    });
-  },[]);
-  /* Init + sync dégradé quand l'onglet devient visible */
-  useEffect(function(){
-    if(!p.active) return;
-    var ct=document.getElementById("spg-picto-gallery");
-    if(ct&&!ct._pg){
-      ct._pg=global.PictoGallery.init(ct,{
-        grad:global.chGrad(p.st.grad),
-        selected:p.st.badgeIconKey,
-        custom:p.st.badgeIconCustom,
-        onChange:function(key){
-          p.setSt(function(prev){var c=Object.assign({},prev);c.badgeIconKey=key;c.badgeIconCustom=null;return c;});
-        },
-        onCustom:function(d){
-          p.setSt(function(prev){var c=Object.assign({},prev);c.badgeIconCustom=d;return c;});
-        }
-      });
-    }
-    if(ct&&ct._pg) ct._pg.setGrad(global.chGrad(p.st.grad));
-  },[p.active,p.st.grad]);
-
-  function onChange(field){
-    return function(ev){
-      var v=ev.target.value;
-      if(p.uppercase) v=v.toUpperCase();
-      p.setSt(function(prev){var c=Object.assign({},prev);c[field]=v;return c;});
-    };
-  }
-  var inputStyle=p.uppercase?{textTransform:"uppercase"}:{};
-  return e(React.Fragment,null,
-    e("label",{className:"field-label"},"Titre ",e("span",{className:"hint"},"(ExtraBold)")),
-    e("input",{type:"text",spellCheck:true,style:inputStyle,
-      value:p.st.badgeMain||"",onChange:onChange("badgeMain")}),
-    e("div",{style:{height:8}}),
-    e("label",{className:"field-label"},"Complément ",
-      e("span",{className:"hint"},"(optionnel — ex. lieu, charte p17)")),
-    e("input",{type:"text",spellCheck:true,style:inputStyle,
-      value:p.st.badgeSub||"",onChange:onChange("badgeSub")}),
-    e("div",{style:{height:10}}),
-    e("label",{className:"field-label"},"Pictogramme"),
-    e("div",{id:"spg-picto-gallery"})
-  );
-};
+/* La cartouche (titre, complément, pictogramme) est un bloc du moteur de
+   panneaux : voir SPGPanneau.bloc("cartouche") dans assets/panneau.js. */
 
 /* ─── previewScale ─────────────────────────────────────────────────────────
    Calcule l'échelle d'affichage de la carte dans le workspace.
@@ -1543,7 +1652,20 @@ Shell.ui.ExportTab = function(p){
         p.shell.busy?e("span",{className:"spin"},e(IcoDl)):e(IcoDl),
         "\xa0",
         p.shell.busy?"Export\u2026"
-          :(p.exportLabel||("T\xe9l\xe9charger le "+sortie.toUpperCase())))),
+          :(p.exportLabel||("T\xe9l\xe9charger le "+sortie.toUpperCase()))),
+      (function(){
+        var fmts=p.formatsTous||Shell._formatsPage||[];
+        if(!p.shell.exportTous||fmts.length<2) return null;
+        return e(React.Fragment,null,
+          e("button",{className:"tab-nav-btn",
+            style:{width:"100%",justifyContent:"center",padding:"10px",marginTop:8},
+            onClick:function(){p.shell.exportTous(p.cardRef,fmts,{sortie:sortie});},
+            disabled:p.shell.busy},
+            e(IcoDl),"\xa0","Tous les formats ("+fmts.length+") en .zip"),
+          e("div",{className:"hint",style:{marginTop:6}},
+            fmts.map(function(k){ return global.chFormat(k).label; }).join(" · ")+
+            ". L'aperçu passe d'un format à l'autre pendant l'export."));
+      })()),
 
     /* Section Sauvegardes */
     e(Shell.ui.Section,{title:"Sauvegardes"},

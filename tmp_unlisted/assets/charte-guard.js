@@ -128,9 +128,12 @@ function evaluer(f){
   /* 3. Débordement : le contenu empiète sur la marge basse ou la flèche.
         Ce n'est pas une tolérance de style, c'est un chevauchement : bloqué. */
   if(f.debord && f.debord>2){
-    out.push({id:"debordement", level:"block", derog:false,
+    /* La carte sait ce qui est le plus simple à faire (remonter la bulle,
+       élargir le bloc…) : elle le dit dans conseilDebord, et peut proposer
+       une correction en un clic (correction : {cle, valeur, libelle}). */
+    out.push({id:"debordement", level:"block", derog:false, correction:f.correctionDebord||null,
       msg:"Le contenu dépasse de "+px(f.debord)+" px dans la zone réservée (marge basse ou flèche de carrousel). "+
-          "Raccourcis le texte ou réduis sa taille."});
+          (f.conseilDebord||"Remonte le bloc, ou raccourcis le texte ou réduis sa taille.")});
   }
   return out;
 }

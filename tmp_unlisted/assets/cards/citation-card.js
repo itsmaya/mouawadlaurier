@@ -82,6 +82,41 @@ function getCiteLayout(format){
 
 /* ── Guillemets ──────────────────────────────────────────────────────────── */
 var GID=0;
+/* Guillemets courbes teintés au dégradé, mis en cache par (dessin, couleurs). */
+var GUIL_CACHE={}, GUIL_EN_COURS={};
+function guilTeinte(url,de,vers){ return GUIL_CACHE[url+"|"+de+"|"+vers]||null; }
+function guilPreparer(url,de,vers,fin){
+  var cle=url+"|"+de+"|"+vers;
+  if(GUIL_CACHE[cle]){ fin(); return; }
+  (GUIL_EN_COURS[cle]=GUIL_EN_COURS[cle]||[]).push(fin);
+  if(GUIL_EN_COURS[cle].length>1) return;
+  var im=new Image();
+  im.onload=function(){
+    try{
+      var c=document.createElement("canvas"); c.width=im.naturalWidth; c.height=im.naturalHeight;
+      var x=c.getContext("2d"), g=x.createLinearGradient(0,0,c.width,0);
+      g.addColorStop(0,de); g.addColorStop(1,vers);
+      x.fillStyle=g; x.fillRect(0,0,c.width,c.height);
+      x.globalCompositeOperation="destination-in"; x.drawImage(im,0,0);
+      GUIL_CACHE[cle]=c.toDataURL("image/png");
+    }catch(err){}
+    var l=GUIL_EN_COURS[cle]||[]; delete GUIL_EN_COURS[cle]; l.forEach(function(f){ f(); });
+  };
+  im.onerror=function(){ var l=GUIL_EN_COURS[cle]||[]; delete GUIL_EN_COURS[cle]; l.forEach(function(f){ f(); }); };
+  im.src=url;
+}
+/* En attendant la version teintée : masque CSS (visible à l'écran). */
+function GuilAttente(p){
+  var e=React.createElement, s=React.useState(0), maj=s[1];
+  React.useEffect(function(){ var vivant=true;
+    guilPreparer(p.url,p.de,p.vers,function(){ if(vivant) maj(function(n){return n+1;}); });
+    return function(){ vivant=false; }; },[p.url,p.de,p.vers]);
+  var t=guilTeinte(p.url,p.de,p.vers);
+  if(t) return e("img",{src:t,alt:"",draggable:false,style:{height:p.h+"px",width:(p.h*1.28)+"px",display:"block",objectFit:"contain"}});
+  return e("div",{style:{height:p.h+"px",width:(p.h*1.28)+"px",display:"block",
+    backgroundImage:p.degrade,mask:p.masque,WebkitMask:p.masque}});
+}
+
 function Guil(p){
   var e=React.createElement;
   if(p.qstyle!=="chevron"){
@@ -92,11 +127,16 @@ function Guil(p){
        comme masque alpha sur un aplat dégradé — le dessin est strictement le
        même, seule la couleur suit la charte. */
     var url=p.close?"../../templates/citation/ferme.png":"../../templates/citation/ouvert.png";
+    var de=p.gradFrom||"#0098E3", vers=p.gradTo||"#4632FF";
+    /* L'export (dom-to-image) ignore les masques CSS : le guillemet
+       disparaissait du fichier téléchargé alors qu'il était visible à l'écran.
+       On colore donc le dessin dans un canvas et on l'affiche en image. */
+    var teinte=guilTeinte(url,de,vers);
+    if(teinte) return e("img",{src:teinte,alt:"",draggable:false,
+      style:{height:p.h+"px",width:(p.h*1.28)+"px",display:"block",objectFit:"contain"}});
     var masque="url("+url+") no-repeat center / contain";
-    var degrade="linear-gradient(90deg,"+(p.gradFrom||"#0098E3")+" 0%,"+(p.gradTo||"#4632FF")+" 100%)";
-    return e("div",{style:{height:p.h+"px",width:(p.h*1.28)+"px",display:"block",
-      backgroundImage:degrade,
-      mask:masque,WebkitMask:masque}});
+    var degrade="linear-gradient(90deg,"+de+" 0%,"+vers+" 100%)";
+    return e(GuilAttente,{h:p.h,masque:masque,degrade:degrade,url:url,de:de,vers:vers});
   }
   var id="gc"+(++GID);
   var VW=108,VH=74,SW=19;
@@ -502,7 +542,18 @@ function CitationCard(p){
       }
       debord=g.debordBas;
     }
-    return {gapTitre:gap, debord:debord,
+    /* Le bloc est déjà calé au plus haut permis sous la cartouche : pour
+       gagner de la hauteur, il faut moins de lignes (bloc plus large) ou un
+       texte plus petit. */
+    var conseil=isT03
+      ? "Élargis le bloc (curseur Largeur du bloc) ou réduis la taille du texte."
+      : "Élargis le bloc (curseur Largeur) pour gagner des lignes, ou réduis la taille du texte.";
+    var corr=null;
+    if(!isT03 && debord>2 && g.curPct<90){
+      var nPct=Math.min(90,g.curPct+Math.max(5,Math.ceil(debord/8)));
+      corr={cle:"blockPct_"+st.format,valeur:nPct,libelle:"Élargir le bloc à "+nPct+" %"};
+    }
+    return {gapTitre:gap, debord:debord, conseilDebord:conseil, correctionDebord:corr,
       texteAuto:{taille:cfsRendu, min:g.QUOTE_FONT_CHARTE, max:g.QUOTE_FONT_MAX, plancher:g.QUOTE_FONT_MIN}};
   })();
 

@@ -217,16 +217,41 @@ function TotallyTrueCard(p){
 
   /* Faits remontés au garde-fou charte : la bulle est placée librement, elle
      peut donc recouvrir la cartouche titre ou la flèche de carrousel. */
+  /* ── Place de la flèche de carrousel ──
+     La bulle est placée librement ; si elle descend sur la flèche (souvent
+     dans le Carrousel, qui impose la flèche), on la remonte automatiquement
+     juste assez, sans passer sous la cartouche. Le réglage enregistré ne
+     change pas : il s'applique de nouveau dès que la flèche n'est plus là. */
+  var Zg=window.SPGLayout.zones(st.format,{navMark:st.navMark,cote:"left"});
+  var byEff=g.by, remonteAuto=0;
+  if(hTexte && Zg.fleche.visible && g.bx<Zg.fleche.x+Zg.fleche.w && g.bx+g.bw>Zg.fleche.x){
+    var ecartFl=(Zg.regles&&Zg.regles.gapContenuFleche)||50;
+    var basActuel=g.by+hBulle+(versLeHaut?0:BULLE.tailH);
+    var basVoulu=Zg.fleche.y-ecartFl;
+    if(basActuel>basVoulu){
+      var hautMin=(st.badgeMain||st.badgeSub)
+        ? Zg.cartouche.y+Zg.cartouche.h+Math.round(((Zg.regles&&Zg.regles.gapSousCartouche)||100)*(1-((Zg.regles&&Zg.regles.tolerance)||0.2)))
+        : Zg.cartouche.y;
+      hautMin+= (versLeHaut?BULLE.tailH:0);
+      byEff=Math.max(Math.min(g.by,hautMin), g.by-(basActuel-basVoulu));
+      remonteAuto=Math.max(0,g.by-byEff);
+    }
+  }
+
   var faitsGarde=(function(){
-    var Zg=window.SPGLayout.zones(st.format,{navMark:st.navMark,cote:"left"});
-    var haut=g.by-(versLeHaut?BULLE.tailH:0);
-    var bas=g.by+hBulle+(versLeHaut?0:BULLE.tailH);
+    var haut=byEff-(versLeHaut?BULLE.tailH:0);
+    var bas=byEff+hBulle+(versLeHaut?0:BULLE.tailH);
     var gap=st.badgeMain||st.badgeSub ? haut-(Zg.cartouche.y+Zg.cartouche.h) : null;
     var debord=0;
     /* Recouvrement de la flèche : seulement si la bulle la croise à l'horizontale. */
     if(Zg.fleche.visible && g.bx<Zg.fleche.x+Zg.fleche.w && g.bx+g.bw>Zg.fleche.x)
       debord=Math.max(0,bas-Zg.fleche.y);
-    return {gapTitre:hTexte?gap:null, debord:hTexte?debord:0};
+    var f={gapTitre:hTexte?gap:null, debord:hTexte?debord:0, remonteAuto:remonteAuto};
+    if(f.debord>2){
+      /* Même remontée au maximum, la bulle touche la flèche : elle est trop haute. */
+      f.conseilDebord="La bulle est trop haute pour tenir entre la cartouche et la flèche : raccourcis le texte, réduis sa taille ou élargis la bulle.";
+    }
+    return f;
   })();
   var faitsJson=JSON.stringify(faitsGarde);
   useEffect(function(){ if(p.onGarde) p.onGarde(JSON.parse(faitsJson)); },[faitsJson]);
@@ -272,7 +297,7 @@ function TotallyTrueCard(p){
 
     /* ── LA BULLE ───────────────────────────────────────────────────────── */
     e("div",{"data-layer":"bulle",style:{position:"absolute",
-        left:g.bx,top:g.by,width:g.bw,height:hBulle}},
+        left:g.bx,top:byEff,width:g.bw,height:hBulle}},
 
       /* Forme : un seul tracé, donc un seul filet et une seule ombre. */
       e("svg",{width:g.bw,height:hBulle+BULLE.tailH,

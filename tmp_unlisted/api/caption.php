@@ -19,8 +19,14 @@
  *       -> { "runId":"..." }
  *   { "action":"status", "workflowId":"...", "runId":"..." }
  *       -> { "status":"PROCESSING"|"COMPLETE", "output":{...}, "credits":n }
+ *
+ * PHP 8.5 : curl_close() est déprécié. Avec l'affichage des erreurs actif,
+ * l'avertissement s'écrivait AVANT le JSON et le navigateur ne pouvait plus
+ * le lire (« JSON.parse: unexpected character »). Retiré, et l'affichage
+ * des erreurs est coupé pour ce fichier.
  */
 
+ini_set('display_errors', '0');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-CopyAI-Key');
@@ -64,7 +70,7 @@ $base = 'https://api.copy.ai/api/workflow/' . rawurlencode($workflowId);
 
 function appel($url, $methode, $charge, $cle) {
     $ch = curl_init($url);
-    $entetes = ['x-copy-ai-api-key: ' . $cle, 'Content-Type: application/json'];
+    $entetes = ['x-copy-ai-api-key: ' . $cle, 'Content-Type: application/json', 'Cache-Control: no-cache'];
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $entetes);
@@ -75,8 +81,7 @@ function appel($url, $methode, $charge, $cle) {
     $reponse = curl_exec($ch);
     $code    = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $erreur  = curl_error($ch);
-    curl_close($ch);
-    return [$code, $reponse, $erreur];
+    return [$code, $reponse, $erreur];   // pas de curl_close : déprécié en PHP 8.5
 }
 
 if ($action === 'run') {
@@ -87,7 +92,7 @@ if ($action === 'run') {
     $json = json_decode($rep, true);
     if ($code >= 400) {
         http_response_code($code);
-        echo json_encode(['error' => 'Copy.ai a refusé la demande', 'detail' => $json ?: $rep]);
+        echo json_encode(['error' => 'Copy.ai a refusé la demande (code ' . $code . ')', 'detail' => $json ?: $rep]);
         exit;
     }
     echo json_encode(['runId' => isset($json['data']['id']) ? $json['data']['id'] : null, 'brut' => $json]);
@@ -102,15 +107,35 @@ if ($action === 'status') {
     $json = json_decode($rep, true);
     if ($code >= 400) {
         http_response_code($code);
-        echo json_encode(['error' => 'Lecture du run impossible', 'detail' => $json ?: $rep]);
+        echo json_encode(['error' => 'Lecture du run impossible (code ' . $code . ')', 'detail' => $json ?: $rep]);
         exit;
     }
-    $d = isset($json['data']) ? $json['data'] : [];
-    echo json_encode([
-        'status'  => isset($d['status']) ? $d['status'] : 'INCONNU',
-        'output'  => isset($d['output']) ? $d['output'] : null,
+    $d = isset($json['data']) && is_array($json['data']) ? $json['data'] : [];
+    /* La doc Copy.ai montre deux formes : état dans data.status (cas réel
+       constaté), ou à la racine. On prend le premier qui est un état de run. */
+    $etat = isset($d['status']) ? $d['status'] : null;
+    if (!$etat && isset($json['status']) && !in_array($json['status'], ['success', 'error'], true)) $etat = $json['status'];
+    $sortie = isset($d['output']) ? $d['output'] : (isset($json['output']) ? $json['output'] : null);
+    $reponse = [
+        'status'  => $etat ? strtoupper($etat) : 'INCONNU',
+        'output'  => $sortie,
         'credits' => isset($d['credits']) ? $d['credits'] : null
-    ]);
+    ];
+    /* Diagnostic : ce que Copy.ai dit avoir reçu en entrée (noms et longueur
+       des valeurs seulement, pas le contenu). Sert quand un run se met en pause. */
+    /* Pause ou échec : on renvoie ce que Copy.ai dit du run (hors entrées et
+       sorties), pour afficher la raison sans aller la chercher dans Copy.ai. */
+    if ($etat && in_array(strtoupper($etat), ['PAUSED', 'FAILED'], true)) {
+        $infos = $d; unset($infos['input'], $infos['output']);
+        $reponse['infos'] = mb_substr(json_encode($infos, JSON_UNESCAPED_UNICODE), 0, 700);
+    }
+    if (isset($d['input']) && is_array($d['input'])) {
+        $recu = [];
+        foreach ($d['input'] as $k => $v) $recu[$k] = is_string($v) ? mb_strlen($v) : (is_null($v) ? 0 : -1);
+        $reponse['recu'] = $recu;
+    }
+    if (!$etat) $reponse['detail'] = mb_substr((string) $rep, 0, 400);   // pour diagnostiquer
+    echo json_encode($reponse);
     exit;
 }
 

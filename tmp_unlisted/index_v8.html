@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Static Posts Generator — Fisheye × TotalEnergies</title>
+<!-- Test V5 : vignettes en lignes sur deux colonnes -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--nuit:#000;--encre:#12181c;--gris:#5f6367;--filet:#e6e6e6;--papier:#f7f7f7;--fantome:#ececec;
+  --grad:linear-gradient(135deg,#0098E3 0%,#4632FF 100%);}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{height:100vh;height:100dvh;overflow:hidden;padding-top:52px;display:flex;flex-direction:column;
+  background:#fff;font-family:'Nunito',sans-serif;color:var(--encre)}
+a{color:inherit;text-decoration:none}
+.c-label,.col-label,.sec-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#9a9a9a;margin-bottom:8px}
+.c-titre{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(19px,1.45vw,28px);line-height:1.02;letter-spacing:-.015em;margin-bottom:8px}
+.c-titre em,.col-titre em,.sec-titre em{font-style:italic;color:#8d8d8d}
+.c-desc{font-size:11.5px;line-height:1.45;color:var(--gris);margin-bottom:10px}
+.c-cta{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  border-bottom:1.5px solid var(--encre);padding-bottom:2px;transition:gap .2s;align-self:flex-start}
+a:hover .c-cta{gap:14px}
+.c-num{position:absolute;top:10px;left:16px;font-family:'DM Serif Display',serif;font-style:italic;font-size:32px;line-height:1;color:var(--fantome);pointer-events:none}
+.c-txt{position:relative;z-index:1;min-width:0;display:flex;flex-direction:column}
+.apercu{position:relative;flex-shrink:0;aspect-ratio:1/1}
+.apercu::before,.apercu::after{content:"";position:absolute;inset:0;background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:2px;box-shadow:0 5px 14px rgba(0,0,0,.05)}
+.apercu::before{transform:translate(10px,10px)}.apercu::after{transform:translate(5px,5px)}
+.apercu img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:cover;border-radius:2px;box-shadow:0 8px 20px rgba(0,0,0,.14);transition:transform .3s ease,box-shadow .3s ease}
+a:hover .apercu img{transform:translate(-3px,-3px);box-shadow:0 13px 28px rgba(0,0,0,.18)}
+.apercu.vide img{display:none}
+.apercu.vide{background:repeating-linear-gradient(45deg,#f1f1f1 0 10px,#e8e8e8 10px 20px)}
+.ftr{flex:0 0 auto;background:var(--nuit);color:#fff;padding:6px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ftr-left{display:flex;align-items:baseline;gap:12px;min-width:0}
+.ftr-copy{font-size:10.5px;font-weight:800;white-space:nowrap}
+.ftr-desc{font-size:9.5px;color:rgba(255,255,255,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ftr-right{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.ftr-te{height:18px;display:block}.ftr-fish{height:11px;display:block;filter:invert(1)}
+/* colonne Carrousel commune */
+.colonne{display:flex;flex-direction:column;align-items:flex-start;padding:28px 28px 24px;min-height:0;background:#fff}
+.col-titre{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(28px,2.4vw,42px);line-height:1;letter-spacing:-.015em;margin-bottom:12px}
+.col-desc{font-size:12.5px;line-height:1.55;color:#3d4348;margin-bottom:14px;max-width:34ch}
+.colonne .apercu{margin-top:22px;width:min(100%,calc(100vh - 380px));min-width:120px}
+.sec-titre{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(20px,1.6vw,28px);line-height:1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.corps{flex:1;min-height:0;display:grid;grid-template-columns:minmax(240px,24%) minmax(0,1fr) minmax(230px,22%)}
+.vignettes{display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--filet);background:#fff}
+.vignettes header{display:flex;align-items:baseline;gap:14px;padding:22px 26px 14px;border-bottom:1px solid var(--filet)}
+.vignettes header p{font-size:11.5px;color:var(--gris)}
+/* sous-grille : titre, description et aperçu alignés d'une rangée à l'autre,
+   la colonne du titre prend la largeur du plus long, les écarts sont égaux */
+.liste{flex:1;min-height:0;display:grid;grid-template-rows:repeat(5,minmax(0,1fr));
+  grid-template-columns:44px max-content minmax(0,1fr) auto;column-gap:clamp(28px,3.4vw,60px)}
+.liste .carte{grid-column:1 / -1;position:relative;display:grid;grid-template-columns:subgrid;align-items:center;padding:8px 32px 8px 26px;border-bottom:1px solid var(--filet);min-height:0;transition:background .2s}
+.liste .carte:last-child{border-bottom:0}
+.liste .carte:hover{background:var(--papier)}
+/* Survol commun (vignettes, Carrousel, formats spéciaux) : fond teinté et
+   couleur du titre qui passe au bleu de la charte. */
+.liste .carte:hover .c-titre,.colonne:hover .col-titre{color:#285AFF}
+.liste .carte:hover .c-titre em,.colonne:hover .col-titre em{color:#0098E3}
+.liste .carte:hover .c-num{color:#9fb4ff}
+.colonne{transition:background .2s}.colonne:hover{background:var(--papier)}
+.c-titre,.col-titre,.c-titre em,.col-titre em,.c-num{transition:color .2s}
+.speciaux .carte{transition:background .2s}
+.speciaux .carte:hover{background:rgba(255,255,255,.04)}
+.speciaux .carte:hover .c-titre{color:#80CDFF}
+.speciaux .carte:hover .c-titre em{color:#0098E3}
+.liste .c-num{position:static;font-size:34px;color:#d6d6d6}
+.liste .c-txt{display:contents}
+.liste .c-label{display:none}
+.liste .c-titre{margin:0;font-size:clamp(18px,1.35vw,24px)}
+.liste .c-desc{margin:0;max-width:60ch}
+.liste .apercu{height:min(100%,calc((100vh - 52px - 30px - 64px)/5 - 22px));width:auto;max-height:110px}
+.liste .apercu::before{transform:translate(6px,6px)}.liste .apercu::after{transform:translate(3px,3px)}
+.speciaux{background:#0b0d10;color:#fff;display:flex;flex-direction:column;min-height:0}
+.speciaux header{padding:22px 22px 8px}
+.speciaux .sec-label{color:#7c8590}
+.speciaux .sec-titre em{color:#7c8590}
+.speciaux .carte{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;overflow:hidden;color:#fff;padding:14px 22px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.speciaux .c-label{color:#7c8590}.speciaux .c-titre em{color:#8b939c}.speciaux .c-desc{color:#a9b0b7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.speciaux .c-cta{border-color:#fff}
+.speciaux .apercu{flex:1 1 0;min-height:60px;height:auto;width:auto;max-width:100%;max-height:none;aspect-ratio:1/1;align-self:flex-start;margin-top:4px}
+.speciaux .apercu::before,.speciaux .apercu::after{background:#1b1f24;border-color:rgba(255,255,255,.08)}
+@media(max-width:1250px),(max-height:760px){
+  body{height:auto;overflow:auto}
+  .corps{grid-template-columns:minmax(230px,28%) minmax(0,1fr)}
+  .liste{grid-template-rows:none}.liste .apercu{height:96px}
+  .speciaux{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap}.speciaux header{width:100%}
+  .speciaux .carte{flex:1 1 300px}.speciaux .apercu{flex:none;height:auto;width:min(100%,170px)}
+  .colonne .apercu{width:min(100%,280px)}
+}
+@media(max-width:820px){.corps{grid-template-columns:1fr}.liste .carte{grid-template-columns:36px minmax(0,1fr) auto;row-gap:4px}.liste .c-desc{grid-column:2;grid-row:2}.liste .apercu{grid-column:3;grid-row:1 / span 2}}
+
+/* ── Test V5 : vignettes en lignes, sur deux colonnes ──
+   Titre + description à gauche, aperçu à droite, comme la V3, mais deux
+   colonnes : les lignes sont plus hautes, donc les images plus grandes.
+   Le titre de section occupe la première case : pas de case vide avec
+   cinq types, et un nouveau type prend simplement la case suivante.
+   Les aperçus restent plus petits que ceux des colonnes voisines. */
+.vignettes{background:#fff}
+.grille2{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr)}
+.g-tete,.ligne{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);min-height:0}
+.grille2>*:nth-child(2n){border-right:0}
+.grille2>*:nth-last-child(-n+2){border-bottom:0}
+.g-tete{display:flex;flex-direction:column;justify-content:center;padding:22px 30px;background:var(--papier)}
+.g-tete .sec-titre{font-size:clamp(26px,2.2vw,38px);margin-bottom:10px}
+.g-tete p{font-size:12px;line-height:1.5;color:var(--gris);max-width:30ch}
+.ligne{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+  column-gap:clamp(16px,1.8vw,28px);padding:16px clamp(18px,2vw,30px);transition:background .2s}
+.ligne:hover{background:var(--papier)}
+.l-num{display:block;font-family:'DM Serif Display',serif;font-style:italic;font-size:26px;line-height:1;color:#d6d6d6;margin-bottom:8px;transition:color .2s}
+.l-titre{font-family:'DM Serif Display',serif;font-size:clamp(19px,1.45vw,26px);line-height:1.02;letter-spacing:-.015em;margin-bottom:8px;transition:color .2s}
+.l-titre em{font-style:italic;color:#8d8d8d;transition:color .2s}
+.l-desc{font-size:11.5px;line-height:1.45;color:var(--gris);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ligne:hover .l-titre{color:#285AFF}.ligne:hover .l-titre em{color:#0098E3}.ligne:hover .l-num{color:#9fb4ff}
+.ligne .apercu{height:min(calc((100vh - 52px - 30px)/3 - 44px),calc(45vh - 215px),180px);width:auto;min-height:90px}
+.ligne .apercu::before{transform:translate(6px,6px)}.ligne .apercu::after{transform:translate(3px,3px)}
+@media(max-width:1250px),(max-height:760px){
+  .grille2{grid-auto-rows:auto}.ligne .apercu{height:140px}
+}
+@media(max-width:820px){.grille2{grid-template-columns:1fr}.grille2>*{border-right:0!important}}
+</style>
+<script src="assets/header.js?v=202610291328"></script></head><body>
+<div class="corps"><a class="colonne" href="generators/carrousel/index.html"><span class="col-label">Carrousel</span><div class="col-titre">Carrousel<br/><em>Slides</em></div><p class="col-desc">Le point de départ d'une série. Assemble les cinq vignettes, numérotation, flèches et point final automatiques, export ZIP multi-formats.</p><div class="apercu"><img src="previews/PREVIEW_CARROUSEL.png" alt="Aperçu Carrousel" onerror="this.parentNode.classList.add('vide')"/></div></a><section class="vignettes"><div class="grille2"><header class="g-tete"><span class="sec-label">Carrousel</span><h2 class="sec-titre">Vignettes</h2><p>Les slides du carrousel, aussi utilisables seules.</p></header><a class="ligne" href="generators/totally-true/index.html"><div class="l-txt"><span class="l-num">01</span><div class="l-titre">Totally<br/><em>True</em></div><p class="l-desc">Bulle de dialogue posée sur l'image, avec la citation du commentaire et la mention du pseudo.</p></div><div class="apercu"><img src="previews/PREVIEW_TOTALLYTRUE.png" alt="Aperçu Totally True" onerror="this.parentNode.classList.add('vide')"/></div></a><a class="ligne" href="generators/citation/index.html"><div class="l-txt"><span class="l-num">02</span><div class="l-titre">Citation<br/><em>Post</em></div><p class="l-desc">Citations de dirigeants et d'experts. Surlignage, soulignage et guillemets EN / FR.</p></div><div class="apercu"><img src="previews/PREVIEW_CITATION.png" alt="Aperçu Citation Post" onerror="this.parentNode.classList.add('vide')"/></div></a><a class="ligne" href="generators/latest-news/index.html"><div class="l-txt"><span class="l-num">03</span><div class="l-titre">Latest<br/><em>News</em></div><p class="l-desc">Actualités localisées. Cartouche lieu, pavé texte sur image et flèche de carrousel.</p></div><div class="apercu"><img src="previews/PREVIEW_LATESTNEWS.png" alt="Aperçu Latest News" onerror="this.parentNode.classList.add('vide')"/></div></a><a class="ligne" href="generators/split-screen/index.html"><div class="l-txt"><span class="l-num">04</span><div class="l-titre">Split<br/><em>Screen</em></div><p class="l-desc">Photo et texte côte à côte, disposition libre, texte ferré à gauche ou à droite.</p></div><div class="apercu"><img src="previews/PREVIEW_SPLITSCREEN.png" alt="Aperçu Split Screen" onerror="this.parentNode.classList.add('vide')"/></div></a><a class="ligne" href="generators/block-layouts/index.html"><div class="l-txt"><span class="l-num">05</span><div class="l-titre">Block<br/><em>Layouts</em></div><p class="l-desc">Chiffres clés en blocs empilés, jusqu'à 4 blocs et callouts géants.</p></div><div class="apercu"><img src="previews/PREVIEW_BLOCKLAYOUTS.png" alt="Aperçu Block Layouts" onerror="this.parentNode.classList.add('vide')"/></div></a></div></section><section class="speciaux"><header><span class="sec-label">Formats spéciaux</span><h2 class="sec-titre">Hors <em>carrousel</em></h2></header><a class="carte" href="generators/energy-talks/index.html"><div class="c-txt"><span class="c-label">Energy Talks</span><div class="c-titre">Energy<br/><em>Talks</em></div><p class="c-desc">Annonces Live et Podcast, 1 à 4 intervenants détourés, carré et paysage.</p></div><div class="apercu"><img src="previews/PREVIEW_ENERGYTALKS.png" alt="Aperçu Energy Talks" onerror="this.parentNode.classList.add('vide')"/></div></a><a class="carte" href="generators/fiche-metier/index.html"><div class="c-txt"><span class="c-label">Fiche métier</span><div class="c-titre">Fiche<br/><em>Métier</em></div><p class="c-desc">Portraits de femmes du secteur énergétique : missions, citation, photo portrait.</p></div><div class="apercu"><img src="previews/PREVIEW_WIE.png" alt="Aperçu Fiche métier" onerror="this.parentNode.classList.add('vide')"/></div></a></section></div>
+<footer class="ftr"><div class="ftr-left"><span class="ftr-copy">Static Posts Generator — Developed by Fisheye</span>
+<span class="ftr-desc">Formats 1:1, 4:5, story 9:16 · Export PNG haute résolution, conforme à la charte Social Media.</span></div>
+<div class="ftr-right"><img class="ftr-te" src="assets/logos/logo-totalenergies-transparent.png" alt="TotalEnergies"/>
+<img class="ftr-fish" src="assets/logos/fisheye-gallery-logo-vector.png" alt="Fisheye"/></div></footer>
+</body></html>

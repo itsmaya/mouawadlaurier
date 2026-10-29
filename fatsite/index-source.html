@@ -1,0 +1,1503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fat-Man Collective 2008</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Fat-Man Collective, site de novembre 2008 : home "bullshit slogan", scène 3D, fiches 2D sur bandes noires de 355 px. */
+:root {
+  --bg: #ffffff;
+  --ink: #111111;
+  --band: #0b0b0b;
+  --panel: #000000;
+  --menu-on: #555555;
+  --menu-off: #a8a8a8;
+  --rule: #b0b0b0;
+  --yellow: #ffcc00;
+  --amber: #f1b800;
+  --grey-1: #cccccc;
+  --grey-2: #999999;
+  --grey-3: #666666;
+  --serif: Georgia, Gelasio, "Times New Roman", serif;
+  --ui: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, sans-serif;
+  --grotesk: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
+body { font-family: var(--ui); color: var(--ink); }
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
+#stage.hover { cursor: pointer; }
+#stage.dragging { cursor: grabbing; }
+.ui { position: fixed; user-select: none; -webkit-user-select: none; }
+button { font: inherit; }
+:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 2px; }
+
+/* --- Slogan, logo, menu --- */
+#slogan { z-index: 5; left: calc(23.2px + env(safe-area-inset-left, 0px)); top: calc(26px + env(safe-area-inset-top, 0px)); width: 248px; pointer-events: none; opacity: 0; transition: opacity 2s cubic-bezier(.17,.84,.44,1); }
+#slogan.on { opacity: 1; }
+#logo { z-index: 5; right: calc(20px + env(safe-area-inset-right, 0px)); top: calc(20px + env(safe-area-inset-top, 0px)); width: 160px; height: 160px; pointer-events: none; }
+#menu { left: 60px; top: 548px; margin: 0; padding: 0; list-style: none; z-index: 6; transition: opacity .4s; }
+#menu::before { content: ""; position: absolute; left: 0; top: 2px; width: 1px; height: 0; background: var(--rule); transition: height .6s; }
+#menu.ready::before { height: calc(var(--n) * 21.5px - 8px); }
+#menu li { margin: 0; padding: 0; }
+#menu li:first-child { margin-top: -3px; }
+#menu button { display: block; font: 15px/21.5px var(--serif); color: var(--menu-off); background: none; border: 0; padding: 0 0 0 9px; margin: 0; text-align: left; cursor: pointer; white-space: nowrap; }
+#menu button:hover, #menu button[aria-current="true"] { color: var(--menu-on); }
+#menu button[aria-current="true"] { cursor: default; }
+
+/* --- Catégories + pagination (Category.fla) --- */
+#cats { right: calc(97px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: flex-end; gap: 6px; z-index: 6; transition: opacity 1s; }
+#cats.hidden { opacity: 0; pointer-events: none; }
+.pg { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #9a9a9a; background: #fff; color: #777; padding: 0; cursor: pointer; display: grid; place-items: center; margin-bottom: 1px; }
+.pg svg { width: 8px; height: 10px; }
+.pg:disabled { opacity: .6; cursor: default; }
+.pg[hidden] { display: none; }
+#cat-box { position: relative; width: 150px; }
+#cat-open { display: flex; align-items: center; gap: 7px; width: 100%; height: 24px; padding: 0 8px; border: 0; background: #eeeeee; color: #333; font: bold 10px/24px var(--ui); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; }
+#cat-open .tri { width: 0; height: 0; border-left: 5px solid var(--amber); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; transition: transform .25s; flex: none; }
+#cat-box.open #cat-open .tri { transform: rotate(-90deg); }
+#cat-list { position: absolute; left: 0; bottom: 28px; width: 100%; margin: 0; padding: 4px 0; list-style: none; background: #f4f4f4; border-top: 2px solid #dcdcdc; transform-origin: bottom; transform: scaleY(0); opacity: 0; transition: transform .45s cubic-bezier(.77,0,.18,1), opacity .3s; }
+#cat-box.open #cat-list { transform: scaleY(1); opacity: 1; }
+#cat-list button { display: block; width: 100%; border: 0; background: none; text-align: left; padding: 2px 10px 2px 20px; font: bold 10px/15px var(--ui); letter-spacing: .06em; color: #777; cursor: pointer; text-transform: uppercase; }
+#cat-list button:hover, #cat-list button[aria-current="true"] { color: #222; }
+
+/* --- Guide clavier (keyboard2) --- */
+#kb { right: calc(20px + env(safe-area-inset-right, 0px)); bottom: 0; width: 77px; z-index: 7; }
+#kb-toggle { display: block; width: 77px; height: 36px; border: 0; padding: 0; background: url("assets/keyboard.svg") center/63px auto no-repeat; cursor: pointer; opacity: .9; margin-bottom: calc(2px + env(safe-area-inset-bottom, 0px)); }
+#kb-toggle:hover { opacity: 1; filter: brightness(.85); }
+#kb-panel { position: absolute; right: 0; bottom: 38px; width: 77px; background: #f2f2f2; border-top: 2px solid #dcdcdc; padding: 10px 0 12px; display: grid; justify-items: center; gap: 4px; transform: translateY(calc(100% + 40px)); transition: transform .5s cubic-bezier(.77,0,.18,1); }
+#kb.open #kb-panel { transform: translateY(0); }
+#kb-panel .lbl { font: bold 9px/11px var(--ui); color: #555; letter-spacing: .04em; text-transform: uppercase; margin-top: 6px; text-align: center; }
+#kb-panel .sub { font: 8px/9px var(--ui); color: #777; margin-top: -4px; }
+.key { min-width: 14px; height: 14px; padding: 0 3px; border: 1px solid #555; border-radius: 2px; background: #8d8d8d; color: #f2f2f2; font: bold 8px/12px var(--ui); cursor: pointer; box-shadow: inset 0 1px 0 #b4b4b4; }
+.key.down, .key:active { background: #555; }
+.key.wide { min-width: 36px; }
+.key.space { min-width: 49px; }
+.key.anim.off { background: #f2f2f2; color: #555; }
+.row { display: flex; gap: 2px; align-items: center; }
+.row .lbl { margin: 0 3px; }
+
+/* --- Fiches 2D --- */
+#whiteboard { position: fixed; inset: 0; background: rgba(255,255,255,.6); z-index: 3; cursor: pointer; }
+#post2d { position: fixed; left: 20px; top: 150px; right: 0; height: 400px; z-index: 4; overflow: visible; transition: opacity .8s; cursor: url("assets/hand-open.svg") 8 8, grab; }
+#post2d.grabbing { cursor: url("assets/hand-closed.svg") 8 8, grabbing; }
+#post2d.closing { opacity: 0; }
+#strip { position: absolute; left: 0; top: 0; height: 355px; will-change: transform; }
+.pnl { position: absolute; top: 0; height: 355px; overflow: hidden; }
+.pnl .bgx { position: absolute; inset: 0; background: var(--panel); transform-origin: left; transform: scaleX(0); opacity: 0; transition: transform .2s linear, opacity .3s linear; }
+.pnl.open .bgx { transform: scaleX(1); opacity: 1; }
+.pnl .in { position: absolute; inset: 0; opacity: 0; transition: opacity .3s linear; }
+.pnl.open .in { opacity: 1; }
+.pnl.media .bgx { background: rgba(0,0,0,.45); }
+.pnl.media img, .pnl.media video { display: block; height: 355px; width: auto; user-select: none; -webkit-user-drag: none; }
+.txt .ttl { position: absolute; font: 30px/36px var(--serif); color: #fff; margin: 0; text-wrap: balance; }
+.txt .body { position: absolute; font: 14px/18px var(--serif); color: #fff; overflow: hidden; }
+.txt .body p { margin: 0 0 18px; }
+.txt .body a, .txt .posted span, .banda a, .contact .site a { color: var(--yellow); text-decoration: none; }
+.txt .body a:hover, .banda a:hover { text-decoration: underline; }
+.txt .fecha { position: absolute; font: 13px/18px var(--serif); color: var(--grey-1); }
+.txt .posted { position: absolute; font: 10px/14px var(--ui); color: var(--grey-2); letter-spacing: .03em; }
+.team .bgx { background: rgba(48,48,48,.9); }
+.team .ttl { position: absolute; left: 100px; top: 64px; font: 30px/36px var(--serif); color: #fff; margin: 0; }
+.team .names { position: absolute; left: 100px; top: 125px; width: 385px; font: 11px/15px var(--ui); color: #fff; }
+.team .names span { color: var(--grey-3); }
+.face { position: absolute; width: 48px; height: 48px; padding: 0; border: 0; background: #fff; transform-origin: 0 0; transition: transform .2s cubic-bezier(.19,1,.22,1); cursor: inherit; }
+.face img { position: absolute; left: 3px; top: 3px; width: calc(100% - 6px); height: calc(100% - 6px); object-fit: cover; }
+.face .tab { position: absolute; left: 0; top: 100%; width: 115px; padding: 5px; box-sizing: border-box; background: #000; color: #fff; text-align: left; font: 11px/14px var(--ui); transform: scale(.42); transform-origin: 0 0; opacity: 0; pointer-events: none; }
+.face .tab small { display: block; color: var(--grey-2); font-size: 10px; white-space: pre-line; }
+.face.big { z-index: 2; transform: scale(2.4); }
+.face.big .tab { opacity: 1; }
+.contact .bgx { background: #000; }
+.contact div { position: absolute; left: 32px; width: 323px; }
+.contact .cn { top: 16px; font: 50px/58px var(--serif); color: #fff; }
+.contact .ac { top: 80px; font: 20px/26px var(--serif); color: #979797; }
+.contact .site { top: 126px; font: 14px/20px var(--ui); color: var(--yellow); }
+.contact .ad { top: 168px; font: 14px/20px var(--ui); color: #fff; }
+.contact .ad font { color: #999; }
+.contact .ad a { color: #fff; text-decoration: none; }
+.contact .ct { top: 258px; font: 15px/20px var(--ui); color: #ffcc33; }
+.banda { position: absolute; top: 373px; height: 18px; padding: 0 7px; background: #000; color: #fefefe; font: 11px/18px var(--ui); white-space: nowrap; transform-origin: right; animation: grow .25s linear both; }
+@keyframes grow { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
+
+/* --- Home "bullshit slogan" --- */
+#home { position: fixed; inset: 0; z-index: 20; background: var(--bg); transition: transform 1s cubic-bezier(.17,.84,.44,1); }
+#home.out { transform: translateY(calc(100% + 402px)); }
+#ticker { position: absolute; left: 0; top: env(safe-area-inset-top, 0px); width: 100%; height: 24px; display: block; background: #000; }
+#home-top { position: absolute; left: 0; right: 0; top: 24px; height: calc(50% - 18px); display: grid; place-content: center; justify-items: center; gap: 0; padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); text-align: center; }
+#bs-form { margin: 0; }
+#bs { width: min(560px, 86vw); border: 0; border-left: 1px solid #333; padding: 0 0 0 10px; font: bold clamp(26px, 5.2vw, 50px)/1.15 var(--grotesk); letter-spacing: -0.04em; color: var(--ink); background: transparent; outline: none; caret-color: #333; text-align: left; }
+#bs::placeholder { color: var(--ink); opacity: 1; }
+#bs:focus::placeholder { color: #c8c8c8; }
+#bs-eg { margin: 18px 0 0; font: bold clamp(12px, 1.6vw, 15px)/1.3 var(--grotesk); color: #aaa; letter-spacing: -0.01em; }
+#bs-rss { margin: 52px 0 0; font: 11px/16px var(--grotesk); color: #000; display: flex; align-items: center; gap: 4px; }
+#bs-rss svg { width: 14px; height: 14px; }
+#bs-sent { height: 16px; margin: 6px 0 0; font: 11px/16px var(--grotesk); color: #999; }
+#home-band { position: absolute; left: 0; right: 0; bottom: 0; top: calc(50% + 6px); background: var(--band); color: #777; overflow: hidden; padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); }
+#home-band .sl { position: absolute; top: 18px; font: 30px/34px var(--serif); color: #ddd; margin: 0; }
+#home-band .sl span { display: block; color: #777; font-size: 25px; line-height: 28px; padding-left: 2px; }
+#home-band .lg { position: absolute; top: 160px; display: flex; align-items: center; gap: 18px; }
+#home-band .lg img { width: 52px; height: 52px; }
+#enter { border: 0; padding: 3px 6px; background: var(--yellow); color: #000; font: bold 9px/11px var(--ui); letter-spacing: .04em; cursor: pointer; }
+#enter:hover { background: #fff; }
+#enter.wait { background: #333; color: var(--yellow); cursor: progress; }
+#studios { position: absolute; left: max(28px, env(safe-area-inset-left, 0px)); right: 16px; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; row-gap: 16px; }
+#studios section { padding: 0 16px 0 15px; border-left: 1px solid #1f1f1f; min-width: 0; }
+#studios section:first-child { padding-left: 0; border-left: 0; }
+#studios h3 { margin: 0 0 6px; font: 15px/20px var(--serif); color: #777; font-weight: normal; }
+#studios p { margin: 0; font: 11px/16px var(--serif); color: #444; white-space: nowrap; }
+#studios p.m { font-style: italic; color: #4d4d4d; margin-top: 2px; }
+#load-error { left: 50%; top: 45%; transform: translateX(-50%); max-width: 80vw; margin: 0; font: 15px/1.4 var(--serif); color: var(--menu-on); text-align: center; z-index: 30; }
+@media (max-width: 700px) {
+  #slogan { width: 160px; }
+  #logo { width: 96px; height: 96px; }
+  #home-band { display: flex; flex-direction: column; gap: 16px; overflow-y: auto; padding-block: 18px calc(22px + env(safe-area-inset-bottom, 0px)); }
+  #home-band .sl, #home-band .lg, #studios { position: static; }
+  #studios section { flex: 1 1 45%; border-left: 0; padding-left: 0; }
+  #studios p { white-space: normal; }
+  #home-band .sl { font-size: 24px; line-height: 28px; }
+  #home-band .sl span { font-size: 20px; line-height: 23px; }
+}
+@media (max-height: 640px) and (min-width: 701px) { #studios { display: none; } }
+@media (prefers-reduced-motion: reduce) { #home { transition-duration: .01s; } }
+</style>
+</head>
+<body>
+<canvas id="stage" tabindex="0" aria-label="Scène 3D : glisser pour tourner autour de l'objet, flèches pour passer d'un post à l'autre, espace pour ouvrir"></canvas>
+<div id="whiteboard" hidden></div>
+<div id="post2d" class="ui" hidden><div id="strip"></div></div>
+<img id="slogan" class="ui" src="assets/fatman.svg" alt="Fat-Man Collective. Thinkers. Designers. Developers.">
+<img id="logo" class="ui" src="assets/logo.svg" alt="">
+<ul id="menu" class="ui" aria-label="Sections"></ul>
+<div id="cats" class="ui hidden">
+  <button class="pg" id="pg-prev" type="button" aria-label="Posts précédents"><svg viewBox="0 0 8 10"><path d="M7 0 0 5l7 5z" fill="currentColor"/></svg></button>
+  <button class="pg" id="pg-next" type="button" aria-label="Posts suivants"><svg viewBox="0 0 8 10"><path d="M1 0l7 5-7 5z" fill="currentColor"/></svg></button>
+  <div id="cat-box"><ul id="cat-list"></ul><button id="cat-open" type="button" aria-haspopup="true"><span class="tri"></span><span id="cat-name"></span></button></div>
+</div>
+<div id="kb" class="ui" hidden>
+  <div id="kb-panel" aria-label="Raccourcis clavier">
+    <div class="lbl">Animation</div><div class="sub">on/off</div><button class="key anim" data-k="KeyA" type="button">A</button>
+    <div class="lbl">Section</div><button class="key wide" data-k="Tab" type="button">⇥ TAB</button>
+    <div class="lbl" style="margin-top:10px"></div>
+    <button class="key" data-k="ArrowUp" type="button" aria-label="Monter">▴</button>
+    <div class="row"><button class="key" data-k="ArrowLeft" type="button" aria-label="Post précédent">◂</button><span class="lbl">Move</span><button class="key" data-k="ArrowRight" type="button" aria-label="Post suivant">▸</button></div>
+    <button class="key" data-k="ArrowDown" type="button" aria-label="Descendre">▾</button>
+    <div class="lbl">Zoom</div><div class="row"><button class="key" data-k="Equal" type="button" aria-label="Zoom avant">+</button><button class="key" data-k="Minus" type="button" aria-label="Zoom arrière">−</button></div>
+    <div class="lbl">Open / Close</div><button class="key space" data-k="Space" type="button">SPACE BAR</button>
+  </div>
+  <button id="kb-toggle" type="button" aria-label="Afficher les raccourcis clavier" aria-expanded="false"></button>
+</div>
+<p id="load-error" class="ui" role="alert" hidden></p>
+
+<div id="home">
+  <canvas id="ticker" aria-label="Bullshit slogans"></canvas>
+  <div id="home-top">
+    <form id="bs-form" autocomplete="off"><input id="bs" type="text" maxlength="70" placeholder="type bullshit slogan here" aria-label="Tape ton bullshit slogan, puis Entrée"></form>
+    <p id="bs-eg">e.g We create strategies that unite the branding experience</p>
+    <p id="bs-sent" aria-live="polite"></p>
+    <p id="bs-rss"><svg viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#f26522"/><circle cx="4.2" cy="11.8" r="1.7" fill="#fff"/><path d="M2.6 6.6a6.8 6.8 0 0 1 6.8 6.8M2.6 2.9a10.5 10.5 0 0 1 10.5 10.5" stroke="#fff" stroke-width="2" fill="none"/></svg>Subscribe to the <b>Bullshit RSS</b> feed</p>
+  </div>
+  <div id="home-band">
+    <p class="sl">Fat-Man Collective.<span>Thinkers.</span><span>Designers.</span><span>Developers.</span></p>
+    <div class="lg"><img src="assets/logo.svg" alt=""><button id="enter" type="button">ENTER</button></div>
+    <div id="studios"></div>
+  </div>
+</div>
+
+<script>window.FAT_DATA = {"projects": [{"id": 0, "category": ["All", "Web", "Featured Works"], "title": "The Fat-Site 2008", "autor": "David Okuniev", "date": "August 8th 2008", "link": null, "team": ["maya", "emi", "fernando", "david", "barnier", "beatriz", "adam", "yann", "philine"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/fatsite/fatsite1.jpg'/>Released on 08.08.08, the new Fat-Site is built in Papervision 3D (opensource), is still in beta, but with new features to come. In fact the first upgrade will be: to feed all content from our blog into the flash site. We also plan to share our code for connecting Papervision 3D to a blog, at some point in the near future.<br /> <br />If you have any comments, suggestion or constructive critique, please do so @ <a href=\"http://fat-man-collective.com/blog/uncategorized/08080808-new-fat-site-beta/373\">this post<\/a><\/p><\/div>", "thumb": "material/Projects/thumbnails/fatsite.jpg"}, {"id": 1, "category": ["All", "Web", "Featured Works"], "title": "Nokia - Navigator", "autor": "David Okuniev", "date": "July 2nd 2008", "link": "http://www.nokia.co.uk/maps/about-maps", "team": ["emi", "maya", "david", "fernando", "adam", "yann"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/nokianavigator/nokianavigator2.jpg'/><img src='material/Projects/nokianavigator/nokianavigator3.jpg'/>Digital Ad Agency Work Club came to us with a Nokia challenge, to create an interactive video player that involves pulling a thin Irishman around Canvey Island, Essex.<br /><br />The Nokia Personal Navigators guide us around the site, showing the lost beginner how to use Nokia Maps. The site hosts a range of online content all designed to show how new technology should be remarkably simple.<\/p><\/div>", "thumb": "material/Projects/thumbnails/nokianavigator.jpg"}, {"id": 2, "category": ["All", "Web", "Featured Works", "Branding"], "title": "Qajack - the sociable knowledge game", "autor": "David Okuniev", "date": "April 2008", "link": "http://qajack.com", "team": ["daniel", "david", "adam", "beatriz", "yann"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/qajack/qajack1.jpg'/><img src='material/Projects/qajack/qajack2.jpg'/><img src='material/Projects/qajack/qajack3.jpg'/>Qajack is our Fat start-up & the bastard offspring of Poker and video Q&A. It enables you to build a reputation and bet on it. Qajackers can answer or post questions by video only. The Qajack community validates your knowledge or not, top answers take home the jackpot. With each question you pose or answer, you gamble with what you know and meet like minded people along the way.<\/p><\/div>", "thumb": "material/Projects/thumbnails/qajack.jpg"}, {"id": 3, "category": ["All", "Web", "Featured Works"], "title": "Bacardi - Murmansk Route", "autor": "David Okuniev", "date": "July 23rd 2007", "link": "http://murmanskroute.com.s14047.gridserver.com/", "team": ["emi", "fernando", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/murmansk/murmansk1.jpg'/><img src='material/Projects/murmansk/murmansk2.jpg'/><img src='material/Projects/murmansk/murmansk3.jpg'/>Design and Development of a microsite for Bacardi Spain to coincide with the launch of a new campaign: Murmansk Route.<\/p><\/div>", "thumb": "material/Projects/thumbnails/murmansk.jpg"}, {"id": 4, "category": ["All", "Web", "Featured Works"], "title": "United Agents", "autor": "David Okuniev", "date": "January 2008 ", "link": "http://unitedagents.co.uk", "team": ["philine", "david", "adam"], "externalTeam": ["Ed Verilo"], "html": "<div class=\"description\"><p><img src='material/Projects/ua/ua1.jpg'/><img src='material/Projects/ua/ua2.jpg'/><img src='material/Projects/ua/ua3.jpg'/>Brief: Build us a website with 1000 client cv’s, pictures, showreels and all the Agents within 4 weeks. We like a creative and technical challenge. Solution: flexible enough to accommodate the various clients’ needs. UA wanted to tell the world about their clients so a blogging platform seemed like the obvious choice. We chose elegant simplicity for the design, let the content engage the user and make Search the focus of the site. We stretched Wordpress further than Gutenberg or Mullenweg ever would have dreamed of!<\/p><\/div>", "thumb": "material/Projects/thumbnails/ua.jpg"}, {"id": 5, "category": ["All", "CG animation", "Featured Works"], "title": "cEVO", "autor": "Adam Martin", "date": "June 5th 2008 ", "link": null, "team": ["andres", "ivan", "barnier"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='http://fat-man-collective.com/video_cache/fat_site/cevo.flv'/><img src='material/Projects/cevo/cevo1.jpg'/><img src='material/Projects/cevo/cevo2.jpg'/><img src='material/Projects/cevo/cevo3.jpg'/><img src='material/Projects/cevo/cevo4.jpg'/><img src='material/Projects/cevo/cevo5.jpg'/><img src='material/Projects/cevo/cevo6.jpg'/><strong>DreamKraft®, Inc.<\/strong> was formed to develop and promote a technology called Cognitive Evolution, or <strong>cEvo<\/strong>. cEvo is a fundamental new computing methodology able to solve longstanding problems in artificial intelligence, cognitive science &amp; machine learning.<\/p><p>Fat-Bitch was asked to create a metaphor which reflects this everlasting evolution.<\/p><p>The music was composed by <strong>Barnier<\/strong> from the Collective (<a href=\"http://iam-studios.com\">iam studios<\/a>).<\/p><\/div>", "thumb": "material/Projects/thumbnails/cevo.jpg"}, {"id": 6, "category": ["All", "Branding", "Featured Works"], "title": "Zwyer Caviar", "autor": "Beatriz Farfan", "date": "July 17th 2008 ", "link": null, "team": ["beatriz", "fernando", "carlos"], "externalTeam": ["Milos Covic"], "html": "<div class=\"description\"><p><img src='material/Projects/zwyer/zwyer1.jpg'/><img src='material/Projects/zwyer/zwyer2.jpg'/><img src='material/Projects/zwyer/zwyer3.jpg'/><img src='material/Projects/zwyer/zwyer4.jpg'/><img src='material/Projects/zwyer/zwyer5.jpg'/>We don’t actually eat caviar, not after 7am but the this year has seen Fat-Man develop a branding package for a new luxury food start-up Zwyer.<\/p><p>We developed the branding strategy, and collaborated with <a href=\"http://bon-bon.tv\">Bon-Bon<\/a> to create a motion piece for the launch. The project required us to dress up and pretend to be expensive fish in order to research Zwyer caviar’s rich family history. We strived to create a stand-out brand in a highly competitive market.<\/p><\/div>", "thumb": "material/Projects/thumbnails/zwyer.jpg"}, {"id": 7, "category": ["All", "Print"], "title": "Music Tank (Annual Report)", "autor": "Beatriz Farfan", "date": "May 20th 2008", "link": null, "team": ["beatriz"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/musictank/musictank1.jpg'/><img src='material/Projects/musictank/musictank2.jpg'/><img src='material/Projects/musictank/musictank3.jpg'/>A new identity was needed for the 2008 MusicTank report. A fresh layout with a bit of humour for the inside illustrations made for a very songful client.<\/p><\/div>", "thumb": "material/Projects/thumbnails/musictank.jpg"}, {"id": 8, "category": ["All", "Branding"], "title": "Candy for Bon-Bon", "autor": "Beatriz Farfan", "date": "December 10th 2007", "link": null, "team": ["carlos", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/bonbon/bonbon1.jpg'/><img src='material/Projects/bonbon/bonbon2.jpg'/>The creation of a logo and identity for motion graphics studio Bon Bon (part of the collective).<\/p><p>The design brief: ‘Charlie and The Chocolate Motion Graphics Factory, sugary sweet and it makes you feel funny when viewed in 3D’. We always listen to the clients needs. <\/p><\/div>", "thumb": "material/Projects/thumbnails/bonbon.jpg"}, {"id": 9, "category": ["All", "Branding"], "title": "Digimooooo....", "autor": "Beatriz Farfan", "date": "May 15th 2007", "link": null, "team": ["beatriz", "carlos", "fernando", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/digimoo/digimoo1.jpg'/><img src='material/Projects/digimoo/digimoo2.jpg'/><img src='material/Projects/digimoo/digimoo3.jpg'/>The challenge: to re-brand a product called ‘iam-solutions’ into something fun, original & accessible. Digimoo delivers fresh audio/video media to commercial spaces, all done with clever software and an Internet connection. Our task was to come up with a new name, a new brand and shortly... a new site.<\/p><\/div>", "thumb": "material/Projects/thumbnails/digimoo.jpg"}, {"id": 10, "category": ["All", "CG animation", "Featured Works"], "title": "Dodaq, a diamond's best friend", "autor": "Beatriz Farfan", "date": "June 3rd 2008", "link": null, "team": ["fernando", "david", "barnier"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='media/dodaq.mp4'/><img src='material/Projects/dodaq/dodaq1.jpg'/><img src='material/Projects/dodaq/dodaq2.jpg'/><img src='material/Projects/dodaq/dodaq4.jpg'/><img src='material/Projects/dodaq/dodaq5.jpg'/>Dodaq is a new start-up aimed at transforming the world diamond market into an electronic commodity exchange. We have been tasked with creating a teaser which introduces this revolutionary concept. Further development will include a community site and online marketing campaign.<\/p><\/div>", "thumb": "material/Projects/thumbnails/dodaq.jpg"}, {"id": 11, "category": ["All", "Web", "Featured Works"], "title": "Nokia - N-gage", "autor": "David Okuniev", "date": "August 8th 2008", "link": "http://www.n-gage.com/fifa08", "team": ["david", "fernando", "yann"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/ngage/ngage1.jpg'/><img src='material/Projects/ngage/ngage2.jpg'/>Video wall micro-site for a Uk poster campaign promoting awareness for the Nokia n-gage handsets. Notice the addictive and unselfconscious  mind control of Fifa 08. Created in collaboration with Work Club<\/p><\/div>", "thumb": "material/Projects/thumbnails/ngage.jpg"}, {"id": 12, "category": ["All", "Web", "Featured Works"], "title": "iam-studios.nl", "autor": "David Okuniev", "date": "January 3rd 2006", "link": "http://iam-studios.nl", "team": ["fernando", "david", "andres", "ivan", "carlos", "barnier"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/iamweb/iamweb1.jpg'/><img src='material/Projects/iamweb/iamweb2.jpg'/><img src='material/Projects/iamweb/iamweb3.jpg'/><img src='material/Projects/iamweb/iamweb4.jpg'/><img src='material/Projects/iamweb/iamweb5.jpg'/><img src='material/Projects/iamweb/iamweb6.jpg'/>iam studios is a music production studio based in Holland (and part of the collective!). Director, Barnier Geerling, was looking for a strong identity for his company, to coincide with the re-launch of the site in 2006. The barking speaker nearly won us prizes too numerable to list.<\/p><\/div>", "thumb": "material/Projects/thumbnails/iamweb.jpg"}, {"id": 13, "category": ["All", "Print", "Branding"], "title": "iam-studios", "autor": "David Okuniev", "date": "January 3rd 2006", "link": "http://iam-studios.nl", "team": ["beatriz", "andres", "carlos", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/iamprint/iamprint1.jpg'/><img src='material/Projects/iamprint/iamprint2.jpg'/><img src='material/Projects/iamprint/iamprint3.jpg'/><img src='material/Projects/iamprint/iamprint4.jpg'/>iam studios is a music production studio based in Holland (and part of the collective!). Director, Barnier Geerling, was looking for a strong identity for his company, to coincide with the re-launch of the site in 2006. The barking speaker nearly won us prizes too numerable to list.<\/p><\/div>", "thumb": "material/Projects/thumbnails/iamprint.jpg"}, {"id": 14, "category": ["All", "CG animation", "Featured Works"], "title": "Zwyer Caviar Video", "autor": "Beatriz Farfan", "date": "July 17th 2008 ", "link": null, "team": ["rob", "fernando"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/zwyervideo/zwyervideo1.jpg'/><img src='http://fat-man-collective.com/video_cache/fat_site/zwyer.flv'/><img src='material/Projects/zwyervideo/zwyervideo2.jpg'/><img src='material/Projects/zwyervideo/zwyervideo3.jpg'/>Fat-Man & Bon-Bon bon produced this animation piece as part of a global launch for a new caviar brand.<\/p><\/div>", "thumb": "material/Projects/thumbnails/zwyervideo.jpg"}, {"id": 15, "category": ["All", "Branding"], "title": "Jove", "autor": "David Okuniev", "date": "June 4th 2007", "link": null, "team": ["beatriz", "fernando"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/jove/jove1.jpg'/>Journal of Visualized Experiments (JoVE) is a peer reviewed, open access, online journal devoted to the publication of biological research in a video format. Fat-Man came up with a logo designed to stand out from the traditional aesthetic of the scientific world.<\/p><\/div>", "thumb": "material/Projects/thumbnails/jove.jpg"}, {"id": 16, "category": ["All", "Branding"], "title": "DreamKraft", "autor": "Beatriz Farfan", "date": "August 3rd 2007", "link": null, "team": ["beatriz", "fernando", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/dream/dream1.jpg'/><img src='material/Projects/dream/dream2.jpg'/><img src='material/Projects/dream/dream3.jpg'/><img src='material/Projects/dream/dream4.jpg'/><img src='material/Projects/dream/dream5.jpg'/>DreamKraft®, Inc. is the developer of Cognitive Evolution a fundamental new computing methodology able to solve longstanding problems in artificial intelligence, cognitive science & machine learning.<\/p><br /><p>They were looking for an identity so we asked our Macs, but they weren’t intelligent enough, so we asked ourselves and created an innovative corporate communications package and branding.<\/p><\/div>", "thumb": "material/Projects/thumbnails/dream.jpg"}, {"id": 17, "category": ["All", "Web", "Branding"], "title": "Cunxtuesday [V.3]", "autor": "Fernando Calvi", "date": "June 4th 2008", "link": "http://cunxtuesday.com/", "team": ["daniel", "david", "fernando"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/cunx/cunx1.jpg'/><img src='material/Projects/cunx/cunx2.jpg'/><img src='material/Projects/cunx/cunx3.jpg'/><img src='material/Projects/cunx/cunx4.jpg'/><img src='material/Projects/cunx/cunx5.jpg'/>Well… Thought we might give a sneak peak of the new interface &amp; re-develop for cunxtuesday.com, a student community site.<\/p><p>Keep your eyes peeled and your ears healthy! Beta is released in July 2008<\/p><\/div>", "thumb": "material/Projects/thumbnails/cunx.jpg"}, {"id": 18, "category": ["All", "Web"], "title": "One Shot (coming soon)", "autor": "David Okuniev", "date": "August 4th 2008", "link": null, "team": ["beatriz", "emi", "maya", "david", "fernando", "carlos"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/oneshotweb/oneshotweb1.jpg'/><img src='material/Projects/oneshotweb/oneshotweb2.jpg'/><img src='material/Projects/oneshotweb/oneshotweb3.jpg'/>Everything looks better with tequila vision.<br /><br />Logo, individual shots design and 4 pack packaging created by Fat drunken Men... The website, still under development is awaiting a couple more shots from the client before launching into a bar fight.<\/p><\/div>", "thumb": "material/Projects/thumbnails/oneshotweb.jpg"}, {"id": 19, "category": ["All", "Branding", "Print"], "title": "One Shot", "autor": "David Okuniev", "date": "August 4th 2008", "link": null, "team": ["beatriz", "carlos", "fernando", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/oneshotprint/oneshotprint1.jpg'/><img src='material/Projects/oneshotprint/oneshotprint2.jpg'/><img src='material/Projects/oneshotprint/oneshotprint3.jpg'/><img src='material/Projects/oneshotprint/oneshotprint4.jpg'/><img src='material/Projects/oneshotprint/oneshotprint5.jpg'/>Everything looks better with tequila vision.<br /><br />Logo, individual shots design and 4 pack packaging created by Fat drunken Men... The website, still under development is awaiting a couple more shots from the client before launching into a bar fight.<\/p><\/div>", "thumb": "material/Projects/thumbnails/oneshotprint.jpg"}, {"id": 20, "category": ["All", "Branding"], "title": "O-Post", "autor": "David Okuniev", "date": "November 4th 2006", "link": null, "team": ["andres", "david"], "externalTeam": [], "html": "<div class=\"description\"><p><img src='material/Projects/opost/opost1.jpg'/><img src='material/Projects/opost/opost2.jpg'/><img src='material/Projects/opost/opost3.jpg'/>O-post are a UK post-production facility specialising in high end production. The brief specified: using current company colour scheme to produce a modern but organic logo. Fat-Man created a mercury-like iconic droplet of water in a 3D environment.<\/p><\/div>", "thumb": "material/Projects/thumbnails/opost.jpg"}], "contacts": [{"id": 0, "category": ["All"], "title": "Fat-Man", "autor": "Web Development. Print. Motion.", "date": "Barcelona", "link": "", "team": [], "externalTeam": [], "html": "<div><font color=\"#999999\">t. <\/font>+34 93 302 3160<br/><font color=\"#999999\">e.  <\/font><a href='mailto:david@fat-man-collective.com'>david@fat-man-collective.com<\/a><\/div>", "thumb": "material/Logos/fatman.jpg"}, {"id": 1, "category": ["All"], "title": "Fat-Man", "autor": "Web Development. Print. Motion.", "date": "London", "link": "", "team": [], "externalTeam": [], "html": "<div><font color=\"#999999\">t. <\/font>+44 (0)7515 384714<br/><font color=\"#999999\">e.  <\/font><a href='mailto:adam@fat-man-collective.com'>adam@fat-man-collective.com<\/a><\/div>", "thumb": "material/Logos/fatman.jpg"}, {"id": 2, "category": ["All"], "title": "Fat-Bitch", "autor": "CG Animation.", "date": "Bogota", "link": "", "team": [], "externalTeam": [], "html": "<div><font color=\"#999999\">t. <\/font>+34 93 302 3160<br/><font color=\"#999999\">e.  <\/font><a href='mailto:david@fat-man-collective.com'>david@fat-man-collective.com<\/a><\/div>", "thumb": "material/Logos/fatbitch.jpg"}, {"id": 3, "category": ["All"], "title": "Iam-Studios", "autor": "Sound design. Scoring.", "date": "Amsterdam", "link": "http://www.iam-studios.nl", "team": [], "externalTeam": [], "html": "<div><font color=\"#999999\">t. <\/font>+31 (0) 71 513 25 6<br/><font color=\"#999999\">e.  <\/font><a href='mailto:barnier@fat-man-collective.com'>barnier@fat-man-collective.com<\/a><\/div>", "thumb": "material/Logos/iam.jpg"}, {"id": 4, "category": ["All"], "title": "Bon-Bon", "autor": "Film & TV production", "date": "London", "link": "http://www.bon-bon.tv", "team": [], "externalTeam": [], "html": "<div><font color=\"#999999\">t. <\/font>+44 (0)20 7226 6222<br/><font color=\"#999999\">e.  <\/font><a href='mailto:paul@bon-bon.tv'>paul@bon-bon.tv<\/a><\/div>", "thumb": "material/Logos/bonbon.jpg"}], "blog": [{"id": 0, "category": ["All", "2 Minute Critique", "Appvertising", "Design Porn"], "title": "WAaaaay", "autor": "Adam Martin", "date": "September 29th 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/fwaaaaay/391", "team": [], "externalTeam": [], "html": "<div><p>When you know you're going to be read by more people than have read you before, you feel compelled to be funnier.<\/p><br/><p>You also start referring to yourself in the third person, thus casting yourself as a fictional character in your own semi-demi-fat-fiction or as my history teacher Mr Rumblelow once said, 'Adam, you're in danger of becoming a caricature of your own self'.<\/p><br/><img src='http://img.ffffound.com/static-data/assets/6/c1fa1759f4319bb5ceb90285572fc98909e07be8_m.jpg' alt=''/><p>I had a caricature done once, at the Epcot Centre - Disney World, when I was 13, by a computer. It was very ‘technically advanced'. It threatened the livelihood of those total twonks on bridges and plazas in every major city with a degree in pastel shading.<\/p><br/><p>Whilst the rest of my family came out unscathed, I was delivered a damning caricature. The sentient Mickey da Vinci Machine had not managed to give me any eyes. Nothing. Eyebrows, sure, but eyes… nah.<\/p><br/><p>How the sweaty folk in their vermin and wild fowl costumes must have laughed!<\/p><br/><p>How technology and optometry have moved on since then.<\/p><br/><p>So has Fat Man. We've had 12 tumultuous months and we're sure to have 12 more. We're growing up, but at our core is a Collective of unsurpassed interactive talent, from conception through creation to delivery.<\/p><br/><p>We've developed a concept and made up a term, whose trajectory we monitor on Google: Appvertising is what we do. <\/p><br/><p>Simply put it's developing applications from social networks and visionary ecommerce sites through to sublime papervisionary and interactive entertainment formats that further a brands reach. We're technical creatives with a 3D understanding of the digital native.<\/p><br/><p>We also believe in pushing our creative boundaries with our own project <a href='http://qajack.com'>Qajack<\/a>, which I hope will be a platform to develop e-learning applications, incorporating video, networking and mobile and enabling students to learn using the digital tools that shape their daily lives.<\/p><br/><p>We're also expanding the Collective ethos of our title to create a one-stop agency for digital talent and are actively looking to find the best interactive creatives from around the world.<\/p><br/><p>A single fat man might possibly be labelled greedy. A Collective of Fat Men are a genetic mutation pre-disposed to general digital genius.<\/p><br/><p>If that sounds a little too much, wait till you see what we've got for desert! and subscribe to our feed, bookmark our waist line or if none of that makes any sense, just check back when you can for more obese, obscene-lite, techno, marketing, start-uppity musings.<\/p><br/><\/div>", "thumb": "material/Blog/lady.jpg"}, {"id": 1, "category": ["All", "Me"], "title": "Me Wrestling Human Milk", "autor": "Adam Martin", "date": "September 26th 2008 ", "link": "http://fat-man-collective.com/blog/me/me-wrestling-human-milk/390", "team": [], "externalTeam": [], "html": "<div><p>It's Friday, previously a day celebrated with funny videos (see below) and now joining the videotronic hilarity is a new blog post category ‘Me'.<\/p><br/><p>Like most people, who would if they could, I have set up Google Alerts to inform me of how my good name is being used and abused on the web. Vanity dictates that I must read what other Adam Martin's are writing about and compare it to my own tech media musings.<\/p><br/><img src='http://fat-man-collective.com/blog/imagedump/blender.jpg' alt=''/><p>For sometime I have been aware of my namesake who writes for <a href='http://www.wnlradio.com/blog/?p=163'>Wrestling News Live - For The Fans, By The Fans.<\/a> He partners with the fictional sounding Trey Dawg to write about well oiled men making rude gestures to one another. Trey and Adam are sometimes joined by Kurt Angle. It warms my heart that Adam does not feel he needs to change his name to something more wrestle friendly like Angry Adam. He does the name proud, though I do have issues with the fact that the site does not report live making it's title something of a misnomer.<\/p><br/><p>Next up is foodie Adam who writes for Menu <a href=''>Pages<\/a>. He says things like:<\/p><br/><p>'If it weren't for that pesky financial crash, this Chinese food safety thing would be really big news.'<\/p><br/><p>and this classic:<\/p><br/><p>Damn the melting financial markets! I will now never know what I clearly need to know about how to safely consume a spring roll and when will I get to drink human milk in a Swiss chalet?<\/p><br/><p>'So, um, remember that Swiss Chef we reported on, who was playing with the idea of using human milk in his restaurant dishes?'<\/p><br/><p>I think we Adam Martin's can be proud of our virtual literary heritage and if you're listening Wrestle Adam or Human Milk Adam, please do leave a comment. If you're not, well I'll continue to monitor your work like some weird virtual stalker and share it with our 10,000 other readers.<\/p><br/><\/div>", "thumb": "material/Blog/blender.jpg"}, {"id": 2, "category": ["All", "2 Minute Critique"], "title": "Dame Barbara Cartland Is Dead", "autor": "Adam Martin", "date": "September 25th 2008 ", "link": "http://fat-man-collective.com/blog/uncategorized/dame-barbara-cartland-is-dead/389", "team": [], "externalTeam": [], "html": "<div><p>Last night my 3 year old daughter informed me that she was ‘dropping Tina off at Barbara Cartland's house.'<\/p><br/><p>Tina is a cabbage patch doll with it's face coloured blue and Barbara Cartland is a dead ‘…successful English author, known for her numerous romance novels. She also became one of the United Kingdom's most popular media personalities, appearing often at public events and on television, dressed in her trademark pink and discoursing on love, health and social issues.' So says <a href='http://en.wikipedia.org/wiki/Barbara_Cartland'>Wikipedia<\/a> <\/p><br/><img src='http://farm4.static.flickr.com/3024/2349074228_4ed17c78ac.jpg?v=0' alt=''/><p>If she were alive today I'm sure she'd be presenting a show on sexually transmitted disease on BBC3.<\/p><br/><p>My wife and I were amused and perplexed as to how our daughter had come into contact with Barbara. Perhaps her Flemish speaking pal from Antwerp whose hair length is directly related to her constant running and getting lost in museums (according to my daughter), had told her about the dead pop romantic wordsmith? Unlikely, but then sometimes things just happen for no good reason at all.<\/p><br/><p>Much like the death of my Macbook last week. Like Barbara it often appeared at public events and enjoyed discoursing on love, health and social issues. Like Barbara it is dead.<\/p><br/><p>Given my trade in webology, I should have backed up. I even had the Time Machine hooked up and ready to go until a sharp ‘ping' sound emanated from the Macbook prompting me to re-boot it and leaving me with nothing but a flashing grey folder with a question mark on it.<\/p><br/><p>Nada. Nothing. Gone. Photos, invoices, pitches, proposals, ideas, business plans, the carefully disguised document with all my passwords carefully disguised within it for all my carefully disguised applications, banking and general logon-ness.<\/p><br/><p>Apple Genius Bar were efficient and replaced the hard drive within 24 hours. Somehow being in their store lusting after an ‘I will break it' Macbook Air made the news that all was lost easier to take.<\/p><br/><p>Days later and now Time Machined up, the new Macbook feels like a new start, sort of digital slash and burn to promote new growth.<\/p><br/><p>It may even make me a better person. I haven't lost days sifting through my RSS reader or mourning all my lost feeds. I've even avoided looking at Techcrunch for 4 weeks, in part due to my wife supplying a son to accompany the daughter and in part due to my dearly departed Macbook. I'd been meaning to delete my Boing Boing feed and my Digg feed for sometime, there's only so much total crapola you can sift through. I have vowed to treat the web and my reader with more respect. <\/p><br/><p>You will see a new Adam emerge post-ping. My property porn addiction has gone the way of the financial institutions. No more private browsing. I will read only blogs and view only sites I would be proud to introduce to Dame Barbara Cartland, if she were alive and if she were my Gran or something.<\/p><br/><\/div>", "thumb": "material/Blog/dame.jpg"}, {"id": 3, "category": ["All", "Design Porn", "Web Apps"], "title": "Big Fat Success", "autor": "Adam Martin", "date": "September 16th 2008 ", "link": "http://fat-man-collective.com/blog/web-apps/big-fat-success/388", "team": [], "externalTeam": [], "html": "<div><img src='http://farm4.static.flickr.com/3145/2862964342_2a67e5c792.jpg?v=0' alt=''/><p>Being obese, making crude jokes at our own expense and battering the Fat metaphor until it can be battered no more is fun. It keeps us off the streets where people point and stare. People can be so cruel like that.<\/p><br/><p>But sometimes being unable to wipe your own arse has it's benefits, notably when your new site gets talked and talked about all over the blogosphere.<\/p><br/><p>Even when you appear in an olde fashioned bookie like <a href='http://www.taschen.com/pages/en/catalogue/design/all/05204/facts.guidelines_for_online_success.htm'>Taschen<\/a> (as in the soft porn coffee table books) who feature Fat Man in their new Guidelines for Online Success. <\/p><br/><p>So it's a regurgitated thank you to the bloggers and people who have emailed to say how wonderous our new site is, particuarly those people who have enquired about internships and wanting to learn from the team. We love to teach and to preach and I like the smell of peach (in a bathroom).<\/p><br/><p>Revelation of revelations, we'll shortly be sharing our magic with the world and enabling anyone to have a site that looks kinda like ours. I used the phrase ‘the easyjet of web design' last night in an internal meeting, which I think gave some fatistas cause for concern, but you get the idea!<\/p><br/><\/div>", "thumb": "material/Blog/fat_site.jpg"}, {"id": 4, "category": ["All", "2 Minute Critique"], "title": "Magic Milking Machine", "autor": "Adam Martin", "date": "September 16th 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/magic-milking-machine/387", "team": [], "externalTeam": [], "html": "<div><img src='http://img.ffffound.com/static-data/assets/6/9c51fde184e1cb9661fbd0f808a8541627b665d3_m.jpg' alt=''/><p>I've been silent for too long, but for good reason, my breeding partner gave birth to a son who we named after a fictional order of intergalactic warriors made famous by George Lucas and the founder of Springfield, the everytown in The Simpsons. Our reasoning certainly stumped the grandparents and to a lesser degree ourselves. But alcohol hand rub, sleeping in hospital chairs and hot plate fry-ups from the canteen can do strange things to the mind.<\/p><br/><p>I'm back so stay tuned, I have 8048 articles to read in my RSS reader, one business plan to write, several lunches to eat and talk webotronics over and world domination to plot.<\/p><br/><p><br/>So what's on the agenda?<\/p><br/><p>Our new site has launched officially, though we'll continue to make changes to it and frankly it's pretty impressive and it's not just us who think so, lot's of people have been <a href='http://dailypv3d.wordpress.com/2008/09/11/fat-man-collective/'>blogging<\/a> about it's big shiny fun-ness. Congrats to all the team who worked on it.<\/p><br/><p><a href='http://qajack.com'>Qajack<\/a> has been fine tuned so the code hums. A little delayed but for all the right reasons, a glut of client work being one. Talking of which our affiliation with digital agency Work Club is working really well, a great group of eager creatives, ad-honchos and marketing mavens. Check out their <a href='http://www.work-club.com/'>new site<\/a>, it's ‘like totally self-populating'.<\/p><br/><p>We're plotting something new for the iPhone and continuing in our everything with a sense of humour ethos.<\/p><br/><p>We're twisting Wordpress into something very shiny and nice, but that's all top secret, hush, hush.<\/p><br/><p>We're addicted to FriendFeed, over Facebook and scared of bulldogs wearing lipstick.<\/p><br/><p>Normal service will resume shortly and yes my wife is a magic milking machine.<\/p><br/><\/div>", "thumb": "material/Blog/milk.jpg"}, {"id": 5, "category": ["All", "Data Visualization"], "title": "Fat-Man Begins", "autor": "Adam Martin", "date": "August 25th 2008 ", "link": "http://fat-man-collective.com/blog/data-visualization/fat-man-begins/385", "team": [], "externalTeam": [], "html": "<div><p><img src='http://farm4.static.flickr.com/3187/2797058689_45bde706f2.jpg?v=0' alt=''/><\/p><br/><\/div>", "thumb": "material/Blog/begins.jpg"}, {"id": 6, "category": ["All", "Qajack"], "title": "Qajack : New Learning", "autor": "Adam Martin", "date": "August 20th 2008 ", "link": "http://fat-man-collective.com/blog/qajack/qajack-new-learning/383", "team": [], "externalTeam": [], "html": "<div><p>We didn't get Qajack into <a href='http://www.techcrunch50.com/2008/index.php'>Techcrunch50<\/a>, frankly I'm not surprised, we're too early stage and have yet to meet, greet and hug our application in all it's really useful video gaming glory. Which means when I had my phone interview with ‘Heather' from TC central I came across like a rambling English buffoon.<\/p><br/><p><em>‘Video Q&amp;A meets Poker'<\/em> was found wanting, a presentation short of a slideshow for a not-yet-ready-hang-on-a-mo. <\/p><br/><p><img title='Image by Some Guy' src='http://img.ffffound.com/static-data/assets/6/ed6e47bee8a5dc4e5d284d7b113243d7b9bc8066_m.png'/>Frankly with a baby due I was going to struggle to tell my wife I was about to head out to San Fran only days after the birth to stand in front of a lot of very important mostly Americans replete with Madonna Vogue-esque headset and talk about <em>‘Qajack'<\/em>:<br/><em>‘You mean like stealing a car?'<\/em><br/><em>‘No, Qajack not car jack'<\/em><\/p><br/><p>We're also behind schedule. Chief architect Daniel is a perfectionist, I am a perfectionist about perfectionists and David is excited. This is all good.<span id='more-383'><\/span><\/p><br/><p>I'm also seeing Qajack differently now, which is not to say I won't totally change my mind in a couple of weeks. <\/p><br/><p>Qajack is a community for information exchange and a game in which dedication and application of knowledge are rewarded. Just like schools.<\/p><br/><p>I am starting to see Qajack as a platform for information exchange and educational engagement. <\/p><br/><p>For example, Joe Blogs in Hull is studying The Tudors, he uses Qajack to pose a question to the community; <em>‘How many wives did Henry VIII have really?'<\/em>. <\/p><br/><p>Jose Blogse in Barcelona is also styuding The Tudors and has alerts about all Qajack activity tagged Tudors sent to his inbox. Keen to demonstate his knowledge and impress his teacher he answers, ‘6′.<\/p><br/><p>Joe and Jose's classmates join in the debate keen to improve their standing within the Qajack community and gain the jackpot allocated to this question.<\/p><br/><p>Joanna Blogberg in New York has been reading up and know's it's a trick question. <\/p><br/><p><em>‘The answer isn't 6, it's 4, because two were annulled, thus Henry was not technically married'.<\/em><\/p><br/><p>Joanna wins the jackpot and is furthering her position as THE source of information on The Tudors. She's becomming a trusted voice and with her accumlated Jack rating can also demonstate her applied knowledge to her teachers and peers.<\/p><br/><p>Qajack could enable learning through the use of mobile phones with video cameras. To demonstrate knowledge whilst on a field trip to enable children to learn using the tools they are accustomed with and have ready access to. No new text books or expensive software, just the ability to turn the phone in your pocket into a means of learning.<\/p><br/><p>This is all theory, but a theory I am keen to test. <a href='http://uk.techcrunch.com/2008/08/20/please-sir-where-are-the-education-start-ups/'>Alistair Briggs<\/a>, writing at Techcrunch UK bemoans the lack of innovation in the Eduction 2.0 arena and Ken Carroll commenting on the post says this:<\/p><br/><p><em>‘But perhaps even more fundamental is the nature of online or mobile learning themselves. I'm seeing a lot of people trying to stuff old educational habits into new web 2.0 clothes, but it tends not to work. In the same way you would not film a newspaper and put the contents on TV, learning objects for new media have to be designed for the purpose. I don't see many start ups who are getting this part right.'<\/em><\/p><br/><p>Perhaps a platform not intended for education, but focused on sharing knowledge and earning reputation, born from a gaming background, could be the start-up to radically disrupt eLearning and faciliate a global educational information exchange?<\/p><br/><\/div>", "thumb": "material/Blog/qajack.jpg"}, {"id": 7, "category": ["All", "Art", "Data Visualization"], "title": "Europe", "autor": "Adam Martin", "date": "August 20th 2008 ", "link": "http://fat-man-collective.com/blog/data-visualization/europe/382", "team": [], "externalTeam": [], "html": "<div><p>Great Britain as a deranged Scotsman, hmmm, this is the stuff wars are made of.<img src='http://drawn.ca/wordpress/wp-content/uploads/2008/08/2721592095_f9ccd02810_b.jpg' alt='Handbag'/><\/p><br/><\/div>", "thumb": "material/Blog/europe.jpg"}, {"id": 8, "category": ["All", "2 Minute Critique"], "title": "Dummies Guide To Cyber Warfare", "autor": "Adam Martin", "date": "August 15th 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/dummies-guide-to-cyber-warfare/380", "team": [], "externalTeam": [], "html": "<div><p>World of Warcraft ain't got nothing on this (via <a href='http://www.slate.com/id/2197514'>Slate<\/a>):<\/p><br/><p>Why spend a billion schmillions on an invisible jet tank with nuclear gills when you could just call upon the patriotism of your countries hackers and Spam Lords (for it is they who send me missives about Angelina in a mud bath) and get them to turn on your enemy with ‘denial of service attacks'.<\/p><br/><img title='Image by Some Guy' src='http://img.ffffound.com/static-data/assets/6/2f0999058c8bcf2ac0b6a07813d757a9e0ac1073_m.jpg' style='border: 7px solid rgb(231, 231, 231); margin-left: 10px; float: right;' /><p>‘As Russian and Georgian troops fight on the ground, there's a parallel war happening in cyberspace. In recent weeks, Georgia's government Web sites have been besieged by denial-of-service attacks and acts of vandalism. Just like in traditional warfare, there's a lot<span id='more-380'><\/span> of confusion about what's going on in this technological battle—nobody seems to know whether this is a centralized Russian attack, the work of a loose band of hackers, or something else. Having read so many contradicting accounts, I knew that the only reliable way to find out what was really happening was to enlist in the Russian digital army myself.<\/p><br/><p>Don't get me wrong: My geopolitical sympathies, if anything, lie with Moscow's counterparts. Nor do I see myself as an Internet-savvy Rambo character. I had a much simpler research objective: to test how much damage someone like me, who is quite aloof from the Kremlin physically and politically, could inflict upon Georgia's Web infrastructure, acting entirely on my own and using only a laptop and an Internet connection. If I succeeded, that would somewhat contradict the widely shared assumption—at least in most of the Western media—that the Kremlin is managing this cyberwarfare in a centralized fashion. My mission, if successful, would show that the field is open to anyone with a grudge against Georgia, regardless of their exact relationship with state authorities.‘<\/p><br/><\/div>", "thumb": "material/Blog/dummies.jpg"}, {"id": 9, "category": ["All", "2 Minute Critique"], "title": "The Formula", "autor": "Adam Martin", "date": "August 15th 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/the-formula/379", "team": [], "externalTeam": [], "html": "<div><p>Natasha Vargas-Cooper writes a razor like critique of the rise and fall of the Lad's Mag, entitled <a href='http://www.radaronline.com/features/2008/08/fall_of_mens_magazines_playboy_maxim_fhm_esquire_01.php'>Twilight of the Rods<\/a>. When the boobs don't work, blame the internet:<\/p><br/><p>‘For publishers in the halcyon days of the late 1990s—those days before the Internet was blamed for robbing media moguls of their precious ad revenues—there existed a magical recipe that could build you a glossy magazine empire almost overnight. The concoction was simply named The Formula.<\/p><br/><img title='Image by Some Guy' src='http://img.ffffound.com/static-data/assets/6/1558925ee9935383da6b45a597acf68c8ddc8131_m.jpg' style='border: 7px solid rgb(231, 231, 231); margin-left: 10px; float: right;'/><p>The Formula's ingredients were as follows:<\/p><br/><p>3 scantily clad B-list starlets<br/>1 two-hundred word sex advice feature<br/>1 personal benefit/service feature<br/> “gritty read”(legitimately researched, well written<span id='more-379'><\/span>, and at the back of the magazine)<br/>1 humor piece whose punch line might include the term “pierced taco”<\/p><br/><p>These were the ingredients of Maxim, FHM, and Stuff, the so-called “lad-mags.” In 1999, the lads came and conquered. They blew off their humorless women's lib oppressors, sneered at the campy “high-brow” men's mags like GQ and Esquire and enjoyed explosive circulation. With their markets threatened, the tanned cheesecake men's magazines had to defend themselves against these young Turks. In no time, the “high-brows” started slashing column space and defiling their articles with words like “dude” and “bro.” Even Playboy, the Grand Pooh-Bah of classy girlie mags, began watering down its genuinely rich literary tradition, pumping out pea-sized articles like artillery shells.<\/p><br/><p>By 2002, the most successful of the bawdy bro-rags peaked at an impressive 2.5 million copies in paid circulation. “And let me tell you, I have never found that statistic more dispiriting than I do today,” lamented former Maxim editor David Itzkoff, in a 2004 tell-all piece in the New York Press.<\/p><br/><p>Itzkoff bemoaned Maxim's abuse of The Formula, its abysmal content, and eventual decline into a cynical ad revenue machine. Itzkoff indulged in his share of hand-wringing. But, like a true lad, he refused to man up and punted much of the blame to the greedy suits.<\/p><br/><p>Itzkoff pulled out of Maxim right as the porn-lite kingdom started to collapse. While moving 2.5 million copies was no small feat, circulation has been stagnant since. Ad revenues plunged 34 percent in 2007 (in a single year!) and the New York Post estimated that the magazine devoured over $110 million of its publisher's money in its eight years of existence. If Maxim merely went limp, its cruder little brothers, FHM and Stuff, went into a full-on revenue death spiral. In 2007, both shut down print production and settled into the seedy world of online-only content. 02_80828981_10.jpg <br/>(Photo: Getty Images) <br/><\/p><br/><p>Maxim continues to milk The Formula for all its worth while the other more “sophisticated” men's magazines grasp for their identity, stuck somewhere between adolescent towel-snapping and enlightened conversations about manhood. So it is that American men are left with soulless sex advice, perfunctory fashion spreads, toothless journalism, and a couple buxom bodies from reality TV squished in between the ads.<\/p><br/><p>Some ascribe the failure of men's magazines to the Internet. Others blame feminism. Still others blame Girls Gone Wild auteur Joe Francis for polluting the field. But it's really about the purgatory between Lad and Dad, which leaves the males of our generation scratching their heads and asking: are we not MEN?<\/p><br/><p>No need to renew your subscription. Click through the flaccid catalog of misfires after the <a href='http://www.radaronline.com/features/2008/08/fall_of_mens_magazines_playboy_maxim_fhm_esquire_02.php'>jump<\/a>!'<\/p><br/><\/div>", "thumb": "material/Blog/formula.jpg"}, {"id": 10, "category": ["All", "2 Minute Critique"], "title": "Rate My Poo", "autor": "Adam Martin", "date": "August 14th 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/rate-my-poo/377", "team": [], "externalTeam": [], "html": "<div><p>Yann is our French intern. Yann is very clever and very organised. Yann isn't going anywhere! But sometimes people do strange things and I feel the need to share, only so my mental torment is dissipated slightly by the knowledge others share it.<\/p><br/><p>By way of back story, David and I were reaquainting ourselves with the ex-girlfriend stalker hell that is Facebook and I chose to tell him via Facebook IM that my daughter did a big poo this morning just as the midwife arrived to examine my wife and that the house smelt. There is more detail, but I'll leave it at that for now.<\/p><br/><p>Forward, 20 minutes or so later, much real business has been discussed in this time, notably the wonders of <a href='http://qik.com/'>Qik<\/a> and excitement about our first iPhone App.<\/p><br/><p>Yann, David and I are all conversing via the Skypetron. Simultaneously both send me a link:<\/p><br/><p><a href='http://www.ratemypoo.com/'>www.ratemypoo.com<\/a><\/p><br/><p>In my wisdom I click away, twice. My eyes pop, my stomach churns, I'm looking at someone else's poo in a bowl, thankfully partially obscured by toilet paper.<\/p><br/><p>I respond to Yann and David:<\/p><br/><p><em>Me: I feel sick<\/em><\/p><br/><p><em>Yann: Me too, I found this when trying to find if the verb is written ‘to poo' or ‘to poop'.<\/em><\/p><br/><p>You got to admire the grammatical dedication.<\/p><br/><p><img src='http://sprinklebrigade.com/images/gallery/law-order.jpg' alt=''/><\/p><br/><p>Picture from the staggering <a href='http://sprinklebrigade.com/'>Sprinkle Brigade<\/a>.<\/p><br/><p>UPDATE: Whilst getting the url for Qik, whose tagline is 'see what happens', I was confronted by a hand towel in a bathroom and then a man masturbating furiously.<\/p><br/><p>This is turning into a morning that requires some mental erasing.<\/p><br/><\/div>", "thumb": "material/Blog/rate.jpg"}, {"id": 11, "category": ["All", "2 Minute Critique", "Appvertising"], "title": "Why Digital Marketing Needs a Reboot", "autor": "Adam Martin", "date": "July 23rd 2008 ", "link": "http://fat-man-collective.com/blog/2-minute-critique/why-digital-marketing-needs-a-reboot/364", "team": [], "externalTeam": [], "html": "<div><br/><p>David Armano (<a href=\"http://darmano.typepad.com/\">Logic + Emotion<\/a>) writes:<\/p><br/><p>‘Once upon a time, newspapers, TV and radio entered our lives. These wonderful inventions spawned yet another one — multichannel advertising. Then along came things like DVRs and everything digital, which spawned yet another invention, the backlash of traditional advertising. For the record, traditional advertising isn't going away anytime soon, and despite the pronouncement of its death, it will <a href=\"http://img.ffffound.com/static-data/assets/6/502a05ea10385ebe3c42b125b83e5848e32cc671_m.gif\"><img title=\"Image by Some Guy\" src=\"http://img.ffffound.com/static-data/assets/6/502a05ea10385ebe3c42b125b83e5848e32cc671_m.gif\" style=\"border: 7px solid rgb(231, 231, 231); margin-left: 10px; float: right;\" /><\/a> live on — albeit in an evolved format. And it actually still works. I look at billboards on highways.(via AdAge) How can you not?<\/p><br/><p>But “tradigital” could be another story. Tradigital, in my opinion, means using traditional marketing methods in<span id=\"more-364\"><\/span> the digital space. For example, creating an advertising campaign and “extending it digitally” usually ends up as a checklist. Micro-site? Check. Online banners? Check. Social media? Check. Mobile? Check. But these days, I'm thinking digital people have even tougher challenges than our traditional cousins. And “tradigitalists” may have it toughest of all. Why? Because some of us on the digital side have become just as set in our ways as our traditional counterparts.<\/p><br/><p>Old habits die hard. While consumers are out there spending countless hours on social networks, file-sharing applications, chat, community sites, buying stuff, selling stuff and using multiple devices, some of us tradigital old fogies are still reaching for our beloved toolbox of the past in the hopes of getting their attention. While online user behavior tells us that people respond well to simplicity, we labor to create complexity in the form of experimental navigation and sites that take forever to load. When YouTube arrived on the scene, we responded by putting our TV spots on it or — better yet — creating spots that looked like they were made by amateurs. Little did we know that the real action happens in the comments. Have we thought about talking back to people, or are we really just interested in telling our stories?<\/p><br/><p>And what about online gaming? It's a fixture for tradigitalists. Yet, many popular online games weren't created by agencies and don't have brands associated with them. Scrabulous, anyone? I don't follow Cannes closely, but with a few exceptions it seems to reward “tradigital” creativity. How clever was the idea? How good was the storytelling? These are all hallmarks of creativity, but I also see creativity as solving business problems. I really like My Starbucks Idea, because I think Starbucks will gain insights from the feedback they get there — these insights may eventually contribute to Starbucks re-capturing some of the loyalty they once enjoyed, and that could reflect well upon their stock price. Would My Starbucks Idea win a Cyber Lion? I really don't know. It's not flashy, it's not terribly original (Dell did it already) and hey, where's the sound effects? But if Starbucks plays its cards right, it could become a powerful tool for turning their ship around.<\/p><br/><p>It's time to come to terms with how people really use the web (hint — it might not be to figure out your experimental navigation) and how we can harness the true power of digital. Digital marketing doesn't need more tradigital creativity — it needs more creative problem solving. It just might be time for the industry to reboot.'<\/p><br/><\/div>", "thumb": "material/Blog/digimarket.jpg"}, {"id": 12, "category": ["All", "Art"], "title": "Ka-Pow", "autor": "Adam Martin", "date": "July 30th 2008 ", "link": "http://fat-man-collective.com/blog/art/ka-pow/360", "team": [], "externalTeam": [], "html": "<div><p>Hot day of brain ache, less words more pictures, thanks Batman:<img src=\"http://img.ffffound.com/static-data/assets/6/af23ec62358e327ce20bf497bec934f898eaf17e_m.jpg\" /><\/p><br/><\/div>", "thumb": "material/Blog/batman.jpg"}, {"id": 13, "category": ["All", "Data Vizualisation"], "title": "Barclay's Booze Boring Cigarettes", "autor": "Adam Martin", "date": "July 17th 2008 ", "link": "http://fat-man-collective.com/blog/branding-general/barclays-booze-boring-cigarettes/356", "team": [], "externalTeam": [], "html": "<div><br/><p>A collective experiment in brand perception, by querying online participants for keywords as a first reaction on a collection of popular brand logos. The collective results per individual brand are displayed as simple tag clouds. (via <a href=\"http://infosthetics.com/archives/2008/07/brand_tags_collaborative_word_clouds.html\">InfoAesthetics<\/a>)<\/p><br/><p>Herewith a sample from the Barclay's tagcloud:<\/p><br/><p>Interesting to see ‘booze' and ‘cigarettes' alongside, ‘boring' and ‘british'.<\/p><br/><p><img src=\"http://farm4.static.flickr.com/3035/2676536301_86eba96124.jpg?v=0\" /><\/p><br/><\/div>", "thumb": "material/Blog/barclays.jpg"}, {"id": 14, "category": ["All", "Art"], "title": "Uncivil Society", "autor": "Adam Martin", "date": "July 17th 2008 ", "link": "http://fat-man-collective.com/blog/art/uncivil-society/355", "team": [], "externalTeam": [], "html": "<div><p><img src=\"http://uncivilsociety.org/graf.jpg\" /><\/p><br/><\/div>", "thumb": "material/Blog/uncivil.jpg"}, {"id": 15, "category": ["All", "Data Vizualisation"], "title": "Homer's Snowdome", "autor": "Adam Martin", "date": "July 17th 2008 ", "link": "http://fat-man-collective.com/blog/data-visualization/homers-snowdome/3534", "team": [], "externalTeam": [], "html": "<div><br/><p>I've spent the last 10 minutes since the last post devouring Strange Maps, and with titles such as <a href=\"http://strangemaps.wordpress.com/2008/07/02/296-the-dykes-of-doggerland\">The Dykes of Doggerland<\/a> it's bowel obstructing stuff.<\/p><br/><p>Here is a sample from <a href=\"http://strangemaps.wordpress.com/2008/06/10/288-okeanos-and-oikoumene-homer%E2%80%99s-snowdome\">Okeanos and Oikoumene: Homer's Snowdome<\/a>:<\/p><br/><p>'Homer (not the slouch of Springfield heralding the end of Western civilization, but the blind, semi-mythical poet at the dawn of Greek history) was seen by Strabo and the Stoics as the father of geography. His overarching geographic concept was of the world as a flat, round disk of land, completely encircled by Okeanos, the world sea.<\/p><br/><p>All this was enclosed by the fixed dome of the Heavens, filled with cloud and mist close to the Earth, but with clear aether closer to the sky's dome. Sun, Moon and stars rose from the eastern waters of the Ocean, moved along the dome and sank again into the western waters. The whole thing is reminiscent of nothing so much as of one of those snowdomes that are the staple of any self-respecting tourist trap.<\/p><br/><p>This vision is expounded in the Iliad, in which Homer uses Achilles' shield, forged by Hephaestos, to metaphorically describe the universe as a circular island, surrounded by water. Human activities, celestial objects and stellar motions are described on the shield, which is actually a map, on the threshold between a purely mythological and an nascent scientific view of the world.<\/p><br/><p style=\"font-style:italic\">Homer's world vision is almost certainly meant to be symbolic rather than realistic – no ships are sailing on the all-encircling sea, which is intended to emphasise the unity of the Oikoumenè, the whole inhabited world. But this vision is based on real geographical knowledge, and shows the Greeks of the eighth century BC had a good grasp of the layout eastern Mediterranean – Homer's Iliad and especially his Odyssey are replete with references to routes and places, both real and imagined (or at least not yet identified).'<\/p><br/><img src=\"http://strangemaps.files.wordpress.com/2008/06/worldaccordingtohomer.jpg?w=700&amp;h=674\" /><\/div>", "thumb": "material/Blog/homer.jpg"}, {"id": 16, "category": ["All", "Data Vizualisation"], "title": "United States of GDP", "autor": "Adam Martin", "date": "July 17th 2008 ", "link": "http://fat-man-collective.com/blog/data-visualization/united-states-of-gdp/352", "team": [], "externalTeam": [], "html": "<div><br/><p>Everyone who know's me and some people do but they just don't know it yet, will know that I love maps and occasionally stats. So imagine my gross national product of joy when my colleague Philine sent me this:<\/p><br/><img src=\"http://strangemaps.files.wordpress.com/2007/06/350816052_0a392a0d28_o1.jpg\" /><p>From the <a href=\"http://strangemaps.wordpress.com/2007/06/10/131-us-states-renamed-for-countries-with-similar-gdps\">site<\/a>:<\/p><br/><p><em>'The creator of this map has had the interesting idea to break down that gigantic US GDP into the GDPs of individual states, and compare those to other countries' GDP. What follows, is this slightly misleading map – misleading, because the economies both of the US states and of the countries they are compared with are not weighted for their respective populations.'<\/em><\/p><br/><\/div>", "thumb": "material/Blog/us.jpg"}, {"id": 17, "category": ["All", "Art", "iphone"], "title": "If...", "autor": "Adam Martin", "date": "July 17th 2008 ", "link": "http://fat-man-collective.com/blog/art/if/351", "team": [], "externalTeam": [], "html": "<div><br/><p>...my iPhone was a plastic figurine it would look something like this and as I upgrade to Version 2.0 and watch all my tunes, contacts and diary settings disappear off a virtual white cliffs of Dover, this image pretty much sums it up:<br />(<a href=\"http://www.nigelgrimmer.com/\">Nigel Grimmer<\/a>)<\/p><br/><img src=\"http://farm4.static.flickr.com/3122/2676170827_202d4fec76.jpg?v=0\" /><\/div>", "thumb": "material/Blog/if.jpg"}, {"id": 18, "category": ["All", "Fat-Blog"], "title": "Visit the blog for more similar RANTING", "autor": "Adam Martin", "date": "August 8th 2008 ", "link": "http://fat-man-collective.com/blog", "team": [], "externalTeam": [], "html": "<div><br/><p>Visit the Blog @ <a href=\"http://fat-man-collective.com/blog\">http://fat-man-collective.com/blog<\/a><\/p><br/><p><b>'From the blog'<\/b> section is still very much in early stages. Due to tight deadlines, we did not connect this section directly to the Fat-Blog. In the coming weeks we will start to connect, so that users will be able to read the entire blog from within the flash site. Keep posted!<\/p><br/><img src=\"http://fat-man-collective.com/blog/imagedump/daveandmaya.jpg\" /><\/div>", "thumb": "material/Blog/fatman.jpg"}], "people": [{"id": "fernando", "name": "Fernando", "lastName": "Calvi", "company": "Fat-Man", "title": "Video", "description": "Motionographer.", "photo": "material/Collective/Fernando.jpg", "photoBack": "material/Collective/FernandoB.jpg", "city": "Barcelona"}, {"id": "ivan", "name": "Ivan", "lastName": "Alviar", "company": "Fat-Bitch", "title": "3D animation", "description": "CGI Designer", "photo": "material/Collective/Ivan.jpg", "photoBack": "material/Collective/IvanB.jpg", "city": "Bogota"}, {"id": "adam", "name": "Adam", "lastName": "Martin", "company": "Fat-Man", "title": "Management", "description": "Creative Technologist.\nStrategist.", "photo": "material/Collective/Adam.jpg", "photoBack": "material/Collective/AdamB.jpg", "city": "London"}, {"id": "maya", "name": "Maya", "lastName": "Benainous", "company": "Fat-Man", "title": "Interactive", "description": "Interactive Designer.\nAnimator.\nDeveloper.", "photo": "material/Collective/Maya.jpg", "photoBack": "material/Collective/MayaB.jpg", "city": "Barcelona"}, {"id": "philine", "name": "Philine", "lastName": "von Guretzky", "company": "Fat-Man", "title": "Management", "description": "Web Thinker.\nProject Manager.", "photo": "material/Collective/Philine.jpg", "photoBack": "material/Collective/PhilineB.jpg", "city": "London"}, {"id": "yann", "name": "Yann", "lastName": "Lorber", "company": "Fat-Man", "title": "Interactive", "description": "Developer.", "photo": "material/Collective/Yann.jpg", "photoBack": "material/Collective/YannB.jpg", "city": "Barcelona"}, {"id": "andres", "name": "Andres", "lastName": "Hernandez", "company": "Fat-Bitch", "title": "3D animation", "description": "CGI Designer.", "photo": "material/Collective/Andres.jpg", "photoBack": "material/Collective/AndresB.jpg", "city": "Bogota"}, {"id": "david", "name": "David", "lastName": "Okuniev", "company": "Fat-Man", "title": "Interactive", "description": "Web Planner.\nWeb Designer.\nDeveloper.", "photo": "material/Collective/David.jpg", "photoBack": "material/Collective/DavidB.jpg", "city": "Barcelona"}, {"id": "beatriz", "name": "Beatriz", "lastName": "Farfan", "company": "Fat-Man", "title": "Print", "description": "Designer.", "photo": "material/Collective/Bea.jpg", "photoBack": "material/Collective/BeaB.jpg", "city": "Barcelona"}, {"id": "paul", "name": "Paul", "lastName": "Richman", "company": "Bon-Bon", "title": "Video", "description": "Video Producer.", "photo": "material/Collective/Paul.jpg", "photoBack": "material/Collective/PaulB.jpg", "city": "London"}, {"id": "emi", "name": "Emiliano", "lastName": "Burgos", "company": "Fat-Man", "title": "Interactive", "description": "Developer.", "photo": "material/Collective/Emi.jpg", "photoBack": "material/Collective/EmiB.jpg", "city": "Barcelona"}, {"id": "rob", "name": "Rob", "lastName": "Chandler", "company": "Bon-Bon", "title": "Video", "description": "Video Director.", "photo": "material/Collective/Rob.jpg", "photoBack": "material/Collective/RobB.jpg", "city": "London"}, {"id": "daniel", "name": "Daniel", "lastName": "Bernal", "company": "Fat-Man", "title": "Interactive", "description": "Developer.", "photo": "material/Collective/Daniel.jpg", "photoBack": "material/Collective/DanielB.jpg", "city": "Bogota"}, {"id": "carlos", "name": "Carlos", "lastName": "Rivas", "company": "Fat-Man", "title": "Print", "description": "Designer.\nIllustrator.", "photo": "material/Collective/Carlos.jpg", "photoBack": "material/Collective/CarlosB.jpg", "city": "Bogota"}, {"id": "barnier", "name": "Barnier", "lastName": "Geerling", "company": "Iam studio", "title": "Sound", "description": "Sound Designer.\nComposer.", "photo": "material/Collective/Barnier.jpg", "photoBack": "material/Collective/BarnierB.jpg", "city": "Amsterdam"}], "studios": [{"name": "Fat-Man (London)", "lines": ["35 Brittannia Row", "London W1 ASD", "+44 (0)207 226 6222"], "mail": "info@fat-man-collective.com"}, {"name": "Fat-Man (Barcelona)", "lines": ["Passatge de la Pau 10 Bis (1-2)", "Barcelona 08002", "+34 93 302 316"], "mail": "info@fat-man-colectivo.com"}, {"name": "Fat-Bitch", "lines": ["Carrera 40 #21 off302", "Bogota, Colombia", "UK: +44 (0)207 226 6222"], "mail": "info@fat-bitch.com"}, {"name": "Bon-Bon", "lines": ["35 Brittannia Row", "London W1 ASD", "+44 (0)207 226 6222"], "mail": "info@bon-bon.tv"}, {"name": "Fat-Hosting", "lines": ["35 Brittannia Row", "London W1 ASD", "+44 (0)207 226 6222"], "mail": "info@fat-hosting.com"}]};</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+/*
+ * Fat-Man Collective - site 3D, version de novembre 2008 (StageView3D_10)
+ * Portage Three.js du code ActionScript 3 / Papervision3D de Maya Benaïnous.
+ * Structure reprise de l'original : StyleSheets, Parameters, providers de données, Root3D/SectionObject3D,
+ * CarrousselleView3D, LineView3D, CrossView3D, DistributeView3D, PostView, StageView3D, Assets, PostView2D, StageView.
+ * Les easings "par frame" sont calés sur les 42 fps du SWF.
+ */
+import * as THREE from 'three';
+import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+
+const DATA = window.FAT_DATA;
+const ASSETS = window.FAT_ASSETS || null;
+
+/* ================================================================ StyleSheets */
+const FPS = 42;
+const STYLE = {
+  object3DDistance: 800, object3DMaxHeight: 800,
+  planeDistance: 500, planeDisOrder: 125,
+  planeFrameThickness: 1, planeFrameColor: 0xf1f1f1, planeFrameSelectColor: 0x999999, planeFrameDistance: 1,
+  planeSpeed: 1,
+  cameraDistance: 600, cameraDistanceProportion: 600,
+  cameraEaseSpeed: 7, cameraSpeed: 2.0,
+  cameraHeight: 350, cameraTargetHeight: 400,
+  cameraKeyboardSpeed: 3, cameraZoomMin: 500, cameraZoomMax: 2000,
+  lineThickness: 1, lineColor: 0xdedede, locatorColor: 0xf1b800,
+  margin: 20, easing: 6, tween: 1,
+  animationMode: true,
+};
+const CAMERA = { zoom: 2, focus: 300 };
+const MODEL_SCALE = 100;            // Papervision affichait les fichiers Maya (cm) x100
+const POST_STAGGER = 0.08;          // ouverture post par post, comme le chargement séquentiel d'origine
+const SAVED = {};
+function setAnimationMode(value) {
+  if (STYLE.animationMode === value) return;
+  const keys = ['cameraEaseSpeed', 'cameraSpeed', 'planeSpeed', 'cameraKeyboardSpeed', 'planeDisOrder', 'easing', 'tween'];
+  if (value) keys.forEach(k => { STYLE[k] = SAVED[k]; });
+  else {
+    keys.forEach(k => { SAVED[k] = STYLE[k]; });
+    Object.assign(STYLE, { easing: 1, tween: 0, cameraEaseSpeed: 1, cameraSpeed: 0, planeSpeed: 0, cameraKeyboardSpeed: 1, planeDisOrder: 0 });
+  }
+  STYLE.animationMode = value;
+}
+
+/* ================================================================ Données (providers) */
+const PEOPLE = DATA.people;
+const personById = id => PEOPLE.find(p => p.id === id);
+class Provider {
+  constructor(posts, { maxPostPage = 8, defaultCategory = 'ALL', byColumn = false } = {}) {
+    this.all = posts; this.max = maxPostPage; this.defaultCategory = defaultCategory;
+    this.categoryList = []; this.postCategory = [];
+    const add = (cat, post) => {
+      let id = this.categoryList.findIndex(c => c.toUpperCase() === cat.toUpperCase());
+      if (id === -1) { this.categoryList.push(cat); this.postCategory.push([]); id = this.categoryList.length - 1; }
+      this.postCategory[id].push(post);
+    };
+    if (byColumn) {   // DataPeopleProvider : catégories construites colonne par colonne
+      const maxCat = Math.max(...posts.map(p => p.category.length));
+      for (let j = 0; j < maxCat; j++) for (const p of posts) { if (j >= p.category.length) break; add(p.category[j], p); }
+    } else posts.forEach(p => p.category.forEach(c => add(c, p)));
+    this.selected = 0;
+    this.changeCategory(defaultCategory);
+  }
+  changeCategory(name) {
+    const i = this.categoryList.findIndex(c => c.toUpperCase() === name.toUpperCase());
+    if (i !== -1) { this.currentCategory = i; this.list = this.postCategory[i]; }
+    else { this.currentCategory = 0; this.list = this.postCategory[0] || this.all; }
+    this.first = 0;
+    this.posts = this.list.slice(0, this.max);
+    this.last = this.posts.length;
+  }
+  get currentCatName() { return this.categoryList[this.currentCategory] || ''; }
+  get currentPost() { return this.posts[this.selected]; }
+  hasNewer() { return this.first > 0; }                   // nextEntries de l'original
+  hasOlder() { return this.last < this.list.length; }     // previousEntries de l'original
+  newer() {
+    if (!this.hasNewer()) return false;
+    this.last = this.first; this.first = Math.max(0, this.last - this.max);
+    this.posts = this.list.slice(this.first, this.last); return true;
+  }
+  older() {
+    if (!this.hasOlder()) return false;
+    this.first = this.last; this.last = Math.min(this.list.length, this.first + this.max);
+    this.posts = this.list.slice(this.first, this.last); return true;
+  }
+}
+const projectPosts = DATA.projects.map(p => ({ ...p, kind: 'project', team: p.team.map(personById).filter(Boolean) }));
+const peoplePosts = PEOPLE.map(p => ({ kind: 'person', category: ['ALL', p.company, p.title], title: 'Team', team: [p] }));
+const blogPosts = DATA.blog.map(p => ({ ...p, kind: 'blog' }));
+const contactPosts = DATA.contacts.map(p => ({ ...p, kind: 'contact' }));
+
+/* ================================================================ Parameters */
+const SECTIONS = [
+  { name: 'Our work',            model: 'material/Colladas/hedra.dae', layout: 'CARROUSSELLE', make: () => new Provider(projectPosts, { defaultCategory: 'Featured Works' }) },
+  { name: 'Meet the collective', model: 'material/Colladas/hand.dae',  layout: 'LINE',         make: () => new Provider(peoplePosts, { maxPostPage: 20, byColumn: true }) },
+  { name: 'From the blog',       model: 'material/Colladas/arrow.dae', layout: 'CROSS',        make: () => new Provider(blogPosts) },
+  { name: 'Contact',             model: 'material/Colladas/world.dae', layout: 'DISTRIBUTE',   make: () => new Provider(contactPosts) },
+];
+const P = {
+  currentSection: 0, degreeCamera: Math.PI, actualDeg: Math.PI, cameraY: STYLE.cameraHeight,
+  postOpen: false, datas: [],
+  get data() { return this.datas[this.currentSection]; },
+  get section() { return SECTIONS[this.currentSection]; },
+  get selected() { return this.data.selected; },
+  set selected(i) { this.data.selected = i; },
+  resetData() {
+    if (!this.datas[this.currentSection]) this.datas[this.currentSection] = this.section.make();
+    else this.data.changeCategory(this.data.defaultCategory);
+  },
+};
+const cam = { x: 0, y: 0, z: 0, zoom: CAMERA.zoom };
+const camTarget = { x: 0, y: 0, z: 0 };
+
+/* ================================================================ TweenLite / TweenMax */
+let clock = 0;
+const tweens = [];
+const EASE = {
+  linear: t => t,
+  quadOut: t => -t * (t - 2),
+  quartOut: t => 1 - Math.pow(1 - t, 4),
+  quintInOut: t => (t < .5 ? 16 * t ** 5 : 1 + 16 * (t - 1) ** 5),
+  expoOut: t => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+  circOut: t => Math.sqrt(1 - (t - 1) * (t - 1)),
+};
+function to(obj, time, props, o = {}) {
+  for (const tw of tweens) if (tw.obj === obj) for (const k in props) delete tw.props[k];
+  const tw = { obj, props: { ...props }, bezier: o.bezier || null, time, start: clock + (o.delay || 0), ease: EASE[o.ease || 'quadOut'], onUpdate: o.onUpdate, onComplete: o.onComplete, from: null };
+  tweens.push(tw); return tw;
+}
+function delayedCall(t, fn) { return to({}, t, {}, { onComplete: fn, ease: 'linear' }); }
+function killTweensOf(obj) { for (let i = tweens.length - 1; i >= 0; i--) if (tweens[i].obj === obj) tweens.splice(i, 1); }
+function isTweening(obj) { return tweens.some(t => t.obj === obj && clock >= t.start); }
+function stepTween(tw, force) {
+  if (!force && clock < tw.start) return false;
+  if (!tw.from) { tw.from = {}; for (const k in tw.props) tw.from[k] = tw.obj[k]; }
+  const raw = force || tw.time <= 0 ? 1 : Math.min(1, (clock - tw.start) / tw.time);
+  const t = raw >= 1 ? 1 : tw.ease(raw);
+  for (const k in tw.props) {
+    const b = tw.from[k], e = tw.props[k];
+    tw.obj[k] = tw.bezier && k in tw.bezier ? b + t * (2 * (1 - t) * (tw.bezier[k] - b) + t * (e - b)) : b + (e - b) * t;
+  }
+  if (tw.onUpdate) tw.onUpdate();
+  return raw >= 1;
+}
+function updateTweens() {
+  for (const tw of tweens.slice()) {
+    if (stepTween(tw, false)) { const i = tweens.indexOf(tw); if (i >= 0) tweens.splice(i, 1); if (tw.onComplete) tw.onComplete(); }
+  }
+}
+function killAllTweens() {   // TweenMax.killAllTweens(true) : les tweens en cours sont terminés d'un coup
+  const list = tweens.splice(0);
+  for (const tw of list) { stepTween(tw, true); }
+}
+function cameraGoto(mx, my, mz, tx, ty, tz, speed) {
+  killTweensOf(cam);
+  to(cam, speed, { x: mx, y: my, z: mz }, { ease: 'quadOut', bezier: { x: (mx - cam.x) / 2, y: my + 500, z: (mz - cam.z) / 2 } });
+  cameraTarget(tx, ty, tz, speed);
+}
+function cameraTarget(x, y, z, speed) { killTweensOf(camTarget); to(camTarget, speed * 3 / 4, { x, y, z }, { ease: 'quartOut' }); }
+function cameraOnlyGoto(mx, my, mz, speed) { killTweensOf(cam); to(cam, speed, { x: mx, y: my, z: mz }, { ease: 'quadOut' }); }
+
+let frames = 1;
+const ease = k => (k <= 1 ? 1 : 1 - Math.pow(1 - 1 / k, frames));
+const D2R = Math.PI / 180;
+const pv = (x, y, z) => new THREE.Vector3(x, y, -z);          // Papervision (main gauche) -> Three.js
+const postLocal = (x, y, z) => [-x, y, z];                    // conteneur de posts tourné de 180°
+
+/* ================================================================ Rendu */
+const canvas = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setClearColor(0xffffff, 1);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, 1, 1, 60000);
+const lineMatCenter = new LineMaterial({ color: STYLE.lineColor, linewidth: STYLE.lineThickness });
+const lineMatFrame = new LineMaterial({ color: STYLE.planeFrameColor, linewidth: STYLE.planeFrameThickness });
+const lineMatSelect = new LineMaterial({ color: STYLE.planeFrameSelectColor, linewidth: STYLE.planeFrameThickness });
+const LINE_MATS = [lineMatCenter, lineMatFrame, lineMatSelect];
+function resolveAsset(url) {
+  const key = url.replace(/^\.\//, '').replace(/\/\.\//g, '/');
+  return (ASSETS && ASSETS[key]) || url;
+}
+const manager = new THREE.LoadingManager();
+manager.setURLModifier(resolveAsset);
+const texLoader = new THREE.TextureLoader(manager);
+const texCache = new Map();
+function prepTex(t) { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return t; }
+function loadTex(url) {
+  if (!texCache.has(url)) texCache.set(url, texLoader.loadAsync(url).then(prepTex));
+  return texCache.get(url);
+}
+const imgCache = new Map();
+function loadImage(url) {
+  if (!imgCache.has(url)) imgCache.set(url, new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = resolveAsset(url); }));
+  return imgCache.get(url);
+}
+let W = 0, H = 0;
+
+/* ================================================================ Root3D / SectionObject3D */
+class SectionObject3D {
+  constructor(def, i) { this.def = def; this.idTable = i; this.container = new THREE.Group(); this.p = { x: 0, y: 0, z: 0 }; this.blockers = []; }
+  async load(loader) {
+    const url = this.def.model;
+    const collada = ASSETS && ASSETS[url] ? loader.parse(ASSETS[url], url.slice(0, url.lastIndexOf('/') + 1)) : await loader.loadAsync(url);
+    const shape = collada.scene;
+    shape.scale.setScalar(MODEL_SCALE);
+    shape.traverse(o => {
+      if (!o.isMesh) return;
+      const conv = m => {
+        const map = m.map || m.emissiveMap || null;
+        // les locators de world.dae sont des WireframeMaterial jaunes (locatorColor) dans l'original
+        if (!map) return new THREE.MeshBasicMaterial({ color: STYLE.locatorColor, wireframe: true });
+        return new THREE.MeshBasicMaterial({ map });
+      };
+      o.material = Array.isArray(o.material) ? o.material.map(conv) : conv(o.material);
+      this.blockers.push(o);
+    });
+    this.container.add(shape);
+    shape.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(shape);
+    if (box.max.y - box.min.y > STYLE.object3DMaxHeight) shape.scale.multiplyScalar(STYLE.object3DMaxHeight / (box.max.y - box.min.y));
+  }
+  place(i) {
+    this.p.x = i * 5 * STYLE.object3DDistance;
+    this.p.z = (Math.pow(-1, i + 1) - 1) * i * STYLE.object3DDistance;
+    this.container.position.copy(pv(this.p.x, 0, this.p.z));
+  }
+}
+
+/* ================================================================ Textures dessinées (MovieClips de la bibliothèque) */
+function fontsReady() { return document.fonts && document.fonts.load ? Promise.all([document.fonts.load('22px Gelasio'), document.fonts.load('italic 22px Gelasio')]).catch(() => {}) : Promise.resolve(); }
+function wrapLines(ctx, text, maxW) {
+  const words = text.split(/\s+/); const lines = []; let line = '';
+  for (const w of words) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line); return lines;
+}
+function canvasTex(w, h, draw, scale = 2) {
+  const c = document.createElement('canvas'); c.width = w * scale; c.height = h * scale;
+  const ctx = c.getContext('2d'); ctx.scale(scale, scale); draw(ctx);
+  return prepTex(new THREE.CanvasTexture(c));
+}
+const SERIF = 'Georgia, Gelasio, "Times New Roman", serif';
+const UI = '"Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif';
+async function blogThumbTextures(post) {
+  const [photo, logo] = await Promise.all([loadImage(post.thumb).catch(() => null), loadImage('assets/logo.svg').catch(() => null)]);
+  await fontsReady();
+  const title = post.title.trim();
+  const front = canvasTex(312, 78, ctx => {
+    ctx.fillStyle = '#333'; ctx.fillRect(0, 0, 312, 78);
+    if (photo) ctx.drawImage(photo, 13, 12.75, 53, 53);
+    ctx.fillStyle = '#fff'; ctx.font = `21px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, 233).slice(0, 3).forEach((l, i) => ctx.fillText(l, 72, 12 + i * 22));
+  });
+  const back = canvasTex(312, 78, ctx => {
+    ctx.translate(312, 0); ctx.scale(-1, 1);   // le dos est vu de derrière : on le dessine en miroir pour que le texte se lise
+    ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(0, 0, 312, 78);
+    if (logo) { ctx.globalAlpha = .35; ctx.drawImage(logo, 10, 10, 58, 58); ctx.globalAlpha = 1; }
+    ctx.fillStyle = '#cccccc'; ctx.font = `21px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, 233).slice(0, 3).forEach((l, i) => ctx.fillText(l, 72, 9 + i * 22));
+  });
+  return [front, back];
+}
+function htmlToLines(html) {   // pour les fiches dessinées dans le canvas
+  return html.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').split('\n').map(s => s.trim()).filter(Boolean);
+}
+function contactInfoTexture(post) {   // MovieClip "contact" (380 x 300) plaqué sur un plan de 165 x 130
+  return fontsReady().then(() => canvasTex(380, 300, ctx => {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 380, 300); ctx.textBaseline = 'top';
+    ctx.fillStyle = '#fff'; ctx.font = `50px ${SERIF}`; ctx.fillText(post.title + '.', 32, 18);
+    ctx.fillStyle = '#979797'; ctx.font = `20px ${SERIF}`; ctx.fillText(post.autor, 32, 82);
+    ctx.fillStyle = '#ffcc00'; ctx.font = `14px ${UI}`; ctx.fillText((post.link || '').replace('http://', ''), 32, 128);
+    htmlToLines(post.html).forEach((l, i) => {
+      const m = l.match(/^([te]\.)\s*(.*)$/);
+      if (m) { ctx.fillStyle = '#999'; ctx.fillText(m[1], 32, 170 + i * 20); ctx.fillStyle = '#fff'; ctx.fillText(m[2], 52, 170 + i * 20); }
+      else { ctx.fillStyle = '#fff'; ctx.fillText(l, 32, 170 + i * 20); }
+    });
+    ctx.fillStyle = '#ffcc33'; ctx.font = `15px ${UI}`; ctx.fillText(post.date, 32, 260);
+  }, 1.5));
+}
+function peopleInfoTexture(person) {  // MovieClip "people" (200 x 200)
+  return fontsReady().then(() => canvasTex(200, 200, ctx => {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
+    ctx.fillStyle = '#fff'; ctx.font = `22px ${SERIF}`; ctx.fillText(`${person.name} ${person.lastName}.`, 18, 14);
+    ctx.fillStyle = '#8c8c8c'; ctx.font = `17px ${SERIF}`;
+    person.description.split('\n').forEach((l, i) => ctx.fillText(l, 19, 44 + i * 21));
+  }));
+}
+async function washedTexture(url) {   // Load3DMaterial avec filtre : voile blanc à 80 % sur le dos des posts
+  const im = await loadImage(url);
+  return canvasTex(im.naturalWidth, im.naturalHeight, ctx => { ctx.drawImage(im, 0, 0); ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillRect(0, 0, im.naturalWidth, im.naturalHeight); }, 1);
+}
+
+/* ================================================================ PostView */
+function makeSegments(points, material) {
+  const g = new LineSegmentsGeometry(); g.setPositions(points);
+  const l = new LineSegments2(g, material); l.computeLineDistances(); return l;
+}
+class PostView {
+  constructor(view, w, h, id) {
+    this.view = view; this.id_ = id; this.width = w; this.height = h;
+    this.thumb = { x: 0, y: 0, z: 0, rotX: 0, rotY: 0, rotZ: 0, scale: 1 };
+    this.p2 = { x: 0, y: 0, z: 0, rotX: 0, rotY: 0, rotZ: 0 };
+    this.group = new THREE.Group(); this.group.rotation.order = 'YXZ';
+    this.meshes = []; this.ready = false;
+  }
+  build(texFront, texBack) {
+    const geo = new THREE.PlaneGeometry(this.width, this.height);
+    const front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texFront, side: THREE.FrontSide }));
+    const back = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texBack, side: THREE.BackSide }));
+    front.userData = { post: this, face: 'front' }; back.userData = { post: this, face: 'back' };
+    this.width += STYLE.planeFrameDistance; this.height += STYLE.planeFrameDistance;
+    const w = this.width / 2, h = this.height / 2;
+    const pts = [-w, -h, 0, w, -h, 0, -w, -h, 0, -w, h, 0, w, -h, 0, w, h, 0, -w, h, 0, w, h, 0];
+    this.frame = makeSegments(pts, lineMatFrame);
+    this.group.add(front, back, this.frame);
+    this.meshes.push(front, back);
+    this.ready = true;
+  }
+  setPosition(x, y, z, rotY, rotX = 0, rotZ = 0) { Object.assign(this.p2, { x, y, z, rotY, rotX, rotZ }); }
+  apply() {
+    const t = this.thumb, g = this.group;
+    g.position.set(...postLocal(t.x, t.y, t.z));
+    g.rotation.y = -(t.rotY + 180) * D2R;
+    g.rotation.x = -t.rotX * D2R;
+    g.rotation.z = t.rotZ * D2R;
+    g.scale.setScalar(Math.max(1e-4, t.scale));
+  }
+  selectIt() {
+    if (!this.frame) return;
+    this.frame.material = lineMatSelect;
+    delayedCall(0.8, () => { if (this.frame) this.frame.material = lineMatFrame; });
+  }
+  turnAround(axis, degree) {
+    const key = { x: 'rotX', y: 'rotY', z: 'rotZ' }[axis];
+    this.thumb.rotX = this.p2.rotX; this.thumb.rotY = this.p2.rotY; this.thumb.rotZ = this.p2.rotZ;
+    to(this.thumb, STYLE.tween, { [key]: this.p2[key] + degree }, { ease: 'quartOut' });
+  }
+  moveToCamera(distance, time = 0) {
+    killTweensOf(this.thumb);
+    const D = STYLE.cameraDistance, p = this.p2;
+    const len = Math.sqrt(p.x * p.x + (p.z - D) * (p.z - D));
+    to(this.thumb, time, { x: p.x * distance / len, y: p.y, z: (p.z - D) * distance / len + D, rotY: p.rotY + 720 }, { ease: 'quartOut' });
+  }
+  moveBack(time = 0) {
+    killTweensOf(this.thumb);
+    const p = this.p2;
+    to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ }, { ease: 'quartOut' });
+  }
+  jump(x, y, z) {
+    to(this.thumb, STYLE.tween / 2, { x, y, z }, { ease: 'quartOut', onComplete: () => to(this.thumb, STYLE.tween / 2, { x: this.p2.x, y: this.p2.y, z: this.p2.z }, { ease: 'quartOut' }) });
+  }
+  dispose() {
+    killTweensOf(this.thumb);
+    this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) o.material.dispose(); });
+  }
+}
+
+/* ================================================================ Vues de posts : Carrousel, Line, Cross, Distribute */
+const layouts = {
+  // CarrousselleView3D : projets autour de l'objet
+  CARROUSSELLE: {
+    size: () => [256, 169],
+    textures: async post => [await loadTex(post.thumb), await washedTexture(post.thumb)],
+    preset(view) {
+      view.angle = -2 * Math.PI / view.n;
+      view.postViews.forEach((pv, i) => {
+        pv.setPosition(STYLE.planeDistance * Math.sin(view.angle * i + 2 * Math.PI), Math.pow(-1, i + 1) * Math.random() * STYLE.planeDisOrder + STYLE.planeDistance,
+          STYLE.planeDistance * Math.cos(view.angle * i + 2 * Math.PI), view.angle * i / D2R + 180 + 360);
+      });
+    },
+    position: (view, pv) => pv.p2,
+    lineEnd: p => [p.x / 3, p.y / 3, p.z / 3],
+    lineStart: (pv, t) => [t.x, t.y, t.z],
+    open: 'twoStep',
+    focus(view, id) { focusFacing(view, id); },
+    move(view, dx, dy, k) {
+      view.postViews.forEach((pv, i) => {
+        const t = pv.thumb, move = Math.pow(-1, i) * dx * (Math.random() * 2 + 1);
+        t.y -= (t.y - pv.p2.y + move) * ease(2 * k);
+        t.rotX -= (t.rotX - pv.p2.rotX - dy) * ease(2 * k);
+      });
+    },
+    reset(view) { view.postViews.forEach((pv, i) => { pv.p2.y = Math.pow(-1, i + 1) * Math.random() * STYLE.planeDisOrder + STYLE.planeDistance; }); },
+  },
+  // LineView3D : le collectif en arc au-dessus de la main
+  LINE: {
+    size: () => [90, 90],
+    textures: async post => [await loadTex(post.team[0].photo), await loadTex(post.team[0].photoBack)],
+    preset(view) { view.angle = Math.PI / (view.n + 1); },
+    position(view, pv, i) {
+      const a = view.angle * (i + 1), S = STYLE;
+      return {
+        x: (S.planeDistance - Math.abs(a - Math.PI / 2) * 120 + pv.width + Math.pow(-1, i + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.cos(a),
+        y: (S.planeDistance + pv.height + Math.pow(-1, i + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.sin(a),
+        z: Math.pow(-1, Math.round(Math.random() * 5)) * S.planeDisOrder * Math.random(), rotY: 180,
+      };
+    },
+    lineEnd: null,
+    open: 'oneStep',
+    focus(view, id) {
+      P.degreeCamera = P.degreeCamera % (2 * Math.PI); P.actualDeg = P.actualDeg % (2 * Math.PI);
+      const pv = view.postViews[id]; if (!pv) return;
+      P.selected = id; P.degreeCamera = Math.PI;
+      if (!pv.ready) return;
+      P.cameraY = pv.p2.y;
+      pv.selectIt();
+      const xp = pv.p2.x * (pv.width / 2) / Math.sqrt(pv.p2.x ** 2 + pv.p2.y ** 2) + pv.p2.x;
+      pv.jump(xp, pv.p2.y * xp / pv.p2.x, pv.p2.z);
+      pv.turnAround('y', 360);
+    },
+    move(view, dx, dy, k) {
+      view.postViews.forEach((pv, i) => {
+        if (isTweening(pv.thumb)) return;
+        const t = pv.thumb, move = Math.pow(-1, i) * dx * (Math.random() * 2 + 1);
+        t.y -= (t.y - pv.p2.y + move) * ease(2 * k);
+        t.rotX -= (t.rotX - pv.p2.rotX - dy) * ease(2 * k);
+      });
+    },
+  },
+  // CrossView3D : les billets en éventail, recto/verso
+  CROSS: {
+    size: () => [312, 78],
+    textures: post => blogThumbTextures(post),
+    preset(view) {
+      view.angle = Math.PI / (Math.ceil(view.n / 2) + 1);
+      view.container.position.y += 250;
+      view.postViews.forEach((pv, i) => { const p = this.position(view, pv, i); pv.setPosition(p.x, p.y, p.z, p.rotY); });
+    },
+    position(view, pv, i) {
+      const n = view.n, half = Math.ceil(n / 2), S = STYLE;
+      const alpha = j => { const r = view.angle * (j + 1); return r - Math.cos(r) * view.angle / 2; };
+      let ix = i, sx; if (i + 1 > half) { ix = 2 * Math.round(n / 2) - i - 1; sx = Math.pow(-1, ix); } else sx = Math.pow(-1, i + 1);
+      const rx = S.planeDistance * 0.7 + pv.width + sx * S.planeDisOrder / (Math.random() + 1) - Math.abs(alpha(ix) - Math.PI / 2) * 120;
+      let iy = i; if (i + 1 > half) iy = 2 * Math.round(n / 2) - i - 1;
+      const ry = S.planeDistance * 0.7 + pv.height + Math.pow(-1, iy) * S.planeDisOrder / (Math.random() + 1) + Math.abs(alpha(iy) - Math.PI / 2) * 120;
+      const sz = i + 1 > half ? -1 : 1, dec = i % 2 === 1 ? S.planeDistance * 0.07 : -S.planeDistance * 0.07;
+      return { x: rx * Math.cos(alpha(ix)), y: ry * Math.sin(alpha(iy)), z: sz * S.planeDistance * 0.3 + Math.pow(-1, Math.round(Math.random() * 5)) * S.planeDisOrder * Math.random() + dec, rotY: i + 1 > half ? 0 : 180 };
+    },
+    lineEnd: p => [p.x / 5, p.y / 5, p.z / 5],
+    lineStart: (pv, t) => [t.x, t.y - pv.height / 2, t.z],
+    open: 'twoStep',
+    focus(view, id) { if (focusFacing(view, id)) view.postViews[id].turnAround('x', 720); },
+    move(view, dx, dy, k) {
+      view.postViews.forEach((pv, i) => {
+        const t = pv.thumb, move = Math.pow(-1, i) * dx * (Math.random() * 2 + 1);
+        t.y -= (t.y - pv.p2.y + move) * ease(2 * k);
+        t.z -= (t.z - pv.p2.z + move) * ease(2 * k);
+      });
+    },
+  },
+  // DistributeView3D : les studios sur la carte du monde
+  DISTRIBUTE: {
+    size: () => [140, 130],
+    coords: { Bogota: [250, 30], London: [47, -110], Barcelona: [57, -70], Amsterdam: [0, -110] },
+    decalage: [[250, 200], [0, -50], [400, 0], [-600, -100], [-500, 200]],
+    textures: async post => { const t = await loadTex(post.thumb); return [t, t]; },
+    preset(view) { view.angle = Math.PI / (view.n + 1); },
+    position(view, pv, i) {
+      const c = this.coords[view.posts[i].date] || [0, 0], d = this.decalage[i % 5];
+      return { x: c[0] + d[0], y: (STYLE.planeDistance + pv.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)), z: c[1] + d[1], rotY: 180 };
+    },
+    lineEnd(p, view, i) { const c = this.coords[view.posts[i].date] || [0, 0]; return [c[0], 50, c[1]]; },
+    lineStart: (pv, t) => [t.x, t.y - 65, t.z],
+    open: 'oneStep',
+    focus(view, id) {
+      P.degreeCamera %= 2 * Math.PI; P.actualDeg %= 2 * Math.PI;
+      const pv = view.postViews[id]; if (!pv) return;
+      P.selected = id; P.degreeCamera = Math.PI;
+      if (!pv.ready) return;
+      P.cameraY = pv.p2.y;
+      pv.selectIt();
+      const xp = pv.p2.x * (pv.width / 2) / Math.sqrt(pv.p2.x ** 2 + pv.p2.y ** 2) + pv.p2.x;
+      pv.jump(pv.p2.x, pv.p2.y * xp / pv.p2.x, pv.p2.z);
+    },
+    move(view, dx) {
+      view.postViews.forEach((pv, i) => {
+        if (isTweening(pv.thumb)) return;
+        const t = pv.thumb, move = -Math.abs(dx * (Math.random() * 2 + 1)) / 2;
+        t.x -= (t.x - pv.p2.x + move) * ease(2 * STYLE.cameraEaseSpeed);
+        const info = view.infos[i]; if (info) info.p.x = pv.p2.x - 140 - 20 - (t.x - pv.p2.x);
+      });
+    },
+  },
+};
+function focusFacing(view, id) {   // focus() du carrousel et de la croix : la caméra se place face au post
+  const pv = view.postViews[id]; if (!pv) return false;
+  let rot = pv.p2.rotY * D2R; if (rot === 0) rot = 2 * Math.PI;
+  let delta = (rot - P.degreeCamera) % (2 * Math.PI);
+  if (delta > Math.PI) delta -= 2 * Math.PI; else if (delta < -Math.PI) delta += 2 * Math.PI;
+  P.selected = id; P.cameraY = pv.p2.y; P.degreeCamera += delta;
+  pv.selectIt();
+  return true;
+}
+
+class PostsView3D {
+  constructor(section) {
+    this.section = section;
+    this.L = layouts[section.def.layout];
+    this.posts = P.data.posts.slice();
+    this.n = this.posts.length;
+    this.container = new THREE.Group();
+    this.container.position.copy(section.container.position);
+    scene.add(this.container);
+    const [w, h] = this.L.size();
+    this.postViews = this.posts.map((_, i) => new PostView(this, w, h, i));
+    this.lines = []; this.following = new Set(); this.infos = [];
+    this.alive = true;
+    this.L.preset.call(this.L, this);
+    this.openPosts();
+  }
+  async openPosts() {
+    for (let i = 0; i < this.n; i++) {
+      let tex;
+      try { tex = await this.L.textures(this.posts[i]); } catch (e) { continue; }
+      if (!this.alive) return;
+      const pv = this.postViews[i];
+      pv.build(tex[0], tex[1]);
+      this.animeOpenPost(pv, i);
+      if (STYLE.planeSpeed > 0) { const until = clock + POST_STAGGER; while (clock < until) { await new Promise(r => requestAnimationFrame(r)); if (!this.alive) return; } }
+    }
+  }
+  animeOpenPost(pv, i) {
+    const L = this.L;
+    if (L.position !== layouts.CARROUSSELLE.position) { const p = L.position.call(L, this, pv, i); pv.setPosition(p.x, p.y, p.z, p.rotY); }
+    const p = pv.p2;
+    Object.assign(pv.thumb, { x: p.x / 2, y: 10, z: p.z / 2, rotY: p.rotY, rotX: 90 - 2 * 360, rotZ: 0, scale: 0.5 });
+    const timeAnim = 2 * STYLE.planeSpeed;
+    let pending;
+    const done = () => { if (--pending <= 0) { this.following.delete(pv); if (L.lineEnd) this.followLine(pv, i); } };
+    if (L.open === 'twoStep') {
+      pending = 2;
+      to(pv.thumb, timeAnim, { y: p.y, rotX: 0 }, { delay: STYLE.planeSpeed / 3, ease: 'expoOut', onComplete: done });
+      to(pv.thumb, timeAnim, { x: p.x, z: p.z, rotY: p.rotY, scale: 1 }, { ease: 'circOut', onComplete: done });
+    } else {
+      pending = 1;
+      to(pv.thumb, timeAnim, { x: p.x, y: p.y, z: p.z, rotY: p.rotY, rotX: 0, scale: 1 }, { ease: 'circOut', onComplete: done });
+    }
+    pv.apply();
+    this.container.add(pv.group);
+    if (L.lineEnd) { this.following.add(pv); this.followLine(pv, i); }
+    if (this.section.def.layout === 'DISTRIBUTE') this.openInfo(pv, i, timeAnim);
+  }
+  followLine(pv, i) {
+    const a = this.L.lineStart(pv, pv.thumb), b = this.L.lineEnd.call(this.L, pv.p2, this, i);
+    const pts = [...postLocal(...a), ...postLocal(...b)];
+    let l = this.lines[i];
+    if (!l) { l = this.lines[i] = makeSegments(pts, lineMatCenter); this.container.add(l); } else l.geometry.setPositions(pts);
+  }
+  async openInfo(pv, i, timeAnim) {   // fiche du studio à côté du logo
+    const tex = await contactInfoTexture(this.posts[i]);
+    if (!this.alive) return;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(165, 130), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+    mesh.userData = { post: pv, face: 'front' };
+    const info = { mesh, p: { x: pv.p2.x - 140 - 20 - 165, y: pv.p2.y, z: pv.p2.z, rotY: 180 } };
+    info.mesh.visible = false;
+    this.infos[i] = info; pv.meshes.push(mesh);
+    this.container.add(mesh);
+    to(info.p, STYLE.tween / 4, { x: pv.p2.x - 140 - 20 }, { delay: timeAnim, ease: 'quartOut' });
+    delayedCall(timeAnim, () => { mesh.visible = true; });
+  }
+  async openPost3D() {   // LineView3D.openPost3D : la photo vient vers la caméra, la fiche s'ouvre à côté
+    const id = P.selected, pv = this.postViews[id]; if (!pv || !pv.ready) return;
+    pv.moveToCamera(60, STYLE.tween);
+    if (!this.peopleInfo) {
+      this.peopleInfo = { mesh: new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })), p: { x: 0, y: 0, z: 0, rotY: 150 } };
+      this.container.add(this.peopleInfo.mesh);
+    }
+    const info = this.peopleInfo; info.mesh.visible = false;
+    const tex = await peopleInfoTexture(this.posts[id].team[0]);
+    if (!this.alive) return;
+    if (info.mesh.material.map) info.mesh.material.map.dispose();
+    info.mesh.material.map = tex; info.mesh.material.needsUpdate = true;
+    delayedCall(STYLE.tween, () => {
+      if (!P.postOpen || P.selected !== id) return;
+      const t = pv.thumb;
+      Object.assign(info.p, { x: t.x - 45, y: t.y, z: t.z - 45, rotY: 150 });
+      info.mesh.visible = true;
+      to(info.p, STYLE.tween / 4, { x: t.x - 90 - 5, z: t.z, rotY: 180 }, { ease: 'quartOut' });
+    });
+  }
+  closePost3D() {
+    const pv = this.postViews[P.selected];
+    if (pv) pv.moveBack(STYLE.tween / 2);
+    if (this.peopleInfo) { killTweensOf(this.peopleInfo.p); this.peopleInfo.mesh.visible = false; }
+  }
+  movePosts(dx, dy, k) { this.L.move.call(this.L, this, dx, dy, k); }
+  resetPostPosition() {
+    this.postViews.forEach((pv, i) => {
+      if (!pv.ready || this.following.has(pv)) return;
+      killTweensOf(pv.thumb);
+      if (this.L.reset) this.L.reset(this);
+      else { const p = this.L.position.call(this.L, this, pv, i); pv.setPosition(p.x, p.y, p.z, p.rotY); }
+      Object.assign(pv.thumb, { x: pv.p2.x, y: pv.p2.y, z: pv.p2.z, rotX: pv.p2.rotX, rotY: pv.p2.rotY, rotZ: 0, scale: 1 });
+      if (this.L.lineEnd) this.followLine(pv, i);
+      const info = this.infos[i]; if (info) Object.assign(info.p, { x: pv.p2.x - 160, y: pv.p2.y, z: pv.p2.z });
+    });
+  }
+  checkPostSelected() {   // le post le plus proche de l'angle de la caméra devient le post courant
+    if (this.section.def.layout === 'LINE' || this.section.def.layout === 'DISTRIBUTE') return;
+    const deg = ((Math.round(P.degreeCamera / D2R) % 360) + 360) % 360;
+    let best = P.selected, diff = Infinity;
+    this.postViews.forEach((pv, i) => {
+      if (!pv.ready) return;
+      const r = ((pv.p2.rotY % 360) + 360) % 360;
+      const d = Math.min(Math.abs(r - deg), 360 - Math.abs(r - deg));
+      if (d < diff) { diff = d; best = i; }
+    });
+    P.selected = best;
+  }
+  goNext() { return P.selected + 1 >= this.n ? 0 : P.selected + 1; }
+  goPrev() { return P.selected - 1 <= -1 ? this.n - 1 : P.selected - 1; }
+  focus(id) { this.L.focus.call(this.L, this, id); }
+  update() {
+    for (const pv of this.postViews) if (pv.ready) pv.apply();
+    this.following.forEach(pv => this.followLine(pv, pv.id_));
+    this.infos.forEach(info => { if (!info) return; info.mesh.position.set(...postLocal(info.p.x, info.p.y, info.p.z)); info.mesh.rotation.y = -(info.p.rotY + 180) * D2R; });
+    if (this.peopleInfo) { const i = this.peopleInfo; i.mesh.position.set(...postLocal(i.p.x, i.p.y, i.p.z)); i.mesh.rotation.y = -(i.p.rotY + 180) * D2R; }
+  }
+  get meshes() { return this.postViews.flatMap(p => p.meshes); }
+  destroy() {
+    this.alive = false;
+    this.postViews.forEach(p => p.dispose());
+    this.lines.forEach(l => l && l.geometry.dispose());
+    this.infos.forEach(i => i && i.mesh.material.dispose());
+    killTweensOf(this.infos.map(i => i && i.p));
+    scene.remove(this.container);
+  }
+}
+
+/* ================================================================ StageView3D */
+const sections = SECTIONS.map((d, i) => new SectionObject3D(d, i));
+let postsView = null;
+let easeSpeed = STYLE.cameraEaseSpeed;
+let isClicking = false, closeTurn = false;
+let mouseX = 0, mouseY = 0, prevX = 0, prevY = 0;
+let started = false, inputEnabled = false;
+const curSec = () => sections[P.currentSection];
+
+function setUpper() { const h = STYLE.cameraHeight; P.cameraY = P.cameraY + h / 7 <= 3 * h ? P.cameraY + h / 7 : h * 3; }
+function setDowner() { const h = STYLE.cameraHeight; P.cameraY = P.cameraY - h / 7 >= h / 7 ? P.cameraY - h / 7 : h / 7; }
+function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + STYLE.cameraDistance * Math.sin(P.actualDeg); cam.z = s.p.z + STYLE.cameraDistance * Math.cos(P.actualDeg); }
+function changeSection3D() {
+  sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
+  isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
+  if (postsView) postsView.destroy();
+  postsView = new PostsView3D(curSec());
+  focusPost(P.selected);
+  P.actualDeg = P.degreeCamera;
+  cameraChangeSection();
+}
+function cameraChangeSection() {
+  const s = curSec();
+  P.cameraY = STYLE.cameraHeight;
+  cameraGoto(STYLE.cameraDistance * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, STYLE.cameraDistance * Math.cos(P.degreeCamera) + s.p.z, s.p.x, STYLE.cameraTargetHeight, s.p.z, STYLE.cameraSpeed);
+}
+function focusPost(i) { P.selected = i; if (postsView) postsView.focus(i); }
+function selectPost(dir) {
+  if (!postsView) return;
+  closeTurn = true;
+  postsView.checkPostSelected();
+  easeSpeed = STYLE.cameraKeyboardSpeed;
+  focusPost(dir === 'NEXT' ? postsView.goNext() : postsView.goPrev());
+}
+function setCamera() {
+  const hmax = 1000, max = 680, div = STYLE.cameraDistanceProportion / (hmax - 720);
+  STYLE.cameraDistance = Math.round((H < max ? hmax - H : hmax - max) * div);
+}
+function onStageResize3D() {
+  closeTurn = false;
+  setCamera();
+  if (!started) return;
+  const s = curSec();
+  if (P.postOpen && P.section.layout === 'LINE' && postsView) postsView.postViews[P.selected].moveToCamera(100, 0);
+  cameraOnlyGoto(s.p.x + STYLE.cameraDistance * Math.sin(P.actualDeg), cam.y, s.p.z + STYLE.cameraDistance * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+}
+function renderMachine() {
+  if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
+  if (isClicking) {
+    easeSpeed = STYLE.cameraEaseSpeed;
+    const deg = P.degreeCamera;
+    P.degreeCamera += (mouseX - prevX) / 150;
+    P.actualDeg -= (P.actualDeg - deg) * ease(easeSpeed);
+    placeCameraOnOrbit();
+    P.cameraY += (mouseY - prevY) * 2;
+    const h = STYLE.cameraHeight;
+    if (P.cameraY < h / 3) P.cameraY = h / 3; else if (P.cameraY > h * 4) P.cameraY = 4 * h;
+    cam.y -= (cam.y - P.cameraY) * ease(easeSpeed);
+    if (STYLE.animationMode && postsView) postsView.movePosts((prevX - mouseX) / Math.max(frames, .25), (prevY - mouseY) / Math.max(frames, .25), easeSpeed);
+    prevX = mouseX; prevY = mouseY;
+  } else if (closeTurn) {
+    if (Math.abs(P.actualDeg - P.degreeCamera) <= 0.007) closeTurn = false;
+    P.actualDeg -= (P.actualDeg - P.degreeCamera) * ease(STYLE.cameraEaseSpeed);
+    placeCameraOnOrbit();
+    cam.y -= (cam.y - P.cameraY) * ease(easeSpeed);
+    if (STYLE.animationMode && postsView) postsView.movePosts(0, 0, STYLE.cameraEaseSpeed);
+  } else if (Math.abs(cam.y - P.cameraY) > 0.007) {
+    cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed);
+  }
+}
+function mainEntrance() {   // le zoom d'entrée : la focale passe de 6 à 2 en 1 s
+  const real = CAMERA.zoom, time = 1;
+  cam.zoom = 6;
+  const p0 = postsView && postsView.postViews[0] ? postsView.postViews[0].p2.y : STYLE.planeDistance;
+  cam.y = p0 + 100; camTarget.y = p0 + 100;
+  cameraTarget(camTarget.x, STYLE.cameraTargetHeight, camTarget.z, time);
+  inputEnabled = false;
+  to(cam, time, { zoom: real }, { ease: 'expoOut' });
+  delayedCall(time, () => { inputEnabled = true; });
+}
+
+/* Caméra Papervision : focale = zoom x focus (en pixels), oeil placé "focus" unités derrière la caméra. */
+const _p = new THREE.Vector3(), _t = new THREE.Vector3(), _dir = new THREE.Vector3();
+function updateCamera() {
+  _p.copy(pv(cam.x, cam.y, cam.z)); _t.copy(pv(camTarget.x, camTarget.y, camTarget.z));
+  _dir.subVectors(_t, _p); if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, -1); _dir.normalize();
+  camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus);
+  camera.lookAt(_t);
+  const narrow = Math.min(1, W / 900);   // seul ajout : sur écran étroit, la focale se réduit pour garder la scène
+  const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
+  if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
+}
+function resizeViewport() {
+  W = window.innerWidth; H = window.innerHeight;
+  renderer.setSize(W, H, false);
+  camera.aspect = W / H; camera.updateProjectionMatrix();
+  LINE_MATS.forEach(m => m.resolution.set(W, H));
+}
+
+/* ================================================================ StageView2D / Assets */
+const menu = document.getElementById('menu');
+const sloganEl = document.getElementById('slogan');
+const menuButtons = SECTIONS.map((s, i) => {
+  const li = document.createElement('li'), b = document.createElement('button');
+  b.type = 'button'; b.textContent = s.name;
+  b.addEventListener('click', () => { if (i !== P.currentSection && inputEnabled) getToSectionView(i); });
+  li.appendChild(b); menu.appendChild(li); return b;
+});
+menu.style.setProperty('--n', SECTIONS.length);
+function changeActiveButton() { menuButtons.forEach((b, i) => b.setAttribute('aria-current', String(i === P.currentSection))); }
+function openMenu() {
+  menuButtons.forEach((b, i) => {
+    b.animate([{ transform: 'translateX(-260px)', opacity: .5 }, { transform: 'none', opacity: 1 }], { duration: (i + 1) * 200, easing: 'cubic-bezier(.17,.84,.44,1)', fill: 'backwards' });
+  });
+  menu.hidden = false;
+  setTimeout(() => menu.classList.add('ready'), (SECTIONS.length + 1) * 200);
+}
+function setMenuPosition() {
+  if (P.postOpen && post2D.height > 100) {
+    let y = sloganEl.offsetHeight + post2D.height + 2 * STYLE.margin + 10 + 26;
+    y = Math.min(y, H - menu.offsetHeight - 10);
+    menu.style.left = STYLE.margin + 'px'; menu.style.top = y + 'px';
+  } else { menu.style.left = 3 * STYLE.margin + 'px'; menu.style.top = Math.round(H / 1.4) + 'px'; }
+}
+
+/* Catégories + pagination */
+const cats = document.getElementById('cats'), catBox = document.getElementById('cat-box'), catList = document.getElementById('cat-list');
+const catName = document.getElementById('cat-name'), catOpen = document.getElementById('cat-open');
+const pgPrev = document.getElementById('pg-prev'), pgNext = document.getElementById('pg-next');
+function initCategorieData() {
+  const d = P.data, list = d.categoryList;
+  cats.querySelector('#cat-box').hidden = list.length <= 1;
+  catList.innerHTML = '';
+  list.forEach(c => {
+    const li = document.createElement('li'), b = document.createElement('button');
+    b.type = 'button'; b.textContent = c; b.setAttribute('aria-current', String(c === d.currentCatName));
+    b.addEventListener('click', () => { closeCategory(); changeCategory(c); });
+    li.appendChild(b); catList.appendChild(li);
+  });
+  catName.textContent = d.currentCatName;
+  checkAccess(); closeCategory();
+}
+function checkAccess() {
+  const d = P.data;
+  pgPrev.disabled = !d.hasNewer(); pgNext.disabled = !d.hasOlder();
+  pgPrev.hidden = pgNext.hidden = !d.hasNewer() && !d.hasOlder();
+}
+function closeCategory() { catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }
+catOpen.addEventListener('click', () => { const o = catBox.classList.toggle('open'); catOpen.setAttribute('aria-expanded', String(o)); });
+pgPrev.addEventListener('click', () => { if (inputEnabled) entries('newer'); });
+pgNext.addEventListener('click', () => { if (inputEnabled) entries('older'); });
+function hideCategory() { cats.classList.add('hidden'); }
+function showCategory() { cats.classList.remove('hidden'); }
+
+/* Guide clavier */
+const kb = document.getElementById('kb'), kbToggle = document.getElementById('kb-toggle');
+let kbTimer = null;
+function openKeyboard() { kb.classList.add('open'); kbToggle.setAttribute('aria-expanded', 'true'); }
+function closeKeyboard() { kb.classList.remove('open'); kbToggle.setAttribute('aria-expanded', 'false'); }
+kbToggle.addEventListener('click', () => { clearTimeout(kbTimer); kb.classList.contains('open') ? closeKeyboard() : openKeyboard(); });
+kb.querySelectorAll('.key').forEach(k => k.addEventListener('click', () => keyBoardNavigation({ code: k.dataset.k, preventDefault() {} })));
+function release(code) {
+  const k = kb.querySelector(`.key[data-k="${code}"]`); if (!k) return;
+  k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 200);
+}
+function toggleActivityButton() { kb.querySelector('.key.anim').classList.toggle('off', !STYLE.animationMode); }
+
+/* ================================================================ PostView2D : fiches projet, blog, contact */
+const whiteboard = document.getElementById('whiteboard');
+const post2dEl = document.getElementById('post2d'), strip = document.getElementById('strip');
+const post2D = {
+  open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, delay: 0,
+  build(post) {
+    this.clear();
+    this.open = true; this.height = post.kind === 'contact' ? 300 : 355;
+    post2dEl.classList.remove('closing'); post2dEl.hidden = false;
+    post2dEl.style.top = (sloganEl.offsetHeight + 2 * STYLE.margin + 26) + 'px';
+    this.delay = 0;
+    if (post.kind === 'contact') { this.addImage(post.thumb.replace('.jpg', 'BIG.jpg'), 300); this.addContact(post); }
+    else {
+      const chunks = splitContent(post.html);
+      if (post.kind === 'project') {
+        const imgs = chunks.filter(c => c.type === 'img' && playable(c.src)), text = chunks.filter(c => c.type === 'text').map(c => c.html).join('');
+        if (imgs[0]) this.addImage(imgs[0].src);
+        this.addText(post, text, 'project');
+        imgs.slice(1).forEach(c => this.addImage(c.src));
+        this.addTeam(post);
+      } else {
+        let titled = false;
+        chunks.forEach(c => { if (c.type === 'img') { if (playable(c.src)) this.addImage(c.src); } else { this.addText(post, c.html, 'blog', titled); titled = true; } });
+        if (!titled) this.addText(post, '', 'blog', false);
+      }
+      const link = post.link && post.link !== 'null' ? post.link : null;
+      if (link) {
+        const b = document.createElement('div'); b.className = 'banda';
+        b.innerHTML = post.kind === 'blog' ? `<a href="${link}" target="_blank" rel="noopener">Trackback </a>` : `Visit the site: <a href="${link}" target="_blank" rel="noopener">${link}</a>`;
+        post2dEl.appendChild(b); this.banda = b; this.placeBanda();
+      }
+    }
+    this.layout();
+    this.x = 0; this.finalpos = 0; strip.style.transform = 'translateX(0px)';
+  },
+  addPanel(cls, width, inner) {
+    const el = document.createElement('div'); el.className = 'pnl ' + cls; el.style.width = width + 'px';
+    el.innerHTML = `<div class="bgx"></div><div class="in">${inner || ''}</div>`;
+    el.style.height = this.height + 'px';
+    strip.appendChild(el); this.panels.push(el);
+    const d = STYLE.animationMode ? this.delay : 0;   // Builders.animeBackground : les fonds se déroulent l'un après l'autre
+    setTimeout(() => el.classList.add('open'), d * 1000 + 20);
+    this.delay += 0.2;
+    return el;
+  },
+  addImage(src, h = 355) {
+    const isVideo = /\.mp4$/i.test(src);
+    const el = this.addPanel('media', h, '');
+    const media = document.createElement(isVideo ? 'video' : 'img');
+    media.draggable = false;
+    if (isVideo) { Object.assign(media, { src, controls: true, playsInline: true, preload: 'metadata', poster: src.replace(/\.mp4$/i, '.jpg') }); media.style.cursor = 'default'; media.addEventListener('pointerdown', e => e.stopPropagation()); }
+    else { media.src = src; media.alt = ''; }
+    media.style.height = h + 'px';
+    const fit = () => { const w = isVideo ? Math.round(media.videoWidth * h / media.videoHeight) : Math.round(media.naturalWidth * h / media.naturalHeight); if (w) { el.style.width = w + 'px'; this.layout(); } };
+    media.addEventListener(isVideo ? 'loadedmetadata' : 'load', fit);
+    el.querySelector('.in').appendChild(media);
+  },
+  addText(post, html, mode, continuation = false) {
+    const width = mode === 'project' ? 522 : 389, x = mode === 'project' ? 79 : 17, colW = mode === 'project' ? 362 : 353;
+    let title = post.title.trim(); if (!title.endsWith('.')) title += '.';
+    const cats = post.category.map((c, i) => (i ? ', ' : '') + c).join('');
+    const posted = `Posted in <span>${cats}</span>`, fecha = `${post.date.trim()} | ${post.autor}`;
+    const measure = document.createElement('div');
+    measure.className = 'txt'; measure.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;width:${colW}px`;
+    document.body.appendChild(measure);
+    const pages = [];
+    if (mode === 'project') {
+      // textSection : titre en haut, date et catégories en bas du dernier panneau
+      measure.innerHTML = `<h2 class="ttl" style="position:static">${title}</h2>`;
+      const tH = measure.firstChild.offsetHeight, top = 34 + tH + 20;
+      pages.push(...paginate(html, colW, [282 - 10 - top, 355 - 93 - 20], measure));
+      pages.forEach((pg, i) => {
+        const last = i === pages.length - 1;
+        this.addPanel('txt', width, (i === 0 && !continuation ? `<h2 class="ttl" style="left:${x}px;top:34px;width:${colW}px">${title}</h2>` : '') +
+          `<div class="body" style="left:${x}px;top:${i === 0 ? top : 93}px;width:${colW}px">${pg}</div>` +
+          (last ? `<div class="fecha" style="left:${x}px;top:282px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:308px;width:${colW}px">${posted}</div>` : ''));
+      });
+    } else {
+      // blogSection : titre, date, catégories puis le texte
+      measure.innerHTML = `<h2 class="ttl" style="position:static">${title}</h2>`;
+      const tH = measure.firstChild.offsetHeight, fy = 13 + tH + 10, py = fy + 20, top = py + 18 + 20;
+      pages.push(...paginate(html, colW, [355 - top - 14, 355 - 28], measure));
+      if (!pages.length) pages.push('');
+      pages.forEach((pg, i) => {
+        const first = i === 0 && !continuation;
+        this.addPanel('txt', width, (first ? `<h2 class="ttl" style="left:${x}px;top:13px;width:${colW}px">${title}</h2><div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` : '') +
+          `<div class="body" style="left:${x}px;top:${first ? top : 14}px;width:${colW}px">${pg}</div>`);
+      });
+    }
+    measure.remove();
+  },
+  addTeam(post) {
+    const team = post.team, ext = post.externalTeam || [];
+    const names = team.map(p => `${p.name} ${p.lastName}`).concat(ext).join(', ');
+    const el = this.addPanel('team', 576, `<h2 class="ttl">Who worked on this project?</h2><div class="names">From left to right. <span>${names}.</span></div>`);
+    const inner = el.querySelector('.in');
+    team.forEach((p, j) => {
+      const f = document.createElement('button');
+      f.type = 'button'; f.className = 'face';
+      f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (160 + Math.floor(j / 6) * 55) + 'px';
+      f.innerHTML = `<img src="${p.photo}" alt="${p.name} ${p.lastName}" draggable="false"><span class="tab">${p.name} ${p.lastName}.<small>${p.description}</small></span>`;
+      f.addEventListener('pointerenter', () => f.classList.add('big'));
+      f.addEventListener('pointerleave', () => f.classList.remove('big'));
+      f.addEventListener('focus', () => f.classList.add('big'));
+      f.addEventListener('blur', () => f.classList.remove('big'));
+      inner.appendChild(f);
+    });
+    el.style.overflow = 'visible';
+  },
+  addContact(post) {
+    const site = (post.link || '').replace(/^https?:\/\//, '');
+    this.addPanel('contact', 380, `<div class="cn">${post.title}.</div><div class="ac">${post.autor}</div>` +
+      `<div class="site">${post.link ? `<a href="${post.link}" target="_blank" rel="noopener">${site}</a>` : ''}</div>` +
+      `<div class="ad">${post.html}</div><div class="ct">${post.date}</div>`);
+  },
+  layout() {
+    let x = 0;
+    this.panels.forEach(p => { p.style.left = x + 'px'; x += p.offsetWidth - 2; });
+    const last = this.panels[this.panels.length - 1];
+    this.end = last ? -parseFloat(last.style.left) : 0;
+    this.placeBanda();
+  },
+  placeBanda() { if (this.banda) this.banda.style.left = (W - 2 * STYLE.margin - this.banda.offsetWidth) + 'px'; },
+  close() {
+    if (!this.open) return 0;
+    this.open = false;
+    const t = STYLE.animationMode ? 0.8 : 0;
+    post2dEl.classList.add('closing');
+    setTimeout(() => { if (!this.open) this.clear(); }, t * 1000);
+    return t;
+  },
+  clear() {
+    strip.querySelectorAll('video').forEach(v => v.pause());
+    strip.innerHTML = ''; this.panels = [];
+    if (this.banda) { this.banda.remove(); this.banda = null; }
+    post2dEl.hidden = true; post2dEl.classList.remove('closing');
+  },
+  action(type) {   // Navigation.action : flèches = panneau suivant / précédent
+    if (this.height === 300) return;
+    let post = 0;
+    if (this.finalpos > 0) post = 0;
+    else if (this.finalpos < this.end) post = this.panels.length - 1;
+    else for (let i = 1; i < this.panels.length; i++) {
+      const a = this.panels[i - 1], b = this.panels[i];
+      if (-this.finalpos >= a.offsetLeft + a.offsetWidth / 2 && -this.finalpos < b.offsetLeft + b.offsetWidth / 2) { post = i; break; }
+    }
+    if (type === 'RIGHT') this.finalpos = -this.panels[Math.min(post + 1, this.panels.length - 1)].offsetLeft;
+    if (type === 'LEFT') this.finalpos = -this.panels[Math.max(post - 1, 0)].offsetLeft;
+  },
+  step() {   // Navigation._navigation, à chaque frame
+    if (!this.open) return;
+    if (this.dragging) {
+      this.finalpos += (mouse2D - this.xprev) * 1.5;
+      this.x -= (this.x - this.finalpos) * ease(STYLE.easing);
+      this.xprev = mouse2D;
+    } else if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
+    else if (this.finalpos > 0) this.finalpos = 0;
+    else if (this.finalpos < this.end) this.finalpos = this.end;
+    strip.style.transform = `translateX(${Math.round(this.x)}px)`;
+  },
+};
+// médias encore disponibles : images locales et la vidéo Dodaq convertie ; les .flv/.swf et images distantes de 2008 ont disparu
+const playable = src => !/^https?:/i.test(src) && !/\.(flv|swf)$/i.test(src);
+function splitContent(html) {   // Builders.processingTexte : découpe le HTML entre textes et images
+  const out = []; const re = /<img[^>]*src=['"]([^'"]+)['"][^>]*\/?>/gi; let last = 0, m;
+  const s = html.replace(/<div[^>]*>|<\/div>/gi, '');
+  while ((m = re.exec(s))) { const t = s.slice(last, m.index); if (t.replace(/<[^>]+>/g, '').trim()) out.push({ type: 'text', html: t }); out.push({ type: 'img', src: m[1] }); last = re.lastIndex; }
+  const t = s.slice(last); if (t.replace(/<[^>]+>/g, '').trim()) out.push({ type: 'text', html: t });
+  return out.map(c => {
+    if (c.type !== 'text') return c;
+    let h = c.html.trim().replace(/^(<\/p>\s*)+/i, '').replace(/(<p>\s*)+$/i, '');
+    if (!/^<p[\s>]/i.test(h)) h = '<p>' + h;
+    return { ...c, html: h };
+  });
+}
+function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit chaque panneau mot par mot
+  const box = document.createElement('div'); box.className = 'body'; box.style.cssText = `position:static;width:${width}px`;
+  measure.innerHTML = ''; measure.appendChild(box);
+  const src = document.createElement('div'); src.innerHTML = html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</p><p>');
+  const blocks = [];
+  let run = null;
+  src.childNodes.forEach(n => {
+    if (n.nodeType === 1 && (n.nodeName === 'P' || n.nodeName === 'DIV')) { run = null; if (n.textContent.trim()) blocks.push(n); return; }
+    if (n.nodeType === 1 && n.nodeName === 'BR') { run = null; return; }
+    if (n.nodeType === 3 && !n.textContent.trim() && !run) return;
+    if (!run) { run = document.createElement('p'); blocks.push(run); }
+    run.appendChild(n.cloneNode(true));
+  });
+  const pages = []; let page = 0;
+  const limit = () => heights[Math.min(page, heights.length - 1)];
+  const flush = () => { pages.push(box.innerHTML); box.innerHTML = ''; page++; };
+  for (const b of blocks) {
+    const clone = b.cloneNode(true); box.appendChild(clone);
+    if (box.offsetHeight <= limit()) continue;
+    box.removeChild(clone);
+    // découpe du paragraphe mot par mot
+    const words = []; (function walk(node, path) { node.childNodes.forEach(c => { if (c.nodeType === 3) c.textContent.split(/(\s+)/).forEach(w => w && words.push({ w, path })); else walk(c, [...path, c]); }); })(b, []);
+    let p = document.createElement('p'); box.appendChild(p);
+    const append = ({ w, path }) => { let parent = p; for (const el of path) { let last = parent.lastChild; if (!last || last.nodeType !== 1 || last.dataset.src !== el.outerHTML) { last = el.cloneNode(false); last.dataset.src = el.outerHTML; parent.appendChild(last); } parent = last; } parent.appendChild(document.createTextNode(w)); };
+    for (const item of words) {
+      append(item);
+      if (box.offsetHeight > limit()) {
+        const lastText = (function deep(n) { return n.lastChild && n.lastChild.nodeType === 1 ? deep(n.lastChild) : n; })(p);
+        lastText.removeChild(lastText.lastChild);
+        flush(); p = document.createElement('p'); box.appendChild(p); if (item.w.trim()) append(item);
+      }
+    }
+  }
+  if (box.textContent.trim() || !pages.length) pages.push(box.innerHTML);
+  return pages.map(h => h.replace(/ data-src="[^"]*"/g, ''));
+}
+let mouse2D = 0;
+post2dEl.addEventListener('pointerdown', e => {
+  if (e.target.closest('a, video, .face')) return;
+  post2D.dragging = true; post2D.xprev = mouse2D = e.clientX; post2D.finalpos = post2D.x;
+  post2dEl.setPointerCapture(e.pointerId); post2dEl.classList.add('grabbing');
+});
+post2dEl.addEventListener('pointermove', e => { mouse2D = e.clientX; });
+const stopDrag2D = () => { post2D.dragging = false; post2dEl.classList.remove('grabbing'); };
+post2dEl.addEventListener('pointerup', stopDrag2D);
+post2dEl.addEventListener('pointercancel', stopDrag2D);
+whiteboard.addEventListener('pointerdown', () => closePost());
+
+/* ================================================================ StageView : navigation générale */
+function getToSectionView(index = -1, indexPost = 0) {
+  killAllTweens();
+  if (index === -1) index = P.currentSection || 0;
+  checkPostOpenAndClose();
+  P.currentSection = index; P.resetData(); P.selected = indexPost;
+  changeSection3D();
+  changeActiveButton(); initCategorieData();
+}
+function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(); checkAccess(); }
+function entries(dir) { if (dir === 'newer' ? P.data.newer() : P.data.older()) refreshSectionPosts(); }
+function changeCategory(name) { P.data.changeCategory(name); catName.textContent = P.data.currentCatName; refreshSectionPosts(); initCategorieData(); }
+function openThatPost(id) { checkPostOpenAndClose(); P.selected = id; openPost(); }
+function openPost() {
+  if (!postsView || !P.data.posts[P.selected]) return;
+  if (P.section.layout !== 'LINE') {   // projets, blog, contact : fiche 2D
+    checkPostOpenAndClose();
+    P.postOpen = true;
+    whiteboard.hidden = false;
+    post2D.build(P.data.posts[P.selected]);
+    hideCategory();
+    isClicking = false; closeTurn = true; canvas.classList.remove('dragging');
+    focusPost(P.selected);
+  } else {                             // collectif : la photo vient vers la caméra
+    checkPostOpenAndClose();
+    P.postOpen = true;
+    closeTurn = true; focusPost(P.selected);
+    postsView.openPost3D();
+  }
+  setMenuPosition();
+}
+function closePost() {
+  if (!P.postOpen) return;
+  P.postOpen = false;
+  if (P.section.layout !== 'LINE') { post2D.close(); whiteboard.hidden = true; showCategory(); }
+  else if (postsView) postsView.closePost3D();
+  setMenuPosition();
+}
+function checkPostOpenAndClose() { if (P.postOpen) closePost(); }
+function changeActivity() {
+  setAnimationMode(!STYLE.animationMode);
+  toggleActivityButton();
+  if (postsView) postsView.resetPostPosition();
+  closeTurn = true;
+}
+function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion * 1.5); onStageResize3D(); } }
+function zoomIn() { if (STYLE.cameraDistanceProportion > STYLE.cameraZoomMin) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); onStageResize3D(); } }
+let touchedKeyboard = false;
+function keyBoardNavigation(e) {
+  if (!inputEnabled) return;
+  if (!touchedKeyboard) { touchedKeyboard = true; openKeyboard(); kbTimer = setTimeout(closeKeyboard, STYLE.planeSpeed * 6000 || 6000); }
+  const kb2D = P.postOpen && P.section.layout !== 'LINE';
+  switch (e.code) {
+    case 'ArrowLeft':
+      release('ArrowLeft');
+      if (!kb2D) { const reopen = P.postOpen && P.section.layout === 'LINE'; checkPostOpenAndClose(); selectPost('PREVIOUS'); if (reopen) openPost(); }
+      else post2D.action('LEFT');
+      break;
+    case 'ArrowRight':
+      release('ArrowRight');
+      if (!kb2D) { const reopen = P.postOpen && P.section.layout === 'LINE'; checkPostOpenAndClose(); selectPost('NEXT'); if (reopen) openPost(); }
+      else post2D.action('RIGHT');
+      break;
+    case 'ArrowUp': release('ArrowUp'); if (!kb2D) setUpper(); break;
+    case 'ArrowDown': release('ArrowDown'); if (!kb2D) setDowner(); break;
+    case 'Tab':
+      release('Tab');
+      if (!kb2D) { checkPostOpenAndClose(); getToSectionView((P.currentSection + 1) % SECTIONS.length); }
+      else { closePost(); selectPost('NEXT'); openPost(); }
+      break;
+    case 'KeyK': kb.classList.contains('open') ? closeKeyboard() : openKeyboard(); break;
+    case 'KeyA': release('KeyA'); changeActivity(); break;
+    case 'Equal': case 'NumpadAdd': release('Equal'); if (!kb2D) zoomIn(); break;
+    case 'Minus': case 'NumpadSubtract': release('Minus'); if (!kb2D) zoomOut(); break;
+    case 'Space':
+      release('Space');
+      if (postsView) postsView.checkPostSelected();
+      P.postOpen ? closePost() : openPost();
+      break;
+    case 'Escape': checkPostOpenAndClose(); break;
+    default: return;
+  }
+  e.preventDefault();
+}
+// après un clic souris sur un bouton de l'interface, le clavier revient à la scène (comme focusRect = false dans Flash)
+document.addEventListener('click', e => { const btn = e.target.closest('#menu button, #cats button, #kb button'); if (btn && e.detail > 0) btn.blur(); });
+window.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (!homeGone) return;
+  if (e.target instanceof HTMLButtonElement && (e.code === 'Space' || e.code === 'Enter')) return;
+  keyBoardNavigation(e);
+});
+
+/* Souris sur la scène 3D */
+const raycaster = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(x, y) {
+  if (!started || !postsView) return null;
+  ndc.set((x / W) * 2 - 1, -(y / H) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hit = raycaster.intersectObjects([...curSec().blockers, ...postsView.meshes], false)[0];
+  return hit ? hit.object.userData : null;
+}
+let dragId = null, downHit = null, downX = 0, downY = 0;
+canvas.addEventListener('pointerdown', e => {
+  if (!inputEnabled || dragId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  mouseX = downX = e.clientX; mouseY = downY = e.clientY;
+  const hit = pick(e.clientX, e.clientY);
+  checkPostOpenAndClose();
+  downHit = hit && hit.post ? hit : null;
+  if (downHit && downHit.face === 'back') { downHit.post.view.focus(downHit.post.id_); closeTurn = true; }
+  dragId = e.pointerId; canvas.setPointerCapture(e.pointerId); canvas.classList.add('dragging');
+  prevX = mouseX; prevY = mouseY; closeTurn = false; isClicking = true;
+});
+function endDrag(e) {
+  if (e.pointerId !== dragId) return;
+  dragId = null; canvas.classList.remove('dragging');
+  if (isClicking) { closeTurn = true; isClicking = false; }
+  if (downHit && downHit.face === 'front' && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) {
+    const hit = pick(e.clientX, e.clientY);
+    if (hit && hit.post === downHit.post) openThatPost(hit.post.id_);
+  }
+  downHit = null;
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+let hoverQueued = false;
+canvas.addEventListener('pointermove', e => {
+  if (dragId !== null && e.pointerId !== dragId) return;
+  mouseX = e.clientX; mouseY = e.clientY;
+  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) {
+    hoverQueued = true;
+    requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); });
+  }
+});
+let lastWheel = 0;
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return;
+  lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut();
+}, { passive: false });
+window.addEventListener('resize', () => {
+  resizeViewport(); onStageResize3D(); setMenuPosition(); post2D.placeBanda();
+  if (post2D.open) post2dEl.style.top = (sloganEl.offsetHeight + 2 * STYLE.margin + 26) + 'px';
+  sizeTicker();
+});
+
+/* ================================================================ Home : bullshit slogans */
+const home = document.getElementById('home'), enterBtn = document.getElementById('enter');
+const ticker = document.getElementById('ticker'), tctx = ticker.getContext('2d');
+const studiosEl = document.getElementById('studios');
+DATA.studios.forEach(s => {
+  const el = document.createElement('section');
+  el.innerHTML = `<h3>${s.name}</h3>${s.lines.map(l => `<p>${l}</p>`).join('')}<p class="m">${s.mail}</p>`;
+  studiosEl.appendChild(el);
+});
+const SLOGAN_KEY = 'fat-bullshit-slogans';
+let slogans = ['BULLSHIT SLOGAN', 'WE CREATE STRATEGIES THAT UNITE THE BRANDING EXPERIENCE', 'APPVERTISING IS WHAT WE DO', 'THINKERS. DESIGNERS. DEVELOPERS.'];
+try { const saved = JSON.parse(localStorage.getItem(SLOGAN_KEY) || '[]'); if (Array.isArray(saved) && saved.length) slogans = saved.concat(slogans).slice(0, 12); } catch (e) {}
+let tickerDots = null, tickerX = 0, tickerDpr = 1;
+function buildTickerDots() {   // texte rasterisé sur 7 lignes, puis affiché en points LED
+  const text = slogans.map(s => s.toUpperCase()).join('   ✚   ') + '   ✚   ';
+  const off = document.createElement('canvas'), o = off.getContext('2d');
+  o.font = 'bold 8px "Lucida Console", Monaco, monospace';
+  const w = Math.ceil(o.measureText(text).width) + 2;
+  off.width = w; off.height = 8;
+  o.font = 'bold 8px "Lucida Console", Monaco, monospace'; o.textBaseline = 'top'; o.fillStyle = '#fff'; o.fillText(text, 0, 0);
+  const data = o.getImageData(0, 0, w, 8).data;
+  tickerDots = { w, h: 8, on: (x, y) => data[(y * w + x) * 4 + 3] > 110 };
+}
+function sizeTicker() { tickerDpr = Math.min(window.devicePixelRatio || 1, 2); ticker.width = Math.round(window.innerWidth * tickerDpr); ticker.height = Math.round(24 * tickerDpr); }
+function drawTicker(dt) {
+  if (homeGone) return;
+  const pitch = 3, cols = Math.ceil(window.innerWidth / pitch) + 1;
+  tickerX = (tickerX + dt * 22) % tickerDots.w;
+  tctx.setTransform(tickerDpr, 0, 0, tickerDpr, 0, 0);
+  tctx.fillStyle = '#000'; tctx.fillRect(0, 0, window.innerWidth, 24);
+  const start = Math.floor(tickerX), frac = (tickerX - start) * pitch;
+  for (let c = 0; c < cols; c++) {
+    const sx = (start + c) % tickerDots.w;
+    for (let r = 0; r < 7; r++) {
+      tctx.fillStyle = tickerDots.on(sx, r) ? '#f1b800' : '#1d1700';
+      tctx.fillRect(c * pitch - frac, 2 + r * pitch, 2, 2);
+    }
+  }
+}
+document.getElementById('bs-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = document.getElementById('bs'), v = input.value.trim();
+  if (!v) return;
+  slogans.unshift(v.toUpperCase()); slogans = slogans.slice(0, 12);
+  try { localStorage.setItem(SLOGAN_KEY, JSON.stringify(slogans.slice(0, 8))); } catch (err) {}
+  buildTickerDots(); tickerX = 0; input.value = '';
+  document.getElementById('bs-sent').textContent = 'Ton slogan défile en haut de la page.';
+});
+let homeGone = false, assetsLoaded = false, clickedEnter = false;
+function enterToTheWeb() {
+  if (homeGone) return;
+  homeGone = true;
+  home.classList.add('out');
+  setTimeout(() => { home.hidden = true; }, 1100);
+  startRender();
+  mainEntrance();
+  sloganEl.classList.add('on');
+  setTimeout(openMenu, 1500);
+  kb.hidden = false; showCategory();
+  canvas.focus({ preventScroll: true });
+}
+enterBtn.addEventListener('click', () => {
+  clickedEnter = true;
+  if (assetsLoaded) enterToTheWeb();
+  else { enterBtn.textContent = 'LOADING'; enterBtn.classList.add('wait'); }
+});
+
+/* ================================================================ Démarrage */
+function startRender() {
+  setCamera();
+  P.currentSection = 0; P.resetData();
+  const s = curSec();
+  P.cameraY = STYLE.cameraHeight;
+  cam.x = STYLE.cameraDistance * Math.sin(P.degreeCamera) + s.p.x; cam.y = P.cameraY; cam.z = STYLE.cameraDistance * Math.cos(P.degreeCamera) + s.p.z;
+  camTarget.x = s.p.x; camTarget.y = STYLE.cameraTargetHeight; camTarget.z = s.p.z;
+  started = true;
+  getToSectionView(0, 0);
+}
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.25, Math.max(0, (now - last) / 1000));
+  last = now; clock += dt; frames = dt * FPS;
+  if (!homeGone && tickerDots) drawTicker(dt);
+  if (started) {
+    updateTweens();
+    renderMachine();
+    if (postsView) postsView.update();
+    post2D.step();
+    updateCamera();
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(frame);
+}
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
+toggleActivityButton();
+menu.hidden = true;
+resizeViewport(); setCamera(); sizeTicker(); buildTickerDots();
+changeActiveButton();
+requestAnimationFrame(frame);
+// préchargement pendant la home
+SECTIONS[0].make().posts.forEach(p => { loadTex(p.thumb); washedTexture(p.thumb).catch(() => {}); });
+const loader = new ColladaLoader(manager);
+Promise.all(sections.map(s => s.load(loader))).then(() => {
+  sections.forEach((s, i) => s.place(i));
+  assetsLoaded = true;
+  if (clickedEnter) enterToTheWeb();
+}).catch(err => {
+  console.error('Chargement des modèles Collada impossible', err);
+  const box = document.getElementById('load-error');
+  box.textContent = 'La scène 3D n\'a pas pu se charger : ' + (err && err.message ? err.message : err);
+  box.hidden = false;
+});
+if (new URLSearchParams(location.search).has('enter') || location.hash === '#site') { clickedEnter = true; }
+
+window.__fat = { P, STYLE, cam, camTarget, sections, camera, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, keyBoardNavigation, post2D, enter: () => enterBtn.click() };
+</script>
+</body>
+</html>
