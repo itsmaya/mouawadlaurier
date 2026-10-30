@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hand Coded</title>
+<meta name="description" content="Hand Coded, design and development studio for interactive art installations: light, sound, AI and our own software.">
+<link rel="icon" href="assets/hc/ui/logo-default.svg">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<link rel="stylesheet" href="assets/hc/site.css">
+</head>
+<body>
+<canvas id="stage" tabindex="0" aria-label="3D scene"></canvas>
+<div id="whiteboard" hidden></div>
+<div id="post2d" class="ui" hidden><div id="strip"></div></div>
+<p id="slogan" class="ui"></p>
+<img id="logo" class="ui" src="assets/hc/ui/logo-default.svg" alt="">
+<ul id="menu" class="ui" aria-label="Sections" hidden></ul>
+<div id="langs" class="ui" hidden></div>
+<div id="cats" class="ui hidden">
+  <button class="pg" id="pg-prev" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M7 0 0 5l7 5z" fill="currentColor"/></svg></button>
+  <button class="pg" id="pg-next" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M1 0l7 5-7 5z" fill="currentColor"/></svg></button>
+  <div id="cat-box"><ul id="cat-list"></ul><button id="cat-open" type="button" aria-haspopup="true"><span class="tri"></span><span id="cat-name"></span></button></div>
+</div>
+<div id="kb" class="ui" hidden>
+  <div id="kb-panel">
+    <div class="lbl" data-i18n="animation">Animation</div><button class="key anim" data-k="KeyA" type="button">A</button>
+    <div class="lbl" data-i18n="section">Section</div><button class="key wide" data-k="Tab" type="button">⇥ TAB</button>
+    <div class="lbl" style="margin-top:10px"></div>
+    <button class="key" data-k="ArrowUp" type="button" aria-label="Up">▴</button>
+    <div class="row"><button class="key" data-k="ArrowLeft" type="button" aria-label="Previous">◂</button><span class="lbl" data-i18n="move">Move</span><button class="key" data-k="ArrowRight" type="button" aria-label="Next">▸</button></div>
+    <button class="key" data-k="ArrowDown" type="button" aria-label="Down">▾</button>
+    <div class="lbl" data-i18n="zoom">Zoom</div><div class="row"><button class="key" data-k="Equal" type="button" aria-label="Zoom in">+</button><button class="key" data-k="Minus" type="button" aria-label="Zoom out">−</button></div>
+    <div class="lbl" data-i18n="openClose">Open / Close</div><button class="key space" data-k="Space" type="button" data-i18n="space">SPACE BAR</button>
+  </div>
+  <button id="kb-toggle" type="button" aria-expanded="false"></button>
+</div>
+<p id="load-error" class="ui" role="alert" hidden></p>
+
+<div id="home">
+  <canvas id="ticker" aria-hidden="true"></canvas>
+  <div id="home-top">
+    <form id="bs-form" autocomplete="off"><input id="bs" type="text" maxlength="70" enterkeyhint="send" spellcheck="false"></form>
+    <p id="bs-eg"></p>
+    <p id="bs-sent" aria-live="polite"></p>
+  </div>
+  <div id="home-band">
+    <p class="sl" id="home-slogan"></p>
+    <div id="home-langs"></div>
+    <div class="lg"><img id="home-logo" src="assets/hc/ui/logo-default.svg" alt=""><button id="enter" type="button">Enter</button></div>
+    <div id="offices"></div>
+  </div>
+</div>
+
+<script>
+/* Ouvert en double-cliquant sur le fichier (file://) : le contenu et les modèles 3D sont lus depuis des copies en JavaScript. */
+if (location.protocol === 'file:') document.write('<script src="content/content.js"><\/script><script src="models/models.js"><\/script>');
+</script>
+<script src="assets/hc/site.bundle.js"></script>
+</body>
+</html>
