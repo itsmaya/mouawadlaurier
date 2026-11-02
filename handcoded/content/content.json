@@ -535,7 +535,7 @@
     "installation",
     "ai"
    ],
-   "thumb": "",
+   "thumb": "media/peupler/peupler-pic-01-copy-ybli.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An immersive installation where the visitor's body is tracked in real time: scent spreads through the space, textures and visual effects are generated live with shaders.</p><p>About a year of work for the team, on our own tools Chataigne, Pleiade and Ledotron, alongside TouchDesigner. Partners: Fisheye Magazine and BNP Real Estate. Supported by ICEC, CatalanArts and the Generalitat de Catalunya.</p><h3>Credits</h3><ul><li><strong>Producers</strong> Benoit Baume, Gaëtan Cerrillo</li><li><strong>Creative coding</strong> Ben Kuper, Maya Mouawad, Clément Gamgie Rignault, Joan Sandoval</li><li><strong>Music</strong> Cyril Laurier, Louis Raveton</li><li><strong>Digital tree</strong> Ultra Lab</li><li><strong>Photos</strong> Marie Flament</li></ul>",
@@ -666,7 +666,7 @@
     "sound",
     "touring"
    ],
-   "thumb": "",
+   "thumb": "media/rising/img-9229-c6q1.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Outdoor light and sound installation about sea level rise, touring from Aveiro to La Rochelle, Paris and Barcelona.</p>",
@@ -734,7 +734,7 @@
     "featured",
     "installation"
    ],
-   "thumb": "",
+   "thumb": "media/ephemere/it-is-now-san-joan-de-deu-small-108-1e2g.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Installation in hospitals in Barcelona and Paris, with Art Explora.</p>",
@@ -855,7 +855,7 @@
     "mapping",
     "sound"
    ],
-   "thumb": "",
+   "thumb": "media/maestro/maestro-2-aj6r.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Three interactive experiences projected on a 500-metre-wide monument. Visitors touch a physical model of the building, and their gestures play sound and image on the façade.</p><p>SAND: move sand particles and compose a desert soundscape. ORGAN: become the DJ of an interactive looper that triggers video and audio loops. MOSAIC: reshape the forms and colours of Islamic mosaics.</p><p>Sharjah Light Festival, 2 to 11 February 2017.</p><h3>Credits</h3><ul><li><strong>Art direction</strong> Mathieu Felix</li><li><strong>Production</strong> Nomada, Tigre Lab</li><li><strong>Project management, visual and audio development</strong> Cyril Laurier</li><li><strong>Concept development</strong> Maya Benaïnous</li><li><strong>Visual development</strong> Stéphanie Huerre</li><li><strong>Sound design</strong> Thomas Aussenac, Sound Object</li><li><strong>Audio development</strong> Joan Sandoval</li></ul>",
@@ -1199,7 +1199,7 @@
     "light",
     "software"
    ],
-   "thumb": "",
+   "thumb": "media/mgntrn/mgntrn-03-2500px-zwp5.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An immersive show built around a Ferris wheel, projection screens and 10-metre LED strips, all synchronised with the music.</p><p>We wrote the software to previsualise, animate and control every light from a single timeline, and built a robot that turns the Ferris wheel's control knobs in response to musical events, driven from an iPad or from the Ledotron timeline.</p><p>PROYECTA festival, Puebla, Mexico, 9 to 11 May 2014.</p><h3>Credits</h3><ul><li><strong>Concept, design, animation and light control</strong> Romain Tardy</li><li><strong>Software and engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul>",
@@ -1325,7 +1325,7 @@
     "mapping",
     "sound"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472564795317-69JQG4HJRTGMN0CTLSVQ/VM_FINAL_2.png?format=750w",
+   "thumb": "media/viktoria-modesta/vik-wphb.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Viktoria Modesta is a singer whose bionic leg is at the heart of her shows. For Music Tech Fest 2016 she challenged a team of hackers: let her control music and lights with her leg and arm movements, her voice and her brain.</p><p>The show was built in under a week: leg and body sensors, interactive music, interactive projection mapping, costume lighting, LED skin and brain sensors. Presented in Berlin on 28 May 2016.</p><h3>Credits</h3><ul><li><strong>Production</strong> Michela Magas, Andrew Dubber</li><li><strong>Costume</strong> Joanna Hir, Winde Rienstra</li><li><strong>Interactive projection mapping and costume light</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>Leg sensors and interactive music</strong> Tracy Redhead</li><li><strong>Light control</strong> Jonathan Rutherford</li><li><strong>LED skin</strong> Katia Vega, Xin Liu, MIT Media Lab</li><li><strong>Brain sensors</strong> Muarts</li></ul>",
@@ -1420,7 +1420,7 @@
     "sound",
     "performance"
    ],
-   "thumb": "",
+   "thumb": "media/beardyman/beardyman-4-652x367-ipm5.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Beardyman is an improvising beatboxer who samples and twists his own voice into music. We design software that lets him compose live, as fast as he thinks.</p><p>Our latest module for the Beardytron 5000 mkIII: the Instant Drum Machine.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Beardyman</li><li><strong>Concept</strong> Darren Foreman</li><li><strong>Production</strong> Sonaris Systems</li><li><strong>Programming</strong> Cyril Laurier</li><li><strong>UI design</strong> Maya Benaïnous</li><li><strong>Beardytron 5000</strong> DMG Audio, Sugar Bytes</li></ul>",
