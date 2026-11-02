@@ -401,7 +401,8 @@
      }
     }
    ],
-   "network": false
+   "network": false,
+   "cardScale": 120
   },
   {
    "id": "expertise",
