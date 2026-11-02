@@ -275,19 +275,6 @@
    "builtin": false
   },
   {
-   "id": "albatros-2",
-   "name": "albatros",
-   "file": "models/albatros-2/albatros-2.dae",
-   "textures": [
-    "albatros.jpg"
-   ],
-   "scaleMode": "fit",
-   "height": 310,
-   "rotationY": 165,
-   "untextured": "wire",
-   "builtin": false
-  },
-  {
    "id": "root",
    "name": "root",
    "file": "models/root/root.dae",
@@ -299,7 +286,22 @@
    "height": 420,
    "rotationY": 0,
    "untextured": "wire",
-   "builtin": false
+   "builtin": false,
+   "scale": 20
+  },
+  {
+   "id": "albatros",
+   "name": "albatros",
+   "file": "models/albatros/albatros.dae",
+   "textures": [
+    "albatros.jpg"
+   ],
+   "scaleMode": "fit",
+   "height": 420,
+   "rotationY": 0,
+   "untextured": "wire",
+   "builtin": false,
+   "scale": 165
   }
  ],
  "sections": [
@@ -496,7 +498,7 @@
     "ca": "L'estudi",
     "es": "El estudio"
    },
-   "model": "albatros-2",
+   "model": "albatros",
    "layout": "arc",
    "card": "portrait",
    "open": "focus3d",
