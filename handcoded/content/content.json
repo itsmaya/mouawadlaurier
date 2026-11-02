@@ -619,7 +619,8 @@
     "sustainable",
     "project-management",
     "hardware",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "tools"
    ]
   },
   {
@@ -691,7 +692,9 @@
    ],
    "author": "Mouawad Laurier",
    "skills": [
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "tools",
+    "hardware"
    ]
   },
   {
@@ -765,7 +768,9 @@
    ],
    "author": "Mouawad Laurier",
    "skills": [
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "tools",
+    "hardware"
    ]
   },
   {
@@ -825,7 +830,10 @@
     }
    ],
    "author": "Mouawad Laurier",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "tientos",
@@ -887,7 +895,10 @@
     }
    ],
    "author": "Pablo Valbuena & Patricia Guerrero",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "maestro",
@@ -946,7 +957,10 @@
     }
    ],
    "author": "Mouawad Laurier & Tigre Lab",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "future-ruins",
@@ -1008,7 +1022,10 @@
     }
    ],
    "author": "Romain Tardy",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "sat",
@@ -1109,7 +1126,9 @@
     }
    ],
    "author": "Romain Tardy",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "ox",
@@ -1236,7 +1255,10 @@
     }
    ],
    "author": "Romain Tardy & Mouawad Laurier",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "mgntrn",
@@ -1292,7 +1314,10 @@
     }
    ],
    "author": "Romain Tardy",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "ledotron",
@@ -1363,7 +1388,9 @@
    "location": null,
    "spots": [],
    "author": "Hand Coded",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "viktoria-modesta",
@@ -1459,7 +1486,10 @@
     }
    ],
    "author": "Viktoria Modesta",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "beardyman",
@@ -1509,7 +1539,9 @@
    "location": null,
    "spots": [],
    "author": "Beardyman",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "tgic",
@@ -1562,7 +1594,9 @@
     }
    ],
    "author": "Romain Tardy",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "bionic-orchestra",
@@ -1655,7 +1689,10 @@
     }
    ],
    "author": "Ezra, Organic Orchestra",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "mouvement-de-l-air",
@@ -1722,7 +1759,9 @@
    "location": null,
    "spots": [],
    "author": "Adrien M & Claire B",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "slush",
@@ -1777,7 +1816,10 @@
     }
    ],
    "author": "Music Tech Fest Labs",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "wave",
@@ -1824,7 +1866,9 @@
    "location": null,
    "spots": [],
    "author": "Pablo Valbuena",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "methods",
@@ -1877,7 +1921,9 @@
     }
    ],
    "author": "Pablo Valbuena",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "kinematope",
@@ -1971,7 +2017,9 @@
     }
    ],
    "author": "Pablo Valbuena",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "gyrotope",
@@ -2042,7 +2090,9 @@
     }
    ],
    "author": "Pablo Valbuena",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "eko",
@@ -2099,7 +2149,9 @@
     }
    ],
    "author": "Maotik & Ezra",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "audi-mind-race",
@@ -2154,7 +2206,10 @@
     }
    ],
    "author": "20 Húngaros",
-   "skills": []
+   "skills": [
+    "tools",
+    "hardware"
+   ]
   },
   {
    "id": "sonaris",
@@ -2202,7 +2257,9 @@
    "location": null,
    "spots": [],
    "author": "Michela Magas & Cyril Laurier",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "nestle-crunch",
@@ -2254,7 +2311,9 @@
     }
    ],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "peugeot",
@@ -2299,7 +2358,9 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "churchill",
@@ -2344,7 +2405,9 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "cadbury",
@@ -2388,7 +2451,9 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "coors",
@@ -2439,7 +2504,9 @@
     }
    ],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "lexus",
@@ -2485,7 +2552,9 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "machine-learning",
@@ -3786,7 +3855,9 @@
    "location": null,
    "link": "",
    "author": "Fat-Man Collective",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "nokia-navigator",
@@ -3848,7 +3919,9 @@
    "thumbBack": "",
    "location": null,
    "author": "Fat-Man Collective, Work Club",
-   "skills": []
+   "skills": [
+    "tools"
+   ]
   },
   {
    "id": "nouveau-contenu",
