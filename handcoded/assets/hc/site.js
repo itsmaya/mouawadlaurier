@@ -250,6 +250,19 @@ async function skillBackdrop(post) {
 }
 /* Recto : la photo sous un voile noir, le texte blanc par-dessus. Dos : la photo plus présente, le texte en transparence. */
 function veil(ctx, bd, w, h, alpha) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = `rgba(0,0,0,${alpha})`; ctx.fillRect(0, 0, w, h); }
+/* Survol d'une vignette photo : le nom et la description par-dessus, sur un petit fond noir transparent */
+function hoverOverlay(post, w, h) {
+  return ctx => {
+    const pad = 12, tw = w - 2 * pad;
+    ctx.font = `${fz(19)}px ${SERIF}`; const tl = wrapLines(ctx, tr(post.title).trim(), tw).slice(0, 2);
+    ctx.font = `${fz(12)}px ${SERIF}`; const sl = wrapLines(ctx, tr(post.subtitle).trim(), tw).slice(0, 2);
+    const bh = pad + tl.length * 22 + (sl.length ? 4 + sl.length * 15 : 0) + pad - 2;
+    ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(0, h - bh, w, bh);
+    ctx.textBaseline = 'top'; let y = h - bh + pad;
+    ctx.fillStyle = '#fff'; ctx.font = `${fz(19)}px ${SERIF}`; tl.forEach(l => { ctx.fillText(l, pad, y); y += 22; });
+    y += 4; ctx.fillStyle = '#d6d6d6'; ctx.font = `${fz(12)}px ${SERIF}`; sl.forEach(l => { ctx.fillText(l, pad, y); y += 15; });
+  };
+}
 /* Carte image : vignette en recadrage "cover", ou une carte typographique quand il n'y a pas encore d'image. */
 async function imageCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
@@ -290,7 +303,8 @@ async function imageCard(post, w, h) {
   const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 2)
     : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2)   // vu de dos : dessiné en miroir pour rester à l'endroit
     : canvasTex(w, h, washed(face), 1.5);
-  return [front, backTex];
+  const over = im && (tr(post.title).trim() || tr(post.subtitle).trim()) ? canvasTex(w, h, ctx => { drawCover(ctx, im, 0, 0, w, h); hoverOverlay(post, w, h)(ctx); }, 2) : null;
+  return [front, backTex, over];
 }
 async function portraitCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
@@ -303,7 +317,8 @@ async function portraitCard(post, w, h) {
     ctx.fillText(initials(tr(post.title)), w / 2, h * 0.45);
     ctx.fillStyle = accent(); ctx.fillRect(w / 2 - 8, h * 0.78, 16, 1.5);
   };
-  return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2)];
+  const over = im && tr(post.title).trim() ? canvasTex(w, h, ctx => { drawCover(ctx, im, 0, 0, w, h); hoverOverlay(post, w, h)(ctx); }, 3) : null;
+  return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2), over];
 }
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
@@ -450,7 +465,8 @@ class PostView {
     this.p2 = { x: 0, y: 0, z: 0, rotX: 0, rotY: 0, rotZ: 0 };
     this.group = new THREE.Group(); this.group.rotation.order = 'YXZ'; this.meshes = []; this.ready = false;
   }
-  build(texFront, texBack) {
+  build(texFront, texBack, texHover = null) {
+    this.texFront = texFront; this.texHover = texHover;
     const geo = new THREE.PlaneGeometry(this.width, this.height);
     const front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texFront, side: THREE.FrontSide }));
     const back = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texBack, side: THREE.BackSide }));
@@ -482,7 +498,11 @@ class PostView {
   }
   moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ }, { ease: 'quartOut' }); }
   jump(x, y, z) { to(this.thumb, STYLE.tween / 2, { x, y, z }, { ease: 'quartOut', onComplete: () => to(this.thumb, STYLE.tween / 2, { x: this.p2.x, y: this.p2.y, z: this.p2.z }, { ease: 'quartOut' }) }); }
-  dispose() { killTweensOf(this.thumb); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
+  hover(on) {   // nom et description par-dessus la photo
+    const m = this.meshes[0]; if (!m || !this.texHover) return;
+    const want = on ? this.texHover : this.texFront; if (m.material.map !== want) { m.material.map = want; m.material.needsUpdate = true; }
+  }
+  dispose() { if (this.texHover) { if (this.meshes[0] && this.meshes[0].material.map === this.texHover) this.meshes[0].material.map = this.texFront; this.texHover.dispose(); } killTweensOf(this.thumb); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
 }
 
 /* ================================================================ Styles de disposition */
@@ -613,7 +633,12 @@ class PostsView3D {
     list.forEach(n => { n.xz = mapCoords(n.loc); });
     list.forEach(n => { n.from = n.base ? null : bases.length ? bases.map(b => [b, Math.hypot(mapCoords(b.loc)[0] - n.xz[0], mapCoords(b.loc)[1] - n.xz[1])]).sort((a, c) => a[1] - c[1])[0][0] : null; n.d = n.from ? Math.hypot(mapCoords(n.from.loc)[0] - n.xz[0], mapCoords(n.from.loc)[1] - n.xz[1]) : 0; });
     list.sort((a, b) => (b.base - a.base) || a.d - b.d);
-    const labeled = [];
+    /* le cœur du réseau : le lieu qui a le plus de voisins proches, et le centre de ce groupe (l'Europe, en général) */
+    const R = 70; let best = null, bestN = -1;
+    list.forEach(n => { const near = list.filter(o => Math.hypot(o.xz[0] - n.xz[0], o.xz[1] - n.xz[1]) < R); if (near.length > bestN) { bestN = near.length; best = near; } });
+    const fx = best.reduce((a, o) => a + o.xz[0], 0) / best.length, fz = best.reduce((a, o) => a + o.xz[1], 0) / best.length;
+    const focus = new THREE.Object3D(); focus.position.set(...postLocal(fx, Y, fz)); g.add(focus); this.net.focus = focus;
+    const labeled = [];   // [x, z, seuil] : une étiquette s'affiche tant que l'échelle reste sous son seuil (en zoomant, les voisines apparaissent)
     list.forEach((n, i) => {
       const [x, z] = n.xz, delay = n.base ? 0 : 0.15 + i * 0.07;
       const dot = new THREE.Mesh(dotGeo, n.base ? mats.base : mats.on); dot.scale.setScalar(n.base ? 7 : 4 + Math.min(3, n.titles.length)); dot.position.set(...postLocal(x, Y, z)); g.add(dot);
@@ -626,9 +651,12 @@ class PostsView3D {
         const pos = []; for (let k = 0; k < segs; k++) pos.push(...pt(k / segs), ...pt((k + 1) / segs));
         const geo = new LineSegmentsGeometry(); geo.setPositions(pos); arc = new LineSegments2(geo, lineMatNet); arc.computeLineDistances(); geo.instanceCount = 0; g.add(arc);
       }
-      let label = null;   // pas d'étiquette si une voisine plus importante est déjà écrite trop près : le survol donne le détail
-      if (n.city && !labeled.some(o => Math.abs(o[0] - x) < 80 && Math.abs(o[1] - z) < 22)) { label = netLabel(n.city.toUpperCase() + (n.titles.length > 1 && !n.base ? ' · ' + n.titles.length : ''), n.base); label.position.set(...postLocal(x, Y + 9, z)); g.add(label); labeled.push([x, z]); }
-      this.net.items.push({ dot, arc, segs, label, delay, base: n.base });
+      let label = null, thr = Infinity;   // une voisine plus importante écrite trop près cache l'étiquette ; en zoomant, la place se libère
+      if (n.city) {
+        for (const o of labeled) { const need = Math.max(Math.abs(o[0] - x) / 80, Math.abs(o[1] - z) / 22); if (need < o[2]) thr = Math.min(thr, need); }
+        if (thr > 0.06) { label = netLabel(n.city.toUpperCase() + (n.titles.length > 1 && !n.base ? ' · ' + n.titles.length : ''), n.base); label.position.set(...postLocal(x, Y + 9, z)); g.add(label); labeled.push([x, z, thr]); }
+      }
+      this.net.items.push({ dot, arc, segs, label, thr, delay, base: n.base, ds: dot.scale.x, ls: label ? label.scale.clone() : null, x, z });
     });
     this.container.add(g);
   }
@@ -637,7 +665,7 @@ class PostsView3D {
     for (let i = 0; i < this.n; i++) {
       let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) return;
-      this.postViews[i].build(tex[0], tex[1]);
+      this.postViews[i].build(tex[0], tex[1], tex[2]);
       this.animeOpenPost(this.postViews[i], i);
       if (STYLE.planeSpeed > 0) { const until = clock + POST_STAGGER; while (clock < until) { await new Promise(r => requestAnimationFrame(r)); if (!this.alive) return; } }
     }
@@ -713,10 +741,18 @@ class PostsView3D {
   goPrev() { return P.selected - 1 <= -1 ? this.n - 1 : P.selected - 1; }
   focus(id) { if (this.n) this.L.focus.call(this.L, this, id); }
   update() {
-    if (this.net) for (const it of this.net.items) {   // les arcs partent du bureau et se dessinent l'un après l'autre
-      const k = Math.max(0, Math.min(1, (clock - this.net.start - it.delay) / 0.9)), e = 1 - (1 - k) * (1 - k);
-      if (it.arc) it.arc.geometry.instanceCount = Math.round(e * it.segs);
-      const on = it.base || k >= 1; it.dot.visible = on; if (it.label) it.label.visible = on;
+    if (this.net) {
+      /* points et étiquettes rapetissent quand on zoome : on voit les liaisons de près sans que tout grossisse */
+      const want = Math.max(0.2, Math.pow(Math.min(1, STYLE.cameraDistanceProportion / zoomBase), 0.85));
+      const prev = this.net.sc ?? want, sc = Math.abs(want - prev) < 0.002 ? want : prev + (want - prev) * ease(STYLE.cameraEaseSpeed);   // suit le mouvement de la caméra
+      for (const it of this.net.items) {   // les arcs partent du bureau et se dessinent l'un après l'autre
+        const k = Math.max(0, Math.min(1, (clock - this.net.start - it.delay) / 0.9)), e = 1 - (1 - k) * (1 - k);
+        if (it.arc) it.arc.geometry.instanceCount = Math.round(e * it.segs);
+        const on = it.base || k >= 1; it.dot.visible = on;
+        if (it.label) it.label.visible = on && sc <= it.thr + 1e-6;
+        if (this.net.sc !== sc) { it.dot.scale.setScalar(it.ds * sc); if (it.label) { it.label.scale.copy(it.ls).multiplyScalar(sc); it.label.position.y = 50 + 9 * sc; } }
+      }
+      this.net.sc = sc;
     }
     for (const p of this.postViews) if (p.ready) p.apply();
     this.following.forEach(p => this.followLine(p, p.id_));
@@ -735,8 +771,13 @@ class PostsView3D {
     for (let i = 0; i < this.n; i++) {
       const pv2 = this.postViews[i]; if (!pv2.ready) continue;
       let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
-      if (!this.alive) { new Set(tex).forEach(x => x.dispose()); return; }
+      if (!this.alive) { new Set(tex).forEach(x => x && x.dispose()); return; }
+      const wasHover = pv2.texHover && pv2.meshes[0].material.map === pv2.texHover;
+      if (wasHover) pv2.meshes[0].material.map = pv2.texFront;
+      if (pv2.texHover) pv2.texHover.dispose();
+      pv2.texFront = tex[0]; pv2.texHover = tex[2] || null;
       new Set([swap(pv2.meshes[0], tex[0]), swap(pv2.meshes[1], tex[1])]).forEach(x => x && x.dispose());
+      if (wasHover) pv2.hover(true);
       const inf = this.infos[i];
       if (inf) { const it = await infoTexture(this.posts[i], 'place'); if (!this.alive) { it.dispose(); return; } const o = swap(inf.mesh, it); if (o) o.dispose(); }
     }
@@ -770,12 +811,35 @@ const CAM_DEFAULT = { map: 58 };
 const camK = (def = (curSec() || {}).def || {}) => Math.max(0.3, Math.min(2.5, (+def.camera || CAM_DEFAULT[def.layout] || 100) / 100));
 const camD = () => STYLE.cameraDistance * camK();
 const camTargetY = () => STYLE.cameraTargetHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 0.62 : 1);
-const camHeight = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 * Math.max(0.12, Math.min(1, STYLE.cameraDistanceProportion / zoomBase)) : 1);
+const camHeightBase = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1);
+/* Carte du monde zoomée : la caméra glisse vers le groupe de lieux le plus dense (l'Europe) et garde le même angle de vue,
+   au-dessus de la carte. Au zoom de base, rien ne change : centre de la section, hauteurs d'origine. */
+const _fw = new THREE.Vector3();
+function mapZoomT() {   // 0 au zoom de base, vers 1 au plus près
+  if (!isMap() || STYLE.cameraDistanceProportion >= zoomBase) return 0;
+  return Math.min(1, (1 - STYLE.cameraDistanceProportion / zoomBase) * 1.25);
+}
+function mapFocus() {   // le cœur du réseau, en coordonnées Papervision
+  const f = postsView && postsView.net && postsView.net.focus; if (!f) return null;
+  f.getWorldPosition(_fw); return { x: _fw.x, y: _fw.y, z: -_fw.z };
+}
+function orbitCenter() {
+  const s = curSec(), t = mapZoomT(), f = t ? mapFocus() : null;
+  const ty0 = camTargetY();
+  if (!f) return { x: s.p.x, z: s.p.z, ty: ty0 };
+  return { x: s.p.x + (f.x - s.p.x) * t, z: s.p.z + (f.z - s.p.z) * t, ty: ty0 + (f.y - ty0) * t };
+}
+const camHeight = () => {   // sur la carte zoomée, la caméra descend avec la distance : même angle, jamais sous la carte
+  if (!isMap()) return camHeightBase();
+  const r = Math.min(1, STYLE.cameraDistanceProportion / zoomBase), ty = orbitCenter().ty;
+  return ty + (camHeightBase() - camTargetY()) * Math.pow(r, 0.55);   // descend moins vite que la distance : on voit l'Europe de plus en plus d'en haut
+};
 const cardK = def => Math.max(0.4, Math.min(2.5, (+def.cardScale || 100) / 100));
-function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + camD() * Math.sin(P.actualDeg); cam.z = s.p.z + camD() * Math.cos(P.actualDeg); }
+function placeCameraOnOrbit() { const s = orbitCenter(); cam.x = s.x + camD() * Math.sin(P.actualDeg); cam.z = s.z + camD() * Math.cos(P.actualDeg); }
 function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
+  hovered = null;
   if (postsView) postsView.destroy();
   postsView = new PostsView3D(curSec());
   focusPost(P.selected);
@@ -783,8 +847,8 @@ function changeSection3D() {
   cameraChangeSection();
 }
 function cameraChangeSection() {   // comme StageView3D v10 : Parameters.cameraGoto à chaque section et à chaque nouvelle sélection
-  const s = curSec(); P.cameraY = camHeight();
-  cameraGoto(camD() * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, camD() * Math.cos(P.degreeCamera) + s.p.z, s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed);
+  const s = orbitCenter(); P.cameraY = camHeight();
+  cameraGoto(camD() * Math.sin(P.degreeCamera) + s.x, P.cameraY, camD() * Math.cos(P.degreeCamera) + s.z, s.x, s.ty, s.z, STYLE.cameraSpeed);
 }
 function focusPost(i) { P.selected = i; if (postsView) postsView.focus(i); }
 function selectPost(dir) {
@@ -795,9 +859,10 @@ function selectPost(dir) {
 function setCamera() { const hmax = 1000, max = 680, div = STYLE.cameraDistanceProportion / (hmax - 720); STYLE.cameraDistance = Math.round((H < max ? hmax - H : hmax - max) * div); }
 function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
-  const s = curSec();
+  const s = orbitCenter();
   if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) postsView.postViews[P.selected].moveToCamera(100, 0);
-  cameraOnlyGoto(s.p.x + camD() * Math.sin(P.actualDeg), isMap() ? P.cameraY : cam.y, s.p.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+  cameraOnlyGoto(s.x + camD() * Math.sin(P.actualDeg), isMap() ? P.cameraY : cam.y, s.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+  if (isMap()) cameraTarget(s.x, s.ty, s.z, STYLE.cameraSpeed / 2);
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
@@ -808,7 +873,7 @@ function renderMachine() {
     P.actualDeg -= (P.actualDeg - deg) * ease(easeSpeed);
     placeCameraOnOrbit();
     P.cameraY += (mouseY - prevY) * 2;
-    const h = STYLE.cameraHeight; if (P.cameraY < h / 3) P.cameraY = h / 3; else if (P.cameraY > h * 4) P.cameraY = 4 * h;
+    const h = STYLE.cameraHeight, lo = isMap() ? orbitCenter().ty + 12 : h / 3; if (P.cameraY < lo) P.cameraY = lo; else if (P.cameraY > h * 4) P.cameraY = 4 * h;
     cam.y -= (cam.y - P.cameraY) * ease(easeSpeed);
     if (STYLE.animationMode && postsView) postsView.movePosts((prevX - mouseX) / Math.max(frames, .25), (prevY - mouseY) / Math.max(frames, .25), easeSpeed);
     prevX = mouseX; prevY = mouseY;
@@ -830,10 +895,14 @@ function mainEntrance() {   // zoom d'entrée : focale de 6 à 2 en 1 s
   setTimeout(() => { inputEnabled = true; }, time * 1000 + 50);   // hors des tweens : un clic de menu pendant l'entrée ne bloque plus le clavier
 }
 const _p = new THREE.Vector3(), _t = new THREE.Vector3(), _dir = new THREE.Vector3();
+let eyeK = 1;
 function updateCamera() {   // caméra Papervision : focale en pixels (zoom x focus), oeil "focus" unités derrière la caméra
   _p.copy(pv(cam.x, cam.y, cam.z)); _t.copy(pv(camTarget.x, camTarget.y, camTarget.z));
   _dir.subVectors(_t, _p); if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, -1); _dir.normalize();
-  camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus); camera.lookAt(_t);
+  /* l'œil est "focus" unités derrière la caméra ; sur la carte zoomée cet écart rétrécit avec le zoom, sinon il bornerait l'approche */
+  const fk = isMap() ? Math.min(1, STYLE.cameraDistanceProportion / zoomBase) : 1;
+  eyeK += Math.abs(fk - eyeK) < 1e-3 ? fk - eyeK : (fk - eyeK) * ease(STYLE.cameraEaseSpeed);
+  camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus * eyeK); camera.lookAt(_t);
   const narrow = Math.min(1, W / 900);
   const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
   if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
@@ -914,7 +983,7 @@ function renderTexts() {
   document.title = s.name || 'Hand Coded';
   const tl = (s.taglines && (s.taglines[LANG] || s.taglines.en)) || [];
   const sloganHTML = tl.length ? `<b class="wm">${escapeHTML(tl[0])}</b>${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}` : escapeHTML(s.name);
-  sloganEl.innerHTML = sloganHTML;
+  sloganEl.innerHTML = tl.length ? sloganHTML.replace('<b class="wm">', `<b class="wm" role="link" tabindex="0" title="${escapeHTML(ui('homeLink'))}">`) : sloganHTML;
   document.getElementById('home-slogan').innerHTML = sloganHTML;
   /* Logo par défaut : anneau à la couleur d'accent sur fond blanc, anneau blanc sur fond noir. Il échappe à l'inversion (classe raw). */
   drawLogos();
@@ -1294,6 +1363,7 @@ function goToPost(id) {
 strip.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); goToPost(b.dataset.go); } });
 function openPost() {
   if (!postsView || !P.data.posts[P.selected]) return;
+  hoverCard(null);
   checkPostOpenAndClose();
   P.postOpen = true;
   if (P.section.def.open === 'strip') {
@@ -1386,11 +1456,13 @@ function endDrag(e) {
   downHit = null;
 }
 canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
-let hoverQueued = false;
+let hoverQueued = false, hovered = null;
+function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
+canvas.addEventListener('pointerleave', () => hoverCard(null));
 canvas.addEventListener('pointermove', e => {
   if (dragId !== null && e.pointerId !== dragId) return;
   mouseX = e.clientX; mouseY = e.clientY;
-  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
+  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); hoverCard(h && h.post && h.face === 'front' && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
 canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
@@ -1797,16 +1869,37 @@ function drawTicker(dt) {   // le texte avance d'une colonne de points à la foi
   }
 }
 let homeGone = false, assetsLoaded = false, clickedEnter = false;
+const isHomeHash = () => /^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash || '');
+let homeTimer = 0, behindUntil = 0;   // la 3D derrière l'accueil ne se dessine que pendant les glissements
 function enterToTheWeb() {
   if (homeGone) return;
-  homeGone = true;
-  home.classList.add('out'); setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1100);
+  homeGone = true; clearTimeout(homeTimer);
+  if (!PREVIEW && isHomeHash()) try { history.pushState(null, '', location.pathname + location.search + '#' + ((CONTENT.sections.find(x => x.id === CONTENT.settings.startSection && x.visible) || SECTIONS[0].def).id)); } catch (e) {}   // le bouton Retour du navigateur ramène à l'accueil
+  home.classList.add('out'); homeTimer = setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1100);
   startRender(); mainEntrance();
   sloganEl.classList.add('on');
   setTimeout(openMenu, 1500);
   kb.hidden = false; cats.classList.remove('hidden');
   canvas.focus({ preventScroll: true });
 }
+/* Retour à l'accueil : clic sur la signature « Hand Coded. » en haut à gauche, bouton Retour du navigateur, ou adresse …/#accueil (accueil.html) */
+function backToHome(push = true) {
+  if (!homeGone) return;
+  checkPostOpenAndClose(); closeKeyboard(); closeCategory(); hideNetTip(); hoverCard(null); resetZoom();
+  homeGone = false; clickedEnter = false; clearTimeout(homeTimer); behindUntil = performance.now() + 1300;
+  enterBtn.textContent = tr(CONTENT.settings.home.enter) || ui('enter'); enterBtn.classList.remove('wait');
+  home.hidden = false; void home.offsetWidth; home.classList.remove('out');
+  if (hv && hv.video) hv.video.play().catch(() => {});
+  if (push && !PREVIEW) try { history.pushState(null, '', location.pathname + location.search + '#accueil'); } catch (e) {}
+  fitSlogan();
+}
+window.addEventListener('popstate', () => {
+  if (PREVIEW) return;
+  if (isHomeHash()) backToHome(false);
+  else if (!homeGone && assetsLoaded) enterToTheWeb();
+});
+sloganEl.addEventListener('click', e => { if (e.target.closest('.wm') && homeGone) backToHome(); });
+sloganEl.addEventListener('keydown', e => { if ((e.code === 'Enter' || e.code === 'Space') && e.target.closest('.wm') && homeGone) { e.preventDefault(); backToHome(); } });
 enterBtn.addEventListener('click', () => { submitSlogan(); clickedEnter = true; if (assetsLoaded) enterToTheWeb(); else { enterBtn.textContent = ui('loading'); enterBtn.classList.add('wait'); } });
 
 /* ================================================================ Démarrage */
@@ -1848,7 +1941,7 @@ function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
-  if (started) {
+  if (started && (homeGone || now < behindUntil)) {
     updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera();
     renderer.render(scene, camera);
   }
@@ -1902,7 +1995,7 @@ async function awaitPreview() {
     sections.forEach((s, i) => s.place(i));
     await Promise.race([Promise.all(TYPO_LINKS).then(fontsReady), new Promise(r => setTimeout(r, 3000))]);   // cartes et fiches se dessinent directement avec les bonnes polices
     assetsLoaded = true;
-    if (clickedEnter || location.hash.length > 1 || (PREVIEW && PREVIEW.start)) enterToTheWeb();
+    if (clickedEnter || !isHomeHash() || (PREVIEW && PREVIEW.start)) enterToTheWeb();
   } catch (err) { showError(err); }
 })();
 

@@ -31,6 +31,8 @@ button { font: inherit; }
 #slogan span { display: block; color: #8f8f8f; font-size: 26px; line-height: 30px; }
 #slogan .wm, #home-band .sl .wm { display: block; font: inherit; }   /* première ligne de la signature : Réglages › Typographie */
 #slogan.on { opacity: 1; }
+#slogan .wm[role="link"] { pointer-events: auto; cursor: pointer; }   /* la signature ramène à l'accueil */
+#slogan .wm[role="link"]:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 3px; }
 #logo { z-index: 5; right: calc(20px + env(safe-area-inset-right, 0px)); top: calc(20px + env(safe-area-inset-top, 0px)); width: 120px; height: 120px; object-fit: contain; pointer-events: none; }
 #menu { left: 60px; top: 548px; margin: 0; padding: 0; list-style: none; z-index: 6; }
 #menu::before { content: ""; position: absolute; left: 0; top: 2px; width: 1px; height: 0; background: var(--rule); transition: height .6s; }
