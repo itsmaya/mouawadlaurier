@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
 import { LANGS, LANG_NAMES, t, LAYOUTS, CARDS, CITIES, findCities, normalizeContent, emptyField, postsOf, slugify, uniqueId, escapeHTML, sanitizeHTML, htmlToText,
   resizeImage, extOf, blobToBase64, kvGet, kvSet, kvDel, GitHubBackend, DemoBackend,
-  FONTS, TYPO, TYPO_PROPS, typoOf, googleFontURLs, typoFontLoads, ringLogoURL } from './store.js';
+  FONTS, TYPO, TYPO_PROPS, typoOf, googleFontURLs, typoFontLoads, ringLogoURL, FolderBackend, kvKeys } from './store.js';
 
 const SITE = window.HC_SITE ?? '../';
 const INLINE = window.HC_ASSETS || null;
@@ -81,7 +81,7 @@ function fileURL(path) {
   if (/^(https?:|data:|blob:)/.test(path)) return path;
   if (INLINE && INLINE[path] && INLINE[path].startsWith('data:')) return INLINE[path];
   const s = S.staged.get(path) || S.recent.get(path); if (s) return s.url;
-  if (S.backend && S.backend.kind === 'demo') return S.backend.url(path);
+  if (S.backend && (S.backend.kind === 'demo' || S.backend.kind === 'folder')) return S.backend.url(path);
   return SITE + path;
 }
 function stageFile(path, blob) {
@@ -137,6 +137,8 @@ async function saveDraft() {
       staged: [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob })) });
   } catch (e) { console.warn('brouillon non sauvegardé', e); }
 }
+/* Un brouillon n'est jamais jeté sans copie : la dernière copie se récupère dans Historique › Sauvegardes */
+async function backupDraft(d) { try { if (d && d.content) await kvSet('draft-backup:' + S.draftKey, { content: d.content, at: d.at || Date.now() }); } catch (e) {} }
 async function restoreDraft() {
   const d = await kvGet(S.draftKey);
   if (!d || !d.content) return;
@@ -145,7 +147,7 @@ async function restoreDraft() {
       h('p', null, `Tu as un brouillon non publié du ${new Date(d.at).toLocaleString('fr-FR')}.`),
       h('p', null, "Le site a été publié depuis (peut-être depuis un autre ordinateur). Si tu reprends ce brouillon, sa publication remplacera ces changements.")),
       [{ label: 'Partir de la version en ligne', value: false, cls: 'ghost' }, { label: 'Reprendre mon brouillon', value: true, cls: 'dark' }]);
-    if (!keep) { await kvDel(S.draftKey); return; }
+    if (!keep) { await backupDraft(d); await kvDel(S.draftKey); return; }
   }
   S.content = normalizeContent(d.content);
   (d.staged || []).forEach(f => stageFile(f.path, f.blob));
@@ -184,7 +186,7 @@ async function publish() {
     h('ul', null, summary.map(s => h('li', null, s))),
     h('label', { class: 'f' }, h('span', null, 'Note pour l’historique'), msg),
     orphans.length ? h('label', { class: 'switch' }, cleanup, `Supprimer aussi ${orphans.length} ancien${orphans.length > 1 ? 's' : ''} fichier${orphans.length > 1 ? 's' : ''} qui ne sert plus`) : null,
-    S.backend.kind === 'github' ? h('p', { class: 'hint' }, 'Le site se met à jour 1 à 2 minutes après la publication.') : h('p', { class: 'hint' }, 'Mode démo : la publication reste dans ce navigateur.'));
+    h('p', { class: 'hint' }, S.backend.kind === 'github' ? 'Le site se met à jour 1 à 2 minutes après la publication.' : S.backend.kind === 'folder' ? `Les fichiers sont écrits dans le dossier « ${S.backend.name} » de ton ordinateur.` : 'Mode démo : la publication reste dans ce navigateur, rien n’est écrit dans les fichiers du site.'));
   const go = await modal('Publier sur le site', body, [{ label: 'Annuler', value: false, cls: 'ghost' }, { label: 'Publier', value: true, cls: 'primary' }]);
   if (!go) return;
   S.busy = true; updateStatus('Publication en cours…');
@@ -201,7 +203,7 @@ async function publish() {
     }
     const used = usedPaths();
     const files = [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob }));
-    if (S.backend.kind === 'github') {   // copies en JavaScript pour ouvrir le site en local (double-clic sur index.html)
+    if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // copies en JavaScript pour ouvrir le site en local (double-clic sur index.html)
       files.push({ path: 'content/content.js', text: 'window.HC_CONTENT = ' + JSON.stringify(S.content) + ';\n' });
       if (JSON.stringify(JSON.parse(S.base).models) !== JSON.stringify(S.content.models)) { updateStatus('Préparation des modèles 3D…'); files.push({ path: 'models/models.js', text: await modelsJS() }); }
     }
@@ -212,7 +214,8 @@ async function publish() {
     files.forEach(f => { S.recent.set(f.path, S.staged.get(f.path)); S.staged.delete(f.path); });
     S.staged.forEach(s => URL.revokeObjectURL(s.url)); S.staged.clear(); S.deletes.clear(); S.files = null;
     await kvDel(S.draftKey);
-    toast(S.backend.kind === 'github' ? 'Publié. Le site sera à jour dans une minute ou deux.' : 'Publié dans la démo.');
+    toast(S.backend.kind === 'github' ? 'Publié. Le site sera à jour dans une minute ou deux.' : S.backend.kind === 'folder' ? `Enregistré dans le dossier « ${S.backend.name} ».` : 'Publié dans la démo (dans ce navigateur seulement).');
+    if (S.backend.kind === 'folder') await S.backend.prepare(S.content);
   } catch (err) {
     console.error(err); toast('La publication a échoué : ' + humanError(err), 'bad', 9000);
   } finally { S.busy = false; updateStatus(); renderNav(); if (S.view === 'history' || S.view === 'media') renderMain(); }
@@ -222,8 +225,10 @@ async function modelsJS() {
   for (const m of S.content.models) {
     const dir = m.file.replace(/[^/]+$/, '');
     for (const p of [m.file, ...(m.textures || []).map(x => dir + x)]) {
-      const r = await fetch(fileURL(p)); if (!r.ok) throw new Error(p + ' : ' + r.status);
-      out[p] = /\.dae$/i.test(p) ? await r.text() : `data:${mime[extOf(p)] || 'application/octet-stream'};base64,${await blobToBase64(await r.blob())}`;
+      let blob = S.staged.has(p) ? S.staged.get(p).blob : null;
+      if (!blob && S.backend.readBlob) blob = await S.backend.readBlob(p).catch(() => null);
+      if (!blob) { const r = await fetch(fileURL(p)); if (!r.ok) throw new Error(p + ' : ' + r.status); blob = await r.blob(); }
+      out[p] = /\.dae$/i.test(p) ? await blob.text() : `data:${mime[extOf(p)] || 'application/octet-stream'};base64,${await blobToBase64(blob)}`;
     }
   }
   return 'window.HC_ASSETS = ' + JSON.stringify(out) + ';\n';
@@ -232,8 +237,9 @@ async function headSha() { const r = await S.backend.req(`${S.backend.repoPath}/
 async function revertAll() {
   if (!isDirty()) return;
   if (!await confirmBox('Annuler les modifications', 'Tout ce qui n’a pas été publié sera perdu : textes, images ajoutées, suppressions.', 'Tout annuler', 'danger')) return;
+  await backupDraft({ content: S.content, at: Date.now() });
   S.content = normalizeContent(JSON.parse(S.base)); S.staged.forEach(s => URL.revokeObjectURL(s.url)); S.staged.clear(); S.deletes.clear();
-  await kvDel(S.draftKey); render(); toast('Retour à la version en ligne.');
+  await kvDel(S.draftKey); render(); toast('Retour à la version publiée. Une copie du brouillon reste dans Historique › Sauvegardes.');
 }
 function humanError(err) {
   const s = err && err.status;
@@ -470,7 +476,8 @@ function render() {
   const logo = S.content.settings.logo ? fileURL(S.content.settings.logo) : defaultLogo();
   statusEl = h('div', { class: 'status', 'aria-live': 'polite' });
   topEl.append(
-    h('div', { class: 'brand' }, h('img', { src: logo, alt: '' }), h('span', null, S.content.settings.name || 'Hand Coded'), h('small', null, S.backend.kind === 'demo' ? 'Back-office · démo' : 'Back-office')),
+    h('div', { class: 'brand' }, h('img', { src: logo, alt: '' }), h('span', null, S.content.settings.name || 'Hand Coded'), h('small', null, S.backend.kind === 'demo' ? 'Back-office · démo' : S.backend.kind === 'folder' ? 'Back-office · dossier « ' + S.backend.name + ' »' : 'Back-office')),
+    ...(S.backend.kind !== 'demo' ? [] : [h('button', { type: 'button', class: 'demo-tag', title: 'Ouvrir les sauvegardes', onclick: () => go('history') }, 'Démo : ton travail reste dans ce navigateur, pas dans les fichiers du site. Exporte-le ou travaille dans le dossier.')]),
     statusEl,
     h('div', { class: 'acts' }, btn('Aperçu', () => openPreview(), 'ghost', { title: 'Voir le site avec les modifications non publiées' }), btn('Publier', publish, 'primary', { title: 'Ctrl+S' })));
   renderNav(); updateStatus(); renderMain();
@@ -485,7 +492,8 @@ function renderNav() {
       S.backend.kind === 'github' ? h('a', { href: `https://github.com/${S.cfg.owner}/${S.cfg.repo}`, target: '_blank', rel: 'noopener' }, `${S.cfg.owner}/${S.cfg.repo}`) : null,
       window.HC_SITE_HTML ? h('a', { href: '#', onclick: e => { e.preventDefault(); openPreview(); } }, 'Voir le site') : h('a', { href: SITE + 'index.html', target: '_blank', rel: 'noopener' }, 'Voir le site en ligne ↗'),
       isDirty() ? h('a', { href: '#', onclick: e => { e.preventDefault(); revertAll(); } }, 'Annuler les modifications') : null,
-      S.backend.kind === 'github' ? h('a', { href: '#', onclick: e => { e.preventDefault(); logout(); } }, 'Se déconnecter') : null));
+      S.backend.kind === 'github' ? h('a', { href: '#', onclick: e => { e.preventDefault(); logout(); } }, 'Se déconnecter') : null,
+      S.backend.kind !== 'github' ? h('a', { href: '#', onclick: e => { e.preventDefault(); leaveLocal(); } }, S.backend.kind === 'folder' ? 'Changer de dossier' : 'Quitter la démo') : null));
 }
 function updateStatus(text) {
   if (!statusEl) return;
@@ -1072,7 +1080,7 @@ function viewMedia() {
     fill(box, 
       h('header', null, h('h2', null, `${rows.length} fichier${rows.length > 1 ? 's' : ''}`), h('div', { class: 'acts' },
         unused.length ? btn(`Tout sélectionner : ${unused.length} inutilisé${unused.length > 1 ? 's' : ''}`, () => { table.querySelectorAll('tbody input[type=checkbox]').forEach(cb => { cb.checked = true; selected.add(cb.closest('tr').querySelector('.p').textContent); }); sync(); }, 'sm') : null,
-        delBtn, S.backend.kind === 'github' ? btn('Relire le dépôt', () => { S.files = null; renderMain(); }, 'sm ghost') : null)),
+        delBtn, S.backend.kind !== 'demo' ? btn(S.backend.kind === 'folder' ? 'Relire le dossier' : 'Relire le dépôt', () => { S.files = null; renderMain(); }, 'sm ghost') : null)),
       rows.length ? h('div', { style: { overflowX: 'auto' } }, table) : h('div', { class: 'empty' }, S.backend.kind === 'demo' ? 'En démo, seuls les fichiers ajoutés depuis ce navigateur apparaissent ici.' : 'Aucun fichier dans media/ ni models/.'));
   })();
   return page('Médias', 'Tous les fichiers du dossier media/ et des modèles 3D. Les fichiers qui ne servent plus peuvent être supprimés pour garder le dépôt léger.', [], remoteBlock(), box);
@@ -1254,44 +1262,111 @@ function viewSettings() {
 /* ================================================================ Vue : Historique */
 function viewHistory() {
   const box = h('div', { class: 'card' }, h('div', { class: 'empty' }, 'Lecture de l’historique…'));
-  if (S.backend.kind !== 'github') {
+  const saveBox = h('div', { class: 'card' });
+  drawBackups(saveBox);
+  if (S.backend.kind === 'demo') {
     fill(box, h('div', { class: 'block' }, h('h3', null, 'Démo'),
-      h('p', null, 'En démo, chaque publication remplace la précédente dans ce navigateur. Sur GitHub, chaque publication devient une version que tu peux restaurer ici.'),
-      btn('Revenir au contenu d’origine', async () => { if (!await confirmBox('Réinitialiser la démo', 'Le contenu de démonstration d’origine sera rechargé. Tes essais seront effacés.', 'Réinitialiser', 'danger')) return; await S.backend.reset(); await kvDel(S.draftKey); location.reload(); }, 'danger')));
-    return page('Historique', null, [], box);
+      h('p', null, 'En démo, chaque publication remplace la précédente, dans ce navigateur seulement : rien n’est écrit dans les fichiers du site. Pour garder ton travail, exporte-le ci-dessous, ou travaille dans le dossier du site (Chrome, Edge) ou sur GitHub.'),
+      btn('Revenir au contenu d’origine', async () => { if (!await confirmBox('Réinitialiser la démo', 'Le contenu de démonstration d’origine sera rechargé. Une copie de ton travail reste dans les sauvegardes.', 'Réinitialiser', 'danger')) return; await backupDraft({ content: S.content, at: Date.now() }); await S.backend.reset(); await kvDel(S.draftKey); location.reload(); }, 'danger')));
+    return page('Historique', null, [], saveBox, box);
   }
   (async () => {
     try {
       const commits = await S.backend.lastCommits(20);
       fill(box, ...commits.map((cm, i) => h('div', { class: 'commit' },
-        h('div', null, h('b', null, cm.commit.message.split('\n')[0]), h('small', null, `${new Date(cm.commit.author.date).toLocaleString('fr-FR')} · ${cm.commit.author.name}`, i === 0 ? ' · version en ligne' : '')),
+        h('div', null, h('b', null, cm.commit.message.split('\n')[0]), h('small', null, `${new Date(cm.commit.author.date).toLocaleString('fr-FR')} · ${cm.commit.author.name}`, i === 0 ? (S.backend.kind === 'folder' ? ' · version enregistrée' : ' · version en ligne') : '')),
         h('div', { style: { display: 'flex', gap: '6px' } },
-          h('a', { class: 'btn sm ghost', href: cm.html_url, target: '_blank', rel: 'noopener' }, 'Sur GitHub'),
+          cm.html_url ? h('a', { class: 'btn sm ghost', href: cm.html_url, target: '_blank', rel: 'noopener' }, 'Sur GitHub') : null,
           i === 0 ? null : btn('Restaurer', async () => {
-            if (!await confirmBox('Restaurer cette version', 'Le contenu de cette version remplace ton brouillon. Rien ne change en ligne tant que tu ne publies pas. Les images supprimées depuis peuvent manquer.', 'Restaurer dans le brouillon')) return;
+            if (!await confirmBox('Restaurer cette version', 'Le contenu de cette version remplace ton brouillon. Rien ne change tant que tu ne publies pas. Les images supprimées depuis peuvent manquer.', 'Restaurer dans le brouillon')) return;
             try { S.content = await S.backend.loadAt(cm.sha); change({ nav: true }); toast('Version chargée dans le brouillon. Vérifie avec l’aperçu, puis publie.'); }
             catch (e) { toast('Lecture impossible : ' + humanError(e), 'bad'); }
           }, 'sm')))));
       if (!commits.length) fill(box, h('div', { class: 'empty' }, 'Pas encore de version publiée.'));
     } catch (e) { fill(box, h('div', { class: 'empty' }, 'Impossible de lire l’historique : ' + humanError(e))); }
   })();
-  return page('Historique', 'Chaque publication est une version du site. Tu peux en recharger une dans le brouillon, la vérifier, puis la republier.', [], box);
+  return page('Historique', S.backend.kind === 'folder' ? 'Chaque publication garde une version dans content/versions/ (les 40 dernières). Tu peux en recharger une dans le brouillon, la vérifier, puis la republier.' : 'Chaque publication est une version du site. Tu peux en recharger une dans le brouillon, la vérifier, puis la republier.', [], saveBox, box);
+}
+/* Sauvegardes : export / import d'un fichier, brouillon abandonné, travail fait en démo */
+function drawBackups(box) {
+  const stamp = () => new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+  const exportBtn = btn('Exporter le contenu (.json)', () => {
+    const a = h('a', { href: URL.createObjectURL(new Blob([JSON.stringify(S.content, null, 1) + '\n'], { type: 'application/json' })), download: `hand-coded-content-${stamp()}.json` });
+    document.body.appendChild(a); a.click(); a.remove(); toast('Fichier téléchargé : il contient tous les textes et réglages, avec ou sans publication.');
+  }, 'sm');
+  const importBtn = btn('Importer un contenu…', () => filePicker('application/json,.json', false, async files => {
+    try {
+      const data = JSON.parse(await files[0].text()); const c = data && data.content && data.settings === undefined ? data.content : data;
+      if (!c || !c.settings || !Array.isArray(c.posts)) throw new Error('ce fichier n’est pas un contenu du site');
+      if (!await confirmBox('Importer ce contenu', `« ${files[0].name} » remplace ton brouillon. Rien n’est publié tant que tu ne cliques pas sur Publier.`, 'Importer')) return;
+      await backupDraft({ content: S.content, at: Date.now() });
+      const prev = S.content, next = normalizeContent(c);
+      prev.models.forEach(m => { if (!next.models.some(x => x.id === m.id)) next.models.push(m); });   // les modèles 3D ajoutés depuis restent disponibles
+      S.content = next; change({ nav: true }); render(); toast('Contenu importé dans le brouillon. Vérifie avec l’aperçu, puis publie.');
+    } catch (e) { toast('Import impossible : ' + (e.message || e), 'bad', 8000); }
+  }), 'sm ghost');
+  const extra = h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' } });
+  fill(box, h('div', { class: 'block' }, h('h3', null, 'Sauvegardes'),
+    h('p', { class: 'hint', style: { marginTop: 0 } }, 'Le fichier exporté contient tous les textes, réglages et liens vers les images. Il se réimporte ici, ou se pose tel quel dans le dossier du site sous le nom content/content.json.'),
+    h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } }, exportBtn, importBtn), extra));
+  (async () => {
+    const items = [];
+    const bk = await kvGet('draft-backup:' + S.draftKey);
+    if (bk && bk.content) items.push(btn(`Récupérer le brouillon mis de côté le ${new Date(bk.at).toLocaleString('fr-FR')}`, async () => {
+      if (!await confirmBox('Récupérer le brouillon', 'Ce brouillon remplace ton brouillon actuel (qui est mis de côté à son tour).', 'Récupérer')) return;
+      const cur = { content: S.content, at: Date.now() }; S.content = normalizeContent(bk.content); await backupDraft(cur); change({ nav: true }); render(); toast('Brouillon récupéré.');
+    }, 'sm ghost'));
+    /* travail fait ailleurs dans ce navigateur : démo (toutes versions), autre dossier, brouillons mis de côté */
+    const keys = (await kvKeys()).filter(k => typeof k === 'string' && /^(draft:|demo:content:|draft-backup:)/.test(k) && k !== S.draftKey && k !== 'draft-backup:' + S.draftKey && !(S.backend.kind === 'demo' && k === 'demo:content:v6'));
+    const label = k => k.startsWith('demo:content:') ? 'publication de la démo' : k.startsWith('draft-backup:') ? 'brouillon mis de côté (' + k.replace(/^draft-backup:draft:/, '').replace(/^demo:v\d+$/, 'démo').replace(/^folder:/, 'dossier ') + ')' : k.startsWith('draft:demo:') ? 'brouillon de la démo' : k.startsWith('draft:folder:') ? 'brouillon du dossier « ' + k.slice(13) + ' »' : 'brouillon GitHub ' + k.slice(6);
+    const found = [];
+    for (const k of keys) { const v = await kvGet(k); const c = v && (v.settings ? v : v.content); if (c && c.settings && Array.isArray(c.posts)) found.push({ k, c, at: (v && v.at) || 0 }); }
+    found.sort((x, y) => y.at - x.at);
+    for (const f of found) items.push(btn(`Reprendre : ${label(f.k)}${f.at ? ' du ' + new Date(f.at).toLocaleString('fr-FR') : ''}`, async () => {
+      if (!await confirmBox('Reprendre ce travail', 'Ce contenu remplace ton brouillon (qui est mis de côté). Les images ajoutées ailleurs ne suivent pas : renvoie-les si besoin. Rien n’est publié tant que tu ne cliques pas sur Publier.', 'Reprendre')) return;
+      await backupDraft({ content: S.content, at: Date.now() }); S.content = normalizeContent(structuredClone(f.c)); change({ nav: true }); render(); toast('Chargé dans le brouillon. Vérifie avec l’aperçu, puis publie.');
+    }, 'sm ghost'));
+    fill(extra, items);
+  })();
 }
 
 /* ================================================================ Aperçu du brouillon */
 function openPreview(start) {
-  if (location.protocol === 'file:' && !window.HC_SITE_HTML) toast('Ouvert depuis le disque, l’aperçu montre la version enregistrée dans le dossier, sans tes modifications en cours. En ligne, il montre le brouillon.', 'ok', 9000);
   const files = {};
   S.recent.forEach((s, p) => { files[p] = s.url; }); S.staged.forEach((s, p) => { files[p] = s.url; });
-  if (S.backend.kind === 'demo' && S.backend.urls) S.backend.urls.forEach((u, p) => { if (!files[p]) files[p] = u; });
+  if ((S.backend.kind === 'demo' || S.backend.kind === 'folder') && S.backend.urls) S.backend.urls.forEach((u, p) => { if (!files[p]) files[p] = u; });
   const sections = S.content.sections.filter(s => s.visible);
   let current = start || (S.view === 'posts' ? S.filter.section : S.view === 'sections' ? S.sel.section : '') || S.content.settings.startSection;
   if (current && !sections.find(s => s.id === current)) current = sections[0] && sections[0].id;
   const frameWrap = h('div', { class: 'frame' });
   let size = 'desk';
+  /* depuis le disque, la page du site ne peut pas lire le brouillon : on le lui envoie par message, images comprises */
+  const previewBlobs = async () => {
+    const out = {};
+    for (const [p, st] of [...S.recent, ...S.staged]) if (st && st.blob) out[p] = st.blob;
+    if (S.backend.kind === 'folder' && S.backend.urls) for (const p of S.backend.urls.keys()) if (!out[p]) { try { out[p] = await S.backend.readBlob(p); } catch (e) {} }
+    if (S.backend.kind === 'demo' && S.backend.urls) for (const p of S.backend.urls.keys()) if (!out[p]) { const b = await kvGet('demo:file:' + p).catch(() => null); if (b) out[p] = b; }
+    return out;
+  };
+  let ifr = null, seenVersion = 0;
+  const NEED = 20261102;   // version du site attendue par ce back-office
+  const warn = h('div', { class: 'preview-warn' });   // toujours dans la grille (hauteur nulle quand tout va bien)
+  const checkVersion = () => {
+    let v = seenVersion; try { v = v || (ifr && ifr.contentWindow && ifr.contentWindow.HC_SITE_VERSION) || 0; } catch (e) {}
+    if (v >= NEED) { warn.classList.remove('on'); return; }
+    warn.textContent = 'Le moteur du site dans ' + (S.backend.kind === 'github' ? 'le dépôt' : 'ce dossier') + ' est plus ancien que le back-office : l’aperçu ne montre pas tous tes réglages (typographie, showreel…). Remplace assets/hc/site.bundle.js et site.js par la dernière version' + (S.backend.kind === 'github' ? ', envoie-les sur GitHub, puis attends une minute.' : '.');
+    warn.classList.add('on');
+  };
+  const onMsg = async e => {
+    if (!ifr || e.source !== ifr.contentWindow || !e.data || e.data.type !== 'hc-preview-ready') return;
+    seenVersion = e.data.version || 0; checkVersion();
+    ifr.contentWindow.postMessage({ type: 'hc-preview', data: window.__hcPreview, blobs: await previewBlobs() }, '*');
+  };
+  window.addEventListener('message', onMsg);
   const load = () => {
     window.__hcPreview = { content: structuredClone(S.content), files, start: current };
-    const ifr = h('iframe', { title: 'Aperçu du site', allow: 'fullscreen' });
+    ifr = h('iframe', { title: 'Aperçu du site', allow: 'fullscreen' });
+    seenVersion = 0; warn.classList.remove('on'); if (!window.HC_SITE_HTML) ifr.addEventListener('load', () => setTimeout(checkVersion, 3000));
     if (window.HC_SITE_HTML) ifr.srcdoc = window.HC_SITE_HTML; else ifr.src = SITE + 'index.html?preview=' + Date.now();
     const dims = { desk: ['100%', '100%'], tab: ['820px', '1080px'], mob: ['390px', '780px'] }[size];
     ifr.style.width = dims[0]; ifr.style.height = dims[1]; ifr.style.maxHeight = '100%';
@@ -1302,12 +1377,12 @@ function openPreview(start) {
   drawSizes();
   const sel = h('select', { 'aria-label': 'Section' }, sections.map(s => h('option', { value: s.id, selected: s.id === current }, fr(s.name))));
   sel.addEventListener('change', () => { current = sel.value; load(); });
-  const close = () => { wrap.remove(); document.removeEventListener('keydown', onKey); };
+  const close = () => { wrap.remove(); document.removeEventListener('keydown', onKey); window.removeEventListener('message', onMsg); };
   const onKey = e => { if (e.key === 'Escape' && document.activeElement && !document.activeElement.closest('iframe')) close(); };
   const wrap = h('div', { class: 'preview', role: 'dialog', 'aria-label': 'Aperçu' },
     h('div', { class: 'bar' }, h('b', null, 'Aperçu'), h('span', null, isDirty() ? 'avec les modifications non publiées' : 'identique au site en ligne'), h('span', { class: 'sp' }), sel, sizes,
       btn('Recharger', load, 'sm'), btn('Fermer', close, 'sm primary')),
-    frameWrap);
+    warn, frameWrap);
   document.body.appendChild(wrap); document.addEventListener('keydown', onKey);
   load();
 }
@@ -1335,6 +1410,7 @@ async function loginView(error) {
   const branch = h('input', { type: 'text', value: v('branch') || 'main', spellcheck: 'false' });
   const root = h('input', { type: 'text', value: v('root'), placeholder: '(racine du dépôt)', spellcheck: 'false' });
   const token = h('input', { type: 'password', value: saved.token || '', required: true, autocomplete: 'current-password', placeholder: 'github_pat_…', spellcheck: 'false' });
+  [owner, repo].forEach(i => i.addEventListener('change', () => { const c = cleanConf({ owner: owner.value, repo: repo.value }); if (c.owner) owner.value = c.owner; if (c.repo) repo.value = c.repo; }));   // une adresse github.com collée se range toute seule
   const remember = h('input', { type: 'checkbox', checked: !!saved.remember });
   const err = h('p', { class: 'err', role: 'alert', hidden: !error }, error || '');
   const submit = h('button', { type: 'submit', class: 'btn primary' }, 'Se connecter');
@@ -1357,16 +1433,92 @@ async function loginView(error) {
     field('Jeton d’accès', token, 'Il reste dans ce navigateur et ne part que vers api.github.com.'),
     h('details', { style: { background: '#fff' } }, h('summary', null, 'Options avancées'), h('div', { class: 'grid2', style: { marginTop: '12px' } }, field('Branche', branch), field('Dossier du site dans le dépôt', root, 'Vide si le site est à la racine.'))),
     h('label', { class: 'switch', style: { margin: '4px 0 16px' } }, remember, 'Rester connectée sur cet ordinateur'),
-    h('div', { class: 'actions' }, submit, btn('Essayer sans GitHub (démo)', () => startDemo(), 'ghost')));
+    h('div', { class: 'actions' }, submit, btn('Essayer sans GitHub (démo)', () => startDemo(), 'ghost')),
+    await folderCard());
   fill(app, h('div', { class: 'login' },
     h('aside', { class: 'side' }, h('div', null, h('img', { src: SITE + 'assets/hc/ui/logo-default.svg', alt: '' }), h('h1', null, 'Hand Coded.'), h('p', null, 'Back-office du site : sections, objets 3D, contenus, tags.')), h('small', null, 'Moteur 3D d’après le site Fat-Man Collective de 2008.')),
     form));
   (owner.value && repo.value ? token : owner).focus();
 }
-async function connect(conf, silent) {
-  const be = new GitHubBackend(conf);
+/* Travailler dans le dossier du site, sur l'ordinateur (Chrome, Edge) */
+/* Relit le dossier mémorisé. Garde-fou : si la lecture a fait planter l'onglet la fois précédente, on l'oublie. */
+async function savedFolderHandle() {
+  try { if (localStorage.getItem(LS + ':h-reading')) { localStorage.removeItem(LS + ':h-reading'); await kvDel('folder:handle'); return null; } localStorage.setItem(LS + ':h-reading', '1'); } catch (e) {}
+  const hd = await kvGet('folder:handle').catch(() => null);
+  try { localStorage.removeItem(LS + ':h-reading'); } catch (e) {}
+  return hd || null;
+}
+async function folderCard() {
+  const box = h('div', { class: 'folder-card' });
+  if (!FolderBackend.supported()) {
+    fill(box, h('h3', null, 'Travailler dans le dossier du site'),
+      h('p', null, 'Ce navigateur ne sait pas écrire dans un dossier de l’ordinateur. Ouvre ce back-office dans Chrome ou Edge pour que « Publier » enregistre directement dans les fichiers du site. Sinon, utilise GitHub, ou exporte ton travail depuis Historique › Sauvegardes.'));
+    return box;
+  }
+  const saved = await savedFolderHandle();
+  const err = h('p', { class: 'err', role: 'alert', hidden: true });
+  const pick = async () => {
+    err.hidden = true;
+    try { const dir = await window.showDirectoryPicker({ id: 'hand-coded-site', mode: 'readwrite' }); await startFolder(dir); }
+    catch (e) { if (e && e.name === 'AbortError') return; err.textContent = 'Ouverture impossible : ' + (e.message || e); err.hidden = false; }
+  };
+  fill(box, h('h3', null, 'Travailler dans le dossier du site'),
+    h('p', null, 'Sans GitHub : choisis le dossier du site sur ton ordinateur (celui qui contient index.html et content). « Publier » y écrit directement les textes, images et modèles. Tu peux ensuite déplacer, copier ou envoyer ce dossier : tout est dedans.'),
+    err,
+    h('div', { class: 'actions' },
+      saved ? btn(`Rouvrir le dossier « ${saved.name} »`, async () => { err.hidden = true; try { await startFolder(saved, true); } catch (e) { err.textContent = 'Ce dossier n’est plus accessible (déplacé ou renommé ?) : choisis-le à nouveau. ' + (e.message || ''); err.hidden = false; } }, 'primary') : null,
+      btn(saved ? 'Choisir un autre dossier…' : 'Choisir le dossier du site…', pick, saved ? 'ghost' : 'primary')));
+  return box;
+}
+async function startFolder(dir, reopen) {
+  const be = new FolderBackend(dir);
+  if (!await be.permission(true)) throw new Error('accès refusé');
   await be.check();
-  const content = await be.load();
+  const content = await be.load(); await be.prepare(content);
+  try { await kvSet('folder:handle', dir); localStorage.setItem(LS + ':mode', 'folder'); } catch (e) {}
+  S.backend = be; S.draftKey = 'draft:folder:' + dir.name;
+  await start(content);
+}
+function leaveLocal() { try { localStorage.removeItem(LS + ':mode'); } catch (e) {} if (DEMO) { location.reload(); return; } saveDraft().then(() => { S.content = null; loginView(); }); }
+/* Connexion avec diagnostic précis : dépôt, branche, puis dossier du site (retrouvé tout seul s'il est ailleurs) */
+function cleanConf(conf) {
+  const c = { ...conf };
+  const m = /github\.com[/:]([^/\s]+)\/([^/\s#?]+)/i.exec(c.repo || '') || /github\.com[/:]([^/\s]+)\/([^/\s#?]+)/i.exec(c.owner || '');
+  if (m) { c.owner = m[1]; c.repo = m[2]; }
+  c.owner = String(c.owner || '').trim().replace(/^@/, '').replace(/\/+$/, '');
+  c.repo = String(c.repo || '').trim().replace(/\.git$/i, '').replace(/^.*\//, '');
+  c.branch = String(c.branch || '').trim() || 'main';
+  c.root = String(c.root || '').trim().replace(/^\/+|\/+$/g, '');
+  c.token = String(c.token || '').trim();
+  return c;
+}
+const plain = msg => Object.assign(new Error(msg), { status: 0 });
+async function connect(conf, silent) {
+  conf = cleanConf(conf);
+  const be = new GitHubBackend(conf);
+  try { await be.check(); }
+  catch (e) {
+    if (e.status === 404) {
+      let who = null; try { who = await be.req('/user'); } catch (e2) {}
+      throw plain(`GitHub ne trouve pas le dépôt « ${conf.owner}/${conf.repo} »` + (who ? ` (le jeton appartient au compte « ${who.login} »)` : '') + '. Vérifie le propriétaire et le nom du dépôt, tels qu’ils apparaissent dans l’adresse github.com/propriétaire/dépôt.');
+    }
+    throw e;
+  }
+  try { await be.req(`${be.repoPath}/git/ref/heads/${encodeURIComponent(be.cfg.branch)}`); }
+  catch (e) {
+    if (e.status !== 404) throw e;
+    let names = []; try { names = (await be.req(`${be.repoPath}/branches?per_page=30`)).map(b => b.name); } catch (e2) {}
+    throw plain(`la branche « ${be.cfg.branch} » n’existe pas dans ${conf.owner}/${conf.repo}.` + (names.length ? ` Branches du dépôt : ${names.join(', ')}.` : ''));
+  }
+  let content;
+  try { content = await be.load(); }
+  catch (e) {
+    if (e.status !== 404) throw e;
+    let found = [];   // le site est peut-être dans un autre dossier du dépôt : on le cherche
+    try { const tree = await be.req(`${be.repoPath}/git/trees/${encodeURIComponent(be.cfg.branch)}?recursive=1`); found = tree.tree.filter(t => t.type === 'blob' && /(^|\/)content\/content\.json$/.test(t.path)).map(t => t.path.replace(/\/?content\/content\.json$/, '')); } catch (e2) {}
+    if (found.length === 1) { conf.root = found[0]; be.cfg.root = found[0]; content = await be.load(); if (!silent) setTimeout(() => toast(`Site trouvé dans le dossier « ${found[0] || '(racine)'} » du dépôt : réglage corrigé.`), 400); }
+    else throw plain(`pas de content/content.json dans ${conf.root ? 'le dossier « ' + conf.root + ' »' : 'la racine'} du dépôt.` + (found.length ? ` Il y en a dans : ${found.map(f => f || '(racine)').join(', ')}. Indique le bon dans Options avancées › Dossier du site.` : ' Envoie d’abord les fichiers du site dans le dépôt.'));
+  }
   S.head = await be.req(`${be.repoPath}/git/ref/heads/${encodeURIComponent(be.cfg.branch)}`).then(r => r.object.sha);
   try {
     localStorage.setItem(LS, JSON.stringify({ owner: conf.owner, repo: conf.repo, branch: conf.branch, root: conf.root, remember: !!conf.remember, token: conf.remember ? conf.token : undefined }));
@@ -1380,6 +1532,7 @@ function logout() {
   location.reload();
 }
 async function startDemo() {
+  try { localStorage.removeItem(LS + ':mode'); } catch (e) {}
   S.backend = new DemoBackend(SITE); S.draftKey = 'draft:demo:v6';
   const content = await S.backend.load(); await S.backend.prepare(content);
   await start(content);
@@ -1399,6 +1552,12 @@ window.addEventListener('beforeunload', () => { if (S.content) saveDraft(); });
   try {
     if (DEMO) { await startDemo(); return; }
     const saved = readSaved();
+    let mode = ''; try { mode = localStorage.getItem(LS + ':mode') || ''; } catch (e) {}
+    if (mode === 'folder' && FolderBackend.supported()) {   // le dossier se rouvre seul si Chrome a gardé l'autorisation
+      const dir = await savedFolderHandle();
+      if (dir) { try { const be = new FolderBackend(dir); if (await be.permission(false)) { await startFolder(dir, true); return; } } catch (e) {} }
+      return loginView();
+    }
     if (saved.token && saved.owner && saved.repo) {
       try { await connect(saved, true); return; } catch (e) { return loginView('Reconnexion impossible : ' + humanError(e)); }
     }
@@ -1406,4 +1565,4 @@ window.addEventListener('beforeunload', () => { if (S.content) saveDraft(); });
   } catch (e) { console.error(e); fill(app, h('p', { class: 'boot' }, 'Le back-office n’a pas pu démarrer : ' + (e.message || e))); }
 })();
 
-window.__admin = { S, publish, go, openPreview, importModelFiles };
+window.__admin = { S, publish, go, openPreview, importModelFiles, startFolder };

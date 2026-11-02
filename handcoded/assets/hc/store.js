@@ -195,6 +195,10 @@ export async function kvSet(key, value) {
   const db = await idb();
   return new Promise((res, rej) => { const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').put(value, key); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); });
 }
+export async function kvKeys() {
+  try { const db = await idb(); return await new Promise(res => { const q = db.transaction('kv').objectStore('kv').getAllKeys(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); }
+  catch (e) { return []; }
+}
 export async function kvDel(key) {
   try { const db = await idb(); return await new Promise(res => { const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').delete(key); tx.oncomplete = () => res(); tx.onerror = () => res(); }); } catch (e) {}
 }
@@ -407,4 +411,72 @@ export function ringLogoURL(ring, settings) {
   x.font = `${r.italic ? 'italic ' : ''}${r.weight || 400} ${Math.max(8, +r.size || 38) * 2}px ${r.css}`;
   const m = x.measureText(text), hgt = (m.actualBoundingBoxAscent || r.size * 1.4) - (m.actualBoundingBoxDescent || 0);
   x.fillText(text, 120, 120 + hgt / 2); return c.toDataURL('image/png');
+}
+
+/* ================================================================ Dossier de l'ordinateur
+   Chrome et Edge savent écrire dans un dossier choisi par l'utilisateur (File System Access API).
+   « Publier » écrit alors directement content/content.json, les médias et les modèles dans le dossier du site :
+   le travail vit dans les fichiers, plus dans la mémoire du navigateur. Chaque publication garde une version dans content/versions/. */
+export class FolderBackend {
+  constructor(dir) { this.kind = 'folder'; this.dir = dir; this.name = dir.name; this.urls = new Map(); }
+  static supported() { return typeof window !== 'undefined' && typeof window.showDirectoryPicker === 'function'; }
+  async parent(path, create) {
+    const parts = path.split('/').filter(Boolean), name = parts.pop(); let d = this.dir;
+    for (const p of parts) d = await d.getDirectoryHandle(p, { create });
+    return [d, name];
+  }
+  async fileHandle(path, create = false) { const [d, name] = await this.parent(path, create); return d.getFileHandle(name, { create }); }
+  async readBlob(path) { return (await this.fileHandle(path)).getFile(); }
+  async readText(path) { return (await this.readBlob(path)).text(); }
+  async exists(path) { try { await this.fileHandle(path); return true; } catch (e) { return false; } }
+  async writeFile(path, data) { const fh = await this.fileHandle(path, true); const w = await fh.createWritable(); await w.write(data); await w.close(); }
+  async remove(path) { try { const [d, name] = await this.parent(path, false); await d.removeEntry(name); } catch (e) {} }
+  async permission(ask) {
+    const opts = { mode: 'readwrite' };
+    if ((await this.dir.queryPermission(opts)) === 'granted') return true;
+    return ask ? (await this.dir.requestPermission(opts)) === 'granted' : false;
+  }
+  async check() {
+    if (!await this.exists('content/content.json')) throw new Error(`le dossier « ${this.name} » ne contient pas content/content.json. Choisis le dossier du site, celui où se trouvent index.html et le dossier content.`);
+  }
+  async load() { return normalizeContent(JSON.parse(await this.readText('content/content.json'))); }
+  async publish(content, files = [], message = 'Mise à jour du contenu') {
+    for (const f of files) {
+      if (f.delete) { await this.remove(f.path); this.urls.delete(f.path); continue; }
+      await this.writeFile(f.path, f.blob || f.text);
+    }
+    const json = JSON.stringify(content, null, 1) + '\n';
+    await this.writeFile('content/content.json', json);
+    /* version gardée dans content/versions/ (les 40 dernières) */
+    const d = new Date(), stamp = d.toISOString().replace(/[:.]/g, '-');
+    let index = []; try { index = JSON.parse(await this.readText('content/versions/index.json')); } catch (e) {}
+    await this.writeFile(`content/versions/${stamp}.json`, json);
+    index.unshift({ file: stamp + '.json', date: d.toISOString(), message });
+    for (const old of index.splice(40)) await this.remove('content/versions/' + old.file);
+    await this.writeFile('content/versions/index.json', JSON.stringify(index, null, 1) + '\n');
+    return stamp;
+  }
+  async listFiles(prefixes = ['media/', 'models/']) {
+    const out = [];
+    const walk = async (d, base) => { for await (const [name, hd] of d.entries()) { const p = base + name; if (hd.kind === 'directory') await walk(hd, p + '/'); else out.push({ path: p, size: (await hd.getFile()).size }); } };
+    for (const pre of prefixes) { try { const [d, name] = await this.parent(pre + 'x', false); await walk(d, pre); } catch (e) {} }
+    return out;
+  }
+  async lastCommits(n = 20) {
+    let index = []; try { index = JSON.parse(await this.readText('content/versions/index.json')); } catch (e) {}
+    return index.slice(0, n).map(v => ({ sha: v.file, html_url: '', commit: { message: v.message || 'Mise à jour du contenu', author: { name: 'dossier « ' + this.name + ' »', date: v.date } } }));
+  }
+  async loadAt(file) { return normalizeContent(JSON.parse(await this.readText('content/versions/' + file))); }
+  /* les images et modèles du dossier, servis au back-office en URL blob */
+  async prepare(content) {
+    const paths = new Set();
+    content.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && paths.add(x)); p.media.forEach(m => m.src && paths.add(m.src)); });
+    content.models.forEach(m => { if (m.file) { paths.add(m.file); (m.textures || []).forEach(tx => paths.add(m.file.replace(/[^/]+$/, '') + tx)); } });
+    if (content.settings.logo) paths.add(content.settings.logo);
+    for (const p of paths) {
+      if (this.urls.has(p) || /^(https?:|data:|blob:)/.test(p)) continue;
+      try { this.urls.set(p, URL.createObjectURL(await this.readBlob(p))); } catch (e) {}
+    }
+  }
+  url(path) { if (!path) return path; if (this.urls.has(path)) return this.urls.get(path); return path; }
 }

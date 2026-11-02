@@ -16,7 +16,8 @@ const backend = window.HC_MODE === 'demo' ? new DemoBackend(BASE) : new StaticBa
 const INLINE = window.HC_ASSETS || null;   // démo, ou site ouvert en local : ressources embarquées
 const LOCAL = location.protocol === 'file:';   // en local, le navigateur interdit de lire les images du disque dans la 3D
 /* Aperçu depuis le back-office : le brouillon et les fichiers pas encore publiés arrivent de la fenêtre parente. */
-const PREVIEW = window.HC_PREVIEW || /[?&]preview\b/.test(location.search) ? (() => { try { return (window.parent !== window && window.parent.__hcPreview) || (window.opener && window.opener.__hcPreview) || null; } catch (e) { return null; } })() : null;
+const SITE_VERSION = 20261102; window.HC_SITE_VERSION = SITE_VERSION;   // le back-office vérifie que le site du dossier est à jour
+let PREVIEW = window.HC_PREVIEW || /[?&]preview\b/.test(location.search) ? (() => { try { return (window.parent !== window && window.parent.__hcPreview) || (window.opener && window.opener.__hcPreview) || null; } catch (e) { return null; } })() : null;
 const url = p => {
   if (!p) return p;
   const key = String(p).replace(/^\.\//, '').replace(/\/\.\//g, '/');
@@ -1497,8 +1498,23 @@ function showError(err) {
   console.error(err);
   const box = document.getElementById('load-error'); box.textContent = ui('loadError') + (err && err.message ? err.message : err); box.hidden = false;
 }
+/* Aperçu du back-office ouvert depuis le disque : le navigateur cloisonne les pages file://, le brouillon arrive alors par message */
+async function awaitPreview() {
+  if (PREVIEW || !/[?&]preview\b/.test(location.search) || window.parent === window) return;
+  PREVIEW = await new Promise(res => {
+    const t = setTimeout(() => res(null), 2500);
+    window.addEventListener('message', e => {
+      const d = e.data; if (e.source !== window.parent || !d || d.type !== 'hc-preview' || !d.data) return;
+      clearTimeout(t); const pv = d.data; pv.files = Object.assign({}, pv.files);
+      Object.entries(d.blobs || {}).forEach(([k, b]) => { try { pv.files[k] = URL.createObjectURL(b); } catch (err) {} });
+      res(pv);
+    });
+    try { window.parent.postMessage({ type: 'hc-preview-ready', version: SITE_VERSION }, '*'); } catch (e) {}
+  });
+}
 (async function boot() {
   try {
+    await awaitPreview();
     if (PREVIEW) CONTENT = normalizeContent(structuredClone(PREVIEW.content));
     else { CONTENT = await backend.load(); if (backend.prepare) await backend.prepare(CONTENT); }
   } catch (err) { showError(err); return; }
