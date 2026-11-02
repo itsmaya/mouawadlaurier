@@ -1250,7 +1250,6 @@
    },
    "date": "",
    "tags": [
-    "featured",
     "software",
     "light",
     "ai"
@@ -2946,7 +2945,7 @@
    "tags": [
     "team"
    ],
-   "thumb": "",
+   "thumb": "media/cyril/cyril-81xu.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>His PhD research used machine learning to detect emotions in music. He has led European research projects and published in journals, books and conferences. He loves new technologies, solving problems and building small robots.</p>",
@@ -2989,7 +2988,7 @@
    "tags": [
     "team"
    ],
-   "thumb": "",
+   "thumb": "media/maya/profile-maya-6slp.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>She started in 3D animation and led the development of several animated TV series. She works on how technology can trigger emotions, and on algorithms that generate designs and animations. She invented a new way to work with LEDs: Ledotron. She also studied acting and scenography.</p>",
