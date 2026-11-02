@@ -100,8 +100,8 @@ button { font: inherit; }
 .txt .body p, .txt .body ul, .txt .body ol { margin: 0 0 18px; }
 .txt .body ul, .txt .body ol { padding-left: 18px; }
 .txt .body h3 { font: bold 14px/18px var(--serif); margin: 0 0 6px; }
-.txt .body a, .txt .posted span, .banda a, .contact .site a { color: var(--accent); text-decoration: none; }
-.txt .body a:hover, .banda a:hover { text-decoration: underline; }
+.txt .body a, .txt .posted span, .contact .site a { color: var(--accent); text-decoration: none; }
+.txt .body a:hover { text-decoration: underline; }
 .txt .fecha { position: absolute; font: 13px/18px var(--serif); color: var(--grey-1); }
 .txt .posted { position: absolute; font: 10px/14px var(--ui); color: var(--grey-2); letter-spacing: .03em; }
 .team .bgx { background: rgba(48,48,48,.9); }
@@ -125,8 +125,6 @@ button { font: inherit; }
 .contact .ad p { margin: 0; }
 .contact .ad a { color: #fff; }
 .contact .ct { margin-top: auto; font: 15px/20px var(--ui); color: var(--accent); }
-.banda { position: absolute; top: 373px; height: 18px; padding: 0 7px; background: #000; color: #fefefe; font: 11px/18px var(--ui); white-space: nowrap; transform-origin: right; animation: grow .25s linear both; }
-@keyframes grow { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
 
 /* Home */
 #home { position: fixed; inset: 0; z-index: 20; background: var(--bg); transition: transform 1s cubic-bezier(.17,.84,.44,1); }

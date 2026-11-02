@@ -1092,7 +1092,7 @@ function viewMedia() {
 
 /* ================================================================ Vidéo de l'accueil (Réglages › Accueil) */
 function homeVideoFields(s) {
-  s.homeVideo = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true, random: true }, s.homeVideo || {});
+  s.homeVideo = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', delay: 4, controls: true, random: true }, s.homeVideo || {});
   const hvs = s.homeVideo;
   const name = h('span', { class: 'hint', style: { margin: 0 } });
   const drawName = () => { name.textContent = hvs.src ? hvs.src.split('/').pop() : 'Aucune : les photos des projets défilent en travelling lent.'; };
@@ -1105,11 +1105,12 @@ function homeVideoFields(s) {
   return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en carrés'),
     h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, btn(hvs.src ? 'Remplacer la vidéo…' : 'Choisir une vidéo…', pick, 'sm'), hvs.src ? btn('Retirer', () => { hvs.src = ''; change(); drawName(); }, 'sm ghost') : null, name),
     h('p', { class: 'hint' }, 'MP4 sans son ou avec, en boucle : un extrait de 20 à 30 secondes en 720p suffit (moins de 15 Mo). Elle démarre à un endroit au hasard. Une vidéo YouTube ne marche pas ici : il faut le fichier.'),
-    h('div', { style: { marginTop: '10px' } }, toggle('Réglage au hasard à chaque visite (grille, contraste, couleur, sens)', () => hvs.random !== false, v => { hvs.random = v; renderMain(); })),
+    h('div', { style: { marginTop: '10px' } }, toggle('Réglage au hasard à chaque visite (grille, contraste, delay, couleur, sens)', () => hvs.random !== false, v => { hvs.random = v; renderMain(); })),
     hvs.random !== false ? h('p', { class: 'hint' }, 'Chaque visiteur arrive sur une combinaison différente, puis la change avec le clavier. Coupe cet interrupteur pour fixer le réglage ci-dessous.') : h('div', { class: 'grid2', style: { marginTop: '10px' } },
       field('Taille de grille (px)', textInput(() => hvs.cell, v => { hvs.cell = Math.max(6, Math.min(40, +v || 14)); }, { type: 'number', min: 6, max: 40 })),
       field('Contraste', textInput(() => hvs.contrast, v => { hvs.contrast = Math.max(0.4, Math.min(3, +v || 1)); }, { type: 'number', min: 0.4, max: 3, step: 0.1 })),
       field('Carré maximal (%)', textInput(() => hvs.size, v => { hvs.size = Math.max(40, Math.min(100, +v || 92)); }, { type: 'number', min: 40, max: 100 })),
+      field('Delay (lissage)', textInput(() => hvs.delay, v => { hvs.delay = Math.max(1, Math.min(8, +v || 1)); }, { type: 'number', min: 1, max: 8 }), 'Comme sur Fat-Man : valeur = valeur − (valeur − cible) / delay. 1 = immédiat, 8 au maximum. Coupé d’office sur un ordinateur trop lent.'),
       field('Couleur des carrés', selectInput([{ value: 'white', label: 'Blanc' }, { value: 'grey', label: 'Gris' }, { value: 'accent', label: 'Couleur d’accent' }, { value: 'source', label: 'Couleurs de la vidéo' }], () => hvs.color, v => { hvs.color = v; })),
       field('Les carrés grossissent', selectInput([{ value: 'light', label: 'à la lumière' }, { value: 'dark', label: 'dans l’ombre' }], () => hvs.mode, v => { hvs.mode = v; }))),
     h('div', { style: { marginTop: '10px' } }, toggle('Les visiteurs ont un petit clavier pour régler la vidéo, activer le son et leur caméra', () => hvs.controls !== false, v => { hvs.controls = v; })));

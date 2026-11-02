@@ -143,7 +143,21 @@ const postLocal = (x, y, z) => [-x, y, z];             // conteneur de posts tou
 /* ================================================================ Rendu */
 const canvas = document.getElementById('stage');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+const MAX_PR = Math.min(window.devicePixelRatio || 1, 2);
+renderer.setPixelRatio(MAX_PR);
+/* Qualité adaptée à l'ordinateur : on mesure seulement quand la scène est posée (pas pendant les chargements ni les animations).
+   Si elle reste sous ~40 images/s pendant 6 s, la scène se calcule en moins de pixels. Jamais d'aller-retour : la qualité ne remonte pas d'elle-même. */
+const perf = { pr: MAX_PR, acc: 0, n: 0, low: 0, since: 0 };
+function isBusy() { return tweens.length > 0 || isClicking || !!(postsView && postsView.loading); }
+function adaptQuality(dt) {
+  if (perf.pr <= 1 || isBusy()) { perf.acc = 0; perf.n = 0; perf.since = clock; return; }
+  if (clock - perf.since < 3) return;   // laisser la scène se poser
+  perf.acc += dt; perf.n++;
+  if (perf.acc < 2) return;
+  const fps = perf.n / perf.acc; perf.acc = 0; perf.n = 0;
+  perf.low = fps < 40 ? perf.low + 1 : 0;
+  if (perf.low >= 3) { perf.low = 0; perf.pr = Math.max(1, perf.pr - 0.5); renderer.setPixelRatio(perf.pr); renderer.setSize(W, H, false); }
+}
 renderer.setClearColor(0xffffff, 1);
 const scene = new THREE.Scene();
 scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8d8, 2.2));
@@ -184,12 +198,13 @@ function fontsReady() {
 /* Typographie réglée dans le back-office : feuille de style générée, polices Google si besoin, polices des cartes 3D */
 /* Une police Google arrive après coup : on redessine ce qui est dessiné sur canvas (logo rond, cartes 3D) */
 let typoTimer = 0;
+const TYPO_LINKS = [];   // feuilles Google en cours de chargement : le démarrage les attend avant de dessiner les cartes
 function typoFontsArrived() {
   clearTimeout(typoTimer);
   typoTimer = setTimeout(async () => {
     try { await Promise.all(typoFontLoads(CONTENT.settings).map(f => document.fonts.load(f).catch(() => {}))); } catch (e) {}
     if (!CONTENT.settings.logo) ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) el.src = ringLogo(negMode ? '#ffffff' : (CONTENT.settings.accent || '#ffcc00')); });
-    if (postsView) postsView.retexture();
+    if (postsView && !postsView.loading) postsView.retexture();   // police arrivée après le dessin des cartes seulement
   }, 150);
 }
 function applyTypo() {
@@ -198,7 +213,7 @@ function applyTypo() {
   const css = typoCSS(s); if (st.textContent !== css) st.textContent = css;
   const urls = googleFontURLs(s);
   document.querySelectorAll('link[data-hc-font]').forEach(l => { if (!urls.includes(l.href)) l.remove(); });
-  urls.forEach(u => { if (!document.querySelector(`link[data-hc-font][href="${CSS.escape(u)}"]`)) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.hcFont = ''; l.onload = typoFontsArrived; document.head.appendChild(l); } });
+  urls.forEach(u => { if (!document.querySelector(`link[data-hc-font][href="${CSS.escape(u)}"]`)) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.hcFont = ''; TYPO_LINKS.push(new Promise(res => { l.onload = () => { res(); typoFontsArrived(); }; l.onerror = res; })); document.head.appendChild(l); } });
   SERIF = typoOf(s, 'card').css; UIF = typoOf(s, 'cardsm').css; CARD_SCALE = Math.max(0.5, Math.min(2, (+typoOf(s, 'card').scale || 100) / 100));
 }
 function wrapLines(ctx, text, maxW) {
@@ -582,6 +597,7 @@ class PostsView3D {
     this.container.add(g);
   }
   async openPosts() {
+    this.loading = true;
     for (let i = 0; i < this.n; i++) {
       let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) return;
@@ -589,6 +605,7 @@ class PostsView3D {
       this.animeOpenPost(this.postViews[i], i);
       if (STYLE.planeSpeed > 0) { const until = clock + POST_STAGGER; while (clock < until) { await new Promise(r => requestAnimationFrame(r)); if (!this.alive) return; } }
     }
+    this.loading = false;
   }
   animeOpenPost(p, i) {
     const L = this.L;
@@ -1086,16 +1103,14 @@ const post2D = {
   layout() {
     let x = 0; this.panels.forEach(p => { p.style.left = x + 'px'; x += p.offsetWidth - 2; });
     const last = this.panels[this.panels.length - 1]; this.end = last ? -parseFloat(last.style.left) : 0;
-    this.placeBanda();
   },
-  placeBanda() { if (this.banda) this.banda.style.left = ((W - 2 * STYLE.margin) / (this.scale || 1) - this.banda.offsetWidth) + 'px'; },
   close() {
     if (!this.open) return 0; this.open = false;
     const time = STYLE.animationMode ? 0.8 : 0;
     post2dEl.classList.add('closing'); setTimeout(() => { if (!this.open) this.clear(); }, time * 1000);
     return time;
   },
-  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; if (this.banda) { this.banda.remove(); this.banda = null; } post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
+  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
   action(type) {
     if (this.panels.length < 2) return;
     let post = 0;
@@ -1279,8 +1294,8 @@ canvas.addEventListener('pointermove', e => {
 let lastWheel = 0;
 canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
 window.addEventListener('resize', () => {
-  resizeViewport(); onStageResize3D(); setMenuPosition(); post2D.placeBanda(); sizeTicker();
-  if (post2D.open) { fitPost2D(); post2D.placeBanda(); clearTimeout(post2D.relayout); post2D.relayout = setTimeout(() => { if (post2D.open && post2D.post && JSON.stringify(textGeom('project')) !== post2D.geomKey) { post2D.build(post2D.post, P.section.def.card); setMenuPosition(); } }, 250); }   // rotation de l'écran : la fiche se recompose
+  resizeViewport(); onStageResize3D(); setMenuPosition(); sizeTicker(); hvSize();
+  if (post2D.open) { fitPost2D(); clearTimeout(post2D.relayout); post2D.relayout = setTimeout(() => { if (post2D.open && post2D.post && JSON.stringify(textGeom('project')) !== post2D.geomKey) { post2D.build(post2D.post, P.section.def.card); setMenuPosition(); } }, 250); }   // rotation de l'écran : la fiche se recompose
 });
 
 /* Négatif / positif : clic sur le logo. Les cartes se redessinent sur place (photos pré-inversées, accent conservé). */
@@ -1384,12 +1399,12 @@ function closeReel(instant) {
    Sans vidéo réglée, ce sont les photos des projets en travelling lent. Les visiteurs ont un petit clavier, comme celui du site :
    grille, contraste, couleur, inversion, son (coupé au départ) et leur caméra (l'image reste sur leur écran). La lecture démarre à un endroit au hasard. */
 var hv = null;
-const HV_COLORS = ['white', 'grey', 'accent', 'source'];
+const HV_COLORS = ['white', 'grey', 'accent', 'source'], HV_MAX_DELAY = 8;
 function hvSettings() {
-  const c = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true, random: true }, CONTENT.settings.homeVideo || {});
+  const c = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', delay: 4, controls: true, random: true }, CONTENT.settings.homeVideo || {});
   if (c.random !== false) {   // chaque visite tombe sur un réglage différent
     const r = (a, b) => a + Math.random() * (b - a), pick = (list, w) => { let x = Math.random() * w.reduce((a, b) => a + b, 0); for (let i = 0; i < list.length; i++) { if ((x -= w[i]) < 0) return list[i]; } return list[0]; };
-    Object.assign(c, { cell: 2 * Math.round(r(4, 12)), contrast: +r(0.6, 2).toFixed(1), size: Math.round(r(72, 100)), color: pick(HV_COLORS, [4, 2, 2, 1]), mode: Math.random() < 0.75 ? 'light' : 'dark' });
+    Object.assign(c, { cell: 2 * Math.round(r(4, 12)), contrast: +r(0.6, 2).toFixed(1), size: Math.round(r(72, 100)), color: pick(HV_COLORS, [4, 2, 2, 1]), mode: Math.random() < 0.75 ? 'light' : 'dark', delay: Math.round(r(1, 8)) });
   }
   return c;
 }
@@ -1401,9 +1416,10 @@ function setupHomeVideo() {
   const shade = document.createElement('div'); shade.className = 'hv-shade';
   band.prepend(cv, shade);
   hv = { cv, ctx: cv.getContext('2d'), off: document.createElement('canvas'), cell: +cfg.cell || 14, gamma: +cfg.contrast || 1, fill: (+cfg.size || 92) / 100,
-    color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
-    tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, keys: {} };
+    color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', delay: Math.max(1, Math.min(HV_MAX_DELAY, +cfg.delay || 1)), sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
+    tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, interval: 1000 / 30, floor: 0, cost: 0, slow: 0, fast: 0 };
   hv.octx = hv.off.getContext('2d', { willReadFrequently: true });
+  hv.raw = document.createElement('canvas'); hv.rctx = hv.raw.getContext('2d', { willReadFrequently: true });   // l'image du moment ; « off » garde l'image lissée par le delay
   const src = (cfg.src || '').trim();
   if (src && /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
     const v = document.createElement('video');
@@ -1418,7 +1434,7 @@ function setupHomeVideo() {
   }
   if (cfg.controls !== false) buildHvKeys(document.getElementById('home'));
   const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
-  hvSize(); window.addEventListener('resize', hvSize);
+  hvSize();
 }
 function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
 function buildHvKeys(band) {
@@ -1426,6 +1442,7 @@ function buildHvKeys(band) {
   box.innerHTML = `<div id="hv-panel">
       <div class="lbl" data-k="grid"></div><div class="row"><button type="button" class="key" data-a="grid-" data-code="ArrowLeft">◂</button><button type="button" class="key" data-a="grid+" data-code="ArrowRight">▸</button></div>
       <div class="lbl" data-k="contrast"></div><div class="row"><button type="button" class="key" data-a="con-" data-code="ArrowDown">▾</button><button type="button" class="key" data-a="con+" data-code="ArrowUp">▴</button></div>
+      <div class="lbl" data-k="delay"></div><div class="row"><button type="button" class="key" data-a="del-" data-code="Minus">−</button><button type="button" class="key" data-a="del+" data-code="Equal">+</button></div>
       <div class="lbl" data-k="color"></div><div class="row"><button type="button" class="key sw" data-a="color" data-code="KeyC"><i></i> C</button></div>
       <div class="lbl" data-k="invert"></div><button type="button" class="key" data-a="invert" data-code="KeyI" aria-pressed="false">I</button>
       <div class="lbl" data-k="sound"></div><button type="button" class="key" data-a="sound" data-code="KeyS" aria-pressed="false">S</button>
@@ -1444,7 +1461,7 @@ function buildHvKeys(band) {
     if (e.code === 'Escape' && inInput) { e.target.blur(); return; }
     if (e.code === 'KeyK' && !inInput) { e.preventDefault(); setOpen(!box.classList.contains('open')); return; }
     const key = box.querySelector(`[data-code="${e.code}"]`); if (!key) return;
-    if (/^Key/.test(e.code) && inInput) return;          // on écrit son slogan : les lettres restent des lettres
+    if (inInput && !/^Arrow/.test(e.code)) return;      // on écrit son slogan : lettres, tirets et signes restent du texte
     if (/^Arrow/.test(e.code) && typed) return;          // les flèches déplacent le curseur dans le slogan
     e.preventDefault();
     if (!hv.touched) { hv.touched = true; setOpen(true); }
@@ -1453,10 +1470,12 @@ function buildHvKeys(band) {
   box.querySelector('#hv-panel').addEventListener('click', e => {
     const b = e.target.closest('button[data-a]'); if (!b) return; const a = b.dataset.a;
     b.classList.add('down'); setTimeout(() => b.classList.remove('down'), 200);
-    if (a === 'grid-') hv.cell = Math.max(6, hv.cell - 2);
-    else if (a === 'grid+') hv.cell = Math.min(40, hv.cell + 2);
+    if (a === 'grid+') hv.cell = Math.max(6, hv.cell - 2);          // plus de grille : plus de carrés, plus petits
+    else if (a === 'grid-') hv.cell = Math.min(40, hv.cell + 2);
     else if (a === 'con-') hv.gamma = Math.max(0.4, +(hv.gamma - 0.2).toFixed(2));
     else if (a === 'con+') hv.gamma = Math.min(3, +(hv.gamma + 0.2).toFixed(2));
+    else if (a === 'del-') hv.delay = Math.max(1, hv.delay - 1);
+    else if (a === 'del+') hv.delay = Math.min(HV_MAX_DELAY, hv.delay + 1);
     else if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
     else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
     else if (a === 'sound') { hv.sound = !hv.sound; if (hv.video) { hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); } }
@@ -1476,7 +1495,9 @@ function hvLabels() {
   set('cam', !!hv.cam, ui('hv_cam'));
   hv.box.querySelector('[data-a="sound"]').disabled = !hv.video || !!hv.cam;
   hv.box.querySelector('[data-a="color"]').setAttribute('aria-label', ui('hv_color'));
-  ['grid-', 'grid+', 'con-', 'con+'].forEach(a => hv.box.querySelector(`[data-a="${a}"]`).setAttribute('aria-label', ui(a.startsWith('grid') ? 'hv_grid' : 'hv_contrast') + (a.endsWith('+') ? ' +' : ' −')));
+  ['grid-', 'grid+', 'con-', 'con+', 'del-', 'del+'].forEach(a => hv.box.querySelector(`[data-a="${a}"]`).setAttribute('aria-label', ui(a.startsWith('grid') ? 'hv_grid' : a.startsWith('con') ? 'hv_contrast' : 'hv_delay') + (a.endsWith('+') ? ' +' : ' −')));
+  const dl = hv.box.querySelector('.lbl[data-k="delay"]'); if (dl) dl.textContent = ui('hv_delay') + ' ' + hvDelay() + (hvDelay() < hv.delay ? '*' : '');
+  const dk = hv.box.querySelector('[data-a="del+"]'); if (dk) dk.disabled = hv.delay >= HV_MAX_DELAY;
 }
 async function hvCamOn() {
   hv.note.hidden = true;
@@ -1495,13 +1516,13 @@ function hvCamOff() {
 }
 function stopHomeVideo() { if (!hv) return; hvCamOff(); if (hv.video) hv.video.pause(); }
 function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false) {
-  const c = hv.octx, cw = hv.off.width, ch = hv.off.height, s = Math.max(cw / sw, ch / sh) * zoom, w = sw * s, h = sh * s;
+  const c = hv.rctx, cw = hv.raw.width, ch = hv.raw.height, s = Math.max(cw / sw, ch / sh) * zoom, w = sw * s, h = sh * s;
   if (mirror) { c.save(); c.translate(cw, 0); c.scale(-1, 1); }
   c.drawImage(src, (cw - w) / 2 + dx * cw, (ch - h) / 2 + dy * ch, w, h);
   if (mirror) c.restore();
 }
 function hvSource(t) {
-  const c = hv.octx; c.globalAlpha = 1; c.fillStyle = '#000'; c.fillRect(0, 0, hv.off.width, hv.off.height);
+  const c = hv.rctx; c.globalAlpha = 1; c.fillStyle = '#000'; c.fillRect(0, 0, hv.raw.width, hv.raw.height);
   if (hv.cam && hv.cam.video.readyState >= 2) { hvCover(hv.cam.video, hv.cam.video.videoWidth, hv.cam.video.videoHeight, 1, 0, 0, true); return true; }
   if (hv.video) { if (hv.video.readyState < 2) return false; hvCover(hv.video, hv.video.videoWidth, hv.video.videoHeight); return true; }
   const ok = hv.pics.filter(p => p.complete && p.naturalWidth); if (!ok.length) return false;
@@ -1524,8 +1545,8 @@ function hvPyramid(cell) {
   hv.pyr = { cell, fill: hv.fill, pat: hv.ctx.createPattern(c, 'repeat') };
   return hv.pyr.pat;
 }
-function hvComposite(cols, rows) {
-  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = hv.cell, ox = Math.round((W - cols * cell) / 2), oy = Math.round((H - rows * cell) / 2);
+function hvComposite(cols, rows, cell) {
+  const ctx = hv.ctx, W = hv.W, H = hv.H, ox = Math.round((W - cols * cell) / 2), oy = Math.round((H - rows * cell) / 2);
   ctx.imageSmoothingEnabled = false;
   if (!canFilter) { ctx.globalAlpha = 0.45; ctx.drawImage(hv.off, ox, oy, cols * cell, rows * cell); ctx.globalAlpha = 1; return; }   // navigateur sans filtres : image en blocs, assombrie
   if (!hv.tmp) { hv.tmp = document.createElement('canvas'); hv.tctx = hv.tmp.getContext('2d'); }
@@ -1546,30 +1567,48 @@ function hvComposite(cols, rows) {
   else { ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : (CONTENT.settings.accent || '#ffcc00'); ctx.fillRect(0, 0, W, H); }
   ctx.restore();
 }
+/* Coût mesuré à chaque image : sur un ordinateur lent, la grille grossit d'office et la cadence descend (30 → 24 → 20 images/s), puis remonte quand ça va mieux. */
+const HV_REDUCE = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+const RGB = new Map();   // couleurs déjà écrites, pour ne pas reconstruire la chaîne à chaque carré
+const rgbStr = (r, g, b) => { const k = (r >> 3) << 10 | (g >> 3) << 5 | (b >> 3); let v = RGB.get(k); if (!v) { v = `rgb(${r & 248},${g & 248},${b & 248})`; RGB.set(k, v); } return v; };
+/* le delay ne s'applique que si l'ordinateur suit : dès que la machine peine, le mouvement redevient direct */
+const hvDelay = () => (hv.floor || hv.interval > 1000 / 29 ? 1 : hv.delay);
 function homeVideoStep(now) {
-  if (!hv || now - hv.last < 1000 / 30 || !hv.W) return; hv.last = now;
-  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const t = reduce ? 0 : (now - hv.t0) / 1000;
-  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = hv.cell, cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+  if (!hv || !hv.W || now - hv.last < hv.interval) return; hv.last = now;
+  const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
+  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = Math.max(hv.cell, hv.floor), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
-  if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = cols; hv.off.height = rows; }
+  if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows; hv.fresh = true; }
   if (!hvSource(t)) return;
-  let d;
+  /* delay : le lissage du site Fat-Man, valeur = valeur − (valeur − cible) / delay, sur chaque pixel de la grille */
+  const dl = hvDelay(); hv.octx.globalAlpha = hv.fresh || dl <= 1 ? 1 : 1 / dl; hv.octx.drawImage(hv.raw, 0, 0); hv.octx.globalAlpha = 1; hv.fresh = false;
+  let d = null;
   if (!hv.tainted) { try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) { hv.tainted = true; } }
-  if (hv.tainted) { hvComposite(cols, rows); return; }
+  if (hv.tainted) hvComposite(cols, rows, cell); else hvSquares(d, cols, rows, cell);
+  /* adaptation à la machine */
+  const cost = performance.now() - t0; hv.cost = hv.cost * 0.9 + cost * 0.1;
+  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.box) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(40, Math.max(hv.floor, cell) + 2); }
+  else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.box) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
+}
+function hvSquares(d, cols, rows, cell) {
+  const ctx = hv.ctx, n = cols * rows, lum = hv.lum && hv.lum.length === n ? hv.lum : (hv.lum = new Float32Array(n));
   let mn = 1, mx = 0;
-  for (let q = 0; q < d.length; q += 16) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; if (l < mn) mn = l; if (l > mx) mx = l; }
-  hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;
-  const ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2, useSrc = hv.color === 'source';
-  if (!useSrc) ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2';
-  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
-    const q = (y * cols + x) * 4, r = d[q], g = d[q + 1], b = d[q + 2];
-    let l = Math.min(1, Math.max(0, ((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 - hv.lo) / (hv.hi - hv.lo)));
-    if (hv.mode === 'dark') l = 1 - l;
-    const sz = Math.pow(l, hv.gamma) * cell * hv.fill; if (sz < 0.6) continue;
-    if (useSrc) ctx.fillStyle = `rgb(${r},${g},${b})`;
-    ctx.fillRect(ox + x * cell + (cell - sz) / 2, oy + y * cell + (cell - sz) / 2, sz, sz);
+  for (let i = 0, q = 0; i < n; i++, q += 4) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; lum[i] = l; if (l < mn) mn = l; if (l > mx) mx = l; }
+  hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;   // contraste automatique, lissé dans le temps
+  const lo = hv.lo, k = 1 / (hv.hi - lo), dark = hv.mode === 'dark', g = hv.gamma, max = cell * hv.fill;
+  const ox = (hv.W - cols * cell) / 2, oy = (hv.H - rows * cell) / 2, useSrc = hv.color === 'source';
+  if (!useSrc) { ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2'; ctx.beginPath(); }
+  for (let y = 0, i = 0; y < rows; y++) {
+    const cy = oy + y * cell + cell / 2;
+    for (let x = 0; x < cols; x++, i++) {
+      let l = (lum[i] - lo) * k; l = l < 0 ? 0 : l > 1 ? 1 : l; if (dark) l = 1 - l;
+      const sz = (g === 1 ? l : Math.pow(l, g)) * max; if (sz < 0.6) continue;
+      const px = ox + x * cell + (cell - sz) / 2, py = cy - sz / 2;
+      if (useSrc) { const q = i * 4; ctx.fillStyle = rgbStr(d[q], d[q + 1], d[q + 2]); ctx.fillRect(px, py, sz, sz); }
+      else ctx.rect(px, py, sz, sz);   // une seule forme pour toute la grille : un seul dessin
+    }
   }
+  if (!useSrc) ctx.fill();
 }
 
 /* ================================================================ Home */
@@ -1704,7 +1743,7 @@ function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
-  if (started) { updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera(); renderer.render(scene, camera); }
+  if (started) { updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera(); renderer.render(scene, camera); if (homeGone && !document.hidden) adaptQuality(dt); }
   requestAnimationFrame(frame);
 }
 function showError(err) {
@@ -1753,10 +1792,10 @@ async function awaitPreview() {
     const results = await Promise.allSettled(sections.map(s => s.load(loader)));   // un modèle illisible ne bloque pas le site : sa section reste sans objet
     results.forEach((r, i) => { if (r.status === 'rejected') console.warn('Modèle 3D illisible pour la section « ' + sections[i].def.id + ' » :', r.reason); });
     sections.forEach((s, i) => s.place(i));
-    await Promise.race([fontsReady(), new Promise(r => setTimeout(r, 3000))]);   // les fiches se paginent avec les vraies polices
+    await Promise.race([Promise.all(TYPO_LINKS).then(fontsReady), new Promise(r => setTimeout(r, 3000))]);   // cartes et fiches se dessinent directement avec les bonnes polices
     assetsLoaded = true;
     if (clickedEnter || location.hash.length > 1 || (PREVIEW && PREVIEW.start)) enterToTheWeb();
   } catch (err) { showError(err); }
 })();
 
-window.__hc = { P, STYLE, cam, camera, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, setLang, enter: () => enterBtn.click() };
+window.__hc = { P, STYLE, cam, camera, get hv() { return hv && { cell: hv.cell, floor: hv.floor, fps: Math.round(1000 / hv.interval), cost: +hv.cost.toFixed(1), tainted: hv.tainted }; }, get pr() { return perf.pr; }, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, setLang, enter: () => enterBtn.click() };
