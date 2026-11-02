@@ -273,6 +273,33 @@
    "rotationY": 0,
    "untextured": "white",
    "builtin": false
+  },
+  {
+   "id": "albatros-2",
+   "name": "albatros",
+   "file": "models/albatros-2/albatros-2.dae",
+   "textures": [
+    "albatros.jpg"
+   ],
+   "scaleMode": "fit",
+   "height": 310,
+   "rotationY": 165,
+   "untextured": "wire",
+   "builtin": false
+  },
+  {
+   "id": "root",
+   "name": "root",
+   "file": "models/root/root.dae",
+   "textures": [
+    "root.jpg",
+    "root-floor.jpg"
+   ],
+   "scaleMode": "pv",
+   "height": 420,
+   "rotationY": 0,
+   "untextured": "wire",
+   "builtin": false
   }
  ],
  "sections": [
@@ -402,7 +429,8 @@
     }
    ],
    "network": false,
-   "cardScale": 120
+   "cardScale": 120,
+   "skills": false
   },
   {
    "id": "expertise",
@@ -412,8 +440,8 @@
     "ca": "Coneixement",
     "es": "Saber hacer"
    },
-   "model": "tentacles",
-   "layout": "fan",
+   "model": "root",
+   "layout": "wall",
    "card": "image",
    "open": "strip",
    "perPage": 12,
@@ -457,7 +485,8 @@
      }
     }
    ],
-   "network": false
+   "network": false,
+   "skills": true
   },
   {
    "id": "studio",
@@ -467,7 +496,7 @@
     "ca": "L'estudi",
     "es": "El estudio"
    },
-   "model": "hand",
+   "model": "albatros-2",
    "layout": "arc",
    "card": "portrait",
    "open": "focus3d",
@@ -494,7 +523,8 @@
      }
     }
    ],
-   "network": false
+   "network": false,
+   "skills": false
   },
   {
    "id": "contact",
@@ -512,7 +542,8 @@
    "defaultTag": "",
    "visible": true,
    "tags": [],
-   "network": true
+   "network": true,
+   "skills": false
   }
  ],
  "posts": [
@@ -574,7 +605,8 @@
      "lon": -17.47
     }
    ],
-   "author": "Mouawad Laurier"
+   "author": "Mouawad Laurier",
+   "skills": []
   },
   {
    "id": "retour-aux-sources",
@@ -643,7 +675,8 @@
      "lon": 4.03
     }
    ],
-   "author": "Mouawad Laurier"
+   "author": "Mouawad Laurier",
+   "skills": []
   },
   {
    "id": "rising",
@@ -714,7 +747,8 @@
      "lon": 2.17
     }
    ],
-   "author": "Mouawad Laurier"
+   "author": "Mouawad Laurier",
+   "skills": []
   },
   {
    "id": "ephemere",
@@ -772,7 +806,8 @@
      "lon": 2.35
     }
    ],
-   "author": "Mouawad Laurier"
+   "author": "Mouawad Laurier",
+   "skills": []
   },
   {
    "id": "tientos",
@@ -833,7 +868,8 @@
      "lon": 2.35
     }
    ],
-   "author": "Pablo Valbuena & Patricia Guerrero"
+   "author": "Pablo Valbuena & Patricia Guerrero",
+   "skills": []
   },
   {
    "id": "maestro",
@@ -891,7 +927,8 @@
      "lon": 55.42
     }
    ],
-   "author": "Mouawad Laurier & Tigre Lab"
+   "author": "Mouawad Laurier & Tigre Lab",
+   "skills": []
   },
   {
    "id": "future-ruins",
@@ -952,7 +989,8 @@
      "lon": 6.63
     }
    ],
-   "author": "Romain Tardy"
+   "author": "Romain Tardy",
+   "skills": []
   },
   {
    "id": "sat",
@@ -1052,7 +1090,8 @@
      "lon": 114.88
     }
    ],
-   "author": "Romain Tardy"
+   "author": "Romain Tardy",
+   "skills": []
   },
   {
    "id": "ox",
@@ -1178,7 +1217,8 @@
      "lon": 4.84
     }
    ],
-   "author": "Romain Tardy & Mouawad Laurier"
+   "author": "Romain Tardy & Mouawad Laurier",
+   "skills": []
   },
   {
    "id": "mgntrn",
@@ -1233,7 +1273,8 @@
      "lon": -98.2
     }
    ],
-   "author": "Romain Tardy"
+   "author": "Romain Tardy",
+   "skills": []
   },
   {
    "id": "ledotron",
@@ -1303,7 +1344,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Hand Coded"
+   "author": "Hand Coded",
+   "skills": []
   },
   {
    "id": "viktoria-modesta",
@@ -1398,7 +1440,8 @@
      "lon": 13.4
     }
    ],
-   "author": "Viktoria Modesta"
+   "author": "Viktoria Modesta",
+   "skills": []
   },
   {
    "id": "beardyman",
@@ -1447,7 +1490,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Beardyman"
+   "author": "Beardyman",
+   "skills": []
   },
   {
    "id": "tgic",
@@ -1499,7 +1543,8 @@
      "lon": 116.4
     }
    ],
-   "author": "Romain Tardy"
+   "author": "Romain Tardy",
+   "skills": []
   },
   {
    "id": "bionic-orchestra",
@@ -1591,7 +1636,8 @@
      "lon": -0.13
     }
    ],
-   "author": "Ezra, Organic Orchestra"
+   "author": "Ezra, Organic Orchestra",
+   "skills": []
   },
   {
    "id": "mouvement-de-l-air",
@@ -1657,7 +1703,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Adrien M & Claire B"
+   "author": "Adrien M & Claire B",
+   "skills": []
   },
   {
    "id": "slush",
@@ -1711,7 +1758,8 @@
      "lon": 24.94
     }
    ],
-   "author": "Music Tech Fest Labs"
+   "author": "Music Tech Fest Labs",
+   "skills": []
   },
   {
    "id": "wave",
@@ -1757,7 +1805,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Pablo Valbuena"
+   "author": "Pablo Valbuena",
+   "skills": []
   },
   {
    "id": "methods",
@@ -1809,7 +1858,8 @@
      "lon": -1.58
     }
    ],
-   "author": "Pablo Valbuena"
+   "author": "Pablo Valbuena",
+   "skills": []
   },
   {
    "id": "kinematope",
@@ -1902,7 +1952,8 @@
      "lon": -3.7
     }
    ],
-   "author": "Pablo Valbuena"
+   "author": "Pablo Valbuena",
+   "skills": []
   },
   {
    "id": "gyrotope",
@@ -1972,7 +2023,8 @@
      "lon": 4.35
     }
    ],
-   "author": "Pablo Valbuena"
+   "author": "Pablo Valbuena",
+   "skills": []
   },
   {
    "id": "eko",
@@ -2028,7 +2080,8 @@
      "lon": 2.17
     }
    ],
-   "author": "Maotik & Ezra"
+   "author": "Maotik & Ezra",
+   "skills": []
   },
   {
    "id": "audi-mind-race",
@@ -2082,7 +2135,8 @@
      "lon": 2.17
     }
    ],
-   "author": "20 Húngaros"
+   "author": "20 Húngaros",
+   "skills": []
   },
   {
    "id": "sonaris",
@@ -2129,7 +2183,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Michela Magas & Cyril Laurier"
+   "author": "Michela Magas & Cyril Laurier",
+   "skills": []
   },
   {
    "id": "nestle-crunch",
@@ -2180,7 +2235,8 @@
      "lon": -99.13
     }
    ],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "peugeot",
@@ -2224,7 +2280,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "churchill",
@@ -2268,7 +2325,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "cadbury",
@@ -2311,7 +2369,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "coors",
@@ -2361,7 +2420,8 @@
      "lon": -74
     }
    ],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "lexus",
@@ -2406,7 +2466,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "machine-learning",
@@ -2449,7 +2510,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "real-time",
@@ -2493,7 +2555,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "audio",
@@ -2536,7 +2599,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "generative",
@@ -2580,7 +2644,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "projection-mapping",
@@ -2624,7 +2689,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "light",
@@ -2668,7 +2734,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "tracking",
@@ -2711,7 +2778,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "concept-design",
@@ -2754,7 +2822,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "sustainable",
@@ -2797,7 +2866,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "project-management",
@@ -2840,7 +2910,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "tools",
@@ -2883,7 +2954,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "hardware",
@@ -2926,7 +2998,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "cyril",
@@ -2969,7 +3042,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "maya",
@@ -3012,7 +3086,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "stephanie",
@@ -3055,7 +3130,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "romain-tardy",
@@ -3098,7 +3174,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "pablo-valbuena",
@@ -3141,7 +3218,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "adrien-m-claire-b",
@@ -3184,7 +3262,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "beardyman-musician",
@@ -3227,7 +3306,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "maotik",
@@ -3270,7 +3350,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "ezra",
@@ -3313,7 +3394,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "pedra",
@@ -3356,7 +3438,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "jesse-watts",
@@ -3399,7 +3482,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "paul-brossier",
@@ -3442,7 +3526,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "thomas-aussenac",
@@ -3485,7 +3570,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "tom-magnier",
@@ -3528,7 +3614,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "joan-sandoval",
@@ -3571,7 +3658,8 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "barcelona",
@@ -3616,7 +3704,8 @@
     "lon": 2.17
    },
    "spots": [],
-   "author": ""
+   "author": "",
+   "skills": []
   },
   {
    "id": "fat-site-2008",
@@ -3678,7 +3767,8 @@
    "thumbBack": "",
    "location": null,
    "link": "",
-   "author": "Fat-Man Collective"
+   "author": "Fat-Man Collective",
+   "skills": []
   },
   {
    "id": "nokia-navigator",
@@ -3739,7 +3829,8 @@
    "published": true,
    "thumbBack": "",
    "location": null,
-   "author": "Fat-Man Collective, Work Club"
+   "author": "Fat-Man Collective, Work Club",
+   "skills": []
   }
  ]
 }
