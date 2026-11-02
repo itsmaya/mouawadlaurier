@@ -251,17 +251,21 @@ async function skillBackdrop(post) {
 /* Recto : la photo sous un voile noir, le texte blanc par-dessus. Dos : la photo plus présente, le texte en transparence. */
 function veil(ctx, bd, w, h, alpha) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = `rgba(0,0,0,${alpha})`; ctx.fillRect(0, 0, w, h); }
 /* Survol d'une vignette photo : le nom et la description par-dessus, sur un petit fond noir transparent */
-function hoverOverlay(post, w, h) {
-  return ctx => {
-    const pad = 12, tw = w - 2 * pad;
-    ctx.font = `${fz(19)}px ${SERIF}`; const tl = wrapLines(ctx, tr(post.title).trim(), tw).slice(0, 2);
-    ctx.font = `${fz(12)}px ${SERIF}`; const sl = wrapLines(ctx, tr(post.subtitle).trim(), tw).slice(0, 2);
-    const bh = pad + tl.length * 22 + (sl.length ? 4 + sl.length * 15 : 0) + pad - 2;
-    ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(0, h - bh, w, bh);
-    ctx.textBaseline = 'top'; let y = h - bh + pad;
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(19)}px ${SERIF}`; tl.forEach(l => { ctx.fillText(l, pad, y); y += 22; });
-    y += 4; ctx.fillStyle = '#d6d6d6'; ctx.font = `${fz(12)}px ${SERIF}`; sl.forEach(l => { ctx.fillText(l, pad, y); y += 15; });
-  };
+function hoverBand(post, w) {   // bandeau seul (fond transparent autour) : il monte du bas de la carte au survol
+  const title = tr(post.title).trim(), sub = tr(post.subtitle).trim(); if (!title && !sub) return null;
+  const ts = Math.max(9, Math.min(13.5, w * 0.053)), ss = Math.max(7.5, ts * 0.74), pad = Math.round(ts * 0.75), tw = w - 2 * pad;
+  const c = document.createElement('canvas').getContext('2d');
+  c.font = `${ts}px ${SERIF}`; const tl = title ? wrapLines(c, title, tw).slice(0, 2) : [];
+  c.font = `${ss}px ${SERIF}`; const sl = sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
+  const tlh = Math.round(ts * 1.2), slh = Math.round(ss * 1.25);
+  const bh = Math.ceil(pad + tl.length * tlh + (sl.length ? 3 + sl.length * slh : 0) + pad - 2);
+  const tex = canvasTex(w, bh, ctx => {
+    ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(0, 0, w, bh);
+    ctx.textBaseline = 'top'; let y = pad;
+    ctx.fillStyle = '#fff'; ctx.font = `${ts}px ${SERIF}`; tl.forEach(l => { ctx.fillText(l, pad, y); y += tlh; });
+    y += 3; ctx.fillStyle = '#d6d6d6'; ctx.font = `${ss}px ${SERIF}`; sl.forEach(l => { ctx.fillText(l, pad, y); y += slh; });
+  }, 3);
+  return { tex, bh, w };
 }
 /* Carte image : vignette en recadrage "cover", ou une carte typographique quand il n'y a pas encore d'image. */
 async function imageCard(post, w, h) {
@@ -270,17 +274,7 @@ async function imageCard(post, w, h) {
   const bd = im ? null : await skillBackdrop(post);
   await fontsReady();
   const face = (ctx, faint = false) => {
-    if (im) {
-      drawCover(ctx, im, 0, 0, w, h);
-      const sig = signature(post, post.media[0] && post.media[0].credit);
-      if (sig) {   // la signature reste lisible et dans ses vraies couleurs, même en négatif
-        ctx.font = `9px ${UIF}`; let text = sig; while (ctx.measureText(text).width > w - 14 && text.length > 4) text = text.slice(0, -2) + '…';
-        const g = ctx.createLinearGradient(0, h - 26, 0, h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.75)');
-        ctx.save(); if (NEG()) ctx.filter = 'invert(1)'; ctx.fillStyle = g; ctx.fillRect(0, h - 26, w, 26); ctx.restore();
-        ctx.fillStyle = NEG() ? '#000' : '#fff'; ctx.textBaseline = 'bottom'; ctx.fillText(text, 7, h - 6);
-      }
-      return;
-    }
+    if (im) { drawCover(ctx, im, 0, 0, w, h); return; }   // la photo seule : le nom monte au survol
     if (bd) veil(ctx, bd, w, h, faint ? 0.22 : 0.64); else { ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); }
     ctx.textBaseline = 'top'; if (faint) ctx.globalAlpha = 0.3;
     ctx.fillStyle = accent(); ctx.fillRect(16, 18, 18, 2);
@@ -303,8 +297,7 @@ async function imageCard(post, w, h) {
   const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 2)
     : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2)   // vu de dos : dessiné en miroir pour rester à l'endroit
     : canvasTex(w, h, washed(face), 1.5);
-  const over = im && (tr(post.title).trim() || tr(post.subtitle).trim()) ? canvasTex(w, h, ctx => { drawCover(ctx, im, 0, 0, w, h); hoverOverlay(post, w, h)(ctx); }, 2) : null;
-  return [front, backTex, over];
+  return [front, backTex, im ? hoverBand(post, w) : null];
 }
 async function portraitCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
@@ -317,8 +310,7 @@ async function portraitCard(post, w, h) {
     ctx.fillText(initials(tr(post.title)), w / 2, h * 0.45);
     ctx.fillStyle = accent(); ctx.fillRect(w / 2 - 8, h * 0.78, 16, 1.5);
   };
-  const over = im && tr(post.title).trim() ? canvasTex(w, h, ctx => { drawCover(ctx, im, 0, 0, w, h); hoverOverlay(post, w, h)(ctx); }, 3) : null;
-  return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2), over];
+  return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2), im ? hoverBand(post, w) : null];
 }
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
@@ -467,9 +459,9 @@ class PostView {
     this.p2 = { x: 0, y: 0, z: 0, rotX: 0, rotY: 0, rotZ: 0 };
     this.group = new THREE.Group(); this.group.rotation.order = 'YXZ'; this.meshes = []; this.ready = false;
   }
-  build(texFront, texBack, texHover = null) {
-    this.texFront = texFront; this.texHover = texHover;
+  build(texFront, texBack, band = null) {
     const geo = new THREE.PlaneGeometry(this.width, this.height);
+    this.setBand(band);
     const front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texFront, side: THREE.FrontSide }));
     const back = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texBack, side: THREE.BackSide }));
     front.userData = { post: this, face: 'front' }; back.userData = { post: this, face: 'back' };
@@ -484,6 +476,7 @@ class PostView {
     g.position.set(...postLocal(th.x, th.y, th.z));
     g.rotation.y = -(th.rotY + 180) * D2R; g.rotation.x = -th.rotX * D2R; g.rotation.z = th.rotZ * D2R;
     g.scale.setScalar(Math.max(1e-4, th.scale));
+    if (this.band) this.drawBand();
   }
   selectIt() { if (!this.frame) return; this.frame.material = lineMatSelect; delayedCall(0.8, () => { if (this.frame) this.frame.material = lineMatFrame; }); }
   turnAround(axis, degree) {
@@ -500,11 +493,28 @@ class PostView {
   }
   moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ }, { ease: 'quartOut' }); }
   jump(x, y, z) { to(this.thumb, STYLE.tween / 2, { x, y, z }, { ease: 'quartOut', onComplete: () => to(this.thumb, STYLE.tween / 2, { x: this.p2.x, y: this.p2.y, z: this.p2.z }, { ease: 'quartOut' }) }); }
-  hover(on) {   // nom et description par-dessus la photo
-    const m = this.meshes[0]; if (!m || !this.texHover) return;
-    const want = on ? this.texHover : this.texFront; if (m.material.map !== want) { m.material.map = want; m.material.needsUpdate = true; }
+  /* Survol : le nom et la description montent du bas de la photo, dans un bandeau noir transparent, coupé au bord de la carte */
+  setBand(band) {
+    if (this.band) { this.group.remove(this.band.mesh); this.band.mesh.geometry.dispose(); this.band.mesh.material.map.dispose(); this.band.mesh.material.dispose(); killTweensOf(this.band); }
+    this.band = null; if (!band) return;
+    const w = this.cardW || this.width, h = this.cardH || this.height; this.cardW = w; this.cardH = h;
+    const bh = band.bh * w / band.w;   // dessiné à la taille de base, la carte peut être agrandie (Taille des cartes)
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, bh), new THREE.MeshBasicMaterial({ map: band.tex, transparent: true, depthWrite: false, side: THREE.FrontSide }));
+    mesh.position.z = 0.4; mesh.renderOrder = 1; mesh.visible = false; mesh.raycast = () => {};
+    this.band = { mesh, bh, w, h, k: 0, drawn: -1 }; this.group.add(mesh);
   }
-  dispose() { if (this.texHover) { if (this.meshes[0] && this.meshes[0].material.map === this.texHover) this.meshes[0].material.map = this.texFront; this.texHover.dispose(); } killTweensOf(this.thumb); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
+  hover(on) {
+    const b = this.band; if (!b) return;
+    to(b, on ? 0.85 : 0.5, { k: on ? 1 : 0 }, { ease: on ? 'expoOut' : 'quartOut' });   // départ vif, arrivée très douce, comme l'accueil et les fiches
+  }
+  drawBand() {
+    const b = this.band; if (!b || b.k === b.drawn) return; b.drawn = b.k;
+    const k = Math.max(0, Math.min(1, b.k)); b.mesh.visible = k > 0.002;
+    const pos = b.mesh.geometry.attributes.position, uv = b.mesh.geometry.attributes.uv, y0 = -b.h / 2, y1 = y0 + k * b.bh;
+    pos.setY(0, y1); pos.setY(1, y1); pos.setY(2, y0); pos.setY(3, y0); uv.setY(0, 1); uv.setY(1, 1); uv.setY(2, 1 - k); uv.setY(3, 1 - k);
+    pos.needsUpdate = true; uv.needsUpdate = true;
+  }
+  dispose() { this.setBand(null); killTweensOf(this.thumb); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
 }
 
 /* ================================================================ Styles de disposition */
@@ -773,13 +783,10 @@ class PostsView3D {
     for (let i = 0; i < this.n; i++) {
       const pv2 = this.postViews[i]; if (!pv2.ready) continue;
       let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
-      if (!this.alive) { new Set(tex).forEach(x => x && x.dispose()); return; }
-      const wasHover = pv2.texHover && pv2.meshes[0].material.map === pv2.texHover;
-      if (wasHover) pv2.meshes[0].material.map = pv2.texFront;
-      if (pv2.texHover) pv2.texHover.dispose();
-      pv2.texFront = tex[0]; pv2.texHover = tex[2] || null;
+      if (!this.alive) { [tex[0], tex[1], tex[2] && tex[2].tex].forEach(x => x && x.dispose()); return; }
+      const k = pv2.band ? pv2.band.k : 0;
+      pv2.setBand(tex[2] || null); if (pv2.band && k) { pv2.band.k = k; pv2.hover(hovered === pv2); }
       new Set([swap(pv2.meshes[0], tex[0]), swap(pv2.meshes[1], tex[1])]).forEach(x => x && x.dispose());
-      if (wasHover) pv2.hover(true);
       const inf = this.infos[i];
       if (inf) { const it = await infoTexture(this.posts[i], 'place'); if (!this.alive) { it.dispose(); return; } const o = swap(inf.mesh, it); if (o) o.dispose(); }
     }
