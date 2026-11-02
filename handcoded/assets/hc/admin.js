@@ -306,20 +306,23 @@ function buildModel(text, m) {   // mêmes règles que le site public
     o.material = Array.isArray(o.material) ? o.material.map(conv) : conv(o.material);
   });
   if (!meshes) throw new Error('aucune forme 3D dans ce fichier');
+  const k = modelK(m);   // Taille (%) : s'applique en plus, quel que soit le mode
   if (m.scaleMode === 'fit') {
     holder.updateMatrixWorld(true);
     const box = new THREE.Box3().setFromObject(holder), size = box.getSize(new THREE.Vector3());
-    holder.scale.setScalar((m.height || 420) / Math.max(size.y, 1e-6)); holder.updateMatrixWorld(true);
+    holder.scale.setScalar((m.height || 420) / Math.max(size.y, 1e-6) * k); holder.updateMatrixWorld(true);
     const b2 = new THREE.Box3().setFromObject(holder), c = b2.getCenter(new THREE.Vector3());
     holder.position.set(-c.x, -b2.min.y, -c.z);
   } else {
     shape.scale.setScalar(100); holder.updateMatrixWorld(true);
     const box = new THREE.Box3().setFromObject(holder);
     if (box.max.y - box.min.y > 800) holder.scale.setScalar(800 / (box.max.y - box.min.y));
+    holder.scale.multiplyScalar(k);
   }
   const turn = new THREE.Group(); turn.rotation.y = (m.rotationY || 0) * Math.PI / 180; turn.add(holder);
   return turn;
 }
+const modelK = m => Math.max(0.05, Math.min(5, (+m.scale || 100) / 100));
 const viewer = (() => {
   let renderer = null;
   const scene = new THREE.Scene();
@@ -327,6 +330,13 @@ const viewer = (() => {
   const sun = new THREE.DirectionalLight(0xffffff, 1.2); sun.position.set(300, 800, 500); scene.add(sun);
   const camera = new THREE.PerspectiveCamera(30, 4 / 3, 1, 20000);
   const spin = new THREE.Group(); scene.add(spin);
+  /* repère d'échelle : huit cartes image (256 × 169) posées comme dans le carrousel, à 500 du centre */
+  const ref = new THREE.Group(); ref.visible = false; spin.add(ref);
+  { const geo = new THREE.PlaneGeometry(256, 169), mat = new THREE.MeshBasicMaterial({ color: 0x1a1a1a, transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false });
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, c = new THREE.Mesh(geo, mat); c.position.set(500 * Math.sin(a), 500 + (i % 2 ? 60 : -60), 500 * Math.cos(a)); c.rotation.y = a; ref.add(c); }
+    const pts = []; for (let i = 0; i <= 64; i++) { const a = i / 64 * Math.PI * 2; pts.push(new THREE.Vector3(500 * Math.sin(a), 0, 500 * Math.cos(a))); }
+    ref.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xcccccc }))); }
+  let toScale = false;
   let current = null, host = null, dragging = false, lastX = 0, vel = 0.004, snapCache = new Map(), queue = Promise.resolve();
   function ensure() {
     if (renderer) return renderer;
@@ -345,7 +355,14 @@ const viewer = (() => {
     const d = r / Math.tan(15 * Math.PI / 180);
     camera.position.set(0, c.y + r * 0.55, d); camera.near = d / 50; camera.far = d * 10; camera.lookAt(0, c.y, 0); camera.updateProjectionMatrix();
   }
-  function setObject(obj) { spin.clear(); spin.rotation.y = 0.6; if (obj) { spin.add(obj); frameObject(spin); } current = obj; }
+  function frameScene() {   // à l'échelle du site : le cadre ne bouge pas, l'objet grandit ou rapetisse entre les cartes
+    const d = 1900; camera.position.set(0, 300 + d * 0.28, d); camera.near = 10; camera.far = 20000; camera.lookAt(0, 330, 0); camera.updateProjectionMatrix();
+  }
+  function setObject(obj) {
+    [...spin.children].forEach(o => { if (o !== ref) spin.remove(o); }); spin.rotation.y = 0.6; ref.visible = !!(obj && toScale);
+    if (obj) { spin.add(obj); if (toScale) frameScene(); else { ref.visible = false; frameObject(obj); } }
+    current = obj;
+  }
   function loop() {
     requestAnimationFrame(loop);
     if (!host || !host.isConnected || !current) return;
@@ -357,25 +374,29 @@ const viewer = (() => {
     renderer.render(scene, camera);
   }
   return {
-    async show(el, m, msgEl) {
-      ensure(); host = el; setObject(null);
+    async show(el, m, msgEl, scaled = false) {
+      ensure(); host = el; toScale = scaled; setObject(null);
       if (msgEl) msgEl.textContent = 'Chargement du modèle…';
-      try { const obj = buildModel(await daeText(m.file), m); if (host !== el) return; setObject(obj); if (msgEl) msgEl.textContent = 'Glisse pour tourner autour.'; }
+      try {
+        const obj = buildModel(await daeText(m.file), m); if (host !== el) return; setObject(obj);
+        const sz = new THREE.Box3().setFromObject(obj).getSize(new THREE.Vector3());
+        if (msgEl) msgEl.textContent = (scaled ? `Dans la scène : ${Math.round(sz.x)} × ${Math.round(sz.y)} × ${Math.round(sz.z)} (les cartes grises sont celles du carrousel). ` : '') + 'Glisse pour tourner autour.';
+      }
       catch (e) { if (msgEl) msgEl.textContent = 'Impossible d’afficher ce modèle : ' + e.message; }
     },
     async snapshot(m) {   // vignette fixe pour les listes
-      const key = m.file + JSON.stringify([m.scaleMode, m.height, m.rotationY, m.untextured]) + (S.staged.has(m.file) ? 's' : '');
+      const key = m.file + JSON.stringify([m.scaleMode, m.height, m.rotationY, m.untextured, m.scale]) + (S.staged.has(m.file) ? 's' : '');
       if (snapCache.has(key)) return snapCache.get(key);
       const p = queue.then(async () => {   // une vignette à la fois : elles partagent le même rendu
         ensure();
         const obj = buildModel(await daeText(m.file), m);
-        const keep = current, keepRot = spin.rotation.y;
-        setObject(obj); spin.rotation.y = 0.6;
+        const keep = current, keepRot = spin.rotation.y, keepScale = toScale;
+        toScale = false; setObject(obj); spin.rotation.y = 0.6;
         renderer.setSize(320, 200, false); camera.aspect = 1.6; camera.updateProjectionMatrix();
         await new Promise(r => setTimeout(r, 400));   // les textures arrivent un peu après
         renderer.render(scene, camera);
         const url = renderer.domElement.toDataURL('image/png');
-        setObject(keep); spin.rotation.y = keepRot; renderer.setSize(1, 1, false);
+        toScale = keepScale; setObject(keep); spin.rotation.y = keepRot; renderer.setSize(1, 1, false);
         return url;
       });
       queue = p.catch(() => {});
@@ -984,7 +1005,7 @@ function viewModels() {
     if (!m) { fill(edBox, h('div', { class: 'card' }, h('div', { class: 'empty' }, 'Aucun modèle.'))); return; }
     const view = h('div', { class: 'model-view' }), msg = h('p', { class: 'msg' });
     view.appendChild(msg);
-    const refresh = () => { viewer.show(view, m, msg); };
+    const refresh = () => { viewer.show(view, m, msg, true); };
     const uses = c.sections.filter(s => s.model === m.id);
     const remove = async () => {
       if (uses.length) { toast(`Ce modèle sert à ${uses.map(s => fr(s.name)).join(', ')}. Choisis un autre objet pour ces sections d’abord.`, 'bad', 7000); return; }
@@ -998,6 +1019,11 @@ function viewModels() {
     rot.addEventListener('change', refresh);
     const height = textInput(() => m.height || 420, v => { m.height = Math.max(50, Math.min(1200, v || 420)); }, { type: 'number', min: 50, max: 1200, step: 10 });
     height.addEventListener('change', refresh);
+    const sc = h('input', { type: 'range', min: 10, max: 400, step: 5, value: m.scale || 100 });
+    const scVal = h('b', null, (m.scale || 100) + ' %');
+    let scTimer = 0;
+    sc.addEventListener('input', () => { const v = +sc.value; if (v === 100) delete m.scale; else m.scale = v; scVal.textContent = v + ' %'; change(); clearTimeout(scTimer); scTimer = setTimeout(refresh, 120); });
+    const scReset = btn('100 %', () => { delete m.scale; sc.value = 100; scVal.textContent = '100 %'; change(); refresh(); }, 'sm ghost');
     const heightField = field('Hauteur dans la scène', height, 'En unités de la scène : les cartes sont posées à environ 500 du centre. 420 donne la taille des objets d’origine.');
     heightField.hidden = m.scaleMode !== 'fit';
     fill(edBox, h('div', { class: 'card' },
@@ -1008,6 +1034,8 @@ function viewModels() {
         h('div', { class: 'grid2' },
           field('Taille', selectInput([{ value: 'pv', label: 'Comme le fichier (×100, règle de 2008)' }, { value: 'fit', label: 'Ajuster à une hauteur' }], () => m.scaleMode, v => { m.scaleMode = v; heightField.hidden = v !== 'fit'; if (v === 'fit' && !m.height) m.height = 420; refresh(); })),
           heightField),
+        h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Taille de l’objet ', scVal), h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center' } }, sc, scReset),
+          h('p', { class: 'hint', style: { margin: '4px 0 0' } }, 'Agrandit ou réduit l’objet dans toutes les sections qui l’utilisent, sans toucher au fichier.')),
         h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Rotation ', rotVal), rot),
         field('Faces sans texture', selectInput([{ value: 'wire', label: 'Fil de fer jaune (comme 2008)' }, { value: 'white', label: 'Blanc mat' }, { value: 'black', label: 'Noir mat' }], () => m.untextured, v => { m.untextured = v; refresh(); })),
         h('p', { class: 'hint' }, 'Fichier : ', h('code', null, m.file), (m.textures || []).length ? ` · ${m.textures.length} texture${m.textures.length > 1 ? 's' : ''}` : '', uses.length ? ' · utilisé par ' + uses.map(s => fr(s.name)).join(', ') : ''))));

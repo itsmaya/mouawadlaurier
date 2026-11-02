@@ -433,10 +433,11 @@ class SectionObject3D {
       o.material = Array.isArray(o.material) ? o.material.map(conv) : conv(o.material);
       this.blockers.push(o);
     });
+    const k = Math.max(0.05, Math.min(5, (+m.scale || 100) / 100));   // Taille (%) réglée dans Modèles 3D
     if (m.scaleMode === 'fit') {   // modèle d'une autre source : mis à la hauteur voulue et posé au sol
       holder.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(holder), size = box.getSize(new THREE.Vector3());
-      const s = (m.height || 420) / Math.max(size.y, 1e-6);
+      const s = (m.height || 420) / Math.max(size.y, 1e-6) * k;
       holder.scale.setScalar(s); holder.updateMatrixWorld(true);
       const b2 = new THREE.Box3().setFromObject(holder), c = b2.getCenter(new THREE.Vector3());
       holder.position.set(-c.x, -b2.min.y, -c.z);
@@ -445,6 +446,7 @@ class SectionObject3D {
       holder.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(holder);
       if (box.max.y - box.min.y > STYLE.object3DMaxHeight) holder.scale.setScalar(STYLE.object3DMaxHeight / (box.max.y - box.min.y));
+      holder.scale.multiplyScalar(k);
     }
     const turn = new THREE.Group(); turn.rotation.y = (m.rotationY || 0) * D2R; turn.add(holder);
     this.container.add(turn);
@@ -1065,8 +1067,20 @@ function initCategorieData() {
   checkAccess(); closeCategory();
 }
 function checkAccess() { const d = P.data; pgPrev.disabled = !d.hasNewer(); pgNext.disabled = !d.hasOlder(); pgPrev.hidden = pgNext.hidden = !d.hasNewer() && !d.hasOlder(); }
-function closeCategory() { catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }
-catOpen.addEventListener('click', () => { const o = catBox.classList.toggle('open'); catOpen.setAttribute('aria-expanded', String(o)); });
+function closeCategory() { clearTimeout(catPeekTimer); catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }
+/* Arrivée sur une section : le menu des catégories s'ouvre puis se referme tout seul, comme le clavier à la première touche */
+let catPeekTimer = 0, enteredAt = -1e9;
+function peekCategories(delay = 0.7) {
+  clearTimeout(catPeekTimer);
+  if (catBox.hidden || !P.data || P.data.categoryList.length <= 1) return;
+  catPeekTimer = setTimeout(() => {
+    if (!homeGone || P.postOpen || cats.classList.contains('hidden')) return;
+    catBox.classList.add('open'); catOpen.setAttribute('aria-expanded', 'true');
+    catPeekTimer = setTimeout(() => { catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }, 2600);
+  }, delay * 1000);
+}
+catBox.addEventListener('pointerenter', () => clearTimeout(catPeekTimer));   // la souris dessus : il reste ouvert
+catOpen.addEventListener('click', () => { clearTimeout(catPeekTimer); const o = catBox.classList.toggle('open'); catOpen.setAttribute('aria-expanded', String(o)); });
 pgPrev.addEventListener('click', () => { if (inputEnabled) entries('newer'); });
 pgNext.addEventListener('click', () => { if (inputEnabled) entries('older'); });
 
@@ -1332,7 +1346,7 @@ function getToSectionView(index = -1, indexPost = 0) {
   checkPostOpenAndClose();
   if (index !== P.currentSection) resetZoom();
   P.currentSection = index; P.resetData(); P.selected = indexPost;
-  changeSection3D(); changeActiveButton(); initCategorieData();
+  changeSection3D(); changeActiveButton(); initCategorieData(); peekCategories(performance.now() - enteredAt < 1500 ? 2.2 : 0.7);   // à l'entrée, après le zoom d'arrivée
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
 }
 function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(); checkAccess(); }
@@ -1355,7 +1369,7 @@ function goToPost(id) {
   if (pageMoved) { const per = d.section.perPage; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
   const sel = d.posts.indexOf(post);
   if (!moved && !catMoved && !pageMoved && postsView) { openThatPost(sel); return; }
-  P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData();
+  P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData(); if (moved) peekCategories();
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
   const token = ++goToken;
   delayedCall(0.5, () => { if (token === goToken && P.data === d && d.posts[sel] === post) openThatPost(sel); });
@@ -1873,7 +1887,7 @@ const isHomeHash = () => /^(#(accueil|home|inici|inicio)?)?$/i.test(location.has
 let homeTimer = 0, behindUntil = 0;   // la 3D derrière l'accueil ne se dessine que pendant les glissements
 function enterToTheWeb() {
   if (homeGone) return;
-  homeGone = true; clearTimeout(homeTimer);
+  homeGone = true; clearTimeout(homeTimer); enteredAt = performance.now();
   if (!PREVIEW && isHomeHash()) try { history.pushState(null, '', location.pathname + location.search + '#' + ((CONTENT.sections.find(x => x.id === CONTENT.settings.startSection && x.visible) || SECTIONS[0].def).id)); } catch (e) {}   // le bouton Retour du navigateur ramène à l'accueil
   home.classList.add('out'); homeTimer = setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1100);
   startRender(); mainEntrance();
