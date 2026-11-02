@@ -66,6 +66,7 @@ function setAnimationMode(value) {
 class Provider {
   constructor(section) {
     this.section = section;
+    this.per = section.skills ? Math.max(section.perPage, 200) : section.perPage;   // les savoir-faire : tous d'un coup d'œil, sans pages
     this.all = postsOf(CONTENT, section.id);
     this.selected = 0;
     this.defaultCategory = section.defaultTag || '';
@@ -79,14 +80,14 @@ class Provider {
     if (id && !this.categoryList.some(c => c.id === id)) id = '';
     this.category = id;
     this.list = id ? this.all.filter(p => p.tags.includes(id)) : this.all;
-    this.first = 0; this.posts = this.list.slice(0, this.section.perPage); this.last = this.posts.length;
+    this.first = 0; this.posts = this.list.slice(0, this.per); this.last = this.posts.length;
   }
   get currentCatName() { const c = this.categoryList.find(c => c.id === this.category); return c ? tr(c.label) : ''; }
   get currentPost() { return this.posts[this.selected]; }
   hasNewer() { return this.first > 0; }
   hasOlder() { return this.last < this.list.length; }
-  newer() { if (!this.hasNewer()) return false; this.last = this.first; this.first = Math.max(0, this.last - this.section.perPage); this.posts = this.list.slice(this.first, this.last); return true; }
-  older() { if (!this.hasOlder()) return false; this.first = this.last; this.last = Math.min(this.list.length, this.first + this.section.perPage); this.posts = this.list.slice(this.first, this.last); return true; }
+  newer() { if (!this.hasNewer()) return false; this.last = this.first; this.first = Math.max(0, this.last - this.per); this.posts = this.list.slice(this.first, this.last); return true; }
+  older() { if (!this.hasOlder()) return false; this.first = this.last; this.last = Math.min(this.list.length, this.first + this.per); this.posts = this.list.slice(this.first, this.last); return true; }
 }
 const P = {
   currentSection: 0, degreeCamera: Math.PI, actualDeg: Math.PI, cameraY: STYLE.cameraHeight, postOpen: false, datas: [],
@@ -360,6 +361,34 @@ async function placeCard(post, w, h) {
   return [tx, tx];
 }
 const CARD_TEX = { image: imageCard, portrait: portraitCard, text: textCard, place: placeCard };
+/* Carte savoir-faire : le nom et une phrase, lisibles d'un coup d'œil ; l'image (la sienne, sinon la photo d'un projet relié) à droite pour illustrer.
+   Au dos, vue de derrière : l'image domine, le texte passe en transparence. */
+async function skillCard(post, w, h) {
+  const own = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
+  const bd = own ? { im: own } : await skillBackdrop(post);
+  await fontsReady();
+  const title = tr(post.title).trim();
+  const sum = (tr(post.subtitle).trim() || htmlToText(tr(post.body)).join(' ')).replace(/\s+/g, ' ').trim();
+  const flat = h < 110, iw = bd ? Math.round(flat ? h * 1.15 : Math.min(w * 0.36, h * 0.8)) : 0;
+  const x0 = 14, tw = w - iw - x0 - 12;
+  const ts = flat ? 15 : 17, tl = flat ? 18 : 20, ss = flat ? 9.5 : 10.5, sl = flat ? 12 : 13.5;
+  const draw = faint => ctx => {
+    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+    if (bd) drawCover(ctx, bd.im, w - iw, 0, iw, h);
+    if (faint) { if (bd) { ctx.globalAlpha = 0.55; drawCover(ctx, bd.im, 0, 0, w, h); } ctx.globalAlpha = 0.3; }
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
+    ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`;
+    const tls = wrapLines(ctx, title, tw).slice(0, 2); let y = flat ? 16 : 22;
+    tls.forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
+    y += flat ? 2 : 5; ctx.fillStyle = '#bdbdbd'; ctx.font = `${fz(ss)}px ${SERIF}`;
+    const room = Math.max(0, Math.floor((h - y - 8) / fz(sl)));
+    let sls = wrapLines(ctx, sum, tw); if (sls.length > room) { sls = sls.slice(0, room); if (room) { let last = sls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); sls[room - 1] = last + '…'; } }
+    sls.forEach(l => { ctx.fillText(l, x0, y); y += fz(sl); });
+    ctx.globalAlpha = 1;
+  };
+  return [canvasTex(w, h, draw(false), 2), canvasTex(w, h, mirrored(w, draw(true)), 2), null];
+}
 function infoTexture(post, kind) {
   return fontsReady().then(() => {
     if (kind === 'place') return canvasTex(380, 300, ctx => {   // MovieClip "contact"
@@ -617,7 +646,8 @@ class PostsView3D {
     this.L = LAYOUT[this.def.layout] || LAYOUT.carousel;
     this.card = this.def.card;
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
-    [this.w, this.h] = CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
+    this.tex = this.def.skills ? skillCard : CARD_TEX[this.card];   // savoir-faire : le texte d'abord, l'image l'illustre
+    [this.w, this.h] = this.def.skills ? (this.card === 'text' ? CARDS.text.size : CARDS.image.size) : CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
@@ -675,7 +705,7 @@ class PostsView3D {
   async openPosts() {
     this.loading = true;
     for (let i = 0; i < this.n; i++) {
-      let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
+      let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) return;
       this.postViews[i].build(tex[0], tex[1], tex[2]);
       this.animeOpenPost(this.postViews[i], i);
@@ -782,7 +812,7 @@ class PostsView3D {
     const swap = (mesh, tex) => { const old = mesh.material.map; mesh.material.map = tex; mesh.material.needsUpdate = true; return old; };
     for (let i = 0; i < this.n; i++) {
       const pv2 = this.postViews[i]; if (!pv2.ready) continue;
-      let tex; try { tex = await CARD_TEX[this.card](this.posts[i], this.w, this.h); } catch (e) { continue; }
+      let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) { [tex[0], tex[1], tex[2] && tex[2].tex].forEach(x => x && x.dispose()); return; }
       const k = pv2.band ? pv2.band.k : 0;
       pv2.setBand(tex[2] || null); if (pv2.band && k) { pv2.band.k = k; pv2.hover(hovered === pv2); }
@@ -1373,7 +1403,7 @@ function goToPost(id) {
   const catMoved = !d.list.includes(post); if (catMoved) d.changeCategory('');
   const idx = d.list.indexOf(post); if (idx < 0) return;
   const pageMoved = idx < d.first || idx >= d.last;
-  if (pageMoved) { const per = d.section.perPage; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
+  if (pageMoved) { const per = d.per; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
   const sel = d.posts.indexOf(post);
   if (!moved && !catMoved && !pageMoved && postsView) { openThatPost(sel); return; }
   P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData(); if (moved) peekCategories();

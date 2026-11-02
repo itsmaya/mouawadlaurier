@@ -216,6 +216,7 @@ async function publish() {
   if (!go) return;
   S.busy = true; updateStatus('Publication en cours…');
   try {
+    if (S.backend.kind === 'folder' && !(await S.backend.permission(true))) throw Object.assign(new Error('accès au dossier refusé'), { name: 'NotAllowedError' });
     if (S.backend.kind === 'github') {
       const head = await headSha();
       if (S.head && head !== S.head) {
@@ -267,6 +268,12 @@ async function revertAll() {
   await kvDel(S.draftKey); render(); toast('Retour à la version publiée. Une copie du brouillon reste dans Historique › Sauvegardes.');
 }
 function humanError(err) {
+  const where = err && err.file ? ` (fichier ${err.file})` : '';
+  if (err && err.name === 'AbortError') return (S.backend && S.backend.kind === 'folder'
+    ? 'le navigateur a interrompu l’écriture dans le dossier' + where + '. Ferme les autres onglets du back-office ou du site ouverts sur ce dossier, et si le dossier est synchronisé (iCloud, Dropbox, Drive), attends la fin de la synchronisation, puis republie : rien n’est perdu.'
+    : 'l’envoi a été interrompu' + where + ' (connexion coupée, ou ordinateur en veille). Republie : rien n’est perdu.');
+  if (err && err.name === 'NotAllowedError') return 'le navigateur n’a plus le droit d’écrire dans le dossier' + where + '. Republie et accepte la demande d’accès.';
+  if (err && err.status === 413) return err.file + ' : ' + err.message;
   const s = err && err.status;
   if (s === 401) return 'jeton refusé (expiré, révoqué ou mal copié).';
   if (s === 403) return err.message.includes('écrire') ? err.message : 'accès refusé. Vérifie que le jeton a « Contents : Read and write » sur ce dépôt.';
@@ -274,7 +281,7 @@ function humanError(err) {
   if (s === 409) return 'conflit sur la branche, recharge la page et réessaie.';
   if (s === 422) return 'GitHub a refusé un fichier (trop lourd ?). ' + (err.message || '');
   if (err instanceof TypeError) return 'pas de connexion à GitHub (réseau ?).';
-  return err && err.message ? err.message : String(err);
+  return (err && err.message ? err.message : String(err)) + where;
 }
 
 /* ================================================================ Modèles 3D : chargement et vignettes */
@@ -727,7 +734,8 @@ function missing(p) {
   if (langs.some(l => !p.title[l])) out.push('titre à traduire');
   if (!langs.some(hasBody)) out.push('pas de texte');
   else if (!langs.every(hasBody)) out.push('texte à traduire (' + langs.filter(l => !hasBody(l)).map(l => l.toUpperCase()).join(', ') + ')');
-  if (sec && ['image', 'portrait'].includes(sec.card) && !p.thumb) out.push('pas d’image');
+  if (sec && ['image', 'portrait'].includes(sec.card) && !p.thumb && !sec.skills) out.push('pas d’image');   // un savoir-faire prend la photo d'un de ses projets
+  if (sec && sec.skills && !S.content.posts.some(x => (x.skills || []).includes(p.id))) out.push('aucun projet relié');
   if (sec && sec.layout === 'map' && !p.location) out.push('pas de position');
   return out;
 }
@@ -786,11 +794,15 @@ function viewPosts() {
 function blankPost(sec) {
   const c = S.content;
   return { id: uniqueId('nouveau-contenu', c.posts.map(p => p.id)), section: sec.id, order: Math.max(-1, ...postsOf(c, sec.id, { all: true }).map(p => p.order ?? 0)) + 1, published: false,
-    title: emptyField(), subtitle: emptyField(), place: emptyField(), date: '', tags: S.filter.tag ? [S.filter.tag] : [], thumb: '', thumbBack: '', body: emptyField(), media: [], link: '', team: [], credits: '', location: null };
+    title: emptyField(), subtitle: emptyField(), place: emptyField(), date: '', tags: S.filter.tag ? [S.filter.tag] : [], thumb: '', thumbBack: '', body: emptyField(), media: [], link: '', team: [], credits: '', location: null, spots: [], skills: [], author: '' };
 }
 function addPost(sec) { const p = blankPost(sec); S.content.posts.push(p); S.sel.post = p.id; S.filter.q = ''; S.filter.status = ''; change({ nav: true }); renderMain(); setTimeout(() => { const i = mainEl.querySelector('.card .lang input'); if (i) i.focus(); }, 30); }
 function postEditor(p, redrawList, redraw) {
-  const c = S.content, sec = c.sections.find(s => s.id === p.section), L = LABELS[sec.card];
+  ['tags', 'media', 'team', 'spots', 'skills'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });   // un contenu incomplet ne bloque jamais l'éditeur
+  if (typeof p.author !== 'string') p.author = '';
+  const c = S.content, sec = c.sections.find(s => s.id === p.section), isSkill = !!sec.skills;
+  /* un savoir-faire : un nom, une phrase courte (le texte de la carte), un texte, des projets. Pas de lieu, de date ni d'auteur. */
+  const L = isSkill ? { title: 'Nom du savoir-faire', subtitle: 'Phrase courte, écrite sur la carte', place: '', body: 'Texte de la fiche', thumb: 'Image d’illustration (facultative)' } : LABELS[sec.card];
   const title = h('h2', null, fr(p.title) || 'Sans titre');
   const afterTitle = () => { title.textContent = fr(p.title) || 'Sans titre'; };
   const opts = { list: true };
@@ -890,7 +902,7 @@ function postEditor(p, redrawList, redraw) {
     if (sec.skills) {
       const n = projectPosts.filter(x => x.skills.includes(p.id)).length;
       fill(skillBox, projectPosts.length ? chipGroups(projectPosts, x => x.skills.includes(p.id), x => { x.skills = x.skills.includes(p.id) ? x.skills.filter(id => id !== p.id) : [...x.skills, p.id]; }) : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucun projet pour l’instant.'),
-        h('p', { class: 'hint' }, n ? `${n} projet${n > 1 ? 's' : ''} relié${n > 1 ? 's' : ''}. Sur le site, la fiche les fait défiler avec leur vignette, et la carte 3D prend la photo de l’un d’eux en fond${p.thumb ? ' (ici ta propre image de carte passe devant : retire-la pour voir la photo d’un projet)' : ''}.` : 'Clique les projets qui ont eu recours à ce savoir-faire.'));
+        h('p', { class: 'hint' }, n ? `${n} projet${n > 1 ? 's' : ''} relié${n > 1 ? 's' : ''}. Sur le site, la fiche les fait défiler avec leur vignette, et la carte 3D illustre son texte avec la photo de l’un d’eux${p.thumb ? ' (ici ton image d’illustration passe devant)' : ''}.` : 'Clique les projets qui ont eu recours à ce savoir-faire.'));
     } else {
       fill(skillBox, skillPosts.length ? chipGroups(skillPosts, x => p.skills.includes(x.id), x => { p.skills = p.skills.includes(x.id) ? p.skills.filter(id => id !== x.id) : [...p.skills, x.id]; })
         : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucune section de savoir-faire : coche « Ses contenus sont des savoir-faire » dans les réglages d’une section.'),
@@ -916,7 +928,7 @@ function postEditor(p, redrawList, redraw) {
     });
     fill(spotBox,
       h('div', { class: 'chips' }, p.spots.length ? p.spots.map((l, i) => h('span', { class: 'chip on' }, l.city || `${l.lat}, ${l.lon}`,
-        h('button', { type: 'button', class: 'x', 'aria-label': 'Retirer ' + (l.city || 'ce lieu'), onclick: () => { p.spots.splice(i, 1); change(); drawSpots(); } }, '×'))) : h('span', { class: 'hint', style: { margin: 0 } }, 'Aucun lieu pour ce contenu.')),
+        h('button', { type: 'button', class: 'x', 'aria-label': 'Retirer ' + (l.city || 'ce lieu'), onclick: () => { p.spots.splice(i, 1); change(); drawSpots(); } }, '×'))) : h('span', { class: 'hint', style: { margin: 0 } }, 'Aucune ville pour l’instant.')),
       sugg.length ? h('p', { class: 'hint' }, 'Repéré dans le champ « Lieu » :', sugg.map(cn => h('button', { type: 'button', class: 'chip sugg', onclick: () => addCity(cn) }, '+ ' + cn))) : null,
       h('div', { style: { marginTop: '10px', maxWidth: '320px' } }, sel));
   };
@@ -957,25 +969,27 @@ function postEditor(p, redrawList, redraw) {
     h('div', { class: 'block' }, h('h3', null, 'Textes de la carte'),
       pairInput(L.title, p, 'title', { list: true, after: afterTitle }),
       pairInput(L.subtitle, p, 'subtitle', opts),
-      pairInput(L.place, p, 'place', { ...opts, after: () => drawSpots() }),
-      h('div', { class: 'grid2' },
+      isSkill ? h('p', { class: 'hint', style: { marginTop: '4px' } }, 'Sur le site, la carte montre le nom et cette phrase, avec une image à côté : la tienne, sinon la photo d’un projet relié. Sans phrase, le début du texte.') : null,
+      isSkill ? null : pairInput(L.place, p, 'place', { ...opts, after: () => drawSpots() }),
+      isSkill ? null : h('div', { class: 'grid2' },
         field('Auteur de l’œuvre', textInput(() => p.author || '', v => { p.author = v; }, { placeholder: 'Ex. Romain Tardy' }), `Signé sur la vignette 3D : « ${fr(p.title) || 'Titre'} · ${p.author || S.content.settings.name} ». Vide : signé ${S.content.settings.name}.`),
         h('div'),
         field('Date', textInput(() => p.date, v => { p.date = v; }, { ...opts, placeholder: '2019, ou 2017 – 2019' })),
         field('Lien', textInput(() => p.link, v => { p.link = v.trim(); }, { type: 'url', placeholder: 'https://…' }), sec.card === 'place' ? 'Affiché sur la fiche du lieu.' : 'Affiché sous la fiche : « Voir le site ».'))),
+    isSkill ? h('div', { class: 'block' }, h('h3', null, 'Projets', h('small', null, 'ceux qui ont eu recours à ce savoir-faire')), skillBox) : null,
     h('div', { class: 'block' }, h('h3', null, L.body), richText(p.body, 'Écris ici. Les paragraphes se répartissent tout seuls sur les panneaux du site.')),
     h('div', { class: 'block' }, h('h3', null, 'Images'),
-      imageSlot('thumb', L.thumb, sec.card === 'image' ? 'Format paysage. Sans image, la carte affiche le titre sur fond noir.' : sec.card === 'portrait' ? 'Carré, cadré sur le visage. Sans image : les initiales.' : 'Facultatif.'),
-      ['image', 'portrait'].includes(sec.card) ? h('details', null, h('summary', { class: 'lbl', style: { cursor: 'pointer', margin: '6px 0 10px' } }, 'Dos de la carte (facultatif)'),
+      imageSlot('thumb', L.thumb, isSkill ? 'Une image qui fait comprendre le savoir-faire d’un coup d’œil. Sans image : la photo d’un projet relié, tirée au hasard.' : sec.card === 'image' ? 'Format paysage. Sans image, la carte affiche le titre sur fond noir.' : sec.card === 'portrait' ? 'Carré, cadré sur le visage. Sans image : les initiales.' : 'Facultatif.'),
+      ['image', 'portrait'].includes(sec.card) && !isSkill ? h('details', null, h('summary', { class: 'lbl', style: { cursor: 'pointer', margin: '6px 0 10px' } }, 'Dos de la carte (facultatif)'),
         imageSlot('thumbBack', 'Image au dos', 'Vue quand la carte est de dos. Par défaut : la vignette, pâlie.')) : null,
       sec.open === 'strip' ? h('div', { class: 'f', style: { marginTop: '6px' } }, h('span', { class: 'lbl' }, 'Images et vidéos de la fiche'), mediaBox,
         h('p', { class: 'hint' }, 'La première s’affiche avant le texte, les autres après. Vidéos MP4 ou WebM, idéalement moins de 20 Mo.')) : null),
     h('div', { class: 'block' }, h('h3', null, 'Tags'), tagBox),
-    linkable ? h('div', { class: 'block' }, sec.skills ? h('h3', null, 'Projets', h('small', null, 'ceux qui ont eu recours à ce savoir-faire')) : h('h3', null, 'Savoir-faire', h('small', null, 'ceux utilisés sur ce projet')), skillBox) : null,
-    ['image', 'text'].includes(sec.card) ? h('div', { class: 'block' }, h('h3', null, 'Qui a travaillé dessus ?', h('small', null, 'les portraits s’affichent sur la fiche')), teamBox,
+    linkable && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Savoir-faire', h('small', null, 'coche ceux utilisés sur ce projet, comme des tags')), skillBox) : null,
+    ['image', 'text'].includes(sec.card) && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Qui a travaillé dessus ?', h('small', null, 'les portraits s’affichent sur la fiche')), teamBox,
       h('div', { style: { marginTop: '12px' } }, field('Autres crédits', textInput(() => p.credits, v => { p.credits = v; }, { placeholder: 'Ex. Tigre Lab, Studio X' })))) : null,
-    sec.layout !== 'map' ? h('div', { class: 'block' }, h('h3', null, 'Lieux d’intervention', h('small', null, netSec ? `les points du réseau sur la carte de « ${fr(netSec.name)} »` : 'pour le réseau d’une section en style « Carte »')), spotBox) : null,
-    h('details', { class: 'block', open: sec.layout === 'map' }, h('summary', { class: 'lbl', style: { cursor: 'pointer', margin: 0 } }, 'Position sur la carte du monde', sec.layout === 'map' ? '' : ' (pour le style « Carte »)'), h('div', { style: { marginTop: '12px' } }, locBox)),
+    sec.layout !== 'map' && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Villes', h('small', null, netSec ? `toutes les villes du projet, autant que tu veux : les points du réseau sur la carte de « ${fr(netSec.name)} »` : 'toutes les villes du projet, autant que tu veux')), spotBox) : null,
+    sec.layout === 'map' ? h('div', { class: 'block' }, h('h3', null, 'Position sur la carte du monde'), locBox) : null,   // seulement pour les lieux de la carte (bureaux, contact)
     h('details', { class: 'block' }, h('summary', { class: 'lbl', style: { cursor: 'pointer', margin: 0 } }, 'Avancé'),
       h('div', { class: 'grid2', style: { marginTop: '12px' } }, field('Identifiant', idInput, 'Sert aux liens « équipe » et au dossier des images.'), field('Dossier des fichiers', h('input', { type: 'text', value: folder + '/', disabled: true })))));
 }
