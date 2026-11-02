@@ -93,6 +93,7 @@ function usedPaths(c = S.content) {
   c.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && set.add(x)); p.media.forEach(m => m && m.src && set.add(m.src)); });
   c.models.forEach(m => { if (m.file) { set.add(m.file); (m.textures || []).forEach(tx => set.add(m.file.replace(/[^/]+$/, '') + tx)); } });
   if (c.settings.logo) set.add(c.settings.logo);
+  if (c.settings.homeVideo && c.settings.homeVideo.src) set.add(c.settings.homeVideo.src);
   return new Set([...set].filter(p => !/^(https?:|data:|blob:)/.test(p)));
 }
 const IMG_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg' };
@@ -1089,6 +1090,30 @@ function viewMedia() {
   return page('Médias', 'Tous les fichiers du dossier media/ et des modèles 3D. Les fichiers qui ne servent plus peuvent être supprimés pour garder le dépôt léger.', [], remoteBlock(), box);
 }
 
+/* ================================================================ Vidéo de l'accueil (Réglages › Accueil) */
+function homeVideoFields(s) {
+  s.homeVideo = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true }, s.homeVideo || {});
+  const hvs = s.homeVideo;
+  const name = h('span', { class: 'hint', style: { margin: 0 } });
+  const drawName = () => { name.textContent = hvs.src ? hvs.src.split('/').pop() : 'Aucune : les photos des projets défilent en travelling lent.'; };
+  const pick = () => filePicker('video/mp4,video/webm,.mp4,.webm', false, async files => {
+    if (!files[0]) return;
+    try { const up = await prepareUpload(files[0], 'media/accueil', 'media'); stageFile(up.path, up.blob); hvs.src = up.path; change(); drawName(); toast('Vidéo ajoutée : elle part sur le site à la prochaine publication.'); }
+    catch (e) { toast(e.message, 'bad', 8000); }
+  });
+  drawName();
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en carrés'),
+    h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, btn(hvs.src ? 'Remplacer la vidéo…' : 'Choisir une vidéo…', pick, 'sm'), hvs.src ? btn('Retirer', () => { hvs.src = ''; change(); drawName(); }, 'sm ghost') : null, name),
+    h('p', { class: 'hint' }, 'MP4 sans son ou avec, en boucle : un extrait de 20 à 30 secondes en 720p suffit (moins de 15 Mo). Elle démarre à un endroit au hasard. Une vidéo YouTube ne marche pas ici : il faut le fichier.'),
+    h('div', { class: 'grid2', style: { marginTop: '10px' } },
+      field('Taille de grille (px)', textInput(() => hvs.cell, v => { hvs.cell = Math.max(6, Math.min(40, +v || 14)); }, { type: 'number', min: 6, max: 40 })),
+      field('Contraste', textInput(() => hvs.contrast, v => { hvs.contrast = Math.max(0.4, Math.min(3, +v || 1)); }, { type: 'number', min: 0.4, max: 3, step: 0.1 })),
+      field('Carré maximal (%)', textInput(() => hvs.size, v => { hvs.size = Math.max(40, Math.min(100, +v || 92)); }, { type: 'number', min: 40, max: 100 })),
+      field('Couleur des carrés', selectInput([{ value: 'white', label: 'Blanc' }, { value: 'grey', label: 'Gris' }, { value: 'accent', label: 'Couleur d’accent' }, { value: 'source', label: 'Couleurs de la vidéo' }], () => hvs.color, v => { hvs.color = v; })),
+      field('Les carrés grossissent', selectInput([{ value: 'light', label: 'à la lumière' }, { value: 'dark', label: 'dans l’ombre' }], () => hvs.mode, v => { hvs.mode = v; }))),
+    h('div', { style: { marginTop: '10px' } }, toggle('Les visiteurs ont un petit clavier pour régler la vidéo, activer le son et leur caméra', () => hvs.controls !== false, v => { hvs.controls = v; })));
+}
+
 /* ================================================================ Typographie (Réglages) */
 function loadTypoFonts(settings) {   // polices Google choisies : chargées aussi dans le back-office pour les aperçus
   const urls = googleFontURLs(settings);
@@ -1257,6 +1282,7 @@ function viewSettings() {
         field('Collecte des slogans', textInput(() => s.sloganInbox, v => { s.sloganInbox = v.trim(); }, { placeholder: 'https://script.google.com/macros/s/…/exec', spell: false }), 'Adresse d’un script Google relié à une feuille de calcul : chaque slogan validé par un visiteur y est enregistré, avec la date, la langue et le tag du lien client. La mise en place prend cinq minutes, voir le fichier tools/slogans-google-sheet.gs. Vide : les slogans restent sur l’écran du visiteur.'),
         inboxBox,
         pairInput('Bouton d’entrée', s.home, 'enter'),
+        homeVideoFields(s),
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
       h('div', { class: 'block' }, h('h3', null, 'Bureaux'), offBox),
       h('div', { class: 'block' }, h('h3', null, 'Réseaux et liens'), socBox)));
@@ -1339,8 +1365,8 @@ function openPreview(start) {
   S.recent.forEach((s, p) => { files[p] = s.url; }); S.staged.forEach((s, p) => { files[p] = s.url; });
   if ((S.backend.kind === 'demo' || S.backend.kind === 'folder') && S.backend.urls) S.backend.urls.forEach((u, p) => { if (!files[p]) files[p] = u; });
   const sections = S.content.sections.filter(s => s.visible);
-  let current = start || (S.view === 'posts' ? S.filter.section : S.view === 'sections' ? S.sel.section : '') || S.content.settings.startSection;
-  if (current && !sections.find(s => s.id === current)) current = sections[0] && sections[0].id;
+  let current = start || (S.view === 'posts' ? S.filter.section : S.view === 'sections' ? S.sel.section : S.view === 'settings' ? '__home' : '') || S.content.settings.startSection;
+  if (current && current !== '__home' && !sections.find(s => s.id === current)) current = sections[0] && sections[0].id;
   const frameWrap = h('div', { class: 'frame' });
   let size = 'desk';
   /* depuis le disque, la page du site ne peut pas lire le brouillon : on le lui envoie par message, images comprises */
@@ -1367,7 +1393,7 @@ function openPreview(start) {
   };
   window.addEventListener('message', onMsg);
   const load = () => {
-    window.__hcPreview = { content: structuredClone(S.content), files, start: current };
+    window.__hcPreview = { content: structuredClone(S.content), files, start: current === '__home' ? '' : current };   // « Accueil » : la page d'entrée, avec le slogan et la vidéo
     ifr = h('iframe', { title: 'Aperçu du site', allow: 'fullscreen' });
     seenVersion = 0; warn.classList.remove('on'); if (!window.HC_SITE_HTML) ifr.addEventListener('load', () => setTimeout(checkVersion, 3000));
     if (window.HC_SITE_HTML) ifr.srcdoc = window.HC_SITE_HTML; else ifr.src = SITE + 'index.html?preview=' + Date.now();
@@ -1378,7 +1404,7 @@ function openPreview(start) {
   const sizes = h('div', { class: 'sizes', role: 'group', 'aria-label': 'Taille d’écran' });
   const drawSizes = () => fill(sizes, ...[['desk', 'Bureau'], ['tab', 'Tablette'], ['mob', 'Mobile']].map(([v, l]) => h('button', { type: 'button', 'aria-pressed': String(size === v), onclick: () => { size = v; drawSizes(); load(); } }, l)));
   drawSizes();
-  const sel = h('select', { 'aria-label': 'Section' }, sections.map(s => h('option', { value: s.id, selected: s.id === current }, fr(s.name))));
+  const sel = h('select', { 'aria-label': 'Section' }, h('option', { value: '__home', selected: current === '__home' }, 'Accueil'), sections.map(s => h('option', { value: s.id, selected: s.id === current }, fr(s.name))));
   sel.addEventListener('change', () => { current = sel.value; load(); });
   const close = () => { wrap.remove(); document.removeEventListener('keydown', onKey); window.removeEventListener('message', onMsg); };
   const onKey = e => { if (e.key === 'Escape' && document.activeElement && !document.activeElement.closest('iframe')) close(); };

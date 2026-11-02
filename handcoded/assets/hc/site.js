@@ -182,13 +182,23 @@ function fontsReady() {
   return Promise.all(loads.map(f => document.fonts.load(f).catch(() => {}))).catch(() => {});
 }
 /* Typographie réglée dans le back-office : feuille de style générée, polices Google si besoin, polices des cartes 3D */
+/* Une police Google arrive après coup : on redessine ce qui est dessiné sur canvas (logo rond, cartes 3D) */
+let typoTimer = 0;
+function typoFontsArrived() {
+  clearTimeout(typoTimer);
+  typoTimer = setTimeout(async () => {
+    try { await Promise.all(typoFontLoads(CONTENT.settings).map(f => document.fonts.load(f).catch(() => {}))); } catch (e) {}
+    if (!CONTENT.settings.logo) ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) el.src = ringLogo(negMode ? '#ffffff' : (CONTENT.settings.accent || '#ffcc00')); });
+    if (postsView) postsView.retexture();
+  }, 150);
+}
 function applyTypo() {
   const s = CONTENT.settings;
   let st = document.getElementById('hc-typo'); if (!st) { st = document.createElement('style'); st.id = 'hc-typo'; document.head.appendChild(st); }
   const css = typoCSS(s); if (st.textContent !== css) st.textContent = css;
   const urls = googleFontURLs(s);
   document.querySelectorAll('link[data-hc-font]').forEach(l => { if (!urls.includes(l.href)) l.remove(); });
-  urls.forEach(u => { if (!document.querySelector(`link[data-hc-font][href="${CSS.escape(u)}"]`)) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.hcFont = ''; document.head.appendChild(l); } });
+  urls.forEach(u => { if (!document.querySelector(`link[data-hc-font][href="${CSS.escape(u)}"]`)) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.hcFont = ''; l.onload = typoFontsArrived; document.head.appendChild(l); } });
   SERIF = typoOf(s, 'card').css; UIF = typoOf(s, 'cardsm').css; CARD_SCALE = Math.max(0.5, Math.min(2, (+typoOf(s, 'card').scale || 100) / 100));
 }
 function wrapLines(ctx, text, maxW) {
@@ -859,7 +869,7 @@ function renderTexts() {
   });
   (s.social || []).forEach(so => { if (!so.url) return; const el = document.createElement('section'); el.innerHTML = `<h3>${escapeHTML(so.label)}</h3><p><a href="${escapeHTML(so.url)}" target="_blank" rel="noopener">${escapeHTML(so.url.replace(/^https?:\/\/(www\.)?/, ''))}</a></p>`; off.appendChild(el); });
   enterBtn.textContent = tr(s.home.enter) || ui('enter');
-  renderReel();
+  renderReel(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
   document.getElementById('kb-toggle').setAttribute('aria-label', ui('keys'));
   pgPrev.setAttribute('aria-label', ui('prev')); pgNext.setAttribute('aria-label', ui('next'));
@@ -1369,6 +1379,142 @@ function closeReel(instant) {
   if (reel.last && reel.last.focus && instant !== true) reel.last.focus({ preventScroll: true });
 }
 
+/* ================================================================ Vidéo de l'accueil en carrés
+   La bande noire de l'accueil montre une vidéo (Réglages › Accueil) en grille de carrés : chaque carré grossit avec la lumière de son pixel.
+   Sans vidéo réglée, ce sont les photos des projets en travelling lent. Les visiteurs ont un petit clavier, comme celui du site :
+   grille, contraste, couleur, inversion, son (coupé au départ) et leur caméra (l'image reste sur leur écran). La lecture démarre à un endroit au hasard. */
+var hv = null;
+const HV_COLORS = ['white', 'grey', 'accent', 'source'];
+function hvSettings() { return Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true }, CONTENT.settings.homeVideo || {}); }
+function setupHomeVideo() {
+  if (hv) return;
+  const band = document.getElementById('home-band'); if (!band) return;
+  const cfg = hvSettings();
+  const cv = document.createElement('canvas'); cv.id = 'home-video'; cv.setAttribute('aria-hidden', 'true');
+  const shade = document.createElement('div'); shade.className = 'hv-shade';
+  band.prepend(cv, shade);
+  hv = { cv, ctx: cv.getContext('2d'), off: document.createElement('canvas'), cell: +cfg.cell || 14, gamma: +cfg.contrast || 1, fill: (+cfg.size || 92) / 100,
+    color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
+    tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, keys: {} };
+  hv.octx = hv.off.getContext('2d', { willReadFrequently: true });
+  const src = (cfg.src || '').trim();
+  if (src && /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
+    const v = document.createElement('video');
+    if (/^https?:/.test(src) && !src.startsWith(location.origin)) v.crossOrigin = 'anonymous';
+    Object.assign(v, { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
+    v.addEventListener('loadedmetadata', () => { if (isFinite(v.duration) && v.duration > 2) v.currentTime = Math.random() * (v.duration - 1); v.play().catch(() => {}); }, { once: true });   // jamais le même départ
+    hv.video = v;
+  } else {   // les photos des projets mis en avant, hébergées avec le site (une image d'un autre site ne se lit pas pixel par pixel)
+    const seen = new Set();
+    CONTENT.posts.filter(p => p.published !== false).forEach(p => [p.thumb, ...(p.media || []).map(m => m && m.src)].forEach(x => { if (x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x) && !seen.has(x) && seen.size < 10) seen.add(x); }));
+    hv.pics = [...seen].sort(() => Math.random() - 0.5).map(x => { const im = new Image(); im.src = url(x); return im; });
+  }
+  if (cfg.controls !== false) buildHvKeys(band);
+  hvSize(); window.addEventListener('resize', hvSize);
+}
+function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
+function buildHvKeys(band) {
+  const box = document.createElement('div'); box.id = 'hv';
+  box.innerHTML = `<div id="hv-panel">
+      <span class="lbl" data-k="grid"></span><div class="row"><button type="button" class="key" data-a="grid-">−</button><button type="button" class="key" data-a="grid+">+</button></div>
+      <span class="lbl" data-k="contrast"></span><div class="row"><button type="button" class="key" data-a="con-">−</button><button type="button" class="key" data-a="con+">+</button></div>
+      <span class="lbl" data-k="color"></span><div class="row"><button type="button" class="key sw" data-a="color"><i></i></button><button type="button" class="key" data-a="invert" aria-pressed="false">⇄</button></div>
+      <span class="lbl" data-k="sound"></span><div class="row"><button type="button" class="key" data-a="sound" aria-pressed="false">♪</button></div>
+      <span class="lbl" data-k="cam"></span><div class="row"><button type="button" class="key" data-a="cam" aria-pressed="false">●</button></div>
+      <span class="hv-note" hidden></span>
+    </div><button id="hv-toggle" type="button" aria-expanded="false"><i aria-hidden="true"></i><span></span></button>`;
+  band.appendChild(box);
+  hv.box = box; hv.note = box.querySelector('.hv-note');
+  box.querySelector('#hv-toggle').addEventListener('click', e => { const open = box.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+  box.querySelector('#hv-panel').addEventListener('click', e => {
+    const b = e.target.closest('button[data-a]'); if (!b) return; const a = b.dataset.a;
+    b.classList.add('down'); setTimeout(() => b.classList.remove('down'), 200);
+    if (a === 'grid-') hv.cell = Math.max(6, hv.cell - 2);
+    else if (a === 'grid+') hv.cell = Math.min(40, hv.cell + 2);
+    else if (a === 'con-') hv.gamma = Math.max(0.4, +(hv.gamma - 0.2).toFixed(2));
+    else if (a === 'con+') hv.gamma = Math.min(3, +(hv.gamma + 0.2).toFixed(2));
+    else if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
+    else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
+    else if (a === 'sound') { hv.sound = !hv.sound; if (hv.video) { hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); } }
+    else if (a === 'cam') { hv.cam ? hvCamOff() : hvCamOn(); }
+    hvLabels();
+  });
+  hvLabels();
+}
+function hvLabels() {
+  if (!hv || !hv.box) return;
+  hv.box.querySelectorAll('.lbl[data-k]').forEach(el => { el.textContent = ui('hv_' + el.dataset.k); });
+  hv.box.querySelector('#hv-toggle span').textContent = ui('hv_tab');
+  hv.box.querySelector('#hv-toggle').setAttribute('aria-label', ui('hv_tab'));
+  const sw = hv.box.querySelector('.sw i'); sw.className = 'c-' + hv.color;
+  const set = (a, on, label) => { const b = hv.box.querySelector(`[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); if (label) b.setAttribute('aria-label', label); };
+  set('invert', hv.mode === 'dark', ui('hv_invert'));
+  set('sound', hv.sound, ui('hv_sound'));
+  set('cam', !!hv.cam, ui('hv_cam'));
+  hv.box.querySelector('[data-a="sound"]').disabled = !hv.video || !!hv.cam;
+  hv.box.querySelector('[data-a="color"]').setAttribute('aria-label', ui('hv_color'));
+  ['grid-', 'grid+', 'con-', 'con+'].forEach(a => hv.box.querySelector(`[data-a="${a}"]`).setAttribute('aria-label', ui(a.startsWith('grid') ? 'hv_grid' : 'hv_contrast') + (a.endsWith('+') ? ' +' : ' −')));
+}
+async function hvCamOn() {
+  hv.note.hidden = true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false });
+    const v = document.createElement('video'); Object.assign(v, { muted: true, playsInline: true, autoplay: true, srcObject: stream }); v.setAttribute('playsinline', ''); await v.play().catch(() => {});
+    hv.cam = { stream, video: v }; hv.lo = 0; hv.hi = 1;
+    if (hv.video) hv.video.pause();
+    hv.note.textContent = ui('hv_camNote'); hv.note.hidden = false;
+  } catch (e) { hv.note.textContent = ui('hv_camDenied'); hv.note.hidden = false; }
+  hvLabels();
+}
+function hvCamOff() {
+  if (hv && hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; if (hv.video) hv.video.play().catch(() => {}); hv.note.hidden = true; }
+  if (hv) hvLabels();
+}
+function stopHomeVideo() { if (!hv) return; hvCamOff(); if (hv.video) hv.video.pause(); }
+function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false) {
+  const c = hv.octx, cw = hv.off.width, ch = hv.off.height, s = Math.max(cw / sw, ch / sh) * zoom, w = sw * s, h = sh * s;
+  if (mirror) { c.save(); c.translate(cw, 0); c.scale(-1, 1); }
+  c.drawImage(src, (cw - w) / 2 + dx * cw, (ch - h) / 2 + dy * ch, w, h);
+  if (mirror) c.restore();
+}
+function hvSource(t) {
+  const c = hv.octx; c.globalAlpha = 1; c.fillStyle = '#000'; c.fillRect(0, 0, hv.off.width, hv.off.height);
+  if (hv.cam && hv.cam.video.readyState >= 2) { hvCover(hv.cam.video, hv.cam.video.videoWidth, hv.cam.video.videoHeight, 1, 0, 0, true); return true; }
+  if (hv.video) { if (hv.video.readyState < 2) return false; hvCover(hv.video, hv.video.videoWidth, hv.video.videoHeight); return true; }
+  const ok = hv.pics.filter(p => p.complete && p.naturalWidth); if (!ok.length) return false;
+  const per = 7, k = Math.max(0, t) / per, n = ok.length, i = ((Math.floor(k) % n) + n) % n, f = k - Math.floor(k);
+  const pan = (p, ph, a) => { c.globalAlpha = a; hvCover(p, p.naturalWidth, p.naturalHeight, 1.18 - 0.12 * ph, Math.sin(ph * 2.2) * 0.06, Math.cos(ph * 1.7) * 0.05); };
+  pan(ok[i], f, 1); if (f > 0.78 && n > 1) pan(ok[(i + 1) % n], f - 1, (f - 0.78) / 0.22);
+  c.globalAlpha = 1; return true;
+}
+function homeVideoStep(now) {
+  if (!hv || now - hv.last < 1000 / 30 || !hv.W) return; hv.last = now;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const t = reduce ? 0 : (now - hv.t0) / 1000;
+  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = hv.cell, cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+  ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
+  if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = cols; hv.off.height = rows; }
+  if (!hvSource(t)) return;
+  let d;
+  if (!hv.tainted) { try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) { hv.tainted = true; } }
+  if (hv.tainted) {   // ouvert depuis le disque : le navigateur interdit de lire les pixels, on montre l'image telle quelle, assombrie
+    ctx.globalAlpha = 0.45; ctx.imageSmoothingEnabled = false; ctx.drawImage(hv.off, 0, 0, W, H); ctx.globalAlpha = 1; return;
+  }
+  let mn = 1, mx = 0;
+  for (let q = 0; q < d.length; q += 16) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; if (l < mn) mn = l; if (l > mx) mx = l; }
+  hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;
+  const ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2, useSrc = hv.color === 'source';
+  if (!useSrc) ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2';
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    const q = (y * cols + x) * 4, r = d[q], g = d[q + 1], b = d[q + 2];
+    let l = Math.min(1, Math.max(0, ((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 - hv.lo) / (hv.hi - hv.lo)));
+    if (hv.mode === 'dark') l = 1 - l;
+    const sz = Math.pow(l, hv.gamma) * cell * hv.fill; if (sz < 0.6) continue;
+    if (useSrc) ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(ox + x * cell + (cell - sz) / 2, oy + y * cell + (cell - sz) / 2, sz, sz);
+  }
+}
+
 /* ================================================================ Home */
 const home = document.getElementById('home'), enterBtn = document.getElementById('enter');
 const ticker = document.getElementById('ticker'), tctx = ticker.getContext('2d');
@@ -1455,7 +1601,7 @@ let homeGone = false, assetsLoaded = false, clickedEnter = false;
 function enterToTheWeb() {
   if (homeGone) return;
   homeGone = true;
-  home.classList.add('out'); setTimeout(() => { home.hidden = true; }, 1100);
+  home.classList.add('out'); setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1100);
   startRender(); mainEntrance();
   sloganEl.classList.add('on');
   setTimeout(openMenu, 1500);
@@ -1500,6 +1646,7 @@ let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
+  if (hv && !home.hidden) homeVideoStep(now);
   if (started) { updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera(); renderer.render(scene, camera); }
   requestAnimationFrame(frame);
 }
@@ -1538,7 +1685,7 @@ async function awaitPreview() {
   SECTIONS = CONTENT.sections.filter(s => s.visible).map(def => ({ def }));
   if (!SECTIONS.length) { showError(new Error('aucune section visible')); return; }
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
-  toggleActivityButton(); renderTexts(); buildMenu();
+  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo();
   resizeViewport(); setCamera(); sizeTicker();
   requestAnimationFrame(frame);
   sections = SECTIONS.map((s, i) => new SectionObject3D(s.def, i));
