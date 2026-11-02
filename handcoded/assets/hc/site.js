@@ -737,17 +737,22 @@ const camTargetY = () => STYLE.cameraTargetHeight * (((curSec() || {}).def || {}
 const camHeight = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1);
 const cardK = def => Math.max(0.4, Math.min(2.5, (+def.cardScale || 100) / 100));
 function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + camD() * Math.sin(P.actualDeg); cam.z = s.p.z + camD() * Math.cos(P.actualDeg); }
-function changeSection3D() {
+function changeSection3D(sameSection = false) {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
   if (postsView) postsView.destroy();
   postsView = new PostsView3D(curSec());
   focusPost(P.selected);
-  P.actualDeg = P.degreeCamera;
-  cameraChangeSection();
+  if (!sameSection) P.actualDeg = P.degreeCamera;
+  cameraChangeSection(sameSection);
 }
-function cameraChangeSection() {
+function cameraChangeSection(sameSection) {
   const s = curSec(); P.cameraY = camHeight();
+  if (sameSection) {   // nouvelle sélection (tag, page) dans la même section : la caméra tourne sur son orbite vers la première carte, sans l'arc d'un changement de section
+    killTweensOf(cam); cameraTarget(s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed / 2);
+    easeSpeed = STYLE.cameraKeyboardSpeed; closeTurn = true;
+    return;
+  }
   cameraGoto(camD() * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, camD() * Math.cos(P.degreeCamera) + s.p.z, s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed);
 }
 function focusPost(i) { P.selected = i; if (postsView) postsView.focus(i); }
@@ -1193,7 +1198,7 @@ function getToSectionView(index = -1, indexPost = 0) {
   changeSection3D(); changeActiveButton(); initCategorieData();
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
 }
-function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(); checkAccess(); }
+function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(true); checkAccess(); }
 function entries(dir) { if (dir === 'newer' ? P.data.newer() : P.data.older()) refreshSectionPosts(); }
 function changeCategory(id) { P.data.changeCategory(id); catName.textContent = P.data.currentCatName; refreshSectionPosts(); initCategorieData(); }
 function openThatPost(id) { checkPostOpenAndClose(); P.selected = id; openPost(); }
