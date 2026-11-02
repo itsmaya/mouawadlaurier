@@ -541,27 +541,26 @@
       "ca": "Especialistes",
       "es": "Especialistas"
      }
+    },
+    {
+     "id": "artists",
+     "label": {
+      "en": "Artists",
+      "fr": "Artistes",
+      "ca": "Artistes",
+      "es": "Artistes"
+     }
+    },
+    {
+     "id": "partners",
+     "label": {
+      "en": "Partners",
+      "fr": "Partenaires",
+      "ca": "Col·laboradors",
+      "es": "Colaboradores"
+     }
     }
    ],
-   "network": false,
-   "skills": false
-  },
-  {
-   "id": "artists",
-   "name": {
-    "en": "Artists",
-    "fr": "Artistes",
-    "ca": "Artistes",
-    "es": "Artistas"
-   },
-   "model": "hedra",
-   "layout": "carousel",
-   "card": "portrait",
-   "open": "focus3d",
-   "perPage": 16,
-   "defaultTag": "",
-   "visible": true,
-   "tags": [],
    "network": false,
    "skills": false
   },
@@ -705,7 +704,8 @@
     "clement-rignault",
     "joan-sandoval",
     "gaetan-cerrillo",
-    "marie-flament"
+    "marie-flament",
+    "gustavo-valera"
    ],
    "credits": "Benoît Baume (Fisheye), UltraLab, BNP Real Estate",
    "location": null,
@@ -734,14 +734,17 @@
     "tracking",
     "audio",
     "concept-design",
-    "tools"
+    "tools",
+    "project-management",
+    "nouveau-contenu"
    ],
    "logos": [
     "media/logos/fisheye.png",
     "media/logos/biennalevenise.png",
     "media/logos/biennaledakar.png",
     "media/logos/generalitat.png",
-    "media/logos/catalanarts.png"
+    "media/logos/catalanarts.png",
+    "media/logos/bnp-paribas-real-estate.png"
    ]
   },
   {
@@ -933,7 +936,10 @@
     "cyril",
     "salvador-mauri",
     "marco-nason",
-    "guillaume-faure"
+    "guillaume-faure",
+    "stephanie",
+    "antoni-hadzijanev",
+    "jesse-watts"
    ],
    "credits": "Ruinart, Fisheye, Sakma, Mecaoctet, NasonMoretti, Ferronnerie Mazingue",
    "location": null,
@@ -962,12 +968,15 @@
     "generative",
     "light",
     "hardware",
+    "tools",
     "concept-design",
     "sustainable",
-    "project-management"
+    "project-management",
+    "nouveau-contenu"
    ],
    "logos": [
-    "media/logos/fisheye.png"
+    "media/logos/fisheye.png",
+    "media/logos/ruinart.png"
    ]
   },
   {
@@ -1116,15 +1125,20 @@
     "real-time",
     "audio",
     "generative",
-    "projection-mapping",
     "light",
+    "hardware",
+    "tools",
     "concept-design",
     "sustainable"
    ],
    "logos": [
     "media/logos/scam.png",
     "media/logos/learningplanet.png",
-    "media/logos/caringgallery.png"
+    "media/logos/caringgallery.png",
+    "media/logos/nuit-blanche.png",
+    "media/logos/llum-bcn.png",
+    "media/logos/mira.png",
+    "media/logos/eufonic.png"
    ]
   },
   {
@@ -1260,7 +1274,8 @@
     "tracking",
     "generative",
     "audio",
-    "concept-design"
+    "concept-design",
+    "nouveau-contenu"
    ],
    "logos": [
     "media/logos/artexplora.png",
@@ -1329,8 +1344,14 @@
    ],
    "author": "Pablo Valbuena & Patricia Guerrero",
    "skills": [
-    "tools",
-    "hardware"
+    "light",
+    "audio",
+    "real-time",
+    "hardware",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/centquatre.png"
    ]
   },
   {
@@ -1375,6 +1396,10 @@
     {
      "src": "https://vimeo.com/232012124",
      "credit": ""
+    },
+    {
+     "src": "https://vimeo.com/232012124",
+     "credit": ""
     }
    ],
    "link": "",
@@ -1397,8 +1422,16 @@
    ],
    "author": "Mouawad Laurier & Tigre Lab",
    "skills": [
+    "projection-mapping",
+    "tracking",
+    "real-time",
+    "hardware",
     "tools",
-    "hardware"
+    "concept-design",
+    "project-management"
+   ],
+   "logos": [
+    "media/logos/sharjah-light-festival.png"
    ]
   },
   {
@@ -1467,8 +1500,14 @@
    ],
    "author": "Romain Tardy",
    "skills": [
-    "tools",
-    "hardware"
+    "projection-mapping",
+    "light",
+    "real-time",
+    "hardware",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/signal-festival.png"
    ]
   },
   {
@@ -1571,6 +1610,10 @@
    ],
    "author": "Romain Tardy",
    "skills": [
+    "light",
+    "hardware",
+    "real-time",
+    "generative",
     "tools"
    ]
   },
@@ -1701,11 +1744,20 @@
    ],
    "author": "Romain Tardy & Mouawad Laurier",
    "skills": [
-    "tools",
-    "hardware"
+    "machine-learning",
+    "audio",
+    "light",
+    "real-time",
+    "generative",
+    "hardware",
+    "tools"
    ],
    "logos": [
-    "media/logos/palaisdetokyo.png"
+    "media/logos/palaisdetokyo.png",
+    "media/logos/absolut.png",
+    "media/logos/tetro.png",
+    "media/logos/gaite-lyrique.png",
+    "media/logos/nuit-blanche.png"
    ]
   },
   {
@@ -1763,8 +1815,14 @@
    ],
    "author": "Romain Tardy",
    "skills": [
-    "tools",
-    "hardware"
+    "light",
+    "hardware",
+    "real-time",
+    "generative",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/proyecta.png"
    ]
   },
   {
@@ -1837,7 +1895,12 @@
    "spots": [],
    "author": "Hand Coded",
    "skills": [
-    "tools"
+    "tools",
+    "light",
+    "machine-learning",
+    "audio",
+    "real-time",
+    "hardware"
    ]
   },
   {
@@ -1937,8 +2000,15 @@
    ],
    "author": "Viktoria Modesta",
    "skills": [
-    "tools",
-    "hardware"
+    "projection-mapping",
+    "tracking",
+    "real-time",
+    "audio",
+    "hardware",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/music-tech-fest.png"
    ]
   },
   {
@@ -1990,6 +2060,9 @@
    "spots": [],
    "author": "Beardyman",
    "skills": [
+    "audio",
+    "real-time",
+    "hardware",
     "tools"
    ]
   },
@@ -2025,7 +2098,7 @@
     "software",
     "touring"
    ],
-   "thumb": "",
+   "thumb": "media/covers/tgic.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A large light and sound installation in a 25-metre circle, fed in real time by the terms most searched on Google in the host country. Visitors stand among light, words and computer-generated chants: an involuntary self-portrait of our networked society.</p><p>Hand Coded wrote the original software. Premiered on the island of Vlieland, in the Netherlands, in September 2018, then on tour. Honorary mention at Prix Ars Electronica 2019.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Music</strong> Loran Delforge</li><li><strong>Original software development</strong> Hand Coded</li><li><strong>Production</strong> Into the Great Wide Open, with MU art space</li><li><strong>Photos</strong> Sander Heezen</li></ul>",
@@ -2055,9 +2128,12 @@
     "generative",
     "light",
     "audio",
-    "tools"
+    "tools",
+    "nouveau-contenu"
    ],
-   "logos": []
+   "logos": [
+    "media/logos/into-the-great-wide-open.png"
+   ]
   },
   {
    "id": "bionic-orchestra",
@@ -2157,11 +2233,17 @@
    ],
    "author": "Ezra, Organic Orchestra",
    "skills": [
-    "tools",
-    "hardware"
+    "audio",
+    "real-time",
+    "tracking",
+    "hardware",
+    "projection-mapping",
+    "generative",
+    "tools"
    ],
    "logos": [
-    "media/logos/upf.png"
+    "media/logos/upf.png",
+    "media/logos/music-tech-fest.png"
    ]
   },
   {
@@ -2230,6 +2312,10 @@
    "spots": [],
    "author": "Adrien M & Claire B",
    "skills": [
+    "projection-mapping",
+    "tracking",
+    "real-time",
+    "generative",
     "tools"
    ]
   },
@@ -2317,8 +2403,14 @@
    ],
    "author": "Music Tech Fest Labs",
    "skills": [
-    "tools",
-    "hardware"
+    "generative",
+    "real-time",
+    "audio",
+    "tracking",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/music-tech-fest.png"
    ]
   },
   {
@@ -2350,7 +2442,7 @@
     "light",
     "sound"
    ],
-   "thumb": "",
+   "thumb": "media/covers/wave.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A walk-through installation of undulating columns, made of light and ambient sound, evoking light dancing on an ocean wave. Presented by La Prairie on the Miami Beach oceanfront during Art Basel Miami Beach, December 2019.</p><p>Part of our long collaboration with Pablo Valbuena: we design and develop his creation and control tools.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Creation and control tools</strong> Hand Coded</li><li><strong>Client</strong> La Prairie</li></ul>",
@@ -2378,10 +2470,12 @@
    "skills": [
     "light",
     "audio",
-    "tools",
-    "real-time"
+    "real-time",
+    "tools"
    ],
-   "logos": []
+   "logos": [
+    "media/logos/la-prairie.png"
+   ]
   },
   {
    "id": "methods",
@@ -2413,7 +2507,7 @@
     "sound",
     "performance"
    ],
-   "thumb": "",
+   "thumb": "media/covers/methods.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Light travels through Durham Cathedral, inside and out, following its bells. The work draws on change ringing, the 17th-century art of ringing bells in numerical sequences: the cathedral is divided into ten segments, one per bell, and the light answers the sound.</p><p>Each night, bell-ringing teams from across the UK played it live. Created with the cathedral’s Bell Major Christopher Crabtree and the Durham Cathedral Bell team, who wrote the score. Lumiere Durham, 16 to 19 November 2017. We designed and developed the creation and control tools.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Music</strong> Christopher Crabtree and the Durham Cathedral Bell team</li><li><strong>Creation and control tools</strong> Hand Coded</li><li><strong>Production</strong> Lumiere Durham</li></ul>",
@@ -2441,10 +2535,12 @@
    "skills": [
     "light",
     "audio",
-    "tools",
-    "real-time"
+    "real-time",
+    "tools"
    ],
-   "logos": []
+   "logos": [
+    "media/logos/lumiere.png"
+   ]
   },
   {
    "id": "kinematope",
@@ -2539,7 +2635,13 @@
    ],
    "author": "Pablo Valbuena",
    "skills": [
+    "light",
+    "hardware",
+    "real-time",
     "tools"
+   ],
+   "logos": [
+    "media/logos/fundacion-telefonica.png"
    ]
   },
   {
@@ -2612,7 +2714,15 @@
    ],
    "author": "Pablo Valbuena",
    "skills": [
+    "light",
+    "audio",
+    "hardware",
+    "real-time",
     "tools"
+   ],
+   "logos": [
+    "media/logos/nuit-blanche.png",
+    "media/logos/societe-du-grand-paris.png"
    ]
   },
   {
@@ -2644,7 +2754,7 @@
     "sound",
     "mapping"
    ],
-   "thumb": "",
+   "thumb": "media/covers/eko.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A complete audio and visual immersive environment for live performance, by the visual artist Maotik and the beatboxer Ezra. Both improvise on stage with real-time technologies.</p><p>We built interactive tools that tighten the dialogue between the two artists during the show. “EKO is a particle that lives and dies. The EKO reveals the architecture and the space.”</p><p>First shown as a work in progress at the MIRA Festival, Barcelona, 2014.</p><h3>Credits</h3><ul><li><strong>Visuals</strong> Maotik</li><li><strong>Music</strong> Ezra</li><li><strong>Development</strong> Cyril Laurier, Maya Benaïnous</li></ul>",
@@ -2671,7 +2781,16 @@
    ],
    "author": "Maotik & Ezra",
    "skills": [
-    "tools"
+    "generative",
+    "real-time",
+    "audio",
+    "projection-mapping",
+    "tracking",
+    "tools",
+    "nouveau-contenu"
+   ],
+   "logos": [
+    "media/logos/mira.png"
    ]
   },
   {
@@ -2719,6 +2838,10 @@
     {
      "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
      "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
+     "credit": ""
     }
    ],
    "link": "",
@@ -2737,8 +2860,17 @@
    ],
    "author": "20 Húngaros",
    "skills": [
-    "tools",
-    "hardware"
+    "tracking",
+    "projection-mapping",
+    "generative",
+    "real-time",
+    "hardware",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/audi.png",
+    "media/logos/fc-barcelona.png",
+    "media/logos/ddb.png"
    ]
   },
   {
@@ -2770,7 +2902,7 @@
     "ai",
     "sound"
    ],
-   "thumb": "",
+   "thumb": "media/covers/sonaris.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A music recommendation engine. Sonaris analyses an audio stream in real time and finds the tracks that sound like it, whatever their name or origin.</p><p>Discover new artists, build well-mixed playlists, license music for film and advertising in minutes. “I like it: is there anything else like it?” Michela Magas. The technology is protected by patent WO2014096832A1.</p><h3>Credits</h3><ul><li><strong>Partner associates</strong> Michela Magas, Cyril Laurier</li></ul>",
@@ -2788,6 +2920,8 @@
    "spots": [],
    "author": "Michela Magas & Cyril Laurier",
    "skills": [
+    "machine-learning",
+    "audio",
     "tools"
    ]
   },
@@ -2850,7 +2984,14 @@
    ],
    "author": "",
    "skills": [
-    "tools"
+    "tracking",
+    "generative",
+    "audio",
+    "real-time",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/nestle.png"
    ]
   },
   {
@@ -2902,7 +3043,11 @@
    "spots": [],
    "author": "",
    "skills": [
-    "tools"
+    "real-time",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/marque-peugeot.png"
    ]
   },
   {
@@ -2963,7 +3108,15 @@
    ],
    "author": "",
    "skills": [
-    "tools"
+    "tracking",
+    "audio",
+    "generative",
+    "projection-mapping",
+    "real-time",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/churchills.png"
    ]
   },
   {
@@ -3018,7 +3171,11 @@
    "spots": [],
    "author": "",
    "skills": [
-    "tools"
+    "generative",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/marque-cadbury.png"
    ]
   },
   {
@@ -3080,7 +3237,12 @@
    ],
    "author": "",
    "skills": [
-    "tools"
+    "tracking",
+    "real-time",
+    "concept-design"
+   ],
+   "logos": [
+    "media/logos/marque-coors.png"
    ]
   },
   {
@@ -3145,7 +3307,12 @@
    "spots": [],
    "author": "",
    "skills": [
-    "tools"
+    "audio",
+    "generative",
+    "real-time"
+   ],
+   "logos": [
+    "media/logos/marque-lexus.png"
    ]
   },
   {
@@ -3814,8 +3981,8 @@
   },
   {
    "id": "romain-tardy",
-   "section": "artists",
-   "order": 0,
+   "section": "studio",
+   "order": 22,
    "published": true,
    "title": {
     "en": "Romain Tardy",
@@ -3836,7 +4003,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -3856,8 +4025,8 @@
   },
   {
    "id": "pablo-valbuena",
-   "section": "artists",
-   "order": 1,
+   "section": "studio",
+   "order": 23,
    "published": true,
    "title": {
     "en": "Pablo Valbuena",
@@ -3878,7 +4047,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -3898,8 +4069,8 @@
   },
   {
    "id": "adrien-m-claire-b",
-   "section": "artists",
-   "order": 2,
+   "section": "studio",
+   "order": 24,
    "published": true,
    "title": {
     "en": "Adrien M & Claire B",
@@ -3920,7 +4091,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -3940,8 +4113,8 @@
   },
   {
    "id": "beardyman-musician",
-   "section": "artists",
-   "order": 6,
+   "section": "studio",
+   "order": 28,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -3962,7 +4135,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -3982,8 +4157,8 @@
   },
   {
    "id": "maotik",
-   "section": "artists",
-   "order": 4,
+   "section": "studio",
+   "order": 26,
    "published": true,
    "title": {
     "en": "Maotik",
@@ -4004,7 +4179,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -4024,8 +4201,8 @@
   },
   {
    "id": "ezra",
-   "section": "artists",
-   "order": 3,
+   "section": "studio",
+   "order": 25,
    "published": true,
    "title": {
     "en": "Ezra",
@@ -4046,7 +4223,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -4436,6 +4615,8 @@
    "link": "",
    "author": "Fat-Man Collective",
    "skills": [
+    "real-time",
+    "concept-design",
     "tools"
    ]
   },
@@ -4500,7 +4681,8 @@
    "location": null,
    "author": "Fat-Man Collective, Work Club",
    "skills": [
-    "tools"
+    "real-time",
+    "concept-design"
    ]
   },
   {
@@ -5227,8 +5409,8 @@
   },
   {
    "id": "viktoria-modesta-artist",
-   "section": "artists",
-   "order": 5,
+   "section": "studio",
+   "order": 27,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -5249,7 +5431,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -5270,8 +5454,8 @@
   },
   {
    "id": "patricia-guerrero",
-   "section": "artists",
-   "order": 7,
+   "section": "studio",
+   "order": 29,
    "published": true,
    "title": {
     "en": "Patricia Guerrero",
@@ -5292,7 +5476,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -5313,8 +5499,8 @@
   },
   {
    "id": "tigre-lab",
-   "section": "artists",
-   "order": 8,
+   "section": "studio",
+   "order": 30,
    "published": true,
    "title": {
     "en": "Tigre Lab",
@@ -5335,7 +5521,9 @@
     "es": ""
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "artists"
+   ],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -5467,7 +5655,9 @@
     "real-time",
     "audio",
     "generative",
-    "concept-design"
+    "tracking",
+    "concept-design",
+    "nouveau-contenu"
    ],
    "author": "Maya Mouawad",
    "logos": [
@@ -5563,7 +5753,9 @@
     "audio",
     "light",
     "hardware",
-    "concept-design"
+    "tools",
+    "concept-design",
+    "nouveau-contenu"
    ],
    "author": "Maya Mouawad",
    "logos": []
@@ -5644,12 +5836,16 @@
    "skills": [
     "real-time",
     "light",
+    "tracking",
     "hardware",
+    "tools",
     "concept-design",
     "sustainable"
    ],
    "author": "Maya Mouawad",
-   "logos": []
+   "logos": [
+    "media/logos/lumiere.png"
+   ]
   },
   {
    "id": "albatros",
@@ -5743,11 +5939,13 @@
    "skills": [
     "concept-design",
     "sustainable",
-    "hardware"
+    "hardware",
+    "project-management"
    ],
    "author": "Mouawad + Laurier",
    "logos": [
-    "media/logos/cnrs.png"
+    "media/logos/cnrs.png",
+    "media/logos/nanomusee.png"
    ]
   },
   {
@@ -5939,8 +6137,10 @@
     }
    ],
    "skills": [
-    "hardware",
+    "projection-mapping",
     "tracking",
+    "real-time",
+    "hardware",
     "concept-design"
    ],
    "author": "Hand Coded",
@@ -6016,7 +6216,9 @@
    ],
    "skills": [
     "concept-design",
-    "project-management"
+    "sustainable",
+    "project-management",
+    "nouveau-contenu"
    ],
    "author": "Mouawad + Laurier",
    "logos": [
@@ -6075,6 +6277,7 @@
     "audio",
     "light",
     "hardware",
+    "concept-design",
     "sustainable"
    ],
    "author": "Mouawad + Laurier",
@@ -6130,11 +6333,2174 @@
      "lon": 2.29
     }
    ],
-   "skills": [],
+   "skills": [
+    "concept-design",
+    "project-management"
+   ],
    "author": "",
    "logos": [
     "media/logos/fisheye.png"
    ]
+  },
+  {
+   "id": "ruinart",
+   "section": "studio",
+   "order": 31,
+   "published": true,
+   "title": {
+    "en": "Ruinart",
+    "fr": "Ruinart",
+    "ca": "Ruinart",
+    "es": "Ruinart"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/ruinart.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "absolut",
+   "section": "studio",
+   "order": 32,
+   "published": true,
+   "title": {
+    "en": "The Absolut Company",
+    "fr": "The Absolut Company",
+    "ca": "The Absolut Company",
+    "es": "The Absolut Company"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/absolut.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "audi",
+   "section": "studio",
+   "order": 33,
+   "published": true,
+   "title": {
+    "en": "Audi",
+    "fr": "Audi",
+    "ca": "Audi",
+    "es": "Audi"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/audi.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "fc-barcelona",
+   "section": "studio",
+   "order": 34,
+   "published": true,
+   "title": {
+    "en": "FC Barcelona",
+    "fr": "FC Barcelona",
+    "ca": "FC Barcelona",
+    "es": "FC Barcelona"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/fc-barcelona.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "bnp-paribas-real-estate",
+   "section": "studio",
+   "order": 35,
+   "published": true,
+   "title": {
+    "en": "BNP Paribas Real Estate",
+    "fr": "BNP Paribas Real Estate",
+    "ca": "BNP Paribas Real Estate",
+    "es": "BNP Paribas Real Estate"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/bnp-paribas-real-estate.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "la-prairie",
+   "section": "studio",
+   "order": 36,
+   "published": true,
+   "title": {
+    "en": "La Prairie",
+    "fr": "La Prairie",
+    "ca": "La Prairie",
+    "es": "La Prairie"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/la-prairie.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nestle",
+   "section": "studio",
+   "order": 37,
+   "published": true,
+   "title": {
+    "en": "Nestlé",
+    "fr": "Nestlé",
+    "ca": "Nestlé",
+    "es": "Nestlé"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/nestle.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "marque-peugeot",
+   "section": "studio",
+   "order": 38,
+   "published": true,
+   "title": {
+    "en": "Peugeot",
+    "fr": "Peugeot",
+    "ca": "Peugeot",
+    "es": "Peugeot"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/marque-peugeot.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "marque-lexus",
+   "section": "studio",
+   "order": 39,
+   "published": true,
+   "title": {
+    "en": "Lexus",
+    "fr": "Lexus",
+    "ca": "Lexus",
+    "es": "Lexus"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/marque-lexus.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "marque-coors",
+   "section": "studio",
+   "order": 40,
+   "published": true,
+   "title": {
+    "en": "Coors",
+    "fr": "Coors",
+    "ca": "Coors",
+    "es": "Coors"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/marque-coors.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "marque-cadbury",
+   "section": "studio",
+   "order": 41,
+   "published": true,
+   "title": {
+    "en": "Cadbury",
+    "fr": "Cadbury",
+    "ca": "Cadbury",
+    "es": "Cadbury"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/marque-cadbury.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "churchills",
+   "section": "studio",
+   "order": 42,
+   "published": true,
+   "title": {
+    "en": "Churchill’s",
+    "fr": "Churchill’s",
+    "ca": "Churchill’s",
+    "es": "Churchill’s"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/churchills.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "fisheye",
+   "section": "studio",
+   "order": 43,
+   "published": true,
+   "title": {
+    "en": "Fisheye",
+    "fr": "Fisheye",
+    "ca": "Fisheye",
+    "es": "Fisheye"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/fisheye.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "tetro",
+   "section": "studio",
+   "order": 44,
+   "published": true,
+   "title": {
+    "en": "Tetro",
+    "fr": "Tetro",
+    "ca": "Tetro",
+    "es": "Tetro"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/tetro.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "ddb",
+   "section": "studio",
+   "order": 45,
+   "published": true,
+   "title": {
+    "en": "DDB Spain",
+    "fr": "DDB Spain",
+    "ca": "DDB Spain",
+    "es": "DDB Spain"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/ddb.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "art-explora",
+   "section": "studio",
+   "order": 46,
+   "published": true,
+   "title": {
+    "en": "Art Explora",
+    "fr": "Art Explora",
+    "ca": "Art Explora",
+    "es": "Art Explora"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/artexplora.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "it-is-now",
+   "section": "studio",
+   "order": 47,
+   "published": true,
+   "title": {
+    "en": "It Is Now",
+    "fr": "It Is Now",
+    "ca": "It Is Now",
+    "es": "It Is Now"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/itisnow.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "the-caring-gallery",
+   "section": "studio",
+   "order": 48,
+   "published": true,
+   "title": {
+    "en": "The Caring Gallery",
+    "fr": "The Caring Gallery",
+    "ca": "The Caring Gallery",
+    "es": "The Caring Gallery"
+   },
+   "subtitle": {
+    "en": "Production and agency",
+    "fr": "Production et agence",
+    "ca": "Producció i agència",
+    "es": "Producción y agencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/caringgallery.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "palais-de-tokyo",
+   "section": "studio",
+   "order": 49,
+   "published": true,
+   "title": {
+    "en": "Palais de Tokyo",
+    "fr": "Palais de Tokyo",
+    "ca": "Palais de Tokyo",
+    "es": "Palais de Tokyo"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/palaisdetokyo.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "grand-palais",
+   "section": "studio",
+   "order": 50,
+   "published": true,
+   "title": {
+    "en": "Grand Palais",
+    "fr": "Grand Palais",
+    "ca": "Grand Palais",
+    "es": "Grand Palais"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/grandpalais.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "centquatre",
+   "section": "studio",
+   "order": 51,
+   "published": true,
+   "title": {
+    "en": "CENTQUATRE-PARIS",
+    "fr": "CENTQUATRE-PARIS",
+    "ca": "CENTQUATRE-PARIS",
+    "es": "CENTQUATRE-PARIS"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/centquatre.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "gaite-lyrique",
+   "section": "studio",
+   "order": 52,
+   "published": true,
+   "title": {
+    "en": "La Gaîté Lyrique",
+    "fr": "La Gaîté Lyrique",
+    "ca": "La Gaîté Lyrique",
+    "es": "La Gaîté Lyrique"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/gaite-lyrique.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "fundacion-telefonica",
+   "section": "studio",
+   "order": 53,
+   "published": true,
+   "title": {
+    "en": "Fundación Telefónica",
+    "fr": "Fundación Telefónica",
+    "ca": "Fundación Telefónica",
+    "es": "Fundación Telefónica"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/fundacion-telefonica.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "learning-planet",
+   "section": "studio",
+   "order": 54,
+   "published": true,
+   "title": {
+    "en": "Learning Planet Institute",
+    "fr": "Learning Planet Institute",
+    "ca": "Learning Planet Institute",
+    "es": "Learning Planet Institute"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/learningplanet.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nanomusee",
+   "section": "studio",
+   "order": 55,
+   "published": true,
+   "title": {
+    "en": "NANOmusée",
+    "fr": "NANOmusée",
+    "ca": "NANOmusée",
+    "es": "NANOmusée"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/nanomusee.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "biennale-venezia",
+   "section": "studio",
+   "order": 56,
+   "published": true,
+   "title": {
+    "en": "La Biennale di Venezia",
+    "fr": "La Biennale di Venezia",
+    "ca": "La Biennale di Venezia",
+    "es": "La Biennale di Venezia"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/biennalevenise.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "biennale-dakar",
+   "section": "studio",
+   "order": 57,
+   "published": true,
+   "title": {
+    "en": "Biennale de Dakar",
+    "fr": "Biennale de Dakar",
+    "ca": "Biennale de Dakar",
+    "es": "Biennale de Dakar"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/biennaledakar.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "riyadh-art",
+   "section": "studio",
+   "order": 58,
+   "published": true,
+   "title": {
+    "en": "Riyadh Art",
+    "fr": "Riyadh Art",
+    "ca": "Riyadh Art",
+    "es": "Riyadh Art"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/riyadhart.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "lumiere",
+   "section": "studio",
+   "order": 59,
+   "published": true,
+   "title": {
+    "en": "Lumiere",
+    "fr": "Lumiere",
+    "ca": "Lumiere",
+    "es": "Lumiere"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/lumiere.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nuit-blanche",
+   "section": "studio",
+   "order": 60,
+   "published": true,
+   "title": {
+    "en": "Nuit Blanche",
+    "fr": "Nuit Blanche",
+    "ca": "Nuit Blanche",
+    "es": "Nuit Blanche"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/nuit-blanche.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "llum-bcn",
+   "section": "studio",
+   "order": 61,
+   "published": true,
+   "title": {
+    "en": "Llum BCN",
+    "fr": "Llum BCN",
+    "ca": "Llum BCN",
+    "es": "Llum BCN"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/llum-bcn.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "mira",
+   "section": "studio",
+   "order": 62,
+   "published": true,
+   "title": {
+    "en": "MIRA",
+    "fr": "MIRA",
+    "ca": "MIRA",
+    "es": "MIRA"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/mira.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "eufonic",
+   "section": "studio",
+   "order": 63,
+   "published": true,
+   "title": {
+    "en": "Eufònic",
+    "fr": "Eufònic",
+    "ca": "Eufònic",
+    "es": "Eufònic"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/eufonic.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "sharjah-light-festival",
+   "section": "studio",
+   "order": 64,
+   "published": true,
+   "title": {
+    "en": "Sharjah Light Festival",
+    "fr": "Sharjah Light Festival",
+    "ca": "Sharjah Light Festival",
+    "es": "Sharjah Light Festival"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/sharjah-light-festival.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "proyecta",
+   "section": "studio",
+   "order": 65,
+   "published": true,
+   "title": {
+    "en": "Proyecta",
+    "fr": "Proyecta",
+    "ca": "Proyecta",
+    "es": "Proyecta"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/proyecta.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "signal-festival",
+   "section": "studio",
+   "order": 66,
+   "published": true,
+   "title": {
+    "en": "Signal Festival",
+    "fr": "Signal Festival",
+    "ca": "Signal Festival",
+    "es": "Signal Festival"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/signal-festival.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "into-the-great-wide-open",
+   "section": "studio",
+   "order": 67,
+   "published": true,
+   "title": {
+    "en": "Into the Great Wide Open",
+    "fr": "Into the Great Wide Open",
+    "ca": "Into the Great Wide Open",
+    "es": "Into the Great Wide Open"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/into-the-great-wide-open.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "music-tech-fest",
+   "section": "studio",
+   "order": 68,
+   "published": true,
+   "title": {
+    "en": "Music Tech Fest",
+    "fr": "Music Tech Fest",
+    "ca": "Music Tech Fest",
+    "es": "Music Tech Fest"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/music-tech-fest.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "societe-du-grand-paris",
+   "section": "studio",
+   "order": 69,
+   "published": true,
+   "title": {
+    "en": "Société du Grand Paris",
+    "fr": "Société du Grand Paris",
+    "ca": "Société du Grand Paris",
+    "es": "Société du Grand Paris"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/societe-du-grand-paris.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "institut-francais",
+   "section": "studio",
+   "order": 70,
+   "published": true,
+   "title": {
+    "en": "Institut français",
+    "fr": "Institut français",
+    "ca": "Institut français",
+    "es": "Institut français"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/institutfrancais.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "generalitat",
+   "section": "studio",
+   "order": 71,
+   "published": true,
+   "title": {
+    "en": "Generalitat de Catalunya",
+    "fr": "Generalitat de Catalunya",
+    "ca": "Generalitat de Catalunya",
+    "es": "Generalitat de Catalunya"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/generalitat.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "catalan-arts",
+   "section": "studio",
+   "order": 72,
+   "published": true,
+   "title": {
+    "en": "Catalan Arts",
+    "fr": "Catalan Arts",
+    "ca": "Catalan Arts",
+    "es": "Catalan Arts"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/catalanarts.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "institut-ramon-llull",
+   "section": "studio",
+   "order": 73,
+   "published": true,
+   "title": {
+    "en": "Institut Ramon Llull",
+    "fr": "Institut Ramon Llull",
+    "ca": "Institut Ramon Llull",
+    "es": "Institut Ramon Llull"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/ramonllull.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "scam",
+   "section": "studio",
+   "order": 74,
+   "published": true,
+   "title": {
+    "en": "Scam",
+    "fr": "Scam",
+    "ca": "Scam",
+    "es": "Scam"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/scam.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "cnrs",
+   "section": "studio",
+   "order": 75,
+   "published": true,
+   "title": {
+    "en": "CNRS",
+    "fr": "CNRS",
+    "ca": "CNRS",
+    "es": "CNRS"
+   },
+   "subtitle": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Recerca",
+    "es": "Investigación"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/cnrs.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "upf",
+   "section": "studio",
+   "order": 76,
+   "published": true,
+   "title": {
+    "en": "Universitat Pompeu Fabra, MTG",
+    "fr": "Universitat Pompeu Fabra, MTG",
+    "ca": "Universitat Pompeu Fabra, MTG",
+    "es": "Universitat Pompeu Fabra, MTG"
+   },
+   "subtitle": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Recerca",
+    "es": "Investigación"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/upf.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "ircam",
+   "section": "studio",
+   "order": 77,
+   "published": true,
+   "title": {
+    "en": "Ircam",
+    "fr": "Ircam",
+    "ca": "Ircam",
+    "es": "Ircam"
+   },
+   "subtitle": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Recerca",
+    "es": "Investigación"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/ircam.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "cea",
+   "section": "studio",
+   "order": 78,
+   "published": true,
+   "title": {
+    "en": "CEA",
+    "fr": "CEA",
+    "ca": "CEA",
+    "es": "CEA"
+   },
+   "subtitle": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Recerca",
+    "es": "Investigación"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/cea.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
   }
  ]
 }
