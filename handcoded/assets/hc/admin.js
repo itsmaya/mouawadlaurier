@@ -46,6 +46,30 @@ const ytIdOf = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&
 const mediaKindOf = s => (ytIdOf(s) ? 'youtube' : /vimeo\.com\/(?:video\/)?\d+/.test(s || '') ? 'vimeo' : /\.(mp4|webm|mov)(\?|#|$)/i.test(s || '') ? 'video' : 'image');
 const defaultLogo = () => ringLogoURL((S.content && S.content.settings.accent) || '#ffcc00', S.content && S.content.settings);   // dessiné comme sur le site (Typographie › Logo rond)
 const fr = f => t(f, 'fr') || t(f, 'en');
+/* Marque du back-office : logo, nom et favicon comme sur le site (Typographie › Logo rond, Signature › Première ligne) */
+function brandFont(settings) {
+  const r = typoOf(settings, 'sig1');
+  return { fontFamily: r.css, fontWeight: String(r.weight || 400), fontStyle: r.italic ? 'italic' : 'normal', letterSpacing: r.ls ? r.ls + 'em' : 'normal', textTransform: r.upper ? 'uppercase' : 'none' };
+}
+function setFavicon(href) {
+  let l = document.querySelector('link[rel~="icon"]'); if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
+  if (l.getAttribute('href') !== href) { l.removeAttribute('type'); l.href = href; }
+}
+/* la police du logo rond peut arriver après le premier dessin : on redessine quand elle est là */
+function whenLogoFont(settings, redraw) {
+  if (!document.fonts || (settings && settings.logo)) return;
+  const r = typoOf(settings, 'logo'), spec = `${r.italic ? 'italic ' : ''}${r.weight || 400} 76px ${r.css}`;
+  if (!document.fonts.check(spec)) document.fonts.load(spec).then(redraw).catch(() => {});
+}
+function paintBrand() {
+  const s = S.content && S.content.settings; if (!s) return;
+  const logo = s.logo ? fileURL(s.logo) : defaultLogo();
+  const b = document.querySelector('.top .brand');
+  if (b) { b.querySelector('img').src = logo; const n = b.querySelector('.name'); n.textContent = s.name || 'Hand Coded'; Object.assign(n.style, brandFont(s)); }
+  const lp = document.querySelector('.logo-prev'); if (lp) lp.style.backgroundImage = `url("${logo}")`;
+  setFavicon(logo);
+  whenLogoFont(s, paintBrand);
+}
 const rand = () => Math.random().toString(36).slice(2, 6);
 const move = (arr, from, to) => { const [x] = arr.splice(from, 1); arr.splice(to, 0, x); };
 const fmtSize = n => n == null ? '' : n < 1024 ? n + ' o' : n < 1048576 ? Math.round(n / 1024) + ' Ko' : (n / 1048576).toFixed(1) + ' Mo';
@@ -474,14 +498,13 @@ function render() {
   fill(app, );
   topEl = h('header', { class: 'top' }); navEl = h('nav', { class: 'nav', 'aria-label': 'Back-office' }); mainEl = h('main', { class: 'main', id: 'main' });
   app.appendChild(h('div', { class: 'shell' }, topEl, navEl, mainEl));
-  const logo = S.content.settings.logo ? fileURL(S.content.settings.logo) : defaultLogo();
   statusEl = h('div', { class: 'status', 'aria-live': 'polite' });
   topEl.append(
-    h('div', { class: 'brand' }, h('img', { src: logo, alt: '' }), h('span', null, S.content.settings.name || 'Hand Coded'), h('small', null, S.backend.kind === 'demo' ? 'Back-office · démo' : S.backend.kind === 'folder' ? 'Back-office · dossier « ' + S.backend.name + ' »' : 'Back-office')),
+    h('div', { class: 'brand' }, h('img', { alt: '' }), h('span', { class: 'name' }), h('small', null, S.backend.kind === 'demo' ? 'Back-office · démo' : S.backend.kind === 'folder' ? 'Back-office · dossier « ' + S.backend.name + ' »' : 'Back-office')),
     ...(S.backend.kind !== 'demo' ? [] : [h('button', { type: 'button', class: 'demo-tag', title: 'Ouvrir les sauvegardes', onclick: () => go('history') }, 'Démo : ton travail reste dans ce navigateur, pas dans les fichiers du site. Exporte-le ou travaille dans le dossier.')]),
     statusEl,
     h('div', { class: 'acts' }, btn('Aperçu', () => openPreview(), 'ghost', { title: 'Voir le site avec les modifications non publiées' }), btn('Publier', publish, 'primary', { title: 'Ctrl+S' })));
-  renderNav(); updateStatus(); renderMain();
+  paintBrand(); renderNav(); updateStatus(); renderMain();
 }
 function renderNav() {
   if (!navEl) return;
@@ -606,6 +629,7 @@ function sectionEditor(sec, redrawList, redraw) {
         h('label', { class: 'f' }, h('span', null, 'Identifiant'), idInput, idHint),
         h('div', { style: { display: 'grid', gap: '10px', alignContent: 'start', paddingTop: '20px' } },
           toggle('Visible sur le site', () => sec.visible, v => { sec.visible = v; }, { list: true }),
+          toggle('Ses contenus sont des savoir-faire, reliés aux projets', () => sec.skills, v => { sec.skills = v; }, { list: true }),
           toggle('Section d’arrivée (après ENTER)', () => c.settings.startSection === sec.id, v => { c.settings.startSection = v ? sec.id : (c.sections.find(s => s !== sec) || {}).id || ''; }, { list: true })))),
     h('div', { class: 'block' }, h('h3', null, 'Objet 3D', h('small', null, 'le modèle au centre de la section')),
       tiles(modelOpts, sec.model, v => { sec.model = v; change(); }, 'Objet 3D'),
@@ -752,7 +776,7 @@ function postEditor(p, redrawList, redraw) {
   const folder = `media/${p.id}`;
   const remove = async () => {
     if (!await confirmBox('Supprimer ce contenu', `« ${fr(p.title) || 'Sans titre'} » sera retiré du site à la prochaine publication.`, 'Supprimer', 'danger')) return;
-    c.posts.splice(c.posts.indexOf(p), 1); c.posts.forEach(x => { x.team = x.team.filter(id => id !== p.id); }); S.sel.post = null; change({ nav: true }); renderMain();
+    c.posts.splice(c.posts.indexOf(p), 1); c.posts.forEach(x => { x.team = x.team.filter(id => id !== p.id); x.skills = (x.skills || []).filter(id => id !== p.id); }); S.sel.post = null; change({ nav: true }); renderMain();
   };
   const duplicate = () => { const copy = structuredClone(p); copy.id = uniqueId(p.id + '-copie', c.posts.map(x => x.id)); copy.order = (p.order ?? 0) + 0.5; copy.published = false; LANGS.forEach(l => { if (copy.title[l]) copy.title[l] += { fr: ' (copie)', ca: ' (còpia)', es: ' (copia)' }[l] || ' (copy)'; }); c.posts.push(copy); postsOf(c, sec.id, { all: true }).forEach((x, k) => { x.order = k; }); S.sel.post = copy.id; change({ nav: true }); renderMain(); };
 
@@ -830,6 +854,30 @@ function postEditor(p, redrawList, redraw) {
   const drawTeam = () => fill(teamBox, ...(people.length ? people.map(x => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(p.team.includes(x.id)), onclick: () => { p.team = p.team.includes(x.id) ? p.team.filter(id => id !== x.id) : [...p.team, x.id]; change(); drawTeam(); } }, fr(x.title))) : [h('p', { class: 'hint', style: { margin: 0 } }, 'Ajoute des portraits dans une section de type « Portrait » pour les relier ici.')]));
   drawTeam();
 
+  /* Savoir-faire ↔ projets : se relie des deux côtés, la donnée vit sur le projet (p.skills) */
+  const secOf = x => c.sections.find(s => s.id === x.section) || {};
+  const skillPosts = c.posts.filter(x => secOf(x).skills);
+  const projectPosts = c.posts.filter(x => !secOf(x).skills && ['image', 'text'].includes(secOf(x).card));
+  const linkable = sec.skills || ['image', 'text'].includes(sec.card);
+  const skillBox = h('div');
+  const chipGroups = (list, on, flip) => {
+    const groups = c.sections.map(s2 => [s2, list.filter(x => x.section === s2.id)]).filter(([, l]) => l.length);
+    return groups.map(([s2, l]) => h('div', { style: { marginBottom: '10px' } }, groups.length > 1 ? h('span', { class: 'lbl' }, fr(s2.name) || s2.id) : null,
+      h('div', { class: 'chips' }, l.map(x => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(on(x)), title: x.published ? '' : 'Masqué sur le site', style: x.published ? null : { opacity: '.55' }, onclick: () => { flip(x); change(); drawSkillLinks(); } }, fr(x.title) || x.id)))));
+  };
+  const drawSkillLinks = () => {
+    if (sec.skills) {
+      const n = projectPosts.filter(x => x.skills.includes(p.id)).length;
+      fill(skillBox, projectPosts.length ? chipGroups(projectPosts, x => x.skills.includes(p.id), x => { x.skills = x.skills.includes(p.id) ? x.skills.filter(id => id !== p.id) : [...x.skills, p.id]; }) : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucun projet pour l’instant.'),
+        h('p', { class: 'hint' }, n ? `${n} projet${n > 1 ? 's' : ''} relié${n > 1 ? 's' : ''}. Sur le site, la fiche les fait défiler avec leur vignette, et la carte 3D prend la photo de l’un d’eux en fond${p.thumb ? ' (ici ta propre image de carte passe devant : retire-la pour voir la photo d’un projet)' : ''}.` : 'Clique les projets qui ont eu recours à ce savoir-faire.'));
+    } else {
+      fill(skillBox, skillPosts.length ? chipGroups(skillPosts, x => p.skills.includes(x.id), x => { p.skills = p.skills.includes(x.id) ? p.skills.filter(id => id !== x.id) : [...p.skills, x.id]; })
+        : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucune section de savoir-faire : coche « Ses contenus sont des savoir-faire » dans les réglages d’une section.'),
+        skillPosts.length ? h('p', { class: 'hint' }, 'Affichés sur la fiche du projet. Un clic ouvre la fiche du savoir-faire, qui liste à son tour ses projets.') : null);
+    }
+  };
+  if (linkable) drawSkillLinks();
+
   /* Position sur la carte */
   /* Lieux d'intervention : les points du réseau sur la carte du monde */
   const spotBox = h('div');
@@ -868,7 +916,7 @@ function postEditor(p, redrawList, redraw) {
   const idInput = textInput(() => p.id, () => {}, { spell: false, onBlur: i => {
     const want = slugify(i.value); if (want === p.id) { i.value = p.id; return; }
     const id = uniqueId(want, c.posts.filter(x => x !== p).map(x => x.id));
-    c.posts.forEach(x => { x.team = x.team.map(t2 => (t2 === p.id ? id : t2)); });
+    c.posts.forEach(x => { x.team = x.team.map(t2 => (t2 === p.id ? id : t2)); x.skills = (x.skills || []).map(t2 => (t2 === p.id ? id : t2)); });
     p.id = id; S.sel.post = id; i.value = id; change(opts);
   } });
   const missBadge = h('span', { class: 'badge' });
@@ -902,6 +950,7 @@ function postEditor(p, redrawList, redraw) {
       sec.open === 'strip' ? h('div', { class: 'f', style: { marginTop: '6px' } }, h('span', { class: 'lbl' }, 'Images et vidéos de la fiche'), mediaBox,
         h('p', { class: 'hint' }, 'La première s’affiche avant le texte, les autres après. Vidéos MP4 ou WebM, idéalement moins de 20 Mo.')) : null),
     h('div', { class: 'block' }, h('h3', null, 'Tags'), tagBox),
+    linkable ? h('div', { class: 'block' }, sec.skills ? h('h3', null, 'Projets', h('small', null, 'ceux qui ont eu recours à ce savoir-faire')) : h('h3', null, 'Savoir-faire', h('small', null, 'ceux utilisés sur ce projet')), skillBox) : null,
     ['image', 'text'].includes(sec.card) ? h('div', { class: 'block' }, h('h3', null, 'Qui a travaillé dessus ?', h('small', null, 'les portraits s’affichent sur la fiche')), teamBox,
       h('div', { style: { marginTop: '12px' } }, field('Autres crédits', textInput(() => p.credits, v => { p.credits = v; }, { placeholder: 'Ex. Tigre Lab, Studio X' })))) : null,
     sec.layout !== 'map' ? h('div', { class: 'block' }, h('h3', null, 'Lieux d’intervention', h('small', null, netSec ? `les points du réseau sur la carte de « ${fr(netSec.name)} »` : 'pour le réseau d’une section en style « Carte »')), spotBox) : null,
@@ -1135,7 +1184,7 @@ function typoBlock(s) {
       if (v === '' || v === null || v === undefined || v === role[k] || (k === 'italic' && !v && !role.italic) || (k === 'upper' && !v && !role.upper) || (k === 'ls' && +v === (role.ls || 0))) delete o[k]; else o[k] = v;
       if (!Object.keys(o).length) delete s.typo[role.id];
       loadTypoFonts(s); change(); paint();
-      if (role.id === 'logo') { const b = document.querySelector('.top .brand img'); if (b && !s.logo) b.src = defaultLogo(); const lp = document.querySelector('.logo-prev'); if (lp && !s.logo) lp.style.backgroundImage = `url("${defaultLogo()}")`; }
+      if (role.id === 'logo' || role.id === 'sig1') paintBrand();
     };
     const num = (k, label, opts = {}) => { const i = h('input', { type: 'number', step: opts.step || 1, min: opts.min, max: opts.max, value: get(k) ?? '', placeholder: opts.ph }); i.addEventListener('input', () => put(k, i.value === '' ? '' : +i.value)); return h('label', null, label, i); };
     const ck = (k, label) => { const i = h('input', { type: 'checkbox', checked: !!get(k) }); i.addEventListener('change', () => put(k, i.checked)); return h('label', { class: 'ck' }, i, label); };
@@ -1152,7 +1201,7 @@ function typoBlock(s) {
     const weightCtl = () => { const sel = h('select', null, WEIGHTS.map(([w, l]) => h('option', { value: w, selected: +get('weight') === w }, l))); sel.addEventListener('change', () => put('weight', +sel.value)); return h('label', null, 'Graisse', sel); };
     const textCtl = () => { const i = h('input', { type: 'text', value: get('text') ?? '', maxlength: 4, style: { width: '70px' } }); i.addEventListener('input', () => put('text', i.value)); return h('label', null, 'Lettres', i); };
     const sample = h('div', { class: 'typo-sample' + (/^(bs|bseg|offh|offp|menu|ui|sig1|sig2)$/.test(role.id) ? ' light' : '') });
-    const rst = btn('Rétablir', () => { if (s.typo) delete s.typo[role.id]; change(); draw(); if (role.id === 'logo') { const b = document.querySelector('.top .brand img'); if (b && !s.logo) b.src = defaultLogo(); } }, 'sm ghost rst');
+    const rst = btn('Rétablir', () => { if (s.typo) delete s.typo[role.id]; change(); draw(); if (role.id === 'logo' || role.id === 'sig1') paintBrand(); }, 'sm ghost rst');
     const paint = () => {
       const r = typoOf(s, role.id);
       row.classList.toggle('changed', !!r.changed); rst.hidden = !r.changed;
@@ -1179,7 +1228,7 @@ function typoBlock(s) {
   return h('div', { class: 'block' }, h('h3', null, 'Typographie', h('small', null, 'police, taille, interligne, graisse de chaque texte du site')),
     h('p', { class: 'hint' }, 'Par défaut, le site garde la typographie d’origine. Un point jaune signale un réglage modifié ; « Rétablir » revient à l’origine. Les polices hébergées avec le site marchent partout, même hors ligne. Une police Google Fonts se charge depuis Google quand le site est en ligne : tape son nom exact, tel qu’il apparaît sur fonts.google.com.'),
     box,
-    h('div', { style: { marginTop: '12px' } }, btn('Tout rétablir', () => { delete s.typo; change(); draw(); const b = document.querySelector('.top .brand img'); if (b && !s.logo) b.src = defaultLogo(); }, 'sm ghost')));
+    h('div', { style: { marginTop: '12px' } }, btn('Tout rétablir', () => { delete s.typo; change(); draw(); paintBrand(); }, 'sm ghost')));
 }
 
 /* ================================================================ Vue : Réglages */
@@ -1220,7 +1269,7 @@ function viewSettings() {
   const logoPrev = h('div', { class: 'logo-prev' });
   const logoActs = h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' } });
   const drawLogo = () => {
-    logoPrev.style.backgroundImage = `url("${s.logo ? fileURL(s.logo) : defaultLogo()}")`;
+    logoPrev.style.backgroundImage = `url("${s.logo ? fileURL(s.logo) : defaultLogo()}")`; paintBrand();
     fill(logoActs, btn(s.logo ? 'Remplacer…' : 'Choisir un logo…', () => filePicker('image/*', false, pickLogo), 'sm'), s.logo ? btn('Logo par défaut', () => { s.logo = ''; change(); drawLogo(); }, 'sm ghost') : null,
       h('span', { class: 'hint', style: { margin: 0 } }, 'SVG ou PNG carré, fond transparent. Affiché en haut à droite et sur l’accueil.'));
   };
@@ -1228,7 +1277,7 @@ function viewSettings() {
   drawLogo();
   const color = h('input', { type: 'color', value: s.accent || '#ffcc00', 'aria-label': 'Couleur d’accent' });
   const sw = h('div', { class: 'swatches' });
-  const tint = col => { s.accent = col; color.value = col; document.documentElement.style.setProperty('--accent', col); drawLogo(); const b = document.querySelector('.top .brand img'); if (b && !s.logo) b.src = defaultLogo(); change(); drawSw(); };
+  const tint = col => { s.accent = col; color.value = col; document.documentElement.style.setProperty('--accent', col); drawLogo(); change(); drawSw(); };
   const drawSw = () => fill(sw, color, ...['#ffcc00', '#f1b800', '#ff5a1f', '#e8175d', '#00b3a4', '#2f6bff', '#111111'].map(col => h('button', { type: 'button', style: { background: col }, 'aria-label': col, 'aria-pressed': String((s.accent || '').toLowerCase() === col), onclick: () => tint(col) })));
   color.addEventListener('input', () => tint(color.value));
   drawSw();
@@ -1432,6 +1481,8 @@ function guessRepo() {   // sur https://<owner>.github.io/<repo>/admin/ on devin
   return { owner: m[1], repo: seg.length > 1 && seg[0] !== 'admin' ? seg[0] : `${m[1]}.github.io` };
 }
 async function loginView(error) {
+  const loginLogo = h('img', { src: SITE + 'assets/hc/ui/logo-default.svg', alt: '' }), loginTitle = h('h1', null, 'Hand Coded.');
+  loginBrand(loginLogo, loginTitle);
   let cfg = {};
   try { const r = await fetch('config.json', { cache: 'no-store' }); if (r.ok) cfg = await r.json(); } catch (e) {}
   const saved = readSaved(), g = guessRepo();
@@ -1467,9 +1518,22 @@ async function loginView(error) {
     h('div', { class: 'actions' }, submit, btn('Essayer sans GitHub (démo)', () => startDemo(), 'ghost')),
     await folderCard());
   fill(app, h('div', { class: 'login' },
-    h('aside', { class: 'side' }, h('div', null, h('img', { src: SITE + 'assets/hc/ui/logo-default.svg', alt: '' }), h('h1', null, 'Hand Coded.'), h('p', null, 'Back-office du site : sections, objets 3D, contenus, tags.')), h('small', null, 'Moteur 3D d’après le site Fat-Man Collective de 2008.')),
+    h('aside', { class: 'side' }, h('div', null, loginLogo, loginTitle, h('p', null, 'Back-office du site : sections, objets 3D, contenus, tags.')), h('small', null, 'Moteur 3D d’après le site Fat-Man Collective de 2008.')),
     form));
   (owner.value && repo.value ? token : owner).focus();
+}
+/* Écran de connexion : le logo et le titre du site public, dans ses polices */
+async function loginBrand(img, title) {
+  try {
+    let c = window.HC_CONTENT;
+    if (!c) { const r = await fetch(SITE + 'content/content.json?v=' + Date.now(), { cache: 'no-store' }); if (!r.ok) return; c = await r.json(); }
+    const s = normalizeContent(structuredClone(c)).settings;
+    loadTypoFonts(s);
+    const tl = (s.taglines && (s.taglines.fr || s.taglines.en)) || [];
+    title.textContent = tl[0] || s.name || 'Hand Coded.'; Object.assign(title.style, brandFont(s));
+    const draw = () => { const src = s.logo ? SITE + s.logo : ringLogoURL(s.accent || '#ffcc00', s); img.src = src; setFavicon(src); };
+    draw(); whenLogoFont(s, draw);
+  } catch (e) {}
 }
 /* Travailler dans le dossier du site, sur l'ordinateur (Chrome, Edge) */
 /* Relit le dossier mémorisé. Garde-fou : si la lecture a fait planter l'onglet la fois précédente, on l'oublie. */

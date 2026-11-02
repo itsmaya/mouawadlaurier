@@ -9,7 +9,7 @@ import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { t, UI, CARDS, LANGS, StaticBackend, DemoBackend, postsOf, sanitizeHTML, htmlToText, mapCoords, escapeHTML, normalizeContent, validLoc, typoOf, typoCSS, googleFontURLs, typoFontLoads, ringLogoURL } from './store.js';
+import { t, UI, CARDS, LANGS, StaticBackend, DemoBackend, postsOf, sanitizeHTML, htmlToText, mapCoords, escapeHTML, normalizeContent, validLoc, typoOf, typoCSS, googleFontURLs, typoFontLoads, ringLogoURL, skillsOf, projectsOf } from './store.js';
 
 const BASE = window.HC_BASE || '';
 const backend = window.HC_MODE === 'demo' ? new DemoBackend(BASE) : new StaticBackend(BASE);
@@ -143,21 +143,8 @@ const postLocal = (x, y, z) => [-x, y, z];             // conteneur de posts tou
 /* ================================================================ Rendu */
 const canvas = document.getElementById('stage');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const MAX_PR = Math.min(window.devicePixelRatio || 1, 2);
-renderer.setPixelRatio(MAX_PR);
-/* Qualité adaptée à l'ordinateur : on mesure seulement quand la scène est posée (pas pendant les chargements ni les animations).
-   Si elle reste sous ~40 images/s pendant 6 s, la scène se calcule en moins de pixels. Jamais d'aller-retour : la qualité ne remonte pas d'elle-même. */
-const perf = { pr: MAX_PR, acc: 0, n: 0, low: 0, since: 0 };
-function isBusy() { return tweens.length > 0 || isClicking || !!(postsView && postsView.loading); }
-function adaptQuality(dt) {
-  if (perf.pr <= 1 || isBusy()) { perf.acc = 0; perf.n = 0; perf.since = clock; return; }
-  if (clock - perf.since < 3) return;   // laisser la scène se poser
-  perf.acc += dt; perf.n++;
-  if (perf.acc < 2) return;
-  const fps = perf.n / perf.acc; perf.acc = 0; perf.n = 0;
-  perf.low = fps < 40 ? perf.low + 1 : 0;
-  if (perf.low >= 3) { perf.low = 0; perf.pr = Math.max(1, perf.pr - 0.5); renderer.setPixelRatio(perf.pr); renderer.setSize(W, H, false); }
-}
+renderer.debug.checkShaderErrors = false;   // pas de lecture des journaux de compilation : le navigateur compile les shaders sans bloquer l'image
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setClearColor(0xffffff, 1);
 const scene = new THREE.Scene();
 scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8d8, 2.2));
@@ -174,10 +161,20 @@ const imgCache = new Map();
 function loadImage(path) {
   if (!path) return Promise.reject(new Error('no image'));
   if (LOCAL && !/^(data:|blob:|https?:)/.test(url(path))) return Promise.reject(new Error('local'));   // la carte reste typographique
-  if (!imgCache.has(path)) imgCache.set(path, new Promise((res, rej) => { const im = new Image(); if (/^https?:/.test(url(path))) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = rej; im.src = url(path); }));
+  if (!imgCache.has(path)) imgCache.set(path, new Promise((res, rej) => { const im = new Image(); if (/^https?:/.test(url(path))) im.crossOrigin = 'anonymous'; im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(im)); im.onerror = rej; im.src = url(path); }));   // image décodée à l'avance, hors de l'image en cours
   return imgCache.get(path);
 }
 function prepTex(tx) { tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return tx; }
+/* Shaders des cartes gardés en vie : sans ça, détruire les cartes d'une sélection libère leurs programmes et la suivante doit les recompiler
+   (un à-coup de 20 à 100 ms à chaque changement de tag ou de section). Trois matériaux témoins, jamais détruits, compilés une fois. */
+const KEEP = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 4;
+  const tex = prepTex(new THREE.CanvasTexture(c)), g = new THREE.PlaneGeometry(1, 1), sc = new THREE.Scene();
+  [THREE.FrontSide, THREE.BackSide, THREE.DoubleSide].forEach(side => sc.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: tex, side }))));
+  sc.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0x111111 })));                 // points du réseau (carte du monde)
+  sc.add(new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true })));          // étiquettes des villes
+  return sc;
+})();
 let W = 0, H = 0;
 /* Mode négatif : toute la page est inversée en CSS. Ce qu'on veut voir dans sa vraie couleur (photos, vidéos, couleur d'accent) est inversé d'avance, la seconde inversion le rétablit. */
 let negMode = false;   // réglage par défaut du back-office, puis le choix du visiteur (clic sur le logo)
@@ -203,7 +200,7 @@ function typoFontsArrived() {
   clearTimeout(typoTimer);
   typoTimer = setTimeout(async () => {
     try { await Promise.all(typoFontLoads(CONTENT.settings).map(f => document.fonts.load(f).catch(() => {}))); } catch (e) {}
-    if (!CONTENT.settings.logo) ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) el.src = ringLogo(negMode ? '#ffffff' : (CONTENT.settings.accent || '#ffcc00')); });
+    if (!CONTENT.settings.logo) drawLogos();
     if (postsView && !postsView.loading) postsView.retexture();   // police arrivée après le dessin des cartes seulement
   }, 150);
 }
@@ -234,12 +231,32 @@ function drawCover(ctx, im, x, y, w, h) {
 const initials = s => String(s).split(/[\s&]+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
 function washed(draw) { return ctx => { draw(ctx); ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillRect(0, 0, 4000, 4000); }; }
 function mirrored(w, draw) { return ctx => { ctx.translate(w, 0); ctx.scale(-1, 1); draw(ctx); }; }
+/* Savoir-faire ↔ projets. Seuls les contenus des sections visibles comptent : on doit pouvoir y aller. */
+const onSite = p => SECTIONS.some(s => s.def.id === p.section);
+const relProjects = post => projectsOf(CONTENT, post).filter(onSite);
+const relSkills = post => skillsOf(CONTENT, post).filter(onSite);
+const photoOf = p => p.thumb || ((p.media || []).find(m => m && m.src && mediaKind(m.src) === 'image') || {}).src || '';
+/* Photo de fond d'une carte savoir-faire : celle d'un de ses projets, tirée au hasard une fois par visite */
+const skillPick = new Map();
+async function skillBackdrop(post) {
+  const list = relProjects(post).filter(photoOf); if (!list.length) return null;
+  const kept = list.find(x => x.id === skillPick.get(post.id));
+  const order = kept ? [kept] : list.map(x => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  for (const p of order) {   // une photo introuvable : on essaie le projet suivant
+    const im = await loadImage(photoOf(p)).catch(() => null);
+    if (im) { skillPick.set(post.id, p.id); return { im, project: p }; }
+  }
+  return null;
+}
+/* Recto : la photo sous un voile noir, le texte blanc par-dessus. Dos : la photo plus présente, le texte en transparence. */
+function veil(ctx, bd, w, h, alpha) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = `rgba(0,0,0,${alpha})`; ctx.fillRect(0, 0, w, h); }
 /* Carte image : vignette en recadrage "cover", ou une carte typographique quand il n'y a pas encore d'image. */
 async function imageCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
   const back = post.thumbBack ? await loadImage(post.thumbBack).catch(() => null) : null;
+  const bd = im ? null : await skillBackdrop(post);
   await fontsReady();
-  const face = ctx => {
+  const face = (ctx, faint = false) => {
     if (im) {
       drawCover(ctx, im, 0, 0, w, h);
       const sig = signature(post, post.media[0] && post.media[0].credit);
@@ -251,24 +268,28 @@ async function imageCard(post, w, h) {
       }
       return;
     }
-    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); ctx.textBaseline = 'top';
+    if (bd) veil(ctx, bd, w, h, faint ? 0.22 : 0.64); else { ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); }
+    ctx.textBaseline = 'top'; if (faint) ctx.globalAlpha = 0.3;
     ctx.fillStyle = accent(); ctx.fillRect(16, 18, 18, 2);
     ctx.fillStyle = '#fff'; ctx.font = `${fz(24)}px ${SERIF}`;
     const lines = wrapLines(ctx, tr(post.title), w - 32).slice(0, 3);
     lines.forEach((l, i) => ctx.fillText(l, 16, 30 + i * 28));
-    ctx.fillStyle = '#8c8c8c'; ctx.font = `${fz(13)}px ${SERIF}`;
+    ctx.fillStyle = bd ? '#c9c9c9' : '#8c8c8c'; ctx.font = `${fz(13)}px ${SERIF}`;
     wrapLines(ctx, tr(post.subtitle), w - 32).slice(0, 2).forEach((l, i) => ctx.fillText(l, 16, 38 + lines.length * 28 + i * 16));
-    const sig = signature(post, post.media[0] && post.media[0].credit);
+    const sig = bd ? signature(bd.project, bd.project.media[0] && bd.project.media[0].credit) : signature(post, post.media[0] && post.media[0].credit);   // la photo est signée par son projet
     ctx.fillStyle = accent(); ctx.font = `10px ${UIF}`;
     ctx.fillText([post.date, tr(post.place)].filter(Boolean).join('  ·  ').toUpperCase(), 16, h - (sig ? 36 : 22));
     if (sig) {   // signature : l'œuvre et son auteur, en bas de la vignette
       ctx.font = `9px ${UIF}`; let text = sig; while (ctx.measureText(text).width > w - 32 && text.length > 4) text = text.slice(0, -2) + '…';
-      ctx.fillStyle = '#2a2a2a'; ctx.fillRect(0, h - 20, w, 20);
-      ctx.fillStyle = '#9a9a9a'; ctx.textBaseline = 'middle'; ctx.fillText(text, 16, h - 10);
+      ctx.fillStyle = bd ? 'rgba(0,0,0,.55)' : '#2a2a2a'; ctx.fillRect(0, h - 20, w, 20);
+      ctx.fillStyle = bd ? '#d0d0d0' : '#9a9a9a'; ctx.textBaseline = 'middle'; ctx.fillText(text, 16, h - 10);
     }
+    ctx.globalAlpha = 1;
   };
   const front = canvasTex(w, h, face, 2);
-  const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 2) : canvasTex(w, h, washed(face), 1.5);
+  const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 2)
+    : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2)   // vu de dos : dessiné en miroir pour rester à l'endroit
+    : canvasTex(w, h, washed(face), 1.5);
   return [front, backTex];
 }
 async function portraitCard(post, w, h) {
@@ -285,6 +306,8 @@ async function portraitCard(post, w, h) {
   return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2)];
 }
 async function textCard(post, w, h) {
+  const bd = await skillBackdrop(post);
+  if (bd) return textCardPhoto(post, w, h, bd);
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
   await fontsReady();
   const title = tr(post.title).trim();
@@ -301,6 +324,19 @@ async function textCard(post, w, h) {
     wrapLines(ctx, title, tw).slice(0, 3).forEach((l, i) => ctx.fillText(l, x0, (im ? 9 : 17) + i * 22));
   }));
   return [front, back];
+}
+async function textCardPhoto(post, w, h, bd) {   // bandeau de savoir-faire : la photo d'un projet en fond
+  await fontsReady();
+  const title = tr(post.title).trim(), tw = w - 32;
+  const draw = faint => ctx => {
+    veil(ctx, bd, w, h, faint ? 0.2 : 0.62);
+    if (faint) ctx.globalAlpha = 0.32;
+    ctx.fillStyle = accent(); ctx.fillRect(18, 14, 14, 2);
+    ctx.fillStyle = '#fff'; ctx.font = `${fz(21)}px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, tw).slice(0, 3).forEach((l, i) => ctx.fillText(l, 18, 20 + i * 22));
+    ctx.globalAlpha = 1;
+  };
+  return [canvasTex(w, h, draw(false), 2), canvasTex(w, h, mirrored(w, draw(true)), 2)];
 }
 async function placeCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
@@ -734,25 +770,20 @@ const CAM_DEFAULT = { map: 58 };
 const camK = (def = (curSec() || {}).def || {}) => Math.max(0.3, Math.min(2.5, (+def.camera || CAM_DEFAULT[def.layout] || 100) / 100));
 const camD = () => STYLE.cameraDistance * camK();
 const camTargetY = () => STYLE.cameraTargetHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 0.62 : 1);
-const camHeight = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1);
+const camHeight = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 * Math.max(0.12, Math.min(1, STYLE.cameraDistanceProportion / zoomBase)) : 1);
 const cardK = def => Math.max(0.4, Math.min(2.5, (+def.cardScale || 100) / 100));
 function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + camD() * Math.sin(P.actualDeg); cam.z = s.p.z + camD() * Math.cos(P.actualDeg); }
-function changeSection3D(sameSection = false) {
+function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
   if (postsView) postsView.destroy();
   postsView = new PostsView3D(curSec());
   focusPost(P.selected);
-  if (!sameSection) P.actualDeg = P.degreeCamera;
-  cameraChangeSection(sameSection);
+  P.actualDeg = P.degreeCamera;
+  cameraChangeSection();
 }
-function cameraChangeSection(sameSection) {
+function cameraChangeSection() {   // comme StageView3D v10 : Parameters.cameraGoto à chaque section et à chaque nouvelle sélection
   const s = curSec(); P.cameraY = camHeight();
-  if (sameSection) {   // nouvelle sélection (tag, page) dans la même section : la caméra tourne sur son orbite vers la première carte, sans l'arc d'un changement de section
-    killTweensOf(cam); cameraTarget(s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed / 2);
-    easeSpeed = STYLE.cameraKeyboardSpeed; closeTurn = true;
-    return;
-  }
   cameraGoto(camD() * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, camD() * Math.cos(P.degreeCamera) + s.p.z, s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed);
 }
 function focusPost(i) { P.selected = i; if (postsView) postsView.focus(i); }
@@ -766,7 +797,7 @@ function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
   const s = curSec();
   if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) postsView.postViews[P.selected].moveToCamera(100, 0);
-  cameraOnlyGoto(s.p.x + camD() * Math.sin(P.actualDeg), cam.y, s.p.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+  cameraOnlyGoto(s.p.x + camD() * Math.sin(P.actualDeg), isMap() ? P.cameraY : cam.y, s.p.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
@@ -840,9 +871,11 @@ function textGeom(mode) {
   return { width, x: pad, colW: width - 2 * pad };
 }
 function fitPost2D() {
-  const top = sloganEl.offsetTop + sloganEl.offsetHeight + 2 * STYLE.margin, need = post2D.height + 12;
-  const reserve = (menu.offsetHeight || 90) + 70;   // sous la fiche : le menu et une bande blanche qui referme la fiche au clic
-  const s = Math.max(0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
+  const short = H <= 420;   // téléphone couché : la signature se réduit à sa première ligne, la fiche prend la hauteur
+  document.body.classList.toggle('post-short', short && P.postOpen);
+  const top = sloganEl.offsetTop + sloganEl.offsetHeight + (short ? 1 : 2) * STYLE.margin, need = post2D.height + 12;
+  const reserve = short ? 24 : (menu.offsetHeight || 90) + 70;   // sous la fiche : le menu et une bande blanche qui referme la fiche au clic
+  const s = Math.max(short ? 0.4 : 0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
   post2D.scale = s;
   post2dEl.style.top = top + 'px';
   post2dEl.style.transform = s !== 1 ? `scale(${s.toFixed(3)})` : '';
@@ -851,15 +884,28 @@ function fitPost2D() {
   document.body.classList.toggle('post-cramped', H - (top + need * s) < menu.offsetHeight + 60);
 }
 function setMenuPosition() {
-  if (!P.postOpen) document.body.classList.remove('post-cramped');
+  if (!P.postOpen) document.body.classList.remove('post-cramped', 'post-short');
   if (P.postOpen && post2D.open && post2D.height > 100) {
     let y = sloganEl.offsetTop + sloganEl.offsetHeight + post2D.height * (post2D.scale || 1) + 2 * STYLE.margin + 30;
-    y = Math.min(y, H - menu.offsetHeight - 40);
+    y = Math.min(y, H - menu.offsetHeight - 52);   // au-dessus de la ligne des langues
     menu.style.left = STYLE.margin + 'px'; menu.style.top = y + 'px';
+  } else if (W <= 700 || H <= 520) {   // téléphone : le menu se pose au-dessus des langues, en bas à gauche
+    menu.style.left = STYLE.margin + 'px'; menu.style.top = Math.round(H - (menu.offsetHeight || 86) - 56) + 'px';
   } else { menu.style.left = 3 * STYLE.margin + 'px'; menu.style.top = Math.round(H / 1.4) + 'px'; }
 }
 /* Logo par défaut : anneau, disque noir, lettres réglées dans Typographie › Logo rond */
-const ringLogo = ring => ringLogoURL(ring, CONTENT.settings);
+const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, invert);
+/* Logo du site, logo de l'accueil et favicon : la même image, dessinée avec la police du rôle « Logo rond » */
+function drawLogos() {
+  const s = CONTENT.settings, accent = s.accent || '#ffcc00';
+  const logo = s.logo ? url(s.logo) : ringLogo(negMode ? '#ffffff' : accent, negMode);   // en négatif, l'image est pré-inversée : la page inversée la remet à l'endroit
+  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = logo; el.classList.toggle('raw', !s.logo); } });
+  setFavicon(s.logo ? logo : (negMode ? ringLogo(accent) : logo));
+}
+function setFavicon(href) {
+  let l = document.querySelector('link[rel~="icon"]'); if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
+  if (l.getAttribute('href') !== href) { l.removeAttribute('type'); l.href = href; }
+}
 function renderTexts() {
   const s = CONTENT.settings;
   applyTypo();
@@ -871,14 +917,15 @@ function renderTexts() {
   sloganEl.innerHTML = sloganHTML;
   document.getElementById('home-slogan').innerHTML = sloganHTML;
   /* Logo par défaut : anneau à la couleur d'accent sur fond blanc, anneau blanc sur fond noir. Il échappe à l'inversion (classe raw). */
-  const ring = negMode ? '#ffffff' : (s.accent || '#ffcc00');
-  const logo = s.logo ? url(s.logo) : ringLogo(ring);
-  if (!s.logo && document.fonts) { const lf = typoOf(s, 'logo'), spec = `${lf.italic ? 'italic ' : ''}${lf.weight || 400} 76px ${lf.css}`; if (!document.fonts.check(spec)) document.fonts.load(spec).then(() => { if (!CONTENT.settings.logo) ['logo', 'home-logo'].forEach(id => { document.getElementById(id).src = ringLogo(negMode ? '#ffffff' : (CONTENT.settings.accent || '#ffcc00')); }); }).catch(() => {}); }
-  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); el.src = logo; el.classList.toggle('raw', !s.logo); });
-  const logoEl = document.getElementById('logo'), canToggle = s.negativeToggle !== false;
-  logoEl.classList.toggle('toggle', canToggle);
-  if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
-  else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
+  drawLogos();
+  if (!s.logo && document.fonts) { const lf = typoOf(s, 'logo'), spec = `${lf.italic ? 'italic ' : ''}${lf.weight || 400} 76px ${lf.css}`; if (!document.fonts.check(spec)) document.fonts.load(spec).then(() => { if (!CONTENT.settings.logo) drawLogos(); }).catch(() => {}); }
+  const canToggle = s.negativeToggle !== false;
+  ['logo', 'home-logo'].forEach(id => {   // le logo du site et celui de l'accueil basculent tous deux jour / nuit
+    const logoEl = document.getElementById(id); if (!logoEl) return;
+    logoEl.classList.toggle('toggle', canToggle);
+    if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
+    else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
+  });
   const bs = document.getElementById('bs');   // la home "bullshit slogan" du site Fat-Man
   bs.placeholder = tr(s.home.placeholder); bs.setAttribute('aria-label', ui('bsLabel')); fitSlogan();
   document.getElementById('bs-eg').textContent = tr(s.home.example);
@@ -994,15 +1041,35 @@ const post2D = {
     } else if (card === 'text') {
       this.addText(post, 'blog');
       media.forEach(m => this.addMedia(m.src, 355, m.credit));
+      this.addRelations(post);
     } else {
       const first = media[0] ? media[0].src : (post.thumb || null);
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '');
       this.addText(post, 'project');
+      const skills = relSkills(post); if (skills.length) this.addSkills(skills);   // ses savoir-faire, juste après le texte
       media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit));
+      this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
     if (post.link && card !== 'place') this.addLink(post);   // le lien du projet ferme la bande, sur la dernière fiche
     this.layout(); this.x = 0; this.finalpos = 0; strip.style.transform = 'translateX(0px)';
+  },
+  addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
+    const projects = relProjects(post); if (!projects.length) return;
+    this.addPanel('relh', 236, `<h2 class="ttl">${escapeHTML(ui('skillProjects'))}.</h2><span class="n">${projects.length}</span>`);
+    projects.forEach(p => {
+      const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
+      const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
+        (ph ? `<img src="${escapeHTML(url(ph))}" alt="" draggable="false">` : '') + `<span class="mono"${ph ? ' hidden' : ''}>${escapeHTML(initials(tr(p.title)))}</span>` +
+        `<span class="cap"><span class="t">${escapeHTML(tr(p.title).trim())}</span>${meta ? `<span class="m">${escapeHTML(meta)}</span>` : ''}</span></button>`);
+      const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
+    });
+  },
+  addSkills(skills) {   // fiche d'un projet : la liste de ses savoir-faire, chacun ouvre sa fiche
+    const sd = (SECTIONS.find(s => s.def.id === skills[0].section) || {}).def;
+    const cols = Math.ceil(skills.length / 9), head = (sd ? tr(sd.name) : ui('skills')).trim();
+    this.addPanel('skl', 92 + cols * 236, `<h2 class="ttl">${escapeHTML(head)}${/[.!?]$/.test(head) ? '' : '.'}</h2><ul style="column-count:${cols}">` +
+      skills.map(k => `<li><button type="button" class="go" data-go="${escapeHTML(k.id)}">${escapeHTML(tr(k.title).trim())}<span class="arr" aria-hidden="true">→</span></button></li>`).join('') + '</ul>');
   },
   addLink(post) {
     const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link;
@@ -1194,14 +1261,37 @@ function getToSectionView(index = -1, indexPost = 0) {
   killAllTweens();
   if (index === -1) index = P.currentSection || 0;
   checkPostOpenAndClose();
+  if (index !== P.currentSection) resetZoom();
   P.currentSection = index; P.resetData(); P.selected = indexPost;
   changeSection3D(); changeActiveButton(); initCategorieData();
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
 }
-function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(true); checkAccess(); }
+function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(); checkAccess(); }
 function entries(dir) { if (dir === 'newer' ? P.data.newer() : P.data.older()) refreshSectionPosts(); }
 function changeCategory(id) { P.data.changeCategory(id); catName.textContent = P.data.currentCatName; refreshSectionPosts(); initCategorieData(); }
 function openThatPost(id) { checkPostOpenAndClose(); P.selected = id; openPost(); }
+/* Aller à un contenu d'une autre section (savoir-faire ↔ projets) : section, tag et page qui le contiennent, puis sa fiche */
+let goToken = 0;
+function goToPost(id) {
+  const post = CONTENT.posts.find(p => p.id === id), si = post ? SECTIONS.findIndex(s => s.def.id === post.section) : -1;
+  if (si < 0 || !inputEnabled) return;
+  killAllTweens(); checkPostOpenAndClose();
+  const moved = si !== P.currentSection;
+  if (moved) resetZoom();
+  P.currentSection = si; if (moved) P.resetData();
+  const d = P.data;
+  const catMoved = !d.list.includes(post); if (catMoved) d.changeCategory('');
+  const idx = d.list.indexOf(post); if (idx < 0) return;
+  const pageMoved = idx < d.first || idx >= d.last;
+  if (pageMoved) { const per = d.section.perPage; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
+  const sel = d.posts.indexOf(post);
+  if (!moved && !catMoved && !pageMoved && postsView) { openThatPost(sel); return; }
+  P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData();
+  try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
+  const token = ++goToken;
+  delayedCall(0.5, () => { if (token === goToken && P.data === d && d.posts[sel] === post) openThatPost(sel); });
+}
+strip.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); goToPost(b.dataset.go); } });
 function openPost() {
   if (!postsView || !P.data.posts[P.selected]) return;
   checkPostOpenAndClose();
@@ -1224,8 +1314,14 @@ function closePost() {
 }
 function checkPostOpenAndClose() { if (P.postOpen) closePost(); }
 function changeActivity() { setAnimationMode(!STYLE.animationMode); toggleActivityButton(); if (postsView) postsView.resetPostPosition(); closeTurn = true; }
-function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion * 1.5); onStageResize3D(); } }
-function zoomIn() { if (STYLE.cameraDistanceProportion > STYLE.cameraZoomMin) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); onStageResize3D(); } }
+/* Zoom : la carte du monde descend beaucoup plus près ; chaque changement de section revient au zoom de base */
+let zoomBase = STYLE.cameraDistanceProportion;
+const isMap = () => (((curSec() || {}).def || {}).layout === 'map');
+const zoomMin = () => (isMap() ? 60 : STYLE.cameraZoomMin);
+function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.min(STYLE.cameraZoomMax, Math.trunc(STYLE.cameraDistanceProportion * 1.5)); zoomMoved(); } }
+function zoomIn() { if (STYLE.cameraDistanceProportion > zoomMin()) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); zoomMoved(); } }
+function zoomMoved() { if (isMap()) P.cameraY = camHeight(); onStageResize3D(); }
+function resetZoom() { if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
 let touchedKeyboard = false;
 function keyBoardNavigation(e) {
   if (!inputEnabled) return;
@@ -1311,9 +1407,11 @@ function toggleNeg() {
   renderTexts();
   if (postsView) postsView.retexture();
 }
-const logoClick = document.getElementById('logo');
-logoClick.addEventListener('click', toggleNeg);
-logoClick.addEventListener('keydown', e => { if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); toggleNeg(); } });
+['logo', 'home-logo'].forEach(id => {
+  const logoClick = document.getElementById(id); if (!logoClick) return;
+  logoClick.addEventListener('click', toggleNeg);
+  logoClick.addEventListener('keydown', e => { if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); e.stopPropagation(); toggleNeg(); } });
+});
 
 /* ================================================================ Showreel
    Un bouton sous le logo, visible partout (accueil compris). L'écran glisse au premier plan, son coupé au départ.
@@ -1725,6 +1823,7 @@ function matchTag(def, want) {
   return tg ? tg.id : '';
 }
 function startRender() {
+  try { renderer.compile(KEEP, camera, scene); } catch (e) {}   // compilés avec les lumières de la scène : les mêmes programmes que les cartes
   setCamera();
   const hash = (PREVIEW && PREVIEW.start) || decodeURIComponent((location.hash || '').slice(1));
   const [hSec, hTag] = hash.split('/');
@@ -1735,20 +1834,24 @@ function startRender() {
     const order = SECTIONS.findIndex(s => s.def.id === hSec) >= 0 ? [start] : [start, ...SECTIONS.keys()];
     for (const i of order) { const tg = matchTag(SECTIONS[i].def, want); if (tg) { start = i; SECTIONS[i].def.defaultTag = tg; break; } }
   }
+  zoomBase = STYLE.cameraDistanceProportion;
   P.currentSection = start; P.resetData();
   const s = curSec();
   P.cameraY = camHeight();
   cam.x = camD() * Math.sin(P.degreeCamera) + s.p.x; cam.y = P.cameraY; cam.z = camD() * Math.cos(P.degreeCamera) + s.p.z;
   camTarget.x = s.p.x; camTarget.y = camTargetY(); camTarget.z = s.p.z;
   started = true;
-  getToSectionView(start, 0);
+  getToSectionView(start, 0); if (W <= 700 || H <= 520) setMenuPosition();   // téléphone : le menu se range tout de suite au-dessus des langues
 }
 let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
-  if (started) { updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera(); renderer.render(scene, camera); if (homeGone && !document.hidden) adaptQuality(dt); }
+  if (started) {
+    updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera();
+    renderer.render(scene, camera);
+  }
   requestAnimationFrame(frame);
 }
 function showError(err) {
@@ -1803,4 +1906,4 @@ async function awaitPreview() {
   } catch (err) { showError(err); }
 })();
 
-window.__hc = { P, STYLE, cam, camera, get hv() { return hv && { cell: hv.cell, floor: hv.floor, fps: Math.round(1000 / hv.interval), cost: +hv.cost.toFixed(1), tainted: hv.tainted }; }, get pr() { return perf.pr; }, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, setLang, enter: () => enterBtn.click() };
+window.__hc = { P, STYLE, cam, camera, renderer, get hv() { return hv && { cell: hv.cell, floor: hv.floor, fps: Math.round(1000 / hv.interval), cost: +hv.cost.toFixed(1), tainted: hv.tainted }; }, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, setLang, enter: () => enterBtn.click() };

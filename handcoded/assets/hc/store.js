@@ -20,16 +20,16 @@ export function t(field, lang) {
   return '';
 }
 export const UI = {
-  en: { all: 'All', postedIn: 'Filed under', visit: 'Visit the site:', who: 'Who worked on this project?', leftToRight: 'From left to right.',
+  en: { all: 'All', postedIn: 'Filed under', visit: 'Visit the site:', skillProjects: 'Projects that drew on it', skills: 'Expertise', who: 'Who worked on this project?', leftToRight: 'From left to right.',
         enter: 'Enter', loading: 'Loading', prev: 'Previous posts', next: 'Next posts', keys: 'Keyboard shortcuts', animation: 'Animation',
         section: 'Section', move: 'Move', zoom: 'Zoom', openClose: 'Open / Close', space: 'SPACE BAR', loadError: 'The 3D scene could not load: ', lang: 'Language', photo: 'Photo', toNeg: 'Switch to negative', toPos: 'Switch to positive', play: 'Play', close: 'Close', soundOn: 'Sound on', soundOff: 'Mute', hv_tab: 'Video', hv_grid: 'Grid', hv_contrast: 'Contrast', hv_delay: 'Delay', hv_color: 'Colour', hv_invert: 'Invert', hv_sound: 'Sound', hv_cam: 'Camera', hv_camNote: 'Your image stays on your screen.', hv_camDenied: 'Camera unavailable.', sent: 'Your slogan is now scrolling at the top.', bsLabel: 'Type your bullshit slogan, then press Enter' },
-  fr: { all: 'Tout', postedIn: 'Classé dans', visit: 'Voir le site :', who: 'Qui a travaillé sur ce projet ?', leftToRight: 'De gauche à droite.',
+  fr: { all: 'Tout', postedIn: 'Classé dans', visit: 'Voir le site :', skillProjects: 'Projets qui y ont eu recours', skills: 'Savoir-faire', who: 'Qui a travaillé sur ce projet ?', leftToRight: 'De gauche à droite.',
         enter: 'Entrer', loading: 'Chargement', prev: 'Contenus précédents', next: 'Contenus suivants', keys: 'Raccourcis clavier', animation: 'Animation',
         section: 'Section', move: 'Bouger', zoom: 'Zoom', openClose: 'Ouvrir / Fermer', space: 'ESPACE', loadError: "La scène 3D n'a pas pu se charger : ", lang: 'Langue', photo: 'Photo', toNeg: 'Passer en négatif', toPos: 'Passer en positif', play: 'Lire', close: 'Fermer', soundOn: 'Activer le son', soundOff: 'Couper le son', hv_tab: 'Vidéo', hv_grid: 'Grille', hv_contrast: 'Contraste', hv_delay: 'Delay', hv_color: 'Couleur', hv_invert: 'Inverser', hv_sound: 'Son', hv_cam: 'Caméra', hv_camNote: 'Ton image reste sur ton écran.', hv_camDenied: 'Caméra indisponible.', sent: 'Ton slogan défile en haut de la page.', bsLabel: 'Tape ton bullshit slogan, puis Entrée' },
-  ca: { all: 'Tot', postedIn: 'Classificat a', visit: 'Visita el web:', who: 'Qui hi ha treballat?', leftToRight: 'D\'esquerra a dreta.',
+  ca: { all: 'Tot', postedIn: 'Classificat a', visit: 'Visita el web:', skillProjects: 'Projectes que l\'han fet servir', skills: 'Coneixement', who: 'Qui hi ha treballat?', leftToRight: 'D\'esquerra a dreta.',
         enter: 'Entra', loading: 'Carregant', prev: 'Anteriors', next: 'Següents', keys: 'Dreceres de teclat', animation: 'Animació',
         section: 'Secció', move: 'Moure', zoom: 'Zoom', openClose: 'Obrir / Tancar', space: 'ESPAI', loadError: 'No s\'ha pogut carregar l\'escena 3D: ', lang: 'Idioma', photo: 'Foto', toNeg: 'Passar a negatiu', toPos: 'Passar a positiu', play: 'Reprodueix', close: 'Tanca', soundOn: 'Activa el so', soundOff: 'Silencia', hv_tab: 'Vídeo', hv_grid: 'Graella', hv_contrast: 'Contrast', hv_delay: 'Delay', hv_color: 'Color', hv_invert: 'Inverteix', hv_sound: 'So', hv_cam: 'Càmera', hv_camNote: 'La teva imatge es queda a la teva pantalla.', hv_camDenied: 'Càmera no disponible.', sent: 'El teu eslògan ja passa a dalt de la pàgina.', bsLabel: 'Escriu el teu bullshit slogan i prem Retorn' },
-  es: { all: 'Todo', postedIn: 'Archivado en', visit: 'Visita la web:', who: '¿Quién ha trabajado en este proyecto?', leftToRight: 'De izquierda a derecha.',
+  es: { all: 'Todo', postedIn: 'Archivado en', visit: 'Visita la web:', skillProjects: 'Proyectos que lo han usado', skills: 'Saber hacer', who: '¿Quién ha trabajado en este proyecto?', leftToRight: 'De izquierda a derecha.',
         enter: 'Entrar', loading: 'Cargando', prev: 'Anteriores', next: 'Siguientes', keys: 'Atajos de teclado', animation: 'Animación',
         section: 'Sección', move: 'Mover', zoom: 'Zoom', openClose: 'Abrir / Cerrar', space: 'ESPACIO', loadError: 'No se ha podido cargar la escena 3D: ', lang: 'Idioma', photo: 'Foto', toNeg: 'Pasar a negativo', toPos: 'Pasar a positivo', play: 'Reproducir', close: 'Cerrar', soundOn: 'Activar el sonido', soundOff: 'Silenciar', hv_tab: 'Vídeo', hv_grid: 'Cuadrícula', hv_contrast: 'Contraste', hv_delay: 'Delay', hv_color: 'Color', hv_invert: 'Invertir', hv_sound: 'Sonido', hv_cam: 'Cámara', hv_camNote: 'Tu imagen se queda en tu pantalla.', hv_camDenied: 'Cámara no disponible.', sent: 'Tu eslogan ya pasa arriba de la página.', bsLabel: 'Escribe tu bullshit slogan y pulsa Intro' },
 };
@@ -71,6 +71,7 @@ export function normalizeContent(c) {
     s.perPage = Math.max(1, Math.min(40, +s.perPage || 8));
     if (s.visible === undefined) s.visible = true;
     s.network = !!s.network;
+    s.skills = s.skills === undefined ? s.id === 'expertise' : !!s.skills;   // ses contenus sont des savoir-faire, reliés aux projets
   });
   c.posts = Array.isArray(c.posts) ? c.posts : [];
   c.posts.forEach(p => {
@@ -79,12 +80,22 @@ export function normalizeContent(c) {
     p.author = typeof p.author === 'string' ? p.author : '';   // auteur de l'œuvre, signé sur les images
     p.media.forEach(m => { if (m && typeof m.credit !== 'string') m.credit = ''; });
     p.spots = Array.isArray(p.spots) ? p.spots.filter(validLoc) : [];   // lieux d'intervention, pour le réseau de la carte
+    p.skills = Array.isArray(p.skills) ? p.skills.filter(x => typeof x === 'string') : [];   // savoir-faire utilisés par ce projet (identifiants)
     if (p.published === undefined) p.published = true;
   });
   return c;
 }
 export function postsOf(content, sectionId, { all = false } = {}) {
   return content.posts.filter(p => p.section === sectionId && (all || p.published)).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+/* Savoir-faire ↔ projets : un projet liste ses savoir-faire (p.skills), un savoir-faire retrouve ses projets */
+export function skillsOf(content, post) {
+  return (post.skills || []).map(id => content.posts.find(x => x.id === id && x.published)).filter(Boolean);
+}
+export function projectsOf(content, skill) {
+  const order = new Map(content.sections.map((s, i) => [s.id, i]));
+  return content.posts.filter(p => p.published && p !== skill && (p.skills || []).includes(skill.id) && order.has(p.section))
+    .sort((a, b) => order.get(a.section) - order.get(b.section) || (a.order ?? 0) - (b.order ?? 0));
 }
 export function slugify(s) {
   return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'item';
@@ -329,12 +340,12 @@ export const TYPO = [
   { id: 'sig2', group: 'Signature', label: 'Lignes suivantes', font: 'georgia', size: 26, lh: 30, weight: 400, sample: 'Responsive. Intelligent.', sel: ['#slogan span', '#home-band .sl span'], mob: 0.72 },
   { id: 'menu', group: 'Navigation', label: 'Menu des sections', font: 'georgia', size: 15, lh: 21.5, weight: 400, sample: 'Réalisations  Savoir-faire  Le studio', sel: ['#menu button'] },
   { id: 'ui', group: 'Navigation', label: 'Interface', hint: 'langues, tags, bouton ENTER, clavier', font: 'lucida', only: ['font'], sample: 'EN FR CA ES · SÉLECTION', vars: ['--ui'] },
-  { id: 'title', group: 'Fiches', label: 'Titre', font: 'georgia', size: 30, lh: 36, weight: 400, sample: 'Kinematope.', sel: ['.txt .ttl', '.team .ttl'] },
+  { id: 'title', group: 'Fiches', label: 'Titre', font: 'georgia', size: 30, lh: 36, weight: 400, sample: 'Kinematope.', sel: ['.txt .ttl', '.team .ttl', '.skl .ttl'] },
   { id: 'subtitle', group: 'Fiches', label: 'Sous-titre', font: 'georgia', size: 16, lh: 20, weight: 400, sample: 'Pablo Valbuena, Paisaje Técnico', sel: ['.txt .stl', '.pnl.link .host'] },
   { id: 'body', group: 'Fiches', label: 'Texte', font: 'georgia', size: 14, lh: 18, weight: 400, sample: 'Animated light and shadow reveal the architecture and offer a new way to experience the space.', sel: ['.txt .body'] },
   { id: 'h3', group: 'Fiches', label: 'Intertitres', hint: 'Crédits, intertitres du texte riche', font: 'georgia', size: 14, lh: 18, weight: 700, sample: 'Credits', sel: ['.txt .body h3'] },
   { id: 'date', group: 'Fiches', label: 'Date et lieu', font: 'georgia', size: 13, lh: 18, weight: 400, sample: '2016 | Fundación Telefónica, Madrid', sel: ['.txt .fecha'] },
-  { id: 'meta', group: 'Fiches', label: '« Classé dans »', font: 'lucida', size: 10, lh: 14, weight: 400, ls: 0.03, sample: 'Filed under Selected, Light', sel: ['.txt .posted', '.pnl.link .lbl'] },
+  { id: 'meta', group: 'Fiches', label: '« Classé dans »', font: 'lucida', size: 10, lh: 14, weight: 400, ls: 0.03, sample: 'Filed under Selected, Light', sel: ['.txt .posted', '.pnl.link .lbl', '.proj .m'] },
   { id: 'names', group: 'Fiches', label: 'Équipe, noms', font: 'lucida', size: 11, lh: 15, weight: 400, sample: 'Cyril Laurier, Maya Benainous', sel: ['.team .names'] },
   { id: 'cname', group: 'Contact', label: 'Nom', font: 'georgia', size: 44, lh: 50, weight: 400, sample: 'Hand Coded', sel: ['.contact .cn'] },
   { id: 'csub', group: 'Contact', label: 'Sous-titre', font: 'georgia', size: 18, lh: 24, weight: 400, sample: 'Barcelona studio', sel: ['.contact .ac'] },
@@ -380,10 +391,10 @@ export function typoCSS(settings) {
     if (role.mob && (set('size') || set('lh'))) {
       const lh = set('lh') ? r.lh : role.lh * r.size / role.size;
       mob.push(`${role.sel.join(', ')} { font-size: ${Math.round(r.size * role.mob)}px; line-height: ${Math.round(lh * role.mob)}px }`);
-      low.push(`${role.sel.join(', ')} { font-size: ${Math.round(r.size * role.mob * 0.9)}px; line-height: ${Math.round(lh * role.mob * 0.9)}px }`);
+      low.push(`${role.sel.join(', ')} { font-size: ${Math.round(r.size * role.mob * 0.8)}px; line-height: ${Math.round(lh * role.mob * 0.8)}px }`);
     }
   }
-  if (mob.length) out.push(`@media (max-width: 700px) { ${mob.join(' ')} }`, `@media (max-height: 520px) and (min-width: 701px) { ${low.join(' ')} }`);
+  if (mob.length) out.push(`@media (max-width: 700px) { ${mob.join(' ')} }`, `@media (max-height: 520px) { ${low.join(' ')} }`);
   return out.join('\n');
 }
 /* Polices Google utilisées : une feuille par graisse et style (une graisse absente ne bloque pas les autres) */
@@ -402,7 +413,7 @@ export function typoFontLoads(settings) {   // pour document.fonts.load avant de
   return [...set];
 }
 /* Logo rond par défaut : anneau à la couleur d'accent, disque noir, lettres blanches */
-export function ringLogoURL(ring, settings) {
+export function ringLogoURL(ring, settings, invert = false) {   // invert : dessiné pré-inversé pour la page en négatif (aucun filtre CSS sur le logo)
   const r = typoOf(settings, 'logo'), c = document.createElement('canvas'); c.width = c.height = 240; const x = c.getContext('2d');
   x.fillStyle = ring; x.beginPath(); x.arc(120, 120, 112, 0, Math.PI * 2); x.fill();
   x.fillStyle = '#111'; x.beginPath(); x.arc(120, 120, 88, 0, Math.PI * 2); x.fill();
@@ -410,7 +421,9 @@ export function ringLogoURL(ring, settings) {
   x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
   x.font = `${r.italic ? 'italic ' : ''}${r.weight || 400} ${Math.max(8, +r.size || 38) * 2}px ${r.css}`;
   const m = x.measureText(text), hgt = (m.actualBoundingBoxAscent || r.size * 1.4) - (m.actualBoundingBoxDescent || 0);
-  x.fillText(text, 120, 120 + hgt / 2); return c.toDataURL('image/png');
+  x.fillText(text, 120, 120 + hgt / 2);
+  if (invert) { const d = x.getImageData(0, 0, 240, 240), px = d.data; for (let i = 0; i < px.length; i += 4) { px[i] = 255 - px[i]; px[i + 1] = 255 - px[i + 1]; px[i + 2] = 255 - px[i + 2]; } x.putImageData(d, 0, 0); }
+  return c.toDataURL('image/png');
 }
 
 /* ================================================================ Dossier de l'ordinateur
