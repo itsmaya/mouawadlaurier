@@ -443,7 +443,7 @@
     "es": "Saber hacer"
    },
    "model": "root",
-   "layout": "wall",
+   "layout": "fan",
    "card": "image",
    "open": "strip",
    "perPage": 12,
@@ -608,7 +608,18 @@
     }
    ],
    "author": "Mouawad Laurier",
-   "skills": []
+   "skills": [
+    "real-time",
+    "audio",
+    "generative",
+    "projection-mapping",
+    "light",
+    "tracking",
+    "concept-design",
+    "sustainable",
+    "project-management",
+    "hardware"
+   ]
   },
   {
    "id": "retour-aux-sources",
