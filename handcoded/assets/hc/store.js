@@ -215,6 +215,19 @@ export async function kvDel(key) {
 }
 
 /* ---------------------------------------------------------------- Backends */
+/* Une opération que le navigateur ou le réseau interrompt (AbortError, coupure, serveur occupé) est retentée deux fois avant d'abandonner.
+   L'erreur finale dit sur quel fichier ça a bloqué. */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const transient = e => e && (e.name === 'AbortError' || e.name === 'NetworkError' || e.name === 'InvalidStateError' || e instanceof TypeError || (e.status >= 500 && e.status < 600) || e.status === 429);
+async function retry(fn, tries = 3) {
+  for (let i = 0; ; i++) {
+    try { return await fn(); } catch (e) { if (i >= tries - 1 || !transient(e)) throw e; await sleep(600 * (i + 1)); }
+  }
+}
+function onFile(path, e) {   // garde le type d'erreur, ajoute le fichier
+  if (e && typeof e === 'object') { try { e.file = path; } catch (x) {} }
+  return e;
+}
 /* Le site public : lit le fichier publié, rien d'autre. */
 export class StaticBackend {
   constructor(base = '') { this.base = base; this.kind = 'static'; }
@@ -232,7 +245,8 @@ export class GitHubBackend {
   constructor(cfg) { this.kind = 'github'; this.cfg = Object.assign({ branch: 'main', root: '' }, cfg); this.api = 'https://api.github.com'; }
   get repoPath() { return `/repos/${this.cfg.owner}/${this.cfg.repo}`; }
   full(path) { const r = (this.cfg.root || '').replace(/^\/+|\/+$/g, ''); return r ? r + '/' + path : path; }
-  async req(path, opts = {}) {
+  async req(path, opts = {}) { return retry(() => this.req1(path, opts)); }
+  async req1(path, opts = {}) {
     const r = await fetch(this.api + path, { ...opts, headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + this.cfg.token, 'X-GitHub-Api-Version': '2022-11-28', ...(opts.body ? { 'Content-Type': 'application/json' } : {}), ...(opts.headers || {}) } });
     if (!r.ok) {
       let msg = r.status + ''; try { const j = await r.json(); msg += ' ' + (j.message || ''); } catch (e) {}
@@ -259,9 +273,12 @@ export class GitHubBackend {
     const all = [...files, { path: 'content/content.json', text: JSON.stringify(content, null, 1) + '\n' }];
     for (const f of all) {
       if (f.delete) { tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: null }); continue; }
-      const body = f.text != null ? { content: f.text, encoding: 'utf-8' } : { content: await blobToBase64(f.blob), encoding: 'base64' };
-      const blob = await this.req(`${this.repoPath}/git/blobs`, { method: 'POST', body: JSON.stringify(body) });
-      tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: blob.sha });
+      if (f.blob && f.blob.size > 90 * 1024 * 1024) throw onFile(f.path, Object.assign(new Error(`fichier trop lourd pour GitHub (${Math.round(f.blob.size / 1048576)} Mo, 90 Mo au plus). Réduis-le ou publie une vidéo YouTube / Vimeo.`), { status: 413 }));
+      try {
+        const body = f.text != null ? { content: f.text, encoding: 'utf-8' } : { content: await blobToBase64(f.blob), encoding: 'base64' };
+        const blob = await this.req(`${this.repoPath}/git/blobs`, { method: 'POST', body: JSON.stringify(body) });
+        tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: blob.sha });
+      } catch (e) { throw onFile(f.path, e); }
     }
     const newTree = await this.req(`${this.repoPath}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) });
     const newCommit = await this.req(`${this.repoPath}/git/commits`, { method: 'POST', body: JSON.stringify({ message, tree: newTree.sha, parents: [head] }) });
@@ -340,7 +357,7 @@ export const TYPO = [
   { id: 'sig2', group: 'Signature', label: 'Lignes suivantes', font: 'georgia', size: 26, lh: 30, weight: 400, sample: 'Responsive. Intelligent.', sel: ['#slogan span', '#home-band .sl span'], mob: 0.72 },
   { id: 'menu', group: 'Navigation', label: 'Menu des sections', font: 'georgia', size: 15, lh: 21.5, weight: 400, sample: 'Réalisations  Savoir-faire  Le studio', sel: ['#menu button'] },
   { id: 'ui', group: 'Navigation', label: 'Interface', hint: 'langues, tags, bouton ENTER, clavier', font: 'lucida', only: ['font'], sample: 'EN FR CA ES · SÉLECTION', vars: ['--ui'] },
-  { id: 'title', group: 'Fiches', label: 'Titre', font: 'georgia', size: 30, lh: 36, weight: 400, sample: 'Kinematope.', sel: ['.txt .ttl', '.team .ttl', '.skl .ttl'] },
+  { id: 'title', group: 'Fiches', label: 'Titre', font: 'georgia', size: 30, lh: 36, weight: 400, sample: 'Kinematope.', sel: ['.txt .ttl', '.team .ttl'] },
   { id: 'subtitle', group: 'Fiches', label: 'Sous-titre', font: 'georgia', size: 16, lh: 20, weight: 400, sample: 'Pablo Valbuena, Paisaje Técnico', sel: ['.txt .stl', '.pnl.link .host'] },
   { id: 'body', group: 'Fiches', label: 'Texte', font: 'georgia', size: 14, lh: 18, weight: 400, sample: 'Animated light and shadow reveal the architecture and offer a new way to experience the space.', sel: ['.txt .body'] },
   { id: 'h3', group: 'Fiches', label: 'Intertitres', hint: 'Crédits, intertitres du texte riche', font: 'georgia', size: 14, lh: 18, weight: 700, sample: 'Credits', sel: ['.txt .body h3'] },
@@ -442,7 +459,16 @@ export class FolderBackend {
   async readBlob(path) { return (await this.fileHandle(path)).getFile(); }
   async readText(path) { return (await this.readBlob(path)).text(); }
   async exists(path) { try { await this.fileHandle(path); return true; } catch (e) { return false; } }
-  async writeFile(path, data) { const fh = await this.fileHandle(path, true); const w = await fh.createWritable(); await w.write(data); await w.close(); }
+  async writeFile(path, data) {
+    /* Chrome écrit dans un fichier temporaire puis le remplace : si un autre onglet écrit le même fichier, ou si un logiciel de synchronisation
+       (iCloud, Dropbox, Drive…) le tient ouvert à ce moment-là, l'écriture est « interrompue ». On réessaie, puis on dit lequel bloque. */
+    try {
+      await retry(async () => {
+        const fh = await this.fileHandle(path, true); const w = await fh.createWritable();
+        try { await w.write(data); await w.close(); } catch (e) { try { await w.abort(); } catch (x) {} throw e; }
+      });
+    } catch (e) { throw onFile(path, e); }
+  }
   async remove(path) { try { const [d, name] = await this.parent(path, false); await d.removeEntry(name); } catch (e) {} }
   async permission(ask) {
     const opts = { mode: 'readwrite' };

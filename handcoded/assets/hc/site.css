@@ -96,14 +96,10 @@ button { font: inherit; }
 .pnl.link a:hover .host { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .pnl.link a:hover .arr { transform: translate(3px, -3px); }
 /* Savoir-faire ↔ projets : la liste des savoir-faire d'un projet, les projets d'un savoir-faire avec leur vignette */
+.txt .skl-tags { max-height: 28px; overflow: hidden; }
+.txt .skl-tags .go { color: var(--accent); letter-spacing: inherit; }
+.txt .skl-tags .go:hover, .txt .skl-tags .go:focus-visible { text-decoration: underline; text-underline-offset: 2px; outline: none; }
 .pnl .go { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; text-align: left; cursor: pointer; }
-.skl .ttl { position: absolute; left: 34px; top: 34px; right: 24px; margin: 0; font: 30px/36px var(--serif); color: #fff; }
-.skl ul { position: absolute; left: 34px; top: 96px; right: 24px; margin: 0; padding: 0; list-style: none; column-gap: 24px; column-fill: auto; height: 236px; }
-.skl li { break-inside: avoid; }
-.skl .go { display: inline-flex; align-items: baseline; gap: 8px; font: 16px/26px var(--serif); color: #fff; }
-.skl .go .arr { font: 13px/1 var(--ui); color: var(--accent); transition: transform .2s cubic-bezier(.17,.84,.44,1); }
-.skl .go:hover, .skl .go:focus-visible { color: var(--accent); outline: none; }
-.skl .go:hover .arr, .skl .go:focus-visible .arr { transform: translateX(3px); }
 .relh .ttl { position: absolute; left: 34px; top: 34px; right: 24px; margin: 0; font: 22px/27px var(--serif); color: #fff; text-wrap: balance; }
 .relh .n { position: absolute; left: 34px; bottom: 34px; font: 44px/1 var(--serif); color: var(--accent); }
 .proj .go { position: absolute; inset: 0; display: block; color: #fff; }

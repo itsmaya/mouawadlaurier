@@ -1166,7 +1166,6 @@ const post2D = {
       const first = media[0] ? media[0].src : (post.thumb || null);
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '');
       this.addText(post, 'project');
-      const skills = relSkills(post); if (skills.length) this.addSkills(skills);   // ses savoir-faire, juste après le texte
       media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit));
       this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
@@ -1184,12 +1183,6 @@ const post2D = {
         `<span class="cap"><span class="t">${escapeHTML(tr(p.title).trim())}</span>${meta ? `<span class="m">${escapeHTML(meta)}</span>` : ''}</span></button>`);
       const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
     });
-  },
-  addSkills(skills) {   // fiche d'un projet : la liste de ses savoir-faire, chacun ouvre sa fiche
-    const sd = (SECTIONS.find(s => s.def.id === skills[0].section) || {}).def;
-    const cols = Math.ceil(skills.length / 9), head = (sd ? tr(sd.name) : ui('skills')).trim();
-    this.addPanel('skl', 92 + cols * 236, `<h2 class="ttl">${escapeHTML(head)}${/[.!?]$/.test(head) ? '' : '.'}</h2><ul style="column-count:${cols}">` +
-      skills.map(k => `<li><button type="button" class="go" data-go="${escapeHTML(k.id)}">${escapeHTML(tr(k.title).trim())}<span class="arr" aria-hidden="true">→</span></button></li>`).join('') + '</ul>');
   },
   addLink(post) {
     const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link;
@@ -1251,14 +1244,22 @@ const post2D = {
     document.body.appendChild(measure);
     measure.innerHTML = `<h2 class="ttl" style="position:static">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="position:static">${escapeHTML(subtitle)}</p>` : ''}`;
     const tH = measure.firstChild.offsetHeight, sH = subtitle ? measure.lastChild.offsetHeight + 6 : 0;
+    /* ses savoir-faire : une petite ligne de tags sous « Classé dans », chacun ouvre sa fiche */
+    const skills = mode === 'project' ? relSkills(post) : [];
+    let sklLine = '';
+    if (skills.length) {
+      const sd = (SECTIONS.find(x => x.def.id === skills[0].section) || {}).def;
+      sklLine = `${escapeHTML((sd ? tr(sd.name) : ui('skills')).trim())} ${skills.map(k => `<button type="button" class="go" data-go="${escapeHTML(k.id)}">${escapeHTML(tr(k.title).trim())}</button>`).join(', ')}`;
+    }
     if (mode === 'project') {
-      const sy = 34 + tH + 6, top = 34 + tH + sH + 20;
-      const pages = paginate(html, colW, [282 - 10 - top, 355 - 93 - 20], measure);
+      const sy = 34 + tH + 6, top = 34 + tH + sH + 20, fy = skills.length ? 270 : 282, py = skills.length ? 294 : 308;   // avec les savoir-faire, la date et « Classé dans » remontent d'un cran
+      const pages = paginate(html, colW, [fy - 10 - top, 355 - 93 - 20 - (skills.length ? 12 : 0)], measure);
       pages.forEach((pg, i) => {
         const last = i === pages.length - 1;
         this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:34px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : 93}px;width:${colW}px">${pg}</div>` +
-          (last ? `<div class="fecha" style="left:${x}px;top:282px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:308px;width:${colW}px">${posted}</div>` : ''));
+          (last ? `<div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` +
+            (sklLine ? `<div class="posted skl-tags" style="left:${x}px;top:${py + 16}px;width:${colW}px">${sklLine}</div>` : '') : ''));
       });
     } else {
       const sy = 13 + tH + 4, fy = 13 + tH + sH + 10, py = fy + 20, top = py + 18 + 20;
@@ -1362,6 +1363,7 @@ post2dEl.addEventListener('pointerdown', e => {
   pend2D = { id: e.pointerId, x: e.clientX, y: e.clientY }; mouse2D = e.clientX;
 });
 post2dEl.addEventListener('pointermove', e => {
+  if (e.pointerType === 'mouse' && e.buttons === 0 && (pend2D || post2D.dragging)) { stopDrag2D(); return; }   // bouton relâché sans qu'on l'ait vu : la fiche ne suit plus la souris
   mouse2D = e.clientX;
   if (!pend2D || e.pointerId !== pend2D.id || post2D.dragging) return;
   const dx = e.clientX - pend2D.x, dy = e.clientY - pend2D.y;
@@ -1374,6 +1376,8 @@ post2dEl.addEventListener('pointermove', e => {
 post2dEl.addEventListener('click', e => { if (post2D.justDragged) { e.preventDefault(); e.stopPropagation(); post2D.justDragged = false; } }, true);
 const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); } pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };
 post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('pointercancel', stopDrag2D);
+post2dEl.addEventListener('lostpointercapture', stopDrag2D);
+window.addEventListener('pointerup', () => { if (pend2D || post2D.dragging) stopDrag2D(); });
 whiteboard.addEventListener('pointerdown', () => closePost());
 
 /* ================================================================ StageView : navigation générale */
@@ -1498,19 +1502,25 @@ canvas.addEventListener('pointerdown', e => {
   dragId = e.pointerId; canvas.setPointerCapture(e.pointerId); canvas.classList.add('dragging');
   prevX = mouseX; prevY = mouseY; closeTurn = false; isClicking = true;
 });
-function endDrag(e) {
+function endDrag(e, lost = false) {
   if (e.pointerId !== dragId) return;
   dragId = null; canvas.classList.remove('dragging');
   if (isClicking) { closeTurn = true; isClicking = false; }
+  if (lost) { downHit = null; return; }   // relâché hors de la page ou capture perdue : on lâche, sans ouvrir de fiche
   if (downHit && downHit.face === 'front' && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) { const hit = pick(e.clientX, e.clientY); if (hit && hit.post === downHit.post) openThatPost(hit.post.id_); }
   else if (!downHit && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) { const hit = pick(e.clientX, e.clientY); if (hit && hit.netNode) showNetTip(hit.netNode, e.clientX, e.clientY); else hideNetTip(); }
   downHit = null;
 }
-canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', e => endDrag(e, true));
+/* Garde-fous : si le navigateur perd le relâchement (Safari, fenêtre qui change, bouton relâché ailleurs), le glisser ne reste jamais collé à la souris */
+canvas.addEventListener('lostpointercapture', e => { if (e.pointerId === dragId) endDrag(e, true); });
+window.addEventListener('pointerup', e => { if (dragId !== null && e.pointerId === dragId && e.target !== canvas) endDrag(e, true); });
+window.addEventListener('blur', () => { if (dragId !== null) endDrag({ pointerId: dragId }, true); stopDrag2D(); });
 let hoverQueued = false, hovered = null;
 function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
 canvas.addEventListener('pointerleave', () => hoverCard(null));
 canvas.addEventListener('pointermove', e => {
+  if (dragId !== null && e.pointerId === dragId && e.pointerType === 'mouse' && e.buttons === 0) { endDrag(e, true); return; }   // bouton déjà relâché
   if (dragId !== null && e.pointerId !== dragId) return;
   mouseX = e.clientX; mouseY = e.clientY;
   if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); hoverCard(h && h.post && h.face === 'front' && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
