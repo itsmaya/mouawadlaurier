@@ -20,16 +20,16 @@ export function t(field, lang) {
   return '';
 }
 export const UI = {
-  en: { all: 'All', postedIn: 'Filed under', visit: 'Visit the site:', homeLink: 'Home', skillProjects: 'Projects that drew on it', skills: 'Expertise', who: 'Who worked on this project?', leftToRight: 'From left to right.',
+  en: { all: 'All', postedIn: 'Filed under', visit: 'Visit the site:', homeLink: 'Home', partners: 'Partners', skillProjects: 'Projects that drew on it', skills: 'Expertise', who: 'Who worked on this project?', leftToRight: 'From left to right.',
         enter: 'Enter', loading: 'Loading', prev: 'Previous posts', next: 'Next posts', keys: 'Keyboard shortcuts', animation: 'Animation',
         section: 'Section', move: 'Move', zoom: 'Zoom', openClose: 'Open / Close', space: 'SPACE BAR', loadError: 'The 3D scene could not load: ', lang: 'Language', photo: 'Photo', toNeg: 'Switch to negative', toPos: 'Switch to positive', play: 'Play', close: 'Close', soundOn: 'Sound on', soundOff: 'Mute', hv_tab: 'Video', hv_grid: 'Grid', hv_contrast: 'Contrast', hv_delay: 'Delay', hv_color: 'Colour', hv_invert: 'Invert', hv_sound: 'Sound', hv_cam: 'Camera', hv_camNote: 'Your image stays on your screen.', hv_camDenied: 'Camera unavailable.', sent: 'Your slogan is now scrolling at the top.', bsLabel: 'Type your bullshit slogan, then press Enter' },
-  fr: { all: 'Tout', postedIn: 'Classé dans', visit: 'Voir le site :', homeLink: 'Accueil', skillProjects: 'Projets qui y ont eu recours', skills: 'Savoir-faire', who: 'Qui a travaillé sur ce projet ?', leftToRight: 'De gauche à droite.',
+  fr: { all: 'Tout', postedIn: 'Classé dans', visit: 'Voir le site :', homeLink: 'Accueil', partners: 'Partenaires', skillProjects: 'Projets qui y ont eu recours', skills: 'Savoir-faire', who: 'Qui a travaillé sur ce projet ?', leftToRight: 'De gauche à droite.',
         enter: 'Entrer', loading: 'Chargement', prev: 'Contenus précédents', next: 'Contenus suivants', keys: 'Raccourcis clavier', animation: 'Animation',
         section: 'Section', move: 'Bouger', zoom: 'Zoom', openClose: 'Ouvrir / Fermer', space: 'ESPACE', loadError: "La scène 3D n'a pas pu se charger : ", lang: 'Langue', photo: 'Photo', toNeg: 'Passer en négatif', toPos: 'Passer en positif', play: 'Lire', close: 'Fermer', soundOn: 'Activer le son', soundOff: 'Couper le son', hv_tab: 'Vidéo', hv_grid: 'Grille', hv_contrast: 'Contraste', hv_delay: 'Delay', hv_color: 'Couleur', hv_invert: 'Inverser', hv_sound: 'Son', hv_cam: 'Caméra', hv_camNote: 'Ton image reste sur ton écran.', hv_camDenied: 'Caméra indisponible.', sent: 'Ton slogan défile en haut de la page.', bsLabel: 'Tape ton bullshit slogan, puis Entrée' },
-  ca: { all: 'Tot', postedIn: 'Classificat a', visit: 'Visita el web:', homeLink: 'Inici', skillProjects: 'Projectes que l\'han fet servir', skills: 'Coneixement', who: 'Qui hi ha treballat?', leftToRight: 'D\'esquerra a dreta.',
+  ca: { all: 'Tot', postedIn: 'Classificat a', visit: 'Visita el web:', homeLink: 'Inici', partners: 'Col·laboradors', skillProjects: 'Projectes que l\'han fet servir', skills: 'Coneixement', who: 'Qui hi ha treballat?', leftToRight: 'D\'esquerra a dreta.',
         enter: 'Entra', loading: 'Carregant', prev: 'Anteriors', next: 'Següents', keys: 'Dreceres de teclat', animation: 'Animació',
         section: 'Secció', move: 'Moure', zoom: 'Zoom', openClose: 'Obrir / Tancar', space: 'ESPAI', loadError: 'No s\'ha pogut carregar l\'escena 3D: ', lang: 'Idioma', photo: 'Foto', toNeg: 'Passar a negatiu', toPos: 'Passar a positiu', play: 'Reprodueix', close: 'Tanca', soundOn: 'Activa el so', soundOff: 'Silencia', hv_tab: 'Vídeo', hv_grid: 'Graella', hv_contrast: 'Contrast', hv_delay: 'Delay', hv_color: 'Color', hv_invert: 'Inverteix', hv_sound: 'So', hv_cam: 'Càmera', hv_camNote: 'La teva imatge es queda a la teva pantalla.', hv_camDenied: 'Càmera no disponible.', sent: 'El teu eslògan ja passa a dalt de la pàgina.', bsLabel: 'Escriu el teu bullshit slogan i prem Retorn' },
-  es: { all: 'Todo', postedIn: 'Archivado en', visit: 'Visita la web:', homeLink: 'Inicio', skillProjects: 'Proyectos que lo han usado', skills: 'Saber hacer', who: '¿Quién ha trabajado en este proyecto?', leftToRight: 'De izquierda a derecha.',
+  es: { all: 'Todo', postedIn: 'Archivado en', visit: 'Visita la web:', homeLink: 'Inicio', partners: 'Colaboradores', skillProjects: 'Proyectos que lo han usado', skills: 'Saber hacer', who: '¿Quién ha trabajado en este proyecto?', leftToRight: 'De izquierda a derecha.',
         enter: 'Entrar', loading: 'Cargando', prev: 'Anteriores', next: 'Siguientes', keys: 'Atajos de teclado', animation: 'Animación',
         section: 'Sección', move: 'Mover', zoom: 'Zoom', openClose: 'Abrir / Cerrar', space: 'ESPACIO', loadError: 'No se ha podido cargar la escena 3D: ', lang: 'Idioma', photo: 'Foto', toNeg: 'Pasar a negativo', toPos: 'Pasar a positivo', play: 'Reproducir', close: 'Cerrar', soundOn: 'Activar el sonido', soundOff: 'Silenciar', hv_tab: 'Vídeo', hv_grid: 'Cuadrícula', hv_contrast: 'Contraste', hv_delay: 'Delay', hv_color: 'Color', hv_invert: 'Invertir', hv_sound: 'Sonido', hv_cam: 'Cámara', hv_camNote: 'Tu imagen se queda en tu pantalla.', hv_camDenied: 'Cámara no disponible.', sent: 'Tu eslogan ya pasa arriba de la página.', bsLabel: 'Escribe tu bullshit slogan y pulsa Intro' },
 };
@@ -81,6 +81,7 @@ export function normalizeContent(c) {
     p.media.forEach(m => { if (m && typeof m.credit !== 'string') m.credit = ''; });
     p.spots = Array.isArray(p.spots) ? p.spots.filter(validLoc) : [];   // lieux d'intervention, pour le réseau de la carte
     p.skills = Array.isArray(p.skills) ? p.skills.filter(x => typeof x === 'string') : [];   // savoir-faire utilisés par ce projet (identifiants)
+    p.logos = Array.isArray(p.logos) ? p.logos.filter(x => typeof x === 'string' && x) : [];   // logos des partenaires, en bas de la fiche
     if (p.published === undefined) p.published = true;
   });
   return c;
@@ -324,7 +325,7 @@ export class DemoBackend {
   /* Les fichiers envoyés en démo vivent dans IndexedDB : on les sert en URL blob. */
   async prepare(content) {
     const paths = new Set();
-    content.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && paths.add(x)); p.media.forEach(m => m.src && paths.add(m.src)); });
+    content.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && paths.add(x)); p.media.forEach(m => m.src && paths.add(m.src)); (p.logos || []).forEach(x => paths.add(x)); });
     content.models.forEach(m => { if (!m.builtin && m.file) { paths.add(m.file); (m.textures || []).forEach(tx => paths.add(m.file.replace(/[^/]+$/, '') + tx)); } });
     if (content.settings.logo) paths.add(content.settings.logo);
     for (const p of paths) {
@@ -509,7 +510,7 @@ export class FolderBackend {
   /* les images et modèles du dossier, servis au back-office en URL blob */
   async prepare(content) {
     const paths = new Set();
-    content.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && paths.add(x)); p.media.forEach(m => m.src && paths.add(m.src)); });
+    content.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && paths.add(x)); p.media.forEach(m => m.src && paths.add(m.src)); (p.logos || []).forEach(x => paths.add(x)); });
     content.models.forEach(m => { if (m.file) { paths.add(m.file); (m.textures || []).forEach(tx => paths.add(m.file.replace(/[^/]+$/, '') + tx)); } });
     if (content.settings.logo) paths.add(content.settings.logo);
     for (const p of paths) {

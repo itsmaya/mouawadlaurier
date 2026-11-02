@@ -327,3 +327,11 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 
 .preview-warn { display: block; height: 0; overflow: hidden; background: #fff3c4; color: #5a4500; font-size: 12.5px; line-height: 1.4; }
 .preview-warn.on { height: auto; padding: 8px 16px; }
+
+/* Logos des partenaires */
+.logo-lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.logo-chip { display: grid; grid-template-rows: 58px auto; gap: 4px; padding: 6px; border: 1px solid var(--line); border-radius: var(--r); background: #fff; cursor: pointer; text-align: center; font: 11px/1.25 var(--ui); color: var(--ink-3); opacity: .55; }
+.logo-chip img { width: 100%; height: 58px; object-fit: contain; }
+.logo-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.logo-chip[aria-pressed="true"] { opacity: 1; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); color: var(--ink); }
+.logo-chip:hover { opacity: 1; }

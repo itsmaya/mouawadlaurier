@@ -1170,6 +1170,7 @@ const post2D = {
       this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
+    if (post.logos && post.logos.length && card !== 'place') this.addLogos(post);   // partenaires, avant le lien
     if (post.link && card !== 'place') this.addLink(post);   // le lien du projet ferme la bande, sur la dernière fiche
     this.layout(); this.x = 0; this.finalpos = 0; strip.style.transform = 'translateX(0px)';
   },
@@ -1183,6 +1184,12 @@ const post2D = {
         `<span class="cap"><span class="t">${escapeHTML(tr(p.title).trim())}</span>${meta ? `<span class="m">${escapeHTML(meta)}</span>` : ''}</span></button>`);
       const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
     });
+  },
+  addLogos(post) {   // les logos des partenaires, sur des pastilles blanches
+    const n = post.logos.length, cols = n <= 4 ? 2 : 3, rows = Math.ceil(n / cols);
+    const w = 68 + cols * 118, el = this.addPanel('logos', w, `<span class="lbl">${escapeHTML(ui('partners'))}</span><div class="grid" style="grid-template-columns:repeat(${cols},110px)">` +
+      post.logos.map(src => `<span class="lg"><img src="${escapeHTML(url(src))}" alt="" draggable="false"></span>`).join('') + '</div>');
+    if (rows > 3) el.querySelector('.grid').style.gridAutoRows = Math.floor(230 / rows - 6) + 'px';
   },
   addLink(post) {
     const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link;
@@ -1958,6 +1965,10 @@ window.addEventListener('popstate', () => {
   if (PREVIEW) return;
   if (isHomeHash()) backToHome(false);
   else if (!homeGone && assetsLoaded) enterToTheWeb();
+  else if (homeGone && started) {   // adresse …#studio tapée ou lien interne : on va à la section
+    const i = SECTIONS.findIndex(x => x.def.id === decodeURIComponent(location.hash.slice(1).split('/')[0]));
+    if (i >= 0 && i !== P.currentSection && inputEnabled) getToSectionView(i);
+  }
 });
 sloganEl.addEventListener('click', e => { if (e.target.closest('.wm') && homeGone) backToHome(); });
 sloganEl.addEventListener('keydown', e => { if ((e.code === 'Enter' || e.code === 'Space') && e.target.closest('.wm') && homeGone) { e.preventDefault(); backToHome(); } });
@@ -2060,4 +2071,4 @@ async function awaitPreview() {
   } catch (err) { showError(err); }
 })();
 
-window.__hc = { P, STYLE, cam, camera, renderer, get hv() { return hv && { cell: hv.cell, floor: hv.floor, fps: Math.round(1000 / hv.interval), cost: +hv.cost.toFixed(1), tainted: hv.tainted }; }, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, setLang, enter: () => enterBtn.click() };
+window.__hc = { P, STYLE, cam, camera, renderer, get hv() { return hv && { cell: hv.cell, floor: hv.floor, fps: Math.round(1000 / hv.interval), cost: +hv.cost.toFixed(1), tainted: hv.tainted }; }, get input() { return inputEnabled; }, get homeGone() { return homeGone; }, get content() { return CONTENT; }, get postsView() { return postsView; }, getToSectionView, openThatPost, closePost, goToPost, setLang, enter: () => enterBtn.click() };

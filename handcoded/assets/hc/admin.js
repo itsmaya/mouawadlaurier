@@ -114,7 +114,7 @@ function stageFile(path, blob) {
 }
 function usedPaths(c = S.content) {
   const set = new Set();
-  c.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && set.add(x)); p.media.forEach(m => m && m.src && set.add(m.src)); });
+  c.posts.forEach(p => { [p.thumb, p.thumbBack].forEach(x => x && set.add(x)); p.media.forEach(m => m && m.src && set.add(m.src)); (p.logos || []).forEach(x => set.add(x)); });
   c.models.forEach(m => { if (m.file) { set.add(m.file); (m.textures || []).forEach(tx => set.add(m.file.replace(/[^/]+$/, '') + tx)); } });
   if (c.settings.logo) set.add(c.settings.logo);
   if (c.settings.homeVideo && c.settings.homeVideo.src) set.add(c.settings.homeVideo.src);
@@ -199,7 +199,7 @@ function changeSummary() {
 function orphanFiles() {   // fichiers publiés que plus rien n'utilise après ces changements
   const before = usedPaths(JSON.parse(S.base)), now = usedPaths();
   const builtin = new Set(JSON.parse(S.base).models.filter(m => m.builtin).flatMap(m => [m.file, ...(m.textures || []).map(x => m.file.replace(/[^/]+$/, '') + x)]));
-  return [...before].filter(p => !now.has(p) && !builtin.has(p) && /^(media|models)\//.test(p) && !S.staged.has(p));
+  return [...before].filter(p => !now.has(p) && !builtin.has(p) && /^(media|models)\//.test(p) && !/^media\/logos\//.test(p) && !S.staged.has(p));   // les logos restent dans la bibliothèque
 }
 async function publish() {
   if (S.busy) return;
@@ -794,11 +794,11 @@ function viewPosts() {
 function blankPost(sec) {
   const c = S.content;
   return { id: uniqueId('nouveau-contenu', c.posts.map(p => p.id)), section: sec.id, order: Math.max(-1, ...postsOf(c, sec.id, { all: true }).map(p => p.order ?? 0)) + 1, published: false,
-    title: emptyField(), subtitle: emptyField(), place: emptyField(), date: '', tags: S.filter.tag ? [S.filter.tag] : [], thumb: '', thumbBack: '', body: emptyField(), media: [], link: '', team: [], credits: '', location: null, spots: [], skills: [], author: '' };
+    title: emptyField(), subtitle: emptyField(), place: emptyField(), date: '', tags: S.filter.tag ? [S.filter.tag] : [], thumb: '', thumbBack: '', body: emptyField(), media: [], link: '', team: [], credits: '', location: null, spots: [], skills: [], author: '', logos: [] };
 }
 function addPost(sec) { const p = blankPost(sec); S.content.posts.push(p); S.sel.post = p.id; S.filter.q = ''; S.filter.status = ''; change({ nav: true }); renderMain(); setTimeout(() => { const i = mainEl.querySelector('.card .lang input'); if (i) i.focus(); }, 30); }
 function postEditor(p, redrawList, redraw) {
-  ['tags', 'media', 'team', 'spots', 'skills'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });   // un contenu incomplet ne bloque jamais l'éditeur
+  ['tags', 'media', 'team', 'spots', 'skills', 'logos'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });   // un contenu incomplet ne bloque jamais l'éditeur
   if (typeof p.author !== 'string') p.author = '';
   const c = S.content, sec = c.sections.find(s => s.id === p.section), isSkill = !!sec.skills;
   /* un savoir-faire : un nom, une phrase courte (le texte de la carte), un texte, des projets. Pas de lieu, de date ni d'auteur. */
@@ -886,6 +886,25 @@ function postEditor(p, redrawList, redraw) {
   const teamBox = h('div', { class: 'chips' });
   const drawTeam = () => fill(teamBox, ...(people.length ? people.map(x => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(p.team.includes(x.id)), onclick: () => { p.team = p.team.includes(x.id) ? p.team.filter(id => id !== x.id) : [...p.team, x.id]; change(); drawTeam(); } }, fr(x.title))) : [h('p', { class: 'hint', style: { margin: 0 } }, 'Ajoute des portraits dans une section de type « Portrait » pour les relier ici.')]));
   drawTeam();
+
+  /* Logos des partenaires : une bibliothèque commune (tous les logos déjà utilisés), on coche ceux du projet ou on en ajoute */
+  const logoBox = h('div');
+  const drawLogos = () => {
+    const lib = [...new Set(c.posts.flatMap(x => x.logos || []).concat(p.logos, S.logoFiles || [], [...S.staged.keys()].filter(k => k.startsWith('media/logos/'))))].sort((a, b) => (p.logos.indexOf(b) >= 0) - (p.logos.indexOf(a) >= 0) || a.localeCompare(b));
+    if (!S.logoFiles && S.backend.listFiles) { S.logoFiles = []; S.backend.listFiles(['media/logos/']).then(fs => { S.logoFiles = fs.map(f => f.path).filter(x => /\.(png|jpe?g|svg|webp|gif)$/i.test(x)); if (logoBox.isConnected) drawLogos(); }).catch(() => {}); }   // tous les logos du dossier media/logos
+    const name = path => decodeURIComponent(path.split('/').pop().replace(/-[a-z0-9]{4}\.[a-z]+$/i, '').replace(/\.[a-z]+$/i, '')).replace(/[-_]+/g, ' ');
+    const add = async files => { for (const f of files) { try { const up = await prepareUpload(f, 'media/logos', 'logo'); stageFile(up.path, up.blob); p.logos.push(up.path); change(); } catch (e) { toast(e.message, 'bad', 7000); } } drawLogos(); };
+    const drop = h('div', { class: 'media-add', role: 'button', tabindex: 0, style: { minHeight: '64px' }, onclick: () => filePicker('image/*', true, add), onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } }, h('span', null, '+ Ajouter des logos', h('br'), h('small', null, 'PNG ou SVG, fond blanc ou transparent')));
+    dropTarget(drop, add);
+    fill(logoBox,
+      h('div', { class: 'logo-lib' }, lib.map(path => {
+        const on = p.logos.includes(path);
+        return h('button', { type: 'button', class: 'logo-chip', 'aria-pressed': String(on), title: name(path), onclick: () => { p.logos = on ? p.logos.filter(x => x !== path) : [...p.logos, path]; change(); drawLogos(); } },
+          h('img', { src: fileURL(path), alt: name(path), loading: 'lazy' }), h('span', null, name(path)));
+      }), drop),
+      h('p', { class: 'hint' }, p.logos.length ? `${p.logos.length} logo${p.logos.length > 1 ? 's' : ''} en bas de la fiche, dans l’ordre où tu les as cochés. Les logos des autres projets sont proposés ici : un clic pour l’ajouter ou le retirer.` : 'Les logos s’affichent en bas de la fiche, dans un panneau « Partenaires ». Ceux déjà utilisés sur d’autres projets sont proposés ici : un clic suffit.'));
+  };
+  drawLogos();
 
   /* Savoir-faire ↔ projets : se relie des deux côtés, la donnée vit sur le projet (p.skills) */
   const secOf = x => c.sections.find(s => s.id === x.section) || {};
@@ -985,6 +1004,7 @@ function postEditor(p, redrawList, redraw) {
       sec.open === 'strip' ? h('div', { class: 'f', style: { marginTop: '6px' } }, h('span', { class: 'lbl' }, 'Images et vidéos de la fiche'), mediaBox,
         h('p', { class: 'hint' }, 'La première s’affiche avant le texte, les autres après. Vidéos MP4 ou WebM, idéalement moins de 20 Mo.')) : null),
     h('div', { class: 'block' }, h('h3', null, 'Tags'), tagBox),
+    sec.open === 'strip' ? h('div', { class: 'block' }, h('h3', null, 'Logos des partenaires', h('small', null, 'producteurs, soutiens, lieux, clients')), logoBox) : null,
     linkable && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Savoir-faire', h('small', null, 'coche ceux utilisés sur ce projet, comme des tags')), skillBox) : null,
     ['image', 'text'].includes(sec.card) && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Qui a travaillé dessus ?', h('small', null, 'les portraits s’affichent sur la fiche')), teamBox,
       h('div', { style: { marginTop: '12px' } }, field('Autres crédits', textInput(() => p.credits, v => { p.credits = v; }, { placeholder: 'Ex. Tigre Lab, Studio X' })))) : null,
