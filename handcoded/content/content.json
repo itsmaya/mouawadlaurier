@@ -618,7 +618,8 @@
     "concept-design",
     "sustainable",
     "project-management",
-    "hardware"
+    "hardware",
+    "nouveau-contenu"
    ]
   },
   {
@@ -689,7 +690,9 @@
     }
    ],
    "author": "Mouawad Laurier",
-   "skills": []
+   "skills": [
+    "nouveau-contenu"
+   ]
   },
   {
    "id": "rising",
@@ -761,7 +764,9 @@
     }
    ],
    "author": "Mouawad Laurier",
-   "skills": []
+   "skills": [
+    "nouveau-contenu"
+   ]
   },
   {
    "id": "ephemere",
@@ -3843,6 +3848,143 @@
    "thumbBack": "",
    "location": null,
    "author": "Fat-Man Collective, Work Club",
+   "skills": []
+  },
+  {
+   "id": "nouveau-contenu",
+   "section": "expertise",
+   "order": 12,
+   "published": true,
+   "title": {
+    "en": "Immersive",
+    "fr": "Immersif",
+    "ca": "Imersivo",
+    "es": "Imersivo"
+   },
+   "subtitle": {
+    "en": "Contenus immersif",
+    "fr": "Contenus immersif",
+    "ca": "Contenus immersif",
+    "es": "Contenus immersif"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "design",
+    "engineering",
+    "software",
+    "operations"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "Création de contenues dynamique immersif",
+    "fr": "Création de contenues dynamique immersif",
+    "ca": "Création de contenues dynamique immersif",
+    "es": "Création de contenues dynamique immersif"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "author": "",
+   "spots": [
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
+   "skills": []
+  },
+  {
+   "id": "nouveau-contenu-2",
+   "section": "expertise",
+   "order": 13,
+   "published": false,
+   "title": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "author": "",
+   "spots": [],
+   "skills": []
+  },
+  {
+   "id": "nouveau-contenu-3",
+   "section": "expertise",
+   "order": 14,
+   "published": false,
+   "title": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "author": "",
+   "spots": [],
    "skills": []
   }
  ]
