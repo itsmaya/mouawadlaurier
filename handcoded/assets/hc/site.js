@@ -414,7 +414,7 @@ class PostView {
   }
   moveToCamera(distance, time = 0) {   // la carte vient se placer devant la caméra (position finale de l'orbite)
     killTweensOf(this.thumb);
-    const D = STYLE.cameraDistance, cl = { x: -D * Math.sin(P.degreeCamera), z: -D * Math.cos(P.degreeCamera) }, p = this.p2;
+    const D = camD(), cl = { x: -D * Math.sin(P.degreeCamera), z: -D * Math.cos(P.degreeCamera) }, p = this.p2;
     const dx = p.x - cl.x, dz = p.z - cl.z, len = Math.hypot(dx, dz) || 1;
     to(this.thumb, time, { x: cl.x + dx * distance / len, y: p.y, z: cl.z + dz * distance / len, rotY: p.rotY + 720 }, { ease: 'quartOut' });
     return { cl, dir: { x: dx / len, z: dz / len } };
@@ -490,7 +490,7 @@ const LAYOUT = {
     preset(view) { view.angle = Math.PI / (view.n + 1); },
     coords(view, i) { return mapCoords(view.posts[i].location) || [((i % 5) - 2) * 160, ((i % 3) - 1) * 120]; },
     offset(i) { return this.offsets[i] || [(i % 2 ? 1 : -1) * (300 + 40 * i), ((i % 3) - 1) * 160]; },
-    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i); return { x: c[0] + d[0], y: (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)), z: c[1] + d[1], rotY: 180 }; },
+    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i), k = camK(view.def); return { x: c[0] + d[0], y: (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)) * Math.min(1, 0.2 + k), z: c[1] + d[1], rotY: 180 }; },   // caméra plus proche : les fiches descendent vers la carte
     open: 'oneStep', lineEnd(p, view, i) { const c = this.coords(view, i); return [c[0], 50, c[1]]; }, lineStart: (p, th) => [th.x, th.y - p.height / 2, th.z],
     focus: (view, id) => focusFront(view, id, p => { const xp = p.p2.x * (p.width / 2) / Math.hypot(p.p2.x, p.p2.y) + p.p2.x; p.jump(p.p2.x, p.p2.y * xp / (p.p2.x || 1e-6), p.p2.z); }),
     move(view, dx) { view.postViews.forEach((p, i) => { if (!p.ready || isTweening(p.thumb)) return; const th = p.thumb, mv = -Math.abs(dx * (Math.random() * 2 + 1)) / 2; th.x -= (th.x - p.p2.x + mv) * ease(2 * STYLE.cameraEaseSpeed); const inf = view.infos[i]; if (inf) inf.p.x = p.p2.x - p.width - 20 - (th.x - p.p2.x); }); },
@@ -524,9 +524,9 @@ class PostsView3D {
     this.L = LAYOUT[this.def.layout] || LAYOUT.carousel;
     this.card = this.def.card;
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
-    [this.w, this.h] = CARDS[this.card].size;
+    [this.w, this.h] = CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
-    this.postViews = this.posts.map((_, i) => new PostView(this, this.w, this.h, i));
+    this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
     this.L.preset.call(this.L, this);
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
@@ -619,7 +619,7 @@ class PostsView3D {
     const tex = await infoTexture(this.posts[id], 'person'); if (!this.alive) return;
     if (info.mesh.material.map) info.mesh.material.map.dispose();
     info.mesh.material.map = tex; info.mesh.material.needsUpdate = true;
-    const s = this.h / 90; info.mesh.scale.setScalar(s);
+    const s = this.h * this.k / 90; info.mesh.scale.setScalar(s);
     delayedCall(STYLE.tween, () => {   // la fiche sort de derrière le portrait et se pose à côté, dans le même plan
       if (!P.postOpen || P.selected !== id) return;
       info.target = p; info.k = 0; info.mesh.visible = true;
@@ -702,7 +702,14 @@ let started = false, inputEnabled = false;
 const curSec = () => sections[P.currentSection];
 function setUpper() { const h = STYLE.cameraHeight; P.cameraY = P.cameraY + h / 7 <= 3 * h ? P.cameraY + h / 7 : h * 3; }
 function setDowner() { const h = STYLE.cameraHeight; P.cameraY = P.cameraY - h / 7 >= h / 7 ? P.cameraY - h / 7 : h / 7; }
-function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + STYLE.cameraDistance * Math.sin(P.actualDeg); cam.z = s.p.z + STYLE.cameraDistance * Math.cos(P.actualDeg); }
+/* Réglages par section (back-office) : distance de la caméra et taille des cartes, en %. La carte du monde se regarde de plus près. */
+const CAM_DEFAULT = { map: 58 };
+const camK = (def = (curSec() || {}).def || {}) => Math.max(0.3, Math.min(2.5, (+def.camera || CAM_DEFAULT[def.layout] || 100) / 100));
+const camD = () => STYLE.cameraDistance * camK();
+const camTargetY = () => STYLE.cameraTargetHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 0.62 : 1);
+const camHeight = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1);
+const cardK = def => Math.max(0.4, Math.min(2.5, (+def.cardScale || 100) / 100));
+function placeCameraOnOrbit() { const s = curSec(); cam.x = s.p.x + camD() * Math.sin(P.actualDeg); cam.z = s.p.z + camD() * Math.cos(P.actualDeg); }
 function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
@@ -713,8 +720,8 @@ function changeSection3D() {
   cameraChangeSection();
 }
 function cameraChangeSection() {
-  const s = curSec(); P.cameraY = STYLE.cameraHeight;
-  cameraGoto(STYLE.cameraDistance * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, STYLE.cameraDistance * Math.cos(P.degreeCamera) + s.p.z, s.p.x, STYLE.cameraTargetHeight, s.p.z, STYLE.cameraSpeed);
+  const s = curSec(); P.cameraY = camHeight();
+  cameraGoto(camD() * Math.sin(P.degreeCamera) + s.p.x, P.cameraY, camD() * Math.cos(P.degreeCamera) + s.p.z, s.p.x, camTargetY(), s.p.z, STYLE.cameraSpeed);
 }
 function focusPost(i) { P.selected = i; if (postsView) postsView.focus(i); }
 function selectPost(dir) {
@@ -727,7 +734,7 @@ function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
   const s = curSec();
   if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) postsView.postViews[P.selected].moveToCamera(100, 0);
-  cameraOnlyGoto(s.p.x + STYLE.cameraDistance * Math.sin(P.actualDeg), cam.y, s.p.z + STYLE.cameraDistance * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+  cameraOnlyGoto(s.p.x + camD() * Math.sin(P.actualDeg), cam.y, s.p.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
@@ -754,7 +761,7 @@ function mainEntrance() {   // zoom d'entrée : focale de 6 à 2 en 1 s
   const time = 1; cam.zoom = 6;
   const p0 = postsView && postsView.postViews[0] ? postsView.postViews[0].p2.y || STYLE.planeDistance : STYLE.planeDistance;
   cam.y = p0 + 100; camTarget.y = p0 + 100;
-  cameraTarget(camTarget.x, STYLE.cameraTargetHeight, camTarget.z, time);
+  cameraTarget(camTarget.x, camTargetY(), camTarget.z, time);
   inputEnabled = false;
   to(cam, time, { zoom: CAMERA.zoom }, { ease: 'expoOut' });
   setTimeout(() => { inputEnabled = true; }, time * 1000 + 50);   // hors des tweens : un clic de menu pendant l'entrée ne bloque plus le clavier
@@ -801,7 +808,7 @@ function textGeom(mode) {
   return { width, x: pad, colW: width - 2 * pad };
 }
 function fitPost2D() {
-  const top = sloganEl.offsetTop + sloganEl.offsetHeight + 2 * STYLE.margin, need = post2D.height + 40;
+  const top = sloganEl.offsetTop + sloganEl.offsetHeight + 2 * STYLE.margin, need = post2D.height + 12;
   const reserve = (menu.offsetHeight || 90) + 70;   // sous la fiche : le menu et une bande blanche qui referme la fiche au clic
   const s = Math.max(0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
   post2D.scale = s;
@@ -962,12 +969,14 @@ const post2D = {
       media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit));
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
-    if (post.link && card !== 'place') {
-      const b = document.createElement('div'); b.className = 'banda';
-      b.innerHTML = `${escapeHTML(ui('visit'))} <a href="${escapeHTML(post.link)}" target="_blank" rel="noopener">${escapeHTML(post.link.replace(/^https?:\/\//, ''))}</a>`;
-      post2dEl.appendChild(b); this.banda = b; this.placeBanda();
-    }
+    if (post.link && card !== 'place') this.addLink(post);   // le lien du projet ferme la bande, sur la dernière fiche
     this.layout(); this.x = 0; this.finalpos = 0; strip.style.transform = 'translateX(0px)';
+  },
+  addLink(post) {
+    const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link;
+    const label = String(ui('visit')).replace(/\s*:\s*$/, '');
+    const host = post.link.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+    this.addPanel('link', 300, `<span class="lbl">${escapeHTML(label)}</span><a href="${escapeHTML(href)}" target="_blank" rel="noopener"><span class="host">${escapeHTML(host)}</span><span class="arr" aria-hidden="true">↗</span></a>`);
   },
   addPanel(cls, width, inner) {
     const el = document.createElement('div'); el.className = 'pnl ' + cls; el.style.width = width + 'px'; el.style.height = this.height + 'px';
@@ -1481,9 +1490,9 @@ function startRender() {
   }
   P.currentSection = start; P.resetData();
   const s = curSec();
-  P.cameraY = STYLE.cameraHeight;
-  cam.x = STYLE.cameraDistance * Math.sin(P.degreeCamera) + s.p.x; cam.y = P.cameraY; cam.z = STYLE.cameraDistance * Math.cos(P.degreeCamera) + s.p.z;
-  camTarget.x = s.p.x; camTarget.y = STYLE.cameraTargetHeight; camTarget.z = s.p.z;
+  P.cameraY = camHeight();
+  cam.x = camD() * Math.sin(P.degreeCamera) + s.p.x; cam.y = P.cameraY; cam.z = camD() * Math.cos(P.degreeCamera) + s.p.z;
+  camTarget.x = s.p.x; camTarget.y = camTargetY(); camTarget.z = s.p.z;
   started = true;
   getToSectionView(start, 0);
 }

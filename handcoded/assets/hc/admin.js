@@ -619,6 +619,9 @@ function sectionEditor(sec, redrawList, redraw) {
       h('div', { class: 'grid2', style: { marginTop: '16px' } },
         field('Tag affiché à l’ouverture', selectInput([{ value: '', label: 'Tout' }, ...sec.tags.map(tg => ({ value: tg.id, label: fr(tg.label) || tg.id }))], () => sec.defaultTag || '', v => { sec.defaultTag = v; })),
         field('Cartes par page', textInput(() => sec.perPage, v => { sec.perPage = Math.max(1, Math.min(40, v || 1)); }, { type: 'number', min: 1, max: 40 }), 'Au-delà, les flèches du site passent à la page suivante.')),
+      h('div', { class: 'grid2', style: { marginTop: '16px' } },
+        field('Taille des cartes (%)', textInput(() => sec.cardScale || '', v => { if (v === '' || v === 100) delete sec.cardScale; else sec.cardScale = Math.max(40, Math.min(250, v)); }, { type: 'number', min: 40, max: 250, step: 5, placeholder: '100' }), 'Agrandit ou réduit les cartes 3D de cette section. 100 = taille d’origine.'),
+        field('Distance de la caméra (%)', textInput(() => sec.camera || '', v => { if (v === '' || v === (sec.layout === 'map' ? 58 : 100)) delete sec.camera; else sec.camera = Math.max(30, Math.min(250, v)); }, { type: 'number', min: 30, max: 250, step: 5, placeholder: sec.layout === 'map' ? '58' : '100' }), 'Plus petit : la caméra s’approche de l’objet. Vide : ' + (sec.layout === 'map' ? '58 pour la carte du monde.' : '100.'))),
       sec.tags.length ? clientLinks(sec) : null));
 }
 function siteBase() {   // adresse publique du site, devinée depuis celle du back-office
@@ -780,10 +783,10 @@ function postEditor(p, redrawList, redraw) {
     const add = h('div', { class: 'media-add', role: 'button', tabindex: 0, onclick: () => filePicker('image/*,video/mp4,video/webm', true, addMedia), onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } }, h('span', null, '+ Ajouter des images ou des vidéos', h('br'), h('small', null, 'ou glisse-les ici')));
     dropTarget(add, addMedia);
     const addLink = h('div', { class: 'media-add', role: 'button', tabindex: 0, onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); }, onclick: async () => {
-      const u = await askText('Ajouter un lien', 'Adresse d’une vidéo YouTube ou Vimeo, ou d’une image en ligne', 'https://', 'Ajouter');
+      const u = await askText('Ajouter une vidéo', 'Lien YouTube ou Vimeo (youtube.com/watch?v=…, youtu.be/…, vimeo.com/…), ou adresse d’une image en ligne', 'https://', 'Ajouter');
       if (!u || !/^https?:\/\/\S+$/.test(u.trim())) return;
       p.media.push({ src: u.trim() }); change(); drawMedia();
-    } }, h('span', null, '+ Ajouter un lien', h('br'), h('small', null, 'YouTube, Vimeo, image en ligne')));
+    } }, h('span', null, '+ Vidéo YouTube / Vimeo', h('br'), h('small', null, 'colle son lien (ou celui d’une image en ligne)')));
     fill(mediaBox, ...p.media.map((m, i) => {
       const k = mediaKindOf(m.src), vid = k === 'video';
       const el = k === 'youtube' ? h('img', { src: `https://i.ytimg.com/vi/${ytIdOf(m.src)}/hqdefault.jpg`, alt: '', loading: 'lazy' })

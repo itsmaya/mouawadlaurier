@@ -11,6 +11,16 @@
 </head>
 <body>
 <div id="app"><p class="boot">Chargement du back-office…</p></div>
+<script id="hc-boot-guard">/* Si un fichier manque ou plante au démarrage, on le dit au lieu de rester sur « Chargement » */
+(function () {
+  function say(msg) { var b = document.querySelector('#app .boot'); if (b) b.innerHTML = msg; }
+  window.addEventListener('error', function (e) {
+    var t = e.target, src = t && (t.src || t.href);
+    say(src ? 'Le back-office n’a pas pu démarrer : fichier introuvable<br><code>' + src + '</code>' : 'Le back-office n’a pas pu démarrer : ' + (e.message || 'erreur inconnue') + '<br><small>Navigateur : ' + navigator.userAgent + '</small>');
+  }, true);
+  setTimeout(function () { var b = document.querySelector('#app .boot'); if (b && /Chargement/.test(b.textContent)) b.innerHTML += '<br><small>Toujours rien ? Recharge avec Cmd + Maj + R. Si ça persiste, envoie une capture de cette page.</small>'; }, 8000);
+})();
+</script>
 <script>window.HC_SITE = '../';
 /* Ouvert depuis le disque (file://) : contenu et modèles lus depuis leurs copies en JavaScript. */
 if (location.protocol === 'file:') document.write('<script src="../content/content.js"><\/script><script src="../models/models.js"><\/script>');
