@@ -17,6 +17,15 @@
   "signImages": true,
   "showreel": "https://youtu.be/dFbp9eWlvgM",
   "sloganInbox": "",
+  "homeVideo": {
+   "src": "",
+   "cell": 14,
+   "contrast": 1,
+   "size": 92,
+   "color": "white",
+   "mode": "light",
+   "controls": true
+  },
   "taglines": {
    "en": [
     "Hand Coded.",
@@ -120,7 +129,7 @@
      "es": "Hand Coded, Barcelona"
     },
     "lines": [
-     "Carrer de la Providència, 55",
+     "Carrer Perez Galdos 6,",
      "08012 Barcelona",
      "+34 666 19 94 29"
     ],
