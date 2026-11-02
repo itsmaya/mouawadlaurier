@@ -1385,7 +1385,14 @@ function closeReel(instant) {
    grille, contraste, couleur, inversion, son (coupé au départ) et leur caméra (l'image reste sur leur écran). La lecture démarre à un endroit au hasard. */
 var hv = null;
 const HV_COLORS = ['white', 'grey', 'accent', 'source'];
-function hvSettings() { return Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true }, CONTENT.settings.homeVideo || {}); }
+function hvSettings() {
+  const c = Object.assign({ src: '', cell: 14, contrast: 1, size: 92, color: 'white', mode: 'light', controls: true, random: true }, CONTENT.settings.homeVideo || {});
+  if (c.random !== false) {   // chaque visite tombe sur un réglage différent
+    const r = (a, b) => a + Math.random() * (b - a), pick = (list, w) => { let x = Math.random() * w.reduce((a, b) => a + b, 0); for (let i = 0; i < list.length; i++) { if ((x -= w[i]) < 0) return list[i]; } return list[0]; };
+    Object.assign(c, { cell: 2 * Math.round(r(4, 12)), contrast: +r(0.6, 2).toFixed(1), size: Math.round(r(72, 100)), color: pick(HV_COLORS, [4, 2, 2, 1]), mode: Math.random() < 0.75 ? 'light' : 'dark' });
+  }
+  return c;
+}
 function setupHomeVideo() {
   if (hv) return;
   const band = document.getElementById('home-band'); if (!band) return;
@@ -1409,23 +1416,40 @@ function setupHomeVideo() {
     CONTENT.posts.filter(p => p.published !== false).forEach(p => [p.thumb, ...(p.media || []).map(m => m && m.src)].forEach(x => { if (x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x) && !seen.has(x) && seen.size < 10) seen.add(x); }));
     hv.pics = [...seen].sort(() => Math.random() - 0.5).map(x => { const im = new Image(); im.src = url(x); return im; });
   }
-  if (cfg.controls !== false) buildHvKeys(band);
+  if (cfg.controls !== false) buildHvKeys(document.getElementById('home'));
+  const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
   hvSize(); window.addEventListener('resize', hvSize);
 }
 function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
 function buildHvKeys(band) {
   const box = document.createElement('div'); box.id = 'hv';
   box.innerHTML = `<div id="hv-panel">
-      <span class="lbl" data-k="grid"></span><div class="row"><button type="button" class="key" data-a="grid-">−</button><button type="button" class="key" data-a="grid+">+</button></div>
-      <span class="lbl" data-k="contrast"></span><div class="row"><button type="button" class="key" data-a="con-">−</button><button type="button" class="key" data-a="con+">+</button></div>
-      <span class="lbl" data-k="color"></span><div class="row"><button type="button" class="key sw" data-a="color"><i></i></button><button type="button" class="key" data-a="invert" aria-pressed="false">⇄</button></div>
-      <span class="lbl" data-k="sound"></span><div class="row"><button type="button" class="key" data-a="sound" aria-pressed="false">♪</button></div>
-      <span class="lbl" data-k="cam"></span><div class="row"><button type="button" class="key" data-a="cam" aria-pressed="false">●</button></div>
+      <div class="lbl" data-k="grid"></div><div class="row"><button type="button" class="key" data-a="grid-" data-code="ArrowLeft">◂</button><button type="button" class="key" data-a="grid+" data-code="ArrowRight">▸</button></div>
+      <div class="lbl" data-k="contrast"></div><div class="row"><button type="button" class="key" data-a="con-" data-code="ArrowDown">▾</button><button type="button" class="key" data-a="con+" data-code="ArrowUp">▴</button></div>
+      <div class="lbl" data-k="color"></div><div class="row"><button type="button" class="key sw" data-a="color" data-code="KeyC"><i></i> C</button></div>
+      <div class="lbl" data-k="invert"></div><button type="button" class="key" data-a="invert" data-code="KeyI" aria-pressed="false">I</button>
+      <div class="lbl" data-k="sound"></div><button type="button" class="key" data-a="sound" data-code="KeyS" aria-pressed="false">S</button>
+      <div class="lbl" data-k="cam"></div><button type="button" class="key" data-a="cam" data-code="KeyV" aria-pressed="false">V</button>
       <span class="hv-note" hidden></span>
-    </div><button id="hv-toggle" type="button" aria-expanded="false"><i aria-hidden="true"></i><span></span></button>`;
+    </div><button id="hv-toggle" type="button" aria-expanded="false"></button>`;
   band.appendChild(box);
   hv.box = box; hv.note = box.querySelector('.hv-note');
-  box.querySelector('#hv-toggle').addEventListener('click', e => { const open = box.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+  const setOpen = open => { box.classList.toggle('open', open); box.querySelector('#hv-toggle').setAttribute('aria-expanded', String(open)); };
+  hv.setOpen = setOpen;
+  box.querySelector('#hv-toggle').addEventListener('click', () => setOpen(!box.classList.contains('open')));
+  /* les touches du vrai clavier, comme dans le site : flèches, C, I, S, V, K pour ouvrir ou fermer */
+  window.addEventListener('keydown', e => {
+    if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
+    const inInput = e.target && e.target.id === 'bs', typed = inInput && e.target.value.length > 0;
+    if (e.code === 'Escape' && inInput) { e.target.blur(); return; }
+    if (e.code === 'KeyK' && !inInput) { e.preventDefault(); setOpen(!box.classList.contains('open')); return; }
+    const key = box.querySelector(`[data-code="${e.code}"]`); if (!key) return;
+    if (/^Key/.test(e.code) && inInput) return;          // on écrit son slogan : les lettres restent des lettres
+    if (/^Arrow/.test(e.code) && typed) return;          // les flèches déplacent le curseur dans le slogan
+    e.preventDefault();
+    if (!hv.touched) { hv.touched = true; setOpen(true); }
+    key.click();
+  });
   box.querySelector('#hv-panel').addEventListener('click', e => {
     const b = e.target.closest('button[data-a]'); if (!b) return; const a = b.dataset.a;
     b.classList.add('down'); setTimeout(() => b.classList.remove('down'), 200);
@@ -1444,7 +1468,6 @@ function buildHvKeys(band) {
 function hvLabels() {
   if (!hv || !hv.box) return;
   hv.box.querySelectorAll('.lbl[data-k]').forEach(el => { el.textContent = ui('hv_' + el.dataset.k); });
-  hv.box.querySelector('#hv-toggle span').textContent = ui('hv_tab');
   hv.box.querySelector('#hv-toggle').setAttribute('aria-label', ui('hv_tab'));
   const sw = hv.box.querySelector('.sw i'); sw.className = 'c-' + hv.color;
   const set = (a, on, label) => { const b = hv.box.querySelector(`[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); if (label) b.setAttribute('aria-label', label); };
@@ -1487,6 +1510,42 @@ function hvSource(t) {
   pan(ok[i], f, 1); if (f > 0.78 && n > 1) pan(ok[(i + 1) % n], f - 1, (f - 0.78) / 0.22);
   c.globalAlpha = 1; return true;
 }
+/* Ouvert depuis le disque, le navigateur interdit de lire les pixels d'un fichier local. Les carrés se fabriquent alors sans les lire :
+   l'image en blocs (moitié) + une pyramide par case (moitié), puis un seuil très dur : chaque case garde un carré d'autant plus grand que le bloc est clair. */
+const canFilter = (() => { try { const c = document.createElement('canvas').getContext('2d'); return typeof c.filter === 'string'; } catch (e) { return false; } })();
+function hvPyramid(cell) {
+  if (hv.pyr && hv.pyr.cell === cell && hv.pyr.fill === hv.fill) return hv.pyr.pat;
+  const c = document.createElement('canvas'); c.width = c.height = cell; const x = c.getContext('2d'), im = x.createImageData(cell, cell), half = cell / 2;
+  for (let j = 0; j < cell; j++) for (let i = 0; i < cell; i++) {
+    const dd = Math.max(Math.abs(i + 0.5 - half), Math.abs(j + 0.5 - half)) / half, v = Math.max(0, Math.min(1, 1 - dd / hv.fill)) * 255, q = (j * cell + i) * 4;
+    im.data[q] = im.data[q + 1] = im.data[q + 2] = v; im.data[q + 3] = 255;
+  }
+  x.putImageData(im, 0, 0);
+  hv.pyr = { cell, fill: hv.fill, pat: hv.ctx.createPattern(c, 'repeat') };
+  return hv.pyr.pat;
+}
+function hvComposite(cols, rows) {
+  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = hv.cell, ox = Math.round((W - cols * cell) / 2), oy = Math.round((H - rows * cell) / 2);
+  ctx.imageSmoothingEnabled = false;
+  if (!canFilter) { ctx.globalAlpha = 0.45; ctx.drawImage(hv.off, ox, oy, cols * cell, rows * cell); ctx.globalAlpha = 1; return; }   // navigateur sans filtres : image en blocs, assombrie
+  if (!hv.tmp) { hv.tmp = document.createElement('canvas'); hv.tctx = hv.tmp.getContext('2d'); }
+  const t = hv.tmp, tc = hv.tctx;
+  if (t.width !== W || t.height !== H) { t.width = W; t.height = H; }
+  tc.setTransform(1, 0, 0, 1, 0, 0); tc.globalCompositeOperation = 'source-over'; tc.globalAlpha = 1; tc.filter = 'none';
+  tc.fillStyle = '#000'; tc.fillRect(0, 0, W, H);
+  tc.imageSmoothingEnabled = false;
+  tc.filter = `grayscale(1)${hv.mode === 'dark' ? ' invert(1)' : ''} brightness(1.25) contrast(${(1.05 + hv.gamma * 0.45).toFixed(2)})`;   // sans lecture des pixels, pas de contraste automatique : on éclaircit d'office
+  tc.globalAlpha = 0.5; tc.drawImage(hv.off, ox, oy, cols * cell, rows * cell);
+  tc.filter = 'none'; tc.globalCompositeOperation = 'lighter';
+  tc.save(); tc.translate(ox, oy); tc.fillStyle = hvPyramid(cell); tc.fillRect(-ox, -oy, W, H); tc.restore();
+  tc.globalCompositeOperation = 'source-over'; tc.globalAlpha = 1;
+  ctx.save(); ctx.filter = 'contrast(4000%)'; ctx.drawImage(t, 0, 0, W, H); ctx.restore();   // seuil : blanc dans les carrés, noir ailleurs
+  if (hv.color === 'white') return;
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';
+  if (hv.color === 'source') ctx.drawImage(hv.off, ox, oy, cols * cell, rows * cell);
+  else { ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : (CONTENT.settings.accent || '#ffcc00'); ctx.fillRect(0, 0, W, H); }
+  ctx.restore();
+}
 function homeVideoStep(now) {
   if (!hv || now - hv.last < 1000 / 30 || !hv.W) return; hv.last = now;
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1497,9 +1556,7 @@ function homeVideoStep(now) {
   if (!hvSource(t)) return;
   let d;
   if (!hv.tainted) { try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) { hv.tainted = true; } }
-  if (hv.tainted) {   // ouvert depuis le disque : le navigateur interdit de lire les pixels, on montre l'image telle quelle, assombrie
-    ctx.globalAlpha = 0.45; ctx.imageSmoothingEnabled = false; ctx.drawImage(hv.off, 0, 0, W, H); ctx.globalAlpha = 1; return;
-  }
+  if (hv.tainted) { hvComposite(cols, rows); return; }
   let mn = 1, mx = 0;
   for (let q = 0; q < d.length; q += 16) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; if (l < mn) mn = l; if (l > mx) mx = l; }
   hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;
