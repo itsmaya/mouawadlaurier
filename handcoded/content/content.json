@@ -297,11 +297,11 @@
     "albatros.jpg"
    ],
    "scaleMode": "fit",
-   "height": 420,
-   "rotationY": 0,
+   "height": 360,
+   "rotationY": 165,
    "untextured": "wire",
    "builtin": false,
-   "scale": 165
+   "scale": 135
   }
  ],
  "sections": [
