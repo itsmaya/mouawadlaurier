@@ -83,6 +83,9 @@ class Provider {
     this.first = 0; this.posts = this.list.slice(0, this.per); this.last = this.posts.length;
   }
   get currentCatName() { const c = this.categoryList.find(c => c.id === this.category); return c ? tr(c.label) : ''; }
+  countOf(id) { return id ? this.all.filter(p => p.tags.includes(id)).length : this.all.length; }   // contenus publiés dans une catégorie
+  get page() { return Math.floor(this.first / this.per) + 1; }
+  get pages() { return Math.max(1, Math.ceil(this.list.length / this.per)); }
   get currentPost() { return this.posts[this.selected]; }
   hasNewer() { return this.first > 0; }
   hasOlder() { return this.last < this.list.length; }
@@ -1077,6 +1080,9 @@ function renderTexts() {
     off.appendChild(el);
   });
   (s.social || []).forEach(so => { if (!so.url) return; const el = document.createElement('section'); el.innerHTML = `<h3>${escapeHTML(so.label)}</h3><p><a href="${escapeHTML(so.url)}" target="_blank" rel="noopener">${escapeHTML(so.url.replace(/^https?:\/\/(www\.)?/, ''))}</a></p>`; off.appendChild(el); });
+  const figs = homeFigures(), num = f => `<b data-v="${escapeHTML(f.value)}">${escapeHTML(f.value)}</b> ${escapeHTML(f.label)}`;
+  if (figs.length) { const el = document.createElement('section'); el.className = 'fig'; el.innerHTML = `<h3>${num(figs[0])}</h3>${figs.slice(1).map(f => `<p>${num(f)}</p>`).join('')}`; off.appendChild(el); }   // les chiffres du studio, en colonne à côté des contacts
+  home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff)); drawFigures();
   enterBtn.textContent = tr(s.home.enter) || ui('enter');
   renderReel(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
@@ -1128,14 +1134,18 @@ function initCategorieData() {
   catList.innerHTML = '';
   list.forEach(c => {
     const li = document.createElement('li'), b = document.createElement('button');
-    b.type = 'button'; b.textContent = tr(c.label); b.setAttribute('aria-current', String(c.id === d.category));
+    b.type = 'button'; b.innerHTML = `${escapeHTML(tr(c.label))} <span class="n">(${d.countOf(c.id)})</span>`; b.setAttribute('aria-current', String(c.id === d.category));
     b.addEventListener('click', () => { closeCategory(); changeCategory(c.id); });
     li.appendChild(b); catList.appendChild(li);
   });
-  catName.textContent = d.currentCatName;
+  catName.innerHTML = `${escapeHTML(d.currentCatName)} <span class="n">(${d.countOf(d.category)})</span>`;
   checkAccess(); closeCategory();
 }
-function checkAccess() { const d = P.data; pgPrev.disabled = !d.hasNewer(); pgNext.disabled = !d.hasOlder(); pgPrev.hidden = pgNext.hidden = !d.hasNewer() && !d.hasOlder(); }
+const pgNum = document.getElementById('pg-num');
+function checkAccess() {
+  const d = P.data; pgPrev.disabled = !d.hasNewer(); pgNext.disabled = !d.hasOlder(); pgPrev.hidden = pgNext.hidden = !d.hasNewer() && !d.hasOlder();
+  if (pgNum) { pgNum.hidden = pgPrev.hidden; pgNum.textContent = `${d.page}/${d.pages}`; pgNum.setAttribute('aria-label', `${d.page} / ${d.pages}`); }   // où on en est : page 2 sur 5
+}
 function closeCategory() { clearTimeout(catPeekTimer); catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }
 /* Arrivée sur une section : le menu des catégories s'ouvre puis se referme tout seul, comme le clavier à la première touche */
 let catPeekTimer = 0, enteredAt = -1e9;
@@ -1920,7 +1930,7 @@ function submitSlogan() {
   if (!v) return false;
   typedSlogans = [v.toUpperCase(), ...typedSlogans.filter(x => x !== v.toUpperCase())].slice(0, 8);
   try { localStorage.setItem(SLOGAN_KEY, JSON.stringify(typedSlogans)); } catch (err) {}
-  buildTickerDots(); tickerX = 0; input.value = '';
+  liveDots = null; buildTickerDots(); tickerX = 0; input.value = '';
   document.getElementById('bs-sent').textContent = ui('sent');
   sendSlogan(v);
   return true;
@@ -1951,16 +1961,43 @@ const ledGlyph = ch => {
   const hex = LED_FONT[c] || LED_FONT['?'];
   return Array.from({ length: 7 }, (_, r) => parseInt(hex.substr(r * 2, 2), 16) || 0);
 };
-function buildTickerDots() {   // le message en colonnes de 7 points ; les slogans tapés passent en premier
-  const items = [...typedSlogans, ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
+/* Les chiffres de l'accueil : « auto:… » se calcule depuis le contenu, sinon la valeur écrite dans Réglages › Accueil */
+function figureValue(v) {
+  const pub = p => p.published && CONTENT.sections.some(s => s.id === p.section && s.visible);
+  const work = CONTENT.sections.find(s => s.card === 'image' && !s.skills && s.visible);
+  switch (String(v)) {
+    case 'auto:years': return String(new Date().getFullYear() - (+CONTENT.settings.founded || 2012));
+    case 'auto:projects': return String(CONTENT.posts.filter(p => pub(p) && work && p.section === work.id).length);
+    case 'auto:partners': return String(CONTENT.posts.filter(p => pub(p) && (p.tags || []).includes('partners')).length);
+    case 'auto:people': return String(CONTENT.posts.filter(p => pub(p) && (p.tags || []).some(t => ['core', 'specialists', 'artists'].includes(t))).length);
+    case 'auto:cities': return String(new Set(CONTENT.posts.filter(pub).flatMap(p => (p.spots || []).map(x => x.city))).size);
+    default: return String(v || '');
+  }
+}
+const homeFigures = () => ((CONTENT.settings.home && CONTENT.settings.home.figures) || []).map(f => ({ value: figureValue(f.value), label: tr(f.label) })).filter(f => f.value && f.label);
+const homeFigureLines = () => (CONTENT.settings.home.figuresInTicker ? homeFigures().map(f => `${f.value} ${f.label}`) : []);
+function drawFigures() {   // les nombres comptent jusqu'à leur valeur à l'arrivée sur l'accueil
+  const box = document.getElementById('offices'); if (!box) return;
+  const t0 = performance.now(), nums = [...box.querySelectorAll('.fig b')].map(b => { const m = /^(\d+)(.*)$/.exec(b.dataset.v); return m && { b, n: +m[1], rest: m[2] }; }).filter(Boolean);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const step = now => { const k = Math.min(1, (now - t0 - 500) / 1600); if (k < 0) { nums.forEach(x => { x.b.textContent = '0' + x.rest; }); requestAnimationFrame(step); return; }
+    const e = 1 - Math.pow(1 - k, 4); nums.forEach(x => { x.b.textContent = Math.round(x.n * e) + x.rest; }); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function buildTickerDots() {   // le message en colonnes de 7 points ; les mots tapés passent en premier
+  const items = [...typedSlogans, ...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
   const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
+  tickerDots = dotsOf(text);
+}
+let liveDots = null;   // ce que le visiteur est en train de taper : le bandeau l'allume aussitôt
+function dotsOf(text) {
   const cols = [];
   for (const ch of text) {
     const g = ledGlyph(ch), w = ch === ' ' ? 3 : 5;
     for (let x = 0; x < w; x++) { let m = 0; for (let r = 0; r < 7; r++) if (g[r] & (1 << (4 - x))) m |= 1 << r; cols.push(m); }
     cols.push(0);   // un point d'espace entre les lettres
   }
-  tickerDots = { w: cols.length, cols };
+  return { w: cols.length, cols };
 }
 const LED = { pitch: 3.2, rows: 7, h: 30 };
 let ledSprites = null, ledColor = '';
@@ -1983,8 +2020,12 @@ function drawTicker(dt) {   // le texte avance d'une colonne de points à la foi
   const k = tickerDpr, p = LED.pitch, cols = Math.ceil(window.innerWidth / p) + 1, top = (LED.h - LED.rows * p) / 2;
   tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.fillStyle = '#000'; tctx.fillRect(0, 0, ticker.width, ticker.height);
   const half = ledSprites.on.width / 2;
+  const live = liveDots, lead = live && live.w <= cols ? Math.floor((cols - live.w) / 2) : 0;   // un mot court se pose au centre, un long défile
   for (let c = 0; c < cols; c++) {
-    const m = tickerDots.cols[(tickerX + c) % tickerDots.w], cx = (c * p + p / 2) * k - half;
+    const m = !live ? tickerDots.cols[(tickerX + c) % tickerDots.w]
+      : live.w <= cols ? (c >= lead && c < lead + live.w ? live.cols[c - lead] : 0)
+      : live.cols[(tickerX + c) % live.w];
+    const cx = (c * p + p / 2) * k - half;
     for (let r = 0; r < LED.rows; r++) tctx.drawImage((m >> r) & 1 ? ledSprites.on : ledSprites.off, cx, (top + r * p + p / 2) * k - half);
   }
 }

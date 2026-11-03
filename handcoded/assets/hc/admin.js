@@ -1300,6 +1300,22 @@ function typoBlock(s) {
     h('div', { style: { marginTop: '12px' } }, btn('Tout rétablir', () => { delete s.typo; change(); draw(); paintBrand(); }, 'sm ghost')));
 }
 
+/* Les chiffres de l'accueil : une colonne chacun, à côté des contacts */
+function figuresEditor(s) {
+  const box = h('div');
+  const draw = () => {
+    const list = s.home.figures = s.home.figures || [];
+    fill(box, ...list.map((f, i) => h('div', { class: 'fig-row', style: { display: 'grid', gridTemplateColumns: '120px 1fr auto', gap: '10px', alignItems: 'end', marginBottom: '8px' } },
+      field('Chiffre', textInput(() => f.value, v => { f.value = v.trim(); }, { placeholder: '42 ou auto:projects', spell: false })),
+      pairInput('Libellé', f, 'label'),
+      btn('×', () => { list.splice(i, 1); change(); draw(); }, 'sm icon ghost danger', { 'aria-label': 'Retirer' }))),
+      btn('+ Chiffre', () => { list.push({ value: '', label: Object.fromEntries(LANGS.map(l => [l, ''])) }); change(); draw(); }, 'sm'),
+      h('p', { class: 'hint' }, 'Calculés tout seuls : auto:years (années depuis 2012), auto:projects (projets publiés), auto:partners, auto:people, auto:cities. Sinon, écris la valeur (21, 40+…).'));
+  };
+  draw();
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Chiffres', h('small', null, ' affichés en bas de l’accueil, à côté des contacts')), box);
+}
+
 /* ================================================================ Vue : Réglages */
 function viewSettings() {
   const c = S.content, s = c.settings;
@@ -1399,9 +1415,11 @@ function viewSettings() {
         pairInput('Invitation dans le champ', s.home, 'placeholder', { hint: 'Le texte gris du grand champ où les visiteurs tapent leur bullshit slogan.' }),
         pairInput('Exemple sous le champ', s.home, 'example'),
         field('Slogans du bandeau LED', tickerTa, 'Ils défilent en points LED tout en haut. Les slogans tapés par un visiteur s’ajoutent devant, sur son écran.'),
+        h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
         field('Collecte des slogans', textInput(() => s.sloganInbox, v => { s.sloganInbox = v.trim(); }, { placeholder: 'https://script.google.com/macros/s/…/exec', spell: false }), 'Adresse d’un script Google relié à une feuille de calcul : chaque slogan validé par un visiteur y est enregistré, avec la date, la langue et le tag du lien client. La mise en place prend cinq minutes, voir le fichier tools/slogans-google-sheet.gs. Vide : les slogans restent sur l’écran du visiteur.'),
         inboxBox,
         pairInput('Bouton d’entrée', s.home, 'enter'),
+        figuresEditor(s),
         homeVideoFields(s),
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
       h('div', { class: 'block' }, h('h3', null, 'Bureaux'), offBox),

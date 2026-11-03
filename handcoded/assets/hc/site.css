@@ -353,3 +353,15 @@ body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouver
 .txt .meta .fecha, .txt .meta .posted { position: static; }
 .txt .meta .fecha { margin-bottom: 4px; }
 .txt .skl-tags .it { white-space: nowrap; }
+
+/* nombre de contenus par catégorie, numéro de page */
+#cat-list .n, #cat-name .n { color: #9a9a9a; font-weight: 400; letter-spacing: 0; }
+#pg-num { align-self: center; min-width: 26px; text-align: center; font: 10px/22px var(--ui); color: #8a8a8a; letter-spacing: .04em; margin-bottom: 1px; }
+/* la liste des catégories s'élargit vers la gauche pour garder chaque nom et son nombre sur une ligne */
+#cat-list { left: auto; right: 0; width: max-content; min-width: 100%; max-width: calc(100vw - 40px); }
+#cat-list button { white-space: nowrap; padding-right: 14px; }
+/* les chiffres du studio, en colonnes à côté des contacts : le nombre à la place du titre */
+#offices .fig b { font-weight: normal; color: #9a9a9a; font-variant-numeric: tabular-nums; }
+#offices .fig h3 b { color: #777; }
+/* bandeau LED du haut masquable (Réglages › Accueil) */
+#home.no-ticker #ticker { display: none; }

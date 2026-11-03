@@ -74,30 +74,48 @@
    ],
    "figures": [
     {
-     "value": "40+",
+     "value": "auto:years",
      "label": {
-      "en": "installations run on Ledotron",
-      "fr": "installations pilotées par Ledotron",
-      "ca": "installations run on Ledotron",
-      "es": "installations run on Ledotron"
+      "en": "years of studio",
+      "fr": "ans d’atelier",
+      "ca": "anys de taller",
+      "es": "años de taller"
      }
     },
     {
-     "value": "15",
+     "value": "auto:projects",
+     "label": {
+      "en": "projects",
+      "fr": "projets",
+      "ca": "projectes",
+      "es": "proyectos"
+     }
+    },
+    {
+     "value": "21",
      "label": {
       "en": "countries",
       "fr": "pays",
-      "ca": "countries",
-      "es": "countries"
+      "ca": "països",
+      "es": "países"
      }
     },
     {
-     "value": "2",
+     "value": "40+",
      "label": {
-      "en": "permanent installations on Ledotron",
-      "fr": "installations permanentes sur Ledotron",
-      "ca": "permanent installations on Ledotron",
-      "es": "permanent installations on Ledotron"
+      "en": "installations on Ledotron",
+      "fr": "installations sur Ledotron",
+      "ca": "instal·lacions amb Ledotron",
+      "es": "instalaciones con Ledotron"
+     }
+    },
+    {
+     "value": "auto:partners",
+     "label": {
+      "en": "partners",
+      "fr": "partenaires",
+      "ca": "col·laboradors",
+      "es": "colaboradores"
      }
     }
    ],
@@ -201,7 +219,8 @@
     "font": "g:Cabin",
     "size": 10
    }
-  }
+  },
+  "founded": 2012
  },
  "models": [
   {
