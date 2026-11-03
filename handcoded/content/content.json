@@ -139,30 +139,25 @@
    },
    "story": {
     "title": {
-     "en": "The story of this site",
-     "fr": "L’histoire de ce site",
-     "ca": "La història d’aquest web",
-     "es": "La historia de esta web"
+     "en": "",
+     "fr": "",
+     "ca": "",
+     "es": ""
     },
     "body": {
-     "en": "<p>This site was born in 2008, in the days of Flash. Maya Benaïnous was then building the interface of the Fat-Man Collective, a group of interactive creatives between London, Barcelona and Bogotá: a website entirely in real-time 3D, in the browser, written in ActionScript 3 with Papervision3D. Each section is a 3D object surrounded by cards that you turn, open and browse with the mouse or the keyboard. Even then, the home page asked you to type your bullshit slogan.</p><p>Launched on 08.08.08, the Fat-Site won an FWA (Favourite Website Award) the same year.</p><p>Flash is gone, the engine stayed. In 2026, Maya took its source code and ported it to JavaScript with Three.js: same camera, same gestures, same transitions. It now runs the Hand Coded site, with a back office to keep it alive.</p><h3>The Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> 3D engine, interaction, animation</li><li><strong>David Okuniev</strong> web design and development</li><li><strong>Emiliano Burgos, Yann Lorber</strong> development</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> graphic design</li><li><strong>Barnier Geerling</strong> sound (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> strategy and production</li></ul>",
-     "fr": "<p>Ce site est né en 2008, au temps de Flash. Maya Benaïnous développe alors l’interface du Fat-Man Collective, un collectif de créatifs interactifs entre Londres, Barcelone et Bogota : un site entièrement en 3D temps réel, dans le navigateur, écrit en ActionScript 3 avec Papervision3D. Chaque section est un objet en 3D entouré de vignettes qu’on fait tourner, qu’on ouvre et qu’on parcourt à la souris ou au clavier. Déjà, la page d’accueil t’invitait à taper ton bullshit slogan.</p><p>Mis en ligne le 08.08.08, le Fat-Site reçoit un FWA (Favourite Website Award) la même année.</p><p>Flash a disparu, le moteur est resté. En 2026, Maya a repris son code source pour le porter en JavaScript avec Three.js : même caméra, mêmes gestes, mêmes transitions. C’est lui qui fait tourner le site de Hand Coded, avec un back-office pour le faire vivre.</p><h3>Le Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> moteur 3D, interaction, animation</li><li><strong>David Okuniev</strong> web design et développement</li><li><strong>Emiliano Burgos, Yann Lorber</strong> développement</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> design graphique</li><li><strong>Barnier Geerling</strong> son (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> stratégie et production</li></ul>",
-     "ca": "<p>Aquest web va néixer el 2008, en temps de Flash. La Maya Benaïnous desenvolupava llavors la interfície del Fat-Man Collective, un col·lectiu de creatius interactius entre Londres, Barcelona i Bogotà: un web completament en 3D en temps real, al navegador, escrit en ActionScript 3 amb Papervision3D. Cada secció és un objecte 3D envoltat de targetes que fas girar, obres i recorres amb el ratolí o el teclat. Ja aleshores, la pàgina d’inici et convidava a escriure el teu bullshit slogan.</p><p>Publicat el 08.08.08, el Fat-Site va guanyar un FWA (Favourite Website Award) aquell mateix any.</p><p>Flash ha desaparegut, el motor s’ha quedat. El 2026, la Maya en va reprendre el codi font per portar-lo a JavaScript amb Three.js: la mateixa càmera, els mateixos gestos, les mateixes transicions. Ara fa funcionar el web de Hand Coded, amb un back-office per mantenir-lo viu.</p><h3>El Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> motor 3D, interacció, animació</li><li><strong>David Okuniev</strong> disseny web i desenvolupament</li><li><strong>Emiliano Burgos, Yann Lorber</strong> desenvolupament</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> disseny gràfic</li><li><strong>Barnier Geerling</strong> so (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> estratègia i producció</li></ul>",
-     "es": "<p>Esta web nació en 2008, en tiempos de Flash. Maya Benaïnous desarrollaba entonces la interfaz del Fat-Man Collective, un colectivo de creativos interactivos entre Londres, Barcelona y Bogotá: una web totalmente en 3D en tiempo real, en el navegador, escrita en ActionScript 3 con Papervision3D. Cada sección es un objeto 3D rodeado de tarjetas que haces girar, abres y recorres con el ratón o el teclado. Ya entonces, la página de inicio te invitaba a escribir tu bullshit slogan.</p><p>Publicado el 08.08.08, el Fat-Site ganó un FWA (Favourite Website Award) ese mismo año.</p><p>Flash ha desaparecido, el motor se ha quedado. En 2026, Maya retomó su código fuente para llevarlo a JavaScript con Three.js: la misma cámara, los mismos gestos, las mismas transiciones. Ahora hace funcionar la web de Hand Coded, con un back-office para mantenerla viva.</p><h3>El Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> motor 3D, interacción, animación</li><li><strong>David Okuniev</strong> diseño web y desarrollo</li><li><strong>Emiliano Burgos, Yann Lorber</strong> desarrollo</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> diseño gráfico</li><li><strong>Barnier Geerling</strong> sonido (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> estrategia y producción</li></ul>"
+     "en": "",
+     "fr": "",
+     "ca": "",
+     "es": ""
     },
-    "images": [
-     "media/site/story/fat-site-2008-1.jpg",
-     "media/site/story/fat-site-2008-2.jpg",
-     "media/site/story/fat-site-2008-3.jpg",
-     "media/site/story/fat-site-2008-4.jpg"
-    ],
-    "link": "https://mouawadlaurier.com/fatsite/",
     "linkLabel": {
-     "en": "See the 2008 Fat-Site",
-     "fr": "Voir le Fat-Site de 2008",
-     "ca": "Veure el Fat-Site del 2008",
-     "es": "Ver el Fat-Site de 2008"
-    }
+     "en": "",
+     "fr": "",
+     "ca": "",
+     "es": ""
+    },
+    "images": [],
+    "link": ""
    }
   },
   "offices": [
@@ -530,7 +525,7 @@
    "layout": "arc",
    "card": "portrait",
    "open": "focus3d",
-   "perPage": 16,
+   "perPage": 20,
    "defaultTag": "",
    "visible": true,
    "tags": [
@@ -586,7 +581,7 @@
    "layout": "map",
    "card": "place",
    "open": "strip",
-   "perPage": 8,
+   "perPage": 15,
    "defaultTag": "",
    "visible": true,
    "tags": [],
@@ -814,10 +809,10 @@
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>A root planted in a chalk cellar dug more than two thousand years ago, thirty metres underground. In this mineral darkness, it listens to the living world breathing on the surface.</p><p>The root listens to the natural elements involved in making champagne. In real time it captures climate data, temperature, humidity, rainfall and wind, and turns these variations into generative music and light. Inspired by Stefano Mancuso’s work on plant intelligence, it reminds us that 90% of the Earth’s biomass is made of plants.</p><p>Permanent installation in the Ruinart cellars since 2019, seen by about 26,000 visitors a year, first presented at FIAC 2019 in Paris. Every glass piece was blown by hand by master glassblower Marco Nason during a residency at the NasonMoretti glassworks in Murano.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Curator</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Data</strong> Caroline Fiot</li><li><strong>Development</strong> Hand Coded</li><li><strong>Lamps</strong> Salvador Mauri (Sakma)</li><li><strong>Kinetics</strong> Mecaoctet</li><li><strong>Glassblowing</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ironwork</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Press</h3><ul><li>“French artists Maya Mouawad and Cyril Laurier create technology-driven artistic works promoting sustainability.” Forbes, 2020</li><li>“The ocean projected on the walls is a sublime reminder of the oceanic origin of chalk, sediment of ancient oceans.” Numéro Art, 2020</li><li>“This immersive project marks a commitment in favour of nature.” Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonials</h3><ul><li>“This work took us out of time and away from the turmoil outside. Bravo for this moment of poetry.” Marie Drucker</li><li>“Thanks to you, we lived an unforgettable moment! Your work is magnificent, moving, spectacular, very accurate.” Céline Berthoumieux, president of HACNUM</li></ul>",
-    "fr": "<p>Une racine plantée dans une cave de craie creusée il y a plus de deux mille ans, à trente mètres sous terre. Dans cette obscurité minérale, elle écoute le monde vivant qui respire à la surface.</p><p>La racine écoute les éléments naturels qui font le champagne. En temps réel, elle capte les données climatiques, température, humidité, précipitations et vent, et traduit ces variations en musique générative et en lumière. Inspirée par les travaux de Stefano Mancuso sur l’intelligence des plantes, elle rappelle que 90 % de la biomasse terrestre est faite de plantes.</p><p>Installation permanente dans les caves Ruinart depuis 2019, vue par environ 26 000 visiteurs par an, présentée d’abord à la FIAC 2019 à Paris. Chaque pièce de verre a été soufflée à la main par le maître verrier Marco Nason, lors d’une résidence à la verrerie NasonMoretti, à Murano.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Maya Mouawad</li><li><strong>Musique</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Commissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Données</strong> Caroline Fiot</li><li><strong>Développement</strong> Hand Coded</li><li><strong>Lampes</strong> Salvador Mauri (Sakma)</li><li><strong>Cinétique</strong> Mecaoctet</li><li><strong>Verre soufflé</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ferronnerie</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Presse</h3><ul><li>« Les artistes français Maya Mouawad et Cyril Laurier créent des œuvres technologiques au service de la durabilité. » Forbes, 2020</li><li>« L’océan projeté sur les parois rappelle sublimement l’origine océanique de la craie, sédiment d’anciens océans. » Numéro Art, 2020</li><li>« Ce projet immersif marque un engagement en faveur de la nature. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Témoignages</h3><ul><li>« Cette œuvre nous a sortis du temps et du tumulte extérieur, bravo pour ce moment de poésie. » Marie Drucker</li><li>« Grâce à vous, nous avons vécu un moment inoubliable ! Votre œuvre est magnifique, émouvante, spectaculaire, très juste. » Céline Berthoumieux, présidente de HACNUM</li></ul>",
-    "ca": "<p>Una arrel plantada en una cava de guix excavada fa més de dos mil anys, a trenta metres sota terra. En aquesta foscor mineral, escolta el món viu que respira a la superfície.</p><p>L’arrel escolta els elements naturals que fan el xampany. En temps real, capta les dades climàtiques, temperatura, humitat, precipitacions i vent, i tradueix aquestes variacions en música generativa i llum. Inspirada pels treballs de Stefano Mancuso sobre la intel·ligència de les plantes, recorda que el 90 % de la biomassa terrestre és feta de plantes.</p><p>Instal·lació permanent a les caves Ruinart des del 2019, vista per uns 26.000 visitants l’any, presentada primer a la FIAC 2019 a París. Cada peça de vidre va ser bufada a mà pel mestre vidrier Marco Nason, durant una residència a la vidrieria NasonMoretti, a Murano.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producció</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinació</strong> Laura Duponchel</li><li><strong>Dades</strong> Caroline Fiot</li><li><strong>Desenvolupament</strong> Hand Coded</li><li><strong>Làmpades</strong> Salvador Mauri (Sakma)</li><li><strong>Cinètica</strong> Mecaoctet</li><li><strong>Vidre bufat</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Premsa</h3><ul><li>« Els artistes francesos Maya Mouawad i Cyril Laurier creen obres tecnològiques al servei de la sostenibilitat. » Forbes, 2020</li><li>« L’oceà projectat a les parets recorda de manera sublim l’origen oceànic del guix, sediment d’oceans antics. » Numéro Art, 2020</li><li>« Aquest projecte immersiu marca un compromís a favor de la natura. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonis</h3><ul><li>« Aquesta obra ens ha tret del temps i del tumult exterior, bravo per aquest moment de poesia. » Marie Drucker</li><li>« Gràcies a vosaltres hem viscut un moment inoblidable! La vostra obra és magnífica, emocionant, espectacular, molt justa. » Céline Berthoumieux, presidenta d’HACNUM</li></ul>",
-    "es": "<p>Una raíz plantada en una bodega de creta excavada hace más de dos mil años, a treinta metros bajo tierra. En esta oscuridad mineral, escucha el mundo vivo que respira en la superficie.</p><p>La raíz escucha los elementos naturales que hacen el champán. En tiempo real, capta los datos climáticos, temperatura, humedad, precipitaciones y viento, y traduce esas variaciones en música generativa y luz. Inspirada en los trabajos de Stefano Mancuso sobre la inteligencia de las plantas, recuerda que el 90 % de la biomasa terrestre está hecha de plantas.</p><p>Instalación permanente en las bodegas Ruinart desde 2019, vista por unos 26.000 visitantes al año, presentada primero en la FIAC 2019 en París. Cada pieza de vidrio fue soplada a mano por el maestro vidriero Marco Nason, durante una residencia en la vidriería NasonMoretti, en Murano.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producción</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comisariado</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinación</strong> Laura Duponchel</li><li><strong>Datos</strong> Caroline Fiot</li><li><strong>Desarrollo</strong> Hand Coded</li><li><strong>Lámparas</strong> Salvador Mauri (Sakma)</li><li><strong>Cinética</strong> Mecaoctet</li><li><strong>Vidrio soplado</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Prensa</h3><ul><li>« Los artistas franceses Maya Mouawad y Cyril Laurier crean obras tecnológicas al servicio de la sostenibilidad. » Forbes, 2020</li><li>« El océano proyectado en las paredes recuerda de forma sublime el origen oceánico de la tiza, sedimento de océanos antiguos. » Numéro Art, 2020</li><li>« Este proyecto inmersivo marca un compromiso a favor de la naturaleza. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonios</h3><ul><li>« Esta obra nos sacó del tiempo y del tumulto exterior, bravo por este momento de poesía. » Marie Drucker</li><li>« ¡Gracias a vosotros vivimos un momento inolvidable! Vuestra obra es magnífica, emocionante, espectacular, muy acertada. » Céline Berthoumieux, presidenta de HACNUM</li></ul>"
+    "en": "<p>A root planted in a chalk cellar dug more than two thousand years ago, thirty metres underground. In this mineral darkness, it listens to the living world breathing on the surface.</p><p>The root listens to the natural elements involved in making champagne. In real time it captures climate data, temperature, humidity, rainfall and wind, and turns these variations into generative music and light. Inspired by Stefano Mancuso’s work on plant intelligence, it reminds us that 90% of the Earth’s biomass is made of plants.</p><p>Permanent installation in the Ruinart cellars since 2019, seen by about 26,000 visitors a year, first presented at FIAC 2019 in Paris. Every glass piece was blown by hand by master glassblower Marco Nason during a residency at the NasonMoretti glassworks in Murano.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Curator</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Data</strong> Caroline Fiot</li><li><strong>Development</strong> Hand Coded</li><li><strong>Lamps</strong> Salvador Mauri (Sakma)</li><li><strong>Kinetics</strong> Mecaoctet</li><li><strong>Glassblowing</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ironwork</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Press</h3><ul><li>Forbes, 2020</li><li>Numéro Art, 2020</li><li>Nowness, 2020</li><li>Berlin Art Link, 2019</li></ul>",
+    "fr": "<p>Une racine plantée dans une cave de craie creusée il y a plus de deux mille ans, à trente mètres sous terre. Dans cette obscurité minérale, elle écoute le monde vivant qui respire à la surface.</p><p>La racine écoute les éléments naturels qui font le champagne. En temps réel, elle capte les données climatiques, température, humidité, précipitations et vent, et traduit ces variations en musique générative et en lumière. Inspirée par les travaux de Stefano Mancuso sur l’intelligence des plantes, elle rappelle que 90 % de la biomasse terrestre est faite de plantes.</p><p>Installation permanente dans les caves Ruinart depuis 2019, vue par environ 26 000 visiteurs par an, présentée d’abord à la FIAC 2019 à Paris. Chaque pièce de verre a été soufflée à la main par le maître verrier Marco Nason, lors d’une résidence à la verrerie NasonMoretti, à Murano.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Maya Mouawad</li><li><strong>Musique</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Commissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Données</strong> Caroline Fiot</li><li><strong>Développement</strong> Hand Coded</li><li><strong>Lampes</strong> Salvador Mauri (Sakma)</li><li><strong>Cinétique</strong> Mecaoctet</li><li><strong>Verre soufflé</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ferronnerie</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Presse</h3><ul><li>Forbes, 2020</li><li>Numéro Art, 2020</li><li>Nowness, 2020</li><li>Berlin Art Link, 2019</li></ul>",
+    "ca": "<p>Una arrel plantada en una cava de guix excavada fa més de dos mil anys, a trenta metres sota terra. En aquesta foscor mineral, escolta el món viu que respira a la superfície.</p><p>L’arrel escolta els elements naturals que fan el xampany. En temps real, capta les dades climàtiques, temperatura, humitat, precipitacions i vent, i tradueix aquestes variacions en música generativa i llum. Inspirada pels treballs de Stefano Mancuso sobre la intel·ligència de les plantes, recorda que el 90 % de la biomassa terrestre és feta de plantes.</p><p>Instal·lació permanent a les caves Ruinart des del 2019, vista per uns 26.000 visitants l’any, presentada primer a la FIAC 2019 a París. Cada peça de vidre va ser bufada a mà pel mestre vidrier Marco Nason, durant una residència a la vidrieria NasonMoretti, a Murano.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producció</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinació</strong> Laura Duponchel</li><li><strong>Dades</strong> Caroline Fiot</li><li><strong>Desenvolupament</strong> Hand Coded</li><li><strong>Làmpades</strong> Salvador Mauri (Sakma)</li><li><strong>Cinètica</strong> Mecaoctet</li><li><strong>Vidre bufat</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Premsa</h3><ul><li>Forbes, 2020</li><li>Numéro Art, 2020</li><li>Nowness, 2020</li><li>Berlin Art Link, 2019</li></ul>",
+    "es": "<p>Una raíz plantada en una bodega de creta excavada hace más de dos mil años, a treinta metros bajo tierra. En esta oscuridad mineral, escucha el mundo vivo que respira en la superficie.</p><p>La raíz escucha los elementos naturales que hacen el champán. En tiempo real, capta los datos climáticos, temperatura, humedad, precipitaciones y viento, y traduce esas variaciones en música generativa y luz. Inspirada en los trabajos de Stefano Mancuso sobre la inteligencia de las plantas, recuerda que el 90 % de la biomasa terrestre está hecha de plantas.</p><p>Instalación permanente en las bodegas Ruinart desde 2019, vista por unos 26.000 visitantes al año, presentada primero en la FIAC 2019 en París. Cada pieza de vidrio fue soplada a mano por el maestro vidriero Marco Nason, durante una residencia en la vidriería NasonMoretti, en Murano.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producción</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comisariado</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinación</strong> Laura Duponchel</li><li><strong>Datos</strong> Caroline Fiot</li><li><strong>Desarrollo</strong> Hand Coded</li><li><strong>Lámparas</strong> Salvador Mauri (Sakma)</li><li><strong>Cinética</strong> Mecaoctet</li><li><strong>Vidrio soplado</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Prensa</h3><ul><li>Forbes, 2020</li><li>Numéro Art, 2020</li><li>Nowness, 2020</li><li>Berlin Art Link, 2019</li></ul>"
    },
    "media": [
     {
@@ -976,8 +971,7 @@
    ],
    "logos": [
     "media/logos/fisheye.png",
-    "media/logos/ruinart.png",
-    "media/logos/nasonmoretti.png"
+    "media/logos/ruinart.png"
    ]
   },
   {
@@ -1012,10 +1006,10 @@
    "thumb": "media/rising/img-8648-copy-mpdh.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>An outdoor sound and light installation about our vulnerability. It turns scientific data on rising sea levels into a sensory experience: waves of light rise and flood the space in real time.</p><p>The system is connected live to oceanographic data from the University of La Rochelle. The stronger the climate anomalies, the more intense and oppressive the experience becomes. Rising breaks the taboo of the future that awaits us, pushing fear aside and using beauty to become more resilient.</p><p>It runs on battery for three hours and sets up in four to six hours, on a façade or on the ground. Public talk at Nuit Blanche 2024 with hydrologist Emma Haziza.</p><p>Rising belongs to the H2O series, our ongoing research on water, climate and the living world, and grew out of Retour aux Sources. Five waterproof lamps, blown by hand at the NasonMoretti glassworks in Murano, each hold LEDs, a motor and speakers, all fed by a single Ethernet cable. Their caustic light, like light moving through water, can fill a 20 × 20 m space on a 7-minute loop driven by Ledotron. A motorised version makes the whole space breathe like an ocean.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier, Louis Raveton</li><li><strong>Technical development</strong> Cyril Laurier</li><li><strong>Software (Ledotron)</strong> Maya Mouawad</li><li><strong>Lamps</strong> NasonMoretti, Murano; Salvador Mauri</li><li><strong>Scientific collaboration</strong> University of La Rochelle (oceanographic data), Learning Planet Institute, La Scam</li></ul><h3>Tour</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023, threatened symbolic places</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Award</h3><ul><li>Pierre Schaeffer Prize, Brouillon d’un Rêve, Scam, 2023</li></ul><h3>Talks</h3><ul><li>Hub Montréal, 2025: the H2O series and the Venice Biennale project</li><li>Nuit Blanche, Paris, 2024: oceans and climate change, with hydrologist Emma Haziza, Learning Planet Institute</li></ul><h3>Press</h3><ul><li>“Among all the proposals of Llum BCN 2025, Rising stands out.” El País, 2025</li></ul>",
-    "fr": "<p>Une installation sonore et lumineuse en plein air qui parle de notre vulnérabilité. Elle traduit les données scientifiques de montée des eaux en expérience sensorielle : des vagues de lumière montent et submergent l’espace en temps réel.</p><p>Le dispositif est relié en temps réel aux données océanographiques de l’Université de La Rochelle. Plus les anomalies climatiques sont fortes, plus l’expérience devient intense et oppressante. Rising brise le tabou de l’avenir qui nous attend, repousse la peur et se sert de la beauté pour nous rendre plus résilients.</p><p>Il fonctionne trois heures sur batterie et s’installe en quatre à six heures, sur une façade ou au sol. Conférence publique à la Nuit Blanche 2024 avec l’hydrologue Emma Haziza.</p><p>Rising fait partie de la série H2O, notre recherche au long cours sur l’eau, le climat et le vivant, et prolonge Retour aux Sources. Cinq lampes étanches, soufflées à la main à la verrerie NasonMoretti de Murano, contiennent chacune LED, moteur et haut-parleurs, alimentés par un seul câble Ethernet. Leur lumière caustique, comme la lumière qui traverse l’eau, peut remplir un espace de 20 × 20 m sur une boucle de 7 minutes pilotée par Ledotron. Une version motorisée fait respirer tout l’espace comme un océan.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Maya Mouawad</li><li><strong>Musique</strong> Cyril Laurier, Louis Raveton</li><li><strong>Développement technique</strong> Cyril Laurier</li><li><strong>Logiciel (Ledotron)</strong> Maya Mouawad</li><li><strong>Lampes</strong> NasonMoretti, Murano ; Salvador Mauri</li><li><strong>Collaboration scientifique</strong> Université de La Rochelle (données océanographiques), Learning Planet Institute, La Scam</li></ul><h3>Tournée</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023, lieux symboliques menacés</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Prix</h3><ul><li>Prix Pierre Schaeffer, Brouillon d’un Rêve, Scam, 2023</li></ul><h3>Conférences</h3><ul><li>Hub Montréal, 2025 : la série H2O et le projet de la Biennale de Venise</li><li>Nuit Blanche, Paris, 2024 : l’océan et le changement climatique, avec l’hydrologue Emma Haziza, Learning Planet Institute</li></ul><h3>Presse</h3><ul><li>« Parmi toutes les propositions de Llum BCN 2025, Rising se démarque. » El País, 2025</li></ul>",
-    "ca": "<p>Una instal·lació sonora i lumínica a l’aire lliure que parla de la nostra vulnerabilitat. Tradueix les dades científiques de la pujada del nivell del mar en una experiència sensorial: onades de llum pugen i inunden l’espai en temps real.</p><p>El dispositiu està connectat en temps real a les dades oceanogràfiques de la Universitat de La Rochelle. Com més fortes són les anomalies climàtiques, més intensa i opressiva es torna l’experiència. Rising trenca el tabú del futur que ens espera, aparta la por i fa servir la bellesa per fer-nos més resilients.</p><p>Funciona tres hores amb bateria i s’instal·la en quatre a sis hores, en una façana o a terra. Conferència pública a la Nuit Blanche 2024 amb la hidròloga Emma Haziza.</p><p>Rising forma part de la sèrie H2O, la nostra recerca de llarg recorregut sobre l’aigua, el clima i el món viu, i neix de Retour aux Sources. Cinc làmpades estanques, bufades a mà a la vidrieria NasonMoretti de Murano, contenen cadascuna LED, motor i altaveus, alimentats per un sol cable Ethernet. La seva llum càustica, com la llum que travessa l’aigua, pot omplir un espai de 20 × 20 m en un bucle de 7 minuts pilotat per Ledotron. Una versió motoritzada fa respirar tot l’espai com un oceà.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier, Louis Raveton</li><li><strong>Desenvolupament tècnic</strong> Cyril Laurier</li><li><strong>Programari (Ledotron)</strong> Maya Mouawad</li><li><strong>Làmpades</strong> NasonMoretti, Murano; Salvador Mauri</li><li><strong>Col·laboració científica</strong> Universitat de La Rochelle (dades oceanogràfiques), Learning Planet Institute, La Scam</li></ul><h3>Gira</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023, llocs simbòlics amenaçats</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Premi</h3><ul><li>Premi Pierre Schaeffer, Brouillon d’un Rêve, Scam, 2023</li></ul><h3>Conferències</h3><ul><li>Hub Montréal, 2025: la sèrie H2O i el projecte de la Biennal de Venècia</li><li>Nuit Blanche, París, 2024: l’oceà i el canvi climàtic, amb la hidròloga Emma Haziza, Learning Planet Institute</li></ul><h3>Premsa</h3><ul><li>« Entre totes les propostes del Llum BCN 2025, destaca Rising. » El País, 2025</li></ul>",
-    "es": "<p>Una instalación sonora y lumínica al aire libre que habla de nuestra vulnerabilidad. Traduce los datos científicos de la subida del nivel del mar en una experiencia sensorial: olas de luz suben e inundan el espacio en tiempo real.</p><p>El dispositivo está conectado en tiempo real a los datos oceanográficos de la Universidad de La Rochelle. Cuanto más fuertes son las anomalías climáticas, más intensa y opresiva se vuelve la experiencia. Rising rompe el tabú del futuro que nos espera, aparta el miedo y usa la belleza para hacernos más resilientes.</p><p>Funciona tres horas con batería y se instala en cuatro a seis horas, en una fachada o en el suelo. Conferencia pública en la Nuit Blanche 2024 con la hidróloga Emma Haziza.</p><p>Rising forma parte de la serie H2O, nuestra investigación de largo recorrido sobre el agua, el clima y el mundo vivo, y nace de Retour aux Sources. Cinco lámparas estancas, sopladas a mano en la vidriería NasonMoretti de Murano, contienen cada una LED, motor y altavoces, alimentados por un solo cable Ethernet. Su luz cáustica, como la luz que atraviesa el agua, puede llenar un espacio de 20 × 20 m en un bucle de 7 minutos pilotado por Ledotron. Una versión motorizada hace respirar todo el espacio como un océano.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier, Louis Raveton</li><li><strong>Desarrollo técnico</strong> Cyril Laurier</li><li><strong>Software (Ledotron)</strong> Maya Mouawad</li><li><strong>Lámparas</strong> NasonMoretti, Murano; Salvador Mauri</li><li><strong>Colaboración científica</strong> Universidad de La Rochelle (datos oceanográficos), Learning Planet Institute, La Scam</li></ul><h3>Gira</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023, lugares simbólicos amenazados</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Premio</h3><ul><li>Premio Pierre Schaeffer, Brouillon d’un Rêve, Scam, 2023</li></ul><h3>Conferencias</h3><ul><li>Hub Montréal, 2025: la serie H2O y el proyecto de la Bienal de Venecia</li><li>Nuit Blanche, París, 2024: el océano y el cambio climático, con la hidróloga Emma Haziza, Learning Planet Institute</li></ul><h3>Prensa</h3><ul><li>« Entre todas las propuestas de Llum BCN 2025, destaca Rising. » El País, 2025</li></ul>"
+    "en": "<p>An outdoor sound and light installation about our vulnerability. It turns scientific data on rising sea levels into a sensory experience: waves of light rise and flood the space in real time.</p><p>The system is connected live to oceanographic data from the University of La Rochelle. The stronger the climate anomalies, the more intense and oppressive the experience becomes. Rising breaks the taboo of the future that awaits us, pushing fear aside and using beauty to become more resilient.</p><p>It runs on battery for three hours and sets up in four to six hours, on a façade or on the ground. Public talk at Nuit Blanche 2024 with hydrologist Emma Haziza.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier, Louis Raveton</li><li><strong>Development</strong> Hand Coded</li><li><strong>Blown glass</strong> Murano</li><li><strong>Scientific collaboration</strong> University of La Rochelle (oceanographic data), Learning Planet Institute, La Scam</li></ul><h3>Tour</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Award</h3><ul><li>Brouillon d’un Rêve laureate, Scam, 2023</li></ul>",
+    "fr": "<p>Une installation sonore et lumineuse en plein air qui parle de notre vulnérabilité. Elle traduit les données scientifiques de montée des eaux en expérience sensorielle : des vagues de lumière montent et submergent l’espace en temps réel.</p><p>Le dispositif est relié en temps réel aux données océanographiques de l’Université de La Rochelle. Plus les anomalies climatiques sont fortes, plus l’expérience devient intense et oppressante. Rising brise le tabou de l’avenir qui nous attend, repousse la peur et se sert de la beauté pour nous rendre plus résilients.</p><p>Il fonctionne trois heures sur batterie et s’installe en quatre à six heures, sur une façade ou au sol. Conférence publique à la Nuit Blanche 2024 avec l’hydrologue Emma Haziza.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Maya Mouawad</li><li><strong>Musique</strong> Cyril Laurier, Louis Raveton</li><li><strong>Développement</strong> Hand Coded</li><li><strong>Verres soufflés</strong> Murano</li><li><strong>Collaboration scientifique</strong> Université de La Rochelle (données océanographiques), Learning Planet Institute, La Scam</li></ul><h3>Tournée</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Prix</h3><ul><li>Lauréat Brouillon d’un Rêve, Scam, 2023</li></ul>",
+    "ca": "<p>Una instal·lació sonora i lumínica a l’aire lliure que parla de la nostra vulnerabilitat. Tradueix les dades científiques de la pujada del nivell del mar en una experiència sensorial: onades de llum pugen i inunden l’espai en temps real.</p><p>El dispositiu està connectat en temps real a les dades oceanogràfiques de la Universitat de La Rochelle. Com més fortes són les anomalies climàtiques, més intensa i opressiva es torna l’experiència. Rising trenca el tabú del futur que ens espera, aparta la por i fa servir la bellesa per fer-nos més resilients.</p><p>Funciona tres hores amb bateria i s’instal·la en quatre a sis hores, en una façana o a terra. Conferència pública a la Nuit Blanche 2024 amb la hidròloga Emma Haziza.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier, Louis Raveton</li><li><strong>Desenvolupament</strong> Hand Coded</li><li><strong>Vidres bufats</strong> Murano</li><li><strong>Col·laboració científica</strong> Universitat de La Rochelle (dades oceanogràfiques), Learning Planet Institute, La Scam</li></ul><h3>Gira</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Premi</h3><ul><li>Guardonat Brouillon d’un Rêve, Scam, 2023</li></ul>",
+    "es": "<p>Una instalación sonora y lumínica al aire libre que habla de nuestra vulnerabilidad. Traduce los datos científicos de la subida del nivel del mar en una experiencia sensorial: olas de luz suben e inundan el espacio en tiempo real.</p><p>El dispositivo está conectado en tiempo real a los datos oceanográficos de la Universidad de La Rochelle. Cuanto más fuertes son las anomalías climáticas, más intensa y opresiva se vuelve la experiencia. Rising rompe el tabú del futuro que nos espera, aparta el miedo y usa la belleza para hacernos más resilientes.</p><p>Funciona tres horas con batería y se instala en cuatro a seis horas, en una fachada o en el suelo. Conferencia pública en la Nuit Blanche 2024 con la hidróloga Emma Haziza.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier, Louis Raveton</li><li><strong>Desarrollo</strong> Hand Coded</li><li><strong>Vidrios soplados</strong> Murano</li><li><strong>Colaboración científica</strong> Universidad de La Rochelle (datos oceanográficos), Learning Planet Institute, La Scam</li></ul><h3>Gira</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Premio</h3><ul><li>Galardonado Brouillon d’un Rêve, Scam, 2023</li></ul>"
    },
    "media": [
     {
@@ -1087,8 +1081,7 @@
    "team": [
     "maya",
     "cyril",
-    "louis-raveton",
-    "emma-haziza"
+    "louis-raveton"
    ],
    "credits": "Université de La Rochelle, Learning Planet Institute, La Scam",
    "location": null,
@@ -1117,11 +1110,6 @@
      "city": "La Ràpita",
      "lat": 40.62,
      "lon": 0.59
-    },
-    {
-     "city": "Montréal",
-     "lat": 45.5,
-     "lon": -73.57
     }
    ],
    "author": "Maya Mouawad",
@@ -1144,10 +1132,7 @@
     "media/logos/mira.png",
     "media/logos/eufonic.png",
     "media/logos/catalanarts.png",
-    "media/logos/generalitat.png",
-    "media/logos/la-rochelle-universite.png",
-    "media/logos/nasonmoretti.png",
-    "media/logos/hub-montreal.png"
+    "media/logos/generalitat.png"
    ]
   },
   {
@@ -1182,10 +1167,10 @@
    "thumb": "media/ephemere/it-is-now-san-joan-de-deu-small-108-1e2g.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>The present moment as a living artwork. Through their simple presence, visitors create a moving painting and an evolving music. A depth sensor follows every kind of movement, with no instructions and no prerequisites: anyone can play, whatever their motor or communication abilities.</p><p>Éphémère turns hospital waiting rooms and corridors into places of contemplation and play. Permanent at the Fondation OVE in Paris since June 2023 and at the Sant Joan de Déu children’s hospital in Barcelona since December 2023, with the CHU de Lille in 2026 and the CHU de Bordeaux. At Sant Joan de Déu, it welcomes children in outpatient palliative care. Presented at Museum Connections 2026.</p><h3>Credits</h3><ul><li><strong>Concept and creation</strong> Maya Mouawad</li><li><strong>Interactive music</strong> Cyril Laurier</li><li><strong>Technical development</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Patronage</strong> Art Explora</li></ul><h3>Venues</h3><ul><li>Fondation OVE, Paris, since June 2023</li><li>Sant Joan de Déu hospital, Barcelona, since December 2023</li><li>CHU de Lille, 2026</li><li>CHU de Bordeaux</li></ul><h3>Testimonials</h3><ul><li>“We are convinced that treatment alone does not sum up what we owe patients. We have a duty to bring together every contributing energy, and artistic energy is one of them, to go beyond care and help improve patients’ lives.” Laure Boquet</li></ul>",
-    "fr": "<p>L’instant présent comme œuvre vivante. Par leur simple présence, les visiteurs créent un tableau en mouvement et une musique qui évolue. Un capteur de profondeur suit tous les mouvements, sans mode d’emploi ni prérequis : chacun peut jouer, quelles que soient ses capacités motrices ou de communication.</p><p>Éphémère transforme les salles d’attente et les couloirs d’hôpitaux en lieux de contemplation et de jeu. Permanente à la Fondation OVE à Paris depuis juin 2023 et à l’hôpital pour enfants Sant Joan de Déu de Barcelone depuis décembre 2023, avec le CHU de Lille en 2026 et le CHU de Bordeaux. À Sant Joan de Déu, elle accueille les enfants suivis en soins palliatifs ambulatoires. Présentée à Museum Connections 2026.</p><h3>Crédits</h3><ul><li><strong>Concept et création</strong> Maya Mouawad</li><li><strong>Musique interactive</strong> Cyril Laurier</li><li><strong>Développement technique</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mécénat</strong> Art Explora</li></ul><h3>Lieux</h3><ul><li>Fondation OVE, Paris, depuis juin 2023</li><li>Hôpital Sant Joan de Déu, Barcelone, depuis décembre 2023</li><li>CHU de Lille, 2026</li><li>CHU de Bordeaux</li></ul><h3>Témoignages</h3><ul><li>« Nous sommes convaincus que la thérapeutique ne résume pas les solutions que nous devons apporter aux patients. Nous avons le devoir de réunir les énergies contributives, et les énergies artistiques en font partie, pour aller au-delà du soin et contribuer à améliorer la vie des patients. » Laure Boquet</li></ul>",
-    "ca": "<p>L’instant present com a obra viva. Amb la seva simple presència, els visitants creen un quadre en moviment i una música que evoluciona. Un sensor de profunditat segueix tots els moviments, sense instruccions ni requisits: tothom hi pot jugar, siguin quines siguin les seves capacitats motrius o de comunicació.</p><p>Éphémère transforma les sales d’espera i els passadissos d’hospitals en llocs de contemplació i de joc. Permanent a la Fondation OVE de París des del juny del 2023 i a l’hospital infantil Sant Joan de Déu de Barcelona des del desembre del 2023, amb el CHU de Lilla el 2026 i el CHU de Bordeus. A Sant Joan de Déu acull els infants atesos en cures pal·liatives ambulatòries. Presentada a Museum Connections 2026.</p><h3>Crèdits</h3><ul><li><strong>Concepte i creació</strong> Maya Mouawad</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desenvolupament tècnic</strong> Joan Sandoval</li><li><strong>Producció</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenatge</strong> Art Explora</li></ul><h3>Llocs</h3><ul><li>Fondation OVE, París, des del juny del 2023</li><li>Hospital Sant Joan de Déu, Barcelona, des del desembre del 2023</li><li>CHU de Lilla, 2026</li><li>CHU de Bordeus</li></ul><h3>Testimonis</h3><ul><li>« Estem convençuts que la terapèutica no resumeix les solucions que hem d’aportar als pacients. Tenim el deure d’unir totes les energies que hi contribueixen, i les energies artístiques en formen part, per anar més enllà de la cura i contribuir a millorar la vida dels pacients. » Laure Boquet</li></ul>",
-    "es": "<p>El instante presente como obra viva. Con su simple presencia, los visitantes crean un cuadro en movimiento y una música que evoluciona. Un sensor de profundidad sigue todos los movimientos, sin instrucciones ni requisitos: cualquiera puede jugar, sean cuales sean sus capacidades motrices o de comunicación.</p><p>Éphémère transforma las salas de espera y los pasillos de hospitales en lugares de contemplación y de juego. Permanente en la Fondation OVE de París desde junio de 2023 y en el hospital infantil Sant Joan de Déu de Barcelona desde diciembre de 2023, con el CHU de Lille en 2026 y el CHU de Burdeos. En Sant Joan de Déu acoge a los niños atendidos en cuidados paliativos ambulatorios. Presentada en Museum Connections 2026.</p><h3>Créditos</h3><ul><li><strong>Concepto y creación</strong> Maya Mouawad</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desarrollo técnico</strong> Joan Sandoval</li><li><strong>Producción</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenazgo</strong> Art Explora</li></ul><h3>Lugares</h3><ul><li>Fondation OVE, París, desde junio de 2023</li><li>Hospital Sant Joan de Déu, Barcelona, desde diciembre de 2023</li><li>CHU de Lille, 2026</li><li>CHU de Burdeos</li></ul><h3>Testimonios</h3><ul><li>« Estamos convencidos de que la terapéutica no resume las soluciones que debemos aportar a los pacientes. Tenemos el deber de unir todas las energías que contribuyen, y las energías artísticas forman parte de ellas, para ir más allá del cuidado y contribuir a mejorar la vida de los pacientes. » Laure Boquet</li></ul>"
+    "en": "<p>The present moment as a living artwork. Through their simple presence, visitors create a moving painting and an evolving music. A depth sensor follows every kind of movement, with no instructions and no prerequisites: anyone can play, whatever their motor or communication abilities.</p><p>Éphémère turns hospital waiting rooms and corridors into places of contemplation and play. Permanent at the Fondation OVE in Paris since June 2023 and at the Sant Joan de Déu children’s hospital in Barcelona since December 2023, with the CHU de Lille in 2026. Presented at Museum Connections 2026.</p><h3>Credits</h3><ul><li><strong>Concept and creation</strong> Maya Mouawad</li><li><strong>Interactive music</strong> Cyril Laurier</li><li><strong>Technical development</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Patronage</strong> Art Explora</li></ul><h3>Venues</h3><ul><li>Fondation OVE, Paris, since June 2023</li><li>Sant Joan de Déu hospital, Barcelona, since December 2023</li><li>CHU de Lille, 2026</li></ul>",
+    "fr": "<p>L’instant présent comme œuvre vivante. Par leur simple présence, les visiteurs créent un tableau en mouvement et une musique qui évolue. Un capteur de profondeur suit tous les mouvements, sans mode d’emploi ni prérequis : chacun peut jouer, quelles que soient ses capacités motrices ou de communication.</p><p>Éphémère transforme les salles d’attente et les couloirs d’hôpitaux en lieux de contemplation et de jeu. Permanente à la Fondation OVE à Paris depuis juin 2023 et à l’hôpital pour enfants Sant Joan de Déu de Barcelone depuis décembre 2023, avec le CHU de Lille en 2026. Présentée à Museum Connections 2026.</p><h3>Crédits</h3><ul><li><strong>Concept et création</strong> Maya Mouawad</li><li><strong>Musique interactive</strong> Cyril Laurier</li><li><strong>Développement technique</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mécénat</strong> Art Explora</li></ul><h3>Lieux</h3><ul><li>Fondation OVE, Paris, depuis juin 2023</li><li>Hôpital Sant Joan de Déu, Barcelone, depuis décembre 2023</li><li>CHU de Lille, 2026</li></ul>",
+    "ca": "<p>L’instant present com a obra viva. Amb la seva simple presència, els visitants creen un quadre en moviment i una música que evoluciona. Un sensor de profunditat segueix tots els moviments, sense instruccions ni requisits: tothom hi pot jugar, siguin quines siguin les seves capacitats motrius o de comunicació.</p><p>Éphémère transforma les sales d’espera i els passadissos d’hospitals en llocs de contemplació i de joc. Permanent a la Fondation OVE de París des del juny del 2023 i a l’hospital infantil Sant Joan de Déu de Barcelona des del desembre del 2023, amb el CHU de Lilla el 2026. Presentada a Museum Connections 2026.</p><h3>Crèdits</h3><ul><li><strong>Concepte i creació</strong> Maya Mouawad</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desenvolupament tècnic</strong> Joan Sandoval</li><li><strong>Producció</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenatge</strong> Art Explora</li></ul><h3>Llocs</h3><ul><li>Fondation OVE, París, des del juny del 2023</li><li>Hospital Sant Joan de Déu, Barcelona, des del desembre del 2023</li><li>CHU de Lilla, 2026</li></ul>",
+    "es": "<p>El instante presente como obra viva. Con su simple presencia, los visitantes crean un cuadro en movimiento y una música que evoluciona. Un sensor de profundidad sigue todos los movimientos, sin instrucciones ni requisitos: cualquiera puede jugar, sean cuales sean sus capacidades motrices o de comunicación.</p><p>Éphémère transforma las salas de espera y los pasillos de hospitales en lugares de contemplación y de juego. Permanente en la Fondation OVE de París desde junio de 2023 y en el hospital infantil Sant Joan de Déu de Barcelona desde diciembre de 2023, con el CHU de Lille en 2026. Presentada en Museum Connections 2026.</p><h3>Créditos</h3><ul><li><strong>Concepto y creación</strong> Maya Mouawad</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desarrollo técnico</strong> Joan Sandoval</li><li><strong>Producción</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenazgo</strong> Art Explora</li></ul><h3>Lugares</h3><ul><li>Fondation OVE, París, desde junio de 2023</li><li>Hospital Sant Joan de Déu, Barcelona, desde diciembre de 2023</li><li>CHU de Lille, 2026</li></ul>"
    },
    "media": [
     {
@@ -1273,11 +1258,6 @@
      "city": "Lille",
      "lat": 50.63,
      "lon": 3.06
-    },
-    {
-     "city": "Bordeaux",
-     "lat": 44.84,
-     "lon": -0.58
     }
    ],
    "author": "Maya Mouawad",
@@ -1291,11 +1271,7 @@
    ],
    "logos": [
     "media/logos/artexplora.png",
-    "media/logos/itisnow.png",
-    "media/logos/fondation-ove.png",
-    "media/logos/sant-joan-de-deu.png",
-    "media/logos/chu-lille.png",
-    "media/logos/chu-bordeaux.png"
+    "media/logos/itisnow.png"
    ]
   },
   {
@@ -1476,10 +1452,10 @@
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1635343969371-S4C8TN4M6848DPKN6B1P/futurRuins.jpeg?format=750w",
    "thumbBack": "",
    "body": {
-    "en": "<p>A music and light performance on hand-built light structures. The challenge: keep LED animation, video mapping and music perfectly in sync.</p><p>We helped Romain Tardy choose the technical approach for his custom LED structures, made them controllable over Art-Net, and adapted Ledotron for real-time editing on site.</p><p>La Nuit des Images at the Musée de l’Élysée, Lausanne, 17 June 2015. The organisers expected 4,000 visitors: 11,000 came.</p><h3>Credits</h3><ul><li><strong>Concept, design and animation</strong> Romain Tardy</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Software and electrical engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul>",
-    "fr": "<p>Une performance de musique et de lumière sur des structures lumineuses fabriquées à la main. Le défi : garder l'animation LED, le mapping vidéo et la musique parfaitement synchronisés.</p><p>Nous avons aidé Romain Tardy à choisir l'approche technique de ses structures LED sur mesure, nous les avons rendues pilotables en Art-Net, et nous avons adapté Ledotron pour l'édition en temps réel sur place.</p><p>La Nuit des Images au Musée de l’Élysée, Lausanne, 17 juin 2015. Les organisateurs attendaient 4 000 visiteurs : 11 000 sont venus.</p><h3>Crédits</h3><ul><li><strong>Concept, design et animation</strong> Romain Tardy</li><li><strong>Musique</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Logiciel et ingénierie électrique</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul>",
-    "ca": "<p>Una actuació de música i llum sobre estructures lluminoses fetes a mà. El repte: mantenir perfectament sincronitzats l'animació LED, el mapping de vídeo i la música.</p><p>Vam ajudar en Romain Tardy a triar l'enfocament tècnic de les seves estructures LED a mida, les vam fer controlables per Art-Net i vam adaptar Ledotron per a l'edició en temps real in situ.</p><p>La Nuit des Images al Musée de l’Élysée, Lausana, 17 de juny de 2015. Els organitzadors esperaven 4.000 visitants: en van venir 11.000.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny i animació</strong> Romain Tardy</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Estructures</strong> Julien Carretero</li><li><strong>Programari i enginyeria elèctrica</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Producció</strong> La Nuit des Images</li></ul>",
-    "es": "<p>Una actuación de música y luz sobre estructuras luminosas hechas a mano. El reto: mantener perfectamente sincronizados la animación LED, el mapping de vídeo y la música.</p><p>Ayudamos a Romain Tardy a elegir el enfoque técnico de sus estructuras LED a medida, las hicimos controlables por Art-Net y adaptamos Ledotron para la edición en tiempo real in situ.</p><p>La Nuit des Images en el Musée de l’Élysée, Lausana, 17 de junio de 2015. Los organizadores esperaban 4.000 visitantes: vinieron 11.000.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño y animación</strong> Romain Tardy</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Estructuras</strong> Julien Carretero</li><li><strong>Software e ingeniería eléctrica</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Producción</strong> La Nuit des Images</li></ul>"
+    "en": "<p>A music and light performance on hand-built light structures. The challenge: keep LED animation, video mapping and music perfectly in sync.</p><p>We helped Romain Tardy choose the technical approach for his custom LED structures, made them controllable over Art-Net, and adapted Ledotron for real-time editing on site.</p><p>La Nuit des Images, Lausanne, 17 June 2015. The organisers expected 4,000 visitors: 11,000 came.</p><h3>Credits</h3><ul><li><strong>Concept, design and animation</strong> Romain Tardy</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Software and electrical engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul>",
+    "fr": "<p>Une performance de musique et de lumière sur des structures lumineuses fabriquées à la main. Le défi : garder l'animation LED, le mapping vidéo et la musique parfaitement synchronisés.</p><p>Nous avons aidé Romain Tardy à choisir l'approche technique de ses structures LED sur mesure, nous les avons rendues pilotables en Art-Net, et nous avons adapté Ledotron pour l'édition en temps réel sur place.</p><p>La Nuit des Images, Lausanne, 17 juin 2015. Les organisateurs attendaient 4 000 visiteurs : 11 000 sont venus.</p><h3>Crédits</h3><ul><li><strong>Concept, design et animation</strong> Romain Tardy</li><li><strong>Musique</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Logiciel et ingénierie électrique</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul>",
+    "ca": "<p>Una actuació de música i llum sobre estructures lluminoses fetes a mà. El repte: mantenir perfectament sincronitzats l'animació LED, el mapping de vídeo i la música.</p><p>Vam ajudar en Romain Tardy a triar l'enfocament tècnic de les seves estructures LED a mida, les vam fer controlables per Art-Net i vam adaptar Ledotron per a l'edició en temps real in situ.</p><p>La Nuit des Images, Lausana, 17 de juny de 2015. Els organitzadors esperaven 4.000 visitants: en van venir 11.000.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny i animació</strong> Romain Tardy</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Estructures</strong> Julien Carretero</li><li><strong>Programari i enginyeria elèctrica</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Producció</strong> La Nuit des Images</li></ul>",
+    "es": "<p>Una actuación de música y luz sobre estructuras luminosas hechas a mano. El reto: mantener perfectamente sincronizados la animación LED, el mapping de vídeo y la música.</p><p>Ayudamos a Romain Tardy a elegir el enfoque técnico de sus estructuras LED a medida, las hicimos controlables por Art-Net y adaptamos Ledotron para la edición en tiempo real in situ.</p><p>La Nuit des Images, Lausana, 17 de junio de 2015. Los organizadores esperaban 4.000 visitantes: vinieron 11.000.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño y animación</strong> Romain Tardy</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Estructuras</strong> Julien Carretero</li><li><strong>Software e ingeniería eléctrica</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Producción</strong> La Nuit des Images</li></ul>"
    },
    "media": [
     {
@@ -1516,8 +1492,7 @@
     "tools"
    ],
    "logos": [
-    "media/logos/signal-festival.png",
-    "media/logos/musee-de-l-elysee.png"
+    "media/logos/signal-festival.png"
    ]
   },
   {
@@ -1651,7 +1626,7 @@
     "ca": "Gira, França",
     "es": "Gira, Francia"
    },
-   "date": "2014 – 2016",
+   "date": "2015 – 2016",
    "tags": [
     "featured",
     "advertising",
@@ -1663,10 +1638,10 @@
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596775-1EK506NKB0DNNWG8HOPQ/14589861_1442393279393479_4417632417371852675_o.jpg?format=750w",
    "thumbBack": "",
    "body": {
-    "en": "<p>The first machine that is sensitive to music: an AI-driven DJ stage made of moving LED structures. Real-time machine learning listens to the DJ and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image, and that packs, installs and leaves quickly.</p><p>Designed from 2014 and officially launched in 2015, OX was produced by Tetro for The Absolut Company Creation and toured France for a year and a half, through more than fifteen venues: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation in Ledotron</strong> Maya Benaïnous</li><li><strong>Beat detection (aubio)</strong> Paul Brossier</li><li><strong>Circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Press</h3><ul><li>“Hand Coded is behind all your favorite installations.” Vice, 2015</li><li>“The man who made the machine sensitive.” Le Monde</li><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
-    "fr": "<p>La première machine sensible à la musique : une scène DJ pilotée par l’IA, faite de structures LED en mouvement. L’apprentissage automatique en temps réel écoute le DJ et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image, et qui se monte et se démonte vite.</p><p>Conçue dès 2014 et présentée officiellement en 2015, OX a été produite par Tetro pour The Absolut Company Creation et a tourné un an et demi en France, dans plus de quinze lieux : Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière dans Ledotron</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Presse</h3><ul><li>« Hand Coded se cache derrière toutes vos installations préférées. » Vice, 2015</li><li>« L’homme qui a rendu la machine sensible. » Le Monde</li><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
-    "ca": "<p>La primera màquina sensible a la música: un escenari de DJ pilotat per IA, fet d’estructures LED en moviment. L’aprenentatge automàtic en temps real escolta el DJ i decideix què mostrar, quan i com. Un sistema semigeneratiu que segueix el disseny de l’artista mantenint el control de la imatge, i que es munta i es desmunta ràpidament.</p><p>Concebuda des del 2014 i presentada oficialment el 2015, OX va ser produïda per Tetro per a The Absolut Company Creation i va girar un any i mig per França, en més de quinze espais: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepte àudio-reactiu</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, anàlisi musical i electrònica</strong> Cyril Laurier</li><li><strong>Animació de llum amb Ledotron</strong> Maya Benaïnous</li><li><strong>Detecció del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits impresos</strong> Tom Magnier</li><li><strong>Estructures, estudi tècnic i construcció</strong> Studio Julien Carretero</li><li><strong>Agència</strong> Tetro</li><li><strong>Mecenatge</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Premsa</h3><ul><li>« Hand Coded és darrere de totes les teves instal·lacions preferides. » Vice, 2015</li><li>« L’home que va fer sensible la màquina. » Le Monde</li><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
-    "es": "<p>La primera máquina sensible a la música: un escenario de DJ pilotado por IA, hecho de estructuras LED en movimiento. El aprendizaje automático en tiempo real escucha al DJ y decide qué mostrar, cuándo y cómo. Un sistema semigenerativo que sigue el diseño del artista manteniendo el control de la imagen, y que se monta y se desmonta rápido.</p><p>Concebida desde 2014 y presentada oficialmente en 2015, OX fue producida por Tetro para The Absolut Company Creation y giró año y medio por Francia, en más de quince espacios: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepto audio-reactivo</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, análisis musical y electrónica</strong> Cyril Laurier</li><li><strong>Animación de luz con Ledotron</strong> Maya Benaïnous</li><li><strong>Detección del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuitos impresos</strong> Tom Magnier</li><li><strong>Estructuras, estudio técnico y construcción</strong> Studio Julien Carretero</li><li><strong>Agencia</strong> Tetro</li><li><strong>Mecenazgo</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Prensa</h3><ul><li>« Hand Coded está detrás de todas tus instalaciones favoritas. » Vice, 2015</li><li>« El hombre que hizo sensible a la máquina. » Le Monde</li><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>"
+    "en": "<p>The first machine that is sensitive to music: an AI-driven DJ stage made of moving LED structures. Real-time machine learning listens to the DJ and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image, and that packs, installs and leaves quickly.</p><p>Produced by Tetro for The Absolut Company Creation, OX toured for nine months through more than fifteen venues in France: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation in Ledotron</strong> Maya Benaïnous</li><li><strong>Beat detection (aubio)</strong> Paul Brossier</li><li><strong>Circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Press</h3><ul><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
+    "fr": "<p>La première machine sensible à la musique : une scène DJ pilotée par l’IA, faite de structures LED en mouvement. L’apprentissage automatique en temps réel écoute le DJ et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image, et qui se monte et se démonte vite.</p><p>Produite par Tetro pour The Absolut Company Creation, OX a tourné neuf mois dans plus de quinze lieux en France : Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière dans Ledotron</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Presse</h3><ul><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
+    "ca": "<p>La primera màquina sensible a la música: un escenari de DJ pilotat per IA, fet d’estructures LED en moviment. L’aprenentatge automàtic en temps real escolta el DJ i decideix què mostrar, quan i com. Un sistema semigeneratiu que segueix el disseny de l’artista mantenint el control de la imatge, i que es munta i es desmunta ràpidament.</p><p>Produïda per Tetro per a The Absolut Company Creation, OX va girar nou mesos per més de quinze espais a França: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepte àudio-reactiu</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, anàlisi musical i electrònica</strong> Cyril Laurier</li><li><strong>Animació de llum amb Ledotron</strong> Maya Benaïnous</li><li><strong>Detecció del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits impresos</strong> Tom Magnier</li><li><strong>Estructures, estudi tècnic i construcció</strong> Studio Julien Carretero</li><li><strong>Agència</strong> Tetro</li><li><strong>Mecenatge</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Premsa</h3><ul><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
+    "es": "<p>La primera máquina sensible a la música: un escenario de DJ pilotado por IA, hecho de estructuras LED en movimiento. El aprendizaje automático en tiempo real escucha al DJ y decide qué mostrar, cuándo y cómo. Un sistema semigenerativo que sigue el diseño del artista manteniendo el control de la imagen, y que se monta y se desmonta rápido.</p><p>Producida por Tetro para The Absolut Company Creation, OX giró nueve meses por más de quince espacios en Francia: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepto audio-reactivo</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, análisis musical y electrónica</strong> Cyril Laurier</li><li><strong>Animación de luz con Ledotron</strong> Maya Benaïnous</li><li><strong>Detección del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuitos impresos</strong> Tom Magnier</li><li><strong>Estructuras, estudio técnico y construcción</strong> Studio Julien Carretero</li><li><strong>Agencia</strong> Tetro</li><li><strong>Mecenazgo</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Prensa</h3><ul><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>"
    },
    "media": [
     {
@@ -1796,10 +1771,10 @@
    "thumb": "media/mgntrn/mgntrn-03-2500px-zwp5.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>An immersive show built around a Ferris wheel, projection screens and 10-metre LED strips, all synchronised with the music.</p><p>We wrote the software to previsualise, animate and control every light from a single timeline, and built a robot that turns the Ferris wheel's control knobs in response to musical events, driven from an iPad or from the Ledotron timeline.</p><p>PROYECTA festival, Puebla, Mexico, 9 to 11 May 2014.</p><h3>Credits</h3><ul><li><strong>Concept, design, animation and light control</strong> Romain Tardy</li><li><strong>Software and engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul><h3>Award</h3><ul><li>Best installation in the world 2014, The Creators Project (Vice)</li></ul>",
-    "fr": "<p>Un spectacle immersif construit autour d'une grande roue, d'écrans de projection et de bandes LED de 10 mètres, le tout synchronisé avec la musique.</p><p>Nous avons écrit le logiciel qui prévisualise, anime et contrôle toutes les lumières depuis une seule timeline, et construit un robot qui tourne les manettes de la grande roue au rythme des événements musicaux, piloté depuis un iPad ou la timeline de Ledotron.</p><p>Festival PROYECTA, Puebla, Mexique, du 9 au 11 mai 2014.</p><h3>Crédits</h3><ul><li><strong>Concept, design, animation et contrôle lumière</strong> Romain Tardy</li><li><strong>Logiciel et ingénierie</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Musique</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul><h3>Prix</h3><ul><li>Élue meilleure installation du monde 2014, The Creators Project (Vice)</li></ul>",
-    "ca": "<p>Un espectacle immersiu construït al voltant d'una sínia, pantalles de projecció i tires LED de 10 metres, tot sincronitzat amb la música.</p><p>Vam escriure el programari que previsualitza, anima i controla totes les llums des d'una sola línia de temps, i vam construir un robot que gira els comandaments de la sínia segons els esdeveniments musicals, pilotat des d'un iPad o des de la línia de temps de Ledotron.</p><p>Festival PROYECTA, Puebla, Mèxic, del 9 a l'11 de maig de 2014.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny, animació i control de llum</strong> Romain Tardy</li><li><strong>Programari i enginyeria</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producció</strong> PROYECTA</li></ul><h3>Premi</h3><ul><li>Escollida millor instal·lació del món 2014, The Creators Project (Vice)</li></ul>",
-    "es": "<p>Un espectáculo inmersivo construido alrededor de una noria, pantallas de proyección y tiras LED de 10 metros, todo sincronizado con la música.</p><p>Escribimos el software que previsualiza, anima y controla todas las luces desde una sola línea de tiempo, y construimos un robot que gira los mandos de la noria según los eventos musicales, pilotado desde un iPad o desde la línea de tiempo de Ledotron.</p><p>Festival PROYECTA, Puebla, México, del 9 al 11 de mayo de 2014.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño, animación y control de luz</strong> Romain Tardy</li><li><strong>Software e ingeniería</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producción</strong> PROYECTA</li></ul><h3>Premio</h3><ul><li>Elegida mejor instalación del mundo 2014, The Creators Project (Vice)</li></ul>"
+    "en": "<p>An immersive show built around a Ferris wheel, projection screens and 10-metre LED strips, all synchronised with the music.</p><p>We wrote the software to previsualise, animate and control every light from a single timeline, and built a robot that turns the Ferris wheel's control knobs in response to musical events, driven from an iPad or from the Ledotron timeline.</p><p>PROYECTA festival, Puebla, Mexico, 9 to 11 May 2014.</p><h3>Credits</h3><ul><li><strong>Concept, design, animation and light control</strong> Romain Tardy</li><li><strong>Software and engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul>",
+    "fr": "<p>Un spectacle immersif construit autour d'une grande roue, d'écrans de projection et de bandes LED de 10 mètres, le tout synchronisé avec la musique.</p><p>Nous avons écrit le logiciel qui prévisualise, anime et contrôle toutes les lumières depuis une seule timeline, et construit un robot qui tourne les manettes de la grande roue au rythme des événements musicaux, piloté depuis un iPad ou la timeline de Ledotron.</p><p>Festival PROYECTA, Puebla, Mexique, du 9 au 11 mai 2014.</p><h3>Crédits</h3><ul><li><strong>Concept, design, animation et contrôle lumière</strong> Romain Tardy</li><li><strong>Logiciel et ingénierie</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Musique</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul>",
+    "ca": "<p>Un espectacle immersiu construït al voltant d'una sínia, pantalles de projecció i tires LED de 10 metres, tot sincronitzat amb la música.</p><p>Vam escriure el programari que previsualitza, anima i controla totes les llums des d'una sola línia de temps, i vam construir un robot que gira els comandaments de la sínia segons els esdeveniments musicals, pilotat des d'un iPad o des de la línia de temps de Ledotron.</p><p>Festival PROYECTA, Puebla, Mèxic, del 9 a l'11 de maig de 2014.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny, animació i control de llum</strong> Romain Tardy</li><li><strong>Programari i enginyeria</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producció</strong> PROYECTA</li></ul>",
+    "es": "<p>Un espectáculo inmersivo construido alrededor de una noria, pantallas de proyección y tiras LED de 10 metros, todo sincronizado con la música.</p><p>Escribimos el software que previsualiza, anima y controla todas las luces desde una sola línea de tiempo, y construimos un robot que gira los mandos de la noria según los eventos musicales, pilotado desde un iPad o desde la línea de tiempo de Ledotron.</p><p>Festival PROYECTA, Puebla, México, del 9 al 11 de mayo de 2014.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño, animación y control de luz</strong> Romain Tardy</li><li><strong>Software e ingeniería</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producción</strong> PROYECTA</li></ul>"
    },
    "media": [],
    "link": "",
@@ -2285,7 +2260,7 @@
     "ca": "Gira, França",
     "es": "Gira, Francia"
    },
-   "date": "2008 – 2014",
+   "date": "2008 – 2013",
    "tags": [
     "collab",
     "performance",
@@ -2295,10 +2270,10 @@
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410878147993-MJ8UB1CQB7XQ015BK547/BO_gant1.jpg?format=750w",
    "thumbBack": "",
    "body": {
-    "en": "<p>Technologies for live beatbox, developed with Ezra and the Organic Orchestra company over two residencies a year from 2008 to 2012, including the Abbaye de Fontevraud, with engineers, visual and music creators and researchers from the Music Technology Group of the Universitat Pompeu Fabra in Barcelona.</p><p>In 2014, a long residency at the Abbaye de Vivoin brought together 40 people living on site in caravans around an augmented paper project, with school visits, workshops and performances for local audiences. Some of the residencies were part of the CEA Art & Science programme.</p><p>An electronic glove that drives the whole performance, a looper for a human orchestra, automatic sound spatialisation, real-time projections triggered by the music and movement detection. Built with Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone and iPad, Wii and Arduino. Presented at Music Tech Fest London in 2013, and used in concerts and workshops around the world.</p><p>“I want people to get lost between what I do because of the machine and what I can really do organically.” Ezra</p><h3>Credits</h3><ul><li><strong>Company</strong> Organic Orchestra</li><li><strong>Artist</strong> Ezra</li><li><strong>Development</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Research</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
-    "fr": "<p>Des technologies pour le beatbox live, développées avec Ezra et la compagnie Organic Orchestra au fil de deux résidences par an de 2008 à 2012, dont l’Abbaye de Fontevraud, avec des ingénieurs, des créateurs visuels et musicaux et des chercheurs du Music Technology Group de l’Universitat Pompeu Fabra, à Barcelone.</p><p>En 2014, une longue résidence à l’Abbaye de Vivoin a réuni 40 personnes vivant sur place en caravanes autour d’un projet de papier augmenté, avec des rencontres avec les écoles, des ateliers et des représentations pour le public local. Une partie des résidences s’est faite dans le programme Art & Science du CEA.</p><p>Un gant électronique qui pilote toute la performance, un looper pour orchestre humain, une spatialisation automatique du son, des projections temps réel déclenchées par la musique et la détection de mouvement. Construit avec Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone et iPad, Wii et Arduino. Présenté à Music Tech Fest Londres en 2013, et utilisé en concert et en atelier dans le monde entier.</p><p>« Je veux que le public se perde entre ce que je fais grâce à la machine et ce que je sais vraiment faire organiquement. » Ezra</p><h3>Crédits</h3><ul><li><strong>Compagnie</strong> Organic Orchestra</li><li><strong>Artiste</strong> Ezra</li><li><strong>Développement</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Recherche</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
-    "ca": "<p>Tecnologies per al beatbox en directe, desenvolupades amb Ezra i la companyia Organic Orchestra en dues residències l’any del 2008 al 2012, entre elles l’Abadia de Fontevraud, amb enginyers, creadors visuals i musicals i investigadors del Music Technology Group de la Universitat Pompeu Fabra, a Barcelona.</p><p>El 2014, una llarga residència a l’Abadia de Vivoin va reunir 40 persones que vivien al lloc en caravanes al voltant d’un projecte de paper augmentat, amb trobades amb escoles, tallers i representacions per al públic local. Part de les residències es van fer dins del programa Art & Science del CEA.</p><p>Un guant electrònic que pilota tota la performance, un looper per a orquestra humana, una espacialització automàtica del so, projeccions en temps real activades per la música i la detecció de moviment. Construït amb Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone i iPad, Wii i Arduino. Presentat a Music Tech Fest Londres el 2013, i utilitzat en concerts i tallers arreu del món.</p><p>«Vull que el públic es perdi entre el que faig gràcies a la màquina i el que realment sé fer orgànicament.» Ezra</p><h3>Crèdits</h3><ul><li><strong>Companyia</strong> Organic Orchestra</li><li><strong>Artista</strong> Ezra</li><li><strong>Desenvolupament</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Recerca</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
-    "es": "<p>Tecnologías para el beatbox en directo, desarrolladas con Ezra y la compañía Organic Orchestra en dos residencias al año de 2008 a 2012, entre ellas la Abadía de Fontevraud, con ingenieros, creadores visuales y musicales e investigadores del Music Technology Group de la Universitat Pompeu Fabra, en Barcelona.</p><p>En 2014, una larga residencia en la Abadía de Vivoin reunió a 40 personas que vivían en el lugar en caravanas en torno a un proyecto de papel aumentado, con encuentros con escuelas, talleres y representaciones para el público local. Parte de las residencias se hicieron dentro del programa Art & Science del CEA.</p><p>Un guante electrónico que pilota toda la performance, un looper para orquesta humana, una espacialización automática del sonido, proyecciones en tiempo real activadas por la música y la detección de movimiento. Construido con Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone y iPad, Wii y Arduino. Presentado en Music Tech Fest Londres en 2013, y utilizado en conciertos y talleres en todo el mundo.</p><p>«Quiero que el público se pierda entre lo que hago gracias a la máquina y lo que realmente sé hacer orgánicamente.» Ezra</p><h3>Créditos</h3><ul><li><strong>Compañía</strong> Organic Orchestra</li><li><strong>Artista</strong> Ezra</li><li><strong>Desarrollo</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Investigación</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>"
+    "en": "<p>Technologies for live beatbox, developed with Ezra and the Organic Orchestra company over two residencies a year from 2008 to 2012, including the Abbaye de Fontevraud, with engineers, visual and music creators and researchers from the Music Technology Group of the Universitat Pompeu Fabra in Barcelona.</p><p>An electronic glove that drives the whole performance, a looper for a human orchestra, automatic sound spatialisation, real-time projections triggered by the music and movement detection. Built with Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone and iPad, Wii and Arduino. Presented at Music Tech Fest London in 2013, and used in concerts and workshops around the world.</p><p>“I want people to get lost between what I do because of the machine and what I can really do organically.” Ezra</p><h3>Credits</h3><ul><li><strong>Company</strong> Organic Orchestra</li><li><strong>Artist</strong> Ezra</li><li><strong>Development</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Research</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
+    "fr": "<p>Des technologies pour le beatbox live, développées avec Ezra et la compagnie Organic Orchestra au fil de deux résidences par an de 2008 à 2012, dont l’Abbaye de Fontevraud, avec des ingénieurs, des créateurs visuels et musicaux et des chercheurs du Music Technology Group de l’Universitat Pompeu Fabra, à Barcelone.</p><p>Un gant électronique qui pilote toute la performance, un looper pour orchestre humain, une spatialisation automatique du son, des projections temps réel déclenchées par la musique et la détection de mouvement. Construit avec Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone et iPad, Wii et Arduino. Présenté à Music Tech Fest Londres en 2013, et utilisé en concert et en atelier dans le monde entier.</p><p>« Je veux que le public se perde entre ce que je fais grâce à la machine et ce que je sais vraiment faire organiquement. » Ezra</p><h3>Crédits</h3><ul><li><strong>Compagnie</strong> Organic Orchestra</li><li><strong>Artiste</strong> Ezra</li><li><strong>Développement</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Recherche</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
+    "ca": "<p>Tecnologies per al beatbox en directe, desenvolupades amb Ezra i la companyia Organic Orchestra en dues residències l’any del 2008 al 2012, entre elles l’Abadia de Fontevraud, amb enginyers, creadors visuals i musicals i investigadors del Music Technology Group de la Universitat Pompeu Fabra, a Barcelona.</p><p>Un guant electrònic que pilota tota la performance, un looper per a orquestra humana, una espacialització automàtica del so, projeccions en temps real activades per la música i la detecció de moviment. Construït amb Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone i iPad, Wii i Arduino. Presentat a Music Tech Fest Londres el 2013, i utilitzat en concerts i tallers arreu del món.</p><p>«Vull que el públic es perdi entre el que faig gràcies a la màquina i el que realment sé fer orgànicament.» Ezra</p><h3>Crèdits</h3><ul><li><strong>Companyia</strong> Organic Orchestra</li><li><strong>Artista</strong> Ezra</li><li><strong>Desenvolupament</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Recerca</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
+    "es": "<p>Tecnologías para el beatbox en directo, desarrolladas con Ezra y la compañía Organic Orchestra en dos residencias al año de 2008 a 2012, entre ellas la Abadía de Fontevraud, con ingenieros, creadores visuales y musicales e investigadores del Music Technology Group de la Universitat Pompeu Fabra, en Barcelona.</p><p>Un guante electrónico que pilota toda la performance, un looper para orquesta humana, una espacialización automática del sonido, proyecciones en tiempo real activadas por la música y la detección de movimiento. Construido con Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone y iPad, Wii y Arduino. Presentado en Music Tech Fest Londres en 2013, y utilizado en conciertos y talleres en todo el mundo.</p><p>«Quiero que el público se pierda entre lo que hago gracias a la máquina y lo que realmente sé hacer orgánicamente.» Ezra</p><h3>Créditos</h3><ul><li><strong>Compañía</strong> Organic Orchestra</li><li><strong>Artista</strong> Ezra</li><li><strong>Desarrollo</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Investigación</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>"
    },
    "media": [
     {
@@ -2356,11 +2331,6 @@
      "city": "London",
      "lat": 51.51,
      "lon": -0.13
-    },
-    {
-     "city": "Vivoin",
-     "lat": 48.23,
-     "lon": 0.17
     }
    ],
    "author": "Ezra, Organic Orchestra",
@@ -2375,9 +2345,7 @@
    ],
    "logos": [
     "media/logos/upf.png",
-    "media/logos/music-tech-fest.png",
-    "media/logos/abbaye-de-fontevraud.png",
-    "media/logos/abbaye-de-vivoin.png"
+    "media/logos/music-tech-fest.png"
    ]
   },
   {
@@ -2412,10 +2380,10 @@
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665771057-4BOS4AQFNZ9Y5UPGPBSB/amcb-air-img_2221-680x353.jpg?format=750w",
    "thumbBack": "",
    "body": {
-    "en": "<p>Adrien M & Claire B create performances that mix the real and the virtual. Together we explored new interactive elements for their shows, with particles that live with the performers on stage.</p><p>Do you feel the particles?</p><p>Creative residency in Cherbourg, 2014.</p><h3>Credits</h3><ul><li><strong>Artists</strong> Adrien M & Claire B</li><li><strong>Development</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
-    "fr": "<p>Adrien M & Claire B créent des spectacles qui mêlent le réel et le virtuel. Ensemble, nous avons exploré de nouveaux éléments interactifs pour leurs spectacles, avec des particules qui vivent avec les interprètes sur scène.</p><p>Sentez-vous les particules ?</p><p>Résidence de création à Cherbourg, 2014.</p><h3>Crédits</h3><ul><li><strong>Artistes</strong> Adrien M & Claire B</li><li><strong>Développement</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
-    "ca": "<p>Adrien M & Claire B creen espectacles que barregen el real i el virtual. Junts vam explorar nous elements interactius per als seus espectacles, amb partícules que viuen amb els intèrprets a l'escenari.</p><p>Sents les partícules?</p><p>Residència de creació a Cherbourg, 2014.</p><h3>Crèdits</h3><ul><li><strong>Artistes</strong> Adrien M & Claire B</li><li><strong>Desenvolupament</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
-    "es": "<p>Adrien M & Claire B crean espectáculos que mezclan lo real y lo virtual. Juntos exploramos nuevos elementos interactivos para sus espectáculos, con partículas que viven con los intérpretes en el escenario.</p><p>¿Sientes las partículas?</p><p>Residencia de creación en Cherbourg, 2014.</p><h3>Créditos</h3><ul><li><strong>Artistas</strong> Adrien M & Claire B</li><li><strong>Desarrollo</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>"
+    "en": "<p>Adrien M & Claire B create performances that mix the real and the virtual. Together we explored new interactive elements for their shows, with particles that live with the performers on stage.</p><p>Do you feel the particles?</p><h3>Credits</h3><ul><li><strong>Artists</strong> Adrien M & Claire B</li><li><strong>Development</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
+    "fr": "<p>Adrien M & Claire B créent des spectacles qui mêlent le réel et le virtuel. Ensemble, nous avons exploré de nouveaux éléments interactifs pour leurs spectacles, avec des particules qui vivent avec les interprètes sur scène.</p><p>Sentez-vous les particules ?</p><h3>Crédits</h3><ul><li><strong>Artistes</strong> Adrien M & Claire B</li><li><strong>Développement</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
+    "ca": "<p>Adrien M & Claire B creen espectacles que barregen el real i el virtual. Junts vam explorar nous elements interactius per als seus espectacles, amb partícules que viuen amb els intèrprets a l'escenari.</p><p>Sents les partícules?</p><h3>Crèdits</h3><ul><li><strong>Artistes</strong> Adrien M & Claire B</li><li><strong>Desenvolupament</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
+    "es": "<p>Adrien M & Claire B crean espectáculos que mezclan lo real y lo virtual. Juntos exploramos nuevos elementos interactivos para sus espectáculos, con partículas que viven con los intérpretes en el escenario.</p><p>¿Sientes las partículas?</p><h3>Créditos</h3><ul><li><strong>Artistas</strong> Adrien M & Claire B</li><li><strong>Desarrollo</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>"
    },
    "media": [
     {
@@ -2443,13 +2411,7 @@
    ],
    "credits": "",
    "location": null,
-   "spots": [
-    {
-     "city": "Cherbourg",
-     "lat": 49.64,
-     "lon": -1.62
-    }
-   ],
+   "spots": [],
    "author": "Adrien M & Claire B",
    "skills": [
     "projection-mapping",
@@ -3838,7 +3800,8 @@
    },
    "media": [
     {
-     "src": "media/sustainable/testingtexturesinmurano-66ww.jpg"
+     "src": "media/sustainable/testingtexturesinmurano-66ww.jpg",
+     "credit": ""
     }
    ],
    "link": "",
@@ -3997,10 +3960,10 @@
     "es": "Cyril Laurier"
    },
    "subtitle": {
-    "en": "Co-founder. PhD in music AI, Sony CSL researcher.",
-    "fr": "Cofondateur. Docteur en IA musicale, chercheur Sony CSL.",
-    "ca": "Cofundador. Doctor en IA musical, investigador a Sony CSL.",
-    "es": "Cofundador. Doctor en IA musical, investigador en Sony CSL."
+    "en": "Co-founder. PhD in music technology.",
+    "fr": "Cofondateur. Docteur en technologies musicales.",
+    "ca": "Cofundador. Doctor en tecnologia musical.",
+    "es": "Cofundador. Doctor en tecnología musical."
    },
    "place": {
     "en": "Barcelona",
@@ -4015,10 +3978,10 @@
    "thumb": "media/cyril/cyril-81xu.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music improvisation.</p><p>He was technical director of the European research project PHAROS and research coordinator of the European project MusicBricks, worked in research and development at IK Multimedia and Eventide, then on deep learning tools for music at Sony CSL Paris from 2018 to 2024. A member of the Music Tech Fest community since 2012, he loves new technologies, solving problems and building small robots.</p>",
-    "fr": "<p>Sa thèse au Music Technology Group de l’Universitat Pompeu Fabra utilisait l’apprentissage automatique pour détecter les émotions dans la musique. Avant cela, il a étudié l’acoustique, le traitement du signal et l’informatique appliqués à la musique à l’IRCAM (master ATIAM), où il a écrit un algorithme génératif d’improvisation musicale automatique.</p><p>Il a été directeur technique du projet de recherche européen PHAROS et coordinateur de recherche du projet européen MusicBricks, a travaillé en recherche et développement chez IK Multimedia et Eventide, puis sur des outils de deep learning pour la musique chez Sony CSL Paris de 2018 à 2024. Membre de la communauté Music Tech Fest depuis 2012, il aime les nouvelles technologies, résoudre des problèmes et construire de petits robots.</p>",
-    "ca": "<p>La seva tesi al Music Technology Group de la Universitat Pompeu Fabra feia servir l’aprenentatge automàtic per detectar les emocions a la música. Abans, va estudiar acústica, tractament del senyal i informàtica aplicats a la música a l’IRCAM (màster ATIAM), on va escriure un algorisme generatiu d’improvisació musical automàtica.</p><p>Va ser director tècnic del projecte de recerca europeu PHAROS i coordinador de recerca del projecte europeu MusicBricks, va treballar en recerca i desenvolupament a IK Multimedia i Eventide, i després en eines de deep learning per a la música a Sony CSL París del 2018 al 2024. Membre de la comunitat Music Tech Fest des del 2012, li agraden les noves tecnologies, resoldre problemes i construir petits robots.</p>",
-    "es": "<p>Su tesis en el Music Technology Group de la Universitat Pompeu Fabra usaba el aprendizaje automático para detectar las emociones en la música. Antes, estudió acústica, tratamiento de la señal e informática aplicados a la música en el IRCAM (máster ATIAM), donde escribió un algoritmo generativo de improvisación musical automática.</p><p>Fue director técnico del proyecto de investigación europeo PHAROS y coordinador de investigación del proyecto europeo MusicBricks, trabajó en investigación y desarrollo en IK Multimedia y Eventide, y después en herramientas de deep learning para la música en Sony CSL París de 2018 a 2024. Miembro de la comunidad Music Tech Fest desde 2012, le gustan las nuevas tecnologías, resolver problemas y construir pequeños robots.</p>"
+    "en": "<p>His PhD research used machine learning to detect emotions in music. He has led European research projects and published in journals, books and conferences. He loves new technologies, solving problems and building small robots.</p>",
+    "fr": "<p>Sa thèse utilisait l'apprentissage automatique pour détecter les émotions dans la musique. Il a mené des projets de recherche européens et publié dans des revues, des livres et des conférences. Il aime les nouvelles technologies, résoudre des problèmes et construire de petits robots.</p>",
+    "ca": "<p>La seva tesi feia servir l'aprenentatge automàtic per detectar les emocions a la música. Ha dirigit projectes de recerca europeus i ha publicat en revistes, llibres i congressos. Li agraden les noves tecnologies, resoldre problemes i construir petits robots.</p>",
+    "es": "<p>Su tesis usaba el aprendizaje automático para detectar las emociones en la música. Ha dirigido proyectos de investigación europeos y ha publicado en revistas, libros y congresos. Le gustan las nuevas tecnologías, resolver problemas y construir pequeños robots.</p>"
    },
    "media": [],
    "link": "",
@@ -4042,10 +4005,10 @@
     "es": "Maya Benaïnous"
    },
    "subtitle": {
-    "en": "Co-founder. Artist and engineer, creator of Ledotron.",
-    "fr": "Cofondatrice. Artiste et ingénieure, créatrice de Ledotron.",
-    "ca": "Cofundadora. Artista i enginyera, creadora de Ledotron.",
-    "es": "Cofundadora. Artista e ingeniera, creadora de Ledotron."
+    "en": "Co-founder. Master in art and new technologies.",
+    "fr": "Cofondatrice. Master arts et nouvelles technologies.",
+    "ca": "Cofundadora. Màster en art i noves tecnologies.",
+    "es": "Cofundadora. Máster en arte y nuevas tecnologías."
    },
    "place": {
     "en": "Barcelona",
@@ -4060,10 +4023,10 @@
    "thumb": "media/maya/screen-shot-2014-05-28-at-7-49-53-pm-copy-g8gl.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>Artist and engineer, she creates immersive installations at the crossroads of ecology, technology and the senses, and has worked with real-time data since 2008. She invented a new way to work with LEDs: Ledotron.</p><p>Trained in mathematics, biology and art and technology (IMAC engineering school), she also studied acting in Paris. She began in research and development for cinema special effects at Duboi Duran, made two animated short films for the RAI and interactive web works with the Fat-Man Collective, then set up and art-directed a 3D animation studio for BRB International in Barcelona (104 episodes).</p><p>Laureate of the Villa Al Qamar residency of the Institut Français du Liban in 2024, in residency at ElClimamola, Barcelona, in 2025.</p><p>“Technology is a tool, nature is the path.”</p>",
-    "fr": "<p>Artiste et ingénieure, elle crée des installations immersives au croisement de l’écologie, de la technologie et des sens, et travaille avec les données en temps réel depuis 2008. Elle a inventé une nouvelle façon de travailler avec les LED : Ledotron.</p><p>Formée aux mathématiques, à la biologie et aux arts et technologies (école d’ingénieurs IMAC), elle a aussi étudié le jeu d’acteur à Paris. Elle a commencé en recherche et développement d’effets spéciaux pour le cinéma chez Duboi Duran, réalisé deux courts métrages d’animation pour la RAI et des créations web interactives avec le Fat-Man Collective, puis créé et dirigé artistiquement un studio d’animation 3D pour BRB International à Barcelone (104 épisodes).</p><p>Lauréate de la résidence Villa Al Qamar de l’Institut Français du Liban en 2024, en résidence à ElClimamola, Barcelone, en 2025.</p><p>« La technologie est un outil, la nature est le chemin. »</p>",
-    "ca": "<p>Artista i enginyera, crea instal·lacions immersives a la cruïlla de l’ecologia, la tecnologia i els sentits, i treballa amb dades en temps real des del 2008. Va inventar una nova manera de treballar amb els LED: Ledotron.</p><p>Formada en matemàtiques, biologia i art i tecnologia (escola d’enginyeria IMAC), també va estudiar interpretació a París. Va començar en recerca i desenvolupament d’efectes especials per al cinema a Duboi Duran, va fer dos curtmetratges d’animació per a la RAI i creacions web interactives amb el Fat-Man Collective, i després va crear i dirigir artísticament un estudi d’animació 3D per a BRB International a Barcelona (104 episodis).</p><p>Guardonada amb la residència Villa Al Qamar de l’Institut Français del Líban el 2024, en residència a ElClimamola, Barcelona, el 2025.</p><p>« La tecnologia és una eina, la natura és el camí. »</p>",
-    "es": "<p>Artista e ingeniera, crea instalaciones inmersivas en el cruce de la ecología, la tecnología y los sentidos, y trabaja con datos en tiempo real desde 2008. Inventó una nueva manera de trabajar con los LED: Ledotron.</p><p>Formada en matemáticas, biología y arte y tecnología (escuela de ingeniería IMAC), también estudió interpretación en París. Empezó en investigación y desarrollo de efectos especiales para el cine en Duboi Duran, realizó dos cortometrajes de animación para la RAI y creaciones web interactivas con el Fat-Man Collective, y luego creó y dirigió artísticamente un estudio de animación 3D para BRB International en Barcelona (104 episodios).</p><p>Galardonada con la residencia Villa Al Qamar del Institut Français du Liban en 2024, en residencia en ElClimamola, Barcelona, en 2025.</p><p>« La tecnología es una herramienta, la naturaleza es el camino. »</p>"
+    "en": "<p>She started in 3D animation and led the development of several animated TV series. She works on how technology can trigger emotions, and on algorithms that generate designs and animations. She invented a new way to work with LEDs: Ledotron. She also studied acting and scenography.</p>",
+    "fr": "<p>Elle a commencé dans l'animation 3D et dirigé le développement de plusieurs séries animées pour la télévision. Elle travaille sur la façon dont la technologie déclenche des émotions, et sur les algorithmes qui génèrent formes et animations. Elle a inventé une nouvelle façon de travailler avec les LED : Ledotron. Elle a aussi étudié le jeu d'acteur et la scénographie.</p>",
+    "ca": "<p>Va començar en l'animació 3D i va dirigir el desenvolupament de diverses sèries d'animació per a la televisió. Treballa en com la tecnologia desperta emocions, i en algorismes que generen formes i animacions. Va inventar una nova manera de treballar amb els LED: Ledotron. També va estudiar interpretació i escenografia.</p>",
+    "es": "<p>Empezó en la animación 3D y dirigió el desarrollo de varias series de animación para televisión. Trabaja en cómo la tecnología despierta emociones, y en algoritmos que generan formas y animaciones. Inventó una nueva manera de trabajar con los LED: Ledotron. También estudió interpretación y escenografía.</p>"
    },
    "media": [],
    "link": "",
@@ -4850,14 +4813,14 @@
    "title": {
     "en": "Immersive",
     "fr": "Immersif",
-    "ca": "Immersiu",
-    "es": "Inmersivo"
+    "ca": "Imersivo",
+    "es": "Imersivo"
    },
    "subtitle": {
-    "en": "Rooms of light, sound and data that answer the people inside them.",
-    "fr": "Des espaces de lumière, de son et de données qui répondent à celles et ceux qui les traversent.",
-    "ca": "Espais de llum, so i dades que responen a qui els travessa.",
-    "es": "Espacios de luz, sonido y datos que responden a quienes los recorren."
+    "en": "Contenus immersif",
+    "fr": "Contenus immersif",
+    "ca": "Contenus immersif",
+    "es": "Contenus immersif"
    },
    "place": {
     "en": "",
@@ -4875,10 +4838,10 @@
    "thumb": "media/nouveau-contenu/dsc3755-copy-x445.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>We design and build immersive spaces where image, light and sound are generated in real time, so the work is never the same twice. Cameras and sensors follow the visitors, live data from the climate, the music or the place feeds the content, and the room becomes a living environment rather than a film on a loop.</p><p>We cover the whole chain: concept and scenography, generative content in our own engines and in TouchDesigner, projection mapping on any surface, LED and light with Ledotron, spatialised sound and scent, and the hardware that keeps it all running for years. Our rooms also travel light: Peupler fits in three suitcases and runs on a single laptop.</p><p>From the chalk cellars of Ruinart to the Venice Immersive Biennale, from hospital waiting rooms to the Grand Palais, each piece is shaped by its place and its audience.</p>",
-    "fr": "<p>Nous concevons et construisons des espaces immersifs où l’image, la lumière et le son sont générés en temps réel : l’œuvre n’est jamais deux fois la même. Caméras et capteurs suivent les visiteurs, les données en direct du climat, de la musique ou du lieu nourrissent le contenu, et la salle devient un environnement vivant plutôt qu’un film en boucle.</p><p>Nous couvrons toute la chaîne : concept et scénographie, contenus génératifs dans nos propres moteurs et dans TouchDesigner, mapping sur toutes les surfaces, LED et lumière avec Ledotron, son spatialisé et odeurs, et le matériel qui fait tourner le tout pendant des années. Nos dispositifs voyagent aussi léger : Peupler tient dans trois valises et tourne sur un seul ordinateur portable.</p><p>Des caves de craie de Ruinart à la Biennale immersive de Venise, des salles d’attente d’hôpitaux au Grand Palais, chaque œuvre se façonne avec son lieu et son public.</p>",
-    "ca": "<p>Dissenyem i construïm espais immersius on la imatge, la llum i el so es generen en temps real: l’obra no és mai dues vegades igual. Càmeres i sensors segueixen els visitants, les dades en directe del clima, de la música o del lloc alimenten el contingut, i la sala esdevé un entorn viu en lloc d’una pel·lícula en bucle.</p><p>Cobrim tota la cadena: concepte i escenografia, continguts generatius amb els nostres propis motors i amb TouchDesigner, mapping sobre qualsevol superfície, LED i llum amb Ledotron, so espacialitzat i olors, i el maquinari que ho fa funcionar durant anys. Els nostres dispositius també viatgen lleugers: Peupler cap en tres maletes i funciona amb un sol portàtil.</p><p>De les caves de guix de Ruinart a la Biennal immersiva de Venècia, de les sales d’espera dels hospitals al Grand Palais, cada obra es modela amb el seu lloc i el seu públic.</p>",
-    "es": "<p>Diseñamos y construimos espacios inmersivos donde la imagen, la luz y el sonido se generan en tiempo real: la obra nunca es dos veces igual. Cámaras y sensores siguen a los visitantes, los datos en directo del clima, de la música o del lugar alimentan el contenido, y la sala se convierte en un entorno vivo en lugar de una película en bucle.</p><p>Cubrimos toda la cadena: concepto y escenografía, contenidos generativos con nuestros propios motores y con TouchDesigner, mapping sobre cualquier superficie, LED y luz con Ledotron, sonido espacializado y olores, y el hardware que lo mantiene funcionando durante años. Nuestros dispositivos también viajan ligeros: Peupler cabe en tres maletas y funciona con un solo portátil.</p><p>De las cavas de tiza de Ruinart a la Bienal inmersiva de Venecia, de las salas de espera de hospitales al Grand Palais, cada obra se moldea con su lugar y su público.</p>"
+    "en": "Création de contenues dynamique immersif",
+    "fr": "Création de contenues dynamique immersif",
+    "ca": "Création de contenues dynamique immersif",
+    "es": "Création de contenues dynamique immersif"
    },
    "media": [],
    "link": "",
@@ -5807,11 +5770,6 @@
      "city": "Riyadh",
      "lat": 24.71,
      "lon": 46.68
-    },
-    {
-     "city": "Deir el Qamar",
-     "lat": 33.7,
-     "lon": 35.56
     }
    ],
    "skills": [
@@ -6106,8 +6064,7 @@
    "author": "Mouawad + Laurier",
    "logos": [
     "media/logos/cnrs.png",
-    "media/logos/nanomusee.png",
-    "media/logos/la-rochelle-universite.png"
+    "media/logos/nanomusee.png"
    ]
   },
   {
@@ -9539,658 +9496,6 @@
     "media/logos/fisheye.png",
     "media/logos/logo-moet-wyrb.jpg"
    ]
-  },
-  {
-   "id": "eruption-of-the-end",
-   "section": "work",
-   "order": 44,
-   "published": true,
-   "title": {
-    "en": "Eruption of the end",
-    "fr": "Eruption of the end",
-    "ca": "Eruption of the end",
-    "es": "Eruption of the end"
-   },
-   "subtitle": {
-    "en": "Rossella Piccinno",
-    "fr": "Rossella Piccinno",
-    "ca": "Rossella Piccinno",
-    "es": "Rossella Piccinno"
-   },
-   "place": {
-    "en": "Panorama 13, Le Fresnoy, Tourcoing",
-    "fr": "Panorama 13, Le Fresnoy, Tourcoing",
-    "ca": "Panorama 13, Le Fresnoy, Tourcoing",
-    "es": "Panorama 13, Le Fresnoy, Tourcoing"
-   },
-   "date": "2011",
-   "tags": [
-    "collab",
-    "archive"
-   ],
-   "thumb": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
-   "thumbBack": "",
-   "media": [
-    {
-     "src": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
-     "credit": "Le Fresnoy"
-    }
-   ],
-   "link": "https://lefresnoy.net/en/exposition/57/oeuvre/402",
-   "team": [
-    "maya",
-    "cyril",
-    "rossella-piccinno"
-   ],
-   "credits": "Rossella Piccinno, Le Fresnoy",
-   "location": null,
-   "spots": [
-    {
-     "city": "Tourcoing",
-     "lat": 50.72,
-     "lon": 3.16
-    }
-   ],
-   "author": "Rossella Piccinno",
-   "skills": [
-    "tracking",
-    "real-time",
-    "projection-mapping"
-   ],
-   "logos": [
-    "media/logos/le-fresnoy.png"
-   ],
-   "body": {
-    "en": "<p>The old chimney of the Congo soap factory in Roubaix, built for Victor Vaissier at the end of the 19th century, comes back to life. Soap bubbles rise from this last eruption, and the images reflected in them take us through the memories of a place that has travelled through time. The abandoned chimney, a totem, stands as a witness.</p><p>An installation by Rossella Piccinno, created at Le Fresnoy, Studio national des arts contemporains, for Panorama 13. Hand Coded worked on its interactive part, with a Kinect.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Award</h3><ul><li>Friends of Le Fresnoy Award for Best Installation, Panorama 13, 2011</li></ul>",
-    "fr": "<p>La vieille cheminée de la savonnerie du Congo, à Roubaix, construite pour Victor Vaissier à la fin du XIXe siècle, reprend vie. Des bulles de savon s’échappent de cette dernière éruption, et les images qui s’y reflètent nous font voyager dans les souvenirs d’un lieu qui a traversé le temps. La cheminée, totem désormais abandonné, en est le témoin.</p><p>Une installation de Rossella Piccinno, créée au Fresnoy, Studio national des arts contemporains, pour Panorama 13. Hand Coded a travaillé sur sa partie interactive, avec une Kinect.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Prix</h3><ul><li>Prix des Amis du Fresnoy de la meilleure installation, Panorama 13, 2011</li></ul>",
-    "ca": "<p>La vella xemeneia de la sabonera del Congo, a Roubaix, construïda per a Victor Vaissier a finals del segle XIX, torna a la vida. Bombolles de sabó surten d’aquesta darrera erupció, i les imatges que s’hi reflecteixen ens fan viatjar pels records d’un lloc que ha travessat el temps. La xemeneia, un tòtem ara abandonat, n’és testimoni.</p><p>Una instal·lació de Rossella Piccinno, creada a Le Fresnoy, Studio national des arts contemporains, per a Panorama 13. Hand Coded hi va treballar la part interactiva, amb una Kinect.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacció</strong> Hand Coded</li><li><strong>Producció</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premi</h3><ul><li>Premi dels Amics de Le Fresnoy a la millor instal·lació, Panorama 13, 2011</li></ul>",
-    "es": "<p>La vieja chimenea de la jabonera del Congo, en Roubaix, construida para Victor Vaissier a finales del siglo XIX, vuelve a la vida. Pompas de jabón salen de esta última erupción, y las imágenes que se reflejan en ellas nos hacen viajar por los recuerdos de un lugar que ha atravesado el tiempo. La chimenea, un tótem ahora abandonado, es su testigo.</p><p>Una instalación de Rossella Piccinno, creada en Le Fresnoy, Studio national des arts contemporains, para Panorama 13. Hand Coded trabajó en su parte interactiva, con una Kinect.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacción</strong> Hand Coded</li><li><strong>Producción</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premio</h3><ul><li>Premio de los Amigos de Le Fresnoy a la mejor instalación, Panorama 13, 2011</li></ul>"
-   }
-  },
-  {
-   "id": "rossella-piccinno",
-   "section": "studio",
-   "order": 94,
-   "published": true,
-   "title": {
-    "en": "Rossella Piccinno",
-    "fr": "Rossella Piccinno",
-    "ca": "Rossella Piccinno",
-    "es": "Rossella Piccinno"
-   },
-   "subtitle": {
-    "en": "Artist and filmmaker",
-    "fr": "Artiste et cinéaste",
-    "ca": "Artista i cineasta",
-    "es": "Artista y cineasta"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "artists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Eruption of the end, 2011. Italian artist born in Salento, trained in documentary and experimental cinema at the University of Bologna, then at Le Fresnoy.</p>",
-    "fr": "<p>Eruption of the end, 2011. Artiste italienne née dans le Salento, formée au cinéma documentaire et expérimental à l’Université de Bologne, puis au Fresnoy.</p>",
-    "ca": "<p>Eruption of the end, 2011. Artista italiana nascuda al Salento, formada en cinema documental i experimental a la Universitat de Bolonya i després a Le Fresnoy.</p>",
-    "es": "<p>Eruption of the end, 2011. Artista italiana nacida en el Salento, formada en cine documental y experimental en la Universidad de Bolonia y después en Le Fresnoy.</p>"
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "emma-haziza",
-   "section": "studio",
-   "order": 95,
-   "published": true,
-   "title": {
-    "en": "Emma Haziza",
-    "fr": "Emma Haziza",
-    "ca": "Emma Haziza",
-    "es": "Emma Haziza"
-   },
-   "subtitle": {
-    "en": "Systemic hydrologist",
-    "fr": "Hydrologue systémique",
-    "ca": "Hidròloga sistèmica",
-    "es": "Hidróloga sistémica"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Scientific advisor of Rising. Gave the public talk on oceans and climate change at Nuit Blanche Paris 2024.</p>",
-    "fr": "<p>Conseillère scientifique de Rising. A donné la conférence publique sur l’océan et le changement climatique à la Nuit Blanche Paris 2024.</p>",
-    "ca": "<p>Assessora científica de Rising. Va fer la conferència pública sobre l’oceà i el canvi climàtic a la Nuit Blanche de París 2024.</p>",
-    "es": "<p>Asesora científica de Rising. Dio la conferencia pública sobre el océano y el cambio climático en la Nuit Blanche de París 2024.</p>"
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "le-fresnoy",
-   "section": "studio",
-   "order": 96,
-   "published": true,
-   "title": {
-    "en": "Le Fresnoy",
-    "fr": "Le Fresnoy",
-    "ca": "Le Fresnoy",
-    "es": "Le Fresnoy"
-   },
-   "subtitle": {
-    "en": "Institution",
-    "fr": "Institution",
-    "ca": "Institució",
-    "es": "Institución"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/le-fresnoy.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "la-rochelle-universite",
-   "section": "studio",
-   "order": 97,
-   "published": true,
-   "title": {
-    "en": "La Rochelle Université",
-    "fr": "La Rochelle Université",
-    "ca": "La Rochelle Université",
-    "es": "La Rochelle Université"
-   },
-   "subtitle": {
-    "en": "Research",
-    "fr": "Recherche",
-    "ca": "Recerca",
-    "es": "Investigación"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/la-rochelle-universite.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "nasonmoretti",
-   "section": "studio",
-   "order": 98,
-   "published": true,
-   "title": {
-    "en": "NasonMoretti",
-    "fr": "NasonMoretti",
-    "ca": "NasonMoretti",
-    "es": "NasonMoretti"
-   },
-   "subtitle": {
-    "en": "Glassworks",
-    "fr": "Verrerie",
-    "ca": "Vidrieria",
-    "es": "Vidriería"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/nasonmoretti.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "hub-montreal",
-   "section": "studio",
-   "order": 99,
-   "published": true,
-   "title": {
-    "en": "Hub Montréal",
-    "fr": "Hub Montréal",
-    "ca": "Hub Montréal",
-    "es": "Hub Montréal"
-   },
-   "subtitle": {
-    "en": "Conference",
-    "fr": "Conférence",
-    "ca": "Conferència",
-    "es": "Conferencia"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/hub-montreal.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "musee-de-l-elysee",
-   "section": "studio",
-   "order": 100,
-   "published": true,
-   "title": {
-    "en": "Musée de l’Élysée",
-    "fr": "Musée de l’Élysée",
-    "ca": "Musée de l’Élysée",
-    "es": "Musée de l’Élysée"
-   },
-   "subtitle": {
-    "en": "Venue",
-    "fr": "Lieu",
-    "ca": "Espai",
-    "es": "Espacio"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/musee-de-l-elysee.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "fondation-ove",
-   "section": "studio",
-   "order": 101,
-   "published": true,
-   "title": {
-    "en": "Fondation OVE",
-    "fr": "Fondation OVE",
-    "ca": "Fondation OVE",
-    "es": "Fondation OVE"
-   },
-   "subtitle": {
-    "en": "Institution",
-    "fr": "Institution",
-    "ca": "Institució",
-    "es": "Institución"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/fondation-ove.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "sant-joan-de-deu",
-   "section": "studio",
-   "order": 102,
-   "published": true,
-   "title": {
-    "en": "Sant Joan de Déu",
-    "fr": "Sant Joan de Déu",
-    "ca": "Sant Joan de Déu",
-    "es": "Sant Joan de Déu"
-   },
-   "subtitle": {
-    "en": "Hospital",
-    "fr": "Hôpital",
-    "ca": "Hospital",
-    "es": "Hospital"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/sant-joan-de-deu.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "chu-lille",
-   "section": "studio",
-   "order": 103,
-   "published": true,
-   "title": {
-    "en": "CHU de Lille",
-    "fr": "CHU de Lille",
-    "ca": "CHU de Lille",
-    "es": "CHU de Lille"
-   },
-   "subtitle": {
-    "en": "Hospital",
-    "fr": "Hôpital",
-    "ca": "Hospital",
-    "es": "Hospital"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/chu-lille.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "chu-bordeaux",
-   "section": "studio",
-   "order": 104,
-   "published": true,
-   "title": {
-    "en": "CHU de Bordeaux",
-    "fr": "CHU de Bordeaux",
-    "ca": "CHU de Bordeaux",
-    "es": "CHU de Bordeaux"
-   },
-   "subtitle": {
-    "en": "Hospital",
-    "fr": "Hôpital",
-    "ca": "Hospital",
-    "es": "Hospital"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/chu-bordeaux.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "abbaye-de-fontevraud",
-   "section": "studio",
-   "order": 105,
-   "published": true,
-   "title": {
-    "en": "Abbaye de Fontevraud",
-    "fr": "Abbaye de Fontevraud",
-    "ca": "Abbaye de Fontevraud",
-    "es": "Abbaye de Fontevraud"
-   },
-   "subtitle": {
-    "en": "Venue",
-    "fr": "Lieu",
-    "ca": "Espai",
-    "es": "Espacio"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/abbaye-de-fontevraud.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "abbaye-de-vivoin",
-   "section": "studio",
-   "order": 106,
-   "published": true,
-   "title": {
-    "en": "Abbaye de Vivoin",
-    "fr": "Abbaye de Vivoin",
-    "ca": "Abbaye de Vivoin",
-    "es": "Abbaye de Vivoin"
-   },
-   "subtitle": {
-    "en": "Venue",
-    "fr": "Lieu",
-    "ca": "Espai",
-    "es": "Espacio"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "partners"
-   ],
-   "thumb": "media/logos/abbaye-de-vivoin.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
   }
  ]
 }
