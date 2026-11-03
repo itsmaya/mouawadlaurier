@@ -136,6 +136,33 @@
     "fr": "ex. Nous exploitons la technologie pour créer des expériences",
     "ca": "p. ex. Aprofitem la tecnologia per crear experiències",
     "es": "p. ej. Aprovechamos la tecnología para crear experiencias"
+   },
+   "story": {
+    "title": {
+     "en": "The story of this site",
+     "fr": "L’histoire de ce site",
+     "ca": "La història d’aquest web",
+     "es": "La historia de esta web"
+    },
+    "body": {
+     "en": "<p>This site was born in 2008, in the days of Flash. Maya Benaïnous was then building the interface of the Fat-Man Collective, a group of interactive creatives between London, Barcelona and Bogotá: a website entirely in real-time 3D, in the browser, written in ActionScript 3 with Papervision3D. Each section is a 3D object surrounded by cards that you turn, open and browse with the mouse or the keyboard. Even then, the home page asked you to type your bullshit slogan.</p><p>Launched on 08.08.08, the Fat-Site won an FWA (Favourite Website Award) the same year.</p><p>Flash is gone, the engine stayed. In 2026, Maya took its source code and ported it to JavaScript with Three.js: same camera, same gestures, same transitions. It now runs the Hand Coded site, with a back office to keep it alive.</p><h3>The Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> 3D engine, interaction, animation</li><li><strong>David Okuniev</strong> web design and development</li><li><strong>Emiliano Burgos, Yann Lorber</strong> development</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> graphic design</li><li><strong>Barnier Geerling</strong> sound (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> strategy and production</li></ul>",
+     "fr": "<p>Ce site est né en 2008, au temps de Flash. Maya Benaïnous développe alors l’interface du Fat-Man Collective, un collectif de créatifs interactifs entre Londres, Barcelone et Bogota : un site entièrement en 3D temps réel, dans le navigateur, écrit en ActionScript 3 avec Papervision3D. Chaque section est un objet en 3D entouré de vignettes qu’on fait tourner, qu’on ouvre et qu’on parcourt à la souris ou au clavier. Déjà, la page d’accueil t’invitait à taper ton bullshit slogan.</p><p>Mis en ligne le 08.08.08, le Fat-Site reçoit un FWA (Favourite Website Award) la même année.</p><p>Flash a disparu, le moteur est resté. En 2026, Maya a repris son code source pour le porter en JavaScript avec Three.js : même caméra, mêmes gestes, mêmes transitions. C’est lui qui fait tourner le site de Hand Coded, avec un back-office pour le faire vivre.</p><h3>Le Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> moteur 3D, interaction, animation</li><li><strong>David Okuniev</strong> web design et développement</li><li><strong>Emiliano Burgos, Yann Lorber</strong> développement</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> design graphique</li><li><strong>Barnier Geerling</strong> son (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> stratégie et production</li></ul>",
+     "ca": "<p>Aquest web va néixer el 2008, en temps de Flash. La Maya Benaïnous desenvolupava llavors la interfície del Fat-Man Collective, un col·lectiu de creatius interactius entre Londres, Barcelona i Bogotà: un web completament en 3D en temps real, al navegador, escrit en ActionScript 3 amb Papervision3D. Cada secció és un objecte 3D envoltat de targetes que fas girar, obres i recorres amb el ratolí o el teclat. Ja aleshores, la pàgina d’inici et convidava a escriure el teu bullshit slogan.</p><p>Publicat el 08.08.08, el Fat-Site va guanyar un FWA (Favourite Website Award) aquell mateix any.</p><p>Flash ha desaparegut, el motor s’ha quedat. El 2026, la Maya en va reprendre el codi font per portar-lo a JavaScript amb Three.js: la mateixa càmera, els mateixos gestos, les mateixes transicions. Ara fa funcionar el web de Hand Coded, amb un back-office per mantenir-lo viu.</p><h3>El Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> motor 3D, interacció, animació</li><li><strong>David Okuniev</strong> disseny web i desenvolupament</li><li><strong>Emiliano Burgos, Yann Lorber</strong> desenvolupament</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> disseny gràfic</li><li><strong>Barnier Geerling</strong> so (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> estratègia i producció</li></ul>",
+     "es": "<p>Esta web nació en 2008, en tiempos de Flash. Maya Benaïnous desarrollaba entonces la interfaz del Fat-Man Collective, un colectivo de creativos interactivos entre Londres, Barcelona y Bogotá: una web totalmente en 3D en tiempo real, en el navegador, escrita en ActionScript 3 con Papervision3D. Cada sección es un objeto 3D rodeado de tarjetas que haces girar, abres y recorres con el ratón o el teclado. Ya entonces, la página de inicio te invitaba a escribir tu bullshit slogan.</p><p>Publicado el 08.08.08, el Fat-Site ganó un FWA (Favourite Website Award) ese mismo año.</p><p>Flash ha desaparecido, el motor se ha quedado. En 2026, Maya retomó su código fuente para llevarlo a JavaScript con Three.js: la misma cámara, los mismos gestos, las mismas transiciones. Ahora hace funcionar la web de Hand Coded, con un back-office para mantenerla viva.</p><h3>El Fat-Site, 2008</h3><ul><li><strong>Maya Benaïnous</strong> motor 3D, interacción, animación</li><li><strong>David Okuniev</strong> diseño web y desarrollo</li><li><strong>Emiliano Burgos, Yann Lorber</strong> desarrollo</li><li><strong>Fernando Calvi</strong> motion design</li><li><strong>Beatriz Farfan</strong> diseño gráfico</li><li><strong>Barnier Geerling</strong> sonido (Iam Studio)</li><li><strong>Adam Martin, Philine von Guretzky</strong> estrategia y producción</li></ul>"
+    },
+    "images": [
+     "media/site/story/fat-site-2008-1.jpg",
+     "media/site/story/fat-site-2008-2.jpg",
+     "media/site/story/fat-site-2008-3.jpg",
+     "media/site/story/fat-site-2008-4.jpg"
+    ],
+    "link": "https://mouawadlaurier.com/fatsite/",
+    "linkLabel": {
+     "en": "See the 2008 Fat-Site",
+     "fr": "Voir le Fat-Site de 2008",
+     "ca": "Veure el Fat-Site del 2008",
+     "es": "Ver el Fat-Site de 2008"
+    }
    }
   },
   "offices": [
@@ -949,7 +976,8 @@
    ],
    "logos": [
     "media/logos/fisheye.png",
-    "media/logos/ruinart.png"
+    "media/logos/ruinart.png",
+    "media/logos/nasonmoretti.png"
    ]
   },
   {
@@ -1059,7 +1087,8 @@
    "team": [
     "maya",
     "cyril",
-    "louis-raveton"
+    "louis-raveton",
+    "emma-haziza"
    ],
    "credits": "Université de La Rochelle, Learning Planet Institute, La Scam",
    "location": null,
@@ -1088,6 +1117,11 @@
      "city": "La Ràpita",
      "lat": 40.62,
      "lon": 0.59
+    },
+    {
+     "city": "Montréal",
+     "lat": 45.5,
+     "lon": -73.57
     }
    ],
    "author": "Maya Mouawad",
@@ -1110,7 +1144,10 @@
     "media/logos/mira.png",
     "media/logos/eufonic.png",
     "media/logos/catalanarts.png",
-    "media/logos/generalitat.png"
+    "media/logos/generalitat.png",
+    "media/logos/la-rochelle-universite.png",
+    "media/logos/nasonmoretti.png",
+    "media/logos/hub-montreal.png"
    ]
   },
   {
@@ -1236,6 +1273,11 @@
      "city": "Lille",
      "lat": 50.63,
      "lon": 3.06
+    },
+    {
+     "city": "Bordeaux",
+     "lat": 44.84,
+     "lon": -0.58
     }
    ],
    "author": "Maya Mouawad",
@@ -1249,7 +1291,11 @@
    ],
    "logos": [
     "media/logos/artexplora.png",
-    "media/logos/itisnow.png"
+    "media/logos/itisnow.png",
+    "media/logos/fondation-ove.png",
+    "media/logos/sant-joan-de-deu.png",
+    "media/logos/chu-lille.png",
+    "media/logos/chu-bordeaux.png"
    ]
   },
   {
@@ -1470,7 +1516,8 @@
     "tools"
    ],
    "logos": [
-    "media/logos/signal-festival.png"
+    "media/logos/signal-festival.png",
+    "media/logos/musee-de-l-elysee.png"
    ]
   },
   {
@@ -2309,6 +2356,11 @@
      "city": "London",
      "lat": 51.51,
      "lon": -0.13
+    },
+    {
+     "city": "Vivoin",
+     "lat": 48.23,
+     "lon": 0.17
     }
    ],
    "author": "Ezra, Organic Orchestra",
@@ -2323,7 +2375,9 @@
    ],
    "logos": [
     "media/logos/upf.png",
-    "media/logos/music-tech-fest.png"
+    "media/logos/music-tech-fest.png",
+    "media/logos/abbaye-de-fontevraud.png",
+    "media/logos/abbaye-de-vivoin.png"
    ]
   },
   {
@@ -2389,7 +2443,13 @@
    ],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Cherbourg",
+     "lat": 49.64,
+     "lon": -1.62
+    }
+   ],
    "author": "Adrien M & Claire B",
    "skills": [
     "projection-mapping",
@@ -4790,14 +4850,14 @@
    "title": {
     "en": "Immersive",
     "fr": "Immersif",
-    "ca": "Imersivo",
-    "es": "Imersivo"
+    "ca": "Immersiu",
+    "es": "Inmersivo"
    },
    "subtitle": {
-    "en": "Contenus immersif",
-    "fr": "Contenus immersif",
-    "ca": "Contenus immersif",
-    "es": "Contenus immersif"
+    "en": "Rooms of light, sound and data that answer the people inside them.",
+    "fr": "Des espaces de lumière, de son et de données qui répondent à celles et ceux qui les traversent.",
+    "ca": "Espais de llum, so i dades que responen a qui els travessa.",
+    "es": "Espacios de luz, sonido y datos que responden a quienes los recorren."
    },
    "place": {
     "en": "",
@@ -4815,10 +4875,10 @@
    "thumb": "media/nouveau-contenu/dsc3755-copy-x445.jpg",
    "thumbBack": "",
    "body": {
-    "en": "Création de contenues dynamique immersif",
-    "fr": "Création de contenues dynamique immersif",
-    "ca": "Création de contenues dynamique immersif",
-    "es": "Création de contenues dynamique immersif"
+    "en": "<p>We design and build immersive spaces where image, light and sound are generated in real time, so the work is never the same twice. Cameras and sensors follow the visitors, live data from the climate, the music or the place feeds the content, and the room becomes a living environment rather than a film on a loop.</p><p>We cover the whole chain: concept and scenography, generative content in our own engines and in TouchDesigner, projection mapping on any surface, LED and light with Ledotron, spatialised sound and scent, and the hardware that keeps it all running for years. Our rooms also travel light: Peupler fits in three suitcases and runs on a single laptop.</p><p>From the chalk cellars of Ruinart to the Venice Immersive Biennale, from hospital waiting rooms to the Grand Palais, each piece is shaped by its place and its audience.</p>",
+    "fr": "<p>Nous concevons et construisons des espaces immersifs où l’image, la lumière et le son sont générés en temps réel : l’œuvre n’est jamais deux fois la même. Caméras et capteurs suivent les visiteurs, les données en direct du climat, de la musique ou du lieu nourrissent le contenu, et la salle devient un environnement vivant plutôt qu’un film en boucle.</p><p>Nous couvrons toute la chaîne : concept et scénographie, contenus génératifs dans nos propres moteurs et dans TouchDesigner, mapping sur toutes les surfaces, LED et lumière avec Ledotron, son spatialisé et odeurs, et le matériel qui fait tourner le tout pendant des années. Nos dispositifs voyagent aussi léger : Peupler tient dans trois valises et tourne sur un seul ordinateur portable.</p><p>Des caves de craie de Ruinart à la Biennale immersive de Venise, des salles d’attente d’hôpitaux au Grand Palais, chaque œuvre se façonne avec son lieu et son public.</p>",
+    "ca": "<p>Dissenyem i construïm espais immersius on la imatge, la llum i el so es generen en temps real: l’obra no és mai dues vegades igual. Càmeres i sensors segueixen els visitants, les dades en directe del clima, de la música o del lloc alimenten el contingut, i la sala esdevé un entorn viu en lloc d’una pel·lícula en bucle.</p><p>Cobrim tota la cadena: concepte i escenografia, continguts generatius amb els nostres propis motors i amb TouchDesigner, mapping sobre qualsevol superfície, LED i llum amb Ledotron, so espacialitzat i olors, i el maquinari que ho fa funcionar durant anys. Els nostres dispositius també viatgen lleugers: Peupler cap en tres maletes i funciona amb un sol portàtil.</p><p>De les caves de guix de Ruinart a la Biennal immersiva de Venècia, de les sales d’espera dels hospitals al Grand Palais, cada obra es modela amb el seu lloc i el seu públic.</p>",
+    "es": "<p>Diseñamos y construimos espacios inmersivos donde la imagen, la luz y el sonido se generan en tiempo real: la obra nunca es dos veces igual. Cámaras y sensores siguen a los visitantes, los datos en directo del clima, de la música o del lugar alimentan el contenido, y la sala se convierte en un entorno vivo en lugar de una película en bucle.</p><p>Cubrimos toda la cadena: concepto y escenografía, contenidos generativos con nuestros propios motores y con TouchDesigner, mapping sobre cualquier superficie, LED y luz con Ledotron, sonido espacializado y olores, y el hardware que lo mantiene funcionando durante años. Nuestros dispositivos también viajan ligeros: Peupler cabe en tres maletas y funciona con un solo portátil.</p><p>De las cavas de tiza de Ruinart a la Bienal inmersiva de Venecia, de las salas de espera de hospitales al Grand Palais, cada obra se moldea con su lugar y su público.</p>"
    },
    "media": [],
    "link": "",
@@ -5747,6 +5807,11 @@
      "city": "Riyadh",
      "lat": 24.71,
      "lon": 46.68
+    },
+    {
+     "city": "Deir el Qamar",
+     "lat": 33.7,
+     "lon": 35.56
     }
    ],
    "skills": [
@@ -6041,7 +6106,8 @@
    "author": "Mouawad + Laurier",
    "logos": [
     "media/logos/cnrs.png",
-    "media/logos/nanomusee.png"
+    "media/logos/nanomusee.png",
+    "media/logos/la-rochelle-universite.png"
    ]
   },
   {
@@ -9513,7 +9579,8 @@
    "link": "https://lefresnoy.net/en/exposition/57/oeuvre/402",
    "team": [
     "maya",
-    "cyril"
+    "cyril",
+    "rossella-piccinno"
    ],
    "credits": "Rossella Piccinno, Le Fresnoy",
    "location": null,
@@ -9530,13 +9597,600 @@
     "real-time",
     "projection-mapping"
    ],
-   "logos": [],
+   "logos": [
+    "media/logos/le-fresnoy.png"
+   ],
    "body": {
     "en": "<p>The old chimney of the Congo soap factory in Roubaix, built for Victor Vaissier at the end of the 19th century, comes back to life. Soap bubbles rise from this last eruption, and the images reflected in them take us through the memories of a place that has travelled through time. The abandoned chimney, a totem, stands as a witness.</p><p>An installation by Rossella Piccinno, created at Le Fresnoy, Studio national des arts contemporains, for Panorama 13. Hand Coded worked on its interactive part, with a Kinect.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Award</h3><ul><li>Friends of Le Fresnoy Award for Best Installation, Panorama 13, 2011</li></ul>",
     "fr": "<p>La vieille cheminée de la savonnerie du Congo, à Roubaix, construite pour Victor Vaissier à la fin du XIXe siècle, reprend vie. Des bulles de savon s’échappent de cette dernière éruption, et les images qui s’y reflètent nous font voyager dans les souvenirs d’un lieu qui a traversé le temps. La cheminée, totem désormais abandonné, en est le témoin.</p><p>Une installation de Rossella Piccinno, créée au Fresnoy, Studio national des arts contemporains, pour Panorama 13. Hand Coded a travaillé sur sa partie interactive, avec une Kinect.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Prix</h3><ul><li>Prix des Amis du Fresnoy de la meilleure installation, Panorama 13, 2011</li></ul>",
     "ca": "<p>La vella xemeneia de la sabonera del Congo, a Roubaix, construïda per a Victor Vaissier a finals del segle XIX, torna a la vida. Bombolles de sabó surten d’aquesta darrera erupció, i les imatges que s’hi reflecteixen ens fan viatjar pels records d’un lloc que ha travessat el temps. La xemeneia, un tòtem ara abandonat, n’és testimoni.</p><p>Una instal·lació de Rossella Piccinno, creada a Le Fresnoy, Studio national des arts contemporains, per a Panorama 13. Hand Coded hi va treballar la part interactiva, amb una Kinect.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacció</strong> Hand Coded</li><li><strong>Producció</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premi</h3><ul><li>Premi dels Amics de Le Fresnoy a la millor instal·lació, Panorama 13, 2011</li></ul>",
     "es": "<p>La vieja chimenea de la jabonera del Congo, en Roubaix, construida para Victor Vaissier a finales del siglo XIX, vuelve a la vida. Pompas de jabón salen de esta última erupción, y las imágenes que se reflejan en ellas nos hacen viajar por los recuerdos de un lugar que ha atravesado el tiempo. La chimenea, un tótem ahora abandonado, es su testigo.</p><p>Una instalación de Rossella Piccinno, creada en Le Fresnoy, Studio national des arts contemporains, para Panorama 13. Hand Coded trabajó en su parte interactiva, con una Kinect.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacción</strong> Hand Coded</li><li><strong>Producción</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premio</h3><ul><li>Premio de los Amigos de Le Fresnoy a la mejor instalación, Panorama 13, 2011</li></ul>"
    }
+  },
+  {
+   "id": "rossella-piccinno",
+   "section": "studio",
+   "order": 94,
+   "published": true,
+   "title": {
+    "en": "Rossella Piccinno",
+    "fr": "Rossella Piccinno",
+    "ca": "Rossella Piccinno",
+    "es": "Rossella Piccinno"
+   },
+   "subtitle": {
+    "en": "Artist and filmmaker",
+    "fr": "Artiste et cinéaste",
+    "ca": "Artista i cineasta",
+    "es": "Artista y cineasta"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "artists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>Eruption of the end, 2011. Italian artist born in Salento, trained in documentary and experimental cinema at the University of Bologna, then at Le Fresnoy.</p>",
+    "fr": "<p>Eruption of the end, 2011. Artiste italienne née dans le Salento, formée au cinéma documentaire et expérimental à l’Université de Bologne, puis au Fresnoy.</p>",
+    "ca": "<p>Eruption of the end, 2011. Artista italiana nascuda al Salento, formada en cinema documental i experimental a la Universitat de Bolonya i després a Le Fresnoy.</p>",
+    "es": "<p>Eruption of the end, 2011. Artista italiana nacida en el Salento, formada en cine documental y experimental en la Universidad de Bolonia y después en Le Fresnoy.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "emma-haziza",
+   "section": "studio",
+   "order": 95,
+   "published": true,
+   "title": {
+    "en": "Emma Haziza",
+    "fr": "Emma Haziza",
+    "ca": "Emma Haziza",
+    "es": "Emma Haziza"
+   },
+   "subtitle": {
+    "en": "Systemic hydrologist",
+    "fr": "Hydrologue systémique",
+    "ca": "Hidròloga sistèmica",
+    "es": "Hidróloga sistémica"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "specialists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>Scientific advisor of Rising. Gave the public talk on oceans and climate change at Nuit Blanche Paris 2024.</p>",
+    "fr": "<p>Conseillère scientifique de Rising. A donné la conférence publique sur l’océan et le changement climatique à la Nuit Blanche Paris 2024.</p>",
+    "ca": "<p>Assessora científica de Rising. Va fer la conferència pública sobre l’oceà i el canvi climàtic a la Nuit Blanche de París 2024.</p>",
+    "es": "<p>Asesora científica de Rising. Dio la conferencia pública sobre el océano y el cambio climático en la Nuit Blanche de París 2024.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "le-fresnoy",
+   "section": "studio",
+   "order": 96,
+   "published": true,
+   "title": {
+    "en": "Le Fresnoy",
+    "fr": "Le Fresnoy",
+    "ca": "Le Fresnoy",
+    "es": "Le Fresnoy"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/le-fresnoy.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "la-rochelle-universite",
+   "section": "studio",
+   "order": 97,
+   "published": true,
+   "title": {
+    "en": "La Rochelle Université",
+    "fr": "La Rochelle Université",
+    "ca": "La Rochelle Université",
+    "es": "La Rochelle Université"
+   },
+   "subtitle": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Recerca",
+    "es": "Investigación"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/la-rochelle-universite.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nasonmoretti",
+   "section": "studio",
+   "order": 98,
+   "published": true,
+   "title": {
+    "en": "NasonMoretti",
+    "fr": "NasonMoretti",
+    "ca": "NasonMoretti",
+    "es": "NasonMoretti"
+   },
+   "subtitle": {
+    "en": "Glassworks",
+    "fr": "Verrerie",
+    "ca": "Vidrieria",
+    "es": "Vidriería"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/nasonmoretti.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "hub-montreal",
+   "section": "studio",
+   "order": 99,
+   "published": true,
+   "title": {
+    "en": "Hub Montréal",
+    "fr": "Hub Montréal",
+    "ca": "Hub Montréal",
+    "es": "Hub Montréal"
+   },
+   "subtitle": {
+    "en": "Conference",
+    "fr": "Conférence",
+    "ca": "Conferència",
+    "es": "Conferencia"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/hub-montreal.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "musee-de-l-elysee",
+   "section": "studio",
+   "order": 100,
+   "published": true,
+   "title": {
+    "en": "Musée de l’Élysée",
+    "fr": "Musée de l’Élysée",
+    "ca": "Musée de l’Élysée",
+    "es": "Musée de l’Élysée"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/musee-de-l-elysee.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "fondation-ove",
+   "section": "studio",
+   "order": 101,
+   "published": true,
+   "title": {
+    "en": "Fondation OVE",
+    "fr": "Fondation OVE",
+    "ca": "Fondation OVE",
+    "es": "Fondation OVE"
+   },
+   "subtitle": {
+    "en": "Institution",
+    "fr": "Institution",
+    "ca": "Institució",
+    "es": "Institución"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/fondation-ove.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "sant-joan-de-deu",
+   "section": "studio",
+   "order": 102,
+   "published": true,
+   "title": {
+    "en": "Sant Joan de Déu",
+    "fr": "Sant Joan de Déu",
+    "ca": "Sant Joan de Déu",
+    "es": "Sant Joan de Déu"
+   },
+   "subtitle": {
+    "en": "Hospital",
+    "fr": "Hôpital",
+    "ca": "Hospital",
+    "es": "Hospital"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/sant-joan-de-deu.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "chu-lille",
+   "section": "studio",
+   "order": 103,
+   "published": true,
+   "title": {
+    "en": "CHU de Lille",
+    "fr": "CHU de Lille",
+    "ca": "CHU de Lille",
+    "es": "CHU de Lille"
+   },
+   "subtitle": {
+    "en": "Hospital",
+    "fr": "Hôpital",
+    "ca": "Hospital",
+    "es": "Hospital"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/chu-lille.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "chu-bordeaux",
+   "section": "studio",
+   "order": 104,
+   "published": true,
+   "title": {
+    "en": "CHU de Bordeaux",
+    "fr": "CHU de Bordeaux",
+    "ca": "CHU de Bordeaux",
+    "es": "CHU de Bordeaux"
+   },
+   "subtitle": {
+    "en": "Hospital",
+    "fr": "Hôpital",
+    "ca": "Hospital",
+    "es": "Hospital"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/chu-bordeaux.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "abbaye-de-fontevraud",
+   "section": "studio",
+   "order": 105,
+   "published": true,
+   "title": {
+    "en": "Abbaye de Fontevraud",
+    "fr": "Abbaye de Fontevraud",
+    "ca": "Abbaye de Fontevraud",
+    "es": "Abbaye de Fontevraud"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/abbaye-de-fontevraud.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "abbaye-de-vivoin",
+   "section": "studio",
+   "order": 106,
+   "published": true,
+   "title": {
+    "en": "Abbaye de Vivoin",
+    "fr": "Abbaye de Vivoin",
+    "ca": "Abbaye de Vivoin",
+    "es": "Abbaye de Vivoin"
+   },
+   "subtitle": {
+    "en": "Venue",
+    "fr": "Lieu",
+    "ca": "Espai",
+    "es": "Espacio"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/abbaye-de-vivoin.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
   }
  ]
 }

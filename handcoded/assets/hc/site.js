@@ -1228,7 +1228,7 @@ function setFavicon(href) {
 }
 function renderTexts() {
   const s = CONTENT.settings;
-  applyTypo();
+  applyTypo(); buildStory(); dockLabels();
   document.documentElement.lang = LANG;
   document.documentElement.classList.toggle('neg', negMode);
   document.title = s.name || 'Hand Coded';
@@ -1362,10 +1362,14 @@ const isVideo = src => /\.(mp4|webm|mov)(\?|#|$)/i.test(src || '');
 const ytId = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
 const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
+const postLbl = document.createElement('div'); postLbl.id = 'post-lbl'; postLbl.hidden = true; postLbl.setAttribute('aria-hidden', 'true'); post2dEl.appendChild(postLbl);
 const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
     this.clear(); this.post = post;
+    /* savoir-faire : un petit bandeau fixe rappelle où l'on est quand la bande a défilé au-delà de la description */
+    postLbl.hidden = !P.section.def.skills; postLbl.classList.remove('on'); this.lblOn = false;
+    if (P.section.def.skills) postLbl.innerHTML = `<span class="sec">${escapeHTML(tr(P.section.def.name).trim())}</span><span class="t">${escapeHTML(tr(post.title).trim())}</span>`;
     this.open = true; this.height = card === 'place' ? 300 : 355;
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
     fitPost2D(); this.geomKey = JSON.stringify(textGeom('project'));
@@ -1379,6 +1383,13 @@ const post2D = {
       this.addText(post, 'blog');
       media.forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
       this.addRelations(post);
+    } else if (P.section.def.skills) {   // savoir-faire : sa description et ses projets forment un seul bloc, les autres images ensuite
+      const first = media[0] ? media[0].src : (post.thumb || null);
+      if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
+      this.addText(post, 'project');
+      this.addRelations(post);
+      media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
+      if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     } else {
       const first = media[0] ? media[0].src : (post.thumb || null);
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
@@ -1394,7 +1405,13 @@ const post2D = {
   addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
     const projects = relProjects(post); if (!projects.length) return;
     const skill = projectsOf(CONTENT, post).length > 0;
-    this.addPanel('relh', 236, `<h2 class="ttl">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n">${projects.length}</span>`);
+    const head = `<h2 class="ttl">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n">${projects.length}</span>`;
+    const txt = this.panels[this.panels.length - 1];
+    if (P.section.def.skills && txt && txt.classList.contains('txt')) {   // savoir-faire : l'en-tête des projets rejoint le bloc de la description
+      const w0 = txt.offsetWidth || parseFloat(txt.style.width) || 0;
+      txt.style.width = (w0 + 236) + 'px';
+      txt.querySelector('.in').insertAdjacentHTML('beforeend', `<div class="relh relh-in" style="left:${w0}px">${head}</div>`);
+    } else this.addPanel('relh', 236, head);
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
       const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
@@ -1548,7 +1565,7 @@ const post2D = {
     post2dEl.classList.add('closing'); setTimeout(() => { if (!this.open) this.clear(); }, time * 1000);
     return time;
   },
-  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
+  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; postLbl.hidden = true; postLbl.classList.remove('on'); post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
   action(type) {
     if (this.panels.length < 2) return;
     let post = 0;
@@ -1566,6 +1583,10 @@ const post2D = {
     else if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
     else if (this.finalpos > 0) this.finalpos = 0; else if (this.finalpos < this.end) this.finalpos = this.end;
     strip.style.transform = `translateX(${Math.round(this.x)}px)`;
+    if (!postLbl.hidden) {
+      const t = this.panels.find(p => p.classList.contains('txt')), at = t ? t.offsetLeft + t.offsetWidth * 0.55 : 200, on = -this.x > at;
+      if (on !== this.lblOn) { this.lblOn = on; postLbl.classList.toggle('on', on); }
+    }
   },
 };
 function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit chaque panneau mot par mot
@@ -1622,6 +1643,13 @@ post2dEl.addEventListener('pointermove', e => {
   }
 });
 post2dEl.addEventListener('click', e => { if (post2D.justDragged) { e.preventDefault(); e.stopPropagation(); post2D.justDragged = false; } }, true);
+/* Pavé tactile et molette sur la fiche : la bande défile, et un balayage horizontal ne renvoie jamais à la page précédente */
+post2dEl.addEventListener('wheel', e => {
+  e.preventDefault(); if (!post2D.open || post2D.dragging) return;
+  const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY, k = e.deltaMode === 1 ? 16 : 1;
+  post2D.finalpos = Math.max(post2D.end - 60, Math.min(60, post2D.finalpos - d * k / (post2D.scale || 1)));
+}, { passive: false });
+window.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.target.closest('.scroll-x')) e.preventDefault(); }, { passive: false });
 const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); post2D.finalpos += (post2D.vel || 0) * 10; } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
 post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('pointercancel', stopDrag2D);
 post2dEl.addEventListener('lostpointercapture', e => { if (e.target === post2dEl) stopDrag2D(); });   // au doigt, la capture passe de l'élément touché à la bande : ce transfert ne doit pas arrêter le glissement
@@ -1933,6 +1961,7 @@ function setupHomeVideo() {
   const cv = document.createElement('canvas'); cv.id = 'home-video'; cv.setAttribute('aria-hidden', 'true');
   const shade = document.createElement('div'); shade.className = 'hv-shade';
   band.prepend(cv, shade);
+  if (window.ResizeObserver) new ResizeObserver(() => hvSize()).observe(cv);   // la barre de Safari se replie : la bande grandit, la grille suit
   hv = { cv, ctx: cv.getContext('2d'), off: document.createElement('canvas'), cell: +cfg.cell || 14, gamma: +cfg.contrast || 1, fill: (+cfg.size || 92) / 100,
     color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', delay: Math.max(1, Math.min(HV_MAX_DELAY, +cfg.delay || 1)), sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
     tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, interval: 1000 / 30, floor: 0, cost: 0, slow: 0, fast: 0 };
@@ -1951,9 +1980,117 @@ function setupHomeVideo() {
     hv.pics = [...seen].sort(() => Math.random() - 0.5).map(x => { const im = new Image(); im.src = url(x); return im; });
   }
   if (cfg.controls !== false) buildHvKeys(document.getElementById('home'));
+  buildHomeDock(cfg.controls !== false);
   const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
   hvSize();
 }
+/* ================================================================ À côté du clavier de la vidéo : vidéo ou caméra, la photo souvenir, et le « ? » de l'histoire du site */
+const ICON = {
+  video: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.5v9l7.5-4.5z" fill="currentColor"/></svg>',
+  cam: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h3l1.4-2h4.2l1.4 2h3v9h-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="11" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+  shot: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="10" r="4" fill="currentColor"/></svg>',
+};
+function buildHomeDock(withKeys) {
+  const home = document.getElementById('home'); if (!home || document.getElementById('home-dock')) return;
+  const camOK = !!(hv && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  const dock = document.createElement('div'); dock.id = 'home-dock'; dock.classList.toggle('alone', !withKeys);
+  dock.innerHTML = `<span class="hv-note" role="status" hidden></span>
+    <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>
+    <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>
+    ${camOK ? `<div id="hv-src" role="group"><button type="button" data-src="video" aria-pressed="true">${ICON.video}</button><button type="button" data-src="cam" data-code="KeyV" aria-pressed="false">${ICON.cam}</button></div>` : ''}`;
+  home.appendChild(dock);
+  dock.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
+  dock.querySelector('#hv-shot').addEventListener('click', hvPhoto);
+  dock.querySelector('#story-btn').addEventListener('click', () => toggleStory());
+  buildStory(); dockLabels();
+}
+function dockLabels() {
+  const dock = document.getElementById('home-dock'); if (!dock) return;
+  const cam = !!(hv && hv.cam);
+  dock.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui(b.dataset.src === 'cam' ? 'hv_cam' : 'hv_video')); });
+  const src = dock.querySelector('#hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
+  const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
+  const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
+}
+let noteTimer = 0;
+function hvNote(text, ms) {
+  const n = document.querySelector('#home-dock .hv-note'); if (!n) return;
+  clearTimeout(noteTimer); n.textContent = text || ''; n.hidden = !text;
+  if (text && ms) noteTimer = setTimeout(() => { n.hidden = true; }, ms);
+}
+/* Photo souvenir : l'image de la caméra en carrés, le slogan tapé et la signature du studio. Elle reste sur l'appareil du visiteur. */
+async function hvPhoto() {
+  if (!hv || !hv.cam || hv.cam.video.readyState < 2) return;
+  const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
+  ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
+  const band = document.getElementById('home-band'); band.classList.remove('flash'); void band.offsetWidth; band.classList.add('flash');
+  /* les carrés à la taille de la photo, avec autant de colonnes qu'à l'écran */
+  const scr = Math.max(hv.cell, hv.floor), cell = Math.max(10, Math.min(36, Math.round(scr * W / Math.max(320, hv.W))));
+  const cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+  const keep = { ctx: hv.ctx, W: hv.W, H: hv.H, ow: hv.off.width, oh: hv.off.height, lo: hv.lo, hi: hv.hi };
+  try {
+    hv.ctx = ctx; hv.W = W; hv.H = H;
+    hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows;
+    hvSource(0); hv.octx.globalAlpha = 1; hv.octx.drawImage(hv.raw, 0, 0);
+    let d = null; try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) {}
+    if (d) hvSquares(d, cols, rows, cell); else hvComposite(cols, rows, cell);   // même contraste qu'à l'écran
+  } finally {
+    hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.off.width = hv.raw.width = keep.ow; hv.off.height = hv.raw.height = keep.oh; hv.lo = keep.lo; hv.hi = keep.hi; hv.fresh = true;
+  }
+  /* le bas de la photo : voile, slogan, logo et adresse du site */
+  const g = ctx.createLinearGradient(0, H * 0.48, 0, H); g.addColorStop(0, 'rgba(11,11,11,0)'); g.addColorStop(0.45, 'rgba(11,11,11,.78)'); g.addColorStop(1, 'rgba(11,11,11,.96)');
+  ctx.fillStyle = g; ctx.fillRect(0, H * 0.48, W, H * 0.52);
+  const bs = document.getElementById('bs'), typed = bs && bs.value.trim();
+  const tagline = ((CONTENT.settings.taglines || {})[LANG] || (CONTENT.settings.taglines || {}).en || []).join(' ');
+  const slogan = (typed || typedSlogans[0] || tagline || 'Hand Coded.').toUpperCase();
+  const grotesk = bs ? getComputedStyle(bs).fontFamily : 'sans-serif', serif = getComputedStyle(document.querySelector('#home-band .sl') || document.body).fontFamily;
+  try { await document.fonts.load(`bold 80px ${grotesk}`); } catch (e) {}
+  const mx = 72, tw = W - 2 * mx; let size = 96, lines = [];
+  for (; size >= 40; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
+  lines = lines.slice(0, 4);
+  const lh = Math.round(size * 1.06), logoY = H - 168, top = logoY - 52 - lines.length * lh;
+  ctx.fillStyle = accent(); ctx.fillRect(mx, top - 34, 46, 6);
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'top'; ctx.font = `bold ${size}px ${grotesk}`;
+  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, top + i * lh));
+  const logo = document.getElementById('home-logo');
+  if (logo && logo.complete && logo.naturalWidth) { try { ctx.drawImage(logo, mx, logoY, 96, 96); } catch (e) {} }
+  ctx.fillStyle = '#fff'; ctx.font = `44px ${serif}`; ctx.fillText((CONTENT.settings.name || 'Hand Coded') + '.', mx + 124, logoY + 8);
+  ctx.fillStyle = '#8f8f8f'; ctx.font = `26px ${grotesk}`; ctx.fillText((location.host + location.pathname).replace(/\/(index\.html)?$/, '').replace(/^www\./, ''), mx + 126, logoY + 62);
+  const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
+  const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';
+  const file = typeof File === 'function' ? new File([blob], name, { type: 'image/jpeg' }) : null;
+  if (file && navigator.canShare && matchMedia('(pointer: coarse)').matches && navigator.canShare({ files: [file] })) {   // téléphone : la feuille de partage propose « Enregistrer l'image »
+    try { await navigator.share({ files: [file], title: CONTENT.settings.name || 'Hand Coded' }); hvNote(ui('hv_shotDone'), 2500); return; } catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  hvNote(ui('hv_shotDone'), 2500);
+}
+/* L'histoire du site : un panneau qui monte par-dessus la vidéo (Réglages › Accueil › Histoire du site) */
+function buildStory() {
+  const btn = document.getElementById('story-btn'), band = document.getElementById('home-band'); if (!btn || !band) return;
+  const st = (CONTENT.settings.home || {}).story || {};
+  const title = tr(st.title || {}).trim(), body = sanitizeHTML(tr(st.body || {})), has = !!(title || htmlToText(body).join('').trim());
+  btn.hidden = !has; let box = document.getElementById('hc-story');
+  if (!has) { if (box) box.remove(); return; }
+  if (!box) { box = document.createElement('section'); box.id = 'hc-story'; box.hidden = true; band.appendChild(box); }
+  box.setAttribute('aria-label', title || ui('story'));
+  const imgs = (st.images || []).filter(Boolean);
+  box.innerHTML = `<div class="in"><button type="button" class="x" aria-label="${escapeHTML(ui('close'))}">×</button>` +
+    `<h2>${escapeHTML(title || ui('story'))}</h2><div class="cols"><div class="txt">${body}` +
+    (st.link ? `<a class="go" href="${escapeHTML(st.link)}" target="_blank" rel="noopener">${escapeHTML(tr(st.linkLabel || {}).trim() || st.link.replace(/^https?:\/\//, ''))} <span aria-hidden="true">↗</span></a>` : '') + '</div>' +
+    (imgs.length ? `<div class="shots scroll-x">${imgs.map(src => `<a href="${escapeHTML(url(src))}" target="_blank" rel="noopener"><img src="${escapeHTML(url(src))}" alt="" loading="lazy" draggable="false"></a>`).join('')}</div>` : '') + '</div></div>';
+  box.querySelector('.x').addEventListener('click', () => toggleStory(false));
+}
+let storyT = 0;
+function toggleStory(open) {
+  const box = document.getElementById('hc-story'), btn = document.getElementById('story-btn'); if (!box) return;
+  if (open === undefined) open = !box.classList.contains('on');
+  clearTimeout(storyT); btn.setAttribute('aria-expanded', String(open)); btn.classList.toggle('on', open);
+  if (open) { box.hidden = false; void box.offsetWidth; box.classList.add('on'); box.scrollTop = 0; setTimeout(() => { if (box.classList.contains('on')) box.querySelector('.x').focus({ preventScroll: true }); }, 60); }
+  else { box.classList.remove('on'); storyT = setTimeout(() => { if (!box.classList.contains('on')) box.hidden = true; }, 700); }
+}
+window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
 function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
 function buildHvKeys(band) {
   const box = document.createElement('div'); box.id = 'hv';
@@ -1964,12 +2101,10 @@ function buildHvKeys(band) {
       <div class="lbl" data-k="color"></div><div class="row"><button type="button" class="key sw" data-a="color" data-code="KeyC"><i></i> C</button></div>
       <div class="lbl" data-k="invert"></div><button type="button" class="key" data-a="invert" data-code="KeyI" aria-pressed="false">I</button>
       <div class="lbl" data-k="sound"></div><button type="button" class="key" data-a="sound" data-code="KeyS" aria-pressed="false">S</button>
-      <div class="lbl" data-k="cam"></div><button type="button" class="key" data-a="cam" data-code="KeyV" aria-pressed="false">V</button>
-      <span class="hv-note" hidden></span>
     </div><button id="hv-toggle" type="button" aria-expanded="false"></button>`;
   band.appendChild(box);
-  hv.box = box; hv.note = box.querySelector('.hv-note');
-  const setOpen = open => { box.classList.toggle('open', open); box.querySelector('#hv-toggle').setAttribute('aria-expanded', String(open)); };
+  hv.box = box;
+  const setOpen = open => { box.classList.toggle('open', open); box.querySelector('#hv-toggle').setAttribute('aria-expanded', String(open)); document.getElementById('home').classList.toggle('hv-open', open); };
   hv.setOpen = setOpen;
   box.querySelector('#hv-toggle').addEventListener('click', () => setOpen(!box.classList.contains('open')));
   /* les touches du vrai clavier, comme dans le site : flèches, C, I, S, V, K pour ouvrir ou fermer */
@@ -1978,7 +2113,7 @@ function buildHvKeys(band) {
     const inInput = e.target && e.target.id === 'bs', typed = inInput && e.target.value.length > 0;
     if (e.code === 'Escape' && inInput) { e.target.blur(); return; }
     if (e.code === 'KeyK' && !inInput) { e.preventDefault(); setOpen(!box.classList.contains('open')); return; }
-    const key = box.querySelector(`[data-code="${e.code}"]`); if (!key) return;
+    const key = box.querySelector(`[data-code="${e.code}"]`) || document.querySelector(`#home-dock [data-code="${e.code}"]`); if (!key) return;
     if (inInput && !/^Arrow/.test(e.code)) return;      // on écrit son slogan : lettres, tirets et signes restent du texte
     if (/^Arrow/.test(e.code) && typed) return;          // les flèches déplacent le curseur dans le slogan
     e.preventDefault();
@@ -1997,12 +2132,12 @@ function buildHvKeys(band) {
     else if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
     else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
     else if (a === 'sound') { hv.sound = !hv.sound; if (hv.video) { hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); } }
-    else if (a === 'cam') { hv.cam ? hvCamOff() : hvCamOn(); }
     hvLabels();
   });
   hvLabels();
 }
 function hvLabels() {
+  dockLabels();
   if (!hv || !hv.box) return;
   hv.box.querySelectorAll('.lbl[data-k]').forEach(el => { el.textContent = ui('hv_' + el.dataset.k); });
   hv.box.querySelector('#hv-toggle').setAttribute('aria-label', ui('hv_tab'));
@@ -2010,7 +2145,6 @@ function hvLabels() {
   const set = (a, on, label) => { const b = hv.box.querySelector(`[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); if (label) b.setAttribute('aria-label', label); };
   set('invert', hv.mode === 'dark', ui('hv_invert'));
   set('sound', hv.sound, ui('hv_sound'));
-  set('cam', !!hv.cam, ui('hv_cam'));
   hv.box.querySelector('[data-a="sound"]').disabled = !hv.video || !!hv.cam;
   hv.box.querySelector('[data-a="color"]').setAttribute('aria-label', ui('hv_color'));
   ['grid-', 'grid+', 'con-', 'con+', 'del-', 'del+'].forEach(a => hv.box.querySelector(`[data-a="${a}"]`).setAttribute('aria-label', ui(a.startsWith('grid') ? 'hv_grid' : a.startsWith('con') ? 'hv_contrast' : 'hv_delay') + (a.endsWith('+') ? ' +' : ' −')));
@@ -2018,18 +2152,18 @@ function hvLabels() {
   const dk = hv.box.querySelector('[data-a="del+"]'); if (dk) dk.disabled = hv.delay >= HV_MAX_DELAY;
 }
 async function hvCamOn() {
-  hv.note.hidden = true;
+  hvNote('');
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false });
     const v = document.createElement('video'); Object.assign(v, { muted: true, playsInline: true, autoplay: true, srcObject: stream }); v.setAttribute('playsinline', ''); await v.play().catch(() => {});
     hv.cam = { stream, video: v }; hv.lo = 0; hv.hi = 1;
     if (hv.video) hv.video.pause();
-    hv.note.textContent = ui('hv_camNote'); hv.note.hidden = false;
-  } catch (e) { hv.note.textContent = ui('hv_camDenied'); hv.note.hidden = false; }
+    hvNote(ui('hv_camNote'), 6000);
+  } catch (e) { hvNote(ui('hv_camDenied'), 4000); }
   hvLabels();
 }
 function hvCamOff() {
-  if (hv && hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; if (hv.video) hv.video.play().catch(() => {}); hv.note.hidden = true; }
+  if (hv && hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; if (hv.video) hv.video.play().catch(() => {}); hvNote(''); }
   if (hv) hvLabels();
 }
 function stopHomeVideo() { if (!hv) return; hvCamOff(); if (hv.video) hv.video.pause(); }

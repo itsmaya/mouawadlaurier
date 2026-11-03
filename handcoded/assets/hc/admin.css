@@ -339,3 +339,12 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 .media-item .mcap-ed summary { cursor: pointer; color: var(--ink-3); padding: 2px 0; }
 .media-item .mcap-ed .f { margin: 4px 0 0; }
 .media-item .mcap-ed .pair { grid-template-columns: 1fr; }
+.inbox-row { grid-template-columns: 64px minmax(0, 1fr) auto auto; }
+.inbox-row .acts { display: flex; gap: 6px; }
+.inbox-row.on .s { color: var(--ink-3); }
+.inbox-row.off .s { color: var(--ink-3); text-decoration: line-through; }
+.story-shots { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.story-shot { position: relative; width: 170px; }
+.story-shot img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; border: 1px solid var(--line-2); }
+.story-shot .acts { position: absolute; top: 4px; right: 4px; display: flex; gap: 4px; }
+.story-shot .acts .btn { background: rgba(255,255,255,.92); }

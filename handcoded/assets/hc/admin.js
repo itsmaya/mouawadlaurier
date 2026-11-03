@@ -1300,6 +1300,28 @@ function typoBlock(s) {
     h('div', { style: { marginTop: '12px' } }, btn('Tout rétablir', () => { delete s.typo; change(); draw(); paintBrand(); }, 'sm ghost')));
 }
 
+/* L'histoire du site : le « ? » de l'accueil, à côté du clavier de la vidéo, ouvre ce texte par-dessus la bande vidéo */
+function storyEditor(s) {
+  const st = s.home.story;
+  const shots = h('div', { class: 'story-shots' });
+  const drawShots = () => fill(shots, ...st.images.map((src, i) => h('div', { class: 'story-shot' },
+      h('img', { src: fileURL(src), alt: '' }),
+      h('div', { class: 'acts' },
+        i ? btn('←', () => { st.images.splice(i - 1, 0, st.images.splice(i, 1)[0]); change(); drawShots(); }, 'sm icon ghost', { 'aria-label': 'Avancer' }) : null,
+        btn('×', () => { st.images.splice(i, 1); change(); drawShots(); }, 'sm icon ghost danger', { 'aria-label': 'Retirer' })))),
+    btn('+ Images…', () => filePicker('image/*', true, async files => {
+      for (const f of files) { try { const up = await prepareUpload(f, 'media/site/story', 'media'); stageFile(up.path, up.blob); st.images.push(up.path); } catch (e) { toast(e.message, 'bad'); } }
+      change(); drawShots();
+    }), 'sm'));
+  drawShots();
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Histoire du site', h('small', null, ' le « ? » à côté du clavier de la vidéo')),
+    pairInput('Titre', st, 'title'),
+    h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Texte'), richText(st.body, 'L’histoire de ce site…')),
+    h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Captures'), shots, h('p', { class: 'hint' }, 'Elles s’affichent à côté du texte ; un clic les ouvre en grand.')),
+    h('div', { class: 'grid2' }, field('Lien', textInput(() => st.link, v => { st.link = v.trim(); }, { placeholder: 'https://…', spell: false })), pairInput('Texte du lien', st, 'linkLabel')),
+    h('p', { class: 'hint' }, 'Laisse le titre et le texte vides pour retirer le « ? ».'));
+}
+
 /* Les chiffres de l'accueil : une colonne chacun, à côté des contacts */
 function figuresEditor(s) {
   const box = h('div');
@@ -1327,18 +1349,31 @@ function viewSettings() {
   const tickerTa = lines(s.home, 'ticker', 'Un slogan par ligne');
   /* Slogans reçus : lus dans la feuille Google, un clic les ajoute au bandeau LED */
   const inboxBox = h('div', { class: 'f' });
+  let showAll = false;
   const drawInbox = (state, rows = []) => {
+    /* à valider : ni au bandeau, ni refusé. Valider l'ajoute au bandeau LED de tous les visiteurs ; Refuser le range sans l'afficher */
     const ticker = new Set((s.home.ticker || []).map(x => x.toUpperCase()));
-    fill(inboxBox, h('span', { class: 'lbl' }, 'Slogans reçus', rows.length ? h('small', null, ' ' + rows.length) : null),
+    const hidden = new Set((s.home.sloganHidden || []).map(x => x.toUpperCase()));
+    const seen = new Set(), list = rows.filter(r => { const up = String(r.slogan || '').toUpperCase(); if (!up || seen.has(up)) return false; seen.add(up); return true; });
+    const pending = list.filter(r => { const up = String(r.slogan).toUpperCase(); return !ticker.has(up) && !hidden.has(up); });
+    const shown = showAll ? list : pending;
+    const setTicker = next => { s.home.ticker = next; tickerTa.value = next.join('\n'); change(); drawInbox('ok', rows); };
+    const setHidden = next => { s.home.sloganHidden = next; change(); drawInbox('ok', rows); };
+    fill(inboxBox, h('span', { class: 'lbl' }, 'Slogans reçus', list.length ? h('small', null, ` ${pending.length} à valider sur ${list.length}`) : null),
       h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } },
-        btn(state === 'loading' ? 'Chargement…' : rows.length ? 'Actualiser' : 'Afficher les slogans reçus', loadInbox, 'sm', { disabled: state === 'loading' }),
+        btn(state === 'loading' ? 'Chargement…' : list.length ? 'Actualiser' : 'Afficher les slogans reçus', loadInbox, 'sm', { disabled: state === 'loading' }),
+        list.length ? toggle('Voir aussi les validés et les refusés', () => showAll, v => { showAll = v; drawInbox('ok', rows); }, { silent: true }) : null,
         state && state !== 'loading' && state !== 'ok' ? h('span', { class: 'hint', style: { margin: 0 } }, state) : null),
-      rows.length ? h('div', { class: 'inbox' }, rows.map(r => {
-        const up = String(r.slogan).toUpperCase(), on = ticker.has(up);
-        return h('div', { class: 'inbox-row' },
+      list.length && !shown.length ? h('p', { class: 'hint' }, 'Tout est traité. Les nouveaux slogans arrivent ici dès qu’un visiteur en valide un.') : null,
+      shown.length ? h('div', { class: 'inbox' }, shown.map(r => {
+        const up = String(r.slogan).toUpperCase(), on = ticker.has(up), off = hidden.has(up);
+        return h('div', { class: 'inbox-row' + (on ? ' on' : off ? ' off' : '') },
           h('span', { class: 'd' }, r.date ? new Date(r.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) : ''),
-          h('span', { class: 's' }, r.slogan), h('span', { class: 'm' }, [r.lang, r.tag].filter(Boolean).join(' · ')),
-          btn(on ? 'Au bandeau' : '+ Bandeau', () => { s.home.ticker = [...(s.home.ticker || []), up]; tickerTa.value = s.home.ticker.join('\n'); change(); drawInbox('ok', rows); }, 'sm ghost', { disabled: on }));
+          h('span', { class: 's' }, r.slogan), h('span', { class: 'm' }, on ? 'Au bandeau' : off ? 'Refusé' : [r.lang, r.tag].filter(Boolean).join(' · ')),
+          h('span', { class: 'acts' },
+            on ? btn('Retirer', () => setTicker((s.home.ticker || []).filter(x => x.toUpperCase() !== up)), 'sm ghost')
+              : off ? btn('Rétablir', () => setHidden((s.home.sloganHidden || []).filter(x => x.toUpperCase() !== up)), 'sm ghost')
+              : [btn('Valider', () => setTicker([...(s.home.ticker || []), up]), 'sm'), btn('Refuser', () => setHidden([...(s.home.sloganHidden || []), up]), 'sm ghost')]));
       })) : null);
   };
   const loadInbox = async () => {
@@ -1420,6 +1455,7 @@ function viewSettings() {
         inboxBox,
         pairInput('Bouton d’entrée', s.home, 'enter'),
         figuresEditor(s),
+        storyEditor(s),
         homeVideoFields(s),
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
       h('div', { class: 'block' }, h('h3', null, 'Bureaux'), offBox),

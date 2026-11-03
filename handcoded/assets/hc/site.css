@@ -376,3 +376,76 @@ html:has(#home:not([hidden]):not(.out)), html:has(#home:not([hidden]):not(.out))
   #home-top #enter { margin-top: 12px; }
   #bs-sent { min-height: 0; margin-top: 4px; }
 }
+
+/* Balayage horizontal du pavé tactile : jamais de retour à la page précédente */
+html, body { overscroll-behavior: none; }
+/* Savoir-faire : l'en-tête des projets dans le même bloc que la description */
+.pnl.txt .relh-in { position: absolute; top: 0; bottom: 0; width: 236px; border-left: 1px solid #262626; }
+/* Savoir-faire : bandeau fixe au-dessus de la bande, quand la description est passée */
+#post-lbl { position: absolute; left: 0; top: -27px; height: 21px; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 8px; background: #111; color: #fff; font: bold 10px/21px var(--ui); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(6px); transition: opacity .45s cubic-bezier(.17,.84,.44,1), transform .45s cubic-bezier(.17,.84,.44,1); z-index: 3; }
+#post-lbl.on { opacity: 1; transform: none; }
+#post-lbl .sec { color: #8f8f8f; }
+#post-lbl .sec::after { content: ''; display: inline-block; width: 10px; height: 2px; background: var(--accent); margin-left: 8px; vertical-align: middle; }
+#post2d.closing #post-lbl { opacity: 0; }
+.pnl.txt .relh-in .ttl { position: absolute; left: 34px; top: 34px; right: 24px; width: auto; margin: 0; font: 22px/27px var(--serif); color: #fff; text-wrap: balance; }
+.pnl.txt .relh-in .n { position: absolute; left: 34px; bottom: 34px; font: 44px/1 var(--serif); color: var(--accent); }
+
+/* ================================================================ Accueil : vidéo ou caméra, photo souvenir, histoire du site */
+#home-dock { position: absolute; right: calc(91px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: flex-end; gap: 6px; z-index: 6; transition: opacity .3s; }
+#home-dock.alone { right: calc(20px + env(safe-area-inset-right, 0px)); }
+#home-dock > button, #hv-src button { height: 22px; border: 0; padding: 0; background: #f2f2f2; color: #333; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+#home-dock svg { width: 16px; height: 16px; display: block; }
+#hv-src { display: flex; gap: 1px; background: #dcdcdc; }
+#hv-src button { width: 27px; }
+#hv-src button.on { background: var(--accent); color: #000; }
+#hv-src button:not(.on):hover, #story-btn:hover, #story-btn:focus-visible { filter: brightness(.88); outline: none; }
+#hv-shot { gap: 5px; padding: 0 9px 0 6px !important; background: var(--accent) !important; color: #000 !important; font: bold 10px/22px var(--ui); letter-spacing: .06em; text-transform: uppercase; animation: shotIn .5s cubic-bezier(.17,.84,.44,1); }
+#hv-shot:hover, #hv-shot:focus-visible { background: #fff !important; outline: none; }
+@keyframes shotIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+#story-btn { width: 22px; font: bold 12px/22px var(--ui); }
+#story-btn.on { background: var(--accent); color: #000; }
+#home-dock .hv-note { position: absolute; right: 0; bottom: 30px; width: max-content; max-width: 220px; padding: 5px 8px; background: rgba(11,11,11,.85); color: #ddd; font: 10px/14px var(--ui); text-align: right; }
+#home-band.flash::after { content: ''; position: absolute; inset: 0; background: #fff; z-index: 3; pointer-events: none; animation: hvFlash .6s ease-out forwards; }
+@keyframes hvFlash { from { opacity: .85; } to { opacity: 0; } }
+@media (max-height: 420px) { #home.hv-open #home-dock { opacity: 0; pointer-events: none; } }
+
+#hc-story { position: absolute; inset: 0; z-index: 4; background: rgba(11,11,11,.96); color: #cfcfcf; overflow: auto; overscroll-behavior: contain; transform: translateY(100%); transition: transform .7s cubic-bezier(.77,0,.18,1); }
+#hc-story.on { transform: none; }
+#hc-story .in { position: relative; padding: 26px max(28px, env(safe-area-inset-right, 0px)) 70px max(28px, env(safe-area-inset-left, 0px)); }
+#hc-story .x { position: absolute; right: max(20px, env(safe-area-inset-right, 0px)); top: 16px; width: 30px; height: 30px; border: 0; background: none; color: #ddd; font: 24px/30px var(--ui); cursor: pointer; }
+#hc-story .x:hover, #hc-story .x:focus-visible { color: var(--accent); outline: none; }
+#hc-story h2 { margin: 0 40px 16px 0; font: 30px/34px var(--serif); color: #fff; font-weight: normal; }
+#hc-story .cols { display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 36px; align-items: start; }
+#hc-story .txt { font: 14px/21px var(--serif); }
+#hc-story .txt p { margin: 0 0 12px; }
+#hc-story .txt h3 { margin: 18px 0 6px; font: bold 10px/14px var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+#hc-story .txt ul { margin: 0 0 12px; padding: 0; list-style: none; }
+#hc-story .txt li { margin: 0 0 3px; }
+#hc-story .txt strong { color: #fff; font-weight: normal; }
+#hc-story .txt a { color: #fff; }
+#hc-story .go { display: inline-flex; gap: 8px; align-items: center; margin-top: 8px; padding: 0 10px; height: 26px; background: var(--accent); color: #000 !important; font: bold 11px/26px var(--ui); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
+#hc-story .go:hover, #hc-story .go:focus-visible { background: #fff; outline: none; }
+#hc-story .shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+#hc-story .shots a { display: block; border: 1px solid #262626; }
+#hc-story .shots img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+@media (max-width: 760px) {
+  #hc-story h2 { font-size: 24px; line-height: 28px; }
+  #hc-story .cols { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  #hc-story .shots { display: flex; overflow-x: auto; gap: 8px; scroll-snap-type: x mandatory; }
+  #hc-story .shots a { flex: 0 0 78%; scroll-snap-align: start; }
+}
+
+/* Téléphone : l'accueil descend sous la barre de Safari, la vidéo va jusqu'en bas ; les boutons restent au-dessus de la barre */
+@supports (height: 100lvh) {
+  #home { bottom: auto; height: 100lvh; }
+  #hv, #home-dock { bottom: calc(20px + env(safe-area-inset-bottom, 0px) + 100lvh - 100dvh); }
+  #hc-story .in { padding-bottom: calc(70px + 100lvh - 100dvh); }
+}
+@supports (height: 100lvh) {
+  @media (max-width: 700px) and (orientation: portrait) {   /* les 30 % se comptent sur la hauteur de l'accueil (lvh) pour le bouton Showreel aussi */
+    #home-band { top: max(30lvh, 186px); }
+    #home-top { height: calc(max(30lvh, 186px) - 66px); }
+    #home > #home-langs { top: calc(max(30lvh, 186px) - 26px); }
+    body:has(#home:not([hidden]):not(.out)) #reel-btn { top: calc(max(30lvh, 186px) - 30px); }
+  }
+}
