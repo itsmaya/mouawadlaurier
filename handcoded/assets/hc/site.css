@@ -96,7 +96,7 @@ button { font: inherit; }
 .pnl.link a:hover .host { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .pnl.link a:hover .arr { transform: translate(3px, -3px); }
 /* Savoir-faire ↔ projets : la liste des savoir-faire d'un projet, les projets d'un savoir-faire avec leur vignette */
-.txt .skl-tags { max-height: 28px; overflow: hidden; }
+.txt .skl-tags { max-height: 42px; overflow: hidden; }
 .txt .skl-tags .go { color: var(--accent); letter-spacing: inherit; }
 .txt .skl-tags .go:hover, .txt .skl-tags .go:focus-visible { text-decoration: underline; text-underline-offset: 2px; outline: none; }
 .pnl .go { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; text-align: left; cursor: pointer; }
@@ -347,3 +347,9 @@ body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouver
 /* légende posée en bas d'une image de fiche (captures de logiciel, etc.) */
 .pnl.media .mcap { position: absolute; left: 0; right: 0; bottom: 0; padding: 9px 14px 10px; background: rgba(0,0,0,.66); color: #e8e8e8; font: 12px/1.4 var(--serif); pointer-events: none; }
 .pnl.media .mcap b { color: #fff; font-weight: 600; }
+
+/* bas de la fiche projet : date, « Classé dans », savoir-faire, empilés */
+.txt .meta { position: absolute; display: flex; flex-direction: column; gap: 4px; }
+.txt .meta .fecha, .txt .meta .posted { position: static; }
+.txt .meta .fecha { margin-bottom: 4px; }
+.txt .skl-tags .it { white-space: nowrap; }

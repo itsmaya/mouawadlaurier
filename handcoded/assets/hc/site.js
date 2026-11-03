@@ -1282,7 +1282,7 @@ const post2D = {
     let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
     const subtitle = tr(post.subtitle);
     const sec = P.section.def;
-    const tags = post.tags.map(id => sec.tags.find(tg => tg.id === id)).filter(Boolean).map(tg => tr(tg.label));
+    const tags = post.tags.filter(id => id !== 'featured').map(id => sec.tags.find(tg => tg.id === id)).filter(Boolean).map(tg => tr(tg.label));   // « Sélection » est une vitrine, pas une catégorie à afficher
     const posted = tags.length ? `${escapeHTML(ui('postedIn'))} <span>${tags.map(escapeHTML).join(', ')}</span>` : '';
     const fecha = escapeHTML([post.date, tr(post.place)].filter(Boolean).join(' | '));
     const html = sanitizeHTML(tr(post.body));
@@ -1296,17 +1296,26 @@ const post2D = {
     let sklLine = '';
     if (skills.length) {
       const sd = (SECTIONS.find(x => x.def.id === skills[0].section) || {}).def;
-      sklLine = `${escapeHTML((sd ? tr(sd.name) : ui('skills')).trim())} ${skills.map(k => `<button type="button" class="go" data-go="${escapeHTML(k.id)}">${escapeHTML(tr(k.title).trim())}</button>`).join(', ')}`;
+      sklLine = `${escapeHTML((sd ? tr(sd.name) : ui('skills')).trim())} ${skills.map((k, i) => `<span class="it"><button type="button" class="go" data-go="${escapeHTML(k.id)}">${escapeHTML(tr(k.title).trim())}</button>${i < skills.length - 1 ? ',' : ''}</span>`).join(' ')}`;   // la virgule reste collée à son mot
     }
     if (mode === 'project') {
-      const sy = 34 + tH + 6, top = 34 + tH + sH + 20, fy = skills.length ? 270 : 282, py = skills.length ? 294 : 308;   // avec les savoir-faire, la date et « Classé dans » remontent d'un cran
-      const pages = paginate(html, colW, [fy - 10 - top, 355 - 93 - 20 - (skills.length ? 12 : 0)], measure);
+      /* la date, « Classé dans » et les savoir-faire : un bloc empilé, posé en bas ; s'il passe sur deux lignes, il monte au lieu de se chevaucher */
+      const metaHTML = `<div class="fecha">${fecha}</div>${posted ? `<div class="posted">${posted}</div>` : ''}${sklLine ? `<div class="posted skl-tags">${sklLine}</div>` : ''}`;
+      measure.innerHTML = `<div class="meta" style="position:static">${metaHTML}</div>`;
+      const mH = measure.firstChild.offsetHeight, metaBottom = 322, metaTop = metaBottom - mH;
+      const sy = 34 + tH + 6, top = 34 + tH + sH + 20;
+      const pages = paginate(html, colW, [335 - top, 335 - 93], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
+      measure.innerHTML = `<div class="body" style="position:static">${pages[pages.length - 1]}</div>`;
+      const lastTop = pages.length === 1 ? top : 93;
+      if (pages[pages.length - 1] && lastTop + measure.firstChild.offsetHeight > metaTop - 12) {   // pas la place : la dernière page se recoupe
+        const tail = paginate(pages.pop(), colW, [metaTop - 12 - lastTop, metaTop - 12 - 93], measure);
+        pages.push(...tail);
+      }
       pages.forEach((pg, i) => {
         const last = i === pages.length - 1;
         this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:34px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : 93}px;width:${colW}px">${pg}</div>` +
-          (last ? `<div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` +
-            (sklLine ? `<div class="posted skl-tags" style="left:${x}px;top:${py + 16}px;width:${colW}px">${sklLine}</div>` : '') : ''));
+          (last ? `<div class="meta" style="left:${x}px;top:${metaTop}px;width:${colW}px">${metaHTML}</div>` : ''));
       });
     } else {
       const sy = 13 + tH + 4, fy = 13 + tH + sH + 10, py = fy + 20, top = py + 18 + 20;
@@ -1322,10 +1331,11 @@ const post2D = {
     const team = post.team.map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
     const names = team.map(p => tr(p.title)).concat(post.credits ? [post.credits] : []).join(', ');
     const el = this.addPanel('team', 576, `<h2 class="ttl">${escapeHTML(ui('who'))}</h2><div class="names">${escapeHTML(ui('leftToRight'))} <span>${escapeHTML(names)}.</span></div>`);
-    const inner = el.querySelector('.in');
+    const inner = el.querySelector('.in'), nm = inner.querySelector('.names');
+    const top0 = Math.max(160, Math.ceil(nm.offsetTop + nm.offsetHeight + 14));   // les visages commencent sous la liste des noms
     team.forEach((p, j) => {
       const f = document.createElement('button'); f.type = 'button'; f.className = 'face';
-      f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (160 + Math.floor(j / 6) * 55) + 'px';
+      f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (top0 + Math.floor(j / 6) * 55) + 'px';
       const other = !p.thumb && (personProjects(p).find(x => x !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
       const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
       f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<span class="tab">${escapeHTML(tr(p.title))}.<small>${escapeHTML(tr(p.subtitle))}</small></span>`;
