@@ -748,8 +748,9 @@
     "media/logos/biennaledakar.png",
     "media/logos/generalitat.png",
     "media/logos/catalanarts.png",
-    "media/logos/bnp-paribas-real-estate.png",
-    "media/logos/chataigne.png"
+    "media/logos/chataigne.png",
+    "media/logos/logounifrance-b39w.jpg",
+    "media/logos/logo-bnp-crdg.jpg"
    ]
   },
   {
@@ -3494,7 +3495,7 @@
    "tags": [
     "software"
    ],
-   "thumb": "",
+   "thumb": "media/audio/audiodetect-copy-yg3j.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Sound analysis and generation that drive light, image and motion: beat detection, spatialisation, interactive music.</p>",
@@ -3540,7 +3541,7 @@
     "design",
     "software"
    ],
-   "thumb": "",
+   "thumb": "media/generative/frames-paysagessonore00108788-qocp.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Algorithms that generate designs and animations, for LEDs, screens and projection.</p>",
@@ -3586,7 +3587,7 @@
     "design",
     "engineering"
    ],
-   "thumb": "",
+   "thumb": "media/projection-mapping/maestro-2-4i2p.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Projection on architecture, objects and bodies, synchronised with sound and sensors.</p>",
@@ -3632,7 +3633,7 @@
     "engineering",
     "software"
    ],
-   "thumb": "",
+   "thumb": "media/light/handcodedmgntrn-u5jm.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>From a few strips to thousands of LEDs and motors, designed and driven with Ledotron, over DMX and Art-Net.</p>",
@@ -3677,7 +3678,7 @@
    "tags": [
     "engineering"
    ],
-   "thumb": "",
+   "thumb": "media/tracking/13304954-1738476856419046-5499737207143988284-o-wxag.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Kinect, Leap Motion, cameras, body and brain sensors: we turn people's presence and movement into data.</p>",
@@ -3722,7 +3723,7 @@
    "tags": [
     "design"
    ],
-   "thumb": "",
+   "thumb": "media/concept-design/layout-venise-2-3q8h.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>We join the brainstorm early, suggest the technologies that serve the idea, and carry it from concept to production.</p>",
@@ -3992,7 +3993,7 @@
    "tags": [
     "core"
    ],
-   "thumb": "media/maya/profile-maya-6slp.jpg",
+   "thumb": "media/maya/screen-shot-2014-05-28-at-7-49-53-pm-copy-g8gl.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>She started in 3D animation and led the development of several animated TV series. She works on how technology can trigger emotions, and on algorithms that generate designs and animations. She invented a new way to work with LEDs: Ledotron. She also studied acting and scenography.</p>",
