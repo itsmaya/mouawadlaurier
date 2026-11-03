@@ -2073,7 +2073,7 @@
   {
    "id": "beardyman",
    "section": "work",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -2194,7 +2194,7 @@
   {
    "id": "bionic-orchestra",
    "section": "work",
-   "order": 29,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Bionic Orchestra",
@@ -2305,7 +2305,7 @@
   {
    "id": "mouvement-de-l-air",
    "section": "work",
-   "order": 27,
+   "order": 28,
    "published": true,
    "title": {
     "en": "Mouvement de l'air",
@@ -2776,7 +2776,7 @@
   {
    "id": "eko",
    "section": "work",
-   "order": 28,
+   "order": 29,
    "published": true,
    "title": {
     "en": "EKO",
@@ -2919,7 +2919,7 @@
   {
    "id": "sonaris",
    "section": "work",
-   "order": 33,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Sonaris",
@@ -2971,7 +2971,7 @@
   {
    "id": "nestle-crunch",
    "section": "work",
-   "order": 31,
+   "order": 32,
    "published": true,
    "title": {
     "en": "Nestlé Crunch, Human Beats",
@@ -3038,7 +3038,7 @@
   {
    "id": "peugeot",
    "section": "work",
-   "order": 32,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -3094,7 +3094,7 @@
   {
    "id": "churchill",
    "section": "work",
-   "order": 30,
+   "order": 31,
    "published": true,
    "title": {
     "en": "Churchill",
@@ -3163,7 +3163,7 @@
   {
    "id": "cadbury",
    "section": "work",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -3222,7 +3222,7 @@
   {
    "id": "coors",
    "section": "work",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Coors",
@@ -3288,7 +3288,7 @@
   {
    "id": "lexus",
    "section": "work",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -4675,7 +4675,7 @@
    ],
    "credits": "Fat-Man Collective",
    "section": "work",
-   "order": 41,
+   "order": 42,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -4742,7 +4742,7 @@
    ],
    "credits": "Fat-Man Collective, Work Club",
    "section": "work",
-   "order": 42,
+   "order": 43,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -6020,7 +6020,7 @@
   {
    "id": "prometheus",
    "section": "work",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Prometheus",
@@ -6134,7 +6134,7 @@
   {
    "id": "augmented-paper",
    "section": "work",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Augmented Paper",
@@ -6215,7 +6215,7 @@
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -6294,7 +6294,7 @@
   {
    "id": "fuurin",
    "section": "work",
-   "order": 40,
+   "order": 41,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -9376,7 +9376,7 @@
   {
    "id": "nouveau-contenu-4",
    "section": "work",
-   "order": 43,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Traversée du temps Moêt",
@@ -9414,7 +9414,11 @@
     }
    ],
    "link": "",
-   "team": [],
+   "team": [
+    "cyril",
+    "maya",
+    "thomas-aussenac"
+   ],
    "credits": "",
    "location": null,
    "spots": [],
