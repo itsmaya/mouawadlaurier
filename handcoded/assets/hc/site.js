@@ -471,12 +471,16 @@ function infoTexture(post, kind) {
       ctx.fillStyle = '#fff'; ctx.font = `${fz(20)}px ${SERIF}`;
       const name = wrapLines(ctx, tr(post.title) + '.', 166).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 18, 14 + i * 22));
       let y = 20 + name.length * 22;
-      ctx.fillStyle = '#8c8c8c'; ctx.font = `${fz(15)}px ${SERIF}`;
-      tr(post.subtitle).split(/(?<=\.)\s+/).forEach(l => wrapLines(ctx, l, 166).forEach(s => { if (y < 150) { ctx.fillText(s, 19, y); y += 18; } }));
       ctx.font = `10px ${UIF}`;   // ses projets avec nous, en bas de la fiche
       const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
       const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 166).slice(0, 3) : [];
       const pTop = (tr(post.place) ? 174 : 188) - pl.length * 13 - 13;
+      ctx.fillStyle = '#8c8c8c'; ctx.font = `${fz(15)}px ${SERIF}`;   // la phrase s'arrête avant le bloc des projets
+      const lim = (pl.length ? pTop - 4 : 168) - 18, sub = [];
+      tr(post.subtitle).split(/(?<=\.)\s+/).forEach(l => wrapLines(ctx, l, 166).forEach(s => sub.push(s)));
+      const shown = []; for (const s of sub) { if (y > lim) break; shown.push(s); y += 18; }
+      if (shown.length < sub.length && shown.length) { let last = shown[shown.length - 1]; while (last && ctx.measureText(last + '…').width > 166) last = last.replace(/\s*\S+$/, ''); shown[shown.length - 1] = last + '…'; }
+      shown.forEach((s, i) => ctx.fillText(s, 19, 20 + name.length * 22 + i * 18));
       ctx.fillStyle = '#bbb'; ctx.font = `11px ${UIF}`;
       htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
       if (pl.length) {
