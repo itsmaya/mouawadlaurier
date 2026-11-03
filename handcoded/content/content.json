@@ -677,13 +677,16 @@
      "credit": ""
     },
     {
-     "src": "media/peupler/06-09-2023-credit-jacopo-salvi-courtesy-la-bienn-mae6.jpg"
+     "src": "media/peupler/06-09-2023-credit-jacopo-salvi-courtesy-la-bienn-mae6.jpg",
+     "credit": ""
     },
     {
-     "src": "media/peupler/57a6e2b8-baf4-43b2-8103-9603f3ef2120-csho.jpg"
+     "src": "media/peupler/57a6e2b8-baf4-43b2-8103-9603f3ef2120-csho.jpg",
+     "credit": ""
     },
     {
-     "src": "media/peupler/img-3479-x0zg.jpg"
+     "src": "media/peupler/img-3479-x0zg.jpg",
+     "credit": ""
     },
     {
      "src": "media/peupler/marieflament-7322-xx6f.jpg",
@@ -3400,7 +3403,7 @@
    "tags": [
     "software"
    ],
-   "thumb": "",
+   "thumb": "media/machine-learning/13730980-1424595017839972-3086151313327473239-o-3yjp.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Systems that listen, watch and decide: emotion detection in music, real-time choices on stage, recommendation engines.</p>",
