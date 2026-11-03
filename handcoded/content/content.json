@@ -24,7 +24,9 @@
    "size": 92,
    "color": "white",
    "mode": "light",
-   "controls": true
+   "delay": 4,
+   "controls": true,
+   "random": true
   },
   "taglines": {
    "en": [
@@ -223,7 +225,7 @@
    "logo": {
     "font": "wireone",
     "weight": 700,
-    "size": 44,
+    "size": 73,
     "italic": false,
     "text": "HC"
    },
@@ -924,7 +926,7 @@
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1569191104388-GKTONZXH2Y9128IB7RMP/IMG_3614.JPG?format=1500w",
+     "src": "media/retour-aux-sources/img-3614-cc16.jpg",
      "credit": ""
     }
    ],
@@ -1303,7 +1305,7 @@
     "performance",
     "touring"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1605008011958-KT92O6ZNT4PO1CF544O7/tientos.png?format=750w",
+   "thumb": "media/tientos/tientos-dhw1.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A flamenco performance where light becomes a stage object. We built the real-time sound analysis and the performance setup that let the light answer the dancer and the voice.</p><p>“I want to use the light as an object, not as a way to display the performer.” Pablo Valbuena</p><p>Produced by the CENTQUATRE in Paris. Several dates were cancelled because of the Covid restrictions.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Choreography and dance</strong> Patricia Guerrero</li><li><strong>Programming and sound design</strong> Hand Coded: Cyril Laurier, Maya Benaïnous, Joan Sandoval</li><li><strong>Vocals</strong> Sergio El Colorao</li><li><strong>Production</strong> CENTQUATRE, Paris</li></ul>",
@@ -1313,7 +1315,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1605008011958-KT92O6ZNT4PO1CF544O7/tientos.png?format=1500w",
+     "src": "media/tientos/tientos-k543.jpg",
      "credit": ""
     }
    ],
@@ -1449,7 +1451,7 @@
     "performance",
     "touring"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1635343969371-S4C8TN4M6848DPKN6B1P/futurRuins.jpeg?format=750w",
+   "thumb": "media/future-ruins/futurruins-tclm.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A music and light performance on hand-built light structures. The challenge: keep LED animation, video mapping and music perfectly in sync.</p><p>We helped Romain Tardy choose the technical approach for his custom LED structures, made them controllable over Art-Net, and adapted Ledotron for real-time editing on site.</p><p>La Nuit des Images, Lausanne, 17 June 2015. The organisers expected 4,000 visitors: 11,000 came.</p><h3>Credits</h3><ul><li><strong>Concept, design and animation</strong> Romain Tardy</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Software and electrical engineering</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul>",
@@ -1459,7 +1461,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1635343969371-S4C8TN4M6848DPKN6B1P/futurRuins.jpeg?format=1500w",
+     "src": "media/future-ruins/futurruins-rtbd.jpg",
      "credit": ""
     }
    ],
@@ -1523,7 +1525,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944302771-L4UMJCUZH0C7EM97J5DC/SAT_2.jpg?format=750w",
+   "thumb": "media/sat/sat-2-hb4f.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A large light, sound and visual installation made of 72 networked modules. By day they are mirrors reflecting the sky; at night they light up in patterns visible from far away.</p><p>Visitors join a local wifi network with their phone. Their IP address appears on the installation, then turns into a light sequence of the data exchanged with the server, while three animated messages play on their phone. They reinterpret the 1970s messages sent to space: the Pioneer plaque, the Arecibo radio message and the LAGEOS plaque.</p><p>SkyDesert Festival, Hebei, China, May 2017.</p><h3>Credits</h3><ul><li><strong>Concept and design</strong> Romain Tardy</li><li><strong>Sound design</strong> Loran Delforg</li><li><strong>Software and electrical engineering</strong> Cyril Laurier, Hand Coded</li><li><strong>Production</strong> MTA Festival</li><li><strong>Line producer</strong> Jesler Amarins</li></ul>",
@@ -1537,43 +1539,43 @@
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944302771-L4UMJCUZH0C7EM97J5DC/SAT_2.jpg?format=1500w",
+     "src": "media/sat/sat-2-de5c.webp",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944044509-3YEQUQZ99ZTUF097K40M/01_Pioneer-light.gif?format=1500w",
+     "src": "media/sat/01-pioneer-light-n1la.gif",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944079436-9DSGJZIRZ9EJBD20JSGS/02_Arecibo-light.gif?format=1500w",
+     "src": "media/sat/02-arecibo-light-xhhk.gif",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944119456-4OV2CU3NZF6TUZNE5COR/03_Lageos-light-final.gif?format=1500w",
+     "src": "media/sat/03-lageos-light-final-n86z.gif",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1497356729786-VA938GFP10X7ZLXH1LY8/SAT_6.jpg?format=1500w",
+     "src": "media/sat/sat-6-mm0i.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1497356730249-CU237ICHZA8LHMEY0ARU/SAT_9.jpg?format=1500w",
+     "src": "media/sat/sat-9-igni.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1497356732742-9GH2R3U74N4UVRVZV2G4/SAT_8.jpg?format=1500w",
+     "src": "media/sat/sat-8-hdx1.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1497356736799-CBUCCKCUPQFC35AS8R81/SAT_7.jpg?format=1500w",
+     "src": "media/sat/sat-7-m11i.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944421334-HJ621HMAUDSQ43250AMF/Romain_Tardy_SAT_11.jpg?format=1500w",
+     "src": "media/sat/romain-tardy-sat-11-6crw.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1497356675568-7Q8PZRDPAMF42PDWS11Y/image-asset.jpeg?format=1500w",
+     "src": "media/sat/image-asset-i7ey.jpg",
      "credit": ""
     }
    ],
@@ -1635,7 +1637,7 @@
     "touring",
     "collab"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596775-1EK506NKB0DNNWG8HOPQ/14589861_1442393279393479_4417632417371852675_o.jpg?format=750w",
+   "thumb": "media/ox/14589861-1442393279393479-4417632417371852675-o-4bxv.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>The first machine that is sensitive to music: an AI-driven DJ stage made of moving LED structures. Real-time machine learning listens to the DJ and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image, and that packs, installs and leaves quickly.</p><p>Produced by Tetro for The Absolut Company Creation, OX toured for nine months through more than fifteen venues in France: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation in Ledotron</strong> Maya Benaïnous</li><li><strong>Beat detection (aubio)</strong> Paul Brossier</li><li><strong>Circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Press</h3><ul><li>Libération, 2016</li><li>Brain Magazine, 2016</li><li>Tsugi, 2016</li><li>France 3, 2016</li></ul>",
@@ -1645,55 +1647,55 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596775-1EK506NKB0DNNWG8HOPQ/14589861_1442393279393479_4417632417371852675_o.jpg?format=1500w",
+     "src": "media/ox/14589861-1442393279393479-4417632417371852675-o-whxi.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596462-0HJB2EQW0JQBOXJG3152/14589581_1442393939393413_5073801707717418202_o.jpg?format=1500w",
+     "src": "media/ox/14589581-1442393939393413-5073801707717418202-o-74j1.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590597120-N2TEC39VI7RUXTD4EF3I/14570711_1442394309393376_2929244048909347825_o.jpg?format=1500w",
+     "src": "media/ox/14570711-1442394309393376-2929244048909347825-o-zfjs.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590598114-KCGDVJTGMAV7GPHPEZO7/14570648_1442393669393440_235700866656401680_o.jpg?format=1500w",
+     "src": "media/ox/14570648-1442393669393440-235700866656401680-o-cpnz.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590598505-YZHFA78KBKWJAMEQGNHD/14570551_1442394019393405_1470548637874765805_o.jpg?format=1500w",
+     "src": "media/ox/14570551-1442394019393405-1470548637874765805-o-yond.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590600292-ONROUPKK6Z0VI43YQZJL/14570542_1442396096059864_2936681870867752457_o.jpg?format=1500w",
+     "src": "media/ox/14570542-1442396096059864-2936681870867752457-o-p5hj.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590599764-8ISEIUKTNT67NPVPHDQF/14567525_1442391919393615_1023521532578462913_o.jpg?format=1500w",
+     "src": "media/ox/14567525-1442391919393615-1023521532578462913-o-ty05.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590600589-1H9Y3HODBJBXD0UBHO8B/14567424_1442392469393560_1739348414019796729_o.jpg?format=1500w",
+     "src": "media/ox/14567424-1442392469393560-1739348414019796729-o-3257.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297432968-KPY6RIMRS3VPKX19B350/13217135_1418474278452046_5340400970754301886_o.jpg?format=1500w",
+     "src": "media/ox/13217135-1418474278452046-5340400970754301886-o-3wkl.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297433055-YFE4NHHTR2RJ1QJSTBT7/13243905_1418474211785386_7276568994420113657_o.jpg?format=1500w",
+     "src": "media/ox/13243905-1418474211785386-7276568994420113657-o-7us4.jpg",
      "credit": "Bobby"
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297433820-RGOXNJNYI5BUDCTFJYYB/13254942_1418474195118721_521053108248655354_o.jpg?format=1500w",
+     "src": "media/ox/13254942-1418474195118721-521053108248655354-o-z7bv.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1457896873634-LGQWRHGSI8OAXKD56QTF/12006607_969989916391371_7640113856885493518_o.jpg?format=1500w",
+     "src": "media/ox/12006607-969989916391371-7640113856885493518-o-4zh7.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1457897228259-HFQG65LS2NAHQRSU4HAO/Screen+Shot+2015-10-08+at+16.25.21.png?format=1500w",
+     "src": "media/ox/screen-shot-2015-10-08-at-16-25-21-mvto.jpg",
      "credit": ""
     }
    ],
@@ -1963,23 +1965,23 @@
      }
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452620256897-U9REO6ZA20L1M6KU27HJ/LedotronPresentation.png?format=1500w",
+     "src": "media/ledotron/ledotronpresentation-vj38.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452622407593-CLVIR9SIBH006JHCMBZ0/Screen+Shot+2015-11-25+at+18.49.20.png?format=1500w",
+     "src": "media/ledotron/screen-shot-2015-11-25-at-18-49-20-heup.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452622360681-U7XW8UPA2RG4FUYIRS55/Screen+Shot+2015-12-08+at+22.34.30.png?format=1500w",
+     "src": "media/ledotron/screen-shot-2015-12-08-at-22-34-30-suxt.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452622334520-OROKH6AAOPOWLDXFX3FQ/Screen+Shot+2015-10-28+at+11.34.21.png?format=1500w",
+     "src": "media/ledotron/screen-shot-2015-10-28-at-11-34-21-8jtg.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452622249512-BK9T1PIPINWS4BVV2PQO/Screen+Shot+2016-01-12+at+19.09.57.png?format=1500w",
+     "src": "media/ledotron/screen-shot-2016-01-12-at-19-09-57-wq54.jpg",
      "credit": ""
     }
    ],
@@ -2047,43 +2049,43 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472564795317-69JQG4HJRTGMN0CTLSVQ/VM_FINAL_2.png?format=1500w",
+     "src": "media/viktoria-modesta/vm-final-2-bu5y.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567831852-5P8T9UWVEBR8BQJG66CB/13304954_1738476856419046_5499737207143988284_o.jpg?format=1500w",
+     "src": "media/viktoria-modesta/13304954-1738476856419046-5499737207143988284-o-pp35.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567812965-MB2LDP7B3KKHWTG57SIC/13315599_1388607311154753_6553339175281817656_n.jpg?format=1500w",
+     "src": "media/viktoria-modesta/13315599-1388607311154753-6553339175281817656-n-b39d.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567838037-TCX6C5H4635OAHAYGSHC/13320600_1738476046419127_5800644303822858405_o.jpg?format=1500w",
+     "src": "media/viktoria-modesta/13320600-1738476046419127-5800644303822858405-o-6yhe.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567833469-37YUZYRR1O276C4FKR5X/BrainstromingWithAPopArtistViktoriaModesta.jpg?format=1500w",
+     "src": "media/viktoria-modesta/brainstromingwithapopartistviktoriamodesta-vvep.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567888477-FLFCKIP25JFBZFY7K7NX/IMG_5869.jpeg?format=1500w",
+     "src": "media/viktoria-modesta/img-5869-w9hw.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567876693-R9EDQEL2JIRTBKUWRO8N/IMG_5870.jpeg?format=1500w",
+     "src": "media/viktoria-modesta/img-5870-ra1j.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472567947237-HHPRDZQ0AREYTVE4L6L6/IMG_5907.jpeg?format=1500w",
+     "src": "media/viktoria-modesta/img-5907-xjry.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472568398883-0ZNOFY3H1J3LQSSJT7VW/Screen%2BShot%2B2016-06-01%2Bat%2B17.51.40.png?format=1500w",
+     "src": "media/viktoria-modesta/screen-shot-2016-06-01-at-17-51-40-bhrt.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472589883734-8CZKNI5H8ZAV22C07W7T/IMG_5845.jpeg?format=1500w",
+     "src": "media/viktoria-modesta/img-5845-bg02.jpg",
      "credit": ""
     }
    ],
@@ -2267,7 +2269,7 @@
     "touring",
     "ai"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410878147993-MJ8UB1CQB7XQ015BK547/BO_gant1.jpg?format=750w",
+   "thumb": "media/bionic-orchestra/bo-gant1-9fk6.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>Technologies for live beatbox, developed with Ezra and the Organic Orchestra company over two residencies a year from 2008 to 2012, including the Abbaye de Fontevraud, with engineers, visual and music creators and researchers from the Music Technology Group of the Universitat Pompeu Fabra in Barcelona.</p><p>An electronic glove that drives the whole performance, a looper for a human orchestra, automatic sound spatialisation, real-time projections triggered by the music and movement detection. Built with Ableton Live, Max/MSP, openFrameworks, Kinect, iPhone and iPad, Wii and Arduino. Presented at Music Tech Fest London in 2013, and used in concerts and workshops around the world.</p><p>“I want people to get lost between what I do because of the machine and what I can really do organically.” Ezra</p><h3>Credits</h3><ul><li><strong>Company</strong> Organic Orchestra</li><li><strong>Artist</strong> Ezra</li><li><strong>Development</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Research</strong> Music Technology Group, Universitat Pompeu Fabra</li></ul>",
@@ -2281,31 +2283,31 @@
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410878147993-MJ8UB1CQB7XQ015BK547/BO_gant1.jpg?format=1500w",
+     "src": "media/bionic-orchestra/bo-gant1-4dbt.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352457016-DAW6YKV0P9AIZE68RXQG/gant.jpg?format=1500w",
+     "src": "media/bionic-orchestra/gant-4e86.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352456109-76EQADCAL5EHXBRER65T/bo.jpg?format=1500w",
+     "src": "media/bionic-orchestra/bo-n1ey.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352456560-EJIC0KTVO14X7NJT7Q0A/duo-battle-intro-laurence-fragnol.jpg?format=1500w",
+     "src": "media/bionic-orchestra/duo-battle-intro-laurence-fragnol-whma.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352457610-IWR6KMPB2F0PO6B530HO/libe.jpg?format=1500w",
+     "src": "media/bionic-orchestra/libe-rcyu.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352457886-7L12GGA3E6FE9BNNVN4R/libellule.jpg?format=1500w",
+     "src": "media/bionic-orchestra/libellule-ljvh.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410352458888-CHDA3PGM9II7IISR2JS2/Screen+Shot+2012-03-14+at+10.27.14+AM.png?format=1500w",
+     "src": "media/bionic-orchestra/screen-shot-2012-03-14-at-10-27-14-am-10z5.jpg",
      "credit": ""
     },
     {
@@ -2377,7 +2379,7 @@
     "performance",
     "touring"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665771057-4BOS4AQFNZ9Y5UPGPBSB/amcb-air-img_2221-680x353.jpg?format=750w",
+   "thumb": "media/mouvement-de-l-air/amcb-air-img-2221-680x353-ikc1.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>Adrien M & Claire B create performances that mix the real and the virtual. Together we explored new interactive elements for their shows, with particles that live with the performers on stage.</p><p>Do you feel the particles?</p><h3>Credits</h3><ul><li><strong>Artists</strong> Adrien M & Claire B</li><li><strong>Development</strong> Adrien M, Cyril Laurier, Maya Benaïnous</li></ul>",
@@ -2387,19 +2389,19 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665771057-4BOS4AQFNZ9Y5UPGPBSB/amcb-air-img_2221-680x353.jpg?format=1500w",
+     "src": "media/mouvement-de-l-air/amcb-air-img-2221-680x353-i1qr.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665771312-K0UQX2QQ435PQSSFUGY2/amcb-air-2158-adrienmclaireb-680x353.jpg?format=1500w",
+     "src": "media/mouvement-de-l-air/amcb-air-2158-adrienmclaireb-680x353-yw4n.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665773388-QWG6YZ5DDZAN9P7UV1EF/amcb.jpg?format=1500w",
+     "src": "media/mouvement-de-l-air/amcb-wqeo.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665800964-2MHNBQM8F9YGFFB2BB3K/Screen+Shot+2014-09-29+at+13.17.28.png?format=1500w",
+     "src": "media/mouvement-de-l-air/screen-shot-2014-09-29-at-13-17-28-rk9c.jpg",
      "credit": ""
     }
    ],
@@ -2472,19 +2474,19 @@
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525953000978-5ISM04Z05KUF9VYBCB52/38725265851_50513e9824_o.jpg?format=1500w",
+     "src": "media/slush/38725265851-50513e9824-o-6o1y.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525953129840-M7F1NLSOUPWHATTBA7FD/24780262468_0e5d800562_o.jpg?format=1500w",
+     "src": "media/slush/24780262468-0e5d800562-o-3a12.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525953324824-U1M3PFIYYPUXK0Q6CSKK/38669816786_1f5fc03587_o.jpg?format=1500w",
+     "src": "media/slush/38669816786-1f5fc03587-o-nl9x.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525953411853-8K7UTWM7QB2UCW87LP08/37854451085_b40093cf42_o.jpg?format=1500w",
+     "src": "media/slush/37854451085-b40093cf42-o-wy7k.jpg",
      "credit": ""
     }
    ],
@@ -2666,7 +2668,7 @@
    "tags": [
     "collab"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793744993-A9C4YIVHZWY8PLKTENGH/kinematope_valbuena_5.jpg?format=750w",
+   "thumb": "media/kinematope/kinematope-valbuena-5-68ly.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>Animated light and shadow reveal the architecture and offer a new way to experience the space.</p><p>We designed a tool that lets the artist drive 5,000 LEDs with freedom and precision, so the shadows could fill the space the way he imagined it.</p><p>“Can we make it faster and slower at the same time?” Pablo Valbuena</p><p>Fundación Telefónica, Madrid, March to May 2016.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Programming</strong> Cyril Laurier, Maya Benaïnous</li></ul>",
@@ -2676,39 +2678,39 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793744993-A9C4YIVHZWY8PLKTENGH/kinematope_valbuena_5.jpg?format=1500w",
+     "src": "media/kinematope/kinematope-valbuena-5-7zpo.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793748021-CQ7RECF2KM8GODCWPGQK/kinematopepaisaje-tecnico_pablovalbuena_1.jpg?format=1500w",
+     "src": "media/kinematope/kinematopepaisaje-tecnico-pablovalbuena-1-jz2p.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793746581-ER8X8LD5MYKBWCJ4AQY5/metalocus_telefonica_pablovalbuena_05.jpg?format=1500w",
+     "src": "media/kinematope/metalocus-telefonica-pablovalbuena-05-k82s.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793747310-S1D2Y3PG8S98BJA67T1D/metalocus_telefonica_pablovalbuena_04.jpg?format=1500w",
+     "src": "media/kinematope/metalocus-telefonica-pablovalbuena-04-qdii.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793748068-EC13LIY9SKW0EGSYH1DW/metalocus_telefonica_pablovalbuena_06.jpg?format=1500w",
+     "src": "media/kinematope/metalocus-telefonica-pablovalbuena-06-8h0g.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462356550281-O2HTOH4MKA7HCGOJDW67/10550083_10153921872598363_319526002205401799_o.jpg?format=1500w",
+     "src": "media/kinematope/10550083-10153921872598363-319526002205401799-o-kbaf.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462356614291-FHTU7J5WV4NXNFCLAHNW/IMG_9427.JPG?format=1500w",
+     "src": "media/kinematope/img-9427-34d7.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462356621144-ILADY37PG9B3Y2RPBJSO/IMG_9426.JPG?format=1500w",
+     "src": "media/kinematope/img-9426-mbej.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462356634631-WVSMOWTK50KXIQ8CBKFA/IMG_9409.JPG?format=1500w",
+     "src": "media/kinematope/img-9409-7z6i.jpg",
      "credit": ""
     }
    ],
@@ -2766,7 +2768,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472288522925-BW7P48DA05BMRS0ANGTC/image-asset.jpeg?format=750w",
+   "thumb": "media/gyrotope/image-asset-ttqk.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A large circle of columns forms a sculptural volume that unfolds over time. Light and sound are its materials, and it applies the sequencing of cinema to space. Walk around it and it is an object; step inside and it becomes an environment.</p><p>We designed the spatialisation system for light and sound. Everything is animated and triggered with Ledotron.</p><p>Commissioned by the Grand Paris Express. KM1, Paris, 5 June 2016, then Nuit Blanche Brussels, 1 October 2016.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Producer</strong> Hannah Standen</li><li><strong>Team</strong> Cyril Laurier, Jesse Watts, Maya Benaïnous</li><li><strong>Production</strong> Grand Paris Express</li></ul>",
@@ -2776,11 +2778,11 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472288522925-BW7P48DA05BMRS0ANGTC/image-asset.jpeg?format=1500w",
+     "src": "media/gyrotope/image-asset-n810.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1476996753794-7F9KZQ2UO2DZZLJZEL0F/image-asset.png?format=1500w",
+     "src": "media/gyrotope/image-asset-oxw3.jpg",
      "credit": ""
     }
    ],
@@ -2914,7 +2916,7 @@
     "advertising",
     "ai"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474413852491-2A6FGPU2N35C7SK9ANCJ/image-asset.jpeg?format=1500w",
+   "thumb": "media/audi-mind-race/image-asset-ucex.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>Barça players race Scalextric cars with their minds. A MindWave headset reads each player's brain activity and drives the car.</p><p>We connected the brain data to the cars, and designed a system that maps dynamic visuals onto the track, following the cars with a custom tracking system. Camp Nou, December 2013.</p><h3>Credits</h3><ul><li><strong>Client</strong> Audi, FC Barcelona</li><li><strong>Concept</strong> 20 Húngaros</li><li><strong>Production</strong> 20 Húngaros, Scaacs</li><li><strong>Programming</strong> Maya Benaïnous, Cyril Laurier</li></ul>",
@@ -2924,7 +2926,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474413852491-2A6FGPU2N35C7SK9ANCJ/image-asset.jpeg?format=1500w",
+     "src": "media/audi-mind-race/image-asset-ucex.webp",
      "credit": ""
     },
     {
@@ -3040,7 +3042,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474410123263-H9FCP9SM9RNFIQR027OR/image-asset.png?format=1500w",
+   "thumb": "media/nestle-crunch/image-asset-1fdl.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>An interactive installation where the visitors’ movements generate beats and particles on a giant screen, with sounds by Camilo Lara (Instituto Mexicano del Sonido). Launched for Nestlé México at the Palacio de los Deportes, Mexico City, in October 2015, together with an app and a website.</p><h3>Credits</h3><ul><li><strong>Client</strong> Nestlé México</li><li><strong>Music</strong> Camilo Lara</li><li><strong>Vocals</strong> Santiago Casillas</li></ul>",
@@ -3050,7 +3052,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474410123263-H9FCP9SM9RNFIQR027OR/image-asset.png?format=1500w",
+     "src": "media/nestle-crunch/image-asset-1fdl.webp",
      "credit": ""
     }
    ],
@@ -3108,7 +3110,7 @@
     "advertising",
     "performance"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525945548685-W23DA5Z6XQEV3FFVU24C/Supertennis_simu04.jpeg?format=1500w",
+   "thumb": "media/peugeot/supertennis-simu04-a4qx.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A performance created for a Peugeot advertisement with Novak Djokovic.</p>",
@@ -3118,7 +3120,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525945548685-W23DA5Z6XQEV3FFVU24C/Supertennis_simu04.jpeg?format=1500w",
+     "src": "media/peugeot/supertennis-simu04-a4qx.webp",
      "credit": ""
     }
    ],
@@ -3164,7 +3166,7 @@
     "advertising",
     "ai"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525943556826-5WD56S8BBECLWS8YR9Q2/TasteDiscovery-1024x682.jpg?format=1500w",
+   "thumb": "media/churchill/tastediscovery-1024x682-2jdz.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>For the opening of Churchill’s visitor centre on Port Wine Day 2016, in Porto, guests tasted three ports blind while wearing EEG headsets: White Port, a 10-year-old Tawny and a Reserve. Their brainwaves were turned into sound in real time, and the visuals, projection-mapped onto the room, followed that music.</p>",
@@ -3174,7 +3176,7 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525943556826-5WD56S8BBECLWS8YR9Q2/TasteDiscovery-1024x682.jpg?format=1500w",
+     "src": "media/churchill/tastediscovery-1024x682-2jdz.webp",
      "credit": ""
     }
    ],
@@ -3232,7 +3234,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474409898215-XWRGYPQEUVT18FM05N8K/image-asset.png?format=1500w",
+   "thumb": "media/cadbury/image-asset-xerb.webp",
    "thumbBack": "",
    "body": {
     "en": "<p>A campaign published in the United Kingdom.</p>",
@@ -3242,11 +3244,11 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474409898215-XWRGYPQEUVT18FM05N8K/image-asset.png?format=1500w",
+     "src": "media/cadbury/image-asset-xerb.webp",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474409937070-0BHY4E3GU9TV2Z7S3VGA/image-asset.png?format=1500w",
+     "src": "media/cadbury/image-asset-k2qn.jpg",
      "credit": ""
     }
    ],
@@ -3291,7 +3293,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411629756-XPBEH25DGT5QCWBO8IMK/image-asset.png?format=1500w",
+   "thumb": "media/coors/image-asset-v5lp.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A Kinect interface to choose your brew with your body.</p>",
@@ -3301,11 +3303,11 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411629756-XPBEH25DGT5QCWBO8IMK/image-asset.png?format=1500w",
+     "src": "media/coors/image-asset-v5lp.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411685864-4SFP3TXUQL5I3WJFNXNJ/image-asset.png?format=1500w",
+     "src": "media/coors/image-asset-bzzz.jpg",
      "credit": ""
     }
    ],
@@ -3358,7 +3360,7 @@
     "advertising",
     "software"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411001403-48FP7KIMSB5KPT08LREK/screen568x568%2B%281%29.jpeg?format=1500w",
+   "thumb": "media/lexus/screen568x568-1-ckmi.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A mobile app of visual and sound effects.</p>",
@@ -3368,19 +3370,19 @@
    },
    "media": [
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411001403-48FP7KIMSB5KPT08LREK/screen568x568%2B%281%29.jpeg?format=1500w",
+     "src": "media/lexus/screen568x568-1-ckmi.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411019190-BBSZDD8PBWI510CO2WFG/image-asset.jpeg?format=1500w",
+     "src": "media/lexus/image-asset-6t9s.webp",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411034348-TGYOTSNKAFQ3IE55V1KQ/image-asset.jpeg?format=1500w",
+     "src": "media/lexus/image-asset-asvy.webp",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411068953-HWL1Q9ZJJ97TB2MFX9XQ/screen568x568%2B%284%29.jpeg?format=1500w",
+     "src": "media/lexus/screen568x568-4-k4qq.webp",
      "credit": ""
     }
    ],
@@ -9216,7 +9218,7 @@
     "ai",
     "performance"
    ],
-   "thumb": "https://i.ytimg.com/vi/hHfJYChnHX0/hq720.jpg",
+   "thumb": "media/batalla-de-los-gallos/hq720-euw6.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A freestyle battle between two rappers who do not share a language: the national champions of Japan and the United States, face to face for the first time. Each rhyme is translated live into the opponent’s language and rapped back by a voice trained on the rapper’s own voice, so each one hears the other in his own language, with the right flow and the right timbre.</p><p>We designed and built the translation and voice system for Red Bull Batalla, the largest Spanish-language freestyle competition.</p><h3>Credits</h3><ul><li><strong>Client</strong> Red Bull Batalla</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
@@ -9276,7 +9278,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "https://i.ytimg.com/vi/TMzf7Swxa94/hq720.jpg",
+   "thumb": "media/cupra-tracking/hq720-7meu.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>For Cupra in Germany, we developed a tracking system for a giant LED screen: the image follows the people in front of it, in real time, and reacts to their movements.</p><h3>Credits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
