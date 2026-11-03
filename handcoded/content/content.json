@@ -324,19 +324,73 @@
     {
      "id": "featured",
      "label": {
-      "en": "Selected",
+      "en": "Selection",
       "fr": "Sélection",
       "ca": "Selecció",
       "es": "Selección"
      }
     },
     {
-     "id": "research",
+     "id": "advertising",
      "label": {
-      "en": "Research & residencies",
-      "fr": "Recherche et résidences",
-      "ca": "Recerca i residències",
-      "es": "Investigación y residencias"
+      "en": "Brands and events",
+      "fr": "Marques et événements",
+      "ca": "Marques i esdeveniments",
+      "es": "Marcas y eventos"
+     }
+    },
+    {
+     "id": "permanent",
+     "label": {
+      "en": "Permanent sites",
+      "fr": "Lieux permanents",
+      "ca": "Espais permanents",
+      "es": "Espacios permanentes"
+     }
+    },
+    {
+     "id": "touring",
+     "label": {
+      "en": "Festivals and tours",
+      "fr": "Festivals et tournées",
+      "ca": "Festivals i gires",
+      "es": "Festivales y giras"
+     }
+    },
+    {
+     "id": "performance",
+     "label": {
+      "en": "Stage and music",
+      "fr": "Scène et musique",
+      "ca": "Escena i música",
+      "es": "Escena y música"
+     }
+    },
+    {
+     "id": "collab",
+     "label": {
+      "en": "With artists",
+      "fr": "Avec les artistes",
+      "ca": "Amb els artistes",
+      "es": "Con los artistas"
+     }
+    },
+    {
+     "id": "ai",
+     "label": {
+      "en": "AI and research",
+      "fr": "IA et recherche",
+      "ca": "IA i recerca",
+      "es": "IA e investigación"
+     }
+    },
+    {
+     "id": "software",
+     "label": {
+      "en": "Software",
+      "fr": "Logiciels",
+      "ca": "Programari",
+      "es": "Software"
      }
     },
     {
@@ -349,102 +403,12 @@
      }
     },
     {
-     "id": "installation",
-     "label": {
-      "en": "Installations",
-      "fr": "Installations",
-      "ca": "Instal·lacions",
-      "es": "Instalaciones"
-     }
-    },
-    {
-     "id": "light",
-     "label": {
-      "en": "Light",
-      "fr": "Lumière",
-      "ca": "Llum",
-      "es": "Luz"
-     }
-    },
-    {
-     "id": "sound",
-     "label": {
-      "en": "Sound",
-      "fr": "Son",
-      "ca": "So",
-      "es": "Sonido"
-     }
-    },
-    {
-     "id": "ai",
-     "label": {
-      "en": "AI",
-      "fr": "IA",
-      "ca": "IA",
-      "es": "IA"
-     }
-    },
-    {
-     "id": "mapping",
-     "label": {
-      "en": "Video mapping",
-      "fr": "Mapping vidéo",
-      "ca": "Mapping de vídeo",
-      "es": "Mapping de vídeo"
-     }
-    },
-    {
-     "id": "performance",
-     "label": {
-      "en": "Performance",
-      "fr": "Performance",
-      "ca": "Actuació",
-      "es": "Actuación"
-     }
-    },
-    {
-     "id": "software",
-     "label": {
-      "en": "Software",
-      "fr": "Logiciel",
-      "ca": "Programari",
-      "es": "Software"
-     }
-    },
-    {
-     "id": "permanent",
-     "label": {
-      "en": "Permanent",
-      "fr": "Permanent",
-      "ca": "Permanent",
-      "es": "Permanente"
-     }
-    },
-    {
-     "id": "touring",
-     "label": {
-      "en": "Touring",
-      "fr": "Tournée",
-      "ca": "Gira",
-      "es": "Gira"
-     }
-    },
-    {
-     "id": "advertising",
-     "label": {
-      "en": "Advertising",
-      "fr": "Publicité",
-      "ca": "Publicitat",
-      "es": "Publicidad"
-     }
-    },
-    {
      "id": "archive",
      "label": {
-      "en": "Fat-Man archives",
-      "fr": "Archives Fat-Man",
-      "ca": "Arxiu Fat-Man",
-      "es": "Archivo Fat-Man"
+      "en": "Archives",
+      "fr": "Archives",
+      "ca": "Arxius",
+      "es": "Archivos"
      }
     }
    ],
@@ -588,7 +552,7 @@
   {
    "id": "peupler",
    "section": "work",
-   "order": 0,
+   "order": 2,
    "published": true,
    "title": {
     "en": "Peupler / Populate",
@@ -612,10 +576,9 @@
    "tags": [
     "featured",
     "art",
-    "installation",
-    "ai",
     "permanent",
-    "touring"
+    "touring",
+    "advertising"
    ],
    "thumb": "media/peupler/peupler-pic-01-copy-ybli.jpg",
    "thumbBack": "",
@@ -751,7 +714,7 @@
   {
    "id": "retour-aux-sources",
    "section": "work",
-   "order": 1,
+   "order": 0,
    "published": true,
    "title": {
     "en": "Retour aux Sources",
@@ -775,11 +738,9 @@
    "tags": [
     "featured",
     "art",
-    "installation",
-    "light",
-    "sound",
+    "permanent",
     "ai",
-    "permanent"
+    "advertising"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
@@ -983,7 +944,7 @@
   {
    "id": "rising",
    "section": "work",
-   "order": 2,
+   "order": 4,
    "published": true,
    "title": {
     "en": "Rising",
@@ -1007,9 +968,6 @@
    "tags": [
     "featured",
     "art",
-    "installation",
-    "light",
-    "sound",
     "touring"
    ],
    "thumb": "media/rising/img-9229-c6q1.jpg",
@@ -1145,7 +1103,7 @@
   {
    "id": "ephemere",
    "section": "work",
-   "order": 3,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Éphémère",
@@ -1169,8 +1127,6 @@
    "tags": [
     "featured",
     "art",
-    "installation",
-    "sound",
     "permanent"
    ],
    "thumb": "media/ephemere/it-is-now-san-joan-de-deu-small-108-1e2g.jpg",
@@ -1286,7 +1242,7 @@
   {
    "id": "tientos",
    "section": "work",
-   "order": 15,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Tientos al tiempo",
@@ -1308,9 +1264,9 @@
    },
    "date": "2020",
    "tags": [
+    "collab",
     "performance",
-    "sound",
-    "light"
+    "touring"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1605008011958-KT92O6ZNT4PO1CF544O7/tientos.png?format=750w",
    "thumbBack": "",
@@ -1358,7 +1314,7 @@
   {
    "id": "maestro",
    "section": "work",
-   "order": 16,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Maestro",
@@ -1380,10 +1336,7 @@
    },
    "date": "2017",
    "tags": [
-    "featured",
-    "installation",
-    "mapping",
-    "sound"
+    "touring"
    ],
    "thumb": "media/maestro/maestro-2-aj6r.jpg",
    "thumbBack": "",
@@ -1394,6 +1347,10 @@
     "es": "<p>Tres experiencias interactivas proyectadas sobre un monumento de 500 metros de ancho. Los visitantes tocan una maqueta del edificio, y sus gestos hacen sonar el sonido y la imagen en la fachada.</p><p>SAND: mover partículas de arena y componer un paisaje sonoro del desierto. ORGAN: ser el DJ de un looper interactivo que lanza bucles de vídeo y de audio. MOSAIC: transformar las formas y los colores de mosaicos islámicos.</p><p>Sharjah Light Festival, del 2 al 11 de febrero de 2017.</p><h3>Créditos</h3><ul><li><strong>Dirección artística</strong> Mathieu Felix</li><li><strong>Producción</strong> Nomada, Tigre Lab</li><li><strong>Gestión de proyecto, desarrollo visual y de audio</strong> Cyril Laurier</li><li><strong>Desarrollo del concepto</strong> Maya Benaïnous</li><li><strong>Desarrollo visual</strong> Stéphanie Huerre</li><li><strong>Diseño sonoro</strong> Thomas Aussenac, Sound Object</li><li><strong>Desarrollo de audio</strong> Joan Sandoval</li></ul>"
    },
    "media": [
+    {
+     "src": "https://vimeo.com/232012124",
+     "credit": ""
+    },
     {
      "src": "https://vimeo.com/232012124",
      "credit": ""
@@ -1446,7 +1403,7 @@
   {
    "id": "future-ruins",
    "section": "work",
-   "order": 17,
+   "order": 8,
    "published": true,
    "title": {
     "en": "Future Ruins",
@@ -1469,9 +1426,9 @@
    "date": "2015",
    "tags": [
     "featured",
-    "light",
-    "mapping",
-    "performance"
+    "collab",
+    "performance",
+    "touring"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1635343969371-S4C8TN4M6848DPKN6B1P/futurRuins.jpeg?format=750w",
    "thumbBack": "",
@@ -1522,7 +1479,7 @@
   {
    "id": "sat",
    "section": "work",
-   "order": 18,
+   "order": 19,
    "published": true,
    "title": {
     "en": "S.A.T.",
@@ -1544,10 +1501,8 @@
    },
    "date": "2017",
    "tags": [
-    "featured",
-    "installation",
-    "light",
-    "sound"
+    "collab",
+    "touring"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1525944302771-L4UMJCUZH0C7EM97J5DC/SAT_2.jpg?format=750w",
    "thumbBack": "",
@@ -1632,7 +1587,7 @@
   {
    "id": "ox",
    "section": "work",
-   "order": 19,
+   "order": 1,
    "published": true,
    "title": {
     "en": "OX",
@@ -1655,12 +1610,11 @@
    "date": "2015 – 2016",
    "tags": [
     "featured",
+    "advertising",
     "ai",
-    "light",
-    "sound",
     "performance",
     "touring",
-    "advertising"
+    "collab"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596775-1EK506NKB0DNNWG8HOPQ/14589861_1442393279393479_4417632417371852675_o.jpg?format=750w",
    "thumbBack": "",
@@ -1775,7 +1729,7 @@
   {
    "id": "mgntrn",
    "section": "work",
-   "order": 20,
+   "order": 5,
    "published": true,
    "title": {
     "en": "MGNTRN",
@@ -1797,9 +1751,9 @@
    },
    "date": "2014",
    "tags": [
-    "installation",
-    "light",
-    "software"
+    "featured",
+    "collab",
+    "touring"
    ],
    "thumb": "media/mgntrn/mgntrn-03-2500px-zwp5.jpg",
    "thumbBack": "",
@@ -1840,7 +1794,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 21,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -1863,7 +1817,6 @@
    "date": "",
    "tags": [
     "software",
-    "light",
     "ai"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452620256897-U9REO6ZA20L1M6KU27HJ/LedotronPresentation.png?format=750w",
@@ -1918,7 +1871,7 @@
   {
    "id": "viktoria-modesta",
    "section": "work",
-   "order": 22,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -1940,10 +1893,9 @@
    },
    "date": "2016",
    "tags": [
-    "research",
+    "collab",
     "performance",
-    "mapping",
-    "sound"
+    "ai"
    ],
    "thumb": "media/viktoria-modesta/vik-wphb.jpg",
    "thumbBack": "",
@@ -2027,7 +1979,7 @@
   {
    "id": "beardyman",
    "section": "work",
-   "order": 23,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -2049,8 +2001,8 @@
    },
    "date": "2015",
    "tags": [
+    "collab",
     "software",
-    "sound",
     "performance"
    ],
    "thumb": "media/beardyman/beardyman-4-652x367-ipm5.jpg",
@@ -2082,7 +2034,7 @@
   {
    "id": "tgic",
    "section": "work",
-   "order": 24,
+   "order": 18,
    "published": true,
    "title": {
     "en": "TGIC",
@@ -2104,11 +2056,7 @@
    },
    "date": "2018",
    "tags": [
-    "installation",
-    "light",
-    "sound",
-    "ai",
-    "software",
+    "collab",
     "touring"
    ],
    "thumb": "media/covers/tgic.jpg",
@@ -2151,7 +2099,7 @@
   {
    "id": "bionic-orchestra",
    "section": "work",
-   "order": 25,
+   "order": 29,
    "published": true,
    "title": {
     "en": "Bionic Orchestra",
@@ -2173,10 +2121,10 @@
    },
    "date": "2008 – 2013",
    "tags": [
-    "research",
+    "collab",
     "performance",
-    "sound",
-    "touring"
+    "touring",
+    "ai"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1410878147993-MJ8UB1CQB7XQ015BK547/BO_gant1.jpg?format=750w",
    "thumbBack": "",
@@ -2262,7 +2210,7 @@
   {
    "id": "mouvement-de-l-air",
    "section": "work",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Mouvement de l'air",
@@ -2284,8 +2232,8 @@
    },
    "date": "2014",
    "tags": [
+    "collab",
     "performance",
-    "mapping",
     "touring"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1414665771057-4BOS4AQFNZ9Y5UPGPBSB/amcb-air-img_2221-680x353.jpg?format=750w",
@@ -2335,7 +2283,7 @@
   {
    "id": "slush",
    "section": "work",
-   "order": 27,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Slush",
@@ -2357,10 +2305,8 @@
    },
    "date": "2017",
    "tags": [
-    "research",
-    "performance",
     "ai",
-    "sound"
+    "performance"
    ],
    "thumb": "media/slush/01.jpg",
    "thumbBack": "",
@@ -2429,7 +2375,7 @@
   {
    "id": "wave",
    "section": "work",
-   "order": 28,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Wave",
@@ -2451,9 +2397,8 @@
    },
    "date": "2019",
    "tags": [
-    "installation",
-    "light",
-    "sound"
+    "collab",
+    "advertising"
    ],
    "thumb": "media/covers/wave.jpg",
    "thumbBack": "",
@@ -2493,7 +2438,7 @@
   {
    "id": "methods",
    "section": "work",
-   "order": 29,
+   "order": 20,
    "published": true,
    "title": {
     "en": "Methods",
@@ -2515,10 +2460,8 @@
    },
    "date": "2017",
    "tags": [
-    "installation",
-    "light",
-    "sound",
-    "performance"
+    "collab",
+    "touring"
    ],
    "thumb": "media/covers/methods.jpg",
    "thumbBack": "",
@@ -2558,7 +2501,7 @@
   {
    "id": "kinematope",
    "section": "work",
-   "order": 30,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Kinematope",
@@ -2580,10 +2523,7 @@
    },
    "date": "2016",
    "tags": [
-    "featured",
-    "installation",
-    "light",
-    "software"
+    "collab"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1462793744993-A9C4YIVHZWY8PLKTENGH/kinematope_valbuena_5.jpg?format=750w",
    "thumbBack": "",
@@ -2660,7 +2600,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 31,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -2682,9 +2622,9 @@
    },
    "date": "2016",
    "tags": [
-    "installation",
-    "light",
-    "sound"
+    "featured",
+    "collab",
+    "touring"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1472288522925-BW7P48DA05BMRS0ANGTC/image-asset.jpeg?format=750w",
    "thumbBack": "",
@@ -2741,7 +2681,7 @@
   {
    "id": "eko",
    "section": "work",
-   "order": 32,
+   "order": 28,
    "published": true,
    "title": {
     "en": "EKO",
@@ -2763,9 +2703,8 @@
    },
    "date": "2014",
    "tags": [
-    "performance",
-    "sound",
-    "mapping"
+    "collab",
+    "performance"
    ],
    "thumb": "media/covers/eko.jpg",
    "thumbBack": "",
@@ -2809,7 +2748,7 @@
   {
    "id": "audi-mind-race",
    "section": "work",
-   "order": 33,
+   "order": 7,
    "published": true,
    "title": {
     "en": "Audi Mind Race",
@@ -2831,9 +2770,9 @@
    },
    "date": "2013",
    "tags": [
+    "featured",
     "advertising",
-    "installation",
-    "mapping"
+    "ai"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474413852491-2A6FGPU2N35C7SK9ANCJ/image-asset.jpeg?format=1500w",
    "thumbBack": "",
@@ -2846,6 +2785,10 @@
    "media": [
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474413852491-2A6FGPU2N35C7SK9ANCJ/image-asset.jpeg?format=1500w",
+     "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
      "credit": ""
     },
     {
@@ -2897,7 +2840,7 @@
   {
    "id": "sonaris",
    "section": "work",
-   "order": 34,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Sonaris",
@@ -2920,8 +2863,7 @@
    "date": "",
    "tags": [
     "software",
-    "ai",
-    "sound"
+    "ai"
    ],
    "thumb": "media/covers/sonaris.jpg",
    "thumbBack": "",
@@ -2949,7 +2891,7 @@
   {
    "id": "nestle-crunch",
    "section": "work",
-   "order": 35,
+   "order": 31,
    "published": true,
    "title": {
     "en": "Nestlé Crunch, Human Beats",
@@ -2971,9 +2913,7 @@
    },
    "date": "2015",
    "tags": [
-    "advertising",
-    "installation",
-    "sound"
+    "advertising"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474410123263-H9FCP9SM9RNFIQR027OR/image-asset.png?format=1500w",
    "thumbBack": "",
@@ -3018,7 +2958,7 @@
   {
    "id": "peugeot",
    "section": "work",
-   "order": 36,
+   "order": 32,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -3074,7 +3014,7 @@
   {
    "id": "churchill",
    "section": "work",
-   "order": 37,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Churchill",
@@ -3143,7 +3083,7 @@
   {
    "id": "cadbury",
    "section": "work",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -3202,7 +3142,7 @@
   {
    "id": "coors",
    "section": "work",
-   "order": 39,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Coors",
@@ -3224,8 +3164,7 @@
    },
    "date": "",
    "tags": [
-    "advertising",
-    "installation"
+    "advertising"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411629756-XPBEH25DGT5QCWBO8IMK/image-asset.png?format=1500w",
    "thumbBack": "",
@@ -3269,7 +3208,7 @@
   {
    "id": "lexus",
    "section": "work",
-   "order": 40,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -3292,8 +3231,7 @@
    "date": "",
    "tags": [
     "advertising",
-    "software",
-    "sound"
+    "software"
    ],
    "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474411001403-48FP7KIMSB5KPT08LREK/screen568x568%2B%281%29.jpeg?format=1500w",
    "thumbBack": "",
@@ -4663,8 +4601,7 @@
    },
    "date": "2008",
    "tags": [
-    "archive",
-    "advertising"
+    "archive"
    ],
    "thumb": "media/nokia-navigator/nokianavigator.jpg",
    "media": [
@@ -5569,7 +5506,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 4,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -5592,9 +5529,7 @@
    "date": "2022",
    "tags": [
     "art",
-    "performance",
-    "sound",
-    "software"
+    "touring"
    ],
    "thumb": "media/paysage-sonore/01.jpg",
    "thumbBack": "",
@@ -5694,7 +5629,7 @@
   {
    "id": "etre-absorbe",
    "section": "work",
-   "order": 5,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Être Absorbé",
@@ -5716,10 +5651,7 @@
    },
    "date": "2024",
    "tags": [
-    "art",
-    "installation",
-    "light",
-    "sound"
+    "art"
    ],
    "thumb": "media/etre-absorbe/01.jpg",
    "thumbBack": "",
@@ -5787,7 +5719,7 @@
   {
    "id": "upperground",
    "section": "work",
-   "order": 7,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Upperground",
@@ -5810,8 +5742,7 @@
    "date": "2018",
    "tags": [
     "art",
-    "installation",
-    "light"
+    "touring"
    ],
    "thumb": "media/upperground/01.jpg",
    "thumbBack": "",
@@ -5874,7 +5805,7 @@
   {
    "id": "albatros",
    "section": "work",
-   "order": 6,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Albatros",
@@ -5897,7 +5828,6 @@
    "date": "2022",
    "tags": [
     "art",
-    "installation",
     "touring"
    ],
    "thumb": "media/albatros/01.jpg",
@@ -5975,7 +5905,7 @@
   {
    "id": "prometheus",
    "section": "work",
-   "order": 11,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Prometheus",
@@ -5997,10 +5927,8 @@
    },
    "date": "2015",
    "tags": [
-    "research",
-    "performance",
-    "software",
-    "ai"
+    "ai",
+    "performance"
    ],
    "thumb": "media/prometheus/01.jpg",
    "thumbBack": "",
@@ -6091,7 +6019,7 @@
   {
    "id": "augmented-paper",
    "section": "work",
-   "order": 12,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Augmented Paper",
@@ -6113,8 +6041,7 @@
    },
    "date": "2015",
    "tags": [
-    "research",
-    "installation"
+    "ai"
    ],
    "thumb": "media/augmented-paper/01.jpg",
    "thumbBack": "",
@@ -6173,7 +6100,7 @@
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 13,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -6195,8 +6122,8 @@
    },
    "date": "2020",
    "tags": [
-    "research",
-    "art"
+    "art",
+    "ai"
    ],
    "thumb": "media/poussiere-detoile/01.jpg",
    "thumbBack": "",
@@ -6252,7 +6179,7 @@
   {
    "id": "fuurin",
    "section": "work",
-   "order": 14,
+   "order": 40,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -6274,10 +6201,7 @@
    },
    "date": "",
    "tags": [
-    "art",
-    "installation",
-    "light",
-    "sound"
+    "art"
    ],
    "thumb": "",
    "thumbBack": "",
@@ -9100,7 +9024,7 @@
   {
    "id": "batalla-de-los-gallos",
    "section": "work",
-   "order": 8,
+   "order": 3,
    "published": true,
    "title": {
     "en": "Red Bull Batalla, beyond language",
@@ -9122,10 +9046,10 @@
    },
    "date": "2024",
    "tags": [
+    "featured",
     "advertising",
     "ai",
-    "performance",
-    "sound"
+    "performance"
    ],
    "thumb": "https://i.ytimg.com/vi/hHfJYChnHX0/hq720.jpg",
    "thumbBack": "",
@@ -9163,7 +9087,7 @@
   {
    "id": "cupra-tracking",
    "section": "work",
-   "order": 9,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Cupra, giant LED screen",
@@ -9185,8 +9109,7 @@
    },
    "date": "",
    "tags": [
-    "advertising",
-    "installation"
+    "advertising"
    ],
    "thumb": "https://i.ytimg.com/vi/TMzf7Swxa94/hq720.jpg",
    "thumbBack": "",
@@ -9247,8 +9170,7 @@
    },
    "date": "2024",
    "tags": [
-    "advertising",
-    "installation"
+    "advertising"
    ],
    "thumb": "",
    "thumbBack": "",
