@@ -191,6 +191,10 @@ let SERIF = 'Georgia, Gelasio, "Times New Roman", serif';   // Réglages › Typ
 let UIF = '"Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif';
 let CARD_SCALE = 1;
 const fz = n => Math.round(n * CARD_SCALE);
+/* Petit écran : toute la scène est réduite (largeur / 900), le texte dessiné sur les vignettes avec.
+   Sous 700 px de large, les vignettes sont redessinées avec un texte plus gros et moins de lignes. */
+const PHONE_W = 700;
+const phoneCards = () => (W || window.innerWidth) < PHONE_W;
 function fontsReady() {
   if (!document.fonts || !document.fonts.load) return Promise.resolve();
   const loads = ['22px Gelasio', 'italic 22px Gelasio', ...(CONTENT ? typoFontLoads(CONTENT.settings) : [])];
@@ -287,19 +291,21 @@ async function imageCard(post, w, h) {
     if (im) { drawCover(ctx, im, 0, 0, w, h); return; }   // la photo seule : le nom monte au survol
     if (bd) veil(ctx, bd, w, h, faint ? 0.22 : 0.64); else { ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); }
     ctx.textBaseline = 'top'; if (faint) ctx.globalAlpha = 0.3;
-    ctx.fillStyle = accent(); ctx.fillRect(16, 18, 18, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(24)}px ${SERIF}`;
-    const lines = wrapLines(ctx, tr(post.title), w - 32).slice(0, 3);
-    lines.forEach((l, i) => ctx.fillText(l, 16, 30 + i * 28));
-    ctx.fillStyle = bd ? '#c9c9c9' : '#8c8c8c'; ctx.font = `${fz(13)}px ${SERIF}`;
-    wrapLines(ctx, tr(post.subtitle), w - 32).slice(0, 2).forEach((l, i) => ctx.fillText(l, 16, 38 + lines.length * 28 + i * 16));
+    const ph = phoneCards(), m = ph ? 14 : 16;   // téléphone : titre et lieu en gros, une ligne de sous-titre
+    const T = ph ? [fz(31), fz(34), 2] : [fz(24), 28, 3], S = ph ? [fz(20), fz(23), 1] : [fz(13), 16, 2], dz = ph ? fz(15) : 10, sz = ph ? fz(13) : 9, sh = ph ? 26 : 20;
+    ctx.fillStyle = accent(); ctx.fillRect(m, ph ? 13 : 18, 18, 2);
+    ctx.fillStyle = '#fff'; ctx.font = `${T[0]}px ${SERIF}`;
+    const lines = wrapLines(ctx, tr(post.title), w - 2 * m).slice(0, T[2]);
+    const ty = ph ? 22 : 30; lines.forEach((l, i) => ctx.fillText(l, m, ty + i * T[1]));
+    ctx.fillStyle = bd ? '#d6d6d6' : '#8c8c8c'; ctx.font = `${S[0]}px ${SERIF}`;
+    wrapLines(ctx, tr(post.subtitle), w - 2 * m).slice(0, ph && lines.length < 2 ? 2 : S[2]).forEach((l, i) => ctx.fillText(l, m, ty + 8 + lines.length * T[1] + i * S[1]));
     const sig = bd ? signature(bd.project, bd.project.media[0] && bd.project.media[0].credit) : signature(post, post.media[0] && post.media[0].credit);   // la photo est signée par son projet
-    ctx.fillStyle = accent(); ctx.font = `10px ${UIF}`;
-    ctx.fillText([post.date, tr(post.place)].filter(Boolean).join('  ·  ').toUpperCase(), 16, h - (sig ? 36 : 22));
+    ctx.fillStyle = accent(); ctx.font = `${dz}px ${UIF}`;
+    ctx.fillText([post.date, tr(post.place)].filter(Boolean).join('  ·  ').toUpperCase(), m, h - (sig ? sh + dz + 6 : dz + 12));
     if (sig) {   // signature : l'œuvre et son auteur, en bas de la vignette
-      ctx.font = `9px ${UIF}`; let text = sig; while (ctx.measureText(text).width > w - 32 && text.length > 4) text = text.slice(0, -2) + '…';
-      ctx.fillStyle = bd ? 'rgba(0,0,0,.55)' : '#2a2a2a'; ctx.fillRect(0, h - 20, w, 20);
-      ctx.fillStyle = bd ? '#d0d0d0' : '#9a9a9a'; ctx.textBaseline = 'middle'; ctx.fillText(text, 16, h - 10);
+      ctx.font = `${sz}px ${UIF}`; let text = sig; while (ctx.measureText(text).width > w - 2 * m && text.length > 4) text = text.slice(0, -2) + '…';
+      ctx.fillStyle = bd ? 'rgba(0,0,0,.55)' : '#2a2a2a'; ctx.fillRect(0, h - sh, w, sh);
+      ctx.fillStyle = bd ? '#d0d0d0' : '#9a9a9a'; ctx.textBaseline = 'middle'; ctx.fillText(text, m, h - sh / 2);
     }
     ctx.globalAlpha = 1;
   };
@@ -318,8 +324,8 @@ async function portraitCard(post, w, h) {
     if (isLogo(post)) {   // un partenaire : son logo entier, posé sur blanc (ou son nom, tant que le logo manque)
       ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
       if (!im) {
-        ctx.fillStyle = '#141414'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `600 ${Math.round(h * 0.13)}px ${UIF}`;
-        const ls = wrapLines(ctx, tr(post.title), w * 0.76).slice(0, 3); ls.forEach((l, i) => ctx.fillText(l, w / 2, h / 2 + (i - (ls.length - 1) / 2) * h * 0.16));
+        ctx.fillStyle = '#141414'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; const k = phoneCards() ? 1.5 : 1; ctx.font = `600 ${Math.round(h * 0.13 * k)}px ${UIF}`;
+        const ls = wrapLines(ctx, tr(post.title), w * (k > 1 ? 0.9 : 0.76)).slice(0, 3); ls.forEach((l, i) => ctx.fillText(l, w / 2, h / 2 + (i - (ls.length - 1) / 2) * h * 0.16 * k));
         if (NEG()) { ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
         return;
       }
@@ -345,30 +351,30 @@ async function textCard(post, w, h) {
   if (bd) return textCardPhoto(post, w, h, bd);
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
   await fontsReady();
-  const title = tr(post.title).trim();
+  const title = tr(post.title).trim(), ph = phoneCards(), tz = ph ? fz(30) : fz(21), tl = ph ? fz(32) : 22, tn = ph ? 2 : 3;
   const x0 = im ? 72 : 18, tw = w - x0 - 14;
   const front = canvasTex(w, h, ctx => {
     ctx.fillStyle = '#333'; ctx.fillRect(0, 0, w, h);
     if (im) drawCover(ctx, im, 13, 12.75, 53, 53); else { ctx.fillStyle = accent(); ctx.fillRect(18, 14, 14, 2); }
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(21)}px ${SERIF}`; ctx.textBaseline = 'top';
-    wrapLines(ctx, title, tw).slice(0, 3).forEach((l, i) => ctx.fillText(l, x0, (im ? 12 : 20) + i * 22));
+    ctx.fillStyle = '#fff'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, tw).slice(0, tn).forEach((l, i) => ctx.fillText(l, x0, (im ? 12 : 20) + i * tl));
   });
   const back = canvasTex(w, h, mirrored(w, ctx => {   // le dos est vu de derrière : dessiné en miroir pour rester lisible
     ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = '#c4c4c4'; ctx.font = `${fz(21)}px ${SERIF}`; ctx.textBaseline = 'top';
-    wrapLines(ctx, title, tw).slice(0, 3).forEach((l, i) => ctx.fillText(l, x0, (im ? 9 : 17) + i * 22));
+    ctx.fillStyle = '#c4c4c4'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, tw).slice(0, tn).forEach((l, i) => ctx.fillText(l, x0, (im ? 9 : 17) + i * tl));
   }));
   return [front, back];
 }
 async function textCardPhoto(post, w, h, bd) {   // bandeau de savoir-faire : la photo d'un projet en fond
   await fontsReady();
-  const title = tr(post.title).trim(), tw = w - 32;
+  const title = tr(post.title).trim(), tw = w - 32, ph = phoneCards(), tz = ph ? fz(30) : fz(21), tl = ph ? fz(32) : 22;
   const draw = faint => ctx => {
-    veil(ctx, bd, w, h, faint ? 0.2 : 0.62);
+    veil(ctx, bd, w, h, faint ? 0.2 : ph ? 0.7 : 0.62);
     if (faint) ctx.globalAlpha = 0.32;
     ctx.fillStyle = accent(); ctx.fillRect(18, 14, 14, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(21)}px ${SERIF}`; ctx.textBaseline = 'top';
-    wrapLines(ctx, title, tw).slice(0, 3).forEach((l, i) => ctx.fillText(l, 18, 20 + i * 22));
+    ctx.fillStyle = '#fff'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    wrapLines(ctx, title, tw).slice(0, ph ? 2 : 3).forEach((l, i) => ctx.fillText(l, 18, 20 + i * tl));
     ctx.globalAlpha = 1;
   };
   return [canvasTex(w, h, draw(false), 2), canvasTex(w, h, mirrored(w, draw(true)), 2)];
@@ -396,19 +402,22 @@ async function skillCard(post, w, h) {
   await fontsReady();
   const title = tr(post.title).trim();
   const sum = (tr(post.subtitle).trim() || htmlToText(tr(post.body)).join(' ')).replace(/\s+/g, ' ').trim();
-  const flat = h < 110, iw = bd ? Math.round(flat ? h * 1.15 : Math.min(w * 0.36, h * 0.8)) : 0;
+  const flat = h < 110, ph = phoneCards();
+  /* téléphone : le texte prend toute la largeur, l'image passe en fond sous un voile */
+  const iw = bd && !ph ? Math.round(flat ? h * 1.15 : Math.min(w * 0.36, h * 0.8)) : 0;
   const x0 = 14, tw = w - iw - x0 - 12;
-  const ts = flat ? 15 : 17, tl = flat ? 18 : 20, ss = flat ? 9.5 : 10.5, sl = flat ? 12 : 13.5;
+  const [ts, tl, ss, sl] = ph ? (flat ? [24, 26, 18, 21] : [27, 30, 20, 24]) : flat ? [15, 18, 9.5, 12] : [17, 20, 10.5, 13.5];
   const draw = faint => ctx => {
     ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
-    if (bd) drawCover(ctx, bd.im, w - iw, 0, iw, h);
+    if (bd && ph && !faint) veil(ctx, bd, w, h, 0.74);
+    if (bd && !ph) drawCover(ctx, bd.im, w - iw, 0, iw, h);
     if (faint) { if (bd) { ctx.globalAlpha = 0.55; drawCover(ctx, bd.im, 0, 0, w, h); } ctx.globalAlpha = 0.3; }
     ctx.textBaseline = 'top';
     ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
     ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`;
     const tls = wrapLines(ctx, title, tw).slice(0, 2); let y = flat ? 16 : 22;
     tls.forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
-    y += flat ? 2 : 5; ctx.fillStyle = '#bdbdbd'; ctx.font = `${fz(ss)}px ${SERIF}`;
+    y += flat ? 2 : 5; ctx.fillStyle = ph ? '#dcdcdc' : '#bdbdbd'; ctx.font = `${fz(ss)}px ${SERIF}`;
     const room = Math.max(0, Math.floor((h - y - 8) / fz(sl)));
     let sls = wrapLines(ctx, sum, tw); if (sls.length > room) { sls = sls.slice(0, room); if (room) { let last = sls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); sls[room - 1] = last + '…'; } }
     sls.forEach(l => { ctx.fillText(l, x0, y); y += fz(sl); });
@@ -426,6 +435,27 @@ function infoTexture(post, kind) {
       ctx.fillStyle = '#fff'; htmlToText(tr(post.body)).slice(0, 4).forEach((l, i) => ctx.fillText(l, 32, 164 + i * 20));
       ctx.fillStyle = accent(); ctx.font = `15px ${UIF}`; ctx.fillText(tr(post.place), 32, 260);
     }, 1.5);
+    if (phoneCards()) return canvasTex(200, 200, ctx => {   // téléphone : le nom, la phrase et les projets en gros, sans le texte long
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
+      ctx.fillStyle = '#fff'; ctx.font = `${fz(25)}px ${SERIF}`;
+      const name = wrapLines(ctx, tr(post.title) + '.', 172).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 14, 12 + i * fz(27)));
+      ctx.font = `${fz(13)}px ${UIF}`;
+      const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
+      const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 172).slice(0, 2) : [];
+      const bottom = tr(post.place) ? 168 : 188, pTop = bottom - pl.length * 16 - 16;
+      let y = 18 + name.length * fz(27);
+      ctx.fillStyle = '#b4b4b4'; ctx.font = `${fz(17)}px ${SERIF}`;
+      const lim = (pl.length ? pTop - 6 : bottom) - fz(20);
+      const sub = wrapLines(ctx, tr(post.subtitle), 172), sl = [];
+      for (const l of sub) { if (y > lim) break; sl.push(l); y += fz(20); }
+      if (sl.length < sub.length && sl.length) { let last = sl[sl.length - 1]; while (last && ctx.measureText(last + '…').width > 172) last = last.replace(/\s*\S+$/, ''); sl[sl.length - 1] = last + '…'; }
+      sl.forEach((l, i) => ctx.fillText(l, 14, 18 + name.length * fz(27) + i * fz(20)));
+      if (pl.length) {
+        ctx.fillStyle = accent(); ctx.font = `${fz(11)}px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 14, pTop);
+        ctx.fillStyle = '#e6e6e6'; ctx.font = `${fz(13)}px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 14, pTop + 16 + i * 16));
+      }
+      if (tr(post.place)) { ctx.fillStyle = accent(); ctx.font = `${fz(13)}px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 14, 176); }
+    }, 2.5);
     return canvasTex(200, 200, ctx => {   // MovieClip "people"
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
       ctx.fillStyle = '#fff'; ctx.font = `${fz(20)}px ${SERIF}`;
@@ -970,7 +1000,6 @@ function mainEntrance() {   // zoom d'entrée : focale de 6 à 2 en 1 s
 }
 const _p = new THREE.Vector3(), _t = new THREE.Vector3(), _dir = new THREE.Vector3();
 let eyeK = 1;
-const TALL_ZOOM = 1.6; let tallK = 1;
 function updateCamera() {   // caméra Papervision : focale en pixels (zoom x focus), oeil "focus" unités derrière la caméra
   _p.copy(pv(cam.x, cam.y, cam.z)); _t.copy(pv(camTarget.x, camTarget.y, camTarget.z));
   _dir.subVectors(_t, _p); if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, -1); _dir.normalize();
@@ -978,9 +1007,7 @@ function updateCamera() {   // caméra Papervision : focale en pixels (zoom x fo
   const fk = isMap() ? Math.min(1, STYLE.cameraDistanceProportion / zoomBase) : 1;
   eyeK += Math.abs(fk - eyeK) < 1e-3 ? fk - eyeK : (fk - eyeK) * ease(STYLE.cameraEaseSpeed);
   camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus * eyeK); camera.lookAt(_t);
-  const tallT = isTall() && ((curSec() || {}).def || {}).layout === 'carousel' ? TALL_ZOOM : 1;
-  tallK += Math.abs(tallT - tallK) < 1e-3 ? tallT - tallK : (tallT - tallK) * ease(STYLE.cameraEaseSpeed);   // le passage se fait en douceur, au rythme de la caméra
-  const narrow = Math.min(1, W / 900) * tallK;
+  const narrow = Math.min(1, W / 900);
   const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
   if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
 }
@@ -1009,10 +1036,6 @@ function openMenu() {
 /* La fiche 2D garde ses proportions de 2008 (bandes de 355 px), agrandies de 20 %, et se réduit quand l'écran est trop bas.
    Sur un écran étroit, les colonnes de texte prennent la largeur de l'écran. */
 const POST_SCALE = 1.44;
-/* Téléphone en hauteur : la fiche se lit à taille réelle, sur toute la largeur, et prend toute la hauteur libre */
-const isTall = () => W <= 600 && H > W * 1.15;
-const postX = document.getElementById('post-x');
-postX.addEventListener('click', () => { if (P.postOpen) closePost(); });
 function textGeom(mode) {
   const full = mode === 'project' ? { width: 522, x: 79, colW: 362 } : { width: 389, x: 17, colW: 353 };
   const avail = (W - 2 * STYLE.margin) / (post2D.scale || 1);
@@ -1021,22 +1044,20 @@ function textGeom(mode) {
   return { width, x: pad, colW: width - 2 * pad };
 }
 function fitPost2D() {
-  const short = H <= 420, tall = !!post2D.tall;   // téléphone couché ou debout : la signature se réduit à sa première ligne, la fiche prend la hauteur
-  document.body.classList.toggle('post-short', (short || tall) && P.postOpen);
-  post2dEl.classList.toggle('tall', tall);
-  const top = sloganEl.offsetTop + sloganEl.offsetHeight + (short || tall ? 1 : 2) * STYLE.margin, need = post2D.height + 12;
+  const short = H <= 420;   // téléphone couché : la signature se réduit à sa première ligne, la fiche prend la hauteur
+  document.body.classList.toggle('post-short', short && P.postOpen);
+  const top = sloganEl.offsetTop + sloganEl.offsetHeight + (short ? 1 : 2) * STYLE.margin, need = post2D.height + 12;
   const reserve = short ? 24 : (menu.offsetHeight || 90) + 70;   // sous la fiche : le menu et une bande blanche qui referme la fiche au clic
-  const s = tall ? 1 : Math.max(short ? 0.4 : 0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
+  const s = Math.max(short ? 0.4 : 0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
   post2D.scale = s;
   post2dEl.style.top = top + 'px';
   post2dEl.style.transform = s !== 1 ? `scale(${s.toFixed(3)})` : '';
   post2dEl.style.width = s !== 1 ? Math.ceil((W - STYLE.margin) / s) + 'px' : '';
   post2dEl.style.height = Math.ceil(need) + 'px';
-  document.body.classList.toggle('post-cramped', tall || H - (top + need * s) < menu.offsetHeight + 60);
-  postX.hidden = !(tall && P.postOpen);   // téléphone debout : le menu se cache, une croix en bas referme la fiche
+  document.body.classList.toggle('post-cramped', H - (top + need * s) < menu.offsetHeight + 60);
 }
 function setMenuPosition() {
-  if (!P.postOpen) { document.body.classList.remove('post-cramped', 'post-short'); postX.hidden = true; }
+  if (!P.postOpen) document.body.classList.remove('post-cramped', 'post-short');
   if (P.postOpen && post2D.open && post2D.height > 100) {
     let y = sloganEl.offsetTop + sloganEl.offsetHeight + post2D.height * (post2D.scale || 1) + 2 * STYLE.margin + 30;
     y = Math.min(y, H - menu.offsetHeight - 52);   // au-dessus de la ligne des langues
@@ -1094,7 +1115,7 @@ function renderTexts() {
   renderReel(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
   document.getElementById('kb-toggle').setAttribute('aria-label', ui('keys'));
-  pgPrev.setAttribute('aria-label', ui('prev')); pgNext.setAttribute('aria-label', ui('next')); postX.setAttribute('aria-label', ui('close'));
+  pgPrev.setAttribute('aria-label', ui('prev')); pgNext.setAttribute('aria-label', ui('next'));
   const langs = s.langs && s.langs.length ? s.langs : LANGS;
   [langsEl, document.getElementById('home-langs')].forEach(box => {
     box.innerHTML = '';
@@ -1198,12 +1219,7 @@ const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
     this.clear(); this.post = post;
-    this.open = true; this.tall = isTall() && card !== 'place';
-    if (this.tall) {   // la signature se replie d'abord, puis la bande prend la hauteur qui reste au-dessus de la bande blanche du bas
-      document.body.classList.add('post-short'); this.scale = 1;
-      const top = sloganEl.offsetTop + sloganEl.offsetHeight + STYLE.margin;
-      this.height = Math.max(355, Math.round(H - top - 64));
-    } else this.height = card === 'place' ? 300 : 355;
+    this.open = true; this.height = card === 'place' ? 300 : 355;
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
     fitPost2D(); this.geomKey = JSON.stringify(textGeom('project'));
     this.delay = 0;
@@ -1271,14 +1287,7 @@ const post2D = {
       play.addEventListener('click', () => { m.controls = true; m.play().catch(() => {}); play.remove(); });
       el.querySelector('.in').appendChild(play);
     } else { m.src = url(src); m.alt = ''; }
-    const fit = () => {
-      const nw = vid ? m.videoWidth : m.naturalWidth, nh = vid ? m.videoHeight : m.naturalHeight; if (!nw || !nh) return;
-      if (this.tall) {   // téléphone debout : l'image prend la largeur de l'écran, sans dépasser la hauteur de la bande
-        const avail = W - 2 * STYLE.margin, iw = Math.min(avail, Math.round(nw * this.height / nh));
-        m.style.width = iw + 'px'; m.style.height = Math.round(iw * nh / nw) + 'px'; el.style.width = avail + 'px';
-      } else el.style.width = Math.round(nw * h / nh) + 'px';
-      this.layout();
-    };
+    const fit = () => { const w = vid ? Math.round(m.videoWidth * h / m.videoHeight) : Math.round(m.naturalWidth * h / m.naturalHeight); if (w) { el.style.width = w + 'px'; this.layout(); } };
     m.addEventListener(vid ? 'loadedmetadata' : 'load', fit);
     m.addEventListener('error', () => { if (!this.panels.includes(el) || this.panels.length < 2) return; el.remove(); this.panels = this.panels.filter(x => x !== el); this.layout(); });   // image introuvable : le panneau disparaît
     el.querySelector('.in').prepend(m);
@@ -1291,7 +1300,7 @@ const post2D = {
     }
   },
   addEmbed(src, kind, h, credit = '') {   // YouTube / Vimeo : vignette et bouton, le lecteur ne se charge qu'au toucher
-    const w = this.tall ? W - 2 * STYLE.margin : Math.round(h * 16 / 9), el = this.addPanel('media embed', w, '');
+    const w = Math.round(h * 16 / 9), el = this.addPanel('media embed', w, '');
     const inner = el.querySelector('.in'), id = kind === 'youtube' ? ytId(src) : vimeoId(src);
     const cover = document.createElement('div'); cover.className = 'cover';
     const poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : (this.post && this.post.thumb ? url(this.post.thumb) : '');
@@ -1331,9 +1340,9 @@ const post2D = {
       /* la date, « Classé dans » et les savoir-faire : un bloc empilé, posé en bas ; s'il passe sur deux lignes, il monte au lieu de se chevaucher */
       const metaHTML = `<div class="fecha">${fecha}</div>${posted ? `<div class="posted">${posted}</div>` : ''}${sklLine ? `<div class="posted skl-tags">${sklLine}</div>` : ''}`;
       measure.innerHTML = `<div class="meta" style="position:static">${metaHTML}</div>`;
-      const PH = this.height, mH = measure.firstChild.offsetHeight, metaBottom = PH - 33, metaTop = metaBottom - mH;
+      const mH = measure.firstChild.offsetHeight, metaBottom = 322, metaTop = metaBottom - mH;
       const sy = 34 + tH + 6, top = 34 + tH + sH + 20;
-      const pages = paginate(html, colW, [PH - 20 - top, PH - 20 - 93], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
+      const pages = paginate(html, colW, [335 - top, 335 - 93], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
       measure.innerHTML = `<div class="body" style="position:static">${pages[pages.length - 1]}</div>`;
       const lastTop = pages.length === 1 ? top : 93;
       if (pages[pages.length - 1] && lastTop + measure.firstChild.offsetHeight > metaTop - 12) {   // pas la place : la dernière page se recoupe
@@ -1348,7 +1357,7 @@ const post2D = {
       });
     } else {
       const sy = 13 + tH + 4, fy = 13 + tH + sH + 10, py = fy + 20, top = py + 18 + 20;
-      const pages = paginate(html, colW, [this.height - top - 14, this.height - 28], measure);
+      const pages = paginate(html, colW, [355 - top - 14, 355 - 28], measure);
       pages.forEach((pg, i) => {
         this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:13px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}<div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : 14}px;width:${colW}px">${pg}</div>`);
@@ -1359,13 +1368,12 @@ const post2D = {
   addTeam(post) {   // "Who worked on this project?" : les portraits viennent des autres sections
     const team = post.team.map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
     const names = team.map(p => tr(p.title)).concat(post.credits ? [post.credits] : []).join(', ');
-    const tw = this.tall ? W - 2 * STYLE.margin : 576, left0 = this.tall ? 24 : 69, perRow = this.tall ? Math.max(3, Math.floor((tw - 2 * left0 + 11) / 59)) : 6;
-    const el = this.addPanel('team', tw, `<h2 class="ttl">${escapeHTML(ui('who'))}</h2><div class="names">${escapeHTML(ui('leftToRight'))} <span>${escapeHTML(names)}.</span></div>`);
+    const el = this.addPanel('team', 576, `<h2 class="ttl">${escapeHTML(ui('who'))}</h2><div class="names">${escapeHTML(ui('leftToRight'))} <span>${escapeHTML(names)}.</span></div>`);
     const inner = el.querySelector('.in'), nm = inner.querySelector('.names');
-    const top0 = Math.max(this.tall ? 110 : 160, Math.ceil(nm.offsetTop + nm.offsetHeight + 14));   // les visages commencent sous la liste des noms
+    const top0 = Math.max(160, Math.ceil(nm.offsetTop + nm.offsetHeight + 14));   // les visages commencent sous la liste des noms
     team.forEach((p, j) => {
       const f = document.createElement('button'); f.type = 'button'; f.className = 'face';
-      f.style.left = (left0 + (j % perRow) * 59) + 'px'; f.style.top = (top0 + Math.floor(j / perRow) * 55) + 'px';
+      f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (top0 + Math.floor(j / 6) * 55) + 'px';
       const other = !p.thumb && (personProjects(p).find(x => x !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
       const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
       f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<span class="tab">${escapeHTML(tr(p.title))}.<small>${escapeHTML(tr(p.subtitle))}</small></span>`;
@@ -1638,7 +1646,9 @@ const dropTouch = e => { touches.delete(e.pointerId); if (touches.size < 2) pinc
 ['pointerup', 'pointercancel'].forEach(t => window.addEventListener(t, dropTouch));
 canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
 window.addEventListener('resize', () => {
-  resizeViewport(); onStageResize3D(); setMenuPosition(); sizeTicker(); hvSize();
+  const ph0 = phoneCards();
+  resizeViewport(); onStageResize3D();
+  if (phoneCards() !== ph0 && postsView && !postsView.loading) postsView.retexture();   // passage téléphone ↔ grand écran : texte redessiné setMenuPosition(); sizeTicker(); hvSize();
   if (post2D.open) { fitPost2D(); clearTimeout(post2D.relayout); post2D.relayout = setTimeout(() => { if (post2D.open && post2D.post && JSON.stringify(textGeom('project')) !== post2D.geomKey) { post2D.build(post2D.post, P.section.def.card); setMenuPosition(); } }, 250); }   // rotation de l'écran : la fiche se recompose
 });
 
@@ -2135,18 +2145,12 @@ function startRender() {
   getToSectionView(start, 0); if (W <= 700 || H <= 520) setMenuPosition();   // téléphone : le menu se range tout de suite au-dessus des langues
 }
 let last = performance.now();
-/* Téléphone debout, sans survol possible : la carte qui fait face montre son titre et sa description, comme au survol de la souris */
-let tallTick = 0;
-function tallBand() {
-  if (++tallTick % 6 || !isTall() || P.postOpen || !['carousel', 'spiral'].includes(postsView.def.layout)) return;
-  postsView.checkPostSelected(); hoverCard(postsView.postViews[P.selected] || null);
-}
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
   if (started && (homeGone || now < behindUntil)) {
-    updateTweens(); renderMachine(); if (postsView) { postsView.update(); tallBand(); } post2D.step(); updateCamera();
+    updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera();
     renderer.render(scene, camera);
   }
   requestAnimationFrame(frame);
