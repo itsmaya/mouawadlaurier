@@ -9473,6 +9473,70 @@
     "media/logos/fisheye.png",
     "media/logos/logo-moet-wyrb.jpg"
    ]
+  },
+  {
+   "id": "eruption-of-the-end",
+   "section": "work",
+   "order": 44,
+   "published": true,
+   "title": {
+    "en": "Eruption of the end",
+    "fr": "Eruption of the end",
+    "ca": "Eruption of the end",
+    "es": "Eruption of the end"
+   },
+   "subtitle": {
+    "en": "Rossella Piccinno",
+    "fr": "Rossella Piccinno",
+    "ca": "Rossella Piccinno",
+    "es": "Rossella Piccinno"
+   },
+   "place": {
+    "en": "Panorama 13, Le Fresnoy, Tourcoing",
+    "fr": "Panorama 13, Le Fresnoy, Tourcoing",
+    "ca": "Panorama 13, Le Fresnoy, Tourcoing",
+    "es": "Panorama 13, Le Fresnoy, Tourcoing"
+   },
+   "date": "2011",
+   "tags": [
+    "collab",
+    "archive"
+   ],
+   "thumb": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
+   "thumbBack": "",
+   "media": [
+    {
+     "src": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
+     "credit": "Le Fresnoy"
+    }
+   ],
+   "link": "https://lefresnoy.net/en/exposition/57/oeuvre/402",
+   "team": [
+    "maya",
+    "cyril"
+   ],
+   "credits": "Rossella Piccinno, Le Fresnoy",
+   "location": null,
+   "spots": [
+    {
+     "city": "Tourcoing",
+     "lat": 50.72,
+     "lon": 3.16
+    }
+   ],
+   "author": "Rossella Piccinno",
+   "skills": [
+    "tracking",
+    "real-time",
+    "projection-mapping"
+   ],
+   "logos": [],
+   "body": {
+    "en": "<p>The old chimney of the Congo soap factory in Roubaix, built for Victor Vaissier at the end of the 19th century, comes back to life. Soap bubbles rise from this last eruption, and the images reflected in them take us through the memories of a place that has travelled through time. The abandoned chimney, a totem, stands as a witness.</p><p>An installation by Rossella Piccinno, created at Le Fresnoy, Studio national des arts contemporains, for Panorama 13. Hand Coded worked on its interactive part, with a Kinect.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Award</h3><ul><li>Friends of Le Fresnoy Award for Best Installation, Panorama 13, 2011</li></ul>",
+    "fr": "<p>La vieille cheminée de la savonnerie du Congo, à Roubaix, construite pour Victor Vaissier à la fin du XIXe siècle, reprend vie. Des bulles de savon s’échappent de cette dernière éruption, et les images qui s’y reflètent nous font voyager dans les souvenirs d’un lieu qui a traversé le temps. La cheminée, totem désormais abandonné, en est le témoin.</p><p>Une installation de Rossella Piccinno, créée au Fresnoy, Studio national des arts contemporains, pour Panorama 13. Hand Coded a travaillé sur sa partie interactive, avec une Kinect.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Prix</h3><ul><li>Prix des Amis du Fresnoy de la meilleure installation, Panorama 13, 2011</li></ul>",
+    "ca": "<p>La vella xemeneia de la sabonera del Congo, a Roubaix, construïda per a Victor Vaissier a finals del segle XIX, torna a la vida. Bombolles de sabó surten d’aquesta darrera erupció, i les imatges que s’hi reflecteixen ens fan viatjar pels records d’un lloc que ha travessat el temps. La xemeneia, un tòtem ara abandonat, n’és testimoni.</p><p>Una instal·lació de Rossella Piccinno, creada a Le Fresnoy, Studio national des arts contemporains, per a Panorama 13. Hand Coded hi va treballar la part interactiva, amb una Kinect.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacció</strong> Hand Coded</li><li><strong>Producció</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premi</h3><ul><li>Premi dels Amics de Le Fresnoy a la millor instal·lació, Panorama 13, 2011</li></ul>",
+    "es": "<p>La vieja chimenea de la jabonera del Congo, en Roubaix, construida para Victor Vaissier a finales del siglo XIX, vuelve a la vida. Pompas de jabón salen de esta última erupción, y las imágenes que se reflejan en ellas nos hacen viajar por los recuerdos de un lugar que ha atravesado el tiempo. La chimenea, un tótem ahora abandonado, es su testigo.</p><p>Una instalación de Rossella Piccinno, creada en Le Fresnoy, Studio national des arts contemporains, para Panorama 13. Hand Coded trabajó en su parte interactiva, con una Kinect.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacción</strong> Hand Coded</li><li><strong>Producción</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premio</h3><ul><li>Premio de los Amigos de Le Fresnoy a la mejor instalación, Panorama 13, 2011</li></ul>"
+   }
   }
  ]
 }
