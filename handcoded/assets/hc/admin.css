@@ -352,3 +352,8 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 .howto { margin-top: 14px; }
 .howto summary { cursor: pointer; font-weight: 600; font-size: 13px; }
 .howto ol { margin: 10px 0 6px 18px; padding: 0; font-size: 13px; line-height: 1.6; }
+
+/* Réglages › Fiches */
+.fiche-row .fdot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ffcc00; margin-left: 6px; vertical-align: middle; }
+.fiche-row .fdot[hidden] { display: none; }
+.fiche-row b { min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }

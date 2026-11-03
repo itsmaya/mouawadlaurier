@@ -521,6 +521,31 @@ function pairInput(label, obj, key, opts = {}) {   // un champ par langue du sit
   const one = l => h('div', { class: 'lang', 'data-l': l.toUpperCase() }, textInput(() => obj[key][l] ?? '', v => { obj[key][l] = v; }, { ...opts, placeholder: opts.placeholder ? opts.placeholder[l] : LANG_NAMES[l] }));
   return h('div', { class: 'f' }, h('span', { class: 'lbl' }, label), h('div', { class: 'pair' }, siteLangs().map(one)), opts.hint ? h('p', { class: 'hint' }, opts.hint) : null);
 }
+/* Marges des fiches (Réalisations, Savoir-faire) : mêmes valeurs par défaut et mêmes bornes que le site (site.js, FICHE) */
+const FICHE_DEF = [
+  ['col', 'Largeur des colonnes', 362, 200, 520, 'Plus étroit : des lignes plus courtes, plus de colonnes, comme dans un journal.'],
+  ['gutter', 'Entre deux colonnes', 160, 10, 240, 'L’espace blanc entre une colonne et la suivante, quand le texte continue.'],
+  ['side', 'Côtés', 79, 8, 140, 'Avant la première colonne (après la photo) et après la dernière.'],
+  ['top', 'Haut', 34, 8, 100, 'Au-dessus du titre. Les colonnes suivantes commencent à cette même hauteur.'],
+  ['bottom', 'Bas', 20, 6, 80, 'Sous le texte et sous la date.'],
+];
+function ficheBlock(s) {
+  const rows = FICHE_DEF.map(([k, label, def, min, max, hint]) => {
+    const cur = () => (s.fiche && s.fiche[k] != null && s.fiche[k] !== '' ? +s.fiche[k] : def);
+    const r = h('input', { type: 'range', min, max, step: 1, value: cur() });
+    const val = h('b', null, String(cur()));
+    const dot = h('span', { class: 'fdot', title: 'Modifié', hidden: cur() === def });
+    const set = v => { s.fiche = s.fiche || {}; if (v === def) delete s.fiche[k]; else s.fiche[k] = v; if (!Object.keys(s.fiche).length) delete s.fiche; r.value = v; val.textContent = v; dot.hidden = v === def; };
+    r.addEventListener('input', () => { set(+r.value); change(); });
+    return h('div', { class: 'f fiche-row' },
+      h('span', { class: 'lbl' }, label, dot),
+      h('div', { style: { display: 'flex', gap: '12px', alignItems: 'center' } }, r, val, btn('↺ ' + def, () => { set(def); change(); }, 'sm ghost', { title: 'Revenir à la valeur d’origine' })),
+      h('p', { class: 'hint' }, hint));
+  });
+  return h('div', { class: 'block' }, h('h3', null, 'Fiches'),
+    h('p', { class: 'hint', style: { marginTop: 0, marginBottom: '10px' } }, 'La mise en page du texte des fiches Réalisations, en colonnes comme un article : le texte passe d’une colonne à la suivante. Les marges haut et bas valent aussi pour Savoir-faire. Valeurs en unités de la fiche (elle fait 355 de haut, agrandie d’environ 1,4 fois sur un ordinateur). Le bouton à droite de chaque réglage remet la valeur d’origine. Regarde le résultat dans l’Aperçu.'),
+    ...rows);
+}
 function toggle(label, get, set, opts = {}) {
   const i = h('input', { type: 'checkbox', checked: !!get(), role: 'switch' });
   i.addEventListener('change', () => { set(i.checked); change(opts); });
@@ -1491,6 +1516,7 @@ function viewSettings() {
         h('p', { class: 'hint' }, 'Une mention discrète en bas de chaque vignette des cartes 3D, pour que l’œuvre d’un artiste ne passe pas pour une création du studio. L’auteur et le crédit photo (celui de la première image) se règlent dans chaque contenu.'),
         h('div', { style: { marginTop: '12px' } }, toggle('Les visiteurs basculent négatif / positif en cliquant sur le logo', () => s.negativeToggle !== false, v => { s.negativeToggle = v; })),
         h('p', { class: 'hint' }, 'Le logo par défaut a un anneau à la couleur d’accent sur fond blanc, et blanc sur fond noir. Le choix du visiteur est gardé pour sa prochaine visite (en mode jour et nuit, jusqu’au prochain lever ou coucher du soleil).')),
+      ficheBlock(s),
       typoBlock(s),
       h('div', { class: 'block' }, h('h3', null, 'Showreel'),
         field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/…', spell: false }), 'YouTube, Vimeo ou adresse d’un fichier MP4. Un bouton « Showreel » sous le logo l’ouvre à tout moment : l’écran glisse au premier plan, la vidéo part son coupé, le visiteur active le son d’un clic. Laisse vide pour retirer le bouton.')),

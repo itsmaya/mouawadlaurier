@@ -1206,8 +1206,19 @@ function openMenu() {
 /* La fiche 2D garde ses proportions de 2008 (bandes de 355 px), agrandies de 20 %, et se réduit quand l'écran est trop bas.
    Sur un écran étroit, les colonnes de texte prennent la largeur de l'écran. */
 const POST_SCALE = 1.44;
+/* Mise en page des fiches Réalisations et Savoir-faire, comme un article en colonnes ; réglable dans le back-office (Réglages › Fiches),
+   en unités de la fiche (355 de haut). col : largeur d'une colonne ; gutter : espace entre deux colonnes ; side : avant la première
+   et après la dernière ; top : au-dessus du titre, et du texte des colonnes suivantes ; bottom : sous le texte. */
+const FICHE = { col: 362, gutter: 160, side: 79, top: 34, bottom: 20 };
+const FICHE_LIM = { col: [200, 520], gutter: [10, 240], side: [8, 140], top: [8, 100], bottom: [6, 80] };
+function ficheM() {
+  const f = (CONTENT && CONTENT.settings && CONTENT.settings.fiche) || {}, o = {};
+  for (const k in FICHE) { const v = f[k]; o[k] = v === '' || v == null || !Number.isFinite(+v) ? FICHE[k] : Math.max(FICHE_LIM[k][0], Math.min(FICHE_LIM[k][1], Math.round(+v))); }
+  return o;
+}
 function textGeom(mode) {
-  const full = mode === 'project' ? { width: 522, x: 79, colW: 362 } : { width: 389, x: 17, colW: 353 };
+  const fm = ficheM();
+  const full = mode === 'project' ? { width: fm.col + 2 * fm.side, x: fm.side, colW: fm.col, press: true } : { width: 389, x: 17, colW: 353 };
   const avail = (W - 2 * STYLE.margin) / (post2D.scale || 1);
   if (avail >= full.width) return full;
   const width = Math.max(240, Math.floor(avail)), pad = mode === 'project' ? 26 : 17;
@@ -1527,8 +1538,11 @@ const post2D = {
     cover.appendChild(play); inner.appendChild(cover);
   },
   addText(post, mode) {
-    let { width, x, colW } = textGeom(mode);
-    if (mode === 'project' && P.section.def.skills) { width = Math.min(width, 261); x = 26; colW = width - 52; }   // savoir-faire : peu de texte, une fiche deux fois plus étroite
+    let { width, x, colW, press } = textGeom(mode);
+    const fm = ficheM(), low = 355 - fm.bottom;   // bas du texte
+    if (mode === 'project' && P.section.def.skills) { width = Math.min(width, 261); x = 26; colW = width - 52; press = false; }
+    /* marges gauche et droite de la colonne i sur n : en colonnes de presse, la gouttière se partage entre deux colonnes voisines */
+    const pads = (i, n) => press ? [i === 0 ? fm.side : Math.floor(fm.gutter / 2), i === n - 1 ? fm.side : Math.ceil(fm.gutter / 2)] : [x, width - x - colW];   // savoir-faire : peu de texte, une fiche deux fois plus étroite
     let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
     const subtitle = tr(post.subtitle);
     const sec = P.section.def;
@@ -1552,19 +1566,19 @@ const post2D = {
       /* la date, « Classé dans » et les savoir-faire : un bloc empilé, posé en bas ; s'il passe sur deux lignes, il monte au lieu de se chevaucher */
       const metaHTML = `<div class="fecha">${fecha}</div>${posted ? `<div class="posted">${posted}</div>` : ''}${sklLine ? `<div class="posted skl-tags">${sklLine}</div>` : ''}`;
       measure.innerHTML = `<div class="meta" style="position:static">${metaHTML}</div>`;
-      const mH = measure.firstChild.offsetHeight, metaBottom = 322, metaTop = metaBottom - mH;
-      const sy = 34 + tH + 6, top = 34 + tH + sH + 20;
-      const pages = paginate(html, colW, [335 - top, 335 - 93], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
+      const mH = measure.firstChild.offsetHeight, metaBottom = low - 13, metaTop = metaBottom - mH;
+      const sy = fm.top + tH + 6, top = fm.top + tH + sH + 20;
+      const pages = paginate(html, colW, [low - top, low - fm.top], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
       measure.innerHTML = `<div class="body" style="position:static">${pages[pages.length - 1]}</div>`;
-      const lastTop = pages.length === 1 ? top : 93;
+      const lastTop = pages.length === 1 ? top : fm.top;
       if (pages[pages.length - 1] && lastTop + measure.firstChild.offsetHeight > metaTop - 12) {   // pas la place : la dernière page se recoupe
-        const tail = paginate(pages.pop(), colW, [metaTop - 12 - lastTop, metaTop - 12 - 93], measure);
+        const tail = paginate(pages.pop(), colW, [metaTop - 12 - lastTop, metaTop - 12 - fm.top], measure);
         pages.push(...tail);
       }
       pages.forEach((pg, i) => {
-        const last = i === pages.length - 1;
-        this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:34px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}` : '') +
-          `<div class="body" style="left:${x}px;top:${i === 0 ? top : 93}px;width:${colW}px">${pg}</div>` +
+        const last = i === pages.length - 1, [x, rp] = pads(i, pages.length);
+        this.addPanel('txt', x + colW + rp, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:${fm.top}px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}` : '') +
+          `<div class="body" style="left:${x}px;top:${i === 0 ? top : fm.top}px;width:${colW}px">${pg}</div>` +
           (last ? `<div class="meta" style="left:${x}px;top:${metaTop}px;width:${colW}px">${metaHTML}</div>` : ''));
       });
     } else {
