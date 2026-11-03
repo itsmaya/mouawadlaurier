@@ -12,7 +12,7 @@
   "defaultLang": "en",
   "accent": "#ffcc00",
   "logo": "",
-  "negative": false,
+  "negative": "auto",
   "negativeToggle": true,
   "signImages": true,
   "showreel": "https://youtu.be/dFbp9eWlvgM",

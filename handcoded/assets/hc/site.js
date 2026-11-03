@@ -9,6 +9,7 @@ import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { daylight } from './sun.js';
 import { t, UI, CARDS, LANGS, StaticBackend, DemoBackend, postsOf, sanitizeHTML, htmlToText, mapCoords, escapeHTML, normalizeContent, validLoc, typoOf, typoCSS, googleFontURLs, typoFontLoads, ringLogoURL, skillsOf, projectsOf } from './store.js';
 
 const BASE = window.HC_BASE || '';
@@ -183,6 +184,28 @@ let W = 0, H = 0;
 /* Mode négatif : toute la page est inversée en CSS. Ce qu'on veut voir dans sa vraie couleur (photos, vidéos, couleur d'accent) est inversé d'avance, la seconde inversion le rétablit. */
 let negMode = false;   // réglage par défaut du back-office, puis le choix du visiteur (clic sur le logo)
 const NEG = () => negMode;
+/* Blanc ou noir à l'arrivée. Réglage 'auto' : blanc quand le soleil est levé chez le visiteur, noir quand il est couché
+   (position déduite du fuseau horaire du navigateur, sans rien lui demander). sunNext : prochain lever ou coucher. */
+let sunNext = 0, sunTimer = 0;
+const autoNeg = () => CONTENT.settings.negative === 'auto';
+function arrivalNeg() {
+  if (!autoNeg()) { sunNext = 0; return !!CONTENT.settings.negative; }
+  const d = daylight(); sunNext = d.next; return !d.day;
+}
+/* Le choix du visiteur (clic sur le logo) : gardé d'une visite à l'autre ; en mode 'auto', jusqu'au prochain lever ou coucher du soleil */
+function visitorNeg() {
+  if (PREVIEW || CONTENT.settings.negativeToggle === false) return null;
+  try { const m = /^([01])(?:@(\d+))?$/.exec(localStorage.getItem('hc-neg') || ''); if (m && (!autoNeg() || (m[2] && Date.now() < +m[2]))) return m[1] === '1'; } catch (e) {}
+  return null;
+}
+function setNeg(v) { if (v === negMode) return; negMode = v; renderTexts(); if (postsView) postsView.retexture(); }
+/* Le site bascule de lui-même au lever et au coucher du soleil si la page reste ouverte (et au retour sur un onglet resté en veille) */
+function watchSun() {
+  clearTimeout(sunTimer); if (!autoNeg()) return;
+  const check = () => { if (Date.now() >= sunNext - 1000) { const v = arrivalNeg(), mine = visitorNeg(); setNeg(mine ?? v); } watchSun(); };
+  sunTimer = setTimeout(check, Math.min(Math.max(sunNext - Date.now(), 1000), 3 * 3600e3));
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && sunNext && Date.now() >= sunNext) { const v = arrivalNeg(), mine = visitorNeg(); setNeg(mine ?? v); watchSun(); } });
 const invertHex = hex => { const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim()); if (!m) return hex; return '#' + (0xffffff ^ parseInt(m[1], 16)).toString(16).padStart(6, '0'); };
 const accent = () => { const a = CONTENT.settings.accent || '#ffcc00'; return NEG() ? invertHex(a) : a; };
 
@@ -1872,7 +1895,8 @@ window.addEventListener('resize', () => {
 function toggleNeg() {
   if (CONTENT.settings.negativeToggle === false) return;
   negMode = !negMode;
-  if (!PREVIEW) try { localStorage.setItem('hc-neg', negMode ? '1' : '0'); } catch (e) {}
+  if (autoNeg()) arrivalNeg();   // met à jour sunNext : le choix vaut jusqu'au prochain lever ou coucher
+  if (!PREVIEW) try { localStorage.setItem('hc-neg', (negMode ? '1' : '0') + (autoNeg() ? '@' + sunNext : '')); } catch (e) {}
   renderTexts();
   if (postsView) postsView.retexture();
 }
@@ -2510,9 +2534,10 @@ async function awaitPreview() {
     if (PREVIEW) CONTENT = normalizeContent(structuredClone(PREVIEW.content));
     else { CONTENT = await backend.load(); if (backend.prepare) await backend.prepare(CONTENT); }
   } catch (err) { showError(err); return; }
-  negMode = !!CONTENT.settings.negative;
+  negMode = arrivalNeg();
   applyTypo();
-  if (!PREVIEW && CONTENT.settings.negativeToggle !== false) try { const v = localStorage.getItem('hc-neg'); if (v === '1' || v === '0') negMode = v === '1'; } catch (e) {}
+  { const mine = visitorNeg(); if (mine !== null) negMode = mine; }
+  watchSun();
   let saved = null; try { saved = localStorage.getItem('hc-lang'); } catch (e) {}
   const langs = CONTENT.settings.langs && CONTENT.settings.langs.length ? CONTENT.settings.langs : LANGS;
   /* langue automatique : la première langue du navigateur que le site propose (ca, es, fr, en), sinon la langue par défaut */
