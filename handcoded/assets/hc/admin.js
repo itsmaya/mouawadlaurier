@@ -892,7 +892,8 @@ function postEditor(p, redrawList, redraw) {
   const drawLogos = () => {
     const lib = [...new Set(c.posts.flatMap(x => x.logos || []).concat(p.logos, S.logoFiles || [], [...S.staged.keys()].filter(k => k.startsWith('media/logos/'))))].sort((a, b) => (p.logos.indexOf(b) >= 0) - (p.logos.indexOf(a) >= 0) || a.localeCompare(b));
     if (!S.logoFiles && S.backend.listFiles) { S.logoFiles = []; S.backend.listFiles(['media/logos/']).then(fs => { S.logoFiles = fs.map(f => f.path).filter(x => /\.(png|jpe?g|svg|webp|gif)$/i.test(x)); if (logoBox.isConnected) drawLogos(); }).catch(() => {}); }   // tous les logos du dossier media/logos
-    const name = path => decodeURIComponent(path.split('/').pop().replace(/-[a-z0-9]{4}\.[a-z]+$/i, '').replace(/\.[a-z]+$/i, '')).replace(/[-_]+/g, ' ');
+    const name = path => { const owner = c.posts.find(x => x.thumb === path && fr(x.title)); return owner ? fr(owner.title) : rawName(path); };   // le nom du partenaire quand il existe
+    const rawName = path => decodeURIComponent(path.split('/').pop().replace(/-[a-z0-9]{4}\.[a-z]+$/i, '').replace(/\.[a-z]+$/i, '')).replace(/[-_]+/g, ' ');
     const add = async files => { for (const f of files) { try { const up = await prepareUpload(f, 'media/logos', 'logo'); stageFile(up.path, up.blob); p.logos.push(up.path); change(); } catch (e) { toast(e.message, 'bad', 7000); } } drawLogos(); };
     const drop = h('div', { class: 'media-add', role: 'button', tabindex: 0, style: { minHeight: '64px' }, onclick: () => filePicker('image/*', true, add), onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } }, h('span', null, '+ Ajouter des logos', h('br'), h('small', null, 'PNG ou SVG, fond blanc ou transparent')));
     dropTarget(drop, add);
@@ -908,7 +909,7 @@ function postEditor(p, redrawList, redraw) {
 
   /* Savoir-faire ↔ projets : se relie des deux côtés, la donnée vit sur le projet (p.skills) */
   const secOf = x => c.sections.find(s => s.id === x.section) || {};
-  const skillPosts = c.posts.filter(x => secOf(x).skills);
+  const skillPosts = c.posts.filter(x => secOf(x).skills && (fr(x.title) || (p.skills || []).includes(x.id)));   // un savoir-faire encore sans nom n'est pas proposé
   const projectPosts = c.posts.filter(x => !secOf(x).skills && ['image', 'text'].includes(secOf(x).card));
   const linkable = sec.skills || ['image', 'text'].includes(sec.card);
   const skillBox = h('div');
@@ -918,10 +919,11 @@ function postEditor(p, redrawList, redraw) {
       h('div', { class: 'chips' }, l.map(x => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(on(x)), title: x.published ? '' : 'Masqué sur le site', style: x.published ? null : { opacity: '.55' }, onclick: () => { flip(x); change(); drawSkillLinks(); } }, fr(x.title) || x.id)))));
   };
   const drawSkillLinks = () => {
-    if (sec.skills) {
-      const n = projectPosts.filter(x => x.skills.includes(p.id)).length;
-      fill(skillBox, projectPosts.length ? chipGroups(projectPosts, x => x.skills.includes(p.id), x => { x.skills = x.skills.includes(p.id) ? x.skills.filter(id => id !== p.id) : [...x.skills, p.id]; }) : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucun projet pour l’instant.'),
-        h('p', { class: 'hint' }, n ? `${n} projet${n > 1 ? 's' : ''} relié${n > 1 ? 's' : ''}. Sur le site, la fiche les fait défiler avec leur vignette, et la carte 3D illustre son texte avec la photo de l’un d’eux${p.thumb ? ' (ici ton image d’illustration passe devant)' : ''}.` : 'Clique les projets qui ont eu recours à ce savoir-faire.'));
+    if (sec.skills) {   // lecture seule : un savoir-faire se coche depuis la fiche de chaque projet
+      const linked = projectPosts.filter(x => x.skills.includes(p.id)), n = linked.length;
+      fill(skillBox, n ? h('div', { class: 'chips' }, linked.map(x => h('span', { class: 'chip', 'aria-pressed': 'true', title: x.published ? '' : 'Masqué sur le site', style: { cursor: 'default', opacity: x.published ? null : '.55' } }, fr(x.title) || x.id)))
+        : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucun projet ne l’utilise pour l’instant.'),
+        h('p', { class: 'hint' }, (n ? `${n} projet${n > 1 ? 's' : ''}. Sur le site, la fiche les fait défiler avec leur vignette, et la carte 3D illustre son texte avec la photo de l’un d’eux. ` : '') + 'Pour relier un projet, ouvre-le et coche ce savoir-faire dans son bloc « Savoir-faire », juste sous les tags.'));
     } else {
       fill(skillBox, skillPosts.length ? chipGroups(skillPosts, x => p.skills.includes(x.id), x => { p.skills = p.skills.includes(x.id) ? p.skills.filter(id => id !== x.id) : [...p.skills, x.id]; })
         : h('p', { class: 'hint', style: { margin: 0 } }, 'Aucune section de savoir-faire : coche « Ses contenus sont des savoir-faire » dans les réglages d’une section.'),
@@ -995,7 +997,7 @@ function postEditor(p, redrawList, redraw) {
         h('div'),
         field('Date', textInput(() => p.date, v => { p.date = v; }, { ...opts, placeholder: '2019, ou 2017 – 2019' })),
         field('Lien', textInput(() => p.link, v => { p.link = v.trim(); }, { type: 'url', placeholder: 'https://…' }), sec.card === 'place' ? 'Affiché sur la fiche du lieu.' : 'Affiché sous la fiche : « Voir le site ».'))),
-    isSkill ? h('div', { class: 'block' }, h('h3', null, 'Projets', h('small', null, 'ceux qui ont eu recours à ce savoir-faire')), skillBox) : null,
+    isSkill ? h('div', { class: 'block' }, h('h3', null, 'Projets', h('small', null, 'ceux qui l’ont coché dans leur fiche')), skillBox) : null,
     h('div', { class: 'block' }, h('h3', null, L.body), richText(p.body, 'Écris ici. Les paragraphes se répartissent tout seuls sur les panneaux du site.')),
     h('div', { class: 'block' }, h('h3', null, 'Images'),
       imageSlot('thumb', L.thumb, isSkill ? 'Une image qui fait comprendre le savoir-faire d’un coup d’œil. Sans image : la photo d’un projet relié, tirée au hasard.' : sec.card === 'image' ? 'Format paysage. Sans image, la carte affiche le titre sur fond noir.' : sec.card === 'portrait' ? 'Carré, cadré sur le visage. Sans image : les initiales.' : 'Facultatif.'),
@@ -1004,8 +1006,8 @@ function postEditor(p, redrawList, redraw) {
       sec.open === 'strip' ? h('div', { class: 'f', style: { marginTop: '6px' } }, h('span', { class: 'lbl' }, 'Images et vidéos de la fiche'), mediaBox,
         h('p', { class: 'hint' }, 'La première s’affiche avant le texte, les autres après. Vidéos MP4 ou WebM, idéalement moins de 20 Mo.')) : null),
     h('div', { class: 'block' }, h('h3', null, 'Tags'), tagBox),
-    sec.open === 'strip' ? h('div', { class: 'block' }, h('h3', null, 'Logos des partenaires', h('small', null, 'producteurs, soutiens, lieux, clients')), logoBox) : null,
     linkable && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Savoir-faire', h('small', null, 'coche ceux utilisés sur ce projet, comme des tags')), skillBox) : null,
+    sec.open === 'strip' ? h('div', { class: 'block' }, h('h3', null, 'Logos des partenaires', h('small', null, 'producteurs, soutiens, lieux, clients')), logoBox) : null,
     ['image', 'text'].includes(sec.card) && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Qui a travaillé dessus ?', h('small', null, 'les portraits s’affichent sur la fiche')), teamBox,
       h('div', { style: { marginTop: '12px' } }, field('Autres crédits', textInput(() => p.credits, v => { p.credits = v; }, { placeholder: 'Ex. Tigre Lab, Studio X' })))) : null,
     sec.layout !== 'map' && !isSkill ? h('div', { class: 'block' }, h('h3', null, 'Villes', h('small', null, netSec ? `toutes les villes du projet, autant que tu veux : les points du réseau sur la carte de « ${fr(netSec.name)} »` : 'toutes les villes du projet, autant que tu veux')), spotBox) : null,

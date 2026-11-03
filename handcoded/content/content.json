@@ -1286,7 +1286,7 @@
   {
    "id": "tientos",
    "section": "work",
-   "order": 13,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Tientos al tiempo",
@@ -1358,7 +1358,7 @@
   {
    "id": "maestro",
    "section": "work",
-   "order": 14,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Maestro",
@@ -1394,6 +1394,10 @@
     "es": "<p>Tres experiencias interactivas proyectadas sobre un monumento de 500 metros de ancho. Los visitantes tocan una maqueta del edificio, y sus gestos hacen sonar el sonido y la imagen en la fachada.</p><p>SAND: mover partículas de arena y componer un paisaje sonoro del desierto. ORGAN: ser el DJ de un looper interactivo que lanza bucles de vídeo y de audio. MOSAIC: transformar las formas y los colores de mosaicos islámicos.</p><p>Sharjah Light Festival, del 2 al 11 de febrero de 2017.</p><h3>Créditos</h3><ul><li><strong>Dirección artística</strong> Mathieu Felix</li><li><strong>Producción</strong> Nomada, Tigre Lab</li><li><strong>Gestión de proyecto, desarrollo visual y de audio</strong> Cyril Laurier</li><li><strong>Desarrollo del concepto</strong> Maya Benaïnous</li><li><strong>Desarrollo visual</strong> Stéphanie Huerre</li><li><strong>Diseño sonoro</strong> Thomas Aussenac, Sound Object</li><li><strong>Desarrollo de audio</strong> Joan Sandoval</li></ul>"
    },
    "media": [
+    {
+     "src": "https://vimeo.com/232012124",
+     "credit": ""
+    },
     {
      "src": "https://vimeo.com/232012124",
      "credit": ""
@@ -1442,7 +1446,7 @@
   {
    "id": "future-ruins",
    "section": "work",
-   "order": 15,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Future Ruins",
@@ -1518,7 +1522,7 @@
   {
    "id": "sat",
    "section": "work",
-   "order": 16,
+   "order": 18,
    "published": true,
    "title": {
     "en": "S.A.T.",
@@ -1628,7 +1632,7 @@
   {
    "id": "ox",
    "section": "work",
-   "order": 17,
+   "order": 19,
    "published": true,
    "title": {
     "en": "OX",
@@ -1771,7 +1775,7 @@
   {
    "id": "mgntrn",
    "section": "work",
-   "order": 18,
+   "order": 20,
    "published": true,
    "title": {
     "en": "MGNTRN",
@@ -1836,7 +1840,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 19,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -1914,7 +1918,7 @@
   {
    "id": "viktoria-modesta",
    "section": "work",
-   "order": 20,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -2023,7 +2027,7 @@
   {
    "id": "beardyman",
    "section": "work",
-   "order": 21,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -2078,7 +2082,7 @@
   {
    "id": "tgic",
    "section": "work",
-   "order": 22,
+   "order": 24,
    "published": true,
    "title": {
     "en": "TGIC",
@@ -2147,7 +2151,7 @@
   {
    "id": "bionic-orchestra",
    "section": "work",
-   "order": 23,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Bionic Orchestra",
@@ -2258,7 +2262,7 @@
   {
    "id": "mouvement-de-l-air",
    "section": "work",
-   "order": 24,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Mouvement de l'air",
@@ -2331,7 +2335,7 @@
   {
    "id": "slush",
    "section": "work",
-   "order": 25,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Slush",
@@ -2425,7 +2429,7 @@
   {
    "id": "wave",
    "section": "work",
-   "order": 26,
+   "order": 28,
    "published": true,
    "title": {
     "en": "Wave",
@@ -2489,7 +2493,7 @@
   {
    "id": "methods",
    "section": "work",
-   "order": 27,
+   "order": 29,
    "published": true,
    "title": {
     "en": "Methods",
@@ -2554,7 +2558,7 @@
   {
    "id": "kinematope",
    "section": "work",
-   "order": 28,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Kinematope",
@@ -2656,7 +2660,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 29,
+   "order": 31,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -2737,7 +2741,7 @@
   {
    "id": "eko",
    "section": "work",
-   "order": 30,
+   "order": 32,
    "published": true,
    "title": {
     "en": "EKO",
@@ -2805,7 +2809,7 @@
   {
    "id": "audi-mind-race",
    "section": "work",
-   "order": 31,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Audi Mind Race",
@@ -2855,6 +2859,10 @@
     {
      "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
      "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
+     "credit": ""
     }
    ],
    "link": "",
@@ -2889,7 +2897,7 @@
   {
    "id": "sonaris",
    "section": "work",
-   "order": 32,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Sonaris",
@@ -2941,7 +2949,7 @@
   {
    "id": "nestle-crunch",
    "section": "work",
-   "order": 33,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Nestlé Crunch, Human Beats",
@@ -3010,7 +3018,7 @@
   {
    "id": "peugeot",
    "section": "work",
-   "order": 34,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -3066,7 +3074,7 @@
   {
    "id": "churchill",
    "section": "work",
-   "order": 35,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Churchill",
@@ -3135,7 +3143,7 @@
   {
    "id": "cadbury",
    "section": "work",
-   "order": 36,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -3194,7 +3202,7 @@
   {
    "id": "coors",
    "section": "work",
-   "order": 37,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Coors",
@@ -3261,7 +3269,7 @@
   {
    "id": "lexus",
    "section": "work",
-   "order": 38,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -4621,7 +4629,7 @@
    ],
    "credits": "Fat-Man Collective",
    "section": "work",
-   "order": 39,
+   "order": 41,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -4688,7 +4696,7 @@
    ],
    "credits": "Fat-Man Collective, Work Club",
    "section": "work",
-   "order": 40,
+   "order": 42,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -5967,7 +5975,7 @@
   {
    "id": "prometheus",
    "section": "work",
-   "order": 8,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Prometheus",
@@ -6083,7 +6091,7 @@
   {
    "id": "augmented-paper",
    "section": "work",
-   "order": 9,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Augmented Paper",
@@ -6165,7 +6173,7 @@
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 10,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -6244,7 +6252,7 @@
   {
    "id": "fuurin",
    "section": "work",
-   "order": 11,
+   "order": 14,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -6298,65 +6306,6 @@
    ],
    "author": "Mouawad + Laurier",
    "logos": []
-  },
-  {
-   "id": "alpine-mondial-2026",
-   "section": "work",
-   "order": 12,
-   "published": false,
-   "title": {
-    "en": "Alpine, Paris Motor Show",
-    "fr": "Alpine, Mondial de l’Auto",
-    "ca": "Alpine, Saló de l’Automòbil de París",
-    "es": "Alpine, Salón del Automóvil de París"
-   },
-   "subtitle": {
-    "en": "A110 Sculpture, with Fisheye",
-    "fr": "A110 Sculpture, avec Fisheye",
-    "ca": "A110 Sculpture, amb Fisheye",
-    "es": "A110 Sculpture, con Fisheye"
-   },
-   "place": {
-    "en": "Paris Expo Porte de Versailles",
-    "fr": "Paris Expo Porte de Versailles",
-    "ca": "Paris Expo Porte de Versailles",
-    "es": "Paris Expo Porte de Versailles"
-   },
-   "date": "2026",
-   "tags": [
-    "advertising",
-    "installation"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Alpine stand at the Paris Motor Show, 12 to 18 October 2026, Hall 6: the A110 Sculpture, a ghost volume veiled in blue that previews the next A110, next to the A310 VISION concept. 270,000 visitors on the stand. Produced with Fisheye Manufacture.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production company</strong> Fisheye Manufacture</li></ul>",
-    "fr": "<p>Stand Alpine au Mondial de l’Auto, du 12 au 18 octobre 2026, hall 6 : l’A110 Sculpture, un volume fantôme voilé de bleu qui annonce la future A110, à côté du concept A310 VISION. 270 000 visiteurs sur le stand. Produit avec Fisheye Manufacture.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Société de production</strong> Fisheye Manufacture</li></ul>",
-    "ca": "<p>Estand d’Alpine al Saló de l’Automòbil de París, del 12 al 18 d’octubre del 2026, pavelló 6: l’A110 Sculpture, un volum fantasma velat de blau que anuncia el futur A110, al costat del concepte A310 VISION. 270.000 visitants a l’estand. Produït amb Fisheye Manufacture.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Productora</strong> Fisheye Manufacture</li></ul>",
-    "es": "<p>Stand de Alpine en el Salón del Automóvil de París, del 12 al 18 de octubre de 2026, pabellón 6: el A110 Sculpture, un volumen fantasma velado de azul que anuncia el futuro A110, junto al concepto A310 VISION. 270.000 visitantes en el stand. Producido con Fisheye Manufacture.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Alpine</li><li><strong>Productora</strong> Fisheye Manufacture</li></ul>"
-   },
-   "media": [],
-   "link": "https://media.alpinecars.com/alpine-at-the-paris-motor-show-shaping-the-next-chapter/?lang=eng",
-   "team": [
-    "maya"
-   ],
-   "credits": "Alpine, Fisheye Manufacture",
-   "location": null,
-   "spots": [
-    {
-     "city": "Paris",
-     "lat": 48.83,
-     "lon": 2.29
-    }
-   ],
-   "skills": [
-    "concept-design",
-    "project-management"
-   ],
-   "author": "",
-   "logos": [
-    "media/logos/fisheye.png"
-   ]
   },
   {
    "id": "ruinart",
@@ -6901,7 +6850,7 @@
   {
    "id": "fisheye",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "Fisheye",
@@ -6946,7 +6895,7 @@
   {
    "id": "tetro",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "Tetro",
@@ -6991,7 +6940,7 @@
   {
    "id": "ddb",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -7036,7 +6985,7 @@
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -7081,7 +7030,7 @@
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -7126,7 +7075,7 @@
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -7171,7 +7120,7 @@
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -7216,7 +7165,7 @@
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -7261,7 +7210,7 @@
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -7306,7 +7255,7 @@
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -7351,7 +7300,7 @@
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -7396,7 +7345,7 @@
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -7441,7 +7390,7 @@
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -7486,7 +7435,7 @@
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -7531,7 +7480,7 @@
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -7576,7 +7525,7 @@
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -7621,7 +7570,7 @@
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -7666,7 +7615,7 @@
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -7711,7 +7660,7 @@
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -7756,7 +7705,7 @@
   {
    "id": "mira",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -7801,7 +7750,7 @@
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -7846,7 +7795,7 @@
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -7891,7 +7840,7 @@
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -7936,7 +7885,7 @@
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -7981,7 +7930,7 @@
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Into the Great Wide Open",
@@ -8026,7 +7975,7 @@
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -8071,7 +8020,7 @@
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -8116,7 +8065,7 @@
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -8161,7 +8110,7 @@
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -8206,7 +8155,7 @@
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -8251,7 +8200,7 @@
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -8296,7 +8245,7 @@
   {
    "id": "scam",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "Scam",
@@ -8341,7 +8290,7 @@
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -8386,7 +8335,7 @@
   {
    "id": "upf",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -8431,7 +8380,7 @@
   {
    "id": "ircam",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -8476,7 +8425,7 @@
   {
    "id": "cea",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": true,
    "title": {
     "en": "CEA",
@@ -8521,7 +8470,7 @@
   {
    "id": "cupra",
    "section": "studio",
-   "order": 43,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Cupra",
@@ -8566,7 +8515,7 @@
   {
    "id": "red-bull",
    "section": "studio",
-   "order": 44,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Red Bull",
@@ -8611,7 +8560,7 @@
   {
    "id": "danone",
    "section": "studio",
-   "order": 45,
+   "order": 46,
    "published": true,
    "title": {
     "en": "Danone",
@@ -8656,7 +8605,7 @@
   {
    "id": "nokia",
    "section": "studio",
-   "order": 46,
+   "order": 47,
    "published": true,
    "title": {
     "en": "Nokia",
@@ -8701,7 +8650,7 @@
   {
    "id": "pommery",
    "section": "studio",
-   "order": 47,
+   "order": 48,
    "published": true,
    "title": {
     "en": "Pommery",
@@ -8746,7 +8695,7 @@
   {
    "id": "santander",
    "section": "studio",
-   "order": 48,
+   "order": 49,
    "published": true,
    "title": {
     "en": "Santander",
@@ -8791,7 +8740,7 @@
   {
    "id": "eventide",
    "section": "studio",
-   "order": 49,
+   "order": 50,
    "published": true,
    "title": {
     "en": "Eventide",
@@ -8836,7 +8785,7 @@
   {
    "id": "france-24",
    "section": "studio",
-   "order": 50,
+   "order": 51,
    "published": true,
    "title": {
     "en": "France 24",
@@ -8881,7 +8830,7 @@
   {
    "id": "rai",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "Rai",
@@ -8926,7 +8875,7 @@
   {
    "id": "tv3",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "TV3",
@@ -8971,7 +8920,7 @@
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -9016,7 +8965,7 @@
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -9061,7 +9010,7 @@
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -9102,6 +9051,245 @@
    "skills": [],
    "author": "",
    "logos": []
+  },
+  {
+   "id": "alpine",
+   "section": "studio",
+   "order": 43,
+   "published": true,
+   "title": {
+    "en": "Alpine",
+    "fr": "Alpine",
+    "ca": "Alpine",
+    "es": "Alpine"
+   },
+   "subtitle": {
+    "en": "Brand",
+    "fr": "Marque",
+    "ca": "Marca",
+    "es": "Marca"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/alpine.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "batalla-de-los-gallos",
+   "section": "work",
+   "order": 8,
+   "published": true,
+   "title": {
+    "en": "Red Bull Batalla, beyond language",
+    "fr": "Red Bull Batalla, au-delà des langues",
+    "ca": "Red Bull Batalla, més enllà de la llengua",
+    "es": "Red Bull Batalla, más allá del idioma"
+   },
+   "subtitle": {
+    "en": "MC S-Kaine (Japan) vs MC Yartzi (USA)",
+    "fr": "MC S-Kaine (Japon) contre MC Yartzi (États-Unis)",
+    "ca": "MC S-Kaine (Japó) contra MC Yartzi (EUA)",
+    "es": "MC S-Kaine (Japón) vs MC Yartzi (EE. UU.)"
+   },
+   "place": {
+    "en": "Red Bull Batalla",
+    "fr": "Red Bull Batalla",
+    "ca": "Red Bull Batalla",
+    "es": "Red Bull Batalla"
+   },
+   "date": "2024",
+   "tags": [
+    "advertising",
+    "ai",
+    "performance",
+    "sound"
+   ],
+   "thumb": "https://i.ytimg.com/vi/hHfJYChnHX0/hq720.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>A freestyle battle between two rappers who do not share a language: the national champions of Japan and the United States, face to face for the first time. Each rhyme is translated live into the opponent’s language and rapped back by a voice trained on the rapper’s own voice, so each one hears the other in his own language, with the right flow and the right timbre.</p><p>We designed and built the translation and voice system for Red Bull Batalla, the largest Spanish-language freestyle competition.</p><h3>Credits</h3><ul><li><strong>Client</strong> Red Bull Batalla</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "fr": "<p>Une battle de freestyle entre deux rappeurs qui ne parlent pas la même langue : les champions nationaux du Japon et des États-Unis, face à face pour la première fois. Chaque rime est traduite en direct dans la langue de l’adversaire et rappée par une voix entraînée sur celle du rappeur : chacun entend l’autre dans sa langue, avec son flow et son timbre.</p><p>Nous avons conçu et développé le système de traduction et de voix pour Red Bull Batalla, la plus grande compétition de freestyle en espagnol.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Red Bull Batalla</li><li><strong>Développement</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "ca": "<p>Una batalla de freestyle entre dos rapers que no parlen la mateixa llengua: els campions nacionals del Japó i dels Estats Units, cara a cara per primera vegada. Cada rima es tradueix en directe a la llengua del rival i la rapeja una veu entrenada amb la del raper: cadascun sent l’altre en la seva llengua, amb el seu flow i el seu timbre.</p><p>Hem concebut i desenvolupat el sistema de traducció i de veu per a Red Bull Batalla, la competició de freestyle en castellà més gran del món.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Red Bull Batalla</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "es": "<p>Una batalla de freestyle entre dos raperos que no hablan el mismo idioma: los campeones nacionales de Japón y de Estados Unidos, cara a cara por primera vez. Cada rima se traduce en directo al idioma del rival y la rapea una voz entrenada con la del rapero: cada uno escucha al otro en su idioma, con su flow y su timbre.</p><p>Concebimos y desarrollamos el sistema de traducción y de voz para Red Bull Batalla, la mayor competición de freestyle en español.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Red Bull Batalla</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>"
+   },
+   "media": [
+    {
+     "src": "https://www.youtube.com/watch?v=hHfJYChnHX0",
+     "credit": ""
+    }
+   ],
+   "link": "https://www.youtube.com/watch?v=hHfJYChnHX0",
+   "team": [
+    "maya",
+    "cyril"
+   ],
+   "credits": "Red Bull Batalla",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "machine-learning",
+    "audio",
+    "real-time",
+    "concept-design"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/red-bull.png"
+   ]
+  },
+  {
+   "id": "cupra-tracking",
+   "section": "work",
+   "order": 9,
+   "published": true,
+   "title": {
+    "en": "Cupra, giant LED screen",
+    "fr": "Cupra, giant LED screen",
+    "ca": "Cupra, giant LED screen",
+    "es": "Cupra, giant LED screen"
+   },
+   "subtitle": {
+    "en": "Real-time tracking for a giant LED screen",
+    "fr": "Tracking temps réel pour un écran LED géant",
+    "ca": "Tracking en temps real per a una pantalla LED gegant",
+    "es": "Tracking en tiempo real para una pantalla LED gigante"
+   },
+   "place": {
+    "en": "Germany",
+    "fr": "Allemagne",
+    "ca": "Alemanya",
+    "es": "Alemania"
+   },
+   "date": "",
+   "tags": [
+    "advertising",
+    "installation"
+   ],
+   "thumb": "https://i.ytimg.com/vi/TMzf7Swxa94/hq720.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>For Cupra in Germany, we developed a tracking system for a giant LED screen: the image follows the people in front of it, in real time, and reacts to their movements.</p><h3>Credits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "fr": "<p>Pour Cupra en Allemagne, nous avons développé un système de tracking pour un écran LED géant : l’image suit les personnes qui passent devant, en temps réel, et réagit à leurs mouvements.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Développement</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "ca": "<p>Per a Cupra a Alemanya, hem desenvolupat un sistema de tracking per a una pantalla LED gegant: la imatge segueix les persones que hi passen davant, en temps real, i reacciona als seus moviments.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "es": "<p>Para Cupra en Alemania, desarrollamos un sistema de tracking para una pantalla LED gigante: la imagen sigue a las personas que pasan delante, en tiempo real, y reacciona a sus movimientos.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Cupra</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>"
+   },
+   "media": [
+    {
+     "src": "https://www.youtube.com/watch?v=TMzf7Swxa94",
+     "credit": ""
+    }
+   ],
+   "link": "https://www.youtube.com/watch?v=TMzf7Swxa94",
+   "team": [
+    "maya",
+    "cyril"
+   ],
+   "credits": "Cupra",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "tracking",
+    "real-time",
+    "generative",
+    "hardware",
+    "tools"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/cupra.png"
+   ]
+  },
+  {
+   "id": "alpine-mondial-2024",
+   "section": "work",
+   "order": 10,
+   "published": true,
+   "title": {
+    "en": "Alpine, Paris Motor Show",
+    "fr": "Alpine, Mondial de l’Auto",
+    "ca": "Alpine, Saló de l’Automòbil de París",
+    "es": "Alpine, Salón del Automóvil de París"
+   },
+   "subtitle": {
+    "en": "Interactive screen for the Alpine stand, with Fisheye",
+    "fr": "Écran interactif du stand Alpine, avec Fisheye",
+    "ca": "Pantalla interactiva de l’estand d’Alpine, amb Fisheye",
+    "es": "Pantalla interactiva del stand de Alpine, con Fisheye"
+   },
+   "place": {
+    "en": "Paris Expo Porte de Versailles",
+    "fr": "Paris Expo Porte de Versailles",
+    "ca": "Paris Expo Porte de Versailles",
+    "es": "Paris Expo Porte de Versailles"
+   },
+   "date": "2024",
+   "tags": [
+    "advertising",
+    "installation"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which answers their presence and their gestures in real time. Produced with Fisheye.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production company</strong> Fisheye</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "fr": "<p>Un écran interactif pour le stand Alpine du Mondial de l’Auto 2024 : les visiteurs jouent avec l’image, qui répond en temps réel à leur présence et à leurs gestes. Produit avec Fisheye.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Société de production</strong> Fisheye</li><li><strong>Développement</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "ca": "<p>Una pantalla interactiva per a l’estand d’Alpine al Saló de l’Automòbil de París 2024: els visitants juguen amb la imatge, que respon en temps real a la seva presència i als seus gestos. Produït amb Fisheye.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Productora</strong> Fisheye</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
+    "es": "<p>Una pantalla interactiva para el stand de Alpine en el Salón del Automóvil de París 2024: los visitantes juegan con la imagen, que responde en tiempo real a su presencia y a sus gestos. Producido con Fisheye.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Alpine</li><li><strong>Productora</strong> Fisheye</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>"
+   },
+   "media": [
+    {
+     "src": "https://vimeo.com/1145214571",
+     "credit": ""
+    }
+   ],
+   "link": "https://vimeo.com/1145214571",
+   "team": [
+    "maya",
+    "cyril"
+   ],
+   "credits": "Alpine, Fisheye",
+   "location": null,
+   "spots": [
+    {
+     "city": "Paris",
+     "lat": 48.83,
+     "lon": 2.29
+    }
+   ],
+   "skills": [
+    "tracking",
+    "real-time",
+    "generative",
+    "concept-design",
+    "project-management"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/fisheye.png",
+    "media/logos/alpine.png"
+   ]
   }
  ]
 }
