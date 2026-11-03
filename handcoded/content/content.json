@@ -205,7 +205,7 @@
     "weight": 300
    },
    "body": {
-    "font": "g:Calibri",
+    "font": "g:Open Sans",
     "size": 12,
     "weight": 300
    },
@@ -872,13 +872,16 @@
      "credit": "Guillaume Faure"
     },
     {
-     "src": "media/retour-aux-sources/dsc3262-ksux.jpg"
+     "src": "media/retour-aux-sources/dsc3262-ksux.jpg",
+     "credit": ""
     },
     {
-     "src": "media/retour-aux-sources/viewback-copy-02p4.jpg"
+     "src": "media/retour-aux-sources/viewback-copy-02p4.jpg",
+     "credit": ""
     },
     {
-     "src": "https://vimeo.com/1145290233?fl=pl&fe=vl"
+     "src": "https://vimeo.com/1145290233?fl=pl&fe=vl",
+     "credit": ""
     },
     {
      "src": "media/retour-aux-sources/08.jpg",
@@ -893,7 +896,8 @@
      "credit": "Guillaume Faure"
     },
     {
-     "src": "media/retour-aux-sources/insidelamp-sylh.jpg"
+     "src": "media/retour-aux-sources/insidelamp-sylh.jpg",
+     "credit": ""
     },
     {
      "src": "media/retour-aux-sources/06.jpg",
@@ -936,7 +940,8 @@
      "credit": ""
     },
     {
-     "src": "media/retour-aux-sources/img-8612-bznd.jpg"
+     "src": "media/retour-aux-sources/img-8612-bznd.jpg",
+     "credit": ""
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -9586,16 +9591,20 @@
      "credit": "Le Fresnoy"
     },
     {
-     "src": "media/eruption-of-the-end/eoe-4-lqva.jpg"
+     "src": "media/eruption-of-the-end/eoe-4-lqva.jpg",
+     "credit": ""
     },
     {
-     "src": "media/eruption-of-the-end/handcoded-lefresnoy-7cse.jpg"
+     "src": "media/eruption-of-the-end/handcoded-lefresnoy-7cse.jpg",
+     "credit": ""
     },
     {
-     "src": "media/eruption-of-the-end/screen-shot-2012-03-14-at-11-41-47-am-6xph.jpg"
+     "src": "media/eruption-of-the-end/screen-shot-2012-03-14-at-11-41-47-am-6xph.jpg",
+     "credit": ""
     },
     {
-     "src": "media/eruption-of-the-end/screen-shot-2012-03-14-at-11-38-21-am-qmom.jpg"
+     "src": "media/eruption-of-the-end/screen-shot-2012-03-14-at-11-38-21-am-qmom.jpg",
+     "credit": ""
     }
    ],
    "link": "https://lefresnoy.net/en/exposition/57/oeuvre/402",
