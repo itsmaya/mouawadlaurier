@@ -1742,20 +1742,21 @@ canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointerc
 canvas.addEventListener('lostpointercapture', e => { if (e.pointerId === dragId) endDrag(e, true); });
 window.addEventListener('pointerup', e => { if (dragId !== null && e.pointerId === dragId && e.target !== canvas) endDrag(e, true); });
 window.addEventListener('blur', () => { if (dragId !== null) endDrag({ pointerId: dragId }, true); stopDrag2D(); });
-let hoverQueued = false, hovered = null, mouseSeen = -1e9;
-/* Téléphone, carrousel : pas de survol au doigt, la vignette de face montre son nom et sa description */
+let hoverQueued = false, hovered = null, mouseCard = null;
+/* Carrousel : la vignette vue de face montre son nom et sa description, comme au survol. La souris garde la main sur la vignette qu'elle survole. */
 let bandTick = 0;
 function phoneBand() {
-  if (++bandTick % 6 || !phoneMode() || P.postOpen || !postsView || !inputEnabled || performance.now() - mouseSeen < 2000 || !['carousel', 'spiral'].includes(postsView.def.layout)) return;
+  if (++bandTick % 6 || P.postOpen || !postsView || !inputEnabled || !['carousel', 'spiral'].includes(postsView.def.layout)) return;
+  if (mouseCard && mouseCard.view === postsView) { hoverCard(mouseCard); return; }
   postsView.checkPostSelected(); hoverCard(postsView.postViews[P.selected] || null);
 }
 function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
-canvas.addEventListener('pointerleave', () => hoverCard(null));
+canvas.addEventListener('pointerleave', () => { mouseCard = null; hoverCard(null); });
 canvas.addEventListener('pointermove', e => {
   if (dragId !== null && e.pointerId === dragId && e.pointerType === 'mouse' && e.buttons === 0) { endDrag(e, true); return; }   // bouton déjà relâché
   if (dragId !== null && e.pointerId !== dragId) return;
-  mouseX = e.clientX; mouseY = e.clientY; if (e.pointerType === 'mouse') mouseSeen = performance.now();
-  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); hoverCard(h && h.post && h.face === 'front' && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
+  mouseX = e.clientX; mouseY = e.clientY;
+  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); mouseCard = h && h.post && h.face === 'front' && !P.postOpen ? h.post : null; hoverCard(mouseCard); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
 /* Deux doigts : écarter zoome, pincer dézoome, par crans comme la molette ; le premier doigt cesse alors de faire tourner la scène */
