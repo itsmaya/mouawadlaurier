@@ -618,31 +618,27 @@
     },
     {
      "src": "media/peupler/02.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/03.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/04.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/05.jpg",
      "credit": ""
     },
     {
-     "src": "media/peupler/06.jpg",
-     "credit": ""
-    },
-    {
      "src": "media/peupler/07.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/08.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/09.jpg",
@@ -650,7 +646,7 @@
     },
     {
      "src": "media/peupler/10.jpg",
-     "credit": ""
+     "credit": "Marie Flamant"
     },
     {
      "src": "media/peupler/11.jpg",
@@ -716,9 +712,11 @@
     "tracking",
     "audio",
     "concept-design",
-    "tools",
     "project-management",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "sustainable",
+    "light",
+    "hardware"
    ],
    "logos": [
     "media/logos/fisheye.png",
@@ -756,10 +754,11 @@
    "date": "2019",
    "tags": [
     "featured",
-    "art",
+    "advertising",
     "permanent",
+    "collab",
     "ai",
-    "advertising"
+    "art"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
@@ -772,7 +771,7 @@
    "media": [
     {
      "src": "media/retour-aux-sources/01.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "https://vimeo.com/362816752",
@@ -780,43 +779,43 @@
     },
     {
      "src": "media/retour-aux-sources/02.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/03.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/04.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/05.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/06.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/07.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/08.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/09.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/10.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/11.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/12.jpg",
@@ -828,11 +827,11 @@
     },
     {
      "src": "media/retour-aux-sources/14.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/15.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "https://vimeo.com/432530431",
@@ -840,74 +839,46 @@
     },
     {
      "src": "media/retour-aux-sources/murano-01.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/murano-02.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/murano-03.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/murano-04.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/murano-05.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/murano-06.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/murano-07.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/murano-08.jpg",
      "credit": ""
     },
     {
-     "src": "media/retour-aux-sources/murano-09.jpg",
-     "credit": ""
-    },
-    {
      "src": "media/retour-aux-sources/murano-10.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/reims-01.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/reims-02.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/reims-03.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/reims-04.jpg",
-     "credit": ""
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/reims-05.jpg",
      "credit": ""
     },
     {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1569191057322-405DQSA0FVUDCQ6UAFEH/Ruinart_RAS-07+QUE+CYRIL+ET+MAYA.jpg?format=1500w",
-     "credit": ""
-    },
-    {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1569191104388-GKTONZXH2Y9128IB7RMP/IMG_3614.JPG?format=1500w",
-     "credit": ""
-    },
-    {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1569191180210-U58NNDTEIDY4XAPK2QRT/Ruinart_RAS-01.jpg?format=1500w",
      "credit": ""
     }
    ],
@@ -945,11 +916,8 @@
    "skills": [
     "machine-learning",
     "real-time",
-    "audio",
     "generative",
     "light",
-    "hardware",
-    "tools",
     "concept-design",
     "sustainable",
     "project-management",
@@ -1116,7 +1084,9 @@
     "media/logos/nuit-blanche.png",
     "media/logos/llum-bcn.png",
     "media/logos/mira.png",
-    "media/logos/eufonic.png"
+    "media/logos/eufonic.png",
+    "media/logos/catalanarts.png",
+    "media/logos/generalitat.png"
    ]
   },
   {
@@ -1630,50 +1600,46 @@
    "media": [
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596775-1EK506NKB0DNNWG8HOPQ/14589861_1442393279393479_4417632417371852675_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590596462-0HJB2EQW0JQBOXJG3152/14589581_1442393939393413_5073801707717418202_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590597120-N2TEC39VI7RUXTD4EF3I/14570711_1442394309393376_2929244048909347825_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590598114-KCGDVJTGMAV7GPHPEZO7/14570648_1442393669393440_235700866656401680_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590598505-YZHFA78KBKWJAMEQGNHD/14570551_1442394019393405_1470548637874765805_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590600292-ONROUPKK6Z0VI43YQZJL/14570542_1442396096059864_2936681870867752457_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590599764-8ISEIUKTNT67NPVPHDQF/14567525_1442391919393615_1023521532578462913_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1475590600589-1H9Y3HODBJBXD0UBHO8B/14567424_1442392469393560_1739348414019796729_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297432968-KPY6RIMRS3VPKX19B350/13217135_1418474278452046_5340400970754301886_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297433055-YFE4NHHTR2RJ1QJSTBT7/13243905_1418474211785386_7276568994420113657_o.jpg?format=1500w",
-     "credit": ""
+     "credit": "Bobby"
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1467297433820-RGOXNJNYI5BUDCTFJYYB/13254942_1418474195118721_521053108248655354_o.jpg?format=1500w",
-     "credit": ""
-    },
-    {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1457896873147-X5L13E9XR8P748T2TUGI/IMG_0274+copy.JPG?format=1500w",
      "credit": ""
     },
     {
@@ -1682,10 +1648,6 @@
     },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1457897228259-HFQG65LS2NAHQRSU4HAO/Screen+Shot+2015-10-08+at+16.25.21.png?format=1500w",
-     "credit": ""
-    },
-    {
-     "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1457896873968-RFTNWD6BZPRBW2BD8I1M/12000924_961920450531651_6833730975739301260_o.jpg?format=1500w",
      "credit": ""
     }
    ],
@@ -1719,7 +1681,8 @@
     "real-time",
     "generative",
     "hardware",
-    "tools"
+    "tools",
+    "projection-mapping"
    ],
    "logos": [
     "media/logos/palaisdetokyo.png",
@@ -5800,6 +5763,7 @@
    },
    "date": "2024",
    "tags": [
+    "permanent",
     "art"
    ],
    "thumb": "media/etre-absorbe/01.jpg",
@@ -5890,8 +5854,9 @@
    },
    "date": "2018",
    "tags": [
-    "art",
-    "touring"
+    "permanent",
+    "touring",
+    "art"
    ],
    "thumb": "media/upperground/01.jpg",
    "thumbBack": "",
@@ -5976,8 +5941,9 @@
    },
    "date": "2022",
    "tags": [
-    "art",
-    "touring"
+    "permanent",
+    "touring",
+    "art"
    ],
    "thumb": "media/albatros/01.jpg",
    "thumbBack": "",
