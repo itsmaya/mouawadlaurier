@@ -210,7 +210,7 @@
     "weight": 300
    },
    "h3": {
-    "font": "helvetica",
+    "font": "arial",
     "size": 9
    },
    "cname": {
@@ -225,7 +225,7 @@
     "size": 10
    },
    "card": {
-    "font": "g:Cabin"
+    "font": "g:League Spartan"
    },
    "logo": {
     "font": "wireone",
@@ -236,17 +236,32 @@
    },
    "title": {
     "size": 24,
-    "font": "g:Cabin"
+    "font": "g:League Spartan"
    },
    "subtitle": {
-    "font": "g:Cabin",
+    "font": "g:Open Sans",
     "size": 14,
     "italic": true,
     "weight": 600
    },
    "date": {
-    "font": "g:Cabin",
+    "font": "arial",
     "size": 10
+   },
+   "meta": {
+    "font": "arial"
+   },
+   "names": {
+    "font": "arial"
+   },
+   "cinfo": {
+    "font": "g:Open Sans"
+   },
+   "csub": {
+    "font": "g:Open Sans"
+   },
+   "cardsm": {
+    "font": "g:Open Sans"
    }
   },
   "founded": 2012,
