@@ -9372,6 +9372,62 @@
    "skills": [],
    "author": "",
    "logos": []
+  },
+  {
+   "id": "nouveau-contenu-4",
+   "section": "work",
+   "order": 43,
+   "published": true,
+   "title": {
+    "en": "Traversée du temps Moêt",
+    "fr": "Traversée du temps Moêt",
+    "ca": "Traversée du temps Moêt",
+    "es": "Traversée du temps"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": " Moêt Cellar - Epernay",
+    "fr": "Galerie Napoleon Moëte - Epernay",
+    "ca": " Moêt Cellar - Epernay",
+    "es": " Moêt Cellar - Epernay"
+   },
+   "date": "2026",
+   "tags": [
+    "advertising"
+   ],
+   "thumb": "media/nouveau-contenu-4/eb66f26b-437d-4842-8311-0a7df0761446-386p.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "Installation Sonore et et visuel de lumière pour Moet et Chandon",
+    "fr": "Installation Sonore et et visuel de lumière pour Moet et Chandon",
+    "ca": "Installation Sonore et et visuel de lumière pour Moet et Chandon",
+    "es": "Installation Sonore et et visuel de lumière pour Moet et Chandon"
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu-4/b2446e6f-89b3-43a7-814c-7a7a30e50eb0-gr5b.mp4"
+    }
+   ],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "light",
+    "concept-design",
+    "nouveau-contenu"
+   ],
+   "author": "Hand Coded",
+   "logos": [
+    "media/logos/fisheye.png",
+    "media/logos/logo-moet-wyrb.jpg"
+   ]
   }
  ]
 }
