@@ -989,7 +989,7 @@
     "art",
     "touring"
    ],
-   "thumb": "media/rising/img-9229-c6q1.jpg",
+   "thumb": "media/rising/img-8648-copy-mpdh.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An outdoor sound and light installation about our vulnerability. It turns scientific data on rising sea levels into a sensory experience: waves of light rise and flood the space in real time.</p><p>The system is connected live to oceanographic data from the University of La Rochelle. The stronger the climate anomalies, the more intense and oppressive the experience becomes. Rising breaks the taboo of the future that awaits us, pushing fear aside and using beauty to become more resilient.</p><p>It runs on battery for three hours and sets up in four to six hours, on a façade or on the ground. Public talk at Nuit Blanche 2024 with hydrologist Emma Haziza.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier, Louis Raveton</li><li><strong>Development</strong> Hand Coded</li><li><strong>Blown glass</strong> Murano</li><li><strong>Scientific collaboration</strong> University of La Rochelle (oceanographic data), Learning Planet Institute, La Scam</li></ul><h3>Tour</h3><ul><li>MIRA Festival, Barcelona, 2025</li><li>Llum Festival, Barcelona, 2025</li><li>Nuit Blanche, Paris, 2024</li><li>Eufonic, La Ràpita, 2023</li><li>Zero1, La Rochelle, 2022</li><li>Dos Canaries, Aveiro, 2022</li></ul><h3>Award</h3><ul><li>Brouillon d’un Rêve laureate, Scam, 2023</li></ul>",
@@ -2160,7 +2160,8 @@
     "real-time",
     "hardware",
     "tools"
-   ]
+   ],
+   "logos": []
   },
   {
    "id": "tgic",
@@ -2409,7 +2410,8 @@
     "real-time",
     "generative",
     "tools"
-   ]
+   ],
+   "logos": []
   },
   {
    "id": "slush",
@@ -3000,7 +3002,8 @@
     "machine-learning",
     "audio",
     "tools"
-   ]
+   ],
+   "logos": []
   },
   {
    "id": "nestle-crunch",
@@ -3430,7 +3433,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "real-time",
@@ -3475,7 +3479,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "audio",
@@ -3519,7 +3524,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "generative",
@@ -3564,7 +3570,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "projection-mapping",
@@ -3609,7 +3616,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "light",
@@ -3654,7 +3662,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "tracking",
@@ -3698,7 +3707,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "concept-design",
@@ -3742,7 +3752,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "sustainable",
@@ -3786,7 +3797,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "project-management",
@@ -3830,7 +3842,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "tools",
@@ -3874,7 +3887,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "hardware",
@@ -3918,7 +3932,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "cyril",
@@ -3962,7 +3977,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "maya",
@@ -4006,7 +4022,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "stephanie",
@@ -4050,7 +4067,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "romain-tardy",
@@ -4094,7 +4112,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "pablo-valbuena",
@@ -4138,7 +4157,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "adrien-m-claire-b",
@@ -4182,7 +4202,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "beardyman-musician",
@@ -4226,7 +4247,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "maotik",
@@ -4270,7 +4292,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "ezra",
@@ -4314,7 +4337,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "pedra",
@@ -4358,7 +4382,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "jesse-watts",
@@ -4402,7 +4427,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "paul-brossier",
@@ -4446,7 +4472,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "thomas-aussenac",
@@ -4490,7 +4517,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "tom-magnier",
@@ -4534,7 +4562,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "joan-sandoval",
@@ -4578,7 +4607,8 @@
    "location": null,
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "barcelona",
@@ -4624,7 +4654,8 @@
    },
    "spots": [],
    "author": "",
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "fat-site-2008",
@@ -4691,7 +4722,8 @@
     "real-time",
     "concept-design",
     "tools"
-   ]
+   ],
+   "logos": []
   },
   {
    "id": "nokia-navigator",
@@ -4811,7 +4843,8 @@
      "lon": 2.35
     }
    ],
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "nouveau-contenu-2",
@@ -4853,7 +4886,8 @@
    "location": null,
    "author": "",
    "spots": [],
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "nouveau-contenu-3",
@@ -4895,7 +4929,8 @@
    "location": null,
    "author": "",
    "spots": [],
-   "skills": []
+   "skills": [],
+   "logos": []
   },
   {
    "id": "ben-kuper",
