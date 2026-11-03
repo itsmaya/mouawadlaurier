@@ -408,11 +408,20 @@ async function skillCard(post, w, h) {
   const iw = bd && !ph ? Math.round(flat ? h * 1.15 : Math.min(w * 0.36, h * 0.8)) : 0;
   const x0 = 14, tw = w - iw - x0 - 12;
   const [ts, tl, ss, sl] = ph ? (flat ? [28, 31, 0, 1] : [36, 40, 0, 1]) : flat ? [15, 18, 9.5, 12] : [17, 20, 10.5, 13.5];   // téléphone : le titre seul, en gros
+  /* Dos, vu de derrière : la photo seule en plein cadre, le titre en transparence. Au survol, un voile et le titre bien lisible s'y posent. */
+  const titleOnly = (ctx, a) => {
+    ctx.globalAlpha = a; ctx.textBaseline = 'top'; const bw = w - x0 - 12;
+    ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
+    ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`; let y = flat ? 16 : 22;
+    wrapLines(ctx, title, bw).slice(0, ph ? 3 : 2).forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
+    ctx.globalAlpha = 1;
+  };
+  const backBase = ctx => { ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); if (bd) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(0, 0, w, h); } titleOnly(ctx, 0.38); };
+  const backHi = ctx => { const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, 'rgba(0,0,0,.7)'); g.addColorStop(1, 'rgba(0,0,0,.3)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); titleOnly(ctx, 1); };
   const draw = faint => ctx => {
     ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
     if (bd && ph && !faint) veil(ctx, bd, w, h, 0.6);
     if (bd && !ph) drawCover(ctx, bd.im, w - iw, 0, iw, h);
-    if (faint) { if (bd) { ctx.globalAlpha = 0.55; drawCover(ctx, bd.im, 0, 0, w, h); } ctx.globalAlpha = 0.3; }
     ctx.textBaseline = 'top';
     ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
     ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`;
@@ -424,7 +433,7 @@ async function skillCard(post, w, h) {
     sls.forEach(l => { ctx.fillText(l, x0, y); y += fz(sl); });
     ctx.globalAlpha = 1;
   };
-  return [canvasTex(w, h, draw(false), 2), canvasTex(w, h, mirrored(w, draw(true)), 2), null];
+  return [canvasTex(w, h, draw(false), 2), canvasTex(w, h, mirrored(w, backBase), 2), null, canvasTex(w, h, mirrored(w, backHi), 2)];
 }
 function infoTexture(post, kind) {
   return fontsReady().then(() => {
@@ -554,9 +563,14 @@ class PostView {
     this.p2 = { x: 0, y: 0, z: 0, rotX: 0, rotY: 0, rotZ: 0 };
     this.group = new THREE.Group(); this.group.rotation.order = 'YXZ'; this.meshes = []; this.ready = false;
   }
-  build(texFront, texBack, band = null) {
+  build(texFront, texBack, band = null, backHi = null) {
     const geo = new THREE.PlaneGeometry(this.width, this.height);
     this.setBand(band);
+    if (backHi) {   // le titre lisible du dos, posé juste derrière la carte, apparaît au survol
+      const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: backHi, side: THREE.BackSide, transparent: true, opacity: 0, depthWrite: false }));
+      m.position.z = -0.4; m.renderOrder = 1; m.visible = false; m.raycast = () => {};
+      this.bhi = { mesh: m, k: 0, drawn: -1 }; this.group.add(m);
+    }
     const front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texFront, side: THREE.FrontSide }));
     const back = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texBack, side: THREE.BackSide }));
     front.userData = { post: this, face: 'front' }; back.userData = { post: this, face: 'back' };
@@ -572,7 +586,9 @@ class PostView {
     g.rotation.y = -(th.rotY + 180) * D2R; g.rotation.x = -th.rotX * D2R; g.rotation.z = th.rotZ * D2R;
     g.scale.setScalar(Math.max(1e-4, th.scale));
     if (this.band) this.drawBand();
+    const b = this.bhi; if (b && b.k !== b.drawn) { b.drawn = b.k; b.mesh.material.opacity = Math.max(0, Math.min(1, b.k)); b.mesh.visible = b.k > 0.002; }
   }
+  hoverBack(on) { const b = this.bhi; if (b) to(b, on ? 0.6 : 0.45, { k: on ? 1 : 0 }, { ease: on ? 'expoOut' : 'quartOut' }); }
   selectIt() { if (!this.frame) return; this.frame.material = lineMatSelect; delayedCall(0.8, () => { if (this.frame) this.frame.material = lineMatFrame; }); }
   turnAround(axis, degree) {
     const key = { x: 'rotX', y: 'rotY', z: 'rotZ' }[axis];
@@ -609,7 +625,7 @@ class PostView {
     pos.setY(0, y1); pos.setY(1, y1); pos.setY(2, y0); pos.setY(3, y0); uv.setY(0, 1); uv.setY(1, 1); uv.setY(2, 1 - k); uv.setY(3, 1 - k);
     pos.needsUpdate = true; uv.needsUpdate = true;
   }
-  dispose() { this.setBand(null); killTweensOf(this.thumb); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
+  dispose() { this.setBand(null); killTweensOf(this.thumb); if (this.bhi) killTweensOf(this.bhi); this.group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && !LINE_MATS.includes(o.material)) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); }
 }
 
 /* ================================================================ Styles de disposition */
@@ -832,7 +848,7 @@ class PostsView3D {
     for (let i = 0; i < this.n; i++) {
       let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) return;
-      this.postViews[i].build(tex[0], tex[1], tex[2]);
+      this.postViews[i].build(tex[0], tex[1], tex[2], tex[3]);
       this.animeOpenPost(this.postViews[i], i);
       if (STYLE.planeSpeed > 0) { const until = clock + POST_STAGGER; while (clock < until) { await new Promise(r => requestAnimationFrame(r)); if (!this.alive) return; } }
     }
@@ -968,10 +984,11 @@ class PostsView3D {
     for (let i = 0; i < this.n; i++) {
       const pv2 = this.postViews[i]; if (!pv2.ready) continue;
       let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
-      if (!this.alive) { [tex[0], tex[1], tex[2] && tex[2].tex].forEach(x => x && x.dispose()); return; }
+      if (!this.alive) { [tex[0], tex[1], tex[2] && tex[2].tex, tex[3]].forEach(x => x && x.dispose()); return; }
       const k = pv2.band ? pv2.band.k : 0;
       pv2.setBand(tex[2] || null); if (pv2.band && k) { pv2.band.k = k; pv2.hover(hovered === pv2); }
       new Set([swap(pv2.meshes[0], tex[0]), swap(pv2.meshes[1], tex[1])]).forEach(x => x && x.dispose());
+      if (pv2.bhi && tex[3]) { const o = swap(pv2.bhi.mesh, tex[3]); if (o) o.dispose(); } else if (tex[3]) tex[3].dispose();
       const inf = this.infos[i];
       if (inf) { const it = await infoTexture(this.posts[i], 'place'); if (!this.alive) { it.dispose(); return; } const o = swap(inf.mesh, it); if (o) o.dispose(); }
     }
@@ -1067,7 +1084,7 @@ function placeCameraOnOrbit() { const o = orbitE || orbitNow(); cam.x = o.x + o.
 function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
-  hovered = null; mouseCard = null;
+  hovered = null; mouseCard = null; backHovered = null;
   if (postsView) postsView.destroy();
   orbitE = null;
   postsView = new PostsView3D(curSec());
@@ -1442,7 +1459,8 @@ const post2D = {
     cover.appendChild(play); inner.appendChild(cover);
   },
   addText(post, mode) {
-    const { width, x, colW } = textGeom(mode);
+    let { width, x, colW } = textGeom(mode);
+    if (mode === 'project' && P.section.def.skills) { width = Math.min(width, 261); x = 26; colW = width - 52; }   // savoir-faire : peu de texte, une fiche deux fois plus étroite
     let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
     const subtitle = tr(post.subtitle);
     const sec = P.section.def;
@@ -1644,7 +1662,7 @@ function goToPost(id) {
 strip.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); goToPost(b.dataset.go); } });
 function openPost() {
   if (!postsView || !P.data.posts[P.selected]) return;
-  hoverCard(null);
+  hoverCard(null); hoverBackCard(null);
   checkPostOpenAndClose();
   P.postOpen = true;
   if (P.section.def.open === 'strip') {
@@ -1742,7 +1760,8 @@ canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointerc
 canvas.addEventListener('lostpointercapture', e => { if (e.pointerId === dragId) endDrag(e, true); });
 window.addEventListener('pointerup', e => { if (dragId !== null && e.pointerId === dragId && e.target !== canvas) endDrag(e, true); });
 window.addEventListener('blur', () => { if (dragId !== null) endDrag({ pointerId: dragId }, true); stopDrag2D(); });
-let hoverQueued = false, hovered = null, mouseCard = null;
+let hoverQueued = false, hovered = null, mouseCard = null, backHovered = null;
+function hoverBackCard(pv) { if (backHovered === pv) return; if (backHovered) backHovered.hoverBack(false); backHovered = pv; if (pv) pv.hoverBack(true); }
 /* Quelle vignette montre son nom ? Une seule décision, pour que survol et vignette de face ne se contredisent jamais :
    la vignette survolée à la souris d'abord ; sinon, sur petit écran et dans le carrousel, celle que la caméra voit de face. */
 const facingBand = () => phoneMode() && inputEnabled && postsView && ['carousel', 'spiral'].includes(postsView.def.layout);
@@ -1755,12 +1774,12 @@ function bandTarget() {
 let bandTick = 0;
 function phoneBand() { if (++bandTick % 6 === 0 && facingBand()) hoverCard(bandTarget()); }   // le carrousel tourne : la vignette de face change
 function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
-canvas.addEventListener('pointerleave', () => { mouseCard = null; hoverCard(bandTarget()); });
+canvas.addEventListener('pointerleave', () => { mouseCard = null; hoverCard(bandTarget()); hoverBackCard(null); });
 canvas.addEventListener('pointermove', e => {
   if (dragId !== null && e.pointerId === dragId && e.pointerType === 'mouse' && e.buttons === 0) { endDrag(e, true); return; }   // bouton déjà relâché
   if (dragId !== null && e.pointerId !== dragId) return;
   mouseX = e.clientX; mouseY = e.clientY;
-  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); mouseCard = h && h.post && h.face === 'front' && !P.postOpen ? h.post : null; hoverCard(bandTarget()); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
+  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); mouseCard = h && h.post && h.face === 'front' && !P.postOpen ? h.post : null; hoverCard(bandTarget()); hoverBackCard(h && h.post && h.face === 'back' && h.post.bhi && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
 /* Deux doigts : écarter zoome, pincer dézoome, par crans comme la molette ; le premier doigt cesse alors de faire tourner la scène */
