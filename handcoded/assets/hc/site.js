@@ -194,7 +194,8 @@ const fz = n => Math.round(n * CARD_SCALE);
 /* Petit écran : toute la scène est réduite (largeur / 900), le texte dessiné sur les vignettes avec.
    Sous 700 px de large, les vignettes sont redessinées avec un texte plus gros et moins de lignes. */
 const PHONE_W = 700;
-const phoneCards = () => (W || window.innerWidth) < PHONE_W;
+const phoneMode = () => { const w = W || window.innerWidth, h = H || window.innerHeight; return w < PHONE_W || Math.min(w, h) < 500; };   // téléphone, debout ou couché
+const phoneCards = phoneMode;
 function fontsReady() {
   if (!document.fonts || !document.fonts.load) return Promise.resolve();
   const loads = ['22px Gelasio', 'italic 22px Gelasio', ...(CONTENT ? typoFontLoads(CONTENT.settings) : [])];
@@ -267,7 +268,7 @@ function veil(ctx, bd, w, h, alpha) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fil
 /* Survol d'une vignette photo : le nom et la description par-dessus, sur un petit fond noir transparent */
 function hoverBand(post, w) {   // bandeau seul (fond transparent autour) : il monte du bas de la carte au survol
   const title = tr(post.title).trim(), sub = tr(post.subtitle).trim(); if (!title && !sub) return null;
-  const ts = Math.max(9, Math.min(13.5, w * 0.053)), ss = Math.max(7.5, ts * 0.74), pad = Math.round(ts * 0.75), tw = w - 2 * pad;
+  const ph = phoneCards(), ts = ph ? 24 : Math.max(9, Math.min(13.5, w * 0.053)), ss = ph ? 17 : Math.max(7.5, ts * 0.74), pad = Math.round(ts * (ph ? 0.6 : 0.75)), tw = w - 2 * pad;   // téléphone : lisible sans zoomer
   const c = document.createElement('canvas').getContext('2d');
   c.font = `${ts}px ${SERIF}`; const tl = title ? wrapLines(c, title, tw).slice(0, 2) : [];
   c.font = `${ss}px ${SERIF}`; const sl = sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
@@ -406,19 +407,19 @@ async function skillCard(post, w, h) {
   /* téléphone : le texte prend toute la largeur, l'image passe en fond sous un voile */
   const iw = bd && !ph ? Math.round(flat ? h * 1.15 : Math.min(w * 0.36, h * 0.8)) : 0;
   const x0 = 14, tw = w - iw - x0 - 12;
-  const [ts, tl, ss, sl] = ph ? (flat ? [24, 26, 18, 21] : [27, 30, 20, 24]) : flat ? [15, 18, 9.5, 12] : [17, 20, 10.5, 13.5];
+  const [ts, tl, ss, sl] = ph ? (flat ? [28, 31, 0, 1] : [36, 40, 0, 1]) : flat ? [15, 18, 9.5, 12] : [17, 20, 10.5, 13.5];   // téléphone : le titre seul, en gros
   const draw = faint => ctx => {
     ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
-    if (bd && ph && !faint) veil(ctx, bd, w, h, 0.74);
+    if (bd && ph && !faint) veil(ctx, bd, w, h, 0.6);
     if (bd && !ph) drawCover(ctx, bd.im, w - iw, 0, iw, h);
     if (faint) { if (bd) { ctx.globalAlpha = 0.55; drawCover(ctx, bd.im, 0, 0, w, h); } ctx.globalAlpha = 0.3; }
     ctx.textBaseline = 'top';
     ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
     ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`;
-    const tls = wrapLines(ctx, title, tw).slice(0, 2); let y = flat ? 16 : 22;
+    const tls = wrapLines(ctx, title, tw).slice(0, ph ? 3 : 2); let y = flat ? 16 : 22;
     tls.forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
     y += flat ? 2 : 5; ctx.fillStyle = ph ? '#dcdcdc' : '#bdbdbd'; ctx.font = `${fz(ss)}px ${SERIF}`;
-    const room = Math.max(0, Math.floor((h - y - 8) / fz(sl)));
+    const room = ph ? 0 : Math.max(0, Math.floor((h - y - 8) / fz(sl)));
     let sls = wrapLines(ctx, sum, tw); if (sls.length > room) { sls = sls.slice(0, room); if (room) { let last = sls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); sls[room - 1] = last + '…'; } }
     sls.forEach(l => { ctx.fillText(l, x0, y); y += fz(sl); });
     ctx.globalAlpha = 1;
@@ -704,11 +705,69 @@ const LAYOUT = {
   },
 };
 
+/* ================================================================ Téléphone : les vignettes en grille, face à la caméra
+   Debout, la grille s'allonge en hauteur ; couché, en largeur. Le nombre de colonnes est celui qui donne les plus grandes
+   vignettes dans la place laissée libre par le menu, la signature et le logo, et la caméra s'approche pour la cadrer.
+   Sur grand écran, rien ne change. */
+const GRID_LAYOUTS = ['fan', 'arc', 'map'];
+const gridWanted = def => phoneMode() && GRID_LAYOUTS.includes(def.layout);
+const ZOOMF = () => CAMERA.zoom * CAMERA.focus * Math.min(1, W / 900);   // pixels à l'écran pour une unité à une unité de l'œil
+function freeRect() {   // la zone de l'écran que l'interface laisse libre
+  const box = id => { const el = document.getElementById(id); if (!el || el.hidden) return null; const b = el.getBoundingClientRect(); return b.width && b.height ? b : null; };
+  const m = 12, r = { l: m, t: m, r: W - m, b: H - m };
+  const tops = ['slogan', 'logo', 'reel-btn'].map(box).filter(Boolean), bots = ['menu', 'langs', 'cats', 'kb'].map(box).filter(Boolean);
+  if (H >= W) {   // debout : la signature en haut, le menu en bas
+    tops.forEach(b => { r.t = Math.max(r.t, b.bottom + 8); });
+    bots.forEach(b => { r.b = Math.min(r.b, b.top - 8); });
+  } else {        // couché : la signature et le menu à gauche, le logo à droite, les tags en bas à droite
+    [box('slogan'), box('menu'), box('langs')].filter(Boolean).forEach(b => { if (b.left < W / 2) r.l = Math.max(r.l, b.right + 10); });
+    [box('logo'), box('reel-btn')].filter(Boolean).forEach(b => { if (b.left > W / 2) r.r = Math.min(r.r, b.left - 10); });
+    [box('cats'), box('kb')].filter(Boolean).forEach(b => { if (b.left < r.r && b.right > r.l) r.b = Math.min(r.b, b.top - 8); });
+  }
+  if (r.r - r.l < 120) { r.l = m; r.r = W - m; }
+  if (r.b - r.t < 120) { r.t = m; r.b = H - m; }
+  return r;
+}
+function computeGrid(view) {
+  const fr = freeRect(), aw = fr.r - fr.l, ah = fr.b - fr.t, place = view.def.layout === 'map' && view.card === 'place';
+  const w = view.w * view.k + STYLE.planeFrameDistance, h = view.h * view.k + STYLE.planeFrameDistance;
+  const uw = place ? 1.5 * w + 102.5 : w, uh = place ? Math.max(h, 130) : h, g = Math.round(Math.min(uw, uh) * 0.1) + 6;   // un lieu : la carte et sa fiche, côte à côte
+  let best = null; const n = Math.max(1, view.n);
+  for (let c = 1; c <= n; c++) {
+    const rows = Math.ceil(n / c), gw = c * uw + (c - 1) * g, gh = rows * uh + (rows - 1) * g, sc = Math.min(aw / gw, ah / gh);
+    if (!best || sc > best.sc + 1e-9) best = { cols: c, rows, gw, gh, sc };
+  }
+  const yOff = view.container.position.y - view.section.container.position.y, floor = place ? 140 : 40;
+  return { ...best, sc: best.sc * 0.94, uw, uh, g, aw, ah, rk: [fr.l, fr.t, fr.r, fr.b].map(Math.round).join(), fx: (fr.l + fr.r) / 2 - W / 2, fy: (fr.t + fr.b) / 2 - H / 2,
+    zg: 200, gy: floor + best.gh / 2 - yOff, yOff, dx: place ? (w / 2 + 102.5) / 2 : 0 };
+}
+const gridPos = (view, i) => {
+  const G = view.grid, c = i % G.cols, r = Math.floor(i / G.cols), rowN = Math.min(G.cols, view.n - r * G.cols);
+  return { x: ((rowN - 1) / 2 - c) * (G.uw + G.g) + G.dx, y: G.gy + ((G.rows - 1) / 2 - r) * (G.uh + G.g), z: G.zg + Math.pow(-1, i) * Math.random() * STYLE.planeDisOrder * 0.1, rotY: 180 };   // de gauche à droite, de haut en bas
+};
+const TAU = 2 * Math.PI;
+const frontDeg = deg => deg + ((((Math.PI - deg) % TAU) + TAU + Math.PI) % TAU - Math.PI);   // l'angle face à la grille le plus proche
+function gridLayout(base) {
+  return {
+    grid: true, base, open: base.open, lineStart: base.lineStart,
+    lineEnd: base.lineEnd ? (p, view, i) => base.lineEnd.call(base, p, view, i) : undefined,
+    preset() {}, position: (view, p, i) => gridPos(view, i),
+    focus(view, id) {   // la vignette sort de la grille vers la caméra, avec le geste de sa disposition d'origine
+      const pv2 = view.postViews[id]; if (!pv2) return;
+      P.selected = id; P.degreeCamera = frontDeg(P.degreeCamera); P.cameraY = camHeight();
+      if (!pv2.ready) return;
+      pv2.selectIt(); pv2.jump(pv2.p2.x, pv2.p2.y, pv2.p2.z + 70);
+      if (base === LAYOUT.fan) pv2.turnAround('x', 720); else if (base === LAYOUT.arc) pv2.turnAround('y', 360);
+    },
+    move: (view, dx, dy, k) => base.move.call(base, view, dx, dy, k),
+  };
+}
+
 const _side = new THREE.Vector3(), _back = new THREE.Vector3();
 class PostsView3D {
   constructor(section) {
     this.section = section; this.def = section.def;
-    this.L = LAYOUT[this.def.layout] || LAYOUT.carousel;
+    this.base = this.L = LAYOUT[this.def.layout] || LAYOUT.carousel;
     this.card = this.def.card;
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
     this.tex = this.def.skills ? skillCard : CARD_TEX[this.card];   // savoir-faire : le texte d'abord, l'image l'illustre
@@ -717,6 +776,7 @@ class PostsView3D {
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
     this.L.preset.call(this.L, this);
+    if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
     this.openPosts();
   }
@@ -796,6 +856,7 @@ class PostsView3D {
     if (this.def.layout === 'map' && this.card === 'place') this.openInfo(p, i, timeAnim);
   }
   followLine(p, i) {
+    if (!this.L.lineEnd) return;
     const a = this.L.lineStart(p, p.thumb), b = this.L.lineEnd.call(this.L, p.p2, this, i);
     const pts = [...postLocal(...a), ...postLocal(...b)];
     let l = this.lines[i]; if (!l) { l = this.lines[i] = makeSegments(pts, lineMatCenter); this.container.add(l); } else l.geometry.setPositions(pts);
@@ -811,7 +872,7 @@ class PostsView3D {
   }
   async openPost3D() {   // LineView3D.openPost3D, généralisé à tous les styles
     const id = P.selected, p = this.postViews[id]; if (!p || !p.ready) return;
-    const { cl, dir } = p.moveToCamera(60, STYLE.tween);
+    if (this.L.grid) this.gridToCamera(p, STYLE.tween); else p.moveToCamera(60, STYLE.tween);
     if (!this.focusInfo) { this.focusInfo = { mesh: new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })), p: { x: 0, y: 0, z: 0, rotY: 150 } }; this.container.add(this.focusInfo.mesh); }
     const info = this.focusInfo; info.mesh.visible = false;
     const tex = await infoTexture(this.posts[id], 'person'); if (!this.alive) return;
@@ -826,6 +887,35 @@ class PostsView3D {
   }
   closePost3D() { const p = this.postViews[P.selected]; if (p) p.moveBack(STYLE.tween / 2); if (this.focusInfo) { killTweensOf(this.focusInfo); this.focusInfo.target = null; this.focusInfo.mesh.visible = false; } }
   movePosts(dx, dy, k) { this.L.move.call(this.L, this, dx, dy, k); }
+  /* Changement de format (rotation, fenêtre) : grille ↔ disposition d'origine. Les vignettes glissent vers leur nouvelle place. */
+  relayout() {
+    const want = gridWanted(this.def), was = !!this.L.grid;
+    if (!want && !was) return false;
+    const G = want ? computeGrid(this) : null, old = this.grid;
+    const same = want && was && old && ['cols', 'rows', 'uw', 'uh', 'gy'].every(k => Math.abs(G[k] - old[k]) < 0.5);
+    this.grid = G || old; this.L = want ? (this.gridL || (this.gridL = gridLayout(this.base))) : this.base;
+    if (same) return true;   // même grille : seule la caméra recadre
+    const T = STYLE.tween * 1.2;
+    const held = P.postOpen && this.def.open === 'focus3d' ? P.selected : -1;   // la personne ouverte reste devant la caméra
+    this.postViews.forEach((p, i) => {
+      if (!p.ready) return;
+      const pos = this.L.position.call(this.L, this, p, i); p.setPosition(pos.x, pos.y, pos.z, pos.rotY);
+      if (i === held) return;
+      const opening = this.following.has(p); killTweensOf(p.thumb); this.following.add(p);
+      to(p.thumb, T, { x: pos.x, y: pos.y, z: pos.z, rotX: 0, rotY: pos.rotY, rotZ: 0, scale: 1 }, { ease: 'quartOut', onComplete: () => { if (!opening) this.following.delete(p); if (this.L.lineEnd) this.followLine(p, i); } });
+      const inf = this.infos[i]; if (inf) { killTweensOf(inf.p); to(inf.p, T, { x: pos.x - p.width - 20, y: pos.y, z: pos.z }, { ease: 'quartOut' }); }
+    });
+    return true;
+  }
+  /* Grille : la vignette ouverte (studio) vient se poser devant la caméra, avec sa fiche à droite, au centre de la place libre */
+  gridToCamera(p, time) {
+    const G = this.grid, o = orbitNow(), zf = ZOOMF(), pairW = 2 * p.width + 3;
+    const depth = Math.max(90, zf * Math.max(pairW / (G.aw * 0.92), p.height / (G.ah * 0.85)));
+    const eyeZ = camD() + CAMERA.focus, k = depth / zf;
+    const ax = this.section.p.x - o.x, ay = o.ty - this.container.position.y;   // l'axe de la caméra, en coordonnées des vignettes
+    killTweensOf(p.thumb);
+    to(p.thumb, time, { x: ax - G.fx * k + (p.width + 3) / 2, y: ay - G.fy * k, z: eyeZ - depth, rotY: p.p2.rotY + 720, rotX: 0, rotZ: 0 }, { ease: 'quartOut' });
+  }
   resetPostPosition() {
     this.postViews.forEach((p, i) => {
       if (!p.ready || this.following.has(p)) return;
@@ -913,14 +1003,21 @@ function setDowner() { const h = STYLE.cameraHeight; P.cameraY = P.cameraY - h /
 /* Réglages par section (back-office) : distance de la caméra et taille des cartes, en %. La carte du monde se regarde de plus près. */
 const CAM_DEFAULT = { map: 58 };
 const camK = (def = (curSec() || {}).def || {}) => Math.max(0.3, Math.min(2.5, (+def.camera || CAM_DEFAULT[def.layout] || 100) / 100));
-const camD = () => STYLE.cameraDistance * camK();
-const camTargetY = () => STYLE.cameraTargetHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 0.62 : 1);
-const camHeightBase = () => STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1);
+/* Grille du téléphone : la caméra se place face à elle, à la distance qui la fait tenir dans la place libre (le zoom à deux doigts reste actif) */
+const gridView = () => (postsView && postsView.L.grid && postsView.grid && postsView.section === curSec() ? postsView : null);
+const gridDepth = G => ZOOMF() / G.sc * Math.min(1, STYLE.cameraDistanceProportion / zoomBase);
+function gridCam(v) {
+  const G = v.grid, depth = gridDepth(G), k = depth / ZOOMF();
+  return { d: Math.max(20, depth - CAMERA.focus + G.zg), ty: v.container.position.y + G.gy + G.fy * k, dx: G.fx * k };
+}
+const camD = () => { const v = gridView(); return v ? gridCam(v).d : STYLE.cameraDistance * camK(); };
+const camTargetY = () => { const v = gridView(); return v ? gridCam(v).ty : STYLE.cameraTargetHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 0.62 : 1); };
+const camHeightBase = () => { const v = gridView(); return v ? gridCam(v).ty : STYLE.cameraHeight * (((curSec() || {}).def || {}).layout === 'map' ? camK() * 1.6 : 1); };
 /* Carte du monde zoomée : la caméra glisse vers le groupe de lieux le plus dense (l'Europe) et garde le même angle de vue,
    au-dessus de la carte. Au zoom de base, rien ne change : centre de la section, hauteurs d'origine. */
 const _fw = new THREE.Vector3();
 function mapZoomT() {   // 0 au zoom de base, vers 1 au plus près
-  if (!isMap() || STYLE.cameraDistanceProportion >= zoomBase) return 0;
+  if (!isMap() || gridView() || STYLE.cameraDistanceProportion >= zoomBase) return 0;
   return Math.min(1, (1 - STYLE.cameraDistanceProportion / zoomBase) * 1.25);
 }
 function mapFocus() {   // le cœur du réseau, en coordonnées Papervision
@@ -929,22 +1026,50 @@ function mapFocus() {   // le cœur du réseau, en coordonnées Papervision
 }
 function orbitCenter() {
   const s = curSec(), t = mapZoomT(), f = t ? mapFocus() : null;
-  const ty0 = camTargetY();
+  const ty0 = camTargetY(), v = gridView();
+  if (v) return { x: s.p.x - gridCam(v).dx, z: s.p.z, ty: ty0 };   // la grille au centre de la place libre
   if (!f) return { x: s.p.x, z: s.p.z, ty: ty0 };
   return { x: s.p.x + (f.x - s.p.x) * t, z: s.p.z + (f.z - s.p.z) * t, ty: ty0 + (f.y - ty0) * t };
 }
 const camHeight = () => {   // sur la carte zoomée, la caméra descend avec la distance : même angle, jamais sous la carte
-  if (!isMap()) return camHeightBase();
+  if (!isMap() || gridView()) return camHeightBase();
   const r = Math.min(1, STYLE.cameraDistanceProportion / zoomBase), ty = orbitCenter().ty;
   return ty + (camHeightBase() - camTargetY()) * Math.pow(r, 0.55);   // descend moins vite que la distance : on voit l'Europe de plus en plus d'en haut
 };
 const cardK = def => Math.max(0.4, Math.min(2.5, (+def.cardScale || 100) / 100));
-function placeCameraOnOrbit() { const s = orbitCenter(); cam.x = s.x + camD() * Math.sin(P.actualDeg); cam.z = s.z + camD() * Math.cos(P.actualDeg); }
+/* Rayon, centre et hauteur de visée de l'orbite. Au changement de format, ils glissent vers leurs nouvelles valeurs
+   avec la même douceur que la caméra (cameraEaseSpeed) au lieu de sauter. */
+const orbitNow = () => { const s = orbitCenter(); return { d: camD(), x: s.x, z: s.z, ty: s.ty }; };
+let orbitE = null;
+function reflow(before) {   // grille ↔ disposition d'origine, ou grille recadrée : vignettes et caméra glissent ensemble
+  if (!before || !postsView || !postsView.relayout()) return;
+  killTweensOf(cam); killTweensOf(camTarget); orbitE = before;
+  if (gridView()) P.degreeCamera = frontDeg(P.degreeCamera);
+  P.cameraY = camHeight(); closeTurn = true; easeSpeed = STYLE.cameraEaseSpeed;
+  const pv2 = P.postOpen && P.section.def.open === 'focus3d' && postsView.postViews[P.selected];
+  if (pv2 && pv2.ready) { if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(60, STYLE.tween / 2); }
+}
+let gridTick = 0;
+function watchGrid() {   // la place libre change (menu posé, polices arrivées, barre du navigateur) : la grille se recadre
+  if (++gridTick % 20 || !started || P.postOpen || isClicking || !inputEnabled) return;
+  const v = gridView(); if (!v) return;
+  const r = freeRect(); if ([r.l, r.t, r.r, r.b].map(Math.round).join() !== v.grid.rk) reflow(orbitE || orbitNow());
+}
+function settleOrbit() {
+  if (!orbitE) return;
+  const t = orbitNow(), k = ease(STYLE.cameraEaseSpeed); let done = true;
+  for (const key of ['d', 'x', 'z', 'ty']) { const dd = t[key] - orbitE[key]; if (Math.abs(dd) > 0.05) { orbitE[key] += dd * k; done = false; } else orbitE[key] = t[key]; }
+  if (!isTweening(camTarget)) { camTarget.x = orbitE.x; camTarget.y = orbitE.ty; camTarget.z = orbitE.z; }
+  if (!isClicking && !closeTurn && !isTweening(cam)) placeCameraOnOrbit();
+  if (done) orbitE = null;
+}
+function placeCameraOnOrbit() { const o = orbitE || orbitNow(); cam.x = o.x + o.d * Math.sin(P.actualDeg); cam.z = o.z + o.d * Math.cos(P.actualDeg); }
 function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
   hovered = null;
   if (postsView) postsView.destroy();
+  orbitE = null;
   postsView = new PostsView3D(curSec());
   focusPost(P.selected);
   P.actualDeg = P.degreeCamera;
@@ -964,9 +1089,10 @@ function setCamera() { const hmax = 1000, max = 680, div = STYLE.cameraDistanceP
 function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
   const s = orbitCenter();
-  if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) postsView.postViews[P.selected].moveToCamera(100, 0);
-  cameraOnlyGoto(s.x + camD() * Math.sin(P.actualDeg), isMap() ? P.cameraY : cam.y, s.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
-  if (isMap()) cameraTarget(s.x, s.ty, s.z, STYLE.cameraSpeed / 2);
+  if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) { const pv2 = postsView.postViews[P.selected]; if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(100, 0); }
+  const fixed = isMap() || gridView();
+  cameraOnlyGoto(s.x + camD() * Math.sin(P.actualDeg), fixed ? P.cameraY : cam.y, s.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
+  if (fixed) cameraTarget(s.x, s.ty, s.z, STYLE.cameraSpeed / 2);
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
@@ -1004,7 +1130,7 @@ function updateCamera() {   // caméra Papervision : focale en pixels (zoom x fo
   _p.copy(pv(cam.x, cam.y, cam.z)); _t.copy(pv(camTarget.x, camTarget.y, camTarget.z));
   _dir.subVectors(_t, _p); if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, -1); _dir.normalize();
   /* l'œil est "focus" unités derrière la caméra ; sur la carte zoomée cet écart rétrécit avec le zoom, sinon il bornerait l'approche */
-  const fk = isMap() ? Math.min(1, STYLE.cameraDistanceProportion / zoomBase) : 1;
+  const fk = isMap() && !gridView() ? Math.min(1, STYLE.cameraDistanceProportion / zoomBase) : 1;
   eyeK += Math.abs(fk - eyeK) < 1e-3 ? fk - eyeK : (fk - eyeK) * ease(STYLE.cameraEaseSpeed);
   camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus * eyeK); camera.lookAt(_t);
   const narrow = Math.min(1, W / 900);
@@ -1545,7 +1671,7 @@ const isMap = () => (((curSec() || {}).def || {}).layout === 'map');
 const zoomMin = () => (isMap() ? 60 : STYLE.cameraZoomMin);
 function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.min(STYLE.cameraZoomMax, Math.trunc(STYLE.cameraDistanceProportion * 1.5)); zoomMoved(); } }
 function zoomIn() { if (STYLE.cameraDistanceProportion > zoomMin()) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); zoomMoved(); } }
-function zoomMoved() { if (isMap()) P.cameraY = camHeight(); onStageResize3D(); }
+function zoomMoved() { if (isMap() || gridView()) P.cameraY = camHeight(); onStageResize3D(); }
 function resetZoom() { if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
 let touchedKeyboard = false;
 function keyBoardNavigation(e) {
@@ -1605,7 +1731,7 @@ canvas.addEventListener('pointerdown', e => {
 function endDrag(e, lost = false) {
   if (e.pointerId !== dragId) return;
   dragId = null; canvas.classList.remove('dragging');
-  if (isClicking) { closeTurn = true; isClicking = false; }
+  if (isClicking) { closeTurn = true; isClicking = false; if (gridView()) { P.degreeCamera = frontDeg(P.degreeCamera); P.cameraY = camHeight(); } }   // grille : on la retrouve de face en lâchant
   if (lost) { downHit = null; return; }   // relâché hors de la page ou capture perdue : on lâche, sans ouvrir de fiche
   if (downHit && downHit.face === 'front' && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) { const hit = pick(e.clientX, e.clientY); if (hit && hit.post === downHit.post) openThatPost(hit.post.id_); }
   else if (!downHit && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) { const hit = pick(e.clientX, e.clientY); if (hit && hit.netNode) showNetTip(hit.netNode, e.clientX, e.clientY); else hideNetTip(); }
@@ -1616,13 +1742,19 @@ canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointerc
 canvas.addEventListener('lostpointercapture', e => { if (e.pointerId === dragId) endDrag(e, true); });
 window.addEventListener('pointerup', e => { if (dragId !== null && e.pointerId === dragId && e.target !== canvas) endDrag(e, true); });
 window.addEventListener('blur', () => { if (dragId !== null) endDrag({ pointerId: dragId }, true); stopDrag2D(); });
-let hoverQueued = false, hovered = null;
+let hoverQueued = false, hovered = null, mouseSeen = -1e9;
+/* Téléphone, carrousel : pas de survol au doigt, la vignette de face montre son nom et sa description */
+let bandTick = 0;
+function phoneBand() {
+  if (++bandTick % 6 || !phoneMode() || P.postOpen || !postsView || !inputEnabled || performance.now() - mouseSeen < 2000 || !['carousel', 'spiral'].includes(postsView.def.layout)) return;
+  postsView.checkPostSelected(); hoverCard(postsView.postViews[P.selected] || null);
+}
 function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
 canvas.addEventListener('pointerleave', () => hoverCard(null));
 canvas.addEventListener('pointermove', e => {
   if (dragId !== null && e.pointerId === dragId && e.pointerType === 'mouse' && e.buttons === 0) { endDrag(e, true); return; }   // bouton déjà relâché
   if (dragId !== null && e.pointerId !== dragId) return;
-  mouseX = e.clientX; mouseY = e.clientY;
+  mouseX = e.clientX; mouseY = e.clientY; if (e.pointerType === 'mouse') mouseSeen = performance.now();
   if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); hoverCard(h && h.post && h.face === 'front' && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
@@ -1646,9 +1778,11 @@ const dropTouch = e => { touches.delete(e.pointerId); if (touches.size < 2) pinc
 ['pointerup', 'pointercancel'].forEach(t => window.addEventListener(t, dropTouch));
 canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
 window.addEventListener('resize', () => {
-  const ph0 = phoneCards();
-  resizeViewport(); onStageResize3D();
-  if (phoneCards() !== ph0 && postsView && !postsView.loading) postsView.retexture();   // passage téléphone ↔ grand écran : texte redessiné setMenuPosition(); sizeTicker(); hvSize();
+  const ph0 = phoneCards(), before = started && postsView ? orbitE || orbitNow() : null;
+  resizeViewport(); onStageResize3D(); setMenuPosition();
+  reflow(before);
+  if (phoneCards() !== ph0 && postsView) postsView.retexture();   // passage téléphone ↔ grand écran : texte redessiné
+  sizeTicker(); hvSize();
   if (post2D.open) { fitPost2D(); clearTimeout(post2D.relayout); post2D.relayout = setTimeout(() => { if (post2D.open && post2D.post && JSON.stringify(textGeom('project')) !== post2D.geomKey) { post2D.build(post2D.post, P.section.def.card); setMenuPosition(); } }, 250); }   // rotation de l'écran : la fiche se recompose
 });
 
@@ -2150,7 +2284,7 @@ function frame(now) {
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
   if (started && (homeGone || now < behindUntil)) {
-    updateTweens(); renderMachine(); if (postsView) postsView.update(); post2D.step(); updateCamera();
+    updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
     renderer.render(scene, camera);
   }
   requestAnimationFrame(frame);

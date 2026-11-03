@@ -363,3 +363,16 @@ body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouver
 /* les chiffres du studio, en colonnes à côté des contacts : le nombre à la place du titre */
 /* bandeau LED du haut masquable (Réglages › Accueil) */
 #home.no-ticker #ticker { display: none; }
+
+/* Accueil : sous la barre de Safari (iPhone), la page montre son fond : noir comme la bande vidéo, sans liseré blanc en bas */
+html:has(#home:not([hidden]):not(.out)), html:has(#home:not([hidden]):not(.out)) body { background: var(--band); }
+/* Téléphone debout : 30 % de blanc, 70 % de vidéo. Le bouton Showreel et les langues se rangent sur une ligne au-dessus de la bande. */
+@media (max-width: 700px) and (orientation: portrait) {
+  #home-band { top: max(30%, 186px); }
+  #home-top { top: 30px; height: calc(max(30%, 186px) - 66px); }
+  #home > #home-langs { top: calc(max(30%, 186px) - 26px); }
+  body:has(#home:not([hidden]):not(.out)) #reel-btn { top: calc(max(30%, 186px) - 30px); left: max(20px, env(safe-area-inset-left, 0px)); right: auto; }
+  #bs-eg { margin-top: 8px; }
+  #home-top #enter { margin-top: 12px; }
+  #bs-sent { min-height: 0; margin-top: 4px; }
+}
