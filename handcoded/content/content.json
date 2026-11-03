@@ -3380,13 +3380,13 @@
   {
    "id": "machine-learning",
    "section": "expertise",
-   "order": 0,
+   "order": 3,
    "published": true,
    "title": {
-    "en": "Machine learning & AI",
-    "fr": "Apprentissage automatique et IA",
-    "ca": "Aprenentatge automàtic i IA",
-    "es": "Aprendizaje automático e IA"
+    "en": "Machine learning & our own AI",
+    "fr": "Apprentissage automatique et notre IA",
+    "ca": "Aprenentatge automàtic i nostra IA",
+    "es": "Aprendizaje automático e nuestra IA"
    },
    "subtitle": {
     "en": "",
@@ -3408,7 +3408,7 @@
    "thumbBack": "",
    "body": {
     "en": "<p>Systems that listen, watch and decide: emotion detection in music, real-time choices on stage, recommendation engines.</p>",
-    "fr": "<p>Des systèmes qui écoutent, regardent et décident : détection des émotions dans la musique, choix en temps réel sur scène, moteurs de recommandation.</p>",
+    "fr": "<p>Des systèmes qui écoutent, regardent et décident : détection des émotions dans la musique, choix en temps réel sur scène, moteurs de recommandation.</p><p>Nous avons créer en 2015 la première oeuvre audio réactive (à notre connaissance) avec l'IA issue de la thèse de Cyril Laurier et Paul Brossier de l'univertsité Pompeu Fabra. OX fue nommé l'oeuvre sensible.</p>",
     "ca": "<p>Sistemes que escolten, miren i decideixen: detecció de les emocions a la música, decisions en temps real a l'escenari, motors de recomanació.</p>",
     "es": "<p>Sistemas que escuchan, miran y deciden: detección de las emociones en la música, decisiones en tiempo real en el escenario, motores de recomendación.</p>"
    },
@@ -3425,7 +3425,7 @@
   {
    "id": "real-time",
    "section": "expertise",
-   "order": 1,
+   "order": 4,
    "published": true,
    "title": {
     "en": "Real-time development",
@@ -3471,7 +3471,7 @@
   {
    "id": "audio",
    "section": "expertise",
-   "order": 2,
+   "order": 5,
    "published": true,
    "title": {
     "en": "Audio processing",
@@ -3516,7 +3516,7 @@
   {
    "id": "generative",
    "section": "expertise",
-   "order": 3,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Generative animation",
@@ -3562,7 +3562,7 @@
   {
    "id": "projection-mapping",
    "section": "expertise",
-   "order": 4,
+   "order": 7,
    "published": true,
    "title": {
     "en": "Projection mapping",
@@ -3608,7 +3608,7 @@
   {
    "id": "light",
    "section": "expertise",
-   "order": 5,
+   "order": 8,
    "published": true,
    "title": {
     "en": "Light and LED control",
@@ -3654,7 +3654,7 @@
   {
    "id": "tracking",
    "section": "expertise",
-   "order": 6,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Tracking and sensors",
@@ -3699,7 +3699,7 @@
   {
    "id": "concept-design",
    "section": "expertise",
-   "order": 7,
+   "order": 0,
    "published": true,
    "title": {
     "en": "Concept design",
@@ -3744,7 +3744,7 @@
   {
    "id": "sustainable",
    "section": "expertise",
-   "order": 8,
+   "order": 2,
    "published": true,
    "title": {
     "en": "Sustainable thinking",
@@ -3789,7 +3789,7 @@
   {
    "id": "project-management",
    "section": "expertise",
-   "order": 9,
+   "order": 1,
    "published": true,
    "title": {
     "en": "Project management",
