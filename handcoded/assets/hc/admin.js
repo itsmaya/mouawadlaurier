@@ -1313,7 +1313,7 @@ function figuresEditor(s) {
       h('p', { class: 'hint' }, 'Calculés tout seuls : auto:years (années depuis 2012), auto:projects (projets publiés), auto:partners, auto:people, auto:cities. Sinon, écris la valeur (21, 40+…).'));
   };
   draw();
-  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Chiffres', h('small', null, ' affichés en bas de l’accueil, à côté des contacts')), box);
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Chiffres', h('small', null, ' ils défilent sur le bandeau LED du haut, après les slogans tapés')), box);
 }
 
 /* ================================================================ Vue : Réglages */

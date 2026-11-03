@@ -1080,9 +1080,7 @@ function renderTexts() {
     off.appendChild(el);
   });
   (s.social || []).forEach(so => { if (!so.url) return; const el = document.createElement('section'); el.innerHTML = `<h3>${escapeHTML(so.label)}</h3><p><a href="${escapeHTML(so.url)}" target="_blank" rel="noopener">${escapeHTML(so.url.replace(/^https?:\/\/(www\.)?/, ''))}</a></p>`; off.appendChild(el); });
-  const figs = homeFigures(), num = f => `<b data-v="${escapeHTML(f.value)}">${escapeHTML(f.value)}</b> ${escapeHTML(f.label)}`;
-  if (figs.length) { const el = document.createElement('section'); el.className = 'fig'; el.innerHTML = `<h3>${num(figs[0])}</h3>${figs.slice(1).map(f => `<p>${num(f)}</p>`).join('')}`; off.appendChild(el); }   // les chiffres du studio, en colonne à côté des contacts
-  home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff)); drawFigures();
+  home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff));
   enterBtn.textContent = tr(s.home.enter) || ui('enter');
   renderReel(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
@@ -1975,15 +1973,7 @@ function figureValue(v) {
   }
 }
 const homeFigures = () => ((CONTENT.settings.home && CONTENT.settings.home.figures) || []).map(f => ({ value: figureValue(f.value), label: tr(f.label) })).filter(f => f.value && f.label);
-const homeFigureLines = () => (CONTENT.settings.home.figuresInTicker ? homeFigures().map(f => `${f.value} ${f.label}`) : []);
-function drawFigures() {   // les nombres comptent jusqu'à leur valeur à l'arrivée sur l'accueil
-  const box = document.getElementById('offices'); if (!box) return;
-  const t0 = performance.now(), nums = [...box.querySelectorAll('.fig b')].map(b => { const m = /^(\d+)(.*)$/.exec(b.dataset.v); return m && { b, n: +m[1], rest: m[2] }; }).filter(Boolean);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const step = now => { const k = Math.min(1, (now - t0 - 500) / 1600); if (k < 0) { nums.forEach(x => { x.b.textContent = '0' + x.rest; }); requestAnimationFrame(step); return; }
-    const e = 1 - Math.pow(1 - k, 4); nums.forEach(x => { x.b.textContent = Math.round(x.n * e) + x.rest; }); if (k < 1) requestAnimationFrame(step); };
-  requestAnimationFrame(step);
-}
+const homeFigureLines = () => homeFigures().map(f => `${f.value} ${f.label}`);   // les chiffres du studio défilent sur le bandeau LED, dans la langue du visiteur
 function buildTickerDots() {   // le message en colonnes de 7 points ; les mots tapés passent en premier
   const items = [...typedSlogans, ...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
   const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
