@@ -238,7 +238,7 @@ const onSite = p => SECTIONS.some(s => s.def.id === p.section);
 const byOrder = (a, b) => SECTIONS.findIndex(s => s.def.id === a.section) - SECTIONS.findIndex(s => s.def.id === b.section) || (a.order ?? 0) - (b.order ?? 0);
 const linkedProjects = post => CONTENT.posts.filter(p => p.published && p !== post && onSite(p) && ((p.team || []).includes(post.id) || (post.thumb && (p.logos || []).includes(post.thumb)))).sort(byOrder);
 const relProjects = post => { const s = projectsOf(CONTENT, post).filter(onSite); return s.length ? s : linkedProjects(post); };
-const isLogo = post => /(^|\/)media\/logos\//.test(post.thumb || '');
+const isLogo = post => /(^|\/)media\/logos\//.test(post.thumb || '') || (post.tags || []).includes('partners');
 const relSkills = post => skillsOf(CONTENT, post).filter(onSite);
 const photoOf = p => p.thumb || ((p.media || []).find(m => m && m.src && mediaKind(m.src) === 'image') || {}).src || '';
 /* Photo de fond d'une carte savoir-faire : celle d'un de ses projets, tirée au hasard une fois par visite */
@@ -309,12 +309,18 @@ async function imageCard(post, w, h) {
 async function portraitCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
   const back = post.thumbBack ? await loadImage(post.thumbBack).catch(() => null) : null;
-  const bd = im ? null : await skillBackdrop(post, personProjects(post));   // pas encore de portrait : la photo d'un de ses projets, voilée, sous les initiales
+  const bd = im || isLogo(post) ? null : await skillBackdrop(post, personProjects(post));   // pas encore de portrait : la photo d'un de ses projets, voilée, sous les initiales
   await fontsReady();
   const face = (ctx, faint = false) => {
-    if (im && isLogo(post)) {   // un partenaire : son logo entier, posé sur blanc
+    if (isLogo(post)) {   // un partenaire : son logo entier, posé sur blanc (ou son nom, tant que le logo manque)
       ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
-      const pad = w * 0.14, r = Math.min((w - 2 * pad) / im.naturalWidth, (h - 2 * pad) / im.naturalHeight), lw = im.naturalWidth * r, lh = im.naturalHeight * r;
+      if (!im) {
+        ctx.fillStyle = '#141414'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `600 ${Math.round(h * 0.13)}px ${UIF}`;
+        const ls = wrapLines(ctx, tr(post.title), w * 0.76).slice(0, 3); ls.forEach((l, i) => ctx.fillText(l, w / 2, h / 2 + (i - (ls.length - 1) / 2) * h * 0.16));
+        if (NEG()) { ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
+        return;
+      }
+      const pad = w * 0.1, r = Math.min((w - 2 * pad) / im.naturalWidth, (h - 2 * pad) / im.naturalHeight), lw = im.naturalWidth * r, lh = im.naturalHeight * r;
       ctx.drawImage(im, (w - lw) / 2, (h - lh) / 2, lw, lh);
       if (NEG()) { ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
       return;
@@ -329,7 +335,7 @@ async function portraitCard(post, w, h) {
   };
   const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3)
     : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2) : canvasTex(w, h, washed(face), 2);
-  return [canvasTex(w, h, face, 3), backTex, (im || bd) ? hoverBand(post, w) : null];
+  return [canvasTex(w, h, face, 3), backTex, (im || bd || isLogo(post)) ? hoverBand(post, w) : null];
 }
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
