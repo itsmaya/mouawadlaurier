@@ -363,3 +363,16 @@ body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouver
 /* les chiffres du studio, en colonnes à côté des contacts : le nombre à la place du titre */
 /* bandeau LED du haut masquable (Réglages › Accueil) */
 #home.no-ticker #ticker { display: none; }
+
+/* téléphone debout : fiche à taille réelle, images et vidéos à la largeur de l'écran */
+#post2d.tall .pnl.media .in { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+#post2d.tall .pnl.media img, #post2d.tall .pnl.media video { flex: none; }
+#post2d.tall .embed .in { display: flex; align-items: center; }
+#post2d.tall .embed .cover, #post2d.tall .embed iframe { height: auto; aspect-ratio: 16 / 9; }
+#post2d.tall .team .ttl, #post2d.tall .team .names { left: 24px; }
+#post2d.tall .team .ttl { top: 34px; font-size: 26px; line-height: 31px; }
+#post2d.tall .team .names { top: 82px; width: calc(100% - 48px); }
+#post-x { position: fixed; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: 44px; height: 44px; border-radius: 50%; border: 0; background: #111; color: #fff; display: grid; place-items: center; z-index: 8; cursor: pointer; }
+#post-x[hidden] { display: none; }
+#post-x svg { width: 14px; height: 14px; }
+#post2d.tall .pnl.media .bgx { background: rgba(0,0,0,.88); }
