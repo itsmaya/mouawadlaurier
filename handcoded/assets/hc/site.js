@@ -1226,12 +1226,36 @@ function setFavicon(href) {
   let l = document.querySelector('link[rel~="icon"]'); if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
   if (l.getAttribute('href') !== href) { l.removeAttribute('type'); l.href = href; }
 }
+/* Titre et description de la page, et adresse ?p= : ils suivent la fiche ouverte (partage, moteurs de recherche) */
+let deepPost = '';
+const metaDesc = document.querySelector('meta[name="description"]'), BASE_DESC = metaDesc ? metaDesc.content : '';
+let BASE_TITLE = document.title;
+function setPageMeta(post) {
+  if (PREVIEW || !CONTENT) return;
+  document.title = post ? `${tr(post.title).trim()} · ${CONTENT.settings.name || 'Hand Coded'}` : BASE_TITLE;
+  if (metaDesc) metaDesc.content = post ? (htmlToText(tr(post.body).split(/<h3/i)[0]).join(' ').slice(0, 160) || tr(post.subtitle) || BASE_DESC) : BASE_DESC;
+  try { const u = new URL(location.href); if (post) u.searchParams.set('p', post.id); else u.searchParams.delete('p'); if (u.href !== location.href) history.replaceState(history.state, '', u.pathname + u.search + u.hash); } catch (e) {}
+  if (post) countView('?p=' + post.id, document.title);
+}
+/* Audience : GoatCounter (sans cookie, sans bandeau de consentement). Le code se règle dans le back-office, onglet Audience. */
+function setupStats() {
+  const code = String(((CONTENT.settings.analytics || {}).goatcounter) || '').trim().replace(/^https?:\/\//, '').replace(/\.goatcounter\.com.*$/, '').replace(/[^a-z0-9-]/gi, '');
+  if (!code || PREVIEW || location.protocol === 'file:' || /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname) || window.goatcounter) return;
+  window.goatcounter = { no_onload: true };
+  const sc = document.createElement('script'); sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+  sc.dataset.goatcounter = `https://${code}.goatcounter.com/count`; sc.dataset.goatcounterSettings = JSON.stringify({ no_onload: true });
+  sc.addEventListener('load', () => { if (!deepPost) countView('', BASE_TITLE); });
+  document.head.appendChild(sc);
+}
+function countView(path, title, event = false) {
+  try { if (window.goatcounter && typeof window.goatcounter.count === 'function') window.goatcounter.count({ path: event ? path : location.pathname.replace(/index\.html$/, '') + path, title, event }); } catch (e) {}
+}
 function renderTexts() {
   const s = CONTENT.settings;
   applyTypo(); buildStory(); dockLabels();
   document.documentElement.lang = LANG;
   document.documentElement.classList.toggle('neg', negMode);
-  document.title = s.name || 'Hand Coded';
+  if (!P.postOpen) document.title = BASE_TITLE || s.name || 'Hand Coded';
   const tl = (s.taglines && (s.taglines[LANG] || s.taglines.en)) || [];
   const sloganHTML = tl.length ? `<b class="wm">${escapeHTML(tl[0])}</b>${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}` : escapeHTML(s.name);
   sloganEl.innerHTML = tl.length ? sloganHTML.replace('<b class="wm">', `<b class="wm" role="link" tabindex="0" title="${escapeHTML(ui('homeLink'))}">`) : sloganHTML;
@@ -1665,6 +1689,7 @@ function getToSectionView(index = -1, indexPost = 0) {
   P.currentSection = index; P.resetData(); P.selected = indexPost;
   changeSection3D(); changeActiveButton(); initCategorieData(); peekCategories(performance.now() - enteredAt < 1500 ? 2.2 : 0.7);   // à l'entrée, après le zoom d'arrivée
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
+  countView('#' + P.section.def.id, tr(P.section.def.name).trim());
 }
 function refreshSectionPosts() { checkPostOpenAndClose(); P.selected = 0; changeSection3D(); checkAccess(); }
 function entries(dir) { if (dir === 'newer' ? P.data.newer() : P.data.older()) refreshSectionPosts(); }
@@ -1688,6 +1713,7 @@ function goToPost(id) {
   if (!moved && !catMoved && !pageMoved && postsView) { openThatPost(sel); return; }
   P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData(); if (moved) peekCategories();
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
+  countView('#' + P.section.def.id, tr(P.section.def.name).trim());
   const token = ++goToken;
   delayedCall(0.5, () => { if (token === goToken && P.data === d && d.posts[sel] === post) openThatPost(sel); });
 }
@@ -1704,14 +1730,14 @@ function openPost() {
     isClicking = false; canvas.classList.remove('dragging');
     closeTurn = true; focusPost(P.selected);
   } else { closeTurn = true; focusPost(P.selected); postsView.openPost3D(); }   // la carte vient vers la caméra
-  setMenuPosition();
+  setMenuPosition(); setPageMeta(P.data.posts[P.selected]);
 }
 function closePost() {
   if (!P.postOpen) return;
   P.postOpen = false;
   if (post2D.open) { post2D.close(); whiteboard.hidden = true; cats.classList.remove('hidden'); }
   else if (postsView) postsView.closePost3D();
-  setMenuPosition();
+  setMenuPosition(); setPageMeta(null);
 }
 function checkPostOpenAndClose() { if (P.postOpen) closePost(); }
 function changeActivity() { setAnimationMode(!STYLE.animationMode); toggleActivityButton(); if (postsView) postsView.resetPostPosition(); closeTurn = true; }
@@ -2037,26 +2063,35 @@ async function hvPhoto() {
   } finally {
     hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.off.width = hv.raw.width = keep.ow; hv.off.height = hv.raw.height = keep.oh; hv.lo = keep.lo; hv.hi = keep.hi; hv.fresh = true;
   }
-  /* le bas de la photo : voile, slogan, logo et adresse du site */
-  const g = ctx.createLinearGradient(0, H * 0.48, 0, H); g.addColorStop(0, 'rgba(11,11,11,0)'); g.addColorStop(0.45, 'rgba(11,11,11,.78)'); g.addColorStop(1, 'rgba(11,11,11,.96)');
-  ctx.fillStyle = g; ctx.fillRect(0, H * 0.48, W, H * 0.52);
+  /* en haut : le logo et « Hand Coded. » dans la police de la signature du site ; en bas : le slogan tapé */
+  const gTop = ctx.createLinearGradient(0, 0, 0, 330); gTop.addColorStop(0, 'rgba(11,11,11,.92)'); gTop.addColorStop(1, 'rgba(11,11,11,0)');
+  ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 330);
+  const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
+  ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
   const bs = document.getElementById('bs'), typed = bs && bs.value.trim();
   const tagline = ((CONTENT.settings.taglines || {})[LANG] || (CONTENT.settings.taglines || {}).en || []).join(' ');
   const slogan = (typed || typedSlogans[0] || tagline || 'Hand Coded.').toUpperCase();
-  const grotesk = bs ? getComputedStyle(bs).fontFamily : 'sans-serif', serif = getComputedStyle(document.querySelector('#home-band .sl') || document.body).fontFamily;
-  try { await document.fonts.load(`bold 80px ${grotesk}`); } catch (e) {}
-  const mx = 72, tw = W - 2 * mx; let size = 96, lines = [];
+  const grotesk = bs ? getComputedStyle(bs).fontFamily : 'sans-serif';
+  const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
+  const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
+  try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
+  const mx = 72, top = 70, logoS = 128;
+  const logo = document.getElementById('home-logo');
+  if (logo && logo.complete && logo.naturalWidth) { try { ctx.drawImage(logo, mx, top, logoS, logoS); } catch (e) {} }
+  const studio = (CONTENT.settings.name || 'Hand Coded') + '.', wx = mx + logoS + 34;
+  let ws = 120; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - wx - mx && ws > 48) { ws -= 4; ctx.font = wmFont(ws); }
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(studio, wx, top + logoS / 2 + ws * 0.04);
+  ctx.textBaseline = 'top';
+  const tw = W - 2 * mx; let size = 104, lines = [];
   for (; size >= 40; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
   lines = lines.slice(0, 4);
-  const lh = Math.round(size * 1.06), logoY = H - 168, top = logoY - 52 - lines.length * lh;
-  ctx.fillStyle = accent(); ctx.fillRect(mx, top - 34, 46, 6);
-  ctx.fillStyle = '#fff'; ctx.textBaseline = 'top'; ctx.font = `bold ${size}px ${grotesk}`;
-  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, top + i * lh));
-  const logo = document.getElementById('home-logo');
-  if (logo && logo.complete && logo.naturalWidth) { try { ctx.drawImage(logo, mx, logoY, 96, 96); } catch (e) {} }
-  ctx.fillStyle = '#fff'; ctx.font = `44px ${serif}`; ctx.fillText((CONTENT.settings.name || 'Hand Coded') + '.', mx + 124, logoY + 8);
-  ctx.fillStyle = '#8f8f8f'; ctx.font = `26px ${grotesk}`; ctx.fillText((location.host + location.pathname).replace(/\/(index\.html)?$/, '').replace(/^www\./, ''), mx + 126, logoY + 62);
+  const lh = Math.round(size * 1.05), urlY = H - 96, y0 = urlY - 44 - lines.length * lh;
+  ctx.fillStyle = accent(); ctx.fillRect(mx, y0 - 38, 54, 7);
+  ctx.fillStyle = '#fff'; ctx.font = `bold ${size}px ${grotesk}`;
+  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, y0 + i * lh));
+  ctx.fillStyle = '#8f8f8f'; ctx.font = `28px ${grotesk}`; ctx.fillText((location.host + location.pathname).replace(/\/(index\.html)?$/, '').replace(/^www\./, ''), mx, urlY);
   const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
+  countView('photo-souvenir', 'Photo souvenir', true);
   const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';
   const file = typeof File === 'function' ? new File([blob], name, { type: 'image/jpeg' }) : null;
   if (file && navigator.canShare && matchMedia('(pointer: coarse)').matches && navigator.canShare({ files: [file] })) {   // téléphone : la feuille de partage propose « Enregistrer l'image »
@@ -2279,7 +2314,7 @@ function submitSlogan() {
   try { localStorage.setItem(SLOGAN_KEY, JSON.stringify(typedSlogans)); } catch (err) {}
   liveDots = null; buildTickerDots(); tickerX = 0; input.value = '';
   document.getElementById('bs-sent').textContent = ui('sent');
-  sendSlogan(v);
+  sendSlogan(v); countView('slogan', 'Slogan tapé', true);
   return true;
 }
 function sendSlogan(v) {
@@ -2482,9 +2517,16 @@ async function awaitPreview() {
   const langs = CONTENT.settings.langs && CONTENT.settings.langs.length ? CONTENT.settings.langs : LANGS;
   /* langue automatique : la première langue du navigateur que le site propose (ca, es, fr, en), sinon la langue par défaut */
   const nav = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(l => String(l).toLowerCase().slice(0, 2)).find(l => langs.includes(l));
-  LANG = langs.includes(saved) ? saved : nav || (CONTENT.settings.defaultLang || langs[0]);
+  let qLang = ''; try { qLang = (new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) {}
+  LANG = langs.includes(qLang) ? qLang : langs.includes(saved) ? saved : nav || (CONTENT.settings.defaultLang || langs[0]);   // ?lang=fr : lien vers une langue (référencement)
   SECTIONS = CONTENT.sections.filter(s => s.visible).map(def => ({ def }));
   if (!SECTIONS.length) { showError(new Error('aucune section visible')); return; }
+  /* ?p=identifiant : l'adresse d'une fiche. On entre directement dans sa section, puis la fiche s'ouvre. */
+  if (!PREVIEW) try {
+    const id = new URLSearchParams(location.search).get('p'), post = id && CONTENT.posts.find(p => p.id === id && p.published !== false && SECTIONS.some(x => x.def.id === p.section));
+    if (post) { deepPost = post.id; history.replaceState(null, '', location.pathname + location.search + '#' + post.section); }
+  } catch (e) {}
+  setupStats();
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
   toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo();
   resizeViewport(); setCamera(); sizeTicker();
@@ -2500,6 +2542,7 @@ async function awaitPreview() {
     await Promise.race([Promise.all(TYPO_LINKS).then(fontsReady), new Promise(r => setTimeout(r, 3000))]);   // cartes et fiches se dessinent directement avec les bonnes polices
     assetsLoaded = true;
     if (clickedEnter || !isHomeHash() || (PREVIEW && PREVIEW.start)) enterToTheWeb();
+    if (deepPost) { const id = deepPost, t0 = performance.now(), wait = setInterval(() => { if (inputEnabled || performance.now() - t0 > 8000) { clearInterval(wait); if (inputEnabled) goToPost(id); } }, 120); }
   } catch (err) { showError(err); }
 })();
 

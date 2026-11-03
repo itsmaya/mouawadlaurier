@@ -449,3 +449,6 @@ html, body { overscroll-behavior: none; }
     body:has(#home:not([hidden]):not(.out)) #reel-btn { top: calc(max(30lvh, 186px) - 30px); }
   }
 }
+
+/* Résumé texte du site (référencement, assistants IA, lecteurs d'écran) : présent dans la page, hors de l'écran */
+#seo-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); margin: -1px; padding: 0; border: 0; }

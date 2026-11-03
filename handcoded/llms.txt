@@ -1,0 +1,183 @@
+# Hand Coded
+
+> Hand Coded is a Barcelona studio that designs and builds interactive art installations, immersive spaces and real-time software: light, sound, AI and our own tools.
+
+## Founders
+- Cyril Laurier: Co-founder. PhD in music AI, Sony CSL researcher.
+- Maya Benaïnous: Co-founder. Artist and engineer, creator of Ledotron.
+
+## Work
+- [Peupler / Populate](https://mouawadlaurier.com/handcoded/?p=peupler): Maya Mouawad, music by Cyril Laurier · 2022 – 2025 · Venice Biennale, Dakar Biennale, Boulogne. How can every living being, human and non-human, share the same territories? Peupler lets us see and feel the point of view of a tree watching our cities, a witness of the ecological changes it wishes for. A new kind of immersive room made entirely of real-time generative content. It adapts to the…
+- [Retour aux Sources](https://mouawadlaurier.com/handcoded/?p=retour-aux-sources): Maya Mouawad, music by Cyril Laurier · 2019 · Maison Ruinart, Reims, UNESCO World Heritage. A root planted in a chalk cellar dug more than two thousand years ago, thirty metres underground. In this mineral darkness, it listens to the living world breathing on the surface. The root listens to the natural elements involved in making champagne. In real time it captures climate data,…
+- [Rising](https://mouawadlaurier.com/handcoded/?p=rising): Maya Mouawad, music by Cyril Laurier · 2022 – 2025 · Nuit Blanche Paris, Llum Barcelona, MIRA, La Rochelle, Aveiro. An outdoor sound and light installation about our vulnerability. It turns scientific data on rising sea levels into a sensory experience: waves of light rise and flood the space in real time. The system is connected live to oceanographic data from the University of La Rochelle. The stronger the…
+- [Éphémère](https://mouawadlaurier.com/handcoded/?p=ephemere): Maya Mouawad, with Art Explora · 2023 · Fondation OVE Paris, Sant Joan de Déu Barcelona, CHU Lille. The present moment as a living artwork. Through their simple presence, visitors create a moving painting and an evolving music. A depth sensor follows every kind of movement, with no instructions and no prerequisites: anyone can play, whatever their motor or communication abilities. Éphémère turns…
+- [Tientos al tiempo](https://mouawadlaurier.com/handcoded/?p=tientos): Pablo Valbuena & Patricia Guerrero · 2020 · CENTQUATRE, Paris. A flamenco performance where light becomes a stage object. We built the real-time sound analysis and the performance setup that let the light answer the dancer and the voice. “I want to use the light as an object, not as a way to display the performer.” Pablo Valbuena Produced by the CENTQUATRE in…
+- [Maestro](https://mouawadlaurier.com/handcoded/?p=maestro): Mouawad Laurier & Tigre Lab · 2017 · Sharjah Light Festival, UAE. Three interactive experiences projected on a 500-metre-wide monument. Visitors touch a physical model of the building, and their gestures play sound and image on the façade. SAND: move sand particles and compose a desert soundscape. ORGAN: become the DJ of an interactive looper that triggers video…
+- [Future Ruins](https://mouawadlaurier.com/handcoded/?p=future-ruins): Romain Tardy · 2015 · La Nuit des Images, Lausanne. A music and light performance on hand-built light structures. The challenge: keep LED animation, video mapping and music perfectly in sync. We helped Romain Tardy choose the technical approach for his custom LED structures, made them controllable over Art-Net, and adapted Ledotron for real-time…
+- [S.A.T.](https://mouawadlaurier.com/handcoded/?p=sat): Romain Tardy, an attempt to send a message to outer space · 2017 · SkyDesert Festival, Hebei, China. A large light, sound and visual installation made of 72 networked modules. By day they are mirrors reflecting the sky; at night they light up in patterns visible from far away. Visitors join a local wifi network with their phone. Their IP address appears on the installation, then turns into a light…
+- [OX](https://mouawadlaurier.com/handcoded/?p=ox): Romain Tardy & Mouawad Laurier · 2014 – 2016 · Touring, France. The first machine that is sensitive to music: an AI-driven DJ stage made of moving LED structures. Real-time machine learning listens to the DJ and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image, and that packs,…
+- [MGNTRN](https://mouawadlaurier.com/handcoded/?p=mgntrn): Romain Tardy · 2014 · PROYECTA, Puebla, Mexico. An immersive show built around a Ferris wheel, projection screens and 10-metre LED strips, all synchronised with the music. We wrote the software to previsualise, animate and control every light from a single timeline, and built a robot that turns the Ferris wheel's control knobs in response to…
+- [Ledotron](https://mouawadlaurier.com/handcoded/?p=ledotron): Our software to create and run light shows · 2015 – 2026 · From Mexico to China. We wrote Ledotron for our own installations, and it has run more than forty of them since 2015, from OX to Retour aux Sources. LED strips, motorised lights, video walls and the venue itself are drawn in 3D; the show is composed on a timeline, and the result can be seen before a single cable is…
+- [Viktoria Modesta](https://mouawadlaurier.com/handcoded/?p=viktoria-modesta): Music Tech Fest performance · 2016 · Music Tech Fest, Berlin. Viktoria Modesta is a singer whose bionic leg is at the heart of her shows. For Music Tech Fest 2016 she challenged a team of hackers: let her control music and lights with her leg and arm movements, her voice and her brain. The show was built in under a week: leg and body sensors, interactive…
+- [Beardyman](https://mouawadlaurier.com/handcoded/?p=beardyman): Beardytron · 2015. Beardyman is an improvising beatboxer who samples and twists his own voice into music. We design software that lets him compose live, as fast as he thinks. Our latest module for the Beardytron 5000 mkIII: the Instant Drum Machine.
+- [TGIC](https://mouawadlaurier.com/handcoded/?p=tgic): Romain Tardy, The Great Indecision Council · 2018 · Vlieland, Netherlands, then on tour. A large light and sound installation in a 25-metre circle, fed in real time by the terms most searched on Google in the host country. Visitors stand among light, words and computer-generated chants: an involuntary self-portrait of our networked society. Hand Coded wrote the original software.…
+- [Bionic Orchestra](https://mouawadlaurier.com/handcoded/?p=bionic-orchestra): Ezra, Organic Orchestra · 2008 – 2014 · Touring, France. Technologies for live beatbox, developed with Ezra and the Organic Orchestra company over two residencies a year from 2008 to 2012, including the Abbaye de Fontevraud, with engineers, visual and music creators and researchers from the Music Technology Group of the Universitat Pompeu Fabra in…
+- [Mouvement de l'air](https://mouawadlaurier.com/handcoded/?p=mouvement-de-l-air): Adrien M & Claire B · 2014 · World touring. Adrien M & Claire B create performances that mix the real and the virtual. Together we explored new interactive elements for their shows, with particles that live with the performers on stage. Do you feel the particles? Creative residency in Cherbourg, 2014.
+- [Slush](https://mouawadlaurier.com/handcoded/?p=slush): Music Tech Fest hackathon · 2017 · Slush, Helsinki, Finland. Does the machine feel the music? Yes. In four days, with the Music Tech Fest Labs, a team built a live performance for Slush: sounds generated from the brainwaves of a blind singer, rhythms from the heartbeats of the audience, music picked up from the air by a cyborg with microchip implants, drums…
+- [Wave](https://mouawadlaurier.com/handcoded/?p=wave): Pablo Valbuena, for La Prairie · 2019 · Art Basel Miami Beach. A walk-through installation of undulating columns, made of light and ambient sound, evoking light dancing on an ocean wave. Presented by La Prairie on the Miami Beach oceanfront during Art Basel Miami Beach, December 2019. Part of our long collaboration with Pablo Valbuena: we design and develop…
+- [Methods](https://mouawadlaurier.com/handcoded/?p=methods): Pablo Valbuena, Durham Cathedral · 2017 · Lumiere Durham, United Kingdom. Light travels through Durham Cathedral, inside and out, following its bells. The work draws on change ringing, the 17th-century art of ringing bells in numerical sequences: the cathedral is divided into ten segments, one per bell, and the light answers the sound. Each night, bell-ringing teams from…
+- [Kinematope](https://mouawadlaurier.com/handcoded/?p=kinematope): Pablo Valbuena, Paisaje Técnico · 2016 · Fundación Telefónica, Madrid. Animated light and shadow reveal the architecture and offer a new way to experience the space. We designed a tool that lets the artist drive 5,000 LEDs with freedom and precision, so the shadows could fill the space the way he imagined it. “Can we make it faster and slower at the same time?” Pablo…
+- [Gyrotope](https://mouawadlaurier.com/handcoded/?p=gyrotope): Pablo Valbuena · 2016 · KM1 Grand Paris Express, Paris · Nuit Blanche, Brussels. A large circle of columns forms a sculptural volume that unfolds over time. Light and sound are its materials, and it applies the sequencing of cinema to space. Walk around it and it is an object; step inside and it becomes an environment. We designed the spatialisation system for light and sound.…
+- [EKO](https://mouawadlaurier.com/handcoded/?p=eko): Maotik & Ezra · 2014 · MIRA Festival, Barcelona. A complete audio and visual immersive environment for live performance, by the visual artist Maotik and the beatboxer Ezra. Both improvise on stage with real-time technologies. We built interactive tools that tighten the dialogue between the two artists during the show. “EKO is a particle that…
+- [Audi Mind Race](https://mouawadlaurier.com/handcoded/?p=audi-mind-race): Or how to get focused · 2013 · Camp Nou, Barcelona. Barça players race Scalextric cars with their minds. A MindWave headset reads each player's brain activity and drives the car. We connected the brain data to the cars, and designed a system that maps dynamic visuals onto the track, following the cars with a custom tracking system. Camp Nou,…
+- [Sonaris](https://mouawadlaurier.com/handcoded/?p=sonaris): AI music search engine. A music recommendation engine. Sonaris analyses an audio stream in real time and finds the tracks that sound like it, whatever their name or origin. Discover new artists, build well-mixed playlists, license music for film and advertising in minutes. “I like it: is there anything else like it?”…
+- [Nestlé Crunch, Human Beats](https://mouawadlaurier.com/handcoded/?p=nestle-crunch): Si suena es Crunch · 2015 · Palacio de los Deportes, Mexico City. An interactive installation where the visitors’ movements generate beats and particles on a giant screen, with sounds by Camilo Lara (Instituto Mexicano del Sonido). Launched for Nestlé México at the Palacio de los Deportes, Mexico City, in October 2015, together with an app and a website.
+- [Peugeot](https://mouawadlaurier.com/handcoded/?p=peugeot): Performance for an advertisement with Novak Djokovic · 2015. A performance created for a Peugeot advertisement with Novak Djokovic.
+- [Churchill](https://mouawadlaurier.com/handcoded/?p=churchill): Brainwave wine tasting · 2016 · Port Wine Day, Porto. For the opening of Churchill’s visitor centre on Port Wine Day 2016, in Porto, guests tasted three ports blind while wearing EEG headsets: White Port, a 10-year-old Tawny and a Reserve. Their brainwaves were turned into sound in real time, and the visuals, projection-mapped onto the room, followed…
+- [Cadbury](https://mouawadlaurier.com/handcoded/?p=cadbury): Campaign · United Kingdom. A campaign published in the United Kingdom.
+- [Coors](https://mouawadlaurier.com/handcoded/?p=coors): Choose your brew · New York. A Kinect interface to choose your brew with your body.
+- [Lexus](https://mouawadlaurier.com/handcoded/?p=lexus): Visual and sound FX app. A mobile app of visual and sound effects.
+- [The Fat-Site](https://mouawadlaurier.com/handcoded/?p=fat-site-2008): Fat-Man Collective, before Hand Coded · 2008 · London, Barcelona. Launched on 08.08.08: a website in real-time 3D, in the browser, built with Papervision3D. Each section is an object surrounded by cards that you turn around, open and browse with the mouse or the keyboard. This very site runs on its engine: the code was ported from ActionScript 3 to Three.js, and…
+- [Nokia Navigator](https://mouawadlaurier.com/handcoded/?p=nokia-navigator): Fat-Man Collective with Work Club · 2008 · London. An interactive video player for Nokia Maps, with the agency Work Club: the visitor pulls a lost character around Canvey Island, in Essex, while the Nokia Personal Navigators show how to find your way with the phone.
+- [Paysage Sonore](https://mouawadlaurier.com/handcoded/?p=paysage-sonore): Maya Mouawad · 2022 · Grand Palais Éphémère Paris, Noor Riyadh. A musical performance in augmented reality, generated in real time by the sounds of every visitor in the space. A hypnotic, contemplative harmony links the real and the virtual, while particles of light respond to the composition across landscapes inspired by nature. Every visitor becomes, without…
+- [Être Absorbé](https://mouawadlaurier.com/handcoded/?p=etre-absorbe): Maya Mouawad, music by Cyril Laurier · 2024 · Maison Ruinart, Reims. Nature is not foreign to us. It perceives us, answers us and takes us in. Être Absorbé continues Retour aux Sources: the same system, with a new root reaching out to the visitor, who no longer just contemplates but becomes an actor. Through their movements, visitors make the sound and light of the…
+- [Upperground](https://mouawadlaurier.com/handcoded/?p=upperground): Maya Mouawad, music by Cyril Laurier · 2018 · Lumiere London, St Pancras. Bringing nature back where people are furthest from it. St Pancras may be one of the most urban places there is, where control and speed are everything. In the tunnel, the lights are connected to the wind and react to it in real time. The wind, a living thing acting in the space, is the only raw…
+- [Albatros](https://mouawadlaurier.com/handcoded/?p=albatros): Mouawad + Laurier, with the CNRS · 2022 · NanoMusée, University of La Rochelle. Five years without touching land, 150,000 km a year, 75 years of life. The albatross is almost impossible to observe: it spends 80% of its life between water and air and only lands to breed on the island where it was born. We wanted to show it in all its majesty, at life size, in paper. A technique…
+- [Prometheus](https://mouawadlaurier.com/handcoded/?p=prometheus): An augmented philharmonic orchestra, Music Technology Group, UPF · 2015 · Singularity University Summit, Seville; ISMIR, Málaga. The Music Technology Group of the Universitat Pompeu Fabra in Barcelona was looking for a visual way to present its research on detecting, in real time, the different aspects of a philharmonic orchestra. We designed the scenario, the graphics and the real-time animation projected on a large screen…
+- [Augmented Paper](https://mouawadlaurier.com/handcoded/?p=augmented-paper): Collective residency with 30 artists · 2015 · Abbaye de Vivoin, France. A collective residency with thirty artists around augmented paper: exploring the borders between physical matter, print and digital interaction. A research on the object as a medium for sensory experience, between the craftsman’s gesture and code.
+- [Poussière d’étoile](https://mouawadlaurier.com/handcoded/?p=poussiere-detoile): A 700 m² exhibition project, with Fisheye and Jean-Luc Monterosso · 2020 · Chengdu Contemporary Image Museum, China. A one-week residency to design a 700 m² exhibition around the six atoms of living matter, with Fisheye and Jean-Luc Monterosso, founder of the Maison Européenne de la Photographie. A project at the scale of a whole museum, stopped by the Covid-19 pandemic before fabrication began, and still in…
+- [Red Bull Batalla, beyond language](https://mouawadlaurier.com/handcoded/?p=batalla-de-los-gallos): MC S-Kaine (Japan) vs MC Yartzi (USA) · 2024 · Red Bull Batalla. A freestyle battle between two rappers who do not share a language: the national champions of Japan and the United States, face to face for the first time. Each rhyme is translated live into the opponent’s language and rapped back by a voice trained on the rapper’s own voice, so each one hears the…
+- [Cupra, giant LED screen](https://mouawadlaurier.com/handcoded/?p=cupra-tracking): Real-time tracking for a giant LED screen · Germany. For Cupra in Germany, we developed a tracking system for a giant LED screen: the image follows the people in front of it, in real time, and reacts to their movements.
+- [Alpine, Paris Motor Show](https://mouawadlaurier.com/handcoded/?p=alpine-mondial-2024): Interactive screen for the Alpine stand, with Fisheye · 2024 · Paris Expo Porte de Versailles. An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which answers their presence and their gestures in real time. Produced with Fisheye.
+- [Traversée du temps Moêt](https://mouawadlaurier.com/handcoded/?p=nouveau-contenu-4): 2026 · Moêt Cellar - Epernay. Installation Sonore et et visuel de lumière pour Moet et Chandon
+- [Eruption of the end](https://mouawadlaurier.com/handcoded/?p=eruption-of-the-end): Rossella Piccinno · 2011 · Panorama 13, Le Fresnoy, Tourcoing. The old chimney of the Congo soap factory in Roubaix, built for Victor Vaissier at the end of the 19th century, comes back to life. Soap bubbles rise from this last eruption, and the images reflected in them take us through the memories of a place that has travelled through time. The abandoned…
+
+## Expertise
+- [Machine learning & our own AI](https://mouawadlaurier.com/handcoded/?p=machine-learning). Systems that listen, watch and decide: emotion detection in music, real-time choices on stage, recommendation engines.
+- [Real-time development](https://mouawadlaurier.com/handcoded/?p=real-time). Software that reacts within the frame: custom engines in C++, openFrameworks, OpenGL and shaders, built to run night after night.
+- [Audio processing](https://mouawadlaurier.com/handcoded/?p=audio). Sound analysis and generation that drive light, image and motion: beat detection, spatialisation, interactive music.
+- [Generative animation](https://mouawadlaurier.com/handcoded/?p=generative). Algorithms that generate designs and animations, for LEDs, screens and projection.
+- [Projection mapping](https://mouawadlaurier.com/handcoded/?p=projection-mapping). Projection on architecture, objects and bodies, synchronised with sound and sensors.
+- [Light and LED control](https://mouawadlaurier.com/handcoded/?p=light). From a few strips to thousands of LEDs and motors, designed and driven with Ledotron, over DMX and Art-Net.
+- [Tracking and sensors](https://mouawadlaurier.com/handcoded/?p=tracking). Kinect, Leap Motion, cameras, body and brain sensors: we turn people's presence and movement into data.
+- [Concept design](https://mouawadlaurier.com/handcoded/?p=concept-design). We join the brainstorm early, suggest the technologies that serve the idea, and carry it from concept to production.
+- [Sustainable thinking](https://mouawadlaurier.com/handcoded/?p=sustainable). Sustainable design approaches in the choice of materials, energy and durability of every installation.
+- [Project management](https://mouawadlaurier.com/handcoded/?p=project-management). One team from the first sketch to the last show, with artists, agencies and brands.
+- [Our tools](https://mouawadlaurier.com/handcoded/?p=tools). Autodesk Maya, After Effects, TouchDesigner, Photoshop, Xcode, MadMapper, Millumin, Ableton Live and our own Ledotron. C++, OpenGL, openFrameworks, Objective-C, SceneKit, Python, Max/MSP, GLSL, VST and WebGL.
+- [Hardware and protocols](https://mouawadlaurier.com/handcoded/?p=hardware). DMX, Art-Net, OSC, Kinect 1 and 2, Leap Motion, augmented reality, iOS, Android and Arduino.
+- [Immersive](https://mouawadlaurier.com/handcoded/?p=nouveau-contenu): Rooms of light, sound and data that answer the people inside them.. We design and build immersive spaces where image, light and sound are generated in real time, so the work is never the same twice. Cameras and sensors follow the visitors, live data from the climate, the music or the place feeds the content, and the room becomes a living environment rather than a…
+
+## Studio
+- [Cyril Laurier](https://mouawadlaurier.com/handcoded/?p=cyril): Co-founder. PhD in music AI, Sony CSL researcher. · Barcelona. His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music…
+- [Maya Benaïnous](https://mouawadlaurier.com/handcoded/?p=maya): Co-founder. Artist and engineer, creator of Ledotron. · Barcelona. Artist and engineer, she creates immersive installations at the crossroads of ecology, technology and the senses, and has worked with real-time data since 2008. She invented a new way to work with LEDs: Ledotron. Trained in mathematics, biology and art and technology (IMAC engineering school), she…
+- [Stéphanie Huerre](https://mouawadlaurier.com/handcoded/?p=stephanie): Maths, art and new technologies, sustainable design.. Ten years at Walt Disney Imagineering R&D, where she led a 3D AI simulation tool to study crowd flow and visitor experience in theme parks, and brought sustainable design into the process. She likes riding her bike.
+- [Romain Tardy](https://mouawadlaurier.com/handcoded/?p=romain-tardy): Visual artist. OX, S.A.T., MGNTRN, Future Ruins, TGIC. Hand Coded designed and developed his creation and control tools from 2014 to 2021.
+- [Pablo Valbuena](https://mouawadlaurier.com/handcoded/?p=pablo-valbuena): Visual artist. Kinematope, Gyrotope, Wave, Methods, Tientos al tiempo. Hand Coded designed and developed his creation and control tools from 2014 to 2020.
+- [Adrien M & Claire B](https://mouawadlaurier.com/handcoded/?p=adrien-m-claire-b): Digital arts and performance company. Mouvement de l’air, world tour.
+- [Beardyman](https://mouawadlaurier.com/handcoded/?p=beardyman-musician): Musician
+- [Maotik](https://mouawadlaurier.com/handcoded/?p=maotik): Visual artist. EKO, with Ezra, MIRA Festival 2014.
+- [Ezra](https://mouawadlaurier.com/handcoded/?p=ezra): Beatboxer, Organic Orchestra. Bionic Orchestra and EKO, with the Organic Orchestra company, from 2008.
+- [Pedra](https://mouawadlaurier.com/handcoded/?p=pedra): Artist and costume designer
+- [Jesse Watts](https://mouawadlaurier.com/handcoded/?p=jesse-watts): Sound engineer
+- [Paul Brossier](https://mouawadlaurier.com/handcoded/?p=paul-brossier): PhD, music developer
+- [Thomas Aussenac](https://mouawadlaurier.com/handcoded/?p=thomas-aussenac): Sound designer
+- [Tom Magnier](https://mouawadlaurier.com/handcoded/?p=tom-magnier): Electronic engineer
+- [Joan Sandoval](https://mouawadlaurier.com/handcoded/?p=joan-sandoval): Creative coder. Creative coding and audio development on Maestro, Peupler, Éphémère and Paysage Sonore.
+- [Ben Kuper](https://mouawadlaurier.com/handcoded/?p=ben-kuper): Technical director, creative coder. Technical director and coder, inventor of Chataigne, the open-source software that links show control, sensors and media. Creative coding on Peupler.
+- [Clément Gamgie Rignault](https://mouawadlaurier.com/handcoded/?p=clement-rignault): Creative coder. Creative coding on Peupler.
+- [Louis Raveton](https://mouawadlaurier.com/handcoded/?p=louis-raveton): Composer, musician. Music with Cyril Laurier for Peupler, Rising and Être Absorbé.
+- [Fanny Fortage](https://mouawadlaurier.com/handcoded/?p=fanny-fortage): Production manager. Production of Éphémère and Être Absorbé.
+- [Gaëtan Cerrillo](https://mouawadlaurier.com/handcoded/?p=gaetan-cerrillo): Project manager, producer. Production of Peupler.
+- [Gustavo Valera](https://mouawadlaurier.com/handcoded/?p=gustavo-valera): Electronics, 3D printing, art building
+- [Salvador Mauri](https://mouawadlaurier.com/handcoded/?p=salvador-mauri): Inventor, LED systems specialist. Founder of Sakma. Lamps of Retour aux Sources.
+- [Guillaume Faure](https://mouawadlaurier.com/handcoded/?p=guillaume-faure): Filmmaker, photographer. Films and photographs of Retour aux Sources.
+- [Antoni Hadzijanev](https://mouawadlaurier.com/handcoded/?p=antoni-hadzijanev): Filmmaker
+- [Marie Flament](https://mouawadlaurier.com/handcoded/?p=marie-flament): Photographer. Photographs of Peupler.
+- [Abel Sierra Sánchez](https://mouawadlaurier.com/handcoded/?p=abel-sierra): Unity developer. Augmented reality development of Paysage Sonore.
+- [Nestor Català](https://mouawadlaurier.com/handcoded/?p=nestor-catala): Pure Data developer. Real-time audio of Paysage Sonore.
+- [Marco Nason](https://mouawadlaurier.com/handcoded/?p=marco-nason): Master glassblower, NasonMoretti, Murano. Hand-blew every glass piece of Retour aux Sources during a residency at the NasonMoretti glassworks.
+- [Viktoria Modesta](https://mouawadlaurier.com/handcoded/?p=viktoria-modesta-artist): Bionic pop artist. Interactive projections for her bionic performance, Music Tech Fest, Funkhaus Berlin, 2016.
+- [Patricia Guerrero](https://mouawadlaurier.com/handcoded/?p=patricia-guerrero): Flamenco dancer and choreographer. Tientos al tiempo, with Pablo Valbuena, CENTQUATRE Paris, 2020.
+- [Tigre Lab](https://mouawadlaurier.com/handcoded/?p=tigre-lab): Studio. Maestro, Sharjah Light Festival, 2017.
+- [Ruinart](https://mouawadlaurier.com/handcoded/?p=ruinart): Brand
+- [The Absolut Company](https://mouawadlaurier.com/handcoded/?p=absolut): Brand
+- [Audi](https://mouawadlaurier.com/handcoded/?p=audi): Brand
+- [FC Barcelona](https://mouawadlaurier.com/handcoded/?p=fc-barcelona): Brand
+- [BNP Paribas Real Estate](https://mouawadlaurier.com/handcoded/?p=bnp-paribas-real-estate): Brand
+- [La Prairie](https://mouawadlaurier.com/handcoded/?p=la-prairie): Brand
+- [Nestlé](https://mouawadlaurier.com/handcoded/?p=nestle): Brand
+- [Peugeot](https://mouawadlaurier.com/handcoded/?p=marque-peugeot): Brand
+- [Lexus](https://mouawadlaurier.com/handcoded/?p=marque-lexus): Brand
+- [Coors](https://mouawadlaurier.com/handcoded/?p=marque-coors): Brand
+- [Cadbury](https://mouawadlaurier.com/handcoded/?p=marque-cadbury): Brand
+- [Churchill’s](https://mouawadlaurier.com/handcoded/?p=churchills): Brand
+- [Fisheye](https://mouawadlaurier.com/handcoded/?p=fisheye): Production and agency
+- [Tetro](https://mouawadlaurier.com/handcoded/?p=tetro): Production and agency
+- [DDB Spain](https://mouawadlaurier.com/handcoded/?p=ddb): Production and agency
+- [Art Explora](https://mouawadlaurier.com/handcoded/?p=art-explora): Production and agency
+- [It Is Now](https://mouawadlaurier.com/handcoded/?p=it-is-now): Production and agency
+- [The Caring Gallery](https://mouawadlaurier.com/handcoded/?p=the-caring-gallery): Production and agency
+- [Palais de Tokyo](https://mouawadlaurier.com/handcoded/?p=palais-de-tokyo): Venue
+- [Grand Palais](https://mouawadlaurier.com/handcoded/?p=grand-palais): Venue
+- [CENTQUATRE-PARIS](https://mouawadlaurier.com/handcoded/?p=centquatre): Venue
+- [La Gaîté Lyrique](https://mouawadlaurier.com/handcoded/?p=gaite-lyrique): Venue
+- [Fundación Telefónica](https://mouawadlaurier.com/handcoded/?p=fundacion-telefonica): Venue
+- [Learning Planet Institute](https://mouawadlaurier.com/handcoded/?p=learning-planet): Venue
+- [NANOmusée](https://mouawadlaurier.com/handcoded/?p=nanomusee): Venue
+- [La Biennale di Venezia](https://mouawadlaurier.com/handcoded/?p=biennale-venezia): Festival
+- [Biennale de Dakar](https://mouawadlaurier.com/handcoded/?p=biennale-dakar): Festival
+- [Riyadh Art](https://mouawadlaurier.com/handcoded/?p=riyadh-art): Festival
+- [Lumiere](https://mouawadlaurier.com/handcoded/?p=lumiere): Festival
+- [Nuit Blanche](https://mouawadlaurier.com/handcoded/?p=nuit-blanche): Festival
+- [Llum BCN](https://mouawadlaurier.com/handcoded/?p=llum-bcn): Festival
+- [MIRA](https://mouawadlaurier.com/handcoded/?p=mira): Festival
+- [Eufònic](https://mouawadlaurier.com/handcoded/?p=eufonic): Festival
+- [Sharjah Light Festival](https://mouawadlaurier.com/handcoded/?p=sharjah-light-festival): Festival
+- [Proyecta](https://mouawadlaurier.com/handcoded/?p=proyecta): Festival
+- [Signal Festival](https://mouawadlaurier.com/handcoded/?p=signal-festival): Festival
+- [Into the Great Wide Open](https://mouawadlaurier.com/handcoded/?p=into-the-great-wide-open): Festival
+- [Music Tech Fest](https://mouawadlaurier.com/handcoded/?p=music-tech-fest): Festival
+- [Société du Grand Paris](https://mouawadlaurier.com/handcoded/?p=societe-du-grand-paris): Institution
+- [Institut français](https://mouawadlaurier.com/handcoded/?p=institut-francais): Institution
+- [Generalitat de Catalunya](https://mouawadlaurier.com/handcoded/?p=generalitat): Institution
+- [Catalan Arts](https://mouawadlaurier.com/handcoded/?p=catalan-arts): Institution
+- [Institut Ramon Llull](https://mouawadlaurier.com/handcoded/?p=institut-ramon-llull): Institution
+- [Scam](https://mouawadlaurier.com/handcoded/?p=scam): Institution
+- [CNRS](https://mouawadlaurier.com/handcoded/?p=cnrs): Research
+- [Universitat Pompeu Fabra, MTG](https://mouawadlaurier.com/handcoded/?p=upf): Research
+- [Ircam](https://mouawadlaurier.com/handcoded/?p=ircam): Research
+- [CEA](https://mouawadlaurier.com/handcoded/?p=cea): Research
+- [Cupra](https://mouawadlaurier.com/handcoded/?p=cupra): Brand
+- [Red Bull](https://mouawadlaurier.com/handcoded/?p=red-bull): Brand
+- [Danone](https://mouawadlaurier.com/handcoded/?p=danone): Brand
+- [Nokia](https://mouawadlaurier.com/handcoded/?p=nokia): Brand
+- [Pommery](https://mouawadlaurier.com/handcoded/?p=pommery): Brand
+- [Santander](https://mouawadlaurier.com/handcoded/?p=santander): Brand
+- [Eventide](https://mouawadlaurier.com/handcoded/?p=eventide): Brand
+- [France 24](https://mouawadlaurier.com/handcoded/?p=france-24): Brand
+- [Rai](https://mouawadlaurier.com/handcoded/?p=rai): Brand
+- [TV3](https://mouawadlaurier.com/handcoded/?p=tv3): Brand
+- [Cité de la musique](https://mouawadlaurier.com/handcoded/?p=cite-de-la-musique): Venue
+- [MTA Festival](https://mouawadlaurier.com/handcoded/?p=mta-festival): Festival
+- [Chataigne](https://mouawadlaurier.com/handcoded/?p=chataigne): Software
+- [Alpine](https://mouawadlaurier.com/handcoded/?p=alpine): Brand
+- [aubio](https://mouawadlaurier.com/handcoded/?p=aubio): Software
+- [Rossella Piccinno](https://mouawadlaurier.com/handcoded/?p=rossella-piccinno): Artist and filmmaker. Eruption of the end, 2011. Italian artist born in Salento, trained in documentary and experimental cinema at the University of Bologna, then at Le Fresnoy.
+- [Emma Haziza](https://mouawadlaurier.com/handcoded/?p=emma-haziza): Systemic hydrologist. Scientific advisor of Rising. Gave the public talk on oceans and climate change at Nuit Blanche Paris 2024.
+- [Le Fresnoy](https://mouawadlaurier.com/handcoded/?p=le-fresnoy): Institution
+- [La Rochelle Université](https://mouawadlaurier.com/handcoded/?p=la-rochelle-universite): Research
+- [NasonMoretti](https://mouawadlaurier.com/handcoded/?p=nasonmoretti): Glassworks
+- [Hub Montréal](https://mouawadlaurier.com/handcoded/?p=hub-montreal): Conference
+- [Musée de l’Élysée](https://mouawadlaurier.com/handcoded/?p=musee-de-l-elysee): Venue
+- [Fondation OVE](https://mouawadlaurier.com/handcoded/?p=fondation-ove): Institution
+- [Sant Joan de Déu](https://mouawadlaurier.com/handcoded/?p=sant-joan-de-deu): Hospital
+- [CHU de Lille](https://mouawadlaurier.com/handcoded/?p=chu-lille): Hospital
+- [CHU de Bordeaux](https://mouawadlaurier.com/handcoded/?p=chu-bordeaux): Hospital
+- [Abbaye de Fontevraud](https://mouawadlaurier.com/handcoded/?p=abbaye-de-fontevraud): Venue
+- [Abbaye de Vivoin](https://mouawadlaurier.com/handcoded/?p=abbaye-de-vivoin): Venue
+
+## Contact
+- Hand Coded, Barcelona, Carrer Perez Galdos 6, 08012 Barcelona, +34 666 19 94 29, maya@hand-coded.net
+- https://www.facebook.com/handcoders
+
+Other languages: https://mouawadlaurier.com/handcoded/?lang=en https://mouawadlaurier.com/handcoded/?lang=fr https://mouawadlaurier.com/handcoded/?lang=ca https://mouawadlaurier.com/handcoded/?lang=es

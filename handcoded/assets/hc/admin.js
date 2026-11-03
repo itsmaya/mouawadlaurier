@@ -5,6 +5,7 @@
  * Le brouillon (textes et fichiers pas encore publiés) est gardé dans le navigateur tant qu'il n'est pas publié.
  */
 import * as THREE from 'three';
+import { seoParts, applySEO, SEO_DEFAULT } from './seo.js';
 import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
 import { LANGS, LANG_NAMES, t, LAYOUTS, CARDS, CITIES, findCities, normalizeContent, emptyField, postsOf, slugify, uniqueId, escapeHTML, sanitizeHTML, htmlToText,
   resizeImage, extOf, blobToBase64, kvGet, kvSet, kvDel, GitHubBackend, DemoBackend,
@@ -162,6 +163,35 @@ async function saveDraft() {
       staged: [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob })) });
   } catch (e) { console.warn('brouillon non sauvegardé', e); }
 }
+/* Fusion à trois : base (le site quand le brouillon a commencé), mine (le brouillon), theirs (le site en ligne maintenant).
+   Seuls les changements du brouillon sont appliqués sur la version en ligne : rien de ce qui a été publié entre-temps n'est perdu.
+   Contenus, sections et modèles se fusionnent fiche par fiche et champ par champ ; si les deux ont changé le même champ, le brouillon gagne. */
+const J = x => JSON.stringify(x);
+const isObj = x => !!x && typeof x === 'object' && !Array.isArray(x);
+const byId = a => Array.isArray(a) && a.length > 0 && a.every(x => isObj(x) && typeof x.id === 'string');
+function merge3(b, m, t) {
+  if (J(m) === J(b)) return t;
+  if (J(t) === J(b) || J(t) === J(m)) return m;
+  if (isObj(b) && isObj(m) && isObj(t)) {
+    const out = {};
+    for (const k of new Set([...Object.keys(b), ...Object.keys(m), ...Object.keys(t)])) { const v = merge3(b[k], m[k], t[k]); if (v !== undefined) out[k] = v; }
+    return out;
+  }
+  if (Array.isArray(m) && Array.isArray(t) && (byId(m) || byId(t))) {
+    const bl = Array.isArray(b) ? b : [], B = new Map(bl.map(x => [x.id, x])), M = new Map(m.map(x => [x.id, x])), T = new Map(t.map(x => [x.id, x]));
+    const order = J(m.map(x => x.id)) !== J(bl.map(x => x.id)) ? m.map(x => x.id) : t.map(x => x.id), ids = [];
+    for (const id of [...order, ...t.map(x => x.id), ...m.map(x => x.id)]) if (!ids.includes(id)) ids.push(id);
+    const out = [];
+    for (const id of ids) {
+      const bb = B.get(id), mm = M.get(id), tt = T.get(id);
+      if (bb && !mm) { if (tt && J(tt) !== J(bb)) out.push(tt); continue; }   // supprimé dans le brouillon : gardé seulement s'il a changé en ligne
+      if (bb && !tt) { if (mm && J(mm) !== J(bb)) out.push(mm); continue; }   // supprimé en ligne : gardé seulement s'il a changé dans le brouillon
+      out.push(!bb ? (mm && tt ? merge3({}, mm, tt) : mm || tt) : merge3(bb, mm, tt));
+    }
+    return out;
+  }
+  return m;
+}
 /* Un brouillon n'est jamais jeté sans copie : la dernière copie se récupère dans Historique › Sauvegardes */
 async function backupDraft(d) { try { if (d && d.content) await kvSet('draft-backup:' + S.draftKey, { content: d.content, at: d.at || Date.now() }); } catch (e) {} }
 async function restoreDraft() {
@@ -170,9 +200,16 @@ async function restoreDraft() {
   if (d.base !== S.base) {
     const keep = await modal('Un brouillon attend', h('div', null,
       h('p', null, `Tu as un brouillon non publié du ${new Date(d.at).toLocaleString('fr-FR')}.`),
-      h('p', null, "Le site a été publié depuis (peut-être depuis un autre ordinateur). Si tu reprends ce brouillon, sa publication remplacera ces changements.")),
-      [{ label: 'Partir de la version en ligne', value: false, cls: 'ghost' }, { label: 'Reprendre mon brouillon', value: true, cls: 'dark' }]);
+      h('p', null, "Le site a été publié depuis (peut-être depuis un autre ordinateur). Si tu reprends ce brouillon, seuls tes changements seront ajoutés à la version en ligne : ce qui a été publié entre-temps est gardé.")),
+      [{ label: 'Partir de la version en ligne', value: false, cls: 'ghost' }, { label: 'Reprendre mes changements', value: true, cls: 'dark' }]);
     if (!keep) { await backupDraft(d); await kvDel(S.draftKey); return; }
+    await backupDraft(d);
+    let base = null; try { base = JSON.parse(d.base); } catch (e) {}
+    S.content = normalizeContent(base ? merge3(base, d.content, JSON.parse(S.base)) : d.content);
+    (d.staged || []).forEach(f => stageFile(f.path, f.blob));
+    (d.deletes || []).forEach(p => S.deletes.add(p));
+    toast('Tes changements sont repris sur la version en ligne. Une copie du brouillon reste dans Historique › Sauvegardes.');
+    return;
   }
   S.content = normalizeContent(d.content);
   (d.staged || []).forEach(f => stageFile(f.path, f.blob));
@@ -221,9 +258,10 @@ async function publish() {
       const head = await headSha();
       if (S.head && head !== S.head) {
         const remote = await S.backend.loadAt(head);
-        if (JSON.stringify(remote) !== S.base) {
-          const force = await confirmBox('Le site a changé entre-temps', 'Quelqu’un (ou toi, depuis un autre onglet) a publié depuis que tu as ouvert le back-office. Publier maintenant remplacera ces changements par les tiens.', 'Publier quand même', 'danger');
-          if (!force) { S.busy = false; updateStatus(); return; }
+        if (JSON.stringify(remote) !== S.base) {   // publié ailleurs entre-temps : on ajoute nos changements à la version en ligne, sans rien écraser
+          const ok = await confirmBox('Le site a changé entre-temps', 'Quelqu’un (ou toi, depuis un autre onglet) a publié depuis que tu as ouvert le back-office. Tes changements vont être ajoutés à la version en ligne : ce qui a été publié entre-temps est gardé.', 'Fusionner et publier');
+          if (!ok) { S.busy = false; updateStatus(); return; }
+          S.content = normalizeContent(merge3(JSON.parse(S.base), S.content, remote));
         }
       }
     }
@@ -232,6 +270,14 @@ async function publish() {
     if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // copies en JavaScript pour ouvrir le site en local (double-clic sur index.html)
       files.push({ path: 'content/content.js', text: 'window.HC_CONTENT = ' + JSON.stringify(S.content) + ';\n' });
       if (JSON.stringify(JSON.parse(S.base).models) !== JSON.stringify(S.content.models)) { updateStatus('Préparation des modèles 3D…'); files.push({ path: 'models/models.js', text: await modelsJS() }); }
+    }
+    if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // référencement : balises et résumé dans index.html, llms.txt, sitemap.xml
+      try {
+        updateStatus('Référencement…');
+        const parts = seoParts(S.content, { base: siteBase() }), idx = await S.backend.readText('index.html'), next = applySEO(idx, parts);
+        if (next !== idx) files.push({ path: 'index.html', text: next });
+        files.push({ path: 'llms.txt', text: parts.llms }, { path: 'sitemap.xml', text: parts.sitemap });
+      } catch (e) { console.warn('référencement non mis à jour', e); }
     }
     const dels = new Set([...S.deletes].filter(p => !used.has(p)));
     if (orphans.length && cleanup.checked) orphans.forEach(p => dels.add(p));
@@ -519,7 +565,7 @@ function richText(fieldObj, placeholder) {
 
 /* ================================================================ Ossature */
 const VIEWS = [
-  ['sections', 'Sections'], ['posts', 'Contenus'], ['models', 'Modèles 3D'], ['media', 'Médias'], ['settings', 'Réglages'], ['history', 'Historique'],
+  ['sections', 'Sections'], ['posts', 'Contenus'], ['models', 'Modèles 3D'], ['media', 'Médias'], ['settings', 'Réglages'], ['audience', 'Audience'], ['history', 'Historique'],
 ];
 let topEl, navEl, mainEl, statusEl;
 function render() {
@@ -557,7 +603,7 @@ function updateStatus(text) {
 function go(view) { S.view = view; try { history.replaceState(null, '', '#/' + view); } catch (e) {} renderNav(); renderMain(); mainEl.scrollTop = 0; }
 function renderMain() {
   S.refreshList = null; S.onChange = null;
-  const v = { sections: viewSections, posts: viewPosts, models: viewModels, media: viewMedia, settings: viewSettings, history: viewHistory }[S.view] || viewSections;
+  const v = { sections: viewSections, posts: viewPosts, models: viewModels, media: viewMedia, settings: viewSettings, audience: viewAudience, history: viewHistory }[S.view] || viewSections;
   fill(mainEl, v());
 }
 function page(title, intro, acts, ...content) {
@@ -677,9 +723,11 @@ function sectionEditor(sec, redrawList, redraw) {
         field('Distance de la caméra (%)', textInput(() => sec.camera || '', v => { if (v === '' || v === (sec.layout === 'map' ? 58 : 100)) delete sec.camera; else sec.camera = Math.max(30, Math.min(250, v)); }, { type: 'number', min: 30, max: 250, step: 5, placeholder: sec.layout === 'map' ? '58' : '100' }), 'Plus petit : la caméra s’approche de l’objet. Vide : ' + (sec.layout === 'map' ? '58 pour la carte du monde.' : '100.'))),
       sec.tags.length ? clientLinks(sec) : null));
 }
-function siteBase() {   // adresse publique du site, devinée depuis celle du back-office
+function siteBase() {   // adresse publique du site : celle réglée dans Audience, sinon devinée depuis celle du back-office
+  const u = ((S.content && S.content.settings.seo && S.content.settings.seo.url) || '').trim();
+  if (u) return u.replace(/\/?$/, '/');
   if (/^https?:$/.test(location.protocol) && /\/admin\/?/.test(location.pathname)) return location.origin + location.pathname.replace(/admin\/?(index\.html)?$/, '');
-  return 'https://hand-coded.net/';
+  return 'https://mouawadlaurier.com/handcoded/';
 }
 function clientLinks(sec) {   // un lien par tag, à envoyer à un client : le site s'ouvre sur ce tag
   const base = siteBase();
@@ -1460,6 +1508,46 @@ function viewSettings() {
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
       h('div', { class: 'block' }, h('h3', null, 'Bureaux'), offBox),
       h('div', { class: 'block' }, h('h3', null, 'Réseaux et liens'), socBox)));
+}
+
+/* ================================================================ Vue : Audience et référencement */
+function viewAudience() {
+  const s = S.content.settings, a = s.analytics, seo = s.seo;
+  const gcCode = () => String(a.goatcounter || '').trim().replace(/^https?:\/\//, '').replace(/\.goatcounter\.com.*$/, '').replace(/[^a-z0-9-]/gi, '');
+  const tokKey = LS + ':gc-token'; let token = ''; try { token = localStorage.getItem(tokKey) || ''; } catch (e) {}
+  const board = h('div', { class: 'gc-board' });
+  const drawBoard = () => {
+    const code = gcCode();
+    if (!code) { fill(board, h('p', { class: 'hint' }, 'Renseigne le code GoatCounter ci-dessus pour voir les visites ici.')); return; }
+    const src = `https://${code}.goatcounter.com/?hideui=1${token ? '&access-token=' + encodeURIComponent(token) : ''}`;
+    fill(board, h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', margin: '0 0 10px' } },
+        h('a', { class: 'btn sm', href: `https://${code}.goatcounter.com`, target: '_blank', rel: 'noopener' }, 'Ouvrir le tableau de bord complet ↗'),
+        h('span', { class: 'hint', style: { margin: 0 } }, 'Si le cadre reste vide : vérifie le jeton et l’autorisation d’intégration (étapes ci-dessous).')),
+      h('iframe', { src, title: 'Statistiques de visite', loading: 'lazy', referrerpolicy: 'no-referrer' }));
+  };
+  drawBoard();
+  const tokenInput = h('input', { type: 'password', value: token, placeholder: 'jeton de lecture du tableau de bord', spellcheck: 'false', autocomplete: 'off' });
+  tokenInput.addEventListener('change', () => { token = tokenInput.value.trim(); try { localStorage.setItem(tokKey, token); } catch (e) {} drawBoard(); });
+  return page('Audience', 'Qui visite le site, ce qu’on y regarde, et comment les moteurs de recherche et les assistants IA le lisent.', [],
+    h('div', { class: 'card' },
+      h('div', { class: 'block' }, h('h3', null, 'Visites', h('small', null, ' GoatCounter : sans cookie, pas de bandeau de consentement')),
+        h('div', { class: 'grid2' },
+          field('Code GoatCounter', textInput(() => a.goatcounter, v => { a.goatcounter = v.trim(); }, { placeholder: 'handcoded', spell: false, onBlur: drawBoard }), 'Le nom choisi à l’inscription : handcoded pour handcoded.goatcounter.com. Le site compte les visites dès la prochaine publication.'),
+          field('Jeton de lecture', tokenInput, 'Reste dans ce navigateur, jamais publié.')),
+        board,
+        h('details', { class: 'howto' }, h('summary', null, 'Mise en place, une seule fois (cinq minutes)'),
+          h('ol', null,
+            h('li', null, 'Crée un compte gratuit sur goatcounter.com et choisis un code (par exemple handcoded).'),
+            h('li', null, 'Dans GoatCounter › Settings : « Sites that can embed GoatCounter » : ajoute ', h('code', null, new URL(siteBase()).host), '.'),
+            h('li', null, 'Toujours dans Settings : « Dashboard viewable by » : « logged in users or with secret token ». Copie le jeton et colle-le ci-dessus.'),
+            h('li', null, 'Écris le code ci-dessus, puis Publier.')),
+          h('p', { class: 'hint' }, 'Sont comptés : l’accueil, chaque section, chaque fiche ouverte (avec son adresse ?p=…), et deux événements : slogan tapé, photo souvenir. Aucune donnée personnelle, pas d’adresse IP conservée.'))),
+      h('div', { class: 'block' }, h('h3', null, 'Référencement', h('small', null, ' moteurs de recherche et assistants IA')),
+        field('Adresse du site', textInput(() => seo.url, v => { seo.url = v.trim(); }, { placeholder: siteBase(), spell: false }), 'L’adresse publique de la page d’accueil. Vide : elle est déduite de l’adresse de ce back-office.'),
+        pairInput('Description', seo, 'description', { placeholder: SEO_DEFAULT, hint: 'Une ou deux phrases : ce qui s’affiche sous le titre dans Google et dans les aperçus de partage. Vide : la phrase proposée en gris.' }),
+        field('Image de partage', textInput(() => seo.image, v => { seo.image = v.trim(); }, { placeholder: 'media/peupler/01.jpg', spell: false }), 'Chemin d’une image du site, montrée quand on partage le lien (WhatsApp, LinkedIn…). Vide : la photo du premier projet.'),
+        h('p', { class: 'hint' }, 'À chaque publication, le back-office réécrit : le titre, la description et les données structurées de la page (studio, projets), un résumé texte de tout le site lisible sans JavaScript, ', h('code', null, 'llms.txt'), ' pour les assistants IA, et ', h('code', null, 'sitemap.xml'), '. Chaque fiche a sa propre adresse : ', h('code', null, siteBase() + '?p=identifiant'), ', et chaque langue la sienne : ', h('code', null, '?lang=fr'), '.'),
+        h('p', { class: 'hint' }, 'Pour suivre les recherches Google : ajoute le site dans ', h('a', { href: 'https://search.google.com/search-console', target: '_blank', rel: 'noopener' }, 'Google Search Console'), ' et donne-lui l’adresse du plan : ', h('code', null, siteBase() + 'sitemap.xml'), '.'))));
 }
 
 /* ================================================================ Vue : Historique */

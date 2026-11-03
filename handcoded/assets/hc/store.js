@@ -60,6 +60,11 @@ export function normalizeContent(c) {
   const h = c.settings.home;
   h.headline = h.headline || emptyField(); h.sub = h.sub || emptyField(); h.enter = h.enter || { en: 'Enter', fr: 'Entrer', ca: 'Entra', es: 'Entrar' };
   h.ticker = Array.isArray(h.ticker) ? h.ticker : []; h.figures = Array.isArray(h.figures) ? h.figures : [];
+  /* Référencement et audience (back-office › Audience) */
+  const seo = c.settings.seo = c.settings.seo && typeof c.settings.seo === 'object' ? c.settings.seo : {};
+  seo.url = typeof seo.url === 'string' ? seo.url : ''; seo.image = typeof seo.image === 'string' ? seo.image : '';
+  if (!seo.description || typeof seo.description !== 'object') seo.description = Object.fromEntries(LANGS.map(l => [l, seo.description || '']));
+  c.settings.analytics = c.settings.analytics && typeof c.settings.analytics === 'object' ? c.settings.analytics : {};
   /* L'histoire du site : le « ? » de l'accueil ouvre un panneau par-dessus la vidéo (titre, texte, images, lien) */
   const st = h.story = h.story && typeof h.story === 'object' ? h.story : {};
   ['title', 'body', 'linkLabel'].forEach(k => { if (!st[k] || typeof st[k] !== 'object') st[k] = Object.fromEntries(LANGS.map(l => [l, st[k] || ''])); });
@@ -259,6 +264,7 @@ export class GitHubBackend {
     }
     return r.status === 204 ? null : (opts.raw ? r.text() : r.json());
   }
+  async readText(path) { return this.req(`${this.repoPath}/contents/${this.full(path)}?ref=${encodeURIComponent(this.cfg.branch)}`, { raw: true, headers: { Accept: 'application/vnd.github.raw+json' } }); }
   async check() {
     const repo = await this.req(this.repoPath);
     if (!repo.permissions || !repo.permissions.push) throw Object.assign(new Error("Ce jeton peut lire le dépôt mais pas y écrire. Donne-lui l'accès « Contents : Read and write »."), { status: 403 });
