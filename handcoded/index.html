@@ -7,7 +7,8 @@
 <meta name="description" content="Hand Coded, design and development studio for interactive art installations: light, sound, AI and our own software.">
 <link rel="icon" href="assets/hc/ui/logo-default.svg">
 <link rel="stylesheet" href="vendor/fonts/fonts.css">
-<link rel="stylesheet" href="assets/hc/site.css">
+<script>window.HC_V = 'ccb4bc925a'; window.hcV = u => location.protocol === 'file:' ? u : u + '?v=' + window.HC_V;</script>
+<script>document.write('<link rel="stylesheet" href="' + hcV('assets/hc/site.css') + '">')</script>
 </head>
 <body>
 <canvas id="stage" tabindex="0" aria-label="3D scene"></canvas>
@@ -57,6 +58,6 @@
 /* Ouvert en double-cliquant sur le fichier (file://) : le contenu et les modèles 3D sont lus depuis des copies en JavaScript. */
 if (location.protocol === 'file:') document.write('<script src="content/content.js"><\/script><script src="models/models.js"><\/script>');
 </script>
-<script src="assets/hc/site.bundle.js"></script>
+<script>document.write('<script src="' + hcV('assets/hc/site.bundle.js') + '"><\/script>')</script>
 </body>
 </html>

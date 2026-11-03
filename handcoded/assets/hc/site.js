@@ -234,13 +234,19 @@ function washed(draw) { return ctx => { draw(ctx); ctx.fillStyle = 'rgba(255,255
 function mirrored(w, draw) { return ctx => { ctx.translate(w, 0); ctx.scale(-1, 1); draw(ctx); }; }
 /* Savoir-faire ↔ projets. Seuls les contenus des sections visibles comptent : on doit pouvoir y aller. */
 const onSite = p => SECTIONS.some(s => s.def.id === p.section);
-const relProjects = post => projectsOf(CONTENT, post).filter(onSite);
+/* Une personne ou un partenaire : les projets où figure son nom dans l'équipe, ou son logo */
+const byOrder = (a, b) => SECTIONS.findIndex(s => s.def.id === a.section) - SECTIONS.findIndex(s => s.def.id === b.section) || (a.order ?? 0) - (b.order ?? 0);
+const linkedProjects = post => CONTENT.posts.filter(p => p.published && p !== post && onSite(p) && ((p.team || []).includes(post.id) || (post.thumb && (p.logos || []).includes(post.thumb)))).sort(byOrder);
+const relProjects = post => { const s = projectsOf(CONTENT, post).filter(onSite); return s.length ? s : linkedProjects(post); };
+const isLogo = post => /(^|\/)media\/logos\//.test(post.thumb || '');
 const relSkills = post => skillsOf(CONTENT, post).filter(onSite);
 const photoOf = p => p.thumb || ((p.media || []).find(m => m && m.src && mediaKind(m.src) === 'image') || {}).src || '';
 /* Photo de fond d'une carte savoir-faire : celle d'un de ses projets, tirée au hasard une fois par visite */
 const skillPick = new Map();
-async function skillBackdrop(post) {
-  const list = relProjects(post).filter(photoOf); if (!list.length) return null;
+/* Les projets d'une personne : ceux où elle figure dans l'équipe */
+const personProjects = post => linkedProjects(post).filter(photoOf);
+async function skillBackdrop(post, from = relProjects(post)) {
+  const list = from.filter(photoOf); if (!list.length) return null;
   const kept = list.find(x => x.id === skillPick.get(post.id));
   const order = kept ? [kept] : list.map(x => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
   for (const p of order) {   // une photo introuvable : on essaie le projet suivant
@@ -303,15 +309,27 @@ async function imageCard(post, w, h) {
 async function portraitCard(post, w, h) {
   const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
   const back = post.thumbBack ? await loadImage(post.thumbBack).catch(() => null) : null;
+  const bd = im ? null : await skillBackdrop(post, personProjects(post));   // pas encore de portrait : la photo d'un de ses projets, voilée, sous les initiales
   await fontsReady();
-  const face = ctx => {
+  const face = (ctx, faint = false) => {
+    if (im && isLogo(post)) {   // un partenaire : son logo entier, posé sur blanc
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+      const pad = w * 0.14, r = Math.min((w - 2 * pad) / im.naturalWidth, (h - 2 * pad) / im.naturalHeight), lw = im.naturalWidth * r, lh = im.naturalHeight * r;
+      ctx.drawImage(im, (w - lw) / 2, (h - lh) / 2, lw, lh);
+      if (NEG()) { ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
+      return;
+    }
     if (im) { drawCover(ctx, im, 0, 0, w, h); return; }
-    ctx.fillStyle = '#1b1b1b'; ctx.fillRect(0, 0, w, h);
+    if (bd) veil(ctx, bd, w, h, faint ? 0.22 : 0.42); else { ctx.fillStyle = '#1b1b1b'; ctx.fillRect(0, 0, w, h); }
+    if (faint) ctx.globalAlpha = 0.35;
     ctx.fillStyle = '#fff'; ctx.font = `${Math.round(h * 0.42 * CARD_SCALE)}px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(initials(tr(post.title)), w / 2, h * 0.45);
     ctx.fillStyle = accent(); ctx.fillRect(w / 2 - 8, h * 0.78, 16, 1.5);
+    ctx.globalAlpha = 1;
   };
-  return [canvasTex(w, h, face, 3), back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3) : canvasTex(w, h, washed(face), 2), im ? hoverBand(post, w) : null];
+  const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3)
+    : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2) : canvasTex(w, h, washed(face), 2);
+  return [canvasTex(w, h, face, 3), backTex, (im || bd) ? hoverBand(post, w) : null];
 }
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
@@ -406,8 +424,16 @@ function infoTexture(post, kind) {
       let y = 20 + name.length * 22;
       ctx.fillStyle = '#8c8c8c'; ctx.font = `${fz(15)}px ${SERIF}`;
       tr(post.subtitle).split(/(?<=\.)\s+/).forEach(l => wrapLines(ctx, l, 166).forEach(s => { if (y < 150) { ctx.fillText(s, 19, y); y += 18; } }));
+      ctx.font = `10px ${UIF}`;   // ses projets avec nous, en bas de la fiche
+      const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
+      const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 166).slice(0, 3) : [];
+      const pTop = (tr(post.place) ? 174 : 188) - pl.length * 13 - 13;
       ctx.fillStyle = '#bbb'; ctx.font = `11px ${UIF}`;
-      htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor((176 - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
+      htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
+      if (pl.length) {
+        ctx.fillStyle = accent(); ctx.font = `8px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 19, pTop);
+        ctx.fillStyle = '#e6e6e6'; ctx.font = `10px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 19, pTop + 13 + i * 13));
+      }
       if (tr(post.place)) { ctx.fillStyle = accent(); ctx.font = `11px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 19, 180); }
     });
   });
@@ -1176,7 +1202,8 @@ const post2D = {
   },
   addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
     const projects = relProjects(post); if (!projects.length) return;
-    this.addPanel('relh', 236, `<h2 class="ttl">${escapeHTML(ui('skillProjects'))}.</h2><span class="n">${projects.length}</span>`);
+    const skill = projectsOf(CONTENT, post).length > 0;
+    this.addPanel('relh', 236, `<h2 class="ttl">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n">${projects.length}</span>`);
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
       const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
@@ -1286,7 +1313,9 @@ const post2D = {
     team.forEach((p, j) => {
       const f = document.createElement('button'); f.type = 'button'; f.className = 'face';
       f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (160 + Math.floor(j / 6) * 55) + 'px';
-      f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono">${escapeHTML(initials(tr(p.title)))}</span>`) + `<span class="tab">${escapeHTML(tr(p.title))}.<small>${escapeHTML(tr(p.subtitle))}</small></span>`;
+      const other = !p.thumb && (personProjects(p).find(x => x !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
+      const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
+      f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<span class="tab">${escapeHTML(tr(p.title))}.<small>${escapeHTML(tr(p.subtitle))}</small></span>`;
       f.setAttribute('aria-label', tr(p.title));
       ['pointerenter', 'focus'].forEach(ev => f.addEventListener(ev, () => f.classList.add('big')));
       ['pointerleave', 'blur'].forEach(ev => f.addEventListener(ev, () => f.classList.remove('big')));

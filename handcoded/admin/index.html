@@ -7,7 +7,8 @@
 <title>Hand Coded · Back-office</title>
 <link rel="icon" href="../assets/hc/ui/logo-default.svg">
 <link rel="stylesheet" href="../vendor/fonts/fonts.css">
-<link rel="stylesheet" href="../assets/hc/admin.css">
+<script>window.HC_V = '2cd762263f'; window.hcV = u => location.protocol === 'file:' ? u : u + '?v=' + window.HC_V;</script>
+<script>document.write('<link rel="stylesheet" href="' + hcV('../assets/hc/admin.css') + '">')</script>
 </head>
 <body>
 <div id="app"><p class="boot">Chargement du back-office…</p></div>
@@ -25,6 +26,6 @@
 /* Ouvert depuis le disque (file://) : contenu et modèles lus depuis leurs copies en JavaScript. */
 if (location.protocol === 'file:') document.write('<script src="../content/content.js"><\/script><script src="../models/models.js"><\/script>');
 </script>
-<script src="../assets/hc/admin.bundle.js"></script>
+<script>document.write('<script src="' + hcV('../assets/hc/admin.bundle.js') + '"><\/script>')</script>
 </body>
 </html>
