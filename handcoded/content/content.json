@@ -3776,7 +3776,11 @@
     "ca": "<p>Enfocaments de disseny sostenible en la tria dels materials, l'energia i la durabilitat de cada instal·lació.</p>",
     "es": "<p>Enfoques de diseño sostenible en la elección de los materiales, la energía y la durabilidad de cada instalación.</p>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/sustainable/testingtexturesinmurano-66ww.jpg"
+    }
+   ],
    "link": "",
    "team": [],
    "credits": "",
