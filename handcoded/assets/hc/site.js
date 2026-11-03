@@ -1067,7 +1067,7 @@ function placeCameraOnOrbit() { const o = orbitE || orbitNow(); cam.x = o.x + o.
 function changeSection3D() {
   sections.forEach((s, i) => { if (i === P.currentSection) { if (!s.container.parent) scene.add(s.container); } else if (s.container.parent) scene.remove(s.container); });
   isClicking = false; closeTurn = false; canvas.classList.remove('dragging');
-  hovered = null;
+  hovered = null; mouseCard = null;
   if (postsView) postsView.destroy();
   orbitE = null;
   postsView = new PostsView3D(curSec());
@@ -1743,20 +1743,24 @@ canvas.addEventListener('lostpointercapture', e => { if (e.pointerId === dragId)
 window.addEventListener('pointerup', e => { if (dragId !== null && e.pointerId === dragId && e.target !== canvas) endDrag(e, true); });
 window.addEventListener('blur', () => { if (dragId !== null) endDrag({ pointerId: dragId }, true); stopDrag2D(); });
 let hoverQueued = false, hovered = null, mouseCard = null;
-/* Carrousel : la vignette vue de face montre son nom et sa description, comme au survol. La souris garde la main sur la vignette qu'elle survole. */
-let bandTick = 0;
-function phoneBand() {
-  if (++bandTick % 6 || P.postOpen || !postsView || !inputEnabled || !['carousel', 'spiral'].includes(postsView.def.layout)) return;
-  if (mouseCard && mouseCard.view === postsView) { hoverCard(mouseCard); return; }
-  postsView.checkPostSelected(); hoverCard(postsView.postViews[P.selected] || null);
+/* Quelle vignette montre son nom ? Une seule décision, pour que survol et vignette de face ne se contredisent jamais :
+   la vignette survolée à la souris d'abord ; sinon, sur petit écran et dans le carrousel, celle que la caméra voit de face. */
+const facingBand = () => phoneMode() && inputEnabled && postsView && ['carousel', 'spiral'].includes(postsView.def.layout);
+function bandTarget() {
+  if (P.postOpen || !postsView) return null;
+  if (mouseCard && mouseCard.view === postsView) return mouseCard;
+  if (!facingBand()) return null;
+  postsView.checkPostSelected(); return postsView.postViews[P.selected] || null;
 }
+let bandTick = 0;
+function phoneBand() { if (++bandTick % 6 === 0 && facingBand()) hoverCard(bandTarget()); }   // le carrousel tourne : la vignette de face change
 function hoverCard(pv) { if (hovered === pv) return; if (hovered) hovered.hover(false); hovered = pv; if (pv) pv.hover(true); }
-canvas.addEventListener('pointerleave', () => { mouseCard = null; hoverCard(null); });
+canvas.addEventListener('pointerleave', () => { mouseCard = null; hoverCard(bandTarget()); });
 canvas.addEventListener('pointermove', e => {
   if (dragId !== null && e.pointerId === dragId && e.pointerType === 'mouse' && e.buttons === 0) { endDrag(e, true); return; }   // bouton déjà relâché
   if (dragId !== null && e.pointerId !== dragId) return;
   mouseX = e.clientX; mouseY = e.clientY;
-  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); mouseCard = h && h.post && h.face === 'front' && !P.postOpen ? h.post : null; hoverCard(mouseCard); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
+  if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); mouseCard = h && h.post && h.face === 'front' && !P.postOpen ? h.post : null; hoverCard(bandTarget()); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
 /* Deux doigts : écarter zoome, pincer dézoome, par crans comme la molette ; le premier doigt cesse alors de faire tourner la scène */
