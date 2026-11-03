@@ -281,6 +281,13 @@
   },
   "analytics": {
    "goatcounter": "handcoded"
+  },
+  "fiche": {
+   "top": 19,
+   "bottom": 15,
+   "side": 24,
+   "gutter": 40,
+   "col": 243
   }
  },
  "models": [
