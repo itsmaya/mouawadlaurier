@@ -825,10 +825,10 @@
     "es": "Retour aux Sources"
    },
    "subtitle": {
-    "en": "Maya Mouawad, music by Cyril Laurier",
-    "fr": "Maya Mouawad, musique de Cyril Laurier",
-    "ca": "Maya Mouawad, música de Cyril Laurier",
-    "es": "Maya Mouawad, música de Cyril Laurier"
+    "en": "Mouawad Laurier",
+    "fr": "Mouawad Laurier",
+    "ca": "Mouawad Laurier",
+    "es": "Mouawad Laurier"
    },
    "place": {
     "en": "Maison Ruinart, Reims, UNESCO World Heritage",
@@ -842,43 +842,29 @@
     "permanent",
     "collab",
     "ai",
-    "art"
+    "software",
+    "art",
+    "art-contemporain"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>A root planted in a chalk cellar dug more than two thousand years ago, thirty metres underground. In this mineral darkness, it listens to the living world breathing on the surface.</p><p>The root listens to the natural elements involved in making champagne. In real time it captures climate data, temperature, humidity, rainfall and wind, and turns these variations into generative music and light. Inspired by Stefano Mancuso’s work on plant intelligence, it reminds us that 90% of the Earth’s biomass is made of plants.</p><p>Permanent installation in the Ruinart cellars since 2019, seen by about 26,000 visitors a year, first presented at FIAC 2019 in Paris. Every glass piece was blown by hand by master glassblower Marco Nason during a residency at the NasonMoretti glassworks in Murano.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Music</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Curator</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Data</strong> Caroline Fiot</li><li><strong>Development</strong> Hand Coded</li><li><strong>Lamps</strong> Salvador Mauri (Sakma)</li><li><strong>Kinetics</strong> Mecaoctet</li><li><strong>Glassblowing</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ironwork</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Press</h3><ul><li>“French artists Maya Mouawad and Cyril Laurier create technology-driven artistic works promoting sustainability.” Forbes, 2020</li><li>“The ocean projected on the walls is a sublime reminder of the oceanic origin of chalk, sediment of ancient oceans.” Numéro Art, 2020</li><li>“This immersive project marks a commitment in favour of nature.” Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonials</h3><ul><li>“This work took us out of time and away from the turmoil outside. Bravo for this moment of poetry.” Marie Drucker</li><li>“Thanks to you, we lived an unforgettable moment! Your work is magnificent, moving, spectacular, very accurate.” Céline Berthoumieux, president of HACNUM</li></ul>",
-    "fr": "<p>Une racine plantée dans une cave de craie creusée il y a plus de deux mille ans, à trente mètres sous terre. Dans cette obscurité minérale, elle écoute le monde vivant qui respire à la surface.</p><p>La racine écoute les éléments naturels qui font le champagne. En temps réel, elle capte les données climatiques, température, humidité, précipitations et vent, et traduit ces variations en musique générative et en lumière. Inspirée par les travaux de Stefano Mancuso sur l’intelligence des plantes, elle rappelle que 90 % de la biomasse terrestre est faite de plantes.</p><p>Installation permanente dans les caves Ruinart depuis 2019, vue par environ 26 000 visiteurs par an, présentée d’abord à la FIAC 2019 à Paris. Chaque pièce de verre a été soufflée à la main par le maître verrier Marco Nason, lors d’une résidence à la verrerie NasonMoretti, à Murano.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Maya Mouawad</li><li><strong>Musique</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Commissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Données</strong> Caroline Fiot</li><li><strong>Développement</strong> Hand Coded</li><li><strong>Lampes</strong> Salvador Mauri (Sakma)</li><li><strong>Cinétique</strong> Mecaoctet</li><li><strong>Verre soufflé</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ferronnerie</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li><li><b>Vidéo</b> Easy Barcelona</li></ul><h3>Presse</h3><ul><li>« Les artistes français Maya Mouawad et Cyril Laurier créent des œuvres technologiques au service de la durabilité. » Forbes, 2020</li><li>« L’océan projeté sur les parois rappelle sublimement l’origine océanique de la craie, sédiment d’anciens océans. » Numéro Art, 2020</li><li>« Ce projet immersif marque un engagement en faveur de la nature. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Témoignages</h3><ul><li>« Cette œuvre nous a sortis du temps et du tumulte extérieur, bravo pour ce moment de poésie. » Marie Drucker</li><li>« Grâce à vous, nous avons vécu un moment inoubliable ! Votre œuvre est magnifique, émouvante, spectaculaire, très juste. » Céline Berthoumieux, présidente de HACNUM</li></ul>",
-    "ca": "<p>Una arrel plantada en una cava de guix excavada fa més de dos mil anys, a trenta metres sota terra. En aquesta foscor mineral, escolta el món viu que respira a la superfície.</p><p>L’arrel escolta els elements naturals que fan el xampany. En temps real, capta les dades climàtiques, temperatura, humitat, precipitacions i vent, i tradueix aquestes variacions en música generativa i llum. Inspirada pels treballs de Stefano Mancuso sobre la intel·ligència de les plantes, recorda que el 90 % de la biomassa terrestre és feta de plantes.</p><p>Instal·lació permanent a les caves Ruinart des del 2019, vista per uns 26.000 visitants l’any, presentada primer a la FIAC 2019 a París. Cada peça de vidre va ser bufada a mà pel mestre vidrier Marco Nason, durant una residència a la vidrieria NasonMoretti, a Murano.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producció</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinació</strong> Laura Duponchel</li><li><strong>Dades</strong> Caroline Fiot</li><li><strong>Desenvolupament</strong> Hand Coded</li><li><strong>Làmpades</strong> Salvador Mauri (Sakma)</li><li><strong>Cinètica</strong> Mecaoctet</li><li><strong>Vidre bufat</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Premsa</h3><ul><li>« Els artistes francesos Maya Mouawad i Cyril Laurier creen obres tecnològiques al servei de la sostenibilitat. » Forbes, 2020</li><li>« L’oceà projectat a les parets recorda de manera sublim l’origen oceànic del guix, sediment d’oceans antics. » Numéro Art, 2020</li><li>« Aquest projecte immersiu marca un compromís a favor de la natura. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonis</h3><ul><li>« Aquesta obra ens ha tret del temps i del tumult exterior, bravo per aquest moment de poesia. » Marie Drucker</li><li>« Gràcies a vosaltres hem viscut un moment inoblidable! La vostra obra és magnífica, emocionant, espectacular, molt justa. » Céline Berthoumieux, presidenta d’HACNUM</li></ul>",
-    "es": "<p>Una raíz plantada en una bodega de creta excavada hace más de dos mil años, a treinta metros bajo tierra. En esta oscuridad mineral, escucha el mundo vivo que respira en la superficie.</p><p>La raíz escucha los elementos naturales que hacen el champán. En tiempo real, capta los datos climáticos, temperatura, humedad, precipitaciones y viento, y traduce esas variaciones en música generativa y luz. Inspirada en los trabajos de Stefano Mancuso sobre la inteligencia de las plantas, recuerda que el 90 % de la biomasa terrestre está hecha de plantas.</p><p>Instalación permanente en las bodegas Ruinart desde 2019, vista por unos 26.000 visitantes al año, presentada primero en la FIAC 2019 en París. Cada pieza de vidrio fue soplada a mano por el maestro vidriero Marco Nason, durante una residencia en la vidriería NasonMoretti, en Murano.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Maya Mouawad</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producción</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comisariado</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinación</strong> Laura Duponchel</li><li><strong>Datos</strong> Caroline Fiot</li><li><strong>Desarrollo</strong> Hand Coded</li><li><strong>Lámparas</strong> Salvador Mauri (Sakma)</li><li><strong>Cinética</strong> Mecaoctet</li><li><strong>Vidrio soplado</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Prensa</h3><ul><li>« Los artistas franceses Maya Mouawad y Cyril Laurier crean obras tecnológicas al servicio de la sostenibilidad. » Forbes, 2020</li><li>« El océano proyectado en las paredes recuerda de forma sublime el origen oceánico de la tiza, sedimento de océanos antiguos. » Numéro Art, 2020</li><li>« Este proyecto inmersivo marca un compromiso a favor de la naturaleza. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonios</h3><ul><li>« Esta obra nos sacó del tiempo y del tumulto exterior, bravo por este momento de poesía. » Marie Drucker</li><li>« ¡Gracias a vosotros vivimos un momento inolvidable! Vuestra obra es magnífica, emocionante, espectacular, muy acertada. » Céline Berthoumieux, presidenta de HACNUM</li></ul>"
+    "en": "<p>A root planted in a chalk cellar dug more than two thousand years ago, thirty metres underground. In this mineral darkness, it listens to the living world breathing on the surface.</p><p>The root listens to the natural elements involved in making champagne. In real time it captures climate data, temperature, humidity, rainfall and wind, and turns these variations into generative music and light. Inspired by Stefano Mancuso’s work on plant intelligence, it reminds us that 90% of the Earth’s biomass is made of plants.</p><p>Permanent installation in the Ruinart cellars since 2019, seen by about 26,000 visitors a year, first presented at FIAC 2019 in Paris. Every glass piece was blown by hand by master glassblower Marco Nason during a residency at the NasonMoretti glassworks in Murano.</p><h3>Credits</h3><ul><li><strong>Artist</strong>&nbsp;Maya Mouawad &amp; Cyril Laurier</li><li><strong>Music</strong> Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Curator</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Data</strong> Caroline Fiot</li><li><strong>Development</strong> Hand Coded</li><li><strong>Lamps</strong> Salvador Mauri (Sakma)</li><li><strong>Kinetics</strong> Mecaoctet</li><li><strong>Glassblowing</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ironwork</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li></ul><h3>Press</h3><ul><li>“French artists Maya Mouawad and Cyril Laurier create technology-driven artistic works promoting sustainability.” Forbes, 2020</li><li>“The ocean projected on the walls is a sublime reminder of the oceanic origin of chalk, sediment of ancient oceans.” Numéro Art, 2020</li><li>“This immersive project marks a commitment in favour of nature.” Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonials</h3><ul><li>“This work took us out of time and away from the turmoil outside. Bravo for this moment of poetry.” Marie Drucker</li><li>“Thanks to you, we lived an unforgettable moment! Your work is magnificent, moving, spectacular, very accurate.” Céline Berthoumieux, president of HACNUM</li></ul>",
+    "fr": "<p>Une racine plantée dans une cave de craie creusée il y a plus de deux mille ans, à trente mètres sous terre. Dans cette obscurité minérale, elle écoute le monde vivant qui respire à la surface.</p><p>La racine écoute les éléments naturels qui font le champagne. En temps réel, elle capte les données climatiques, température, humidité, précipitations et vent, et traduit ces variations en musique générative et en lumière. Inspirée par les travaux de Stefano Mancuso sur l’intelligence des plantes, elle rappelle que 90 % de la biomasse terrestre est faite de plantes.</p><p>Installation permanente dans les caves Ruinart depuis 2019, vue par environ 26 000 visiteurs par an, présentée d’abord à la FIAC 2019 à Paris. Chaque pièce de verre a été soufflée à la main par le maître verrier Marco Nason, lors d’une résidence à la verrerie NasonMoretti, à Murano.</p><h3>Crédits</h3><ul><li><strong>Artistes</strong> Maya Mouawad &amp; Cyril Laurier</li><li><strong>Production</strong> Frédéric Dufour (Ruinart)</li><li><strong>Commissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordination</strong> Laura Duponchel</li><li><strong>Données</strong> Caroline Fiot</li><li><strong>Développement</strong> Hand Coded</li><li><strong>Lampes</strong> Salvador Mauri (Sakma)</li><li><strong>Cinétique</strong> Mecaoctet</li><li><strong>Verre soufflé</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Ferronnerie</strong> Ferronnerie Mazingue, Reims</li><li><strong>Photos</strong> Guillaume Faure</li><li><b>Vidéo</b> Easy Barcelona</li></ul><h3>Presse</h3><ul><li>« Les artistes français Maya Mouawad et Cyril Laurier créent des œuvres technologiques au service de la durabilité. » Forbes, 2020</li><li>« L’océan projeté sur les parois rappelle sublimement l’origine océanique de la craie, sédiment d’anciens océans. » Numéro Art, 2020</li><li>« Ce projet immersif marque un engagement en faveur de la nature. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Témoignages</h3><ul><li>« Cette œuvre nous a sortis du temps et du tumulte extérieur, bravo pour ce moment de poésie. » Marie Drucker</li><li>« Grâce à vous, nous avons vécu un moment inoubliable ! Votre œuvre est magnifique, émouvante, spectaculaire, très juste. » Céline Berthoumieux, présidente de HACNUM</li></ul>",
+    "ca": "<p>Una arrel plantada en una cava de guix excavada fa més de dos mil anys, a trenta metres sota terra. En aquesta foscor mineral, escolta el món viu que respira a la superfície.</p><p>L’arrel escolta els elements naturals que fan el xampany. En temps real, capta les dades climàtiques, temperatura, humitat, precipitacions i vent, i tradueix aquestes variacions en música generativa i llum. Inspirada pels treballs de Stefano Mancuso sobre la intel·ligència de les plantes, recorda que el 90 % de la biomassa terrestre és feta de plantes.</p><p>Instal·lació permanent a les caves Ruinart des del 2019, vista per uns 26.000 visitants l’any, presentada primer a la FIAC 2019 a París. Cada peça de vidre va ser bufada a mà pel mestre vidrier Marco Nason, durant una residència a la vidrieria NasonMoretti, a Murano.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong>&nbsp;Maya Mouawad &amp; Cyril Laurier</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producció</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comissariat</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinació</strong> Laura Duponchel</li><li><strong>Dades</strong> Caroline Fiot</li><li><strong>Desenvolupament</strong> Hand Coded</li><li><strong>Làmpades</strong> Salvador Mauri (Sakma)</li><li><strong>Cinètica</strong> Mecaoctet</li><li><strong>Vidre bufat</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Premsa</h3><ul><li>« Els artistes francesos Maya Mouawad i Cyril Laurier creen obres tecnològiques al servei de la sostenibilitat. » Forbes, 2020</li><li>« L’oceà projectat a les parets recorda de manera sublim l’origen oceànic del guix, sediment d’oceans antics. » Numéro Art, 2020</li><li>« Aquest projecte immersiu marca un compromís a favor de la natura. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonis</h3><ul><li>« Aquesta obra ens ha tret del temps i del tumult exterior, bravo per aquest moment de poesia. » Marie Drucker</li><li>« Gràcies a vosaltres hem viscut un moment inoblidable! La vostra obra és magnífica, emocionant, espectacular, molt justa. » Céline Berthoumieux, presidenta d’HACNUM</li></ul>",
+    "es": "<p>Una raíz plantada en una bodega de creta excavada hace más de dos mil años, a treinta metros bajo tierra. En esta oscuridad mineral, escucha el mundo vivo que respira en la superficie.</p><p>La raíz escucha los elementos naturales que hacen el champán. En tiempo real, capta los datos climáticos, temperatura, humedad, precipitaciones y viento, y traduce esas variaciones en música generativa y luz. Inspirada en los trabajos de Stefano Mancuso sobre la inteligencia de las plantas, recuerda que el 90 % de la biomasa terrestre está hecha de plantas.</p><p>Instalación permanente en las bodegas Ruinart desde 2019, vista por unos 26.000 visitantes al año, presentada primero en la FIAC 2019 en París. Cada pieza de vidrio fue soplada a mano por el maestro vidriero Marco Nason, durante una residencia en la vidriería NasonMoretti, en Murano.</p><h3>Créditos</h3><ul><li><strong>Artista</strong>&nbsp;Maya Mouawad &amp; Cyril Laurier</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Producción</strong> Frédéric Dufour (Ruinart)</li><li><strong>Comisariado</strong> Benoît Baume (Fisheye)</li><li><strong>Coordinación</strong> Laura Duponchel</li><li><strong>Datos</strong> Caroline Fiot</li><li><strong>Desarrollo</strong> Hand Coded</li><li><strong>Lámparas</strong> Salvador Mauri (Sakma)</li><li><strong>Cinética</strong> Mecaoctet</li><li><strong>Vidrio soplado</strong> Marco Nason, NasonMoretti, Murano</li><li><strong>Forja</strong> Ferronnerie Mazingue, Reims</li><li><strong>Fotos</strong> Guillaume Faure</li></ul><h3>Prensa</h3><ul><li>« Los artistas franceses Maya Mouawad y Cyril Laurier crean obras tecnológicas al servicio de la sostenibilidad. » Forbes, 2020</li><li>« El océano proyectado en las paredes recuerda de forma sublime el origen oceánico de la tiza, sedimento de océanos antiguos. » Numéro Art, 2020</li><li>« Este proyecto inmersivo marca un compromiso a favor de la naturaleza. » Nowness, 2020</li><li>Berlin Art Link, 2019</li><li>Beaux Arts Magazine</li><li>Art of Change</li></ul><h3>Testimonios</h3><ul><li>« Esta obra nos sacó del tiempo y del tumulto exterior, bravo por este momento de poesía. » Marie Drucker</li><li>« ¡Gracias a vosotros vivimos un momento inolvidable! Vuestra obra es magnífica, emocionante, espectacular, muy acertada. » Céline Berthoumieux, presidenta de HACNUM</li></ul>"
    },
    "media": [
-    {
-     "src": "media/retour-aux-sources/01.jpg",
-     "credit": "Guillaume Faure"
-    },
     {
      "src": "https://vimeo.com/362816752",
      "credit": ""
     },
     {
+     "src": "media/retour-aux-sources/01.jpg",
+     "credit": "Guillaume Faure"
+    },
+    {
      "src": "media/retour-aux-sources/02.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/03.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/04.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/05.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/06.jpg",
      "credit": "Guillaume Faure"
     },
     {
@@ -886,31 +872,20 @@
      "credit": "Guillaume Faure"
     },
     {
+     "src": "media/retour-aux-sources/dsc3262-ksux.jpg"
+    },
+    {
+     "src": "media/retour-aux-sources/viewback-copy-02p4.jpg"
+    },
+    {
+     "src": "https://vimeo.com/1145290233?fl=pl&fe=vl"
+    },
+    {
      "src": "media/retour-aux-sources/08.jpg",
      "credit": "Guillaume Faure"
     },
     {
-     "src": "media/retour-aux-sources/09.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/10.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/11.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/12.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/13.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/retour-aux-sources/14.jpg",
+     "src": "media/retour-aux-sources/03.jpg",
      "credit": "Guillaume Faure"
     },
     {
@@ -918,8 +893,15 @@
      "credit": "Guillaume Faure"
     },
     {
-     "src": "https://vimeo.com/432530431",
-     "credit": ""
+     "src": "media/retour-aux-sources/insidelamp-sylh.jpg"
+    },
+    {
+     "src": "media/retour-aux-sources/06.jpg",
+     "credit": "Guillaume Faure"
+    },
+    {
+     "src": "media/retour-aux-sources/murano-05.jpg",
+     "credit": "Guillaume Faure"
     },
     {
      "src": "media/retour-aux-sources/murano-01.jpg",
@@ -934,7 +916,7 @@
      "credit": "Guillaume Faure"
     },
     {
-     "src": "media/retour-aux-sources/murano-05.jpg",
+     "src": "media/retour-aux-sources/murano-10.jpg",
      "credit": "Guillaume Faure"
     },
     {
@@ -942,28 +924,19 @@
      "credit": ""
     },
     {
-     "src": "media/retour-aux-sources/murano-10.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/reims-02.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/reims-03.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
-     "src": "media/retour-aux-sources/reims-04.jpg",
-     "credit": "Guillaume Faure"
-    },
-    {
      "src": "media/retour-aux-sources/reims-05.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/retour-aux-sources/12.jpg",
      "credit": ""
     },
     {
      "src": "media/retour-aux-sources/img-3614-cc16.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/retour-aux-sources/img-8612-bznd.jpg"
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -996,7 +969,7 @@
      "lon": 12.35
     }
    ],
-   "author": "Maya Mouawad",
+   "author": "Mouawad Laurier",
    "skills": [
     "machine-learning",
     "real-time",
@@ -1005,7 +978,10 @@
     "concept-design",
     "sustainable",
     "project-management",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "audio",
+    "tracking",
+    "hardware"
    ],
    "logos": [
     "media/logos/fisheye.png",
@@ -4046,7 +4022,7 @@
    "tags": [
     "core"
    ],
-   "thumb": "media/cyril/cyril-81xu.jpg",
+   "thumb": "media/cyril/cyril-profile-cqcg.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music improvisation.</p><p>He was technical director of the European research project PHAROS and research coordinator of the European project MusicBricks, worked in research and development at IK Multimedia and Eventide, then on deep learning tools for music at Sony CSL Paris from 2018 to 2024. A member of the Music Tech Fest community since 2012, he loves new technologies, solving problems and building small robots.</p>",
