@@ -9287,7 +9287,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "",
+   "thumb": "media/alpine-mondial-2024/screenshot-2026-11-03-at-11-14-44-6hpb.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which answers their presence and their gestures in real time. Produced with Fisheye.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production company</strong> Fisheye</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
@@ -9299,12 +9299,22 @@
     {
      "src": "https://vimeo.com/1145214571",
      "credit": ""
+    },
+    {
+     "src": "media/alpine-mondial-2024/img-1051-4c29.jpg"
+    },
+    {
+     "src": "media/alpine-mondial-2024/schemainstallation-4ufz.jpg"
+    },
+    {
+     "src": "media/alpine-mondial-2024/enscape-2024-07-02-10-51-23-i3v3.jpg"
     }
    ],
    "link": "https://vimeo.com/1145214571",
    "team": [
     "maya",
-    "cyril"
+    "cyril",
+    "joan-sandoval"
    ],
    "credits": "Alpine, Fisheye",
    "location": null,
@@ -9322,7 +9332,7 @@
     "concept-design",
     "project-management"
    ],
-   "author": "",
+   "author": "Hand Coded",
    "logos": [
     "media/logos/fisheye.png",
     "media/logos/alpine.png"
