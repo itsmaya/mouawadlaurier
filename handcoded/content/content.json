@@ -599,7 +599,7 @@
     "touring",
     "advertising"
    ],
-   "thumb": "media/peupler/peupler-pic-01-copy-ybli.jpg",
+   "thumb": "media/peupler/marieflament-7445-tpc2.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>How can every living being, human and non-human, share the same territories? Peupler lets us see and feel the point of view of a tree watching our cities, a witness of the ecological changes it wishes for.</p><p>A new kind of immersive room made entirely of real-time generative content. It adapts to the data it receives and to the presence of visitors, whose bodies are tracked live. Spatialised music and scent strengthen the bond between nature and humans.</p><p>Official selection of the Venice Immersive Biennale 2023, shown at the Dakar Biennale 2024 and installed permanently at BNP Real Estate. It travels in three suitcases and runs on a single laptop. Built with Chataigne, the open-source software by Ben Kuper, our own tools Pleiade and Ledotron, and TouchDesigner.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Maya Mouawad</li><li><strong>Artistic collaboration</strong> Cyril Laurier</li><li><strong>Music</strong> Cyril Laurier, Louis Raveton</li><li><strong>Creative coding</strong> Ben Kuper, Maya Mouawad, Clément Gamgie Rignault, Joan Sandoval</li><li><strong>Production</strong> Benoît Baume, Gaëtan Cerrillo, Fisheye, BNP Real Estate</li><li><strong>Tree fabrication</strong> UltraLab</li><li><strong>Photos</strong> Marie Flament</li></ul><h3>Tour</h3><ul><li>Dakar Biennale, 2024</li><li>Venice Immersive Biennale, official selection, 2023</li><li>BNP Real Estate, permanent installation, 2022</li></ul><h3>Press</h3><ul><li>Kent Bye, Voices of VR, 2023: “Peupler poetically explores the human-nature dialectic.”</li></ul>",
@@ -610,7 +610,11 @@
    "media": [
     {
      "src": "media/peupler/01.jpg",
-     "credit": ""
+     "credit": "Maya Mouawad"
+    },
+    {
+     "src": "media/peupler/marieflament-7103-mjx3.jpg",
+     "credit": "Marie Flament"
     },
     {
      "src": "https://vimeo.com/871855125",
@@ -671,6 +675,23 @@
     {
      "src": "https://vimeo.com/1032296710",
      "credit": ""
+    },
+    {
+     "src": "media/peupler/06-09-2023-credit-jacopo-salvi-courtesy-la-bienn-mae6.jpg"
+    },
+    {
+     "src": "media/peupler/57a6e2b8-baf4-43b2-8103-9603f3ef2120-csho.jpg"
+    },
+    {
+     "src": "media/peupler/img-3479-x0zg.jpg"
+    },
+    {
+     "src": "media/peupler/marieflament-7322-xx6f.jpg",
+     "credit": "Marie Flament"
+    },
+    {
+     "src": "media/peupler/marieflament-7401-dhfi.jpg",
+     "credit": "Marie Flament"
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -754,7 +775,6 @@
    "date": "2019",
    "tags": [
     "featured",
-    "advertising",
     "permanent",
     "collab",
     "ai",
@@ -2493,8 +2513,7 @@
    },
    "date": "2019",
    "tags": [
-    "collab",
-    "advertising"
+    "collab"
    ],
    "thumb": "media/covers/wave.jpg",
    "thumbBack": "",
@@ -9301,13 +9320,16 @@
      "credit": ""
     },
     {
-     "src": "media/alpine-mondial-2024/img-1051-4c29.jpg"
+     "src": "media/alpine-mondial-2024/img-1051-4c29.jpg",
+     "credit": ""
     },
     {
-     "src": "media/alpine-mondial-2024/schemainstallation-4ufz.jpg"
+     "src": "media/alpine-mondial-2024/schemainstallation-4ufz.jpg",
+     "credit": ""
     },
     {
-     "src": "media/alpine-mondial-2024/enscape-2024-07-02-10-51-23-i3v3.jpg"
+     "src": "media/alpine-mondial-2024/enscape-2024-07-02-10-51-23-i3v3.jpg",
+     "credit": ""
     }
    ],
    "link": "https://vimeo.com/1145214571",
@@ -9420,7 +9442,8 @@
    },
    "media": [
     {
-     "src": "media/nouveau-contenu-4/b2446e6f-89b3-43a7-814c-7a7a30e50eb0-gr5b.mp4"
+     "src": "media/nouveau-contenu-4/b2446e6f-89b3-43a7-814c-7a7a30e50eb0-gr5b.mp4",
+     "credit": ""
     }
    ],
    "link": "",
