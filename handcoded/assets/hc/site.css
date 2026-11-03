@@ -343,3 +343,7 @@ html.neg #reel .scrim { background: rgba(243,243,243,.62); }
 }
 body.post-short #slogan span { display: none; }
 body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouverte sur téléphone couché : le bandeau prend toute la largeur */
+
+/* légende posée en bas d'une image de fiche (captures de logiciel, etc.) */
+.pnl.media .mcap { position: absolute; left: 0; right: 0; bottom: 0; padding: 9px 14px 10px; background: rgba(0,0,0,.66); color: #e8e8e8; font: 12px/1.4 var(--serif); pointer-events: none; }
+.pnl.media .mcap b { color: #fff; font-weight: 600; }

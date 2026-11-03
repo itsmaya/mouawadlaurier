@@ -1192,13 +1192,13 @@ const post2D = {
       this.addContact(post);
     } else if (card === 'text') {
       this.addText(post, 'blog');
-      media.forEach(m => this.addMedia(m.src, 355, m.credit));
+      media.forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
       this.addRelations(post);
     } else {
       const first = media[0] ? media[0].src : (post.thumb || null);
-      if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '');
+      if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
       this.addText(post, 'project');
-      media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit));
+      media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
       this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
@@ -1238,7 +1238,7 @@ const post2D = {
     setTimeout(() => el.classList.add('open'), d * 1000 + 20); this.delay += 0.2;
     return el;
   },
-  addMedia(src, h = 355, credit = '', sign = true) {
+  addMedia(src, h = 355, credit = '', sign = true, caption = null) {
     const kind = mediaKind(src);
     if (kind === 'youtube' || kind === 'vimeo') { this.addEmbed(src, kind, h, credit); return; }
     const vid = kind === 'video', el = this.addPanel('media', h, '');
@@ -1253,6 +1253,13 @@ const post2D = {
     m.addEventListener(vid ? 'loadedmetadata' : 'load', fit);
     m.addEventListener('error', () => { if (!this.panels.includes(el) || this.panels.length < 2) return; el.remove(); this.panels = this.panels.filter(x => x !== el); this.layout(); });   // image introuvable : le panneau disparaît
     el.querySelector('.in').prepend(m);
+    const cap = caption ? tr(caption).trim() : '';
+    if (cap) {   // légende de l'image : la première phrase en titre, le reste en dessous
+      const k = cap.search(/[.:]\s/), t = k > 0 ? cap.slice(0, k + 1) : '', rest = k > 0 ? cap.slice(k + 2) : cap;
+      const d = document.createElement('div'); d.className = 'mcap';
+      d.innerHTML = (t ? `<b>${escapeHTML(t)}</b> ` : '') + escapeHTML(rest);
+      el.querySelector('.in').appendChild(d);
+    }
   },
   addEmbed(src, kind, h, credit = '') {   // YouTube / Vimeo : vignette et bouton, le lecteur ne se charge qu'au toucher
     const w = Math.round(h * 16 / 9), el = this.addPanel('media embed', w, '');

@@ -855,7 +855,12 @@ function postEditor(p, redrawList, redraw) {
           btn('←', () => { if (i) { move(p.media, i, i - 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Avant', disabled: !i }),
           btn('→', () => { if (i < p.media.length - 1) { move(p.media, i, i + 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Après', disabled: i === p.media.length - 1 }),
           btn('×', () => { p.media.splice(i, 1); change(); drawMedia(); }, 'sm icon ghost danger', { 'aria-label': 'Retirer' })),
-        h('div', { class: 'cr' }, textInput(() => m.credit || '', v => { m.credit = v; }, { placeholder: 'Crédit photo' })));
+        h('div', { class: 'cr' }, textInput(() => m.credit || '', v => { m.credit = v; }, { placeholder: 'Crédit photo' })),
+        (() => {   // légende facultative, affichée en bas de l'image sur la fiche ; le champ n'est créé qu'à l'ouverture
+          const box = h('div'), d = h('details', { class: 'mcap-ed' }, h('summary', null, m.caption && Object.values(m.caption).some(Boolean) ? 'Légende ✓' : 'Légende'), box);
+          d.addEventListener('toggle', () => { if (d.open && !box.firstChild) box.appendChild(pairInput('', m, 'caption')); });
+          return d;
+        })());
     }), add, addLink);
   };
   const addMedia = async files => {

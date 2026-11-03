@@ -1242,7 +1242,7 @@
   {
    "id": "tientos",
    "section": "work",
-   "order": 14,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Tientos al tiempo",
@@ -1347,6 +1347,10 @@
     "es": "<p>Tres experiencias interactivas proyectadas sobre un monumento de 500 metros de ancho. Los visitantes tocan una maqueta del edificio, y sus gestos hacen sonar el sonido y la imagen en la fachada.</p><p>SAND: mover partículas de arena y componer un paisaje sonoro del desierto. ORGAN: ser el DJ de un looper interactivo que lanza bucles de vídeo y de audio. MOSAIC: transformar las formas y los colores de mosaicos islámicos.</p><p>Sharjah Light Festival, del 2 al 11 de febrero de 2017.</p><h3>Créditos</h3><ul><li><strong>Dirección artística</strong> Mathieu Felix</li><li><strong>Producción</strong> Nomada, Tigre Lab</li><li><strong>Gestión de proyecto, desarrollo visual y de audio</strong> Cyril Laurier</li><li><strong>Desarrollo del concepto</strong> Maya Benaïnous</li><li><strong>Desarrollo visual</strong> Stéphanie Huerre</li><li><strong>Diseño sonoro</strong> Thomas Aussenac, Sound Object</li><li><strong>Desarrollo de audio</strong> Joan Sandoval</li></ul>"
    },
    "media": [
+    {
+     "src": "https://vimeo.com/232012124",
+     "credit": ""
+    },
     {
      "src": "https://vimeo.com/232012124",
      "credit": ""
@@ -1723,7 +1727,8 @@
     "media/logos/absolut.png",
     "media/logos/tetro.png",
     "media/logos/gaite-lyrique.png",
-    "media/logos/nuit-blanche.png"
+    "media/logos/nuit-blanche.png",
+    "media/logos/aubio.png"
    ]
   },
   {
@@ -1794,7 +1799,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 16,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -1803,10 +1808,10 @@
     "es": "Ledotron"
    },
    "subtitle": {
-    "en": "Our AI and light control software",
-    "fr": "Notre logiciel d'IA et de contrôle de la lumière",
-    "ca": "El nostre programari d'IA i de control de la llum",
-    "es": "Nuestro software de IA y de control de la luz"
+    "en": "Our software to create and run light shows",
+    "fr": "Notre logiciel de création et de pilotage de la lumière",
+    "ca": "El nostre programari per crear i pilotar la llum",
+    "es": "Nuestro software para crear y pilotar la luz"
    },
    "place": {
     "en": "From Mexico to China",
@@ -1814,20 +1819,141 @@
     "ca": "De Mèxic a la Xina",
     "es": "De México a China"
    },
-   "date": "",
+   "date": "2015 – 2026",
    "tags": [
+    "featured",
     "software",
     "ai"
    ],
-   "thumb": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452620256897-U9REO6ZA20L1M6KU27HJ/LedotronPresentation.png?format=750w",
+   "thumb": "media/ledotron/01-vue-ensemble.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>An animation editor and controller for light systems, displays and motors. Create, modify and visualise LED strips, motors and LED screens in 3D before they exist.</p><p>LED mapping, 3D simulation, real-time control, generative visuals, automation, audio reactivity, DMX, Art-Net, video output and OSC. Ledotron has run more than 40 installations, from Mexico to China, including OX, MGNTRN, Kinematope, Gyrotope and Future Ruins.</p><h3>Credits</h3><ul><li><strong>Concept, design and development</strong> Maya Benaïnous</li><li><strong>Audio development</strong> Cyril Laurier, Paul Brossier</li><li><strong>Licence</strong> Hand Coded</li></ul>",
-    "fr": "<p>Un éditeur d'animation et un contrôleur pour les systèmes lumineux, les écrans et les moteurs. On y crée, modifie et visualise en 3D les bandes LED, les moteurs et les écrans LED avant qu'ils existent.</p><p>Mapping LED, simulation 3D, contrôle en temps réel, visuels génératifs, automatisation, réactivité audio, DMX, Art-Net, sortie vidéo et OSC. Ledotron a fait tourner plus de 40 installations, du Mexique à la Chine, dont OX, MGNTRN, Kinematope, Gyrotope et Future Ruins.</p><h3>Crédits</h3><ul><li><strong>Concept, design et développement</strong> Maya Benaïnous</li><li><strong>Développement audio</strong> Cyril Laurier, Paul Brossier</li><li><strong>Licence</strong> Hand Coded</li></ul>",
-    "ca": "<p>Un editor d'animació i un controlador per a sistemes de llum, pantalles i motors. Permet crear, modificar i visualitzar en 3D tires LED, motors i pantalles LED abans que existeixin.</p><p>Mapping LED, simulació 3D, control en temps real, visuals generatius, automatització, reactivitat a l'àudio, DMX, Art-Net, sortida de vídeo i OSC. Ledotron ha fet funcionar més de 40 instal·lacions, de Mèxic a la Xina, entre elles OX, MGNTRN, Kinematope, Gyrotope i Future Ruins.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny i desenvolupament</strong> Maya Benaïnous</li><li><strong>Desenvolupament d'àudio</strong> Cyril Laurier, Paul Brossier</li><li><strong>Llicència</strong> Hand Coded</li></ul>",
-    "es": "<p>Un editor de animación y un controlador para sistemas de luz, pantallas y motores. Permite crear, modificar y visualizar en 3D tiras LED, motores y pantallas LED antes de que existan.</p><p>Mapping LED, simulación 3D, control en tiempo real, visuales generativos, automatización, reactividad al audio, DMX, Art-Net, salida de vídeo y OSC. Ledotron ha hecho funcionar más de 40 instalaciones, de México a China, entre ellas OX, MGNTRN, Kinematope, Gyrotope y Future Ruins.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño y desarrollo</strong> Maya Benaïnous</li><li><strong>Desarrollo de audio</strong> Cyril Laurier, Paul Brossier</li><li><strong>Licencia</strong> Hand Coded</li></ul>"
+    "en": "<p>We wrote Ledotron for our own installations, and it has run more than forty of them since 2015, from OX to Retour aux Sources. LED strips, motorised lights, video walls and the venue itself are drawn in 3D; the show is composed on a timeline, and the result can be seen before a single cable is pulled.</p><p>Three ways to play. In a loop, a written timeline runs during opening hours, locked, and restarts by itself if something goes wrong. By draw, the Brain composes a new show at each press, hour or message, from the weather, the season and the date: every visit is unique. Live, the Brain listens to the music and changes the image as much as the music changes.</p><p>The AI that listens to the music comes from Cyril Laurier’s PhD research on automatic music mood classification, at the Music Technology Group of Universitat Pompeu Fabra in Barcelona (2011). Beats and onsets are detected with aubio, the open-source library born from Paul Brossier’s PhD at Queen Mary University of London.</p><p>Inputs: live audio, weather and local climate, clock and calendar, OSC, buttons and keys, Chataigne. Outputs: Art-Net and DMX, video walls, motors, OSC to Ableton Live. Twenty-three generative effects, all of them able to react to the sound or the weather. On site: autostart, locked screen, log, automatic reconnection and restart.</p><p>Coming next: the live Brain of OX rebuilt with generated visuals, a shared media library, Autodesk Maya-style 3D manipulators, Art-Net recording with a lightweight player mode, timelines generated from an audio file, Kinect and Leap Motion.</p><h3>Credits</h3><ul><li><strong>Created by</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Music AI</strong> Cyril Laurier, PhD research, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Beat and onset detection</strong> aubio, by Paul Brossier</li><li><strong>Built with</strong> openFrameworks</li><li><strong>Version</strong> 0.9.63, October 2026</li></ul><h3>Used on</h3><ul><li>Retour aux Sources</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>",
+    "fr": "<p>On a écrit Ledotron pour nos propres installations, et il en fait tourner plus de quarante depuis 2015, d’OX à Retour aux Sources. Bandes LED, lumières à moteur, murs vidéo et lieu sont dessinés en 3D ; le spectacle se compose sur une timeline, et on voit le résultat avant d’avoir tiré le moindre câble.</p><p>Trois façons de jouer. En boucle, une timeline écrite tourne aux heures d’ouverture, verrouillée, et redémarre toute seule en cas de souci. Par tirage, le Brain compose un nouveau spectacle à chaque appui, à chaque heure ou à chaque message, à partir de la météo, de la saison et de la date : chaque visite est unique. En direct, le Brain écoute la musique et fait évoluer l’image autant que la musique change.</p><p>L’IA qui écoute la musique vient de la thèse de Cyril Laurier sur la classification automatique de l’humeur musicale, au Music Technology Group de l’Universitat Pompeu Fabra, à Barcelone (2011). Les temps et les attaques sont détectés avec aubio, la bibliothèque libre née de la thèse de Paul Brossier à la Queen Mary University of London.</p><p>Entrées : audio en direct, météo et climat local, horloge et calendrier, OSC, boutons et touches, Chataigne. Sorties : Art-Net et DMX, murs vidéo, moteurs, OSC vers Ableton Live. Vingt-trois effets génératifs, tous capables de réagir au son ou à la météo. Sur place : lancement automatique, écran verrouillé, journal, reconnexion et redémarrage automatiques.</p><p>Prochainement : le Brain d’OX refait avec des visuels générés, une médiathèque partagée, des manipulateurs 3D façon Autodesk Maya, l’enregistrement de l’Art-Net avec un mode lecteur léger, des timelines générées depuis un fichier audio, la Kinect et le Leap Motion.</p><h3>Crédits</h3><ul><li><strong>Créé par</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>IA musicale</strong> Cyril Laurier, thèse de doctorat, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Détection des temps et des attaques</strong> aubio, de Paul Brossier</li><li><strong>Construit avec</strong> openFrameworks</li><li><strong>Version</strong> 0.9.63, octobre 2026</li></ul><h3>Utilisé sur</h3><ul><li>Retour aux Sources</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>",
+    "ca": "<p>Vam escriure Ledotron per a les nostres pròpies instal·lacions, i n’ha fet funcionar més de quaranta des del 2015, d’OX a Retour aux Sources. Tires LED, llums motoritzats, murs de vídeo i el mateix espai es dibuixen en 3D; l’espectacle es compon en una timeline, i es veu el resultat abans d’estirar cap cable.</p><p>Tres maneres de tocar. En bucle, una timeline escrita funciona en horari d’obertura, bloquejada, i es reinicia sola si hi ha cap problema. Per sorteig, el Brain compon un espectacle nou a cada pulsació, hora o missatge, a partir del temps, l’estació i la data: cada visita és única. En directe, el Brain escolta la música i fa evolucionar la imatge tant com canvia la música.</p><p>La IA que escolta la música prové de la tesi doctoral de Cyril Laurier sobre la classificació automàtica de l’estat d’ànim musical, al Music Technology Group de la Universitat Pompeu Fabra, a Barcelona (2011). Els temps i els atacs es detecten amb aubio, la biblioteca lliure nascuda de la tesi de Paul Brossier a la Queen Mary University of London.</p><p>Entrades: àudio en directe, temps i clima local, rellotge i calendari, OSC, botons i tecles, Chataigne. Sortides: Art-Net i DMX, murs de vídeo, motors, OSC cap a Ableton Live. Vint-i-tres efectes generatius, tots capaços de reaccionar al so o al temps. In situ: arrencada automàtica, pantalla bloquejada, registre, reconnexió i reinici automàtics.</p><p>Properament: el Brain d’OX refet amb visuals generats, una mediateca compartida, manipuladors 3D a l’estil d’Autodesk Maya, l’enregistrament de l’Art-Net amb un mode reproductor lleuger, timelines generades a partir d’un fitxer d’àudio, Kinect i Leap Motion.</p><h3>Crèdits</h3><ul><li><strong>Creat per</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>IA musical</strong> Cyril Laurier, tesi doctoral, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Detecció de temps i atacs</strong> aubio, de Paul Brossier</li><li><strong>Construït amb</strong> openFrameworks</li><li><strong>Versió</strong> 0.9.63, octubre 2026</li></ul><h3>Utilitzat a</h3><ul><li>Retour aux Sources</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>",
+    "es": "<p>Escribimos Ledotron para nuestras propias instalaciones, y ha hecho funcionar más de cuarenta desde 2015, de OX a Retour aux Sources. Tiras LED, luces motorizadas, muros de vídeo y el propio espacio se dibujan en 3D; el espectáculo se compone en una timeline, y se ve el resultado antes de tirar un solo cable.</p><p>Tres maneras de tocar. En bucle, una timeline escrita funciona en horario de apertura, bloqueada, y se reinicia sola si algo falla. Por sorteo, el Brain compone un espectáculo nuevo en cada pulsación, hora o mensaje, a partir del tiempo, la estación y la fecha: cada visita es única. En directo, el Brain escucha la música y hace evolucionar la imagen tanto como cambia la música.</p><p>La IA que escucha la música procede de la tesis doctoral de Cyril Laurier sobre la clasificación automática del estado de ánimo musical, en el Music Technology Group de la Universitat Pompeu Fabra, en Barcelona (2011). Los tiempos y los ataques se detectan con aubio, la biblioteca libre nacida de la tesis de Paul Brossier en la Queen Mary University of London.</p><p>Entradas: audio en directo, tiempo y clima local, reloj y calendario, OSC, botones y teclas, Chataigne. Salidas: Art-Net y DMX, muros de vídeo, motores, OSC hacia Ableton Live. Veintitrés efectos generativos, todos capaces de reaccionar al sonido o al tiempo. In situ: arranque automático, pantalla bloqueada, registro, reconexión y reinicio automáticos.</p><p>Próximamente: el Brain de OX rehecho con visuales generados, una mediateca compartida, manipuladores 3D al estilo de Autodesk Maya, la grabación del Art-Net con un modo reproductor ligero, timelines generadas a partir de un archivo de audio, Kinect y Leap Motion.</p><h3>Créditos</h3><ul><li><strong>Creado por</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>IA musical</strong> Cyril Laurier, tesis doctoral, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Detección de tiempos y ataques</strong> aubio, de Paul Brossier</li><li><strong>Construido con</strong> openFrameworks</li><li><strong>Versión</strong> 0.9.63, octubre 2026</li></ul><h3>Utilizado en</h3><ul><li>Retour aux Sources</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>"
    },
    "media": [
+    {
+     "src": "media/ledotron/01-vue-ensemble.jpg",
+     "credit": "",
+     "caption": {
+      "en": "All of Ledotron on one screen. The show timeline at the top, the 3D scene in the middle, clips and effect settings on the left, the Show panel on the right: you compose and check the result in the same place, before being on site.",
+      "fr": "Tout Ledotron sur un écran. La timeline du spectacle en haut, la scène en 3D au centre, les clips et les réglages de l’effet à gauche, le panneau Spectacle à droite : on compose et on vérifie au même endroit, avant d’être sur place.",
+      "ca": "Tot Ledotron en una pantalla. La timeline de l’espectacle a dalt, l’escena en 3D al centre, els clips i els ajustos de l’efecte a l’esquerra, el panell Espectacle a la dreta: es compon i es comprova al mateix lloc, abans de ser-hi.",
+      "es": "Todo Ledotron en una pantalla. La timeline del espectáculo arriba, la escena en 3D en el centro, los clips y los ajustes del efecto a la izquierda, el panel Espectáculo a la derecha: se compone y se comprueba en el mismo sitio, antes de estar allí."
+     }
+    },
+    {
+     "src": "media/ledotron/02-caustics.jpg",
+     "credit": "",
+     "caption": {
+      "en": "Realistic rendering. Each lamp is drawn in place with its halo and its haze, as in a room with a fog machine: you see what the audience will see without switching on a single real lamp.",
+      "fr": "Le rendu réaliste. Chaque lampe est dessinée à sa place avec son halo et sa brume, comme dans une salle avec une machine à brouillard : on voit ce que le public verra, sans allumer une seule lampe.",
+      "ca": "El render realista. Cada làmpada es dibuixa al seu lloc amb el seu halo i la seva boira, com en una sala amb màquina de fum: es veu el que veurà el públic sense encendre ni una làmpada.",
+      "es": "El render realista. Cada lámpara se dibuja en su sitio con su halo y su bruma, como en una sala con máquina de humo: se ve lo que verá el público sin encender ni una lámpara."
+     }
+    },
+    {
+     "src": "media/ledotron/03-scenographie.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The scenography. Every LED strip or ring is placed in space with its network address and its shape; here ten lamps are selected and moved in one gesture.",
+      "fr": "La scénographie. Chaque bande ou cercle de LEDs est placé dans l’espace, avec son adresse réseau et sa forme ; ici, dix lampes sont sélectionnées et déplacées d’un geste.",
+      "ca": "L’escenografia. Cada tira o cercle de LEDs es col·loca a l’espai amb la seva adreça de xarxa i la seva forma; aquí, deu làmpades seleccionades i desplaçades d’un sol gest.",
+      "es": "La escenografía. Cada tira o círculo de LEDs se coloca en el espacio con su dirección de red y su forma; aquí, diez lámparas seleccionadas y desplazadas de un solo gesto."
+     }
+    },
+    {
+     "src": "media/ledotron/04-timeline.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The timeline. One track per part of the installation; each block is an effect with its duration. The eye switches a track off without erasing it, the padlock freezes it.",
+      "fr": "La timeline. Une piste par partie de l’installation, chaque bloc est un effet avec sa durée. L’œil éteint une piste sans rien effacer, le cadenas la fige.",
+      "ca": "La timeline. Una pista per a cada part de la instal·lació, cada bloc és un efecte amb la seva durada. L’ull apaga una pista sense esborrar res, el cadenat la congela.",
+      "es": "La timeline. Una pista por cada parte de la instalación, cada bloque es un efecto con su duración. El ojo apaga una pista sin borrar nada, el candado la congela."
+     }
+    },
+    {
+     "src": "media/ledotron/05-spectacle.jpg",
+     "credit": "",
+     "caption": {
+      "en": "Three ways to play. In a loop, by draw (a button, the Brain composes a show, back to standby) or live (the music leads). Launch, lock and volume settings are in the same window.",
+      "fr": "Trois façons de jouer. En boucle, par tirage (un bouton, le Brain compose un spectacle, retour au standby) ou en direct (la musique guide tout). Lancement, verrouillage et volume au même endroit.",
+      "ca": "Tres maneres de tocar. En bucle, per sorteig (un botó, el Brain compon un espectacle, tornada al standby) o en directe (la música ho guia tot). Inici, bloqueig i volum al mateix lloc.",
+      "es": "Tres maneras de tocar. En bucle, por sorteo (un botón, el Brain compone un espectáculo, vuelta al standby) o en directo (la música lo guía todo). Inicio, bloqueo y volumen en el mismo sitio."
+     }
+    },
+    {
+     "src": "media/ledotron/06-brain.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The Brain. A version is a chain of steps; at each step the Brain draws a clip among those that fit (category, season, nature of the day). Everything is set in menus, without touching the code.",
+      "fr": "Le Brain. Une version est un enchaînement d’étapes ; à chaque étape, le Brain tire un clip parmi ceux qui conviennent (catégorie, saison, nature du jour). Tout se règle dans des menus, sans toucher au code.",
+      "ca": "El Brain. Una versió és una cadena de passos; a cada pas, el Brain tria un clip entre els que encaixen (categoria, estació, natura del dia). Tot es configura amb menús, sense tocar el codi.",
+      "es": "El Brain. Una versión es una cadena de pasos; en cada paso, el Brain elige un clip entre los que encajan (categoría, estación, naturaleza del día). Todo se ajusta con menús, sin tocar el código."
+     }
+    },
+    {
+     "src": "media/ledotron/06b-brain-projet.jpg",
+     "credit": "",
+     "caption": {
+      "en": "A Brain per project. Each project declares what its Brain uses: a musical project has no seasons, a heritage site follows the calendar and the weather.",
+      "fr": "Un Brain par projet. Chaque projet déclare ce que son Brain utilise : un projet musical n’a pas de saisons, un lieu patrimonial suit le calendrier et la météo.",
+      "ca": "Un Brain per projecte. Cada projecte declara què fa servir el seu Brain: un projecte musical no té estacions, un lloc patrimonial segueix el calendari i el temps.",
+      "es": "Un Brain por proyecto. Cada proyecto declara lo que usa su Brain: un proyecto musical no tiene estaciones, un lugar patrimonial sigue el calendario y el tiempo."
+     }
+    },
+    {
+     "src": "media/ledotron/07-entrees.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The Inputs table. A button, an OSC message or a key, and the action it triggers: start a version, play a clip, mute the sound, switch off. “Listen” learns the next message received.",
+      "fr": "La table des Entrées. Un bouton, un message OSC ou une touche, et l’action qu’il déclenche : lancer une version, jouer un clip, couper le son, éteindre. « Écouter » apprend le prochain message reçu.",
+      "ca": "La taula d’Entrades. Un botó, un missatge OSC o una tecla, i l’acció que dispara: llançar una versió, tocar un clip, silenciar, apagar. «Escoltar» aprèn el missatge següent.",
+      "es": "La tabla de Entradas. Un botón, un mensaje OSC o una tecla, y la acción que dispara: lanzar una versión, tocar un clip, silenciar, apagar. «Escuchar» aprende el siguiente mensaje."
+     }
+    },
+    {
+     "src": "media/ledotron/08-data-musique.jpg",
+     "credit": "",
+     "caption": {
+      "en": "Listening to music. Level, energy, tempo, mood (calm, happy, sad, excited), dissonance, frequency bands, spectrum and song sections, measured live: the data the live Brain and the sound-reactive effects use.",
+      "fr": "L’écoute de la musique. Niveau, énergie, tempo, humeur (calme, joyeuse, triste, excitée), dissonance, bandes de fréquences, spectre et parties du morceau, mesurés en direct : ce que le Brain en direct et les effets réactifs utilisent.",
+      "ca": "L’escolta de la música. Nivell, energia, tempo, estat d’ànim (calma, alegre, trista, excitada), dissonància, bandes de freqüència, espectre i parts del tema, mesurats en directe: el que fan servir el Brain en directe i els efectes reactius.",
+      "es": "La escucha de la música. Nivel, energía, tempo, estado de ánimo (calma, alegre, triste, excitada), disonancia, bandas de frecuencia, espectro y partes del tema, medidos en directo: lo que usan el Brain en directo y los efectos reactivos."
+     }
+    },
+    {
+     "src": "media/ledotron/09-data-meteo.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The weather. Temperature, wind, rain, clouds, storm, snow, and a climate stress computed against twenty years of local climate: the show changes with the weather.",
+      "fr": "La météo. Température, vent, pluie, nuages, orage, neige, et un stress climatique calculé par rapport au climat local des vingt dernières années : le spectacle change avec le temps qu’il fait.",
+      "ca": "El temps. Temperatura, vent, pluja, núvols, tempesta, neu i un estrès climàtic calculat respecte al clima local dels últims vint anys: l’espectacle canvia amb el temps que fa.",
+      "es": "El tiempo. Temperatura, viento, lluvia, nubes, tormenta, nieve y un estrés climático calculado frente al clima local de los últimos veinte años: el espectáculo cambia con el tiempo que hace."
+     }
+    },
+    {
+     "src": "media/ledotron/10-effets.jpg",
+     "credit": "",
+     "caption": {
+      "en": "A generative effect. Motion, density, colours, intensity, fades, target strips, animation curves, and two sections to make it react to the weather or to the sound.",
+      "fr": "Un effet génératif. Mouvement, densité, couleurs, intensité, fondus, bandes ciblées, courbes d’animation, et deux sections pour le rendre réactif à la météo ou au son.",
+      "ca": "Un efecte generatiu. Moviment, densitat, colors, intensitat, fosos, tires objectiu, corbes d’animació i dues seccions per fer-lo reactiu al temps o al so.",
+      "es": "Un efecto generativo. Movimiento, densidad, colores, intensidad, fundidos, tiras objetivo, curvas de animación y dos secciones para hacerlo reactivo al tiempo o al sonido."
+     }
+    },
+    {
+     "src": "media/ledotron/11-ecran-verrouille.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The locked screen. What the on-site team sees: the state of the installation, big buttons to restart, switch off, test, set the volume, and what to do if something goes wrong. The rest of the interface is hidden.",
+      "fr": "L’écran verrouillé. Ce que voit l’équipe sur place : l’état de l’installation, de grands boutons pour relancer, tout éteindre, tester, régler le volume, et la marche à suivre en cas de souci. Le reste est caché.",
+      "ca": "La pantalla bloquejada. El que veu l’equip in situ: l’estat de la instal·lació, botons grans per reiniciar, apagar-ho tot, provar, ajustar el volum, i què fer si hi ha un problema. La resta queda amagada.",
+      "es": "La pantalla bloqueada. Lo que ve el equipo in situ: el estado de la instalación, botones grandes para reiniciar, apagarlo todo, probar, ajustar el volumen, y qué hacer si algo falla. El resto queda oculto."
+     }
+    },
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1452620256897-U9REO6ZA20L1M6KU27HJ/LedotronPresentation.png?format=1500w",
      "credit": ""
@@ -1858,7 +1984,7 @@
    "credits": "",
    "location": null,
    "spots": [],
-   "author": "Hand Coded",
+   "author": "",
    "skills": [
     "tools",
     "light",
@@ -1866,6 +1992,12 @@
     "audio",
     "real-time",
     "hardware"
+   ],
+   "logos": [
+    "media/logos/ledotron.png",
+    "media/logos/upf.png",
+    "media/logos/aubio.png",
+    "media/logos/chataigne.png"
    ]
   },
   {
@@ -2375,7 +2507,7 @@
   {
    "id": "wave",
    "section": "work",
-   "order": 15,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Wave",
@@ -2600,7 +2732,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 9,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -2622,7 +2754,6 @@
    },
    "date": "2016",
    "tags": [
-    "featured",
     "collab",
     "touring"
    ],
@@ -2785,6 +2916,10 @@
    "media": [
     {
      "src": "https://images.squarespace-cdn.com/content/v1/54100ad6e4b0bf02ce44ab92/1474413852491-2A6FGPU2N35C7SK9ANCJ/image-asset.jpeg?format=1500w",
+     "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=YYQNjI2Ma7k",
      "credit": ""
     },
     {
@@ -5506,7 +5641,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 12,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -5629,7 +5764,7 @@
   {
    "id": "etre-absorbe",
    "section": "work",
-   "order": 13,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Être Absorbé",
@@ -8214,7 +8349,7 @@
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -8259,7 +8394,7 @@
   {
    "id": "upf",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -8304,7 +8439,7 @@
   {
    "id": "ircam",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -8349,7 +8484,7 @@
   {
    "id": "cea",
    "section": "studio",
-   "order": 92,
+   "order": 93,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9212,6 +9347,51 @@
     "media/logos/fisheye.png",
     "media/logos/alpine.png"
    ]
+  },
+  {
+   "id": "aubio",
+   "section": "studio",
+   "order": 89,
+   "published": true,
+   "title": {
+    "en": "aubio",
+    "fr": "aubio",
+    "ca": "aubio",
+    "es": "aubio"
+   },
+   "subtitle": {
+    "en": "Software",
+    "fr": "Logiciel",
+    "ca": "Programari",
+    "es": "Software"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/logos/aubio.png",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
   }
  ]
 }

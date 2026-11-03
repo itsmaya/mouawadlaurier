@@ -335,3 +335,7 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 .logo-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .logo-chip[aria-pressed="true"] { opacity: 1; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); color: var(--ink); }
 .logo-chip:hover { opacity: 1; }
+.media-item .mcap-ed { padding: 0 6px 6px; font-size: 12px; }
+.media-item .mcap-ed summary { cursor: pointer; color: var(--ink-3); padding: 2px 0; }
+.media-item .mcap-ed .f { margin: 4px 0 0; }
+.media-item .mcap-ed .pair { grid-template-columns: 1fr; }

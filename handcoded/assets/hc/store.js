@@ -78,7 +78,7 @@ export function normalizeContent(c) {
     ['title', 'subtitle', 'place', 'body'].forEach(k => { if (!p[k] || typeof p[k] !== 'object') p[k] = Object.fromEntries(LANGS.map(l => [l, p[k] || ''])); LANGS.forEach(l => { if (p[k][l] == null) p[k][l] = ''; }); });
     p.tags = Array.isArray(p.tags) ? p.tags : []; p.media = Array.isArray(p.media) ? p.media : []; p.team = Array.isArray(p.team) ? p.team : [];
     p.author = typeof p.author === 'string' ? p.author : '';   // auteur de l'œuvre, signé sur les images
-    p.media.forEach(m => { if (m && typeof m.credit !== 'string') m.credit = ''; });
+    p.media.forEach(m => { if (m && typeof m.credit !== 'string') m.credit = ''; if (m && typeof m.caption === 'string') m.caption = Object.fromEntries(LANGS.map(l => [l, m.caption])); });
     p.spots = Array.isArray(p.spots) ? p.spots.filter(validLoc) : [];   // lieux d'intervention, pour le réseau de la carte
     p.skills = Array.isArray(p.skills) ? p.skills.filter(x => typeof x === 'string') : [];   // savoir-faire utilisés par ce projet (identifiants)
     p.logos = Array.isArray(p.logos) ? p.logos.filter(x => typeof x === 'string' && x) : [];   // logos des partenaires, en bas de la fiche
