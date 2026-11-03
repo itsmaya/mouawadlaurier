@@ -210,8 +210,9 @@
     "weight": 300
    },
    "h3": {
-    "font": "arial",
-    "size": 9
+    "font": "g:Open Sans",
+    "size": 13,
+    "upper": true
    },
    "cname": {
     "font": "wireone"
@@ -236,13 +237,16 @@
    },
    "title": {
     "size": 24,
-    "font": "g:League Spartan"
+    "font": "g:League Spartan",
+    "lh": 22,
+    "upper": true,
+    "weight": 300
    },
    "subtitle": {
-    "font": "g:Open Sans",
-    "size": 14,
-    "italic": true,
-    "weight": 600
+    "font": "g:League Spartan",
+    "weight": 600,
+    "lh": 15.5,
+    "upper": true
    },
    "date": {
     "font": "arial",
