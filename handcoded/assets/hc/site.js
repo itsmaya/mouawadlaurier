@@ -1186,7 +1186,7 @@ const ytId = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?
 const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
 const post2D = {
-  open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, delay: 0,
+  open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
     this.clear(); this.post = post;
     this.open = true; this.height = card === 'place' ? 300 : 355;
@@ -1381,7 +1381,10 @@ const post2D = {
   },
   step() {   // Navigation._navigation
     if (!this.open) return;
-    if (this.dragging) { this.finalpos += (mouse2D - this.xprev) * 1.5; this.x -= (this.x - this.finalpos) * ease(STYLE.easing); this.xprev = mouse2D; }
+    if (this.dragging) {   // la bande est réduite sur téléphone : le doigt la fait avancer de la même distance à l'écran
+      const d = (mouse2D - this.xprev) * 1.5 / (this.scale || 1);
+      this.finalpos += d; this.vel = this.vel * 0.6 + d * 0.4; this.x -= (this.x - this.finalpos) * ease(STYLE.easing); this.xprev = mouse2D;
+    }
     else if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
     else if (this.finalpos > 0) this.finalpos = 0; else if (this.finalpos < this.end) this.finalpos = this.end;
     strip.style.transform = `translateX(${Math.round(this.x)}px)`;
@@ -1435,15 +1438,15 @@ post2dEl.addEventListener('pointermove', e => {
   if (!pend2D || e.pointerId !== pend2D.id || post2D.dragging) return;
   const dx = e.clientX - pend2D.x, dy = e.clientY - pend2D.y;
   if (Math.abs(dx) > 6 && Math.abs(dx) >= Math.abs(dy)) {
-    post2D.dragging = true; post2D.xprev = pend2D.x; post2D.finalpos = post2D.x;
+    post2D.dragging = true; post2D.xprev = pend2D.x; post2D.finalpos = post2D.x; post2D.vel = 0;
     try { post2dEl.setPointerCapture(e.pointerId); } catch (err) {}
     post2dEl.classList.add('grabbing');
   }
 });
 post2dEl.addEventListener('click', e => { if (post2D.justDragged) { e.preventDefault(); e.stopPropagation(); post2D.justDragged = false; } }, true);
-const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); } pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };
+const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); post2D.finalpos += (post2D.vel || 0) * 10; } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
 post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('pointercancel', stopDrag2D);
-post2dEl.addEventListener('lostpointercapture', stopDrag2D);
+post2dEl.addEventListener('lostpointercapture', e => { if (e.target === post2dEl) stopDrag2D(); });   // au doigt, la capture passe de l'élément touché à la bande : ce transfert ne doit pas arrêter le glissement
 window.addEventListener('pointerup', () => { if (pend2D || post2D.dragging) stopDrag2D(); });
 whiteboard.addEventListener('pointerdown', () => closePost());
 
@@ -1560,7 +1563,7 @@ function pickNet(x, y) {   // les lieux sont petits et serrés : on prend le plu
 }
 let dragId = null, downHit = null, downX = 0, downY = 0;
 canvas.addEventListener('pointerdown', e => {
-  if (!inputEnabled || dragId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  if (!inputEnabled || dragId !== null || (e.pointerType === 'mouse' && e.button !== 0) || (e.pointerType === 'touch' && touches.size > 0)) return;
   mouseX = downX = e.clientX; mouseY = downY = e.clientY;
   const hit = pick(e.clientX, e.clientY);
   checkPostOpenAndClose();
@@ -1593,6 +1596,24 @@ canvas.addEventListener('pointermove', e => {
   if (dragId === null && e.pointerType === 'mouse' && !hoverQueued) { hoverQueued = true; requestAnimationFrame(() => { hoverQueued = false; const h = pick(mouseX, mouseY); canvas.classList.toggle('hover', !!(h && h.post)); hoverCard(h && h.post && h.face === 'front' && !P.postOpen ? h.post : null); if (h && h.netNode && !P.postOpen) showNetTip(h.netNode, mouseX, mouseY); else hideNetTip(); }); }
 });
 let lastWheel = 0;
+/* Deux doigts : écarter zoome, pincer dézoome, par crans comme la molette ; le premier doigt cesse alors de faire tourner la scène */
+const touches = new Map(); let pinch = null;
+const pinchDist = () => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+window.addEventListener('pointerdown', e => {   // le deuxième doigt peut tomber sur un bouton ou une étiquette : on le suit partout, dès que le premier est sur la scène
+  if (e.pointerType !== 'touch' || !homeGone || post2D.open) return;
+  if (!touches.size && e.target !== canvas) return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (touches.size === 2) { if (dragId !== null) endDrag({ pointerId: dragId }, true); pinch = { last: pinchDist() }; }
+});
+window.addEventListener('pointermove', e => {
+  if (!touches.has(e.pointerId)) return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (!pinch || touches.size < 2 || !inputEnabled) return;
+  const d = pinchDist(), r = d / pinch.last;
+  if (r > 1.15) { zoomIn(); pinch.last = d; } else if (r < 1 / 1.15) { zoomOut(); pinch.last = d; }
+});
+const dropTouch = e => { touches.delete(e.pointerId); if (touches.size < 2) pinch = null; };
+['pointerup', 'pointercancel'].forEach(t => window.addEventListener(t, dropTouch));
 canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
 window.addEventListener('resize', () => {
   resizeViewport(); onStageResize3D(); setMenuPosition(); sizeTicker(); hvSize();
