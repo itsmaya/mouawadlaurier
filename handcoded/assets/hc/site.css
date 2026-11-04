@@ -34,7 +34,7 @@ button { font: inherit; }
 #slogan .wm[role="link"] { pointer-events: auto; cursor: pointer; }   /* la signature ramène à l'accueil */
 #slogan .wm[role="link"]:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 3px; }
 #logo { z-index: 5; right: calc(20px + env(safe-area-inset-right, 0px)); top: calc(20px + env(safe-area-inset-top, 0px)); width: 120px; height: 120px; object-fit: contain; pointer-events: none; }
-#menu { left: 60px; top: 548px; margin: 0; padding: 0; list-style: none; z-index: 6; }
+#menu { left: 23px; top: 210px; margin: 0; padding: 0; list-style: none; z-index: 6; }
 #menu::before { content: ""; position: absolute; left: 0; top: 2px; width: 1px; height: 0; background: var(--rule); transition: height .6s; }
 #menu.ready::before { height: calc(var(--n) * 21.5px - 8px); }
 #menu li { margin: 0; padding: 0; }
@@ -47,8 +47,9 @@ button { font: inherit; }
 #langs button[aria-pressed="true"] { color: #222; box-shadow: inset 0 -2px 0 var(--accent); }
 
 /* Catégories (tags) + pagination */
-#cats { right: calc(97px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: flex-end; gap: 6px; z-index: 6; transition: opacity 1s; }
-#cats.hidden { opacity: 0; pointer-events: none; }
+#cats { display: contents; }
+#pager, #cat-box { transition: opacity 1s; z-index: 6; }
+#cats.hidden #pager, #cats.hidden #cat-box { opacity: 0; pointer-events: none; }
 .pg { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #9a9a9a; background: #fff; color: #777; padding: 0; cursor: pointer; display: grid; place-items: center; margin-bottom: 1px; }
 .pg svg { width: 8px; height: 10px; }
 .pg:disabled { opacity: .6; cursor: default; }
@@ -224,8 +225,7 @@ html.neg #home { filter: invert(1); }   /* la page inversée la remet à l'endro
 }
 /* Petits écrans : les tags montent au-dessus du clavier pour laisser la place aux langues */
 @media (max-width: 520px) {
-  #cats { right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(52px + env(safe-area-inset-bottom, 0px)); }
-  #cat-box { width: 150px; }
+
 }
 @media (prefers-reduced-motion: reduce) { #home { transition-duration: .01s; } }
 
@@ -502,3 +502,107 @@ body:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 #hv-rv > video, #hv-rv > iframe { position: absolute; display: block; border: 0; pointer-events: none; }
 #hv-rv .grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(0,0,0,.42) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.42) 1px, transparent 1px); background-size: 4px 4px; }
 #home.reel-on #home-video { visibility: hidden; }
+
+/* Showreel et réglages sous la signature, en haut à gauche ; le « ? » reste seul en bas à droite */
+#home-ctl { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; position: relative; margin-top: 6px; }
+#home-ctl > button { height: 34px; min-width: 34px; border: 1px solid #333; padding: 0; background: rgba(20,20,20,.8); color: #cfcfcf; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+#home-ctl > button:hover, #home-ctl > button:focus-visible { color: #fff; border-color: #666; outline: none; }
+#home-ctl svg { width: 21px; height: 21px; display: block; }
+#home.reel-on #hv-toggle, #home.reel-on #hv-panel { display: none; }   /* le showreel joue : les réglages des carrés ne servent à rien */
+#home-ctl #hv-panel { left: calc(100% + 12px); top: 0; right: auto !important; bottom: auto !important; transform-origin: 0 0; }
+#home.leaving #home-ctl { pointer-events: none; }
+@media (max-width: 700px), (max-height: 520px) {
+  #home-ctl { grid-column: 1 / -1; grid-row: 2; align-self: start; justify-self: start; flex-direction: row; margin-top: 0; }
+}
+@media (max-width: 700px) {
+  #home-ctl #hv-panel { left: 0; top: calc(100% + 8px); }
+  #home-ctl #hv-panel.open { transform: none; }
+}
+@media (max-height: 520px) {
+  #home-ctl #hv-panel { left: calc(100% + 10px); top: 0; }
+  #home-ctl #hv-panel.open { transform: scale(.8); }
+}
+
+/* ================================================================ Navigation : un seul langage pour tous les contrôles
+   Pas de noir pur : des gris profonds (--ink), des filets clairs (--hair), le jaune seulement pour les repères (tiret, triangle, soulignement).
+   En haut à gauche, dans l'ordre de lecture : la signature, les sections, la catégorie. En bas au centre : les pages. */
+:root { --ink: #2f2f2f; --ink-2: #6e6e6e; --ink-3: #a9a9a9; --hair: #d7d7d7; --chip: rgba(255,255,255,.9); }
+/* sections : un filet jaune vertical à gauche de la liste */
+#menu::before { width: 2px; top: 3px; background: var(--accent); }
+#menu.ready::before { height: calc(var(--n) * 28.5px - 6px); }
+#menu li:first-child { margin-top: 0; }
+#menu button { padding: 0 0 0 20px; color: var(--ink-3); transition: color .2s; }
+#menu button:hover { color: var(--ink-2); }
+#menu button[aria-current="true"] { color: var(--ink); }
+/* catégorie : un petit libellé, puis un bouton à filet */
+#cat-box { position: fixed; width: auto; min-width: 190px; max-width: calc(100vw - 40px); display: grid; gap: 6px; }
+#cat-cap { padding-left: 1px; font: bold 9px/12px var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+#cat-open { height: 34px; width: auto; min-width: 100%; padding: 0 16px 0 13px; gap: 11px; border: 1px solid var(--hair); background: var(--chip); color: var(--ink); font: bold 11px/32px var(--ui); letter-spacing: .1em; box-sizing: border-box; transition: border-color .2s; }
+#cat-open:hover, #cat-open:focus-visible, #cat-box.open #cat-open { border-color: var(--ink-3); outline: none; background: #fff; }
+#cat-open .tri { border-left-width: 6px; border-top-width: 5px; border-bottom-width: 5px; }
+#cat-box.open #cat-open .tri { transform: rotate(90deg); }
+#cat-name .n { color: var(--ink-3); font-weight: 400; }
+#cat-list { overflow-y: auto; overscroll-behavior: contain; left: 0; right: auto; top: calc(100% + 4px); bottom: auto; min-width: 100%; width: max-content; padding: 8px 0; background: #fff; border: 1px solid var(--hair); border-top: 1px solid var(--hair); transform-origin: top; box-shadow: 0 14px 34px rgba(40,40,40,.08); }
+#cat-list button { position: relative; padding: 5px 20px 5px 36px; font: bold 11px/16px var(--ui); letter-spacing: .1em; color: var(--ink-3); }
+#cat-list button:hover { color: var(--ink); }
+#cat-list button[aria-current="true"] { color: var(--ink); }
+#cat-list button[aria-current="true"]::before { content: ''; position: absolute; left: 14px; top: 50%; width: 12px; height: 2px; margin-top: -1px; background: var(--accent); }
+#cat-list .n { color: var(--ink-3); font-weight: 400; letter-spacing: .02em; }
+/* showreel, sous le logo : le même bouton à filet */
+#reel-btn { width: auto; min-width: 120px; height: 34px; padding: 0 16px 0 13px; gap: 10px; border: 1px solid var(--hair); background: var(--chip); color: var(--ink); font: bold 11px/32px var(--ui); letter-spacing: .1em; box-sizing: border-box; top: calc(150px + env(safe-area-inset-top, 0px)); }
+#reel-btn i { border-left-width: 6px; border-top-width: 5px; border-bottom-width: 5px; }
+#reel-btn:hover, #reel-btn:focus-visible { background: #fff; border-color: var(--ink-3); }
+/* pages : deux cercles à filet et « 2 / 5 » */
+#pager { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 16px; }
+#pager .pg { width: 38px; height: 38px; border: 1px solid var(--hair); background: var(--chip); color: var(--ink-2); margin: 0; transition: border-color .2s, color .2s; }
+#pager .pg svg { width: 10px; height: 13px; }
+#pager .pg:not(:disabled):hover, #pager .pg:not(:disabled):focus-visible { border-color: var(--ink-2); color: var(--ink); outline: none; }
+#pager .pg:disabled { opacity: 1; color: var(--hair); }
+#pager #pg-num { font: bold 11px/38px var(--ui); letter-spacing: .14em; color: var(--ink-2); min-width: 44px; margin: 0; }
+/* langues : les mêmes gris */
+#langs button { color: var(--ink-3); }
+#langs button:hover { color: var(--ink-2); }
+#langs button[aria-pressed="true"] { color: var(--ink); }
+@media (max-width: 700px), (max-height: 520px) {
+  #cat-box { min-width: 0; gap: 4px; }
+  #cat-cap { display: none; }
+  #cat-open { height: 30px; font-size: 10px; line-height: 28px; padding: 0 12px 0 10px; }
+  #cat-list button { font-size: 10px; line-height: 15px; }
+  #reel-btn { min-width: 0; width: auto; height: 26px; padding: 0 9px; gap: 6px; font-size: 9px; line-height: 24px; top: calc(100px + env(safe-area-inset-top, 0px)); }
+  #pager { gap: 10px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+  #pager .pg { width: 34px; height: 34px; }
+  #pager #pg-num { line-height: 34px; min-width: 36px; }
+  #menu button { padding-left: 12px; }
+  #menu.ready::before { height: calc(var(--n) * 21.5px - 8px); }
+}
+
+/* Accueil : le logo à droite, comme dans le site */
+#home-band .lg { position: absolute !important; top: 20px; right: max(20px, env(safe-area-inset-right, 0px)); z-index: 2 !important; }
+#home-band .lg img { width: 120px; height: 120px; }
+@media (max-width: 700px), (max-height: 520px) {
+  #home-band .sl { grid-column: 1 / -1; padding-right: 90px; }
+  #home-band .lg img { width: 72px; height: 72px; }
+  #home-band .lg { top: 14px; }
+}
+#hv-panel .tg { grid-template-columns: 1fr; }
+
+
+/* ================================================================ Grand écran : la mise en page de la maquette
+   En haut à gauche : la signature, le Showreel dessous ; en haut à droite : le logo.
+   En bas à gauche : les sections (plus grandes, filet jaune) et les langues ; au centre : les pages, puis la catégorie ; à droite : le clavier. */
+@media (min-width: 701px) and (min-height: 521px) {
+  #reel-btn { width: auto; min-width: 0; padding: 0 16px 0 13px; }
+  #menu button { font-size: 17px !important; line-height: 28.5px !important; }
+  #langs { left: calc(26px + env(safe-area-inset-left, 0px)); bottom: calc(26px + env(safe-area-inset-bottom, 0px)); gap: 6px; }
+  #langs button { font-size: 12px; line-height: 16px; padding: 3px 4px; }
+  #pager { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+  #pager .pg { width: 40px; height: 40px; }
+  #pager #pg-num { line-height: 40px; }
+  #cat-box { left: 50% !important; right: auto; top: auto !important; bottom: calc(27px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); min-width: 0; }
+  #cat-cap { display: none; }
+  #cat-open { padding: 0 16px 0 13px; }
+  #cat-list { top: auto; bottom: calc(100% + 6px); left: 50%; transform-origin: bottom; translate: -50% 0; }
+  #kb { width: 77px; }
+  #kb-toggle { background-size: 70px auto; height: 26px; }
+  body.post-open-wide #reel-btn { opacity: 0; pointer-events: none; }
+}

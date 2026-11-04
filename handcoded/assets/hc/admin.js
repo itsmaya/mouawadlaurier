@@ -1299,7 +1299,7 @@ function homeVideoFields(s) {
     h('p', { class: 'hint' }, 'MP4 sans son ou avec, en boucle : un extrait de 20 à 30 secondes en 720p suffit (moins de 15 Mo). Elle démarre à un endroit au hasard. Une vidéo YouTube ne marche pas ici : il faut le fichier.'),
     h('div', { style: { marginTop: '10px' } }, toggle('Réglage au hasard à chaque visite (grille, contraste, delay, couleur, sens)', () => hvs.random !== false, v => { hvs.random = v; renderMain(); })),
     hvs.random !== false ? h('p', { class: 'hint' }, 'Chaque visiteur arrive sur une combinaison différente, puis la change avec le panneau de réglages. Coupe cet interrupteur pour fixer le réglage ci-dessous.') : h('div', { style: { marginTop: '10px' } },
-      hvFader(hvs, 'cell', 'Carrés (px)', 14, 6, 40, 2, 'La taille de la grille. Petit : plus de carrés, image plus fine.'),
+      hvFader(hvs, 'cell', 'Carrés (px)', 14, 3, 40, 1, 'La taille de la grille. Petit : plus de carrés, image plus fine.'),
       hvFader(hvs, 'size', 'Taille maximale des carrés (%)', 92, 40, 100, 2, 'La place que prend un carré dans sa case quand le pixel est au plus clair.'),
       hvFader(hvs, 'contrast', 'Contraste', 1, 0.4, 3, 0.1, 'Au-dessus de 1, les zones sombres disparaissent plus vite.'),
       hvFader(hvs, 'delay', 'Delay (lissage)', 4, 1, 8, 1, 'Comme sur Fat-Man : valeur = valeur − (valeur − cible) / delay. 1 = immédiat. Coupé d’office sur un ordinateur trop lent.'),

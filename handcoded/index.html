@@ -23,7 +23,7 @@
 <!--/seo-head-->
 <link rel="icon" href="assets/hc/ui/logo-default.svg">
 <link rel="stylesheet" href="vendor/fonts/fonts.css">
-<script>window.HC_V = 'a82e7f5d4f'; window.hcV = u => location.protocol === 'file:' ? u : u + '?v=' + window.HC_V;</script>
+<script>window.HC_V = '352c4886b0'; window.hcV = u => location.protocol === 'file:' ? u : u + '?v=' + window.HC_V;</script>
 <script>document.write('<link rel="stylesheet" href="' + hcV('assets/hc/site.css') + '">')</script>
 </head>
 <body>
@@ -46,11 +46,13 @@
 <img id="logo" class="ui" src="assets/hc/ui/logo-default.svg" alt="">
 <ul id="menu" class="ui" aria-label="Sections" hidden></ul>
 <div id="langs" class="ui" hidden></div>
-<div id="cats" class="ui hidden">
-  <button class="pg" id="pg-prev" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M7 0 0 5l7 5z" fill="currentColor"/></svg></button>
-  <span id="pg-num" hidden></span>
-  <button class="pg" id="pg-next" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M1 0l7 5-7 5z" fill="currentColor"/></svg></button>
-  <div id="cat-box"><ul id="cat-list"></ul><button id="cat-open" type="button" aria-haspopup="true"><span class="tri"></span><span id="cat-name"></span></button></div>
+<div id="cats" class="hidden">
+  <div id="pager" class="ui">
+    <button class="pg" id="pg-prev" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M7 0 0 5l7 5z" fill="currentColor"/></svg></button>
+    <span id="pg-num" hidden></span>
+    <button class="pg" id="pg-next" type="button"><svg viewBox="0 0 8 10" aria-hidden="true"><path d="M1 0l7 5-7 5z" fill="currentColor"/></svg></button>
+  </div>
+  <div id="cat-box" class="ui"><span id="cat-cap" aria-hidden="true"></span><button id="cat-open" type="button" aria-haspopup="true"><span class="tri"></span><span id="cat-name"></span></button><ul id="cat-list"></ul></div>
 </div>
 <div id="kb" class="ui" hidden>
   <div id="kb-panel">
