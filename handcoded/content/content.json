@@ -206,8 +206,9 @@
    },
    "body": {
     "font": "g:Open Sans",
-    "size": 12,
-    "weight": 300
+    "size": 11,
+    "weight": 300,
+    "lh": 15
    },
    "h3": {
     "font": "g:Open Sans",
@@ -259,7 +260,8 @@
     "font": "arial"
    },
    "cinfo": {
-    "font": "g:Open Sans"
+    "font": "g:Open Sans",
+    "size": 11
    },
    "csub": {
     "font": "g:Open Sans"
@@ -281,6 +283,13 @@
   },
   "analytics": {
    "goatcounter": "handcoded"
+  },
+  "fiche": {
+   "top": 19,
+   "bottom": 15,
+   "side": 24,
+   "gutter": 40,
+   "col": 243
   }
  },
  "models": [
