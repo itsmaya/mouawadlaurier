@@ -972,14 +972,26 @@ function postEditor(p, redrawList, redraw) {
     if (!S.logoFiles && S.backend.listFiles) { S.logoFiles = []; S.backend.listFiles(['media/logos/']).then(fs => { S.logoFiles = fs.map(f => f.path).filter(x => /\.(png|jpe?g|svg|webp|gif)$/i.test(x)); if (logoBox.isConnected) drawLogos(); }).catch(() => {}); }   // tous les logos du dossier media/logos
     const name = path => { const owner = c.posts.find(x => x.thumb === path && fr(x.title)); return owner ? fr(owner.title) : rawName(path); };   // le nom du partenaire quand il existe
     const rawName = path => decodeURIComponent(path.split('/').pop().replace(/-[a-z0-9]{4}\.[a-z]+$/i, '').replace(/\.[a-z]+$/i, '')).replace(/[-_]+/g, ' ');
+    /* remplacer un logo : le nouveau fichier prend sa place dans tous les projets, et sur la fiche du partenaire */
+    const replaceLogo = async (old, f) => {
+      if (!f) return;
+      try {
+        const up = await prepareUpload(f, 'media/logos', 'logo'); stageFile(up.path, up.blob);
+        let n = 0; c.posts.forEach(x => { if ((x.logos || []).includes(old)) { x.logos = x.logos.map(v => v === old ? up.path : v); n++; } if (x.thumb === old) { x.thumb = up.path; n++; } });
+        S.logoFiles = (S.logoFiles || []).filter(v => v !== old);
+        change(); drawLogos(); toast(`Logo remplacé (${n} endroit${n > 1 ? 's' : ''}). Il part sur le site à la prochaine publication.`);
+      } catch (e) { toast(e.message, 'bad', 7000); }
+    };
     const add = async files => { for (const f of files) { try { const up = await prepareUpload(f, 'media/logos', 'logo'); stageFile(up.path, up.blob); p.logos.push(up.path); change(); } catch (e) { toast(e.message, 'bad', 7000); } } drawLogos(); };
     const drop = h('div', { class: 'media-add', role: 'button', tabindex: 0, style: { minHeight: '64px' }, onclick: () => filePicker('image/*', true, add), onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } }, h('span', null, '+ Ajouter des logos', h('br'), h('small', null, 'PNG ou SVG, fond blanc ou transparent')));
     dropTarget(drop, add);
     fill(logoBox,
       h('div', { class: 'logo-lib' }, lib.map(path => {
         const on = p.logos.includes(path);
-        return h('button', { type: 'button', class: 'logo-chip', 'aria-pressed': String(on), title: name(path), onclick: () => { p.logos = on ? p.logos.filter(x => x !== path) : [...p.logos, path]; change(); drawLogos(); } },
-          h('img', { src: fileURL(path), alt: name(path), loading: 'lazy' }), h('span', null, name(path)));
+        return h('div', { class: 'logo-cell' },
+          h('button', { type: 'button', class: 'logo-chip', 'aria-pressed': String(on), title: name(path), onclick: () => { p.logos = on ? p.logos.filter(x => x !== path) : [...p.logos, path]; change(); drawLogos(); } },
+            h('img', { src: fileURL(path), alt: name(path), loading: 'lazy' }), h('span', null, name(path))),
+          h('button', { type: 'button', class: 'logo-swap', title: 'Remplacer ce logo par un nouveau fichier, partout où il est utilisé', 'aria-label': 'Remplacer le logo ' + name(path), onclick: () => filePicker('image/*', false, files => replaceLogo(path, files[0])) }, '↻'));
       }), drop),
       h('p', { class: 'hint' }, p.logos.length ? `${p.logos.length} logo${p.logos.length > 1 ? 's' : ''} en bas de la fiche, dans l’ordre où tu les as cochés. Les logos des autres projets sont proposés ici : un clic pour l’ajouter ou le retirer.` : 'Les logos s’affichent en bas de la fiche, dans un panneau « Partenaires ». Ceux déjà utilisés sur d’autres projets sont proposés ici : un clic suffit.'));
   };

@@ -113,13 +113,6 @@ button { font: inherit; }
 .proj .go:hover img, .proj .go:focus-visible img { opacity: .82; transform: scale(1.03); }
 .proj .go:hover .t, .proj .go:focus-visible .t { color: var(--accent); }
 .proj .go:focus-visible { outline: none; }
-.pnl.logos .in { display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 0 34px; box-sizing: border-box; }
-.pnl.logos .lbl { font: 10px/14px var(--ui); color: var(--grey-2); letter-spacing: .08em; text-transform: uppercase; }
-.pnl.logos .grid { display: grid; grid-auto-rows: 66px; gap: 8px; }
-.pnl.logos .lg { display: grid; place-items: center; background: #fff; padding: 8px 10px; box-sizing: border-box; min-height: 0; }
-.pnl.logos img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
-html.neg .pnl.logos .lg { filter: invert(1); }   /* la pastille et son logo gardent leurs vraies couleurs en négatif */
-html.neg #strip .pnl.logos img { filter: none; }
 .pnl.media img, .pnl.media video { display: block; height: 355px; width: auto; user-select: none; -webkit-user-drag: none; }
 .txt .ttl { position: absolute; font: 30px/36px var(--serif); color: #fff; margin: 0; text-wrap: balance; }
 .txt .stl { position: absolute; font: 16px/20px var(--serif); color: #9a9a9a; margin: 0; }
@@ -584,7 +577,7 @@ body:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 #cat-list button:hover { text-decoration: underline; text-underline-offset: 3px; }
 #pager .pg:disabled { color: #111; opacity: .25; }
 /* fiches : tout en blanc, les liens soulignés */
-.txt .stl, .txt .fecha, .txt .posted, .proj .m, .txt .relp .lbl, .txt .relp .arr, .pnl.link .lbl, .pnl.logos .lbl { color: #fff; }
+.txt .stl, .txt .fecha, .txt .posted, .proj .m, .txt .relp .lbl, .txt .relp .arr, .pnl.link .lbl { color: #fff; }
 .txt .body a, .txt .posted span, .txt .skl-tags .go { color: #fff; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
 .txt .skl-tags .go:hover, .txt .body a:hover { text-decoration-thickness: 2px; }
 .proj .t { color: #fff; }
@@ -623,3 +616,13 @@ html:not(.neg) .face.on img { filter: brightness(1.12); }
 .pnl.mat .in img, .pnl.grid4 .in img { position: absolute; display: block; width: auto; object-fit: cover; user-select: none; -webkit-user-drag: none; }
 .pnl.mat .mcap2 { position: absolute; margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 13px; line-height: 15px; color: #111; }
 .pnl.grid4 .bgx { background: var(--panel); }
+
+/* Partenaires : logos en blanc, grille à filets fins (les filets ne touchent pas les bords de la fiche) */
+.pnl.logos .lbl { position: absolute; margin: 0; font-family: var(--f-h3, var(--serif)); font-style: var(--st-h3, italic); font-weight: 400; font-size: 20px; line-height: 22px; color: #fff; }
+.pnl.logos .grid { position: absolute; display: grid; gap: 1px; background: rgba(255,255,255,.28); }
+.pnl.logos .lg { position: relative; background: var(--panel); min-width: 0; min-height: 0; }
+.pnl.logos img { position: absolute; left: 18px; top: 13px; width: calc(100% - 36px); height: calc(100% - 26px); display: block; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.pnl.logos img:not([src]) { visibility: hidden; }
+.pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; }   /* image d'un autre site : approximation par filtre */
+html.neg #strip .pnl.logos img { filter: none; }
+html.neg #strip .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6); }

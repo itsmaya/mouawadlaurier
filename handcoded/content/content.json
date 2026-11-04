@@ -264,10 +264,10 @@
     "font": "g:Inter Tight"
    },
    "logo": {
-    "font": "wireone",
-    "weight": 700,
-    "size": 73,
-    "italic": false,
+    "font": "g:Instrument Serif",
+    "italic": true,
+    "weight": 400,
+    "size": 54,
     "text": "HC"
    }
   },

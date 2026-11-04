@@ -1479,12 +1479,17 @@ const post2D = {
       const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
     });
   },
-  addLogos(post) {   // les logos des partenaires, sur des pastilles blanches
-    const n = post.logos.length, cols = n <= 4 ? 2 : 3, rows = Math.ceil(n / cols);
-    const w = 68 + cols * 118, el = this.addPanel('logos', w, `<span class="lbl">${escapeHTML(ui('partners'))}</span><div class="grid" style="grid-template-columns:repeat(${cols},110px)">` +
-      post.logos.map(src => `<span class="lg"><img src="${escapeHTML(url(src))}" alt="" draggable="false"></span>`).join('') + '</div>');
-    if (rows > 3) el.querySelector('.grid').style.gridAutoRows = Math.floor(230 / rows - 6) + 'px';
+  addLogos(post) {   // les partenaires : leurs logos en blanc sur le noir de la fiche, dans une grille aux filets fins, comme une page de crédits de magazine
+    const fm = ficheM(), n = post.logos.length, top = fm.top, low = 355 - fm.bottom, labH = 34, L = fm.side;
+    const cw = 96, ch0 = 50, maxRows = Math.max(1, Math.floor((low - top - labH) / ch0)), cols = Math.max(1, Math.min(n, Math.ceil(n / maxRows))), rows = Math.ceil(n / cols);   // une cartouche étroite : deux colonnes en général
+    const ch = Math.min(ch0, Math.floor((low - top - labH) / rows));
+    const cells = post.logos.map(src => `<span class="lg"><img data-src="${escapeHTML(src)}" alt="" draggable="false"></span>`).concat(Array(rows * cols - n).fill('<span class="lg"></span>')).join('');
+    const gy = Math.round(top + labH + Math.max(0, (low - top - labH - rows * ch) / 2));
+    const el = this.addPanel('logos', L * 2 + cols * cw, `<h3 class="lbl" style="left:${L}px;top:${top}px">${escapeHTML(ui('partners'))}</h3>` +
+      `<div class="grid" style="left:${L}px;top:${gy}px;grid-template-columns:repeat(${cols},${cw - 1}px);grid-auto-rows:${ch - 1}px">${cells}</div>`);
+    el.querySelectorAll('img[data-src]').forEach(im => monoLogo(im.dataset.src).then(u => { im.src = u.src; im.classList.toggle('raw', !!u.raw); }));
   },
+
   addLink(post) {
     const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link;
     const label = String(ui('visit')).replace(/\s*:\s*$/, '');
@@ -1709,6 +1714,37 @@ const post2D = {
     strip.style.transform = `translateX(${Math.round(this.x)}px)`;
   },
 };
+/* Un logo de partenaire en blanc sur transparent, quels que soient ses couleurs et son fond : on repère le fond sur les bords de l'image,
+   et chaque pixel garde d'autant plus d'encre qu'il s'en écarte. Une image d'un autre site (illisible au pixel) passe par un filtre. */
+const MONO = new Map();
+function monoLogo(src) {
+  if (MONO.has(src)) return MONO.get(src);
+  const job = loadImage(src).then(im => {
+    const k = Math.min(1, 480 / Math.max(im.naturalWidth, im.naturalHeight)), w = Math.max(1, Math.round(im.naturalWidth * k)), h = Math.max(1, Math.round(im.naturalHeight * k));
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0, w, h);
+    let d; try { d = x.getImageData(0, 0, w, h); } catch (e) { return { src: url(src), raw: true }; }
+    const px = d.data, lum = i => (0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2]) / 255;
+    let n = 0, clear = 0, sum = 0;   // le fond : les pixels du bord
+    const edge = i => { n++; if (px[i + 3] < 40) clear++; else sum += lum(i); };
+    for (let X = 0; X < w; X++) { edge(X * 4); edge(((h - 1) * w + X) * 4); }
+    for (let Y = 0; Y < h; Y++) { edge(Y * w * 4); edge((Y * w + w - 1) * 4); }
+    const transparent = clear > n * 0.5, bg = transparent ? 0 : sum / Math.max(1, n - clear);
+    let inkLum = 0, cnt = 0; if (transparent) { for (let i = 0; i < px.length; i += 16) if (px[i + 3] > 128) { inkLum += lum(i); cnt++; } inkLum = cnt ? inkLum / cnt : 0; }
+    const ref = transparent ? (inkLum < 0.5 ? 1 : 0) : bg, span = Math.max(0.25, Math.max(ref, 1 - ref));
+    for (let i = 0; i < px.length; i += 4) {
+      const a = px[i + 3] / 255, l = lum(i), sat = (Math.max(px[i], px[i + 1], px[i + 2]) - Math.min(px[i], px[i + 1], px[i + 2])) / 255;
+      let ink = Math.min(1, Math.max(Math.abs(l - ref), sat * 0.8) / span); ink = ink < 0.08 ? 0 : Math.min(1, (ink - 0.08) * 1.35);
+      px[i] = px[i + 1] = px[i + 2] = 255; px[i + 3] = Math.round(255 * ink * a);
+    }
+    x.putImageData(d, 0, 0);
+    let x0 = w, y0 = h, x1 = -1, y1 = -1;   // on recadre sur l'encre : les logos aux grandes marges gardent la même présence que les autres
+    for (let Y = 0; Y < h; Y++) for (let X = 0; X < w; X++) if (px[(Y * w + X) * 4 + 3] > 24) { if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y; }
+    if (x1 < x0) return { src: c.toDataURL('image/png') };
+    const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1; o.getContext('2d').drawImage(c, -x0, -y0);
+    return { src: o.toDataURL('image/png') };
+  }).catch(() => ({ src: url(src), raw: true }));
+  MONO.set(src, job); return job;
+}
 function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit chaque panneau mot par mot
   const box = document.createElement('div'); box.className = 'body'; box.style.cssText = `position:static;width:${width}px`;
   measure.innerHTML = ''; measure.appendChild(box);
