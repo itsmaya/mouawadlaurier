@@ -16,7 +16,6 @@
   "negativeToggle": true,
   "signImages": true,
   "showreel": "https://youtu.be/dFbp9eWlvgM",
-  "sloganInbox": "",
   "homeVideo": {
    "src": "",
    "cell": 14,
@@ -190,6 +189,7 @@
    }
   ],
   "startSection": "work",
+  "sloganInbox": "",
   "typo": {
    "sig1": {
     "font": "g:Instrument Serif",
@@ -533,7 +533,7 @@
     "es": "Saber hacer"
    },
    "model": "root",
-   "layout": "fan",
+   "layout": "arc",
    "card": "image",
    "open": "strip",
    "perPage": 12,
@@ -587,7 +587,9 @@
     }
    ],
    "network": false,
-   "skills": true
+   "skills": true,
+   "camera": 80,
+   "cardScale": 145
   },
   {
    "id": "studio",
