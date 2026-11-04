@@ -53,6 +53,10 @@
 - [Eruption of the end](https://mouawadlaurier.com/handcoded/?p=eruption-of-the-end): Rossella Piccinno · 2011 · Panorama 13, Le Fresnoy, Tourcoing. The old chimney of the Congo soap factory in Roubaix, built for Victor Vaissier at the end of the 19th century, comes back to life. Soap bubbles rise from this last eruption, and the images reflected in them take us through the memories of a place that has travelled through time. The abandoned…
 
 ## Expertise
+- [Imagine](https://mouawadlaurier.com/handcoded/?p=imaginer): Artistic and advertising concepts. We start from an intuition, a brand or a place, and invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds.
+- [Explore](https://mouawadlaurier.com/handcoded/?p=explorer): Consulting and workshops. You are looking for what is possible before knowing what you want. We bring your teams together, put the constraints on the table, test leads and help you pick the right one, even if it means steering the project elsewhere.
+- [Build](https://mouawadlaurier.com/handcoded/?p=fabriquer): Development and production. Real-time software, sensors, light, sound, electronics: we build the device from end to end, and run it on site or on tour.
+- [Support](https://mouawadlaurier.com/handcoded/?p=accompagner): Technical support for artists. An artist has the work in mind. We give them the tools to make it exist, from prototype to installation, without taking their place.
 - [Machine learning & our own AI](https://mouawadlaurier.com/handcoded/?p=machine-learning). Systems that listen, watch and decide: emotion detection in music, real-time choices on stage, recommendation engines.
 - [Real-time development](https://mouawadlaurier.com/handcoded/?p=real-time). Software that reacts within the frame: custom engines in C++, openFrameworks, OpenGL and shaders, built to run night after night.
 - [Audio processing](https://mouawadlaurier.com/handcoded/?p=audio). Sound analysis and generation that drive light, image and motion: beat detection, spatialisation, interactive music.

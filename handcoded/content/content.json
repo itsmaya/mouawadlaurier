@@ -225,8 +225,8 @@
    },
    "body": {
     "font": "g:Inter Tight",
-    "size": 12.5,
-    "lh": 17
+    "size": 11.5,
+    "lh": 16.5
    },
    "h3": {
     "font": "g:Instrument Serif",
@@ -290,7 +290,7 @@
    "bottom": 15,
    "side": 24,
    "gutter": 40,
-   "col": 243
+   "col": 280
   }
  },
  "models": [
@@ -537,9 +537,18 @@
    "card": "image",
    "open": "strip",
    "perPage": 12,
-   "defaultTag": "",
+   "defaultTag": "approach",
    "visible": true,
    "tags": [
+    {
+     "id": "approach",
+     "label": {
+      "en": "How we work",
+      "fr": "Notre façon de travailler",
+      "ca": "La nostra manera de treballar",
+      "es": "Nuestra forma de trabajar"
+     }
+    },
     {
      "id": "design",
      "label": {
@@ -829,7 +838,9 @@
     "nouveau-contenu",
     "sustainable",
     "light",
-    "hardware"
+    "hardware",
+    "imaginer",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/fisheye.png",
@@ -1015,7 +1026,9 @@
     "nouveau-contenu",
     "audio",
     "tracking",
-    "hardware"
+    "hardware",
+    "imaginer",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/fisheye.png",
@@ -1176,7 +1189,8 @@
     "hardware",
     "tools",
     "concept-design",
-    "sustainable"
+    "sustainable",
+    "imaginer"
    ],
    "logos": [
     "media/logos/scam.png",
@@ -1330,7 +1344,8 @@
     "generative",
     "audio",
     "concept-design",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "imaginer"
    ],
    "logos": [
     "media/logos/artexplora.png",
@@ -1407,7 +1422,8 @@
     "audio",
     "real-time",
     "hardware",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/centquatre.png"
@@ -1556,7 +1572,8 @@
     "light",
     "real-time",
     "hardware",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/signal-festival.png",
@@ -1665,7 +1682,8 @@
     "hardware",
     "real-time",
     "generative",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/mta-festival.png"
@@ -1796,7 +1814,8 @@
     "generative",
     "hardware",
     "tools",
-    "projection-mapping"
+    "projection-mapping",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/palaisdetokyo.png",
@@ -1866,7 +1885,8 @@
     "hardware",
     "real-time",
     "generative",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/proyecta.png"
@@ -2067,7 +2087,8 @@
     "machine-learning",
     "audio",
     "real-time",
-    "hardware"
+    "hardware",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/ledotron.png",
@@ -2177,7 +2198,8 @@
     "real-time",
     "audio",
     "hardware",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/music-tech-fest.png",
@@ -2236,7 +2258,8 @@
     "audio",
     "real-time",
     "hardware",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": []
   },
@@ -2299,7 +2322,8 @@
     "light",
     "audio",
     "tools",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "accompagner"
    ],
    "logos": [
     "media/logos/into-the-great-wide-open.png"
@@ -2414,7 +2438,8 @@
     "hardware",
     "projection-mapping",
     "generative",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/upf.png",
@@ -2499,7 +2524,8 @@
     "tracking",
     "real-time",
     "generative",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": []
   },
@@ -2651,7 +2677,8 @@
     "light",
     "audio",
     "real-time",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/la-prairie.png"
@@ -2714,7 +2741,8 @@
     "light",
     "audio",
     "real-time",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/lumiere.png"
@@ -2813,7 +2841,8 @@
     "light",
     "hardware",
     "real-time",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/fundacion-telefonica.png"
@@ -2892,7 +2921,8 @@
     "audio",
     "hardware",
     "real-time",
-    "tools"
+    "tools",
+    "accompagner"
    ],
    "logos": [
     "media/logos/nuit-blanche.png",
@@ -2960,7 +2990,8 @@
     "projection-mapping",
     "tracking",
     "tools",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "accompagner"
    ],
    "logos": [
     "media/logos/mira.png"
@@ -3155,7 +3186,8 @@
     "generative",
     "audio",
     "real-time",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/nestle.png"
@@ -3211,7 +3243,8 @@
    "author": "",
    "skills": [
     "real-time",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/marque-peugeot.png"
@@ -3280,7 +3313,8 @@
     "generative",
     "projection-mapping",
     "real-time",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/churchills.png"
@@ -3339,7 +3373,8 @@
    "author": "",
    "skills": [
     "generative",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/marque-cadbury.png"
@@ -3405,7 +3440,8 @@
    "skills": [
     "tracking",
     "real-time",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/marque-coors.png"
@@ -3474,11 +3510,192 @@
    "skills": [
     "audio",
     "generative",
-    "real-time"
+    "real-time",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/marque-lexus.png"
    ]
+  },
+  {
+   "id": "imaginer",
+   "section": "expertise",
+   "order": -4,
+   "published": true,
+   "title": {
+    "en": "Imagine",
+    "fr": "Imaginer",
+    "ca": "Imaginar",
+    "es": "Imaginar"
+   },
+   "subtitle": {
+    "en": "Artistic and advertising concepts",
+    "fr": "Concepts artistiques et publicitaires",
+    "ca": "Conceptes artístics i publicitaris",
+    "es": "Conceptos artísticos y publicitarios"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "approach"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>We start from an intuition, a brand or a place, and invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds.</p>",
+    "fr": "<p>On part d’une intuition, d’une marque ou d’un lieu, et on invente l’expérience : ce que le public va voir, entendre, déclencher. Nous écrivons le concept, le dispositif et la façon dont il réagit.</p>",
+    "ca": "<p>Partim d’una intuïció, d’una marca o d’un lloc, i inventem l’experiència: el que el públic veurà, sentirà i desencadenarà. Escrivim el concepte, el dispositiu i la manera com reacciona.</p>",
+    "es": "<p>Partimos de una intuición, de una marca o de un lugar, e inventamos la experiencia: lo que el público verá, oirá y desencadenará. Escribimos el concepto, el dispositivo y la forma en que reacciona.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "author": "",
+   "skills": [],
+   "logos": []
+  },
+  {
+   "id": "explorer",
+   "section": "expertise",
+   "order": -3,
+   "published": true,
+   "title": {
+    "en": "Explore",
+    "fr": "Explorer",
+    "ca": "Explorar",
+    "es": "Explorar"
+   },
+   "subtitle": {
+    "en": "Consulting and workshops",
+    "fr": "Conseil et ateliers",
+    "ca": "Consultoria i tallers",
+    "es": "Consultoría y talleres"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "approach"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>You are looking for what is possible before knowing what you want. We bring your teams together, put the constraints on the table, test leads and help you pick the right one, even if it means steering the project elsewhere.</p>",
+    "fr": "<p>Vous cherchez ce qui est possible avant de savoir ce que vous voulez. Nous réunissons vos équipes, posons les contraintes sur la table, testons des pistes et vous aidons à choisir la bonne, quitte à réorienter le projet.</p>",
+    "ca": "<p>Busqueu què és possible abans de saber què voleu. Reunim els vostres equips, posem les restriccions sobre la taula, provem camins i us ajudem a triar el bo, encara que calgui reorientar el projecte.</p>",
+    "es": "<p>Buscáis lo que es posible antes de saber lo que queréis. Reunimos a vuestros equipos, ponemos las restricciones sobre la mesa, probamos caminos y os ayudamos a elegir el bueno, aunque haya que reorientar el proyecto.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "author": "",
+   "skills": [],
+   "logos": []
+  },
+  {
+   "id": "fabriquer",
+   "section": "expertise",
+   "order": -2,
+   "published": true,
+   "title": {
+    "en": "Build",
+    "fr": "Fabriquer",
+    "ca": "Fabricar",
+    "es": "Fabricar"
+   },
+   "subtitle": {
+    "en": "Development and production",
+    "fr": "Développement et production",
+    "ca": "Desenvolupament i producció",
+    "es": "Desarrollo y producción"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "approach"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>Real-time software, sensors, light, sound, electronics: we build the device from end to end, and run it on site or on tour.</p>",
+    "fr": "<p>Logiciels temps réel, capteurs, lumière, son, électronique : nous construisons le dispositif de bout en bout, et le faisons tourner sur place ou en tournée.</p>",
+    "ca": "<p>Programari en temps real, sensors, llum, so, electrònica: construïm el dispositiu de punta a punta i el fem funcionar in situ o de gira.</p>",
+    "es": "<p>Software en tiempo real, sensores, luz, sonido, electrónica: construimos el dispositivo de principio a fin y lo hacemos funcionar in situ o de gira.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "author": "",
+   "skills": [],
+   "logos": []
+  },
+  {
+   "id": "accompagner",
+   "section": "expertise",
+   "order": -1,
+   "published": true,
+   "title": {
+    "en": "Support",
+    "fr": "Accompagner",
+    "ca": "Acompanyar",
+    "es": "Acompañar"
+   },
+   "subtitle": {
+    "en": "Technical support for artists",
+    "fr": "Soutien technique aux artistes",
+    "ca": "Suport tècnic als artistes",
+    "es": "Apoyo técnico a artistas"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "approach"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "<p>An artist has the work in mind. We give them the tools to make it exist, from prototype to installation, without taking their place.</p>",
+    "fr": "<p>Un artiste a son œuvre en tête. Nous lui donnons les outils pour qu’elle existe, du prototype au montage, sans prendre sa place.</p>",
+    "ca": "<p>Un artista té la seva obra al cap. Li donem les eines perquè existeixi, del prototip al muntatge, sense ocupar el seu lloc.</p>",
+    "es": "<p>Un artista tiene su obra en mente. Le damos las herramientas para que exista, del prototipo al montaje, sin ocupar su lugar.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "author": "",
+   "skills": [],
+   "logos": []
   },
   {
    "id": "machine-learning",
@@ -5864,7 +6081,8 @@
     "generative",
     "tracking",
     "concept-design",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "imaginer"
    ],
    "author": "Maya Mouawad",
    "logos": [
@@ -5960,7 +6178,8 @@
     "hardware",
     "tools",
     "concept-design",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "imaginer"
    ],
    "author": "Maya Mouawad",
    "logos": []
@@ -6045,7 +6264,8 @@
     "hardware",
     "tools",
     "concept-design",
-    "sustainable"
+    "sustainable",
+    "imaginer"
    ],
    "author": "Maya Mouawad",
    "logos": [
@@ -6145,7 +6365,8 @@
     "concept-design",
     "sustainable",
     "hardware",
-    "project-management"
+    "project-management",
+    "imaginer"
    ],
    "author": "Mouawad + Laurier",
    "logos": [
@@ -6421,7 +6642,8 @@
     "concept-design",
     "sustainable",
     "project-management",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "imaginer"
    ],
    "author": "Mouawad + Laurier",
    "logos": [
@@ -9329,7 +9551,8 @@
     "machine-learning",
     "audio",
     "real-time",
-    "concept-design"
+    "concept-design",
+    "fabriquer"
    ],
    "author": "",
    "logos": [
@@ -9390,7 +9613,8 @@
     "real-time",
     "generative",
     "hardware",
-    "tools"
+    "tools",
+    "fabriquer"
    ],
    "author": "",
    "logos": [
@@ -9470,7 +9694,8 @@
     "real-time",
     "generative",
     "concept-design",
-    "project-management"
+    "project-management",
+    "fabriquer"
    ],
    "author": "Hand Coded",
    "logos": [
@@ -9576,7 +9801,8 @@
    "skills": [
     "light",
     "concept-design",
-    "nouveau-contenu"
+    "nouveau-contenu",
+    "fabriquer"
    ],
    "author": "Hand Coded",
    "logos": [
@@ -9657,7 +9883,8 @@
     "real-time",
     "projection-mapping",
     "audio",
-    "generative"
+    "generative",
+    "accompagner"
    ],
    "logos": [
     "media/logos/4303-fresnoystudio-national-arts-contemporains-ige8.png"

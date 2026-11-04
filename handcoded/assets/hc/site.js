@@ -1236,7 +1236,9 @@ function fitPost2D() {
   document.body.classList.toggle('post-short', short && P.postOpen);
   const top = sloganEl.offsetTop + sloganEl.offsetHeight + (short ? 1 : 2) * STYLE.margin, need = post2D.height + 12;
   const reserve = short ? 24 : (menu.offsetHeight || 90) + 70;   // sous la fiche : le menu et une bande blanche qui referme la fiche au clic
-  const s = Math.max(short ? 0.4 : 0.5, Math.min(POST_SCALE, (H - top - reserve) / need));
+  /* sur un écran d'ordinateur bas, la fiche ne rapetisse pas au point que le texte passe sous 14 px : elle prend alors la place du menu (qui s'efface) */
+  const fit = (H - top - reserve) / need, room = (H - top - 56) / need, read = W > 700 && !short ? 14 / (+typoOf(CONTENT.settings, 'body').size || 14) : 0;
+  const s = Math.max(short ? 0.4 : 0.5, Math.min(POST_SCALE, Math.max(fit, Math.min(read, room))));
   post2D.scale = s;
   post2dEl.style.top = top + 'px';
   post2dEl.style.transform = s !== 1 ? `scale(${s.toFixed(3)})` : '';
@@ -1447,13 +1449,13 @@ const post2D = {
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
       this.addText(post, 'project');
       this.addRelations(post);
-      media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
+      this.addGallery(media.slice(1));
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     } else {
       const first = media[0] ? media[0].src : (post.thumb || null);
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
       this.addText(post, 'project');
-      media.slice(1).forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
+      this.addGallery(media.slice(1));
       this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
@@ -1496,6 +1498,35 @@ const post2D = {
     const d = STYLE.animationMode ? this.delay : 0;   // Builders.animeBackground : les fonds se déroulent l'un après l'autre
     setTimeout(() => el.classList.add('open'), d * 1000 + 20); this.delay += 0.2;
     return el;
+  },
+  /* Les images après le texte, en rythme, comme un magazine : une image en marie-louise (posée sur blanc, avec sa marge),
+     une composition de quatre, une image pleine hauteur, et ainsi de suite. Les vidéos restent pleine hauteur. Jusqu'à deux images : pleine hauteur. */
+  addGallery(list) {
+    const isImg = m => mediaKind(m.src) === 'image';
+    if (list.filter(isImg).length < 3) { list.forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption)); return; }
+    const RHYTHM = ['mat', 'grid', 'bleed', 'bleed'];
+    let i = 0, k = 0;
+    while (i < list.length) {
+      const m = list[i];
+      if (!isImg(m)) { this.addMedia(m.src, 355, m.credit, true, m.caption); i++; continue; }
+      let mode = RHYTHM[k++ % RHYTHM.length];
+      if (mode === 'grid') { const four = list.slice(i, i + 4); if (four.length === 4 && four.every(isImg)) { this.addGrid(four); i += 4; continue; } mode = 'mat'; }
+      if (mode === 'mat') this.addMat(m); else this.addMedia(m.src, 355, m.credit, true, m.caption);
+      i++;
+    }
+  },
+  addMat(m) {   // marie-louise : l'image sur fond blanc, avec une marge égale tout autour ; la légende dans la marge du bas
+    const M = 46, cap = m.caption ? tr(m.caption).trim() : '', ih = 355 - 2 * M;
+    const el = this.addPanel('media mat', Math.round(ih * 1.5 + 2 * M), `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" style="left:${M}px;top:${M}px;height:${ih}px">` + (cap ? `<p class="mcap2" style="left:${M}px;top:${355 - M + 10}px">${escapeHTML(cap)}</p>` : ''));
+    const im = el.querySelector('img');
+    const fit = () => { if (!im.naturalWidth) return; const w = Math.round(im.naturalWidth * ih / im.naturalHeight); el.style.width = (w + 2 * M) + 'px'; const c = el.querySelector('.mcap2'); if (c) c.style.width = w + 'px'; this.layout(); };
+    im.addEventListener('load', fit); if (im.complete) fit();
+    im.addEventListener('error', () => { el.remove(); this.panels = this.panels.filter(x => x !== el); this.layout(); });
+  },
+  addGrid(four) {   // composition de quatre images : deux par deux, recadrées, avec une gouttière fine
+    const fm = ficheM(), M = Math.max(16, Math.min(34, fm.top)), g = 8, ch = (355 - 2 * M - g) / 2, cw = Math.round(ch * 1.42);
+    const el = this.addPanel('media grid4', Math.round(2 * cw + g + 2 * M), four.map((m, j) => `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" style="left:${M + (j % 2) * (cw + g)}px;top:${M + Math.floor(j / 2) * (ch + g)}px;width:${cw}px;height:${ch}px">`).join(''));
+    el.querySelectorAll('img').forEach(im => im.addEventListener('error', () => { im.style.visibility = 'hidden'; }));
   },
   addMedia(src, h = 355, credit = '', sign = true, caption = null) {
     const kind = mediaKind(src);

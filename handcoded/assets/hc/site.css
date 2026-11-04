@@ -617,3 +617,9 @@ html:not(.neg) .face.on img { filter: brightness(1.12); }
 .face.on { outline: 1px solid #fff; outline-offset: 3px; }
 .txt .relp .lbl { font-family: var(--f-date, var(--ui)); font-style: normal; font-weight: 600; letter-spacing: .08em; font-size: 9.5px; }
 .proj .mono { font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); }
+
+/* Images en rythme : marie-louise sur blanc, composition de quatre */
+.pnl.mat .bgx { background: #fff; }
+.pnl.mat .in img, .pnl.grid4 .in img { position: absolute; display: block; width: auto; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+.pnl.mat .mcap2 { position: absolute; margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 13px; line-height: 15px; color: #111; }
+.pnl.grid4 .bgx { background: var(--panel); }
