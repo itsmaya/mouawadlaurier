@@ -628,6 +628,7 @@ html:not(.neg) .face.on img { filter: brightness(1.12); }
 .pnl.comp .bgx { background: var(--panel); }
 .pnl.comp.wht .bgx { background: #fff; }
 .pnl.comp .mcap2 { position: absolute; margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 13px; line-height: 15px; color: #111; }
+.pnl.comp:not(.wht) .mcap2 { color: #fff; }
 
 /* Partenaires : logos en blanc, grille à filets fins (les filets ne touchent pas les bords de la fiche) */
 .pnl.logos .lbl { position: absolute; margin: 0; font-family: var(--f-h3, var(--serif)); font-style: var(--st-h3, italic); font-weight: 400; font-size: 20px; line-height: 22px; color: #fff; }
