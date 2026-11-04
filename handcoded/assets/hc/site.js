@@ -1783,6 +1783,139 @@ const post2D = {
     strip.style.transform = `translateX(${Math.round(this.x)}px)`;
   },
 };
+/* ================================================================ Fiche verticale (téléphone)
+   Sur téléphone, la 3D sert à choisir un projet ; on le lit ensuite de haut en bas, comme une page de magazine :
+   la première image, le titre, le texte sur une colonne, les rubriques (crédits, presse…) qui s'ouvrent d'un toucher,
+   les images entières, l'équipe, les partenaires, et le projet suivant. La croix ou le geste retour du téléphone ramènent à la 3D. */
+const postvEl = document.createElement('div'); postvEl.id = 'postv'; postvEl.hidden = true; postvEl.setAttribute('role', 'dialog'); postvEl.setAttribute('aria-modal', 'true');
+document.body.appendChild(postvEl);
+const verticalFiche = () => phoneMode();
+const postV = {
+  open: false, pushed: false, keepHistory: false, post: null,
+  build(post, card) {
+    this.post = post; this.open = true;
+    const sec = P.section.def, media = post.media.filter(m => m && m.src), E = escapeHTML;
+    let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
+    const subtitle = tr(post.subtitle).trim(), out = [];
+    out.push(`<div class="pv-bar"><span class="pv-sec">${E(tr(sec.name).trim())}</span><button type="button" class="pv-x" aria-label="${E(ui('close'))}"><span></span><span></span></button></div>`);
+    const first = media[0] ? media[0] : (post.thumb ? { src: post.thumb } : null);
+    if (first) out.push(this.media(first, 'pv-hero'));
+    if (card === 'place') {
+      const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
+      out.push(`<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
+        (post.link ? `<p class="pv-site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : '') +
+        `<div class="pv-body">${sanitizeHTML(tr(post.body))}</div>${tr(post.place) ? `<p class="pv-meta">${E(tr(post.place))}</p>` : ''}</div>`);
+    } else {
+      out.push(this.text(post, title, subtitle, sec));
+      if (sec.skills) out.push(this.relations(post));
+      if (card === 'text') media.slice(1).forEach(m => out.push(this.media(m, 'pv-full')));
+      else out.push(this.gallery(media.slice(1)));
+      if (!sec.skills) out.push(this.relations(post));
+      if (card !== 'text' && ((post.team && post.team.length) || post.credits)) out.push(this.team(post));
+      if (post.logos && post.logos.length) out.push(`<section class="pv-logos"><h2 class="pv-h">${E(ui('partners'))}</h2><div class="pv-lgrid">${post.logos.map(src => `<span><img data-src="${E(src)}" alt=""></span>`).join('')}</div></section>`);
+      if (post.link) { const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link, host = post.link.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+        out.push(`<p class="pv-link"><span>${E(String(ui('visit')).replace(/\s*:\s*$/, ''))}</span><a href="${E(href)}" target="_blank" rel="noopener">${E(host)} ↗</a></p>`); }
+      out.push(this.next(post));
+    }
+    postvEl.innerHTML = `<div class="pv-page">${out.join('')}</div>`;
+    this.wire();
+    postvEl.hidden = false; postvEl.scrollTop = 0; void postvEl.offsetWidth; postvEl.classList.add('on');
+    document.body.classList.add('pv-open');
+    if (!this.pushed && !PREVIEW) { try { history.pushState({ hcv: 1 }, '', location.href); this.pushed = true; } catch (e) {} }
+  },
+  text(post, title, subtitle, sec) {
+    const E = escapeHTML, html = sanitizeHTML(tr(post.body)), parts = html.split(/(?=<h3[\s>])/i);
+    const lead = /^\s*<h3/i.test(parts[0]) ? '' : parts.shift();
+    const folds = parts.map(pt => { const m = /^<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*)$/i.exec(pt.trim()); return m ? `<details class="pv-fold"><summary>${m[1]}</summary><div class="pv-body">${m[2]}</div></details>` : pt; }).join('');
+    const tags = post.tags.filter(id => id !== 'featured').map(id => sec.tags.find(tg => tg.id === id)).filter(Boolean).map(tg => tr(tg.label));
+    const fecha = [post.date, tr(post.place)].filter(Boolean).join(' | ');
+    const skills = relSkills(post);
+    let skl = '';
+    if (skills.length) { const sd = (SECTIONS.find(x => x.def.id === skills[0].section) || {}).def;
+      skl = `<p class="pv-meta"><span>${E((sd ? tr(sd.name) : ui('skills')).trim())}</span> ${skills.map(k => `<button type="button" class="go" data-go="${E(k.id)}">${E(tr(k.title).trim())}</button>`).join(', ')}</p>`; }
+    return `<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
+      (fecha ? `<p class="pv-date">${E(fecha)}</p>` : '') + `<div class="pv-body">${lead || ''}</div>` +
+      (folds ? `<div class="pv-folds">${folds}</div>` : '') +
+      (tags.length ? `<p class="pv-meta"><span>${E(ui('postedIn'))}</span> ${tags.map(E).join(', ')}</p>` : '') + skl + '</div>';
+  },
+  media(m, cls) {   // une image, une vidéo ou un lecteur, toujours entier, en pleine largeur
+    const E = escapeHTML, kind = mediaKind(m.src), cap = m.caption ? tr(m.caption).trim() : '';
+    const fc = cap ? `<figcaption>${E(cap)}</figcaption>` : '';
+    if (kind === 'youtube' || kind === 'vimeo') {
+      const id = kind === 'youtube' ? ytId(m.src) : vimeoId(m.src), poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : (this.post && this.post.thumb ? url(this.post.thumb) : '');
+      return `<figure class="${cls} pv-embed" data-kind="${kind}" data-id="${E(id || '')}"><div class="pv-cover">${poster ? `<img src="${E(poster)}" alt="">` : ''}<button type="button" class="play" aria-label="${E(ui('play'))}"></button><span class="brand">${kind === 'youtube' ? 'YouTube' : 'Vimeo'}</span></div>${fc}</figure>`;
+    }
+    if (kind === 'video') return `<figure class="${cls}"><video src="${E(url(m.src) + (/#t=/.test(m.src) ? '' : '#t=0.1'))}" controls playsinline preload="metadata"></video>${fc}</figure>`;
+    return `<figure class="${cls}"><img src="${E(url(m.src))}" alt="" loading="lazy">${fc}</figure>`;
+  },
+  /* les images à la suite, en rythme : pleine largeur, marie-louise, deux côte à côte, quatre en deux rangs… toujours entières */
+  gallery(list) {
+    const isImg = m => mediaKind(m.src) === 'image', out = [], E = escapeHTML;
+    const row = two => `<div class="pv-row">${two.map(m => `<img src="${E(url(m.src))}" alt="" loading="lazy">`).join('')}</div>`;
+    const CYCLE = ['full', 'mat', 'pair', 'full', 'quad', 'full', 'big2', 'mat', 'full', 'pair'], NEED = { pair: 2, quad: 4, big2: 3 };
+    const id = String(this.post.id || ''); let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    let k = h % CYCLE.length, i = 0;
+    while (i < list.length) {
+      const m = list[i];
+      if (!isImg(m)) { out.push(this.media(m, 'pv-full')); i++; continue; }
+      const mode = CYCLE[k++ % CYCLE.length], n = NEED[mode] || 1, run = list.slice(i, i + n);
+      if (n > 1 && !(run.length === n && run.every(isImg))) { out.push(this.media(m, 'pv-full')); i++; continue; }
+      const cap = run.map(x => (x.caption ? tr(x.caption).trim() : '')).filter(Boolean)[0] || '';
+      const fc = cap ? `<figcaption>${E(cap)}</figcaption>` : '';
+      if (mode === 'mat') out.push(this.media(m, 'pv-mat'));
+      else if (mode === 'pair') out.push(`<figure class="pv-grid">${row(run)}${fc}</figure>`);
+      else if (mode === 'quad') out.push(`<figure class="pv-grid">${row(run.slice(0, 2))}${row(run.slice(2))}${fc}</figure>`);
+      else if (mode === 'big2') out.push(`<figure class="pv-grid"><img class="pv-one" src="${E(url(run[0].src))}" alt="" loading="lazy">${row(run.slice(1))}${fc}</figure>`);
+      else out.push(this.media(m, 'pv-full'));
+      i += n;
+    }
+    return out.length ? `<div class="pv-gal">${out.join('')}</div>` : '';
+  },
+  relations(post) {
+    const projects = relProjects(post); if (!projects.length) return '';
+    const E = escapeHTML, skill = projectsOf(CONTENT, post).length > 0;
+    return `<section class="pv-rel"><h2 class="pv-h">${E(ui(skill ? 'skillProjects' : 'together'))} <span>${projects.length}</span></h2><div class="pv-tiles">` +
+      projects.map(p => { const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
+        return `<button type="button" class="go pv-tile" data-go="${E(p.id)}">${ph ? `<img src="${E(url(ph))}" alt="" loading="lazy">` : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</button>`; }).join('') + '</div></section>';
+  },
+  team(post) {
+    const E = escapeHTML, team = (post.team || []).map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
+    return `<section class="pv-team"><h2 class="pv-h">${E(ui('who'))}</h2><div class="pv-faces">` +
+      team.map(p => { const go = onSite(p) && p.published !== false, tag = go ? 'button' : 'div';
+        return `<${tag} ${go ? `type="button" class="go pv-face" data-go="${E(p.id)}"` : 'class="pv-face"'}>${p.thumb ? `<img src="${E(url(p.thumb))}" alt="" loading="lazy">` : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${tr(p.subtitle).trim() ? `<span class="m">${E(tr(p.subtitle).trim())}</span>` : ''}</${tag}>`; }).join('') +
+      '</div>' + (post.credits ? `<p class="pv-with"><i>${E(ui('with'))}</i> ${E(post.credits)}</p>` : '') + '</section>';
+  },
+  next(post) {   // le projet suivant de la section, pour enchaîner sans repasser par la 3D
+    const list = (P.data && P.data.list) || [], i = list.indexOf(post); if (list.length < 2 || i < 0) return '';
+    const n = list[(i + 1) % list.length], ph = photoOf(n), E = escapeHTML;
+    return `<button type="button" class="go pv-next" data-go="${E(n.id)}"><span class="l">${E(ui('nextProject'))} →</span><span class="t">${E(tr(n.title).trim())}</span>${ph ? `<img src="${E(url(ph))}" alt="" loading="lazy">` : ''}</button>`;
+  },
+  wire() {
+    postvEl.querySelector('.pv-x').addEventListener('click', () => closePost());
+    postvEl.querySelectorAll('.pv-row img').forEach(im => {   // deux images côte à côte : chacune prend une largeur proportionnelle à son format, à la même hauteur
+      const set = () => { if (im.naturalWidth) im.style.flexGrow = (im.naturalWidth / im.naturalHeight).toFixed(3); };
+      im.addEventListener('load', set); if (im.complete) set();
+    });
+    postvEl.querySelectorAll('img').forEach(im => im.addEventListener('error', () => { const f = im.closest('figure.pv-full, figure.pv-mat'); if (f && !f.classList.contains('pv-hero')) f.remove(); else im.style.visibility = 'hidden'; }));
+    postvEl.querySelectorAll('.pv-lgrid img[data-src]').forEach(im => monoLogo(im.dataset.src).then(u => { im.src = u.src; im.classList.toggle('raw', !!u.raw); }));
+    postvEl.querySelectorAll('.pv-embed').forEach(fg => fg.querySelector('.play').addEventListener('click', () => {
+      const kind = fg.dataset.kind, id = fg.dataset.id, f = document.createElement('iframe');
+      f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
+      f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
+      fg.querySelector('.pv-cover').replaceWith(f);
+    }));
+  },
+  close() {
+    if (!this.open) return; this.open = false;
+    postvEl.querySelectorAll('video').forEach(v => v.pause());
+    postvEl.classList.remove('on'); document.body.classList.remove('pv-open');
+    setTimeout(() => { if (!this.open) { postvEl.hidden = true; postvEl.innerHTML = ''; } }, 420);
+    if (this.keepHistory) { this.keepHistory = false; return; }   // on passe à un autre projet depuis la fiche : l'entrée d'historique sert au suivant
+    if (this.pushed) { this.pushed = false; try { history.back(); } catch (e) {} }
+  },
+};
+postvEl.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); postV.keepHistory = true; goToPost(b.dataset.go); postV.keepHistory = false; } });
+postvEl.addEventListener('keydown', e => { if (e.code === 'Escape') closePost(); });
 /* Un logo de partenaire en blanc sur transparent, quels que soient ses couleurs et son fond : on repère le fond sur les bords de l'image,
    et chaque pixel garde d'autant plus d'encre qu'il s'en écarte. Une image d'un autre site (illisible au pixel) passe par un filtre. */
 const MONO = new Map();
@@ -1930,7 +2063,12 @@ function openPost() {
   hoverCard(null); hoverBackCard(null);
   checkPostOpenAndClose();
   P.postOpen = true;
-  if (P.section.def.open === 'strip') {
+  if (P.section.def.open === 'strip' && verticalFiche()) {   // téléphone : la fiche se lit de haut en bas
+    postV.build(P.data.posts[P.selected], P.section.def.card);
+    cats.classList.add('hidden');
+    isClicking = false; canvas.classList.remove('dragging');
+    closeTurn = true; focusPost(P.selected);
+  } else if (P.section.def.open === 'strip') {
     whiteboard.hidden = false;
     post2D.build(P.data.posts[P.selected], P.section.def.card);
     cats.classList.add('hidden');
@@ -1942,7 +2080,8 @@ function openPost() {
 function closePost() {
   if (!P.postOpen) return;
   P.postOpen = false;
-  if (post2D.open) { post2D.close(); whiteboard.hidden = true; cats.classList.remove('hidden'); }
+  if (postV.open) { postV.close(); cats.classList.remove('hidden'); }
+  else if (post2D.open) { post2D.close(); whiteboard.hidden = true; cats.classList.remove('hidden'); }
   else if (postsView) postsView.closePost3D();
   setMenuPosition(); setPageMeta(null);
 }
@@ -2840,6 +2979,8 @@ function backToHome(push = true) {
 }
 window.addEventListener('popstate', () => {
   if (PREVIEW) return;
+  if (postV.open) { postV.pushed = false; closePost(); try { history.replaceState(null, '', location.pathname + location.search + '#' + P.section.def.id); } catch (e) {} return; }   // le geste retour du téléphone referme la fiche, l'adresse suit la section affichée
+  postV.pushed = false;
   if (isHomeHash()) backToHome(false);
   else if (!homeGone && assetsLoaded) enterToTheWeb();
   else if (homeGone && started) {   // adresse …#studio tapée ou lien interne : on va à la section
