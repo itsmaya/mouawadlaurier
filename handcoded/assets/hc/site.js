@@ -260,7 +260,7 @@ function drawCover(ctx, im, x, y, w, h) {
   ctx.drawImage(im, (im.naturalWidth - sw) / 2, (im.naturalHeight - sh) / 2, sw, sh, x, y, w, h);
   if (NEG()) { ctx.save(); ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h); ctx.restore(); }   // photo pré-inversée
 }
-const initials = s => String(s).split(/[\s&]+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+const initials = s => String(s).split(/[\s&/|·,–-]+/).filter(w => /[\p{L}\d]/u.test(w)).slice(0, 2).map(w => w.match(/[\p{L}\d]/u)[0].toUpperCase()).join('');   // « Peupler / Populate » : PP
 function washed(draw) { return ctx => { draw(ctx); ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillRect(0, 0, 4000, 4000); }; }
 function mirrored(w, draw) { return ctx => { ctx.translate(w, 0); ctx.scale(-1, 1); draw(ctx); }; }
 /* Savoir-faire ↔ projets. Seuls les contenus des sections visibles comptent : on doit pouvoir y aller. */
@@ -1253,7 +1253,7 @@ const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, i
 function drawLogos() {
   const s = CONTENT.settings, accent = s.accent || '#ffcc00';
   const logo = s.logo ? url(s.logo) : ringLogo(negMode ? '#ffffff' : accent, negMode);   // en négatif, l'image est pré-inversée : la page inversée la remet à l'endroit
-  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = logo; el.classList.toggle('raw', !s.logo); } });
+  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = id === 'home-logo' && !s.logo ? ringLogo(accent, false) : logo; el.classList.toggle('raw', !s.logo); } });   // l'accueil reste sombre : son logo ne s'inverse jamais
   setFavicon(s.logo ? logo : (negMode ? ringLogo(accent) : logo));
 }
 function setFavicon(href) {
@@ -1298,16 +1298,12 @@ function renderTexts() {
   drawLogos();
   if (!s.logo && document.fonts) { const lf = typoOf(s, 'logo'), spec = `${lf.italic ? 'italic ' : ''}${lf.weight || 400} 76px ${lf.css}`; if (!document.fonts.check(spec)) document.fonts.load(spec).then(() => { if (!CONTENT.settings.logo) drawLogos(); }).catch(() => {}); }
   const canToggle = s.negativeToggle !== false;
-  ['logo', 'home-logo'].forEach(id => {   // le logo du site et celui de l'accueil basculent tous deux jour / nuit
+  ['logo'].forEach(id => {   // le logo du site bascule jour / nuit (l'accueil, lui, reste sombre)
     const logoEl = document.getElementById(id); if (!logoEl) return;
     logoEl.classList.toggle('toggle', canToggle);
     if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
     else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
   });
-  const bs = document.getElementById('bs');   // la home "bullshit slogan" du site Fat-Man
-  bs.placeholder = tr(s.home.placeholder); bs.setAttribute('aria-label', ui('bsLabel')); fitSlogan();
-  document.getElementById('bs-eg').textContent = tr(s.home.example);
-  if (document.getElementById('bs-sent').textContent) document.getElementById('bs-sent').textContent = ui('sent');
   const off = document.getElementById('offices'); off.innerHTML = '';
   (s.offices || []).forEach(o => {
     const el = document.createElement('section');
@@ -1316,7 +1312,7 @@ function renderTexts() {
   });
   (s.social || []).forEach(so => { if (!so.url) return; const el = document.createElement('section'); el.innerHTML = `<h3>${escapeHTML(so.label)}</h3><p><a href="${escapeHTML(so.url)}" target="_blank" rel="noopener">${escapeHTML(so.url.replace(/^https?:\/\/(www\.)?/, ''))}</a></p>`; off.appendChild(el); });
   home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff));
-  enterBtn.textContent = tr(s.home.enter) || ui('enter');
+  if (!enterBtn.classList.contains('wait')) setEnterLabel(tr(s.home.enter) || ui('enter'));
   renderReel(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
   document.getElementById('kb-toggle').setAttribute('aria-label', ui('keys'));
@@ -1332,17 +1328,6 @@ function renderTexts() {
   document.documentElement.style.setProperty('--accent-inv', invertHex(CONTENT.settings.accent || '#ffcc00'));   // affiché en jaune une fois la page inversée
   buildTickerDots();
 }
-/* Le champ du bullshit slogan : la phrase d'invitation tient toujours sur une ligne, quelle que soit la langue */
-function fitSlogan() {
-  const bs = document.getElementById('bs'); if (!bs || !bs.offsetWidth) return;
-  bs.style.fontSize = '';
-  const cs = getComputedStyle(bs), max = parseFloat(cs.fontSize), room = bs.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 6;
-  const ctx = document.createElement('canvas').getContext('2d');
-  ctx.font = `${cs.fontWeight} ${max}px ${cs.fontFamily}`;
-  const ls = parseFloat(cs.letterSpacing) || 0, w = ctx.measureText(bs.placeholder).width + ls * bs.placeholder.length;
-  if (w > room) bs.style.fontSize = Math.max(16, Math.floor(max * room / w)) + 'px';
-}
-window.addEventListener('resize', () => { if (!homeGone) fitSlogan(); });
 function setLang(l) {
   if (l === LANG) return;
   LANG = l; try { localStorage.setItem('hc-lang', l); } catch (e) {}
@@ -1420,14 +1405,11 @@ const isVideo = src => /\.(mp4|webm|mov)(\?|#|$)/i.test(src || '');
 const ytId = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
 const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
-const postLbl = document.createElement('div'); postLbl.id = 'post-lbl'; postLbl.hidden = true; postLbl.setAttribute('aria-hidden', 'true'); post2dEl.appendChild(postLbl);
 const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
     this.clear(); this.post = post;
     /* savoir-faire : un petit bandeau fixe rappelle où l'on est quand la bande a défilé au-delà de la description */
-    postLbl.hidden = !P.section.def.skills; postLbl.classList.remove('on'); this.lblOn = false;
-    if (P.section.def.skills) postLbl.innerHTML = `<span class="sec">${escapeHTML(tr(P.section.def.name).trim())}</span><span class="t">${escapeHTML(tr(post.title).trim())}</span>`;
     this.open = true; this.height = card === 'place' ? 300 : 355;
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
     fitPost2D(); this.geomKey = JSON.stringify(textGeom('project'));
@@ -1463,13 +1445,15 @@ const post2D = {
   addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
     const projects = relProjects(post); if (!projects.length) return;
     const skill = projectsOf(CONTENT, post).length > 0;
-    const head = `<h2 class="ttl">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n">${projects.length}</span>`;
-    const txt = this.panels[this.panels.length - 1];
-    if (P.section.def.skills && txt && txt.classList.contains('txt')) {   // savoir-faire : l'en-tête des projets rejoint le bloc de la description
+    /* l'en-tête suit la mise en page des fiches (Réglages › Fiches) : même marge haute que le titre, même police que le titre */
+    const fm = ficheM(), txt = this.panels[this.panels.length - 1], inSkill = P.section.def.skills && txt && txt.classList.contains('txt');
+    const padL = inSkill ? Math.max(12, fm.gutter - fm.side) : fm.side, W = Math.max(200, Math.min(300, fm.col)) + padL + fm.side;
+    const head = `<h2 class="ttl" style="left:${padL}px;right:${fm.side}px;top:${fm.top}px">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n" style="left:${padL}px;bottom:${fm.bottom}px">${projects.length}</span>`;
+    if (inSkill) {   // savoir-faire : l'en-tête des projets rejoint le bloc de la description, comme une colonne de plus
       const w0 = txt.offsetWidth || parseFloat(txt.style.width) || 0;
-      txt.style.width = (w0 + 236) + 'px';
-      txt.querySelector('.in').insertAdjacentHTML('beforeend', `<div class="relh relh-in" style="left:${w0}px">${head}</div>`);
-    } else this.addPanel('relh', 236, head);
+      txt.style.width = (w0 + W) + 'px';
+      txt.querySelector('.in').insertAdjacentHTML('beforeend', `<div class="relh relh-in" style="left:${w0}px;width:${W}px">${head}</div>`);
+    } else this.addPanel('relh', W, head);
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
       const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
@@ -1626,7 +1610,7 @@ const post2D = {
     post2dEl.classList.add('closing'); setTimeout(() => { if (!this.open) this.clear(); }, time * 1000);
     return time;
   },
-  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; postLbl.hidden = true; postLbl.classList.remove('on'); post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
+  clear() { strip.querySelectorAll('video').forEach(v => v.pause()); strip.innerHTML = ''; this.panels = []; post2dEl.hidden = true; post2dEl.classList.remove('closing'); },
   action(type) {
     if (this.panels.length < 2) return;
     let post = 0;
@@ -1644,10 +1628,6 @@ const post2D = {
     else if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
     else if (this.finalpos > 0) this.finalpos = 0; else if (this.finalpos < this.end) this.finalpos = this.end;
     strip.style.transform = `translateX(${Math.round(this.x)}px)`;
-    if (!postLbl.hidden) {
-      const t = this.panels.find(p => p.classList.contains('txt')), at = t ? t.offsetLeft + t.offsetWidth * 0.55 : 200, on = -this.x > at;
-      if (on !== this.lblOn) { this.lblOn = on; postLbl.classList.toggle('on', on); }
-    }
   },
 };
 function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit chaque panneau mot par mot
@@ -1901,7 +1881,7 @@ window.addEventListener('pointermove', e => {
 });
 const dropTouch = e => { touches.delete(e.pointerId); if (touches.size < 2) pinch = null; };
 ['pointerup', 'pointercancel'].forEach(t => window.addEventListener(t, dropTouch));
-canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY) return; lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
+canvas.addEventListener('wheel', e => { e.preventDefault(); const now = performance.now(); if (!inputEnabled || now - lastWheel < 220 || !e.deltaY || now - enteredAt < 1400) return; /* la molette qui a fait entrer ne zoome pas */ lastWheel = now; e.deltaY < 0 ? zoomIn() : zoomOut(); }, { passive: false });
 window.addEventListener('resize', () => {
   const ph0 = phoneCards(), before = started && postsView ? orbitE || orbitNow() : null;
   resizeViewport(); onStageResize3D(); setMenuPosition();
@@ -1920,7 +1900,7 @@ function toggleNeg() {
   renderTexts();
   if (postsView) postsView.retexture();
 }
-['logo', 'home-logo'].forEach(id => {
+['logo'].forEach(id => {
   const logoClick = document.getElementById(id); if (!logoClick) return;
   logoClick.addEventListener('click', toggleNeg);
   logoClick.addEventListener('keydown', e => { if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); e.stopPropagation(); toggleNeg(); } });
@@ -2049,7 +2029,6 @@ function setupHomeVideo() {
     CONTENT.posts.filter(p => p.published !== false).forEach(p => [p.thumb, ...(p.media || []).map(m => m && m.src)].forEach(x => { if (x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x) && !seen.has(x) && seen.size < 10) seen.add(x); }));
     hv.pics = [...seen].sort(() => Math.random() - 0.5).map(x => { const im = new Image(); im.src = url(x); return im; });
   }
-  if (cfg.controls !== false) buildHvKeys(document.getElementById('home'));
   buildHomeDock(cfg.controls !== false);
   const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
   hvSize();
@@ -2059,17 +2038,21 @@ const ICON = {
   video: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.5v9l7.5-4.5z" fill="currentColor"/></svg>',
   cam: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h3l1.4-2h4.2l1.4 2h3v9h-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="11" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
   shot: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="10" r="4" fill="currentColor"/></svg>',
+  faders: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3v14M10 3v14M15 3v14" stroke="currentColor" stroke-width="1.3" opacity=".55"/><rect x="2.5" y="10" width="5" height="3" rx=".5" fill="currentColor"/><rect x="7.5" y="5" width="5" height="3" rx=".5" fill="currentColor"/><rect x="12.5" y="12" width="5" height="3" rx=".5" fill="currentColor"/></svg>',
 };
 function buildHomeDock(withKeys) {
   const home = document.getElementById('home'); if (!home || document.getElementById('home-dock')) return;
   const camOK = !!(hv && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  const dock = document.createElement('div'); dock.id = 'home-dock'; dock.classList.toggle('alone', !withKeys);
+  const src = camOK ? `<div id="hv-src" class="seg" role="group"><button type="button" data-src="video" aria-pressed="true"></button><button type="button" data-src="cam" aria-pressed="false"></button></div>` : '';
+  const dock = document.createElement('div'); dock.id = 'home-dock';
   dock.innerHTML = `<span class="hv-note" role="status" hidden></span>
-    <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>
     <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>
-    ${camOK ? `<div id="hv-src" role="group"><button type="button" data-src="video" aria-pressed="true">${ICON.video}</button><button type="button" data-src="cam" data-code="KeyV" aria-pressed="false">${ICON.cam}</button></div>` : ''}`;
+    ${withKeys ? '' : src}
+    <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>
+    ${withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false">${ICON.faders}</button>` : ''}`;
   home.appendChild(dock);
-  dock.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
+  if (withKeys) buildHvPanel(home, src);
+  document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   dock.querySelector('#hv-shot').addEventListener('click', hvPhoto);
   dock.querySelector('#story-btn').addEventListener('click', () => toggleStory());
   buildStory(); dockLabels();
@@ -2077,8 +2060,8 @@ function buildHomeDock(withKeys) {
 function dockLabels() {
   const dock = document.getElementById('home-dock'); if (!dock) return;
   const cam = !!(hv && hv.cam);
-  dock.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui(b.dataset.src === 'cam' ? 'hv_cam' : 'hv_video')); });
-  const src = dock.querySelector('#hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
+  document.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.textContent = ui(b.dataset.src === 'cam' ? 'hv_cam' : 'hv_video'); });
+  const src = document.getElementById('hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
   const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
 }
@@ -2107,15 +2090,14 @@ async function hvPhoto() {
   } finally {
     hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.off.width = hv.raw.width = keep.ow; hv.off.height = hv.raw.height = keep.oh; hv.lo = keep.lo; hv.hi = keep.hi; hv.fresh = true;
   }
-  /* en haut : le logo et « Hand Coded. » dans la police de la signature du site ; en bas : le slogan tapé */
+  /* en haut : le logo et « Hand Coded. » dans la police de la signature du site ; en bas : la signature */
   const gTop = ctx.createLinearGradient(0, 0, 0, 330); gTop.addColorStop(0, 'rgba(11,11,11,.92)'); gTop.addColorStop(1, 'rgba(11,11,11,0)');
   ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 330);
   const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
   ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
-  const bs = document.getElementById('bs'), typed = bs && bs.value.trim();
   const tagline = ((CONTENT.settings.taglines || {})[LANG] || (CONTENT.settings.taglines || {}).en || []).join(' ');
-  const slogan = (typed || typedSlogans[0] || tagline || 'Hand Coded.').toUpperCase();
-  const grotesk = bs ? getComputedStyle(bs).fontFamily : 'sans-serif';
+  const slogan = (tagline || 'Hand Coded.').toUpperCase();
+  const grotesk = getComputedStyle(document.documentElement).getPropertyValue('--grotesk').trim() || 'sans-serif';
   const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
   const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
   try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
@@ -2171,64 +2153,82 @@ function toggleStory(open) {
 }
 window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
 function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
-function buildHvKeys(band) {
-  const box = document.createElement('div'); box.id = 'hv';
-  box.innerHTML = `<div id="hv-panel">
-      <div class="lbl" data-k="grid"></div><div class="row"><button type="button" class="key" data-a="grid-" data-code="ArrowLeft">◂</button><button type="button" class="key" data-a="grid+" data-code="ArrowRight">▸</button></div>
-      <div class="lbl" data-k="contrast"></div><div class="row"><button type="button" class="key" data-a="con-" data-code="ArrowDown">▾</button><button type="button" class="key" data-a="con+" data-code="ArrowUp">▴</button></div>
-      <div class="lbl" data-k="delay"></div><div class="row"><button type="button" class="key" data-a="del-" data-code="Minus">−</button><button type="button" class="key" data-a="del+" data-code="Equal">+</button></div>
-      <div class="lbl" data-k="color"></div><div class="row"><button type="button" class="key sw" data-a="color" data-code="KeyC"><i></i> C</button></div>
-      <div class="lbl" data-k="invert"></div><button type="button" class="key" data-a="invert" data-code="KeyI" aria-pressed="false">I</button>
-      <div class="lbl" data-k="sound"></div><button type="button" class="key" data-a="sound" data-code="KeyS" aria-pressed="false">S</button>
-    </div><button id="hv-toggle" type="button" aria-expanded="false"></button>`;
-  band.appendChild(box);
-  hv.box = box;
-  const setOpen = open => { box.classList.toggle('open', open); box.querySelector('#hv-toggle').setAttribute('aria-expanded', String(open)); document.getElementById('home').classList.toggle('hv-open', open); };
+/* Le panneau de réglages de la vidéo, comme une console de lumière : des faders, des boutons à témoin, la grille et la cadence en direct.
+   Raccourcis : K ouvre ou ferme, C couleur, I inverser, S son, V caméra. */
+const HV_FADERS = [
+  { p: 'cell', min: 6, max: 40, step: 2, get: () => hv.cell, set: v => { hv.cell = v; }, show: () => Math.max(hv.cell, hv.floor) + 'px' + (hv.floor > hv.cell ? '*' : '') },
+  { p: 'size', min: 40, max: 100, step: 2, get: () => Math.round(hv.fill * 100), set: v => { hv.fill = v / 100; }, show: () => Math.round(hv.fill * 100) + '%' },
+  { p: 'contrast', min: 0.4, max: 3, step: 0.1, get: () => hv.gamma, set: v => { hv.gamma = v; }, show: () => '×' + hv.gamma.toFixed(1) },
+  { p: 'delay', min: 1, max: HV_MAX_DELAY, step: 1, get: () => hv.delay, set: v => { hv.delay = v; }, show: () => hvDelay() + (hvDelay() < hv.delay ? '*' : '') },
+];
+const paintFader = i => i.style.setProperty('--p', ((i.value - i.min) / (i.max - i.min) * 100).toFixed(1) + '%');
+function buildHvPanel(home, src) {
+  const panel = document.createElement('div'); panel.id = 'hv-panel'; panel.setAttribute('role', 'group'); panel.hidden = true;
+  panel.innerHTML = `<div class="hd"><i class="led" aria-hidden="true"></i><b data-k="panel"></b><span class="stat" aria-hidden="true"></span></div>` +
+    (src ? `<div class="rw"><span class="lb" data-k="source"></span>${src}</div>` : '') +
+    HV_FADERS.map(f => `<label class="rw"><span class="lb" data-k="${f.p}"></span><input type="range" data-p="${f.p}" min="${f.min}" max="${f.max}" step="${f.step}"><output></output></label>`).join('') +
+    `<div class="rw"><span class="lb" data-k="color"></span><div class="seg sw" role="group">${HV_COLORS.map(c => `<button type="button" data-c="${c}"><i class="c-${c}"></i></button>`).join('')}</div></div>` +
+    `<div class="rw tg"><button type="button" class="tgl" data-a="invert"><i aria-hidden="true"></i><span data-k="invert"></span></button><button type="button" class="tgl" data-a="sound"><i aria-hidden="true"></i><span data-k="sound"></span></button></div>`;
+  home.appendChild(panel);
+  const toggle = document.getElementById('hv-toggle');
+  hv.panel = panel; hv.toggle = toggle;
+  let hideT = 0;
+  const setOpen = open => {
+    clearTimeout(hideT);
+    if (open) { panel.hidden = false; void panel.offsetWidth; panel.classList.add('open'); }
+    else { panel.classList.remove('open'); hideT = setTimeout(() => { if (!panel.classList.contains('open')) panel.hidden = true; }, 320); }
+    toggle.setAttribute('aria-expanded', String(open)); toggle.classList.toggle('on', open); home.classList.toggle('hv-open', open);
+    if (open) hvLabels();
+  };
   hv.setOpen = setOpen;
-  box.querySelector('#hv-toggle').addEventListener('click', () => setOpen(!box.classList.contains('open')));
-  /* les touches du vrai clavier, comme dans le site : flèches, C, I, S, V, K pour ouvrir ou fermer */
+  toggle.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  home.addEventListener('pointerdown', e => { if (panel.classList.contains('open') && !e.target.closest('#hv-panel, #hv-toggle, #hv-src')) setOpen(false); });
+  panel.querySelectorAll('input[data-p]').forEach(i => {
+    const f = HV_FADERS.find(x => x.p === i.dataset.p);
+    i.addEventListener('input', () => { f.set(+i.value); hvLabels(); });
+  });
+  const act = a => {
+    if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
+    else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
+    else if (a === 'sound') { if (!hv.video || hv.cam) return; hv.sound = !hv.sound; hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); }
+    else if (a === 'cam') { if (!document.getElementById('hv-src')) return; if (hv.cam) hvCamOff(); else hvCamOn(); }
+    hvLabels();
+  };
+  panel.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => { hv.color = b.dataset.c; hvLabels(); }));
+  panel.querySelectorAll('.tgl').forEach(b => b.addEventListener('click', () => act(b.dataset.a)));
   window.addEventListener('keydown', e => {
     if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
-    const inInput = e.target && e.target.id === 'bs', typed = inInput && e.target.value.length > 0;
-    if (e.code === 'Escape' && inInput) { e.target.blur(); return; }
-    if (e.code === 'KeyK' && !inInput) { e.preventDefault(); setOpen(!box.classList.contains('open')); return; }
-    const key = box.querySelector(`[data-code="${e.code}"]`) || document.querySelector(`#home-dock [data-code="${e.code}"]`); if (!key) return;
-    if (inInput && !/^Arrow/.test(e.code)) return;      // on écrit son slogan : lettres, tirets et signes restent du texte
-    if (/^Arrow/.test(e.code) && typed) return;          // les flèches déplacent le curseur dans le slogan
+    if (e.code === 'Escape' && panel.classList.contains('open')) { setOpen(false); toggle.focus({ preventScroll: true }); return; }
+    const k = { KeyK: 'panel', KeyC: 'color', KeyI: 'invert', KeyS: 'sound', KeyV: 'cam' }[e.code]; if (!k) return;
     e.preventDefault();
+    if (k === 'panel') { setOpen(!panel.classList.contains('open')); return; }
     if (!hv.touched) { hv.touched = true; setOpen(true); }
-    key.click();
-  });
-  box.querySelector('#hv-panel').addEventListener('click', e => {
-    const b = e.target.closest('button[data-a]'); if (!b) return; const a = b.dataset.a;
-    b.classList.add('down'); setTimeout(() => b.classList.remove('down'), 200);
-    if (a === 'grid+') hv.cell = Math.max(6, hv.cell - 2);          // plus de grille : plus de carrés, plus petits
-    else if (a === 'grid-') hv.cell = Math.min(40, hv.cell + 2);
-    else if (a === 'con-') hv.gamma = Math.max(0.4, +(hv.gamma - 0.2).toFixed(2));
-    else if (a === 'con+') hv.gamma = Math.min(3, +(hv.gamma + 0.2).toFixed(2));
-    else if (a === 'del-') hv.delay = Math.max(1, hv.delay - 1);
-    else if (a === 'del+') hv.delay = Math.min(HV_MAX_DELAY, hv.delay + 1);
-    else if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
-    else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
-    else if (a === 'sound') { hv.sound = !hv.sound; if (hv.video) { hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); } }
-    hvLabels();
+    act(k);
   });
   hvLabels();
 }
 function hvLabels() {
   dockLabels();
-  if (!hv || !hv.box) return;
-  hv.box.querySelectorAll('.lbl[data-k]').forEach(el => { el.textContent = ui('hv_' + el.dataset.k); });
-  hv.box.querySelector('#hv-toggle').setAttribute('aria-label', ui('hv_tab'));
-  const sw = hv.box.querySelector('.sw i'); sw.className = 'c-' + hv.color;
-  const set = (a, on, label) => { const b = hv.box.querySelector(`[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); if (label) b.setAttribute('aria-label', label); };
-  set('invert', hv.mode === 'dark', ui('hv_invert'));
-  set('sound', hv.sound, ui('hv_sound'));
-  hv.box.querySelector('[data-a="sound"]').disabled = !hv.video || !!hv.cam;
-  hv.box.querySelector('[data-a="color"]').setAttribute('aria-label', ui('hv_color'));
-  ['grid-', 'grid+', 'con-', 'con+', 'del-', 'del+'].forEach(a => hv.box.querySelector(`[data-a="${a}"]`).setAttribute('aria-label', ui(a.startsWith('grid') ? 'hv_grid' : a.startsWith('con') ? 'hv_contrast' : 'hv_delay') + (a.endsWith('+') ? ' +' : ' −')));
-  const dl = hv.box.querySelector('.lbl[data-k="delay"]'); if (dl) dl.textContent = ui('hv_delay') + ' ' + hvDelay() + (hvDelay() < hv.delay ? '*' : '');
-  const dk = hv.box.querySelector('[data-a="del+"]'); if (dk) dk.disabled = hv.delay >= HV_MAX_DELAY;
+  if (!hv || !hv.panel) return;
+  const P = hv.panel;
+  P.querySelectorAll('[data-k]').forEach(el => { el.textContent = ui('hv_' + el.dataset.k); });
+  hv.toggle.setAttribute('aria-label', ui('hv_panel')); hv.toggle.title = ui('hv_panel') + ' (K)';
+  HV_FADERS.forEach(f => {
+    const i = P.querySelector(`input[data-p="${f.p}"]`); if (!i) return;
+    if (document.activeElement !== i) i.value = f.get();
+    paintFader(i); i.setAttribute('aria-label', ui('hv_' + f.p));
+    i.nextElementSibling.textContent = f.show();
+  });
+  P.querySelectorAll('[data-c]').forEach(b => { const on = b.dataset.c === hv.color; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui('hv_color') + ' ' + ui('hv_c_' + b.dataset.c)); });
+  const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
+  tg('invert', hv.mode === 'dark'); tg('sound', hv.sound && !hv.cam);
+  P.querySelector('.tgl[data-a="sound"]').disabled = !hv.video || !!hv.cam;
+  hvStat();
+}
+function hvStat() {
+  const st = hv && hv.panel && hv.panel.querySelector('.stat'); if (!st) return;
+  const cell = Math.max(hv.cell, hv.floor);
+  st.textContent = `${Math.ceil(hv.W / cell)}×${Math.ceil(hv.H / cell)} · ${Math.round(1000 / hv.interval)} FPS`;
 }
 async function hvCamOn() {
   hvNote('');
@@ -2308,6 +2308,7 @@ function homeVideoStep(now) {
   if (!hv || !hv.W || now - hv.last < hv.interval) return; hv.last = now;
   const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
   const ctx = hv.ctx, W = hv.W, H = hv.H, cell = Math.max(hv.cell, hv.floor), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+  if (hv.panel && hv.panel.classList.contains('open') && now - (hv.statAt || 0) > 500) { hv.statAt = now; hvStat(); }
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
   if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows; hv.fresh = true; }
   if (!hvSource(t)) return;
@@ -2318,8 +2319,8 @@ function homeVideoStep(now) {
   if (hv.tainted) hvComposite(cols, rows, cell); else hvSquares(d, cols, rows, cell);
   /* adaptation à la machine */
   const cost = performance.now() - t0; hv.cost = hv.cost * 0.9 + cost * 0.1;
-  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.box) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(40, Math.max(hv.floor, cell) + 2); }
-  else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.box) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
+  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(40, Math.max(hv.floor, cell) + 2); }
+  else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.panel) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
 }
 function hvSquares(d, cols, rows, cell) {
   const ctx = hv.ctx, n = cols * rows, lum = hv.lum && hv.lum.length === n ? hv.lum : (hv.lum = new Float32Array(n));
@@ -2343,31 +2344,12 @@ function hvSquares(d, cols, rows, cell) {
 }
 
 /* ================================================================ Home */
-const home = document.getElementById('home'), enterBtn = document.getElementById('enter');
+/* L'accueil : la vidéo en carrés plein écran, la phrase du studio sur le bandeau LED, une flèche pour entrer.
+   On entre en cliquant la flèche, en faisant défiler vers le bas (molette, pavé tactile), en glissant vers le haut sur téléphone, ou au clavier. */
+const home = document.getElementById('home'), enterBtn = document.getElementById('enter'), enterLbl = enterBtn.querySelector('.lbl');
 const ticker = document.getElementById('ticker'), tctx = ticker.getContext('2d');
 let tickerDots = null, tickerX = 0, tickerDpr = 1;
-const SLOGAN_KEY = 'hc-bullshit-slogans';
-let typedSlogans = [];
-try { const v = JSON.parse(localStorage.getItem(SLOGAN_KEY) || '[]'); if (Array.isArray(v)) typedSlogans = v.filter(x => typeof x === 'string').slice(0, 8); } catch (e) {}
-/* Entrée (ou le bouton ENTER) valide le slogan tapé, s'il y en a un, puis fait entrer dans le site.
-   Le slogan passe en tête du bandeau LED du visiteur et part vers la collecte (Réglages › Accueil), si elle est configurée. */
-function submitSlogan() {
-  const input = document.getElementById('bs'), v = input.value.replace(/\s+/g, ' ').trim().slice(0, 70);
-  if (!v) return false;
-  typedSlogans = [v.toUpperCase(), ...typedSlogans.filter(x => x !== v.toUpperCase())].slice(0, 8);
-  try { localStorage.setItem(SLOGAN_KEY, JSON.stringify(typedSlogans)); } catch (err) {}
-  liveDots = null; buildTickerDots(); tickerX = 0; input.value = '';
-  document.getElementById('bs-sent').textContent = ui('sent');
-  sendSlogan(v); countView('slogan', 'Slogan tapé', true);
-  return true;
-}
-function sendSlogan(v) {
-  const inbox = (CONTENT.settings.sloganInbox || '').trim();
-  if (!inbox || PREVIEW || !/^https:\/\//.test(inbox)) return;   // pas d'envoi depuis l'aperçu du back-office
-  const body = JSON.stringify({ slogan: v, lang: LANG, tag: urlTag('') || '', site: location.host || 'local' });
-  try { fetch(inbox, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body }).catch(() => {}); } catch (e) {}
-}
-document.getElementById('bs-form').addEventListener('submit', e => { e.preventDefault(); submitSlogan(); document.getElementById('bs').blur(); enterBtn.click(); });
+function setEnterLabel(t) { enterLbl.textContent = t; enterBtn.setAttribute('aria-label', t); }
 /* Police LED 5 x 7, celle des afficheurs à matrice de points : chaque caractère = 7 lignes de 5 points (bit 4 = colonne de gauche). */
 const LED_FONT = {
   A: '0e11111f111111', B: '1e11111e11111e', C: '0e11101010110e', D: '1c12111111121c', E: '1f10101e10101f', F: '1f10101e101010',
@@ -2402,12 +2384,12 @@ function figureValue(v) {
 }
 const homeFigures = () => ((CONTENT.settings.home && CONTENT.settings.home.figures) || []).map(f => ({ value: figureValue(f.value), label: tr(f.label) })).filter(f => f.value && f.label);
 const homeFigureLines = () => homeFigures().map(f => `${f.value} ${f.label}`);   // les chiffres du studio défilent sur le bandeau LED, dans la langue du visiteur
-function buildTickerDots() {   // le message en colonnes de 7 points ; les mots tapés passent en premier
-  const items = [...typedSlogans, ...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
+function buildTickerDots() {   // la phrase du studio en colonnes de 7 points (Réglages › Accueil) ; sans phrase, les chiffres
+  const phrase = tr(CONTENT.settings.home.sub || {}).trim();
+  const items = phrase ? [phrase] : [...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
   const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
   tickerDots = dotsOf(text);
 }
-let liveDots = null;   // ce que le visiteur est en train de taper : le bandeau l'allume aussitôt
 function dotsOf(text) {
   const cols = [];
   for (const ch of text) {
@@ -2431,18 +2413,15 @@ function ledSprite(color, lit) {   // un point : cœur net, halo doux pour les p
 function sizeTicker() { tickerDpr = Math.min(window.devicePixelRatio || 1, 2); ticker.width = Math.round(window.innerWidth * tickerDpr); ticker.height = Math.round(LED.h * tickerDpr); ledSprites = null; }
 let tickerAcc = 0;
 function drawTicker(dt) {   // le texte avance d'une colonne de points à la fois, comme un vrai panneau
-  const on = accent();
+  const on = CONTENT.settings.accent || '#ffcc00';   // l'accueil est remis à l'endroit en négatif : la vraie couleur
   if (!ledSprites || ledColor !== on) { ledColor = on; ledSprites = { on: ledSprite(on, true), off: ledSprite(on, false) }; }
   tickerAcc += dt * 26;
   if (tickerAcc >= 1) { tickerX = (tickerX + Math.floor(tickerAcc)) % tickerDots.w; tickerAcc %= 1; }
   const k = tickerDpr, p = LED.pitch, cols = Math.ceil(window.innerWidth / p) + 1, top = (LED.h - LED.rows * p) / 2;
   tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.fillStyle = '#000'; tctx.fillRect(0, 0, ticker.width, ticker.height);
   const half = ledSprites.on.width / 2;
-  const live = liveDots, lead = live && live.w <= cols ? Math.floor((cols - live.w) / 2) : 0;   // un mot court se pose au centre, un long défile
   for (let c = 0; c < cols; c++) {
-    const m = !live ? tickerDots.cols[(tickerX + c) % tickerDots.w]
-      : live.w <= cols ? (c >= lead && c < lead + live.w ? live.cols[c - lead] : 0)
-      : live.cols[(tickerX + c) % live.w];
+    const m = tickerDots.cols[(tickerX + c) % tickerDots.w];
     const cx = (c * p + p / 2) * k - half;
     for (let r = 0; r < LED.rows; r++) tctx.drawImage((m >> r) & 1 ? ledSprites.on : ledSprites.off, cx, (top + r * p + p / 2) * k - half);
   }
@@ -2466,11 +2445,10 @@ function backToHome(push = true) {
   if (!homeGone) return;
   checkPostOpenAndClose(); closeKeyboard(); closeCategory(); hideNetTip(); hoverCard(null); resetZoom();
   homeGone = false; clickedEnter = false; clearTimeout(homeTimer); behindUntil = performance.now() + 1300;
-  enterBtn.textContent = tr(CONTENT.settings.home.enter) || ui('enter'); enterBtn.classList.remove('wait');
+  enterBtn.classList.remove('wait'); setEnterLabel(tr(CONTENT.settings.home.enter) || ui('enter')); homeShownAt = performance.now();
   home.hidden = false; void home.offsetWidth; home.classList.remove('out');
   if (hv && hv.video) hv.video.play().catch(() => {});
   if (push && !PREVIEW) try { history.pushState(null, '', location.pathname + location.search + '#accueil'); } catch (e) {}
-  fitSlogan();
 }
 window.addEventListener('popstate', () => {
   if (PREVIEW) return;
@@ -2483,7 +2461,31 @@ window.addEventListener('popstate', () => {
 });
 sloganEl.addEventListener('click', e => { if (e.target.closest('.wm') && homeGone) backToHome(); });
 sloganEl.addEventListener('keydown', e => { if ((e.code === 'Enter' || e.code === 'Space') && e.target.closest('.wm') && homeGone) { e.preventDefault(); backToHome(); } });
-enterBtn.addEventListener('click', () => { submitSlogan(); clickedEnter = true; if (assetsLoaded) enterToTheWeb(); else { enterBtn.textContent = ui('loading'); enterBtn.classList.add('wait'); } });
+enterBtn.addEventListener('click', () => { clickedEnter = true; if (assetsLoaded) enterToTheWeb(); else { setEnterLabel(ui('loading')); enterBtn.classList.add('wait'); } });
+/* Faire défiler vers le bas fait descendre l'accueil. Le panneau de réglages et l'histoire du site gardent leurs gestes. */
+let homeShownAt = 0, wheelAcc = 0, wheelAt = 0, touchY = null;
+const homeOwnGesture = el => !!(el && el.closest && el.closest('#hc-story, #hv-panel'));
+function scrollEnter() {
+  if (homeGone || clickedEnter || performance.now() - homeShownAt < 900 || (reel && reel.open)) return;
+  const st = document.getElementById('hc-story'); if (st && st.classList.contains('on')) return;
+  enterBtn.click();
+}
+home.addEventListener('wheel', e => {
+  if (homeGone || homeOwnGesture(e.target)) return;
+  const now = performance.now(); if (now - wheelAt > 350) wheelAcc = 0; wheelAt = now;
+  if (e.deltaY > 0) { wheelAcc += e.deltaY * (e.deltaMode ? 30 : 1); if (wheelAcc > 40) { wheelAcc = 0; scrollEnter(); } }
+}, { passive: true });
+home.addEventListener('touchstart', e => { touchY = e.touches.length === 1 && !homeOwnGesture(e.target) ? e.touches[0].clientY : null; }, { passive: true });
+home.addEventListener('touchmove', e => { if (touchY !== null && e.touches.length === 1 && touchY - e.touches[0].clientY > 46) { touchY = null; scrollEnter(); } }, { passive: true });
+home.addEventListener('touchend', () => { touchY = null; }, { passive: true });
+window.addEventListener('keydown', e => {
+  if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
+  const t = e.target, onCtl = t && t.closest && t.closest('button, a, input, select, textarea, [contenteditable="true"]');
+  if (e.code === 'ArrowDown' || e.code === 'PageDown' || ((e.code === 'Space' || e.code === 'Enter') && !onCtl)) {
+    if (t && t.tagName === 'INPUT') return;   // un curseur du panneau garde ses flèches
+    e.preventDefault(); scrollEnter();
+  }
+});
 
 /* ================================================================ Démarrage */
 /* Lien client : ?tag=sound (ou ?cat=, ?categorie=) choisit le tag affiché en premier. Identifiant ou nom du tag, dans n'importe quelle langue, sans accents ni majuscules. */

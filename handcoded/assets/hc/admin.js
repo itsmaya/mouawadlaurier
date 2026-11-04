@@ -1293,18 +1293,30 @@ function homeVideoFields(s) {
     catch (e) { toast(e.message, 'bad', 8000); }
   });
   drawName();
-  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en carrés'),
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en carrés, plein écran'),
     h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, btn(hvs.src ? 'Remplacer la vidéo…' : 'Choisir une vidéo…', pick, 'sm'), hvs.src ? btn('Retirer', () => { hvs.src = ''; change(); drawName(); }, 'sm ghost') : null, name),
     h('p', { class: 'hint' }, 'MP4 sans son ou avec, en boucle : un extrait de 20 à 30 secondes en 720p suffit (moins de 15 Mo). Elle démarre à un endroit au hasard. Une vidéo YouTube ne marche pas ici : il faut le fichier.'),
     h('div', { style: { marginTop: '10px' } }, toggle('Réglage au hasard à chaque visite (grille, contraste, delay, couleur, sens)', () => hvs.random !== false, v => { hvs.random = v; renderMain(); })),
-    hvs.random !== false ? h('p', { class: 'hint' }, 'Chaque visiteur arrive sur une combinaison différente, puis la change avec le clavier. Coupe cet interrupteur pour fixer le réglage ci-dessous.') : h('div', { class: 'grid2', style: { marginTop: '10px' } },
-      field('Taille de grille (px)', textInput(() => hvs.cell, v => { hvs.cell = Math.max(6, Math.min(40, +v || 14)); }, { type: 'number', min: 6, max: 40 })),
-      field('Contraste', textInput(() => hvs.contrast, v => { hvs.contrast = Math.max(0.4, Math.min(3, +v || 1)); }, { type: 'number', min: 0.4, max: 3, step: 0.1 })),
-      field('Carré maximal (%)', textInput(() => hvs.size, v => { hvs.size = Math.max(40, Math.min(100, +v || 92)); }, { type: 'number', min: 40, max: 100 })),
-      field('Delay (lissage)', textInput(() => hvs.delay, v => { hvs.delay = Math.max(1, Math.min(8, +v || 1)); }, { type: 'number', min: 1, max: 8 }), 'Comme sur Fat-Man : valeur = valeur − (valeur − cible) / delay. 1 = immédiat, 8 au maximum. Coupé d’office sur un ordinateur trop lent.'),
-      field('Couleur des carrés', selectInput([{ value: 'white', label: 'Blanc' }, { value: 'grey', label: 'Gris' }, { value: 'accent', label: 'Couleur d’accent' }, { value: 'source', label: 'Couleurs de la vidéo' }], () => hvs.color, v => { hvs.color = v; })),
-      field('Les carrés grossissent', selectInput([{ value: 'light', label: 'à la lumière' }, { value: 'dark', label: 'dans l’ombre' }], () => hvs.mode, v => { hvs.mode = v; }))),
-    h('div', { style: { marginTop: '10px' } }, toggle('Les visiteurs ont un petit clavier pour régler la vidéo, activer le son et leur caméra', () => hvs.controls !== false, v => { hvs.controls = v; })));
+    hvs.random !== false ? h('p', { class: 'hint' }, 'Chaque visiteur arrive sur une combinaison différente, puis la change avec le panneau de réglages. Coupe cet interrupteur pour fixer le réglage ci-dessous.') : h('div', { style: { marginTop: '10px' } },
+      hvFader(hvs, 'cell', 'Carrés (px)', 14, 6, 40, 2, 'La taille de la grille. Petit : plus de carrés, image plus fine.'),
+      hvFader(hvs, 'size', 'Taille maximale des carrés (%)', 92, 40, 100, 2, 'La place que prend un carré dans sa case quand le pixel est au plus clair.'),
+      hvFader(hvs, 'contrast', 'Contraste', 1, 0.4, 3, 0.1, 'Au-dessus de 1, les zones sombres disparaissent plus vite.'),
+      hvFader(hvs, 'delay', 'Delay (lissage)', 4, 1, 8, 1, 'Comme sur Fat-Man : valeur = valeur − (valeur − cible) / delay. 1 = immédiat. Coupé d’office sur un ordinateur trop lent.'),
+      h('div', { class: 'grid2' },
+        field('Couleur des carrés', selectInput([{ value: 'white', label: 'Blanc' }, { value: 'grey', label: 'Gris' }, { value: 'accent', label: 'Couleur d’accent' }, { value: 'source', label: 'Couleurs de la vidéo' }], () => hvs.color, v => { hvs.color = v; })),
+        field('Les carrés grossissent', selectInput([{ value: 'light', label: 'à la lumière' }, { value: 'dark', label: 'dans l’ombre' }], () => hvs.mode, v => { hvs.mode = v; })))),
+    h('div', { style: { marginTop: '10px' } }, toggle('Les visiteurs ont un panneau de réglages (faders) pour la vidéo, le son et leur caméra', () => hvs.controls !== false, v => { hvs.controls = v; })));
+}
+function hvFader(hvs, k, label, def, min, max, step, hint) {
+  const dec = step < 1 ? 1 : 0, fmt = v => (+v).toFixed(dec);
+  const cur = () => (hvs[k] != null && hvs[k] !== '' ? +hvs[k] : def);
+  const r = h('input', { type: 'range', min, max, step, value: cur() });
+  const val = h('b', null, fmt(cur()));
+  const set = v => { v = +(+v).toFixed(dec); hvs[k] = v; r.value = v; val.textContent = fmt(v); };
+  r.addEventListener('input', () => { set(r.value); change(); });
+  return h('div', { class: 'f fiche-row' }, h('span', { class: 'lbl' }, label),
+    h('div', { style: { display: 'flex', gap: '12px', alignItems: 'center' } }, r, val, btn('↺ ' + fmt(def), () => { set(def); change(); }, 'sm ghost', { title: 'Revenir à la valeur d’origine' })),
+    h('p', { class: 'hint' }, hint));
 }
 
 /* ================================================================ Typographie (Réglages) */
@@ -1373,7 +1385,7 @@ function typoBlock(s) {
     h('div', { style: { marginTop: '12px' } }, btn('Tout rétablir', () => { delete s.typo; change(); draw(); paintBrand(); }, 'sm ghost')));
 }
 
-/* L'histoire du site : le « ? » de l'accueil, à côté du clavier de la vidéo, ouvre ce texte par-dessus la bande vidéo */
+/* L'histoire du site : le « ? » en bas à droite de l'accueil ouvre ce texte par-dessus la vidéo */
 function storyEditor(s) {
   const st = s.home.story;
   const shots = h('div', { class: 'story-shots' });
@@ -1387,7 +1399,7 @@ function storyEditor(s) {
       change(); drawShots();
     }), 'sm'));
   drawShots();
-  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Histoire du site', h('small', null, ' le « ? » à côté du clavier de la vidéo')),
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Histoire du site', h('small', null, ' le « ? » en bas à droite de l’accueil')),
     pairInput('Titre', st, 'title'),
     h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Texte'), richText(st.body, 'L’histoire de ce site…')),
     h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Captures'), shots, h('p', { class: 'hint' }, 'Elles s’affichent à côté du texte ; un clic les ouvre en grand.')),
@@ -1395,69 +1407,9 @@ function storyEditor(s) {
     h('p', { class: 'hint' }, 'Laisse le titre et le texte vides pour retirer le « ? ».'));
 }
 
-/* Les chiffres de l'accueil : une colonne chacun, à côté des contacts */
-function figuresEditor(s) {
-  const box = h('div');
-  const draw = () => {
-    const list = s.home.figures = s.home.figures || [];
-    fill(box, ...list.map((f, i) => h('div', { class: 'fig-row', style: { display: 'grid', gridTemplateColumns: '120px 1fr auto', gap: '10px', alignItems: 'end', marginBottom: '8px' } },
-      field('Chiffre', textInput(() => f.value, v => { f.value = v.trim(); }, { placeholder: '42 ou auto:projects', spell: false })),
-      pairInput('Libellé', f, 'label'),
-      btn('×', () => { list.splice(i, 1); change(); draw(); }, 'sm icon ghost danger', { 'aria-label': 'Retirer' }))),
-      btn('+ Chiffre', () => { list.push({ value: '', label: Object.fromEntries(LANGS.map(l => [l, ''])) }); change(); draw(); }, 'sm'),
-      h('p', { class: 'hint' }, 'Calculés tout seuls : auto:years (années depuis 2012), auto:projects (projets publiés), auto:partners, auto:people, auto:cities. Sinon, écris la valeur (21, 40+…).'));
-  };
-  draw();
-  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Chiffres', h('small', null, ' ils défilent sur le bandeau LED du haut, après les slogans tapés')), box);
-}
-
 /* ================================================================ Vue : Réglages */
 function viewSettings() {
   const c = S.content, s = c.settings;
-  const lines = (obj, key, ph) => {
-    const ta = h('textarea', { rows: 3, placeholder: ph }); ta.value = (obj[key] || []).join('\n');
-    ta.addEventListener('input', () => { obj[key] = ta.value.split('\n').map(x => x.trim()).filter(Boolean); change(); });
-    return ta;
-  };
-  const tickerTa = lines(s.home, 'ticker', 'Un slogan par ligne');
-  /* Slogans reçus : lus dans la feuille Google, un clic les ajoute au bandeau LED */
-  const inboxBox = h('div', { class: 'f' });
-  let showAll = false;
-  const drawInbox = (state, rows = []) => {
-    /* à valider : ni au bandeau, ni refusé. Valider l'ajoute au bandeau LED de tous les visiteurs ; Refuser le range sans l'afficher */
-    const ticker = new Set((s.home.ticker || []).map(x => x.toUpperCase()));
-    const hidden = new Set((s.home.sloganHidden || []).map(x => x.toUpperCase()));
-    const seen = new Set(), list = rows.filter(r => { const up = String(r.slogan || '').toUpperCase(); if (!up || seen.has(up)) return false; seen.add(up); return true; });
-    const pending = list.filter(r => { const up = String(r.slogan).toUpperCase(); return !ticker.has(up) && !hidden.has(up); });
-    const shown = showAll ? list : pending;
-    const setTicker = next => { s.home.ticker = next; tickerTa.value = next.join('\n'); change(); drawInbox('ok', rows); };
-    const setHidden = next => { s.home.sloganHidden = next; change(); drawInbox('ok', rows); };
-    fill(inboxBox, h('span', { class: 'lbl' }, 'Slogans reçus', list.length ? h('small', null, ` ${pending.length} à valider sur ${list.length}`) : null),
-      h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } },
-        btn(state === 'loading' ? 'Chargement…' : list.length ? 'Actualiser' : 'Afficher les slogans reçus', loadInbox, 'sm', { disabled: state === 'loading' }),
-        list.length ? toggle('Voir aussi les validés et les refusés', () => showAll, v => { showAll = v; drawInbox('ok', rows); }, { silent: true }) : null,
-        state && state !== 'loading' && state !== 'ok' ? h('span', { class: 'hint', style: { margin: 0 } }, state) : null),
-      list.length && !shown.length ? h('p', { class: 'hint' }, 'Tout est traité. Les nouveaux slogans arrivent ici dès qu’un visiteur en valide un.') : null,
-      shown.length ? h('div', { class: 'inbox' }, shown.map(r => {
-        const up = String(r.slogan).toUpperCase(), on = ticker.has(up), off = hidden.has(up);
-        return h('div', { class: 'inbox-row' + (on ? ' on' : off ? ' off' : '') },
-          h('span', { class: 'd' }, r.date ? new Date(r.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) : ''),
-          h('span', { class: 's' }, r.slogan), h('span', { class: 'm' }, on ? 'Au bandeau' : off ? 'Refusé' : [r.lang, r.tag].filter(Boolean).join(' · ')),
-          h('span', { class: 'acts' },
-            on ? btn('Retirer', () => setTicker((s.home.ticker || []).filter(x => x.toUpperCase() !== up)), 'sm ghost')
-              : off ? btn('Rétablir', () => setHidden((s.home.sloganHidden || []).filter(x => x.toUpperCase() !== up)), 'sm ghost')
-              : [btn('Valider', () => setTicker([...(s.home.ticker || []), up]), 'sm'), btn('Refuser', () => setHidden([...(s.home.sloganHidden || []), up]), 'sm ghost')]));
-      })) : null);
-  };
-  const loadInbox = async () => {
-    if (!/^https:\/\//.test(s.sloganInbox || '')) { drawInbox('Renseigne d’abord l’adresse de collecte ci-dessus.'); return; }
-    drawInbox('loading');
-    try {
-      const r = await fetch(s.sloganInbox + (s.sloganInbox.includes('?') ? '&' : '?') + 'limit=500');
-      const d = await r.json(); drawInbox(d.slogans && d.slogans.length ? 'ok' : 'Aucun slogan pour l’instant.', d.slogans || []);
-    } catch (e) { drawInbox('Lecture impossible : vérifie l’adresse et que le script est déployé pour « Tout le monde ».'); }
-  };
-  drawInbox('');
   /* Logo et couleur */
   const logoPrev = h('div', { class: 'logo-prev' });
   const logoActs = h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' } });
@@ -1505,7 +1457,7 @@ function viewSettings() {
       h('div', { class: 'block' }, h('h3', null, 'Identité'),
         h('div', { class: 'grid2' }, field('Nom du studio', textInput(() => s.name, v => { s.name = v; })), field('Depuis', textInput(() => s.since, v => { s.since = v; }, { placeholder: '2012' }))),
         h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Logo'), h('div', { style: { display: 'flex', gap: '14px', alignItems: 'center' } }, logoPrev, logoActs)),
-        h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Couleur d’accent'), sw, h('p', { class: 'hint' }, 'Bandeau LED, tirets des cartes, lieux, bouton ENTER.'))),
+        h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Couleur d’accent'), sw, h('p', { class: 'hint' }, 'Bandeau LED, tirets des cartes, lieux, flèche d’entrée, faders.'))),
       h('div', { class: 'block' }, h('h3', null, 'Apparence'),
         field('Le site s’ouvre en', selectInput([
           { value: 'auto', label: 'Blanc le jour, noir la nuit, selon l’heure chez le visiteur' },
@@ -1524,14 +1476,10 @@ function viewSettings() {
         h('p', { class: 'hint' }, 'Le site s’ouvre dans la langue du navigateur du visiteur quand elle est proposée. Il peut ensuite en changer en bas à gauche. Le back-office affiche un champ par langue activée.')),
       h('div', { class: 'block' }, h('h3', null, 'Signature', h('small', null, 'en haut à gauche du site, une ligne par ligne')), h('div', { class: 'pair' }, siteLangs().map(tagl))),
       h('div', { class: 'block' }, h('h3', null, 'Accueil'),
-        pairInput('Invitation dans le champ', s.home, 'placeholder', { hint: 'Le texte gris du grand champ où les visiteurs tapent leur bullshit slogan.' }),
-        pairInput('Exemple sous le champ', s.home, 'example'),
-        field('Slogans du bandeau LED', tickerTa, 'Ils défilent en points LED tout en haut. Les slogans tapés par un visiteur s’ajoutent devant, sur son écran.'),
+        h('p', { class: 'hint', style: { marginTop: 0 } }, 'L’accueil montre la vidéo en carrés sur tout l’écran, la phrase du studio sur le bandeau LED et une flèche vers le bas. On entre en cliquant la flèche ou en faisant défiler vers le bas (glisser vers le haut sur téléphone).'),
+        pairInput('Phrase du bandeau LED', s.home, 'sub', { hint: 'Ce que fait le studio, en une phrase. Elle défile en points LED tout en haut de l’accueil, dans la langue du visiteur.' }),
         h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
-        field('Collecte des slogans', textInput(() => s.sloganInbox, v => { s.sloganInbox = v.trim(); }, { placeholder: 'https://script.google.com/macros/s/…/exec', spell: false }), 'Adresse d’un script Google relié à une feuille de calcul : chaque slogan validé par un visiteur y est enregistré, avec la date, la langue et le tag du lien client. La mise en place prend cinq minutes, voir le fichier tools/slogans-google-sheet.gs. Vide : les slogans restent sur l’écran du visiteur.'),
-        inboxBox,
-        pairInput('Bouton d’entrée', s.home, 'enter'),
-        figuresEditor(s),
+        pairInput('Mot au-dessus de la flèche', s.home, 'enter', { hint: 'En petites capitales, au-dessus de la flèche d’entrée.' }),
         storyEditor(s),
         homeVideoFields(s),
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
