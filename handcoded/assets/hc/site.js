@@ -212,6 +212,10 @@ const accent = () => { const a = CONTENT.settings.accent || '#ffcc00'; return NE
 /* ================================================================ Textures dessinées (les MovieClips de la bibliothèque, en canvas) */
 let SERIF = 'Georgia, Gelasio, "Times New Roman", serif';   // Réglages › Typographie › Cartes 3D
 let UIF = '"Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif';
+/* Cartes 3D : le titre dans la police et la graisse des « Titres des cartes », les phrases dans celle du sous-titre des fiches (une serif italique, comme un magazine) */
+let CARD_W = 400, ITF = SERIF, ITI = false, ITK = 1;
+const TF = px => `${CARD_W} ${px}px ${SERIF}`;
+const IT = px => `${ITI ? 'italic ' : ''}400 ${Math.round(px * ITK * 10) / 10}px ${ITF}`;
 let CARD_SCALE = 1;
 const fz = n => Math.round(n * CARD_SCALE);
 /* Petit écran : toute la scène est réduite (largeur / 900), le texte dessiné sur les vignettes avec.
@@ -244,7 +248,8 @@ function applyTypo() {
   const urls = googleFontURLs(s);
   document.querySelectorAll('link[data-hc-font]').forEach(l => { if (!urls.includes(l.href)) l.remove(); });
   urls.forEach(u => { if (!document.querySelector(`link[data-hc-font][href="${CSS.escape(u)}"]`)) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.hcFont = ''; TYPO_LINKS.push(new Promise(res => { l.onload = () => { res(); typoFontsArrived(); }; l.onerror = res; })); document.head.appendChild(l); } });
-  SERIF = typoOf(s, 'card').css; UIF = typoOf(s, 'cardsm').css; CARD_SCALE = Math.max(0.5, Math.min(2, (+typoOf(s, 'card').scale || 100) / 100));
+  const ct = typoOf(s, 'card'), sb = typoOf(s, 'subtitle'); CARD_W = ct.weight || 400; ITF = sb.css; ITI = !!sb.italic; ITK = /Instrument Serif|Playfair|Cormorant/.test(sb.css) ? 1.18 : 1;   // les serifs à petit œil sont un peu agrandies
+  SERIF = ct.css; UIF = typoOf(s, 'cardsm').css; CARD_SCALE = Math.max(0.5, Math.min(2, (+typoOf(s, 'card').scale || 100) / 100));
 }
 function wrapLines(ctx, text, maxW) {
   const words = String(text).split(/\s+/); const lines = []; let line = '';
@@ -294,15 +299,15 @@ function hoverBand(post, w) {   // bandeau seul (fond transparent autour) : il m
   const title = tr(post.title).trim(), sub = tr(post.subtitle).trim(); if (!title && !sub) return null;
   const ph = phoneCards(), ts = ph ? 24 : Math.max(9, Math.min(13.5, w * 0.053)), ss = ph ? 17 : Math.max(7.5, ts * 0.74), pad = Math.round(ts * (ph ? 0.6 : 0.75)), tw = w - 2 * pad;   // téléphone : lisible sans zoomer
   const c = document.createElement('canvas').getContext('2d');
-  c.font = `${ts}px ${SERIF}`; const tl = title ? wrapLines(c, title, tw).slice(0, 2) : [];
-  c.font = `${ss}px ${SERIF}`; const sl = sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
+  c.font = TF(ts); const tl = title ? wrapLines(c, title, tw).slice(0, 2) : [];
+  c.font = IT(ss); const sl = sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
   const tlh = Math.round(ts * 1.2), slh = Math.round(ss * 1.25);
   const bh = Math.ceil(pad + tl.length * tlh + (sl.length ? 3 + sl.length * slh : 0) + pad - 2);
   const tex = canvasTex(w, bh, ctx => {
     ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(0, 0, w, bh);
     ctx.textBaseline = 'top'; let y = pad;
-    ctx.fillStyle = '#fff'; ctx.font = `${ts}px ${SERIF}`; tl.forEach(l => { ctx.fillText(l, pad, y); y += tlh; });
-    y += 3; ctx.fillStyle = '#d6d6d6'; ctx.font = `${ss}px ${SERIF}`; sl.forEach(l => { ctx.fillText(l, pad, y); y += slh; });
+    ctx.fillStyle = '#fff'; ctx.font = TF(ts); tl.forEach(l => { ctx.fillText(l, pad, y); y += tlh; });
+    y += 3; ctx.font = IT(ss); sl.forEach(l => { ctx.fillText(l, pad, y); y += slh; });
   }, 3);
   return { tex, bh, w };
 }
@@ -319,18 +324,18 @@ async function imageCard(post, w, h) {
     const ph = phoneCards(), m = ph ? 14 : 16;   // téléphone : titre et lieu en gros, une ligne de sous-titre
     const T = ph ? [fz(31), fz(34), 2] : [fz(24), 28, 3], S = ph ? [fz(20), fz(23), 1] : [fz(13), 16, 2], dz = ph ? fz(15) : 10, sz = ph ? fz(13) : 9, sh = ph ? 26 : 20;
     ctx.fillStyle = accent(); ctx.fillRect(m, ph ? 13 : 18, 18, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${T[0]}px ${SERIF}`;
+    ctx.fillStyle = '#fff'; ctx.font = TF(T[0]);
     const lines = wrapLines(ctx, tr(post.title), w - 2 * m).slice(0, T[2]);
     const ty = ph ? 22 : 30; lines.forEach((l, i) => ctx.fillText(l, m, ty + i * T[1]));
-    ctx.fillStyle = bd ? '#d6d6d6' : '#8c8c8c'; ctx.font = `${S[0]}px ${SERIF}`;
+    ctx.font = IT(S[0]);
     wrapLines(ctx, tr(post.subtitle), w - 2 * m).slice(0, ph && lines.length < 2 ? 2 : S[2]).forEach((l, i) => ctx.fillText(l, m, ty + 8 + lines.length * T[1] + i * S[1]));
     const sig = bd ? signature(bd.project, bd.project.media[0] && bd.project.media[0].credit) : signature(post, post.media[0] && post.media[0].credit);   // la photo est signée par son projet
-    ctx.fillStyle = accent(); ctx.font = `${dz}px ${UIF}`;
+    ctx.font = `600 ${dz}px ${UIF}`;
     ctx.fillText([post.date, tr(post.place)].filter(Boolean).join('  ·  ').toUpperCase(), m, h - (sig ? sh + dz + 6 : dz + 12));
     if (sig) {   // signature : l'œuvre et son auteur, en bas de la vignette
       ctx.font = `${sz}px ${UIF}`; let text = sig; while (ctx.measureText(text).width > w - 2 * m && text.length > 4) text = text.slice(0, -2) + '…';
-      ctx.fillStyle = bd ? 'rgba(0,0,0,.55)' : '#2a2a2a'; ctx.fillRect(0, h - sh, w, sh);
-      ctx.fillStyle = bd ? '#d0d0d0' : '#9a9a9a'; ctx.textBaseline = 'middle'; ctx.fillText(text, m, h - sh / 2);
+      ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(m, h - sh, w - 2 * m, 0.6);   // un filet fin, de marge à marge
+      ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(text, m, h - sh / 2);
     }
     ctx.globalAlpha = 1;
   };
@@ -362,7 +367,7 @@ async function portraitCard(post, w, h) {
     if (im) { drawCover(ctx, im, 0, 0, w, h); return; }
     if (bd) veil(ctx, bd, w, h, faint ? 0.22 : 0.42); else { ctx.fillStyle = '#1b1b1b'; ctx.fillRect(0, 0, w, h); }
     if (faint) ctx.globalAlpha = 0.35;
-    ctx.fillStyle = '#fff'; ctx.font = `${Math.round(h * 0.42 * CARD_SCALE)}px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#fff'; ctx.font = IT(Math.round(h * 0.42 * CARD_SCALE)); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(initials(tr(post.title)), w / 2, h * 0.45);
     ctx.fillStyle = accent(); ctx.fillRect(w / 2 - 8, h * 0.78, 16, 1.5);
     ctx.globalAlpha = 1;
@@ -381,12 +386,12 @@ async function textCard(post, w, h) {
   const front = canvasTex(w, h, ctx => {
     ctx.fillStyle = '#333'; ctx.fillRect(0, 0, w, h);
     if (im) drawCover(ctx, im, 13, 12.75, 53, 53); else { ctx.fillStyle = accent(); ctx.fillRect(18, 14, 14, 2); }
-    ctx.fillStyle = '#fff'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    ctx.fillStyle = '#fff'; ctx.font = TF(tz); ctx.textBaseline = 'top';
     wrapLines(ctx, title, tw).slice(0, tn).forEach((l, i) => ctx.fillText(l, x0, (im ? 12 : 20) + i * tl));
   });
   const back = canvasTex(w, h, mirrored(w, ctx => {   // le dos est vu de derrière : dessiné en miroir pour rester lisible
     ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = '#c4c4c4'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    ctx.fillStyle = '#c4c4c4'; ctx.font = TF(tz); ctx.textBaseline = 'top';
     wrapLines(ctx, title, tw).slice(0, tn).forEach((l, i) => ctx.fillText(l, x0, (im ? 9 : 17) + i * tl));
   }));
   return [front, back];
@@ -398,7 +403,7 @@ async function textCardPhoto(post, w, h, bd) {   // bandeau de savoir-faire : la
     veil(ctx, bd, w, h, faint ? 0.2 : ph ? 0.7 : 0.62);
     if (faint) ctx.globalAlpha = 0.32;
     ctx.fillStyle = accent(); ctx.fillRect(18, 14, 14, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${tz}px ${SERIF}`; ctx.textBaseline = 'top';
+    ctx.fillStyle = '#fff'; ctx.font = TF(tz); ctx.textBaseline = 'top';
     wrapLines(ctx, title, tw).slice(0, ph ? 2 : 3).forEach((l, i) => ctx.fillText(l, 18, 20 + i * tl));
     ctx.globalAlpha = 1;
   };
@@ -436,7 +441,7 @@ async function skillCard(post, w, h) {
   const titleOnly = (ctx, a) => {
     ctx.globalAlpha = a; ctx.textBaseline = 'top'; const bw = w - x0 - 12;
     ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`; let y = flat ? 16 : 22;
+    ctx.fillStyle = '#fff'; ctx.font = TF(fz(ts)); let y = flat ? 16 : 22;
     wrapLines(ctx, title, bw).slice(0, ph ? 3 : 2).forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
     ctx.globalAlpha = 1;
   };
@@ -448,10 +453,10 @@ async function skillCard(post, w, h) {
     if (bd && !ph) drawCover(ctx, bd.im, w - iw, 0, iw, h);
     ctx.textBaseline = 'top';
     ctx.fillStyle = accent(); ctx.fillRect(x0, flat ? 9 : 13, 14, 2);
-    ctx.fillStyle = '#fff'; ctx.font = `${fz(ts)}px ${SERIF}`;
+    ctx.fillStyle = '#fff'; ctx.font = TF(fz(ts));
     const tls = wrapLines(ctx, title, tw).slice(0, ph ? 3 : 2); let y = flat ? 16 : 22;
     tls.forEach(l => { ctx.fillText(l, x0, y); y += fz(tl); });
-    y += flat ? 2 : 5; ctx.fillStyle = ph ? '#dcdcdc' : '#bdbdbd'; ctx.font = `${fz(ss)}px ${SERIF}`;
+    y += flat ? 2 : 5; ctx.font = IT(fz(ss));
     const room = ph ? 0 : Math.max(0, Math.floor((h - y - 8) / fz(sl)));
     let sls = wrapLines(ctx, sum, tw); if (sls.length > room) { sls = sls.slice(0, room); if (room) { let last = sls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); sls[room - 1] = last + '…'; } }
     sls.forEach(l => { ctx.fillText(l, x0, y); y += fz(sl); });
@@ -463,55 +468,55 @@ function infoTexture(post, kind) {
   return fontsReady().then(() => {
     if (kind === 'place') return canvasTex(380, 300, ctx => {   // MovieClip "contact"
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 380, 300); ctx.textBaseline = 'top';
-      ctx.fillStyle = '#fff'; ctx.font = `${fz(44)}px ${SERIF}`; ctx.fillText(tr(post.title) + '.', 32, 18);
-      ctx.fillStyle = '#979797'; ctx.font = `${fz(18)}px ${SERIF}`; wrapLines(ctx, tr(post.subtitle), 320).slice(0, 2).forEach((l, i) => ctx.fillText(l, 32, 76 + i * 22));
-      ctx.fillStyle = accent(); ctx.font = `14px ${UIF}`; ctx.fillText((post.link || '').replace(/^https?:\/\/(www\.)?/, ''), 32, 128);
+      ctx.fillStyle = '#fff'; ctx.font = TF(fz(44)); ctx.fillText(tr(post.title) + '.', 32, 18);
+      ctx.font = IT(fz(18)); wrapLines(ctx, tr(post.subtitle), 320).slice(0, 2).forEach((l, i) => ctx.fillText(l, 32, 76 + i * 22));
+      ctx.font = `14px ${UIF}`; ctx.fillText((post.link || '').replace(/^https?:\/\/(www\.)?/, ''), 32, 128);
       ctx.fillStyle = '#fff'; htmlToText(tr(post.body)).slice(0, 4).forEach((l, i) => ctx.fillText(l, 32, 164 + i * 20));
-      ctx.fillStyle = accent(); ctx.font = `15px ${UIF}`; ctx.fillText(tr(post.place), 32, 260);
+      ctx.font = `600 15px ${UIF}`; ctx.fillText(tr(post.place), 32, 260);
     }, 1.5);
     if (phoneCards()) return canvasTex(200, 200, ctx => {   // téléphone : le nom, la phrase et les projets en gros, sans le texte long
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
-      ctx.fillStyle = '#fff'; ctx.font = `${fz(25)}px ${SERIF}`;
+      ctx.fillStyle = '#fff'; ctx.font = TF(fz(25));
       const name = wrapLines(ctx, tr(post.title) + '.', 172).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 14, 12 + i * fz(27)));
       ctx.font = `${fz(13)}px ${UIF}`;
       const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
       const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 172).slice(0, 2) : [];
       const bottom = tr(post.place) ? 168 : 188, pTop = bottom - pl.length * 16 - 16;
       let y = 18 + name.length * fz(27);
-      ctx.fillStyle = '#b4b4b4'; ctx.font = `${fz(17)}px ${SERIF}`;
+      ctx.font = IT(fz(17));
       const lim = (pl.length ? pTop - 6 : bottom) - fz(20);
       const sub = wrapLines(ctx, tr(post.subtitle), 172), sl = [];
       for (const l of sub) { if (y > lim) break; sl.push(l); y += fz(20); }
       if (sl.length < sub.length && sl.length) { let last = sl[sl.length - 1]; while (last && ctx.measureText(last + '…').width > 172) last = last.replace(/\s*\S+$/, ''); sl[sl.length - 1] = last + '…'; }
       sl.forEach((l, i) => ctx.fillText(l, 14, 18 + name.length * fz(27) + i * fz(20)));
       if (pl.length) {
-        ctx.fillStyle = accent(); ctx.font = `${fz(11)}px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 14, pTop);
-        ctx.fillStyle = '#e6e6e6'; ctx.font = `${fz(13)}px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 14, pTop + 16 + i * 16));
+        ctx.font = `600 ${fz(11)}px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 14, pTop);
+        ctx.font = `${fz(13)}px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 14, pTop + 16 + i * 16));
       }
-      if (tr(post.place)) { ctx.fillStyle = accent(); ctx.font = `${fz(13)}px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 14, 176); }
+      if (tr(post.place)) { ctx.font = `600 ${fz(13)}px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 14, 176); }
     }, 2.5);
     return canvasTex(200, 200, ctx => {   // MovieClip "people"
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
-      ctx.fillStyle = '#fff'; ctx.font = `${fz(20)}px ${SERIF}`;
+      ctx.fillStyle = '#fff'; ctx.font = TF(fz(20));
       const name = wrapLines(ctx, tr(post.title) + '.', 166).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 18, 14 + i * 22));
       let y = 20 + name.length * 22;
       ctx.font = `10px ${UIF}`;   // ses projets avec nous, en bas de la fiche
       const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
       const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 166).slice(0, 3) : [];
       const pTop = (tr(post.place) ? 174 : 188) - pl.length * 13 - 13;
-      ctx.fillStyle = '#8c8c8c'; ctx.font = `${fz(15)}px ${SERIF}`;   // la phrase s'arrête avant le bloc des projets
+      ctx.font = IT(fz(15));   // la phrase s'arrête avant le bloc des projets
       const lim = (pl.length ? pTop - 4 : 168) - 18, sub = [];
       tr(post.subtitle).split(/(?<=\.)\s+/).forEach(l => wrapLines(ctx, l, 166).forEach(s => sub.push(s)));
       const shown = []; for (const s of sub) { if (y > lim) break; shown.push(s); y += 18; }
       if (shown.length < sub.length && shown.length) { let last = shown[shown.length - 1]; while (last && ctx.measureText(last + '…').width > 166) last = last.replace(/\s*\S+$/, ''); shown[shown.length - 1] = last + '…'; }
       shown.forEach((s, i) => ctx.fillText(s, 19, 20 + name.length * 22 + i * 18));
-      ctx.fillStyle = '#bbb'; ctx.font = `11px ${UIF}`;
+      ctx.font = `11px ${UIF}`;
       htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
       if (pl.length) {
-        ctx.fillStyle = accent(); ctx.font = `8px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 19, pTop);
-        ctx.fillStyle = '#e6e6e6'; ctx.font = `10px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 19, pTop + 13 + i * 13));
+        ctx.font = `600 8px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 19, pTop);
+        ctx.font = `10px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 19, pTop + 13 + i * 13));
       }
-      if (tr(post.place)) { ctx.fillStyle = accent(); ctx.font = `11px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 19, 180); }
+      if (tr(post.place)) { ctx.font = `600 11px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 19, 180); }
     });
   });
 }
@@ -1243,10 +1248,11 @@ function setMenuPosition() {
   if (!P.postOpen) document.body.classList.remove('post-cramped', 'post-short');
   if (P.postOpen && post2D.open && post2D.height > 100) {
     let y = sloganEl.offsetTop + sloganEl.offsetHeight + post2D.height * (post2D.scale || 1) + 2 * STYLE.margin + 30;
-    y = Math.min(y, H - menu.offsetHeight - 52);   // au-dessus de la ligne des langues
+    y = Math.min(y, langsEl.getBoundingClientRect().top - menu.offsetHeight - 22);   // toujours au-dessus des langues
     menu.style.left = STYLE.margin + 'px'; menu.style.top = y + 'px';
   } else {   // en bas à gauche, au-dessus des langues (plus haut sur grand écran, au niveau des flèches de pages)
-    menu.style.left = (wideScreen() ? 26 : STYLE.margin) + 'px'; menu.style.top = Math.round(H - (menu.offsetHeight || 86) - (wideScreen() ? 100 : 56)) + 'px';
+    const lt = langsEl.hidden ? H - 30 : langsEl.getBoundingClientRect().top;
+    menu.style.left = (wideScreen() ? 26 : STYLE.margin) + 'px'; menu.style.top = Math.round(Math.min(H - (menu.offsetHeight || 86) - (wideScreen() ? 100 : 56), lt - (menu.offsetHeight || 86) - 24)) + 'px';
   }
   document.body.classList.toggle('post-open-wide', wideScreen() && !!P.postOpen);   // fiche ouverte : le Showreel sous la signature s'efface
   placeCats(); placeReel();
@@ -1425,6 +1431,7 @@ const post2D = {
     this.open = true; this.height = card === 'place' ? 300 : 355;
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
     fitPost2D(); this.geomKey = JSON.stringify(textGeom('project'));
+    { const fm = ficheM(); strip.style.setProperty('--ft', fm.top + 'px'); strip.style.setProperty('--fb', fm.bottom + 'px'); }
     this.delay = 0;
     const media = post.media.filter(m => m && m.src);
     if (card === 'place') {
@@ -1601,25 +1608,40 @@ const post2D = {
     }
     measure.remove();
   },
-  addTeam(post) {   // "Who worked on this project?" : les portraits viennent des autres sections
+  addTeam(post) {   // « Qui a travaillé sur ce projet ? » : à gauche le titre et l'index numéroté, à droite les portraits en planche, de tailles variées, comme une page de magazine
     const team = post.team.map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
-    const names = team.map(p => tr(p.title)).concat(post.credits ? [post.credits] : []).join(', ');
-    const el = this.addPanel('team', 576, `<h2 class="ttl">${escapeHTML(ui('who'))}</h2><div class="names">${escapeHTML(ui('leftToRight'))} <span>${escapeHTML(names)}.</span></div>`);
-    const inner = el.querySelector('.in'), nm = inner.querySelector('.names');
-    const top0 = Math.max(160, Math.ceil(nm.offsetTop + nm.offsetHeight + 14));   // les visages commencent sous la liste des noms
+    const fm = ficheM(), top = fm.top, low = 355 - fm.bottom, L = fm.side, gap = Math.max(24, Math.min(36, fm.gutter));
+    const num = j => String(j + 1).padStart(2, '0');
+    const el = this.addPanel('team', 900, `<h2 class="ttl" style="left:${L}px;top:${top}px">${escapeHTML(ui('who'))}</h2>` +
+      `<ol class="idx" style="left:${L}px">${team.map((p, j) => `<li data-i="${j}"><b>${num(j)}</b><span><span class="nm">${escapeHTML(tr(p.title).trim())}</span>${tr(p.subtitle).trim() ? `<i>${escapeHTML(tr(p.subtitle).trim())}</i>` : ''}</span></li>`).join('')}` +
+      (post.credits ? `<li class="more"><span><i>${escapeHTML(ui('with'))}</i> ${escapeHTML(post.credits)}</span></li>` : '') + '</ol>');
+    const inner = el.querySelector('.in'), ttl = inner.querySelector('.ttl'), idx = inner.querySelector('.idx');
+    const it = Math.ceil(ttl.offsetTop + ttl.offsetHeight + 18);
+    idx.style.top = it + 'px'; idx.style.height = Math.max(60, low - it) + 'px';
+    const idxW = Math.max(200, idx.scrollWidth, Math.min(ttl.scrollWidth, 260));   // un long index passe sur une deuxième colonne
+    /* la planche : des colonnes de portraits carrés, de tailles qui alternent, décalées d'une colonne à l'autre */
+    const SIZES = [116, 82, 98, 70, 108, 76, 90, 66], x0 = L + idxW + gap;
+    let x = x0, y = top, colW = 0, col = 0, right = x0;
     team.forEach((p, j) => {
-      const f = document.createElement('button'); f.type = 'button'; f.className = 'face';
-      f.style.left = (69 + (j % 6) * 59) + 'px'; f.style.top = (top0 + Math.floor(j / 6) * 55) + 'px';
-      const other = !p.thumb && (personProjects(p).find(x => x !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
+      const sz = SIZES[j % SIZES.length] * (team.length > 12 ? 0.8 : 1), cap = 16;
+      if (y + sz + cap > low && y > top + 1) { x += colW + 16; col++; y = top + (col % 2 ? 34 : 0); colW = 0; }
+      const go = onSite(p) && p.published !== false;
+      const f = document.createElement(go ? 'button' : 'div'); f.className = 'face' + (go ? ' go' : ''); if (go) { f.type = 'button'; f.dataset.go = p.id; }
+      f.dataset.i = j; Object.assign(f.style, { left: x + 'px', top: y + 'px', width: sz + 'px', height: sz + 'px' });
+      const other = !p.thumb && (personProjects(p).find(q => q !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
       const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
-      f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<span class="tab">${escapeHTML(tr(p.title))}.<small>${escapeHTML(tr(p.subtitle))}</small></span>`;
+      f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<b class="n">${num(j)}</b>`;
       f.setAttribute('aria-label', tr(p.title));
-      ['pointerenter', 'focus'].forEach(ev => f.addEventListener(ev, () => f.classList.add('big')));
-      ['pointerleave', 'blur'].forEach(ev => f.addEventListener(ev, () => f.classList.remove('big')));
       inner.appendChild(f);
+      colW = Math.max(colW, sz); y += sz + cap; right = Math.max(right, x + sz);
     });
-    el.style.overflow = 'visible';
+    el.style.width = Math.ceil((team.length ? right : L + idxW) + L) + 'px';
+    /* un portrait et son nom s'allument ensemble */
+    const lite = (i, on) => inner.querySelectorAll(`[data-i="${i}"]`).forEach(n => n.classList.toggle('on', on));
+    inner.querySelectorAll('[data-i]').forEach(n => { ['pointerenter', 'focus'].forEach(ev => n.addEventListener(ev, () => lite(n.dataset.i, true))); ['pointerleave', 'blur'].forEach(ev => n.addEventListener(ev, () => lite(n.dataset.i, false))); });
+    inner.querySelectorAll('.idx li[data-i]').forEach(li => { const f = inner.querySelector(`.face.go[data-i="${li.dataset.i}"]`); if (f) { li.classList.add('go'); li.dataset.go = f.dataset.go; } });
   },
+
   addContact(post) {
     const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
     this.addPanel('contact', Math.min(380, Math.max(260, Math.floor((W - 2 * STYLE.margin) / (this.scale || 1)))), `<div class="cn">${escapeHTML(tr(post.title))}.</div><div class="ac">${escapeHTML(tr(post.subtitle))}</div>` +

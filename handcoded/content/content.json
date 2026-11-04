@@ -192,42 +192,76 @@
   "startSection": "work",
   "typo": {
    "sig1": {
-    "font": "wireone",
-    "size": 62
+    "font": "g:Instrument Serif",
+    "italic": true,
+    "size": 56,
+    "lh": 58
    },
    "sig2": {
-    "font": "helvetica",
-    "weight": 200,
-    "size": 22
+    "font": "g:Inter Tight",
+    "weight": 500,
+    "size": 20,
+    "lh": 24
    },
    "menu": {
-    "font": "lucida",
-    "weight": 300
+    "font": "g:Inter Tight",
+    "weight": 500
+   },
+   "ui": {
+    "font": "g:Inter Tight"
+   },
+   "title": {
+    "font": "g:Inter Tight",
+    "weight": 600,
+    "size": 30,
+    "lh": 30,
+    "ls": -0.02
+   },
+   "subtitle": {
+    "font": "g:Instrument Serif",
+    "italic": true,
+    "size": 25,
+    "lh": 25
    },
    "body": {
-    "font": "g:Open Sans",
-    "size": 11,
-    "weight": 300,
-    "lh": 15
+    "font": "g:Inter Tight",
+    "size": 12.5,
+    "lh": 17
    },
    "h3": {
-    "font": "g:Open Sans",
-    "size": 13,
-    "upper": true
+    "font": "g:Instrument Serif",
+    "italic": true,
+    "weight": 400,
+    "size": 20,
+    "lh": 22
    },
-   "cname": {
-    "font": "wireone"
-   },
-   "offh": {
-    "font": "helvetica",
-    "size": 13
-   },
-   "offp": {
-    "font": "helvetica",
+   "date": {
+    "font": "g:Inter Tight",
+    "weight": 600,
     "size": 10
    },
+   "meta": {
+    "font": "g:Inter Tight"
+   },
+   "names": {
+    "font": "g:Inter Tight"
+   },
+   "cname": {
+    "font": "g:Instrument Serif",
+    "italic": true
+   },
+   "csub": {
+    "font": "g:Inter Tight"
+   },
+   "cinfo": {
+    "font": "g:Inter Tight"
+   },
    "card": {
-    "font": "g:League Spartan"
+    "font": "g:Inter Tight",
+    "weight": 600
+   },
+   "cardsm": {
+    "font": "g:Inter Tight"
    },
    "logo": {
     "font": "wireone",
@@ -235,39 +269,6 @@
     "size": 73,
     "italic": false,
     "text": "HC"
-   },
-   "title": {
-    "size": 24,
-    "font": "g:League Spartan",
-    "lh": 22,
-    "upper": true,
-    "weight": 300
-   },
-   "subtitle": {
-    "font": "g:League Spartan",
-    "weight": 600,
-    "lh": 15.5,
-    "upper": true
-   },
-   "date": {
-    "font": "arial",
-    "size": 10
-   },
-   "meta": {
-    "font": "arial"
-   },
-   "names": {
-    "font": "arial"
-   },
-   "cinfo": {
-    "font": "g:Open Sans",
-    "size": 11
-   },
-   "csub": {
-    "font": "g:Open Sans"
-   },
-   "cardsm": {
-    "font": "g:Open Sans"
    }
   },
   "founded": 2012,
