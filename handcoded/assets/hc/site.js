@@ -1664,7 +1664,13 @@ function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit 
   });
   const pages = []; let page = 0;
   const limit = () => heights[Math.min(page, heights.length - 1)];
-  const flush = () => { pages.push(box.innerHTML); box.innerHTML = ''; page++; };
+  /* changement de colonne ; un intertitre (Crédits, Presse…) ne reste jamais seul en bas : il passe avec ce qui le suit */
+  const flush = () => {
+    while (box.lastChild && !box.lastChild.textContent.trim()) box.removeChild(box.lastChild);
+    const last = box.lastElementChild, carry = last && last.nodeName === 'H3' && box.children.length > 1 ? box.removeChild(last) : null;
+    pages.push(box.innerHTML); box.innerHTML = ''; page++;
+    if (carry) box.appendChild(carry);
+  };
   for (const b of blocks) {
     const clone = b.cloneNode(true); box.appendChild(clone);
     if (box.offsetHeight <= limit()) continue;
