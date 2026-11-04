@@ -7,9 +7,9 @@
 import * as THREE from 'three';
 import { seoParts, applySEO, SEO_DEFAULT } from './seo.js';
 import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
-import { LANGS, LANG_NAMES, t, LAYOUTS, CARDS, CITIES, findCities, normalizeContent, emptyField, postsOf, slugify, uniqueId, escapeHTML, sanitizeHTML, htmlToText,
+import { LANGS, LANG_NAMES, t, LAYOUTS, CARDS, CITIES, findCities, normalizeContent, emptyField, postsOf, slugify, uniqueId, sanitizeHTML, htmlToText,
   resizeImage, extOf, blobToBase64, kvGet, kvSet, kvDel, GitHubBackend, DemoBackend,
-  FONTS, TYPO, TYPO_PROPS, typoOf, googleFontURLs, typoFontLoads, ringLogoURL, FolderBackend, kvKeys } from './store.js';
+  FONTS, TYPO, typoOf, googleFontURLs, typoFontLoads, ringLogoURL, FolderBackend, kvKeys } from './store.js';
 
 const SITE = window.HC_SITE ?? '../';
 const INLINE = window.HC_ASSETS || null;
@@ -42,7 +42,6 @@ function h(tag, props, ...kids) {
   return el;
 }
 function fill(el, ...kids) { el.replaceChildren(...kids.flat(Infinity).filter(k => k != null && k !== false)); return el; }
-const svg = markup => { const d = document.createElement('div'); d.innerHTML = markup.trim(); return d.firstChild; };
 const ytIdOf = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
 const mediaKindOf = s => (ytIdOf(s) ? 'youtube' : /vimeo\.com\/(?:video\/)?\d+/.test(s || '') ? 'vimeo' : /\.(mp4|webm|mov)(\?|#|$)/i.test(s || '') ? 'video' : 'image');
 const defaultLogo = () => ringLogoURL((S.content && S.content.settings.accent) || '#ffcc00', S.content && S.content.settings);   // dessiné comme sur le site (Typographie › Logo rond)
@@ -1491,7 +1490,7 @@ function viewSettings() {
         storyEditor(s),
         homeVideoFields(s),
         field('Section d’arrivée', selectInput(c.sections.map(x => ({ value: x.id, label: fr(x.name) || x.id })), () => s.startSection, v => { s.startSection = v; }))),
-      h('div', { class: 'block' }, h('h3', null, 'Bureaux'), offBox),
+      h('div', { class: 'block' }, h('h3', null, 'Bureaux'), h('p', { class: 'hint', style: { marginTop: 0 } }, 'Ils ne s’affichent plus sur l’accueil : ils servent au référencement (Google, assistants IA) et au résumé texte du site. Les coordonnées visibles sont dans la section Contact.'), offBox),
       h('div', { class: 'block' }, h('h3', null, 'Réseaux et liens'), socBox)));
 }
 

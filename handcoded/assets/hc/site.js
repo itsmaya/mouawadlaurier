@@ -75,7 +75,7 @@ class Provider {
   }
   get categoryList() {   // "Tout" + les tags qui ont au moins un contenu publié
     const used = new Set(this.all.flatMap(p => p.tags));
-    return [{ id: '', label: { en: UI.en.all, fr: UI.fr.all } }, ...this.section.tags.filter(tg => used.has(tg.id))];
+    return [{ id: '', label: Object.fromEntries(LANGS.map(l => [l, (UI[l] || UI.en).all])) }, ...this.section.tags.filter(tg => used.has(tg.id))];
   }
   changeCategory(id) {
     if (id && !this.categoryList.some(c => c.id === id)) id = '';
@@ -1322,13 +1322,6 @@ function renderTexts() {
     if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
     else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
   });
-  const off = document.getElementById('offices') || document.createElement('div'); off.innerHTML = '';   // les bureaux ne sont plus sur l'accueil (section Contact)
-  (s.offices || []).forEach(o => {
-    const el = document.createElement('section');
-    el.innerHTML = `<h3>${escapeHTML(tr(o.name))}</h3>${(o.lines || []).map(l => `<p>${escapeHTML(l)}</p>`).join('')}${o.mail ? `<p><a href="mailto:${escapeHTML(o.mail)}">${escapeHTML(o.mail)}</a></p>` : ''}`;
-    off.appendChild(el);
-  });
-  (s.social || []).forEach(so => { if (!so.url) return; const el = document.createElement('section'); el.innerHTML = `<h3>${escapeHTML(so.label)}</h3><p><a href="${escapeHTML(so.url)}" target="_blank" rel="noopener">${escapeHTML(so.url.replace(/^https?:\/\/(www\.)?/, ''))}</a></p>`; off.appendChild(el); });
   home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff));
   if (!enterBtn.classList.contains('wait')) setEnterLabel(tr(s.home.enter) || ui('enter'));
   renderReel(); hvLabels();
@@ -2057,10 +2050,13 @@ function setupHomeVideo() {
     Object.assign(v, { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
     v.addEventListener('loadedmetadata', () => { if (isFinite(v.duration) && v.duration > 2) v.currentTime = Math.random() * (v.duration - 1); v.play().catch(() => {}); }, { once: true });   // jamais le même départ
     hv.video = v;
-  } else {   // les photos des projets mis en avant, hébergées avec le site (une image d'un autre site ne se lit pas pixel par pixel)
-    const seen = new Set();
-    CONTENT.posts.filter(p => p.published !== false).forEach(p => [p.thumb, ...(p.media || []).map(m => m && m.src)].forEach(x => { if (x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x) && !seen.has(x) && seen.size < 10) seen.add(x); }));
-    hv.pics = [...seen].sort(() => Math.random() - 0.5).map(x => { const im = new Image(); im.src = url(x); return im; });
+  } else {   // diaporama : les vignettes de dix projets différents, hébergées avec le site (une image d'un autre site ne se lit pas pixel par pixel), les mêmes que les cartes 3D
+    const local = x => x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x);
+    const work = CONTENT.sections.find(x => x.visible && x.card === 'image' && !x.skills) || {};
+    const posts = CONTENT.posts.filter(p => p.published !== false && local(p.thumb)), first = posts.filter(p => p.section === work.id);
+    const mix = list => list.map(p => p.thumb).sort(() => Math.random() - 0.5);
+    const pick = [...new Set([...mix(first), ...mix(posts)])].slice(0, 10);   // d'abord les réalisations
+    hv.pics = pick.map(x => { const im = new Image(); im.decoding = 'async'; im.src = url(x); return im; });
   }
   buildHomeDock(cfg.controls !== false);
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
@@ -2613,21 +2609,30 @@ function ledSprite(color, lit) {   // un point : cœur net, halo doux pour les p
   if (lit) { x.globalAlpha = 0.55; x.fillStyle = '#fff'; x.beginPath(); x.arc(mid - LED.pitch * 0.1 * k, mid - LED.pitch * 0.1 * k, LED.pitch * 0.12 * k, 0, Math.PI * 2); x.fill(); }
   return c;
 }
-function sizeTicker() { tickerDpr = Math.min(window.devicePixelRatio || 1, 2); ticker.width = Math.round(window.innerWidth * tickerDpr); ticker.height = Math.round(LED.h * tickerDpr); ledSprites = null; }
+function sizeTicker() { tickerDpr = Math.min(window.devicePixelRatio || 1, 2); ticker.width = Math.round(window.innerWidth * tickerDpr); ticker.height = Math.round(LED.h * tickerDpr); ledSprites = null; tickerStrip = null; }
 let tickerAcc = 0;
-function drawTicker(dt) {   // le texte avance d'une colonne de points à la fois, comme un vrai panneau
-  const on = CONTENT.settings.accent || '#ffcc00';   // l'accueil est remis à l'endroit en négatif : la vraie couleur
+let tickerStrip = null;   // toute la phrase en points LED, dessinée une fois ; l'écran n'en recopie qu'une fenêtre
+function tickerStripFor(on) {
+  const k = tickerDpr, p = LED.pitch, cols = Math.ceil(window.innerWidth / p) + 1, key = [tickerDots.w, cols, k, on].join('|');
+  if (tickerStrip && tickerStrip.dots === tickerDots && tickerStrip.key === key) return tickerStrip;
   if (!ledSprites || ledColor !== on) { ledColor = on; ledSprites = { on: ledSprite(on, true), off: ledSprite(on, false) }; }
+  const n = tickerDots.w + cols, c = document.createElement('canvas'); c.width = Math.ceil(n * p * k); c.height = Math.round(LED.h * k);
+  const x = c.getContext('2d'), top = (LED.h - LED.rows * p) / 2, half = ledSprites.on.width / 2;
+  x.fillStyle = '#000'; x.fillRect(0, 0, c.width, c.height);
+  for (let i = 0; i < n; i++) {
+    const m = tickerDots.cols[i % tickerDots.w], cx = (i * p + p / 2) * k - half;
+    for (let r = 0; r < LED.rows; r++) x.drawImage((m >> r) & 1 ? ledSprites.on : ledSprites.off, cx, (top + r * p + p / 2) * k - half);
+  }
+  return (tickerStrip = { canvas: c, dots: tickerDots, key, shown: -1 });
+}
+function drawTicker(dt) {   // le texte avance d'une colonne de points à la fois, comme un vrai panneau
   tickerAcc += dt * 26;
   if (tickerAcc >= 1) { tickerX = (tickerX + Math.floor(tickerAcc)) % tickerDots.w; tickerAcc %= 1; }
-  const k = tickerDpr, p = LED.pitch, cols = Math.ceil(window.innerWidth / p) + 1, top = (LED.h - LED.rows * p) / 2;
-  tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.fillStyle = '#000'; tctx.fillRect(0, 0, ticker.width, ticker.height);
-  const half = ledSprites.on.width / 2;
-  for (let c = 0; c < cols; c++) {
-    const m = tickerDots.cols[(tickerX + c) % tickerDots.w];
-    const cx = (c * p + p / 2) * k - half;
-    for (let r = 0; r < LED.rows; r++) tctx.drawImage((m >> r) & 1 ? ledSprites.on : ledSprites.off, cx, (top + r * p + p / 2) * k - half);
-  }
+  const st = tickerStripFor(CONTENT.settings.accent || '#ffcc00');   // l'accueil est remis à l'endroit en négatif : la vraie couleur
+  if (st.shown === tickerX) return;   // rien n'a bougé : rien à redessiner
+  st.shown = tickerX;
+  tctx.setTransform(1, 0, 0, 1, 0, 0);
+  tctx.drawImage(st.canvas, tickerX * LED.pitch * tickerDpr, 0, ticker.width, ticker.height, 0, 0, ticker.width, ticker.height);
 }
 let homeGone = false, assetsLoaded = false, clickedEnter = false;
 const isHomeHash = () => /^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash || '');
@@ -2748,13 +2753,31 @@ function startRender() {
   getToSectionView(start, 0); if (W <= 700 || H <= 520) setMenuPosition();   // téléphone : le menu se range tout de suite au-dessus des langues
 }
 let last = performance.now();
+/* La 3D ne se redessine que si quelque chose a changé : caméra, objets, matières, textures, animations en cours, ou un geste du visiteur.
+   Immobile, elle ne coûte presque plus rien (une image de contrôle toutes les deux secondes, au cas où). */
+let lastSig = NaN, lastDraw = 0, wakeUntil = 0;
+const wake = (ms = 700) => { wakeUntil = Math.max(wakeUntil, performance.now() + ms); };
+['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'touchstart', 'touchmove', 'resize'].forEach(ev => window.addEventListener(ev, () => wake(), { passive: true }));
+function sceneSig() {
+  const p = camera.position, q = camera.quaternion;
+  let s = p.x + p.y * 1.3 + p.z * 1.7 + q.x * 31 + q.y * 37 + q.z * 41 + q.w * 43 + camera.fov * 7.3, k = 1;
+  scene.traverseVisible(o => {
+    k += 1.13; const a = o.position, r = o.rotation, c = o.scale;
+    s += (a.x + a.y * 1.3 + a.z * 1.7 + r.x * 3.1 + r.y * 3.7 + r.z * 4.3 + c.x * 5.3 + c.y * 5.9 + c.z * 6.1) * k;
+    const m = o.material; if (m && !Array.isArray(m)) s += (m.opacity * 11 + m.version * 13 + (m.map ? m.map.version * 17 + m.map.id * 0.01 : 0)) * k;
+    const g = o.geometry; if (g && Number.isFinite(g.instanceCount)) s += g.instanceCount * 19 * k;
+  });
+  return s;
+}
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots) drawTicker(dt);
   if (hv && !home.hidden) homeVideoStep(now);
   if (started && (homeGone || now < behindUntil)) {
     updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
-    renderer.render(scene, camera);
+    const busy = tweens.length || now < wakeUntil || now < behindUntil || isClicking || closeTurn || orbitE || now - lastDraw > 2000;
+    const sig = sceneSig();
+    if (busy || sig !== lastSig) { renderer.render(scene, camera); lastDraw = now; lastSig = sig; }
   }
   requestAnimationFrame(frame);
 }
