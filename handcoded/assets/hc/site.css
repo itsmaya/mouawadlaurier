@@ -496,3 +496,9 @@ body:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 .txt .relp .row { display: flex; align-items: baseline; gap: 10px; }
 .txt .relp .n { font-family: var(--f-title, var(--serif)); font-weight: var(--w-title, 400); font-size: 40px; line-height: 1; color: var(--accent); }
 .txt .relp .arr { font: 18px/1 var(--ui); color: #8a8a8a; }
+
+/* Showreel dans le fond : la vraie vidéo, sous une grille fine comme un écran LED */
+#hv-rv { position: absolute !important; inset: 0; z-index: 0 !important; overflow: hidden; background: #000; }
+#hv-rv > video, #hv-rv > iframe { position: absolute; display: block; border: 0; pointer-events: none; }
+#hv-rv .grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(0,0,0,.42) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.42) 1px, transparent 1px); background-size: 4px 4px; }
+#home.reel-on #home-video { visibility: hidden; }

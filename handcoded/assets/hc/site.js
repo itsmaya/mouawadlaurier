@@ -2171,7 +2171,7 @@ function toggleStory(open) {
   else { box.classList.remove('on'); storyT = setTimeout(() => { if (!box.classList.contains('on')) box.hidden = true; }, 700); }
 }
 window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
-function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); }
+function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.reelOn) hvReelFit(); }
 /* Le panneau de réglages de la vidéo, comme une console de lumière : des faders, des boutons à témoin, la grille et la cadence en direct.
    Raccourcis : K ouvre ou ferme, C couleur, I inverser, S son, V caméra. */
 const HV_FADERS = [
@@ -2242,7 +2242,7 @@ function hvLabels() {
   P.querySelectorAll('[data-c]').forEach(b => { const on = b.dataset.c === hv.color; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui('hv_color') + ' ' + ui('hv_c_' + b.dataset.c)); });
   const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
   tg('invert', hv.mode === 'dark'); tg('sound', hv.sound && !hv.cam);
-  P.querySelector('.tgl[data-a="sound"]').disabled = !hvPlayer() || !!hv.cam;
+  P.querySelector('.tgl[data-a="sound"]').disabled = !(hv.reelOn || hv.video) || !!hv.cam;
   hvStat();
 }
 function hvStat() {
@@ -2250,71 +2250,122 @@ function hvStat() {
   const cell = Math.max(hv.cell, hv.floor);
   st.textContent = `${Math.ceil(hv.W / cell)}×${Math.ceil(hv.H / cell)} · ${Math.round(1000 / hv.interval)} FPS`;
 }
-/* ================================================================ Showreel en points
-   Un showreel en fichier MP4 (Réglages › Showreel) se joue sur le fond de l'accueil : la grille passe à sa finesse maximale et aux couleurs de la vidéo,
-   une barre de lecture apparaît. Depuis la 3D, le bouton Showreel ramène à l'accueil et lance la lecture. Un lien YouTube ou Vimeo garde sa fenêtre. */
-const hvPlayer = () => (hv ? (hv.reelOn ? hv.reelV : hv.video) : null);
+/* ================================================================ Showreel dans le fond de l'accueil
+   Le bouton Showreel joue la vraie vidéo sur tout le fond de l'accueil, sous une grille fine (comme un écran LED), avec une barre de lecture.
+   Fichier MP4 du site, YouTube ou Vimeo : la vidéo n'est jamais lue pixel par pixel, il n'y a presque rien à calculer.
+   Pendant ce temps, les carrés s'arrêtent. Depuis la 3D, le bouton Showreel ramène à l'accueil et lance la lecture. */
+const hvPlayer = () => (hv && !hv.reelOn ? hv.video : null);
 function hvSound(on) {
-  hv.sound = on; const v = hvPlayer();
-  if (v) { v.muted = !on; if (on) v.volume = 1; if (v.paused && !hv.frozen) v.play().catch(() => {}); }
+  hv.sound = on;
+  if (hv.reelOn && hv.rp) hv.rp.mute(!on);
+  else if (hv.video) { hv.video.muted = !on; if (on) hv.video.volume = 1; if (hv.video.paused && !hv.frozen) hv.video.play().catch(() => {}); }
   hvLabels(); hvReelBar();
 }
-const reelFile = () => (reel && reel.src && reel.kind === 'video' ? reel.src : '');
+const reelPlayable = () => !!(reel && reel.src && /^(video|youtube|vimeo)$/.test(reel.kind));
 function showreelClick() {
-  if (reelFile() && hv) { if (homeGone) backToHome(); hvReelStart(); }
+  if (hv && reelPlayable()) { if (homeGone) backToHome(); hvReelStart(); }
   else openReel();
 }
+function makeReelPlayer(kind, src) {
+  const box = document.createElement('div'); box.id = 'hv-rv'; box.setAttribute('aria-hidden', 'true');
+  const rp = { kind, box, t: 0, d: 0, paused: false, ratio: 16 / 9 };
+  if (kind === 'video') {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, playsInline: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
+    const sync = () => { rp.t = v.currentTime; rp.d = isFinite(v.duration) ? v.duration : 0; rp.paused = v.paused; hvReelBar(); };
+    ['timeupdate', 'durationchange', 'play', 'pause'].forEach(ev => v.addEventListener(ev, sync));
+    v.addEventListener('loadedmetadata', () => { if (v.videoWidth) rp.ratio = v.videoWidth / v.videoHeight; hvReelFit(); sync(); });
+    v.addEventListener('ended', () => hvReelStop());
+    Object.assign(rp, { el: v, play: () => v.play().catch(() => {}), pause: () => v.pause(), mute: m => { v.muted = m; if (!m) v.volume = 1; }, seek: x => { v.currentTime = x; } });
+  } else {
+    const f = document.createElement('iframe'), yt = kind === 'youtube', id = yt ? ytId(src) : vimeoId(src);
+    const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
+    f.src = yt ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&playsinline=1&rel=0&enablejsapi=1${origin}`
+      : `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1&autopause=0`;
+    f.allow = 'autoplay; encrypted-media'; f.tabIndex = -1; f.title = 'Showreel'; f.referrerPolicy = 'strict-origin-when-cross-origin';
+    const post = m => { try { f.contentWindow.postMessage(JSON.stringify(m), '*'); } catch (e) {} };
+    const cmd = yt ? (func, args = []) => post({ event: 'command', func, args }) : (method, value) => post(value === undefined ? { method } : { method, value });
+    f.addEventListener('load', () => { if (yt) post({ event: 'listening', id: 'hvreel', channel: 'widget' }); });
+    Object.assign(rp, { el: f, post,
+      play: () => { rp.paused = false; cmd(yt ? 'playVideo' : 'play'); hvReelBar(); },
+      pause: () => { rp.paused = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelBar(); },
+      mute: m => { if (yt) { cmd(m ? 'mute' : 'unMute'); if (!m) cmd('setVolume', [100]); } else { cmd('setMuted', m); if (!m) cmd('setVolume', 1); } },
+      seek: x => { if (yt) cmd('seekTo', [x, true]); else cmd('setCurrentTime', x); rp.t = x; hvReelBar(); } });
+  }
+  const grid = document.createElement('div'); grid.className = 'grid';
+  box.append(rp.el, grid);
+  return rp;
+}
+/* messages de YouTube et Vimeo : position, durée, lecture, fin */
+window.addEventListener('message', e => {
+  const rp = hv && hv.rp; if (!rp || rp.kind === 'video' || !rp.el.contentWindow || e.source !== rp.el.contentWindow) return;
+  let d = e.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (err) { return; } if (!d) return;
+  if (rp.kind === 'youtube') {
+    const i = d.event === 'infoDelivery' && d.info; if (!i) return;
+    if (typeof i.currentTime === 'number') rp.t = i.currentTime;
+    if (typeof i.duration === 'number' && i.duration) rp.d = i.duration;
+    if (typeof i.playerState === 'number') { if (i.playerState === 0 && hv.reelOn) { hvReelStop(); return; } if (i.playerState === 1) rp.paused = false; else if (i.playerState === 2) rp.paused = true; }
+  } else {
+    if (d.event === 'ready') { ['timeupdate', 'play', 'pause', 'ended'].forEach(ev => rp.post({ method: 'addEventListener', value: ev })); if (hv.sound) rp.mute(false); return; }
+    if (d.event === 'timeupdate' && d.data) { rp.t = d.data.seconds || 0; rp.d = d.data.duration || rp.d; }
+    else if (d.event === 'play') rp.paused = false;
+    else if (d.event === 'pause') rp.paused = true;
+    else if (d.event === 'ended' && hv.reelOn) { hvReelStop(); return; }
+  }
+  hvReelBar();
+});
+function hvReelFit() {   // la vidéo couvre l'écran ; sur un écran en hauteur, elle s'y tient entière
+  const rp = hv && hv.rp; if (!rp) return;
+  const W = rp.box.clientWidth, H = rp.box.clientHeight; if (!W || !H) return;
+  const cover = W / H >= 1.2, r = rp.ratio;
+  let w = W, h = W / r; if (cover ? h < H : h > H) { h = H; w = H * r; }
+  Object.assign(rp.el.style, { width: Math.ceil(w) + 'px', height: Math.ceil(h) + 'px', left: Math.round((W - w) / 2) + 'px', top: Math.round((H - h) / 2) + 'px' });
+}
 function hvReelStart() {
-  const src = reelFile(); if (!src || !hv) return false;
+  if (!hv || !reelPlayable()) return false;
   if (hv.reelOn) return true;
   if (hv.cam) hvCamOff();
-  if (!hv.reelV || hv.reelSrc !== src) {
-    if (hv.reelV) hv.reelV.pause();
-    const v = document.createElement('video');
-    if (/^https?:/.test(src) && !src.startsWith(location.origin)) v.crossOrigin = 'anonymous';
-    Object.assign(v, { muted: true, playsInline: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
-    v.addEventListener('ended', () => hvReelStop());
-    ['timeupdate', 'play', 'pause', 'durationchange'].forEach(ev => v.addEventListener(ev, hvReelBar));
-    hv.reelV = v; hv.reelSrc = src;
-  }
-  hv.saved = { cell: hv.cell, color: hv.color, delay: hv.delay, mode: hv.mode, gamma: hv.gamma, fill: hv.fill };
-  Object.assign(hv, { cell: 6, color: 'source', delay: 1, mode: 'light', gamma: 1, fill: 0.96, reelOn: true, fresh: true, lo: 0, hi: 1 });   // finesse maximale, vraies couleurs
+  const key = reel.kind + '|' + reel.src;
+  if (!hv.rp || hv.rp.key !== key) {
+    if (hv.rp) { hv.rp.pause(); hv.rp.box.remove(); }
+    hv.rp = makeReelPlayer(reel.kind, reel.src); hv.rp.key = key;
+    const band = document.getElementById('home-band'); band.insertBefore(hv.rp.box, band.querySelector('.hv-shade'));
+    if (hv.sound && reel.kind === 'video') hv.rp.mute(false);
+    if (reel.kind === 'video') hv.rp.play();
+  } else { hv.rp.seek(0); hv.rp.play(); hv.rp.mute(!hv.sound); }
+  hv.reelOn = true; hv.rp.box.hidden = false;
   if (hv.video) hv.video.pause();
-  try { hv.reelV.currentTime = 0; } catch (e) {}
-  hv.reelV.muted = !hv.sound; hv.reelV.play().catch(() => {});
-  home.classList.add('reel-on'); hvReelBar(); hvLabels();
+  home.classList.add('reel-on'); hvReelFit(); hvReelBar(); hvLabels();
   countView('showreel', 'Showreel', true);
   return true;
 }
 function hvReelStop() {
   if (!hv || !hv.reelOn) return;
-  hv.reelOn = false; hv.reelV.pause();
-  if (hv.saved) Object.assign(hv, hv.saved); hv.fresh = true; hv.lo = 0; hv.hi = 1;
+  hv.reelOn = false; hv.rp.pause(); hv.rp.box.hidden = true; hv.fresh = true;
   if (hv.video && !homeGone && !hv.frozen) { hv.video.muted = !hv.sound; hv.video.play().catch(() => {}); }
   home.classList.remove('reel-on'); hvReelBar(); hvLabels();
 }
 const PLAY_ICON = p => p ? '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>' : '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z" fill="currentColor"/></svg>';
 const mmss = x => { x = Math.max(0, Math.floor(x || 0)); return Math.floor(x / 60) + ':' + String(x % 60).padStart(2, '0'); };
+const reelToggle = () => { const rp = hv && hv.rp; if (!rp || !hv.reelOn) return; if (rp.paused) rp.play(); else rp.pause(); };
 function buildReelBar(home) {
   const bar = document.createElement('div'); bar.id = 'hv-reel'; bar.hidden = true; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Showreel');
   bar.innerHTML = `<button type="button" class="pp"></button><div class="tl" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100"><i></i></div><span class="tm"></span><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button>`;
   home.appendChild(bar); hv.reelBar = bar;
-  bar.querySelector('.pp').addEventListener('click', () => { const v = hv.reelV; if (!v) return; if (v.paused) v.play().catch(() => {}); else v.pause(); });
+  bar.querySelector('.pp').addEventListener('click', reelToggle);
   bar.querySelector('.snd').addEventListener('click', () => hvSound(!hv.sound));
   bar.querySelector('.x').addEventListener('click', hvReelStop);
   const tl = bar.querySelector('.tl');
-  const seek = f => { const v = hv.reelV; if (v && isFinite(v.duration)) { v.currentTime = Math.max(0, Math.min(1, f)) * v.duration; hv.fresh = true; } };
-  tl.addEventListener('pointerdown', e => { const r = tl.getBoundingClientRect(); seek((e.clientX - r.left) / r.width); });
-  tl.addEventListener('keydown', e => { const v = hv.reelV; if (!v) return; if (e.code === 'ArrowRight' || e.code === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); v.currentTime = Math.max(0, v.currentTime + (e.code === 'ArrowRight' ? 5 : -5)); hv.fresh = true; } });
+  tl.addEventListener('pointerdown', e => { const rp = hv.rp, r = tl.getBoundingClientRect(); if (rp && rp.d) rp.seek(Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * rp.d); });
+  tl.addEventListener('keydown', e => { const rp = hv.rp; if (!rp || !(e.code === 'ArrowRight' || e.code === 'ArrowLeft')) return; e.preventDefault(); e.stopPropagation(); rp.seek(Math.max(0, rp.t + (e.code === 'ArrowRight' ? 5 : -5))); });
 }
 function hvReelBar() {
   const bar = hv && hv.reelBar; if (!bar) return;
   bar.hidden = !hv.reelOn; dockLabels(); if (!hv.reelOn) return;
-  const v = hv.reelV, d = v && isFinite(v.duration) ? v.duration : 0, c = v ? v.currentTime : 0, paused = !v || v.paused;
-  const pp = bar.querySelector('.pp'); pp.innerHTML = PLAY_ICON(paused); pp.setAttribute('aria-label', ui(paused ? 'play' : 'pause'));
-  bar.querySelector('.tl i').style.width = (d ? c / d * 100 : 0).toFixed(2) + '%';
+  const rp = hv.rp, d = rp.d || 0, c = rp.t || 0;
+  const pp = bar.querySelector('.pp'); pp.innerHTML = PLAY_ICON(rp.paused); pp.setAttribute('aria-label', ui(rp.paused ? 'play' : 'pause'));
+  bar.querySelector('.tl i').style.width = (d ? Math.min(100, c / d * 100) : 0).toFixed(2) + '%';
   bar.querySelector('.tl').setAttribute('aria-valuenow', String(d ? Math.round(c / d * 100) : 0)); bar.querySelector('.tl').setAttribute('aria-label', 'Showreel');
-  bar.querySelector('.tm').textContent = `${mmss(c)} / ${mmss(d)}`;
+  bar.querySelector('.tm').textContent = d ? `${mmss(c)} / ${mmss(d)}` : mmss(c);
   const snd = bar.querySelector('.snd'); snd.innerHTML = SPEAKER(hv.sound); snd.setAttribute('aria-label', ui(hv.sound ? 'soundOff' : 'soundOn')); snd.setAttribute('aria-pressed', String(hv.sound));
   bar.querySelector('.x').setAttribute('aria-label', ui('close'));
 }
@@ -2344,7 +2395,6 @@ function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false, fit = fa
 function hvSource(t) {
   const c = hv.rctx; c.globalAlpha = 1; c.fillStyle = '#000'; c.fillRect(0, 0, hv.raw.width, hv.raw.height);
   if (hv.cam && hv.cam.video.readyState >= 2) { hvCover(hv.cam.video, hv.cam.video.videoWidth, hv.cam.video.videoHeight, 1, 0, 0, true); return true; }
-  if (hv.reelOn && hv.reelV.readyState >= 2 && hv.reelV.videoWidth) { hvCover(hv.reelV, hv.reelV.videoWidth, hv.reelV.videoHeight, 1, 0, 0, false, true); return true; }   // le showreel en entier
   if (hv.video) { if (hv.video.readyState < 2) return false; hvCover(hv.video, hv.video.videoWidth, hv.video.videoHeight); return true; }
   const ok = hv.pics.filter(p => p.complete && p.naturalWidth); if (!ok.length) return false;
   const per = 7, k = Math.max(0, t) / per, n = ok.length, i = ((Math.floor(k) % n) + n) % n, f = k - Math.floor(k);
@@ -2396,6 +2446,7 @@ function homeVideoStep(now) {
   if (!hv || !hv.W) return;
   const ex = hv.exit ? now - hv.exit : -1;
   if (ex > HV_EXIT) { if (!hv.cleared) { hv.cleared = true; hv.ctx.fillStyle = '#0b0b0b'; hv.ctx.fillRect(0, 0, hv.W, hv.H); } return; }   // tout est aspiré : plus rien à calculer, la 3D a la main
+  if (hv.reelOn) return;   // le showreel joue : les carrés se reposent
   if (now - hv.last < (ex >= 0 ? 1000 / 60 : hv.interval)) return; hv.last = now;   // l'aspiration se dessine à 60 images/s : ce n'est plus que du dessin
   const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
   const ctx = hv.ctx, W = hv.W, H = hv.H;
@@ -2422,7 +2473,7 @@ function homeVideoStep(now) {
   if (ex >= 0) return;   // pendant l'aspiration, on ne touche pas aux réglages de la machine
   /* adaptation à la machine */
   const cost = performance.now() - t0; hv.cost = hv.cost * 0.9 + cost * 0.1;
-  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(40, Math.max(hv.floor, cell) + 2); }
+  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(Math.max(hv.cell + 6, 14), Math.max(hv.floor, cell) + 2); }   // au plus 6 px de plus que le réglage
   else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.panel) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
 }
 /* Sortie de l'accueil : chaque carré rétrécit jusqu'à disparaître, avec le delay du site Fat-Man (taille = taille − taille / delay, à chaque image) :
@@ -2567,13 +2618,14 @@ function enterToTheWeb(animate = clickedEnter) {
   if (!(animate && hv && hv.W && !home.hidden && !HV_REDUCE.matches)) { goInside(); return; }
   leaving = true; home.classList.add('leaving');
   if (hv.setOpen) hv.setOpen(false);
+  if (hv.reelOn) hvReelStop();
   hvFreeze(); hv.exit = performance.now(); hv.cleared = false; hv.intro = 0;
   setTimeout(() => { leaving = false; goInside(); }, HV_SLIDE_AT);
 }
 function hvFreeze() {   // le flux s'arrête : vidéo, showreel et caméra
   if (!hv) return; hv.frozen = true;
   if (hv.video) hv.video.pause();
-  if (hv.reelV) hv.reelV.pause();
+  if (hv.rp) hv.rp.pause();
   if (hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; }
 }
 function goInside() {
@@ -2630,7 +2682,7 @@ home.addEventListener('touchend', () => { touchY = null; }, { passive: true });
 window.addEventListener('keydown', e => {
   if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
   const t = e.target, onCtl = t && t.closest && t.closest('button, a, input, select, textarea, [contenteditable="true"]');
-  if (e.code === 'Space' && !onCtl && hv && hv.reelOn) { e.preventDefault(); const v = hv.reelV; if (v.paused) v.play().catch(() => {}); else v.pause(); return; }   // showreel : espace = pause
+  if (e.code === 'Space' && !onCtl && hv && hv.reelOn) { e.preventDefault(); reelToggle(); return; }   // showreel : espace = pause
   if (e.code === 'ArrowDown' || e.code === 'PageDown' || ((e.code === 'Space' || e.code === 'Enter') && !onCtl)) {
     if (t && t.tagName === 'INPUT') return;   // un curseur du panneau garde ses flèches
     e.preventDefault(); scrollEnter();

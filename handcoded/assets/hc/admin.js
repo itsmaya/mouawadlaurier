@@ -1472,7 +1472,7 @@ function viewSettings() {
       ficheBlock(s),
       typoBlock(s),
       h('div', { class: 'block' }, h('h3', null, 'Showreel'),
-        field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/… ou media/showreel/showreel.mp4', spell: false }), 'Avec un fichier MP4 du site, le showreel se joue en points sur tout l’écran de l’accueil, dans les couleurs de la vidéo, avec une barre de lecture ; depuis la 3D, le bouton Showreel ramène à l’accueil et le lance. Avec un lien YouTube ou Vimeo, il s’ouvre dans une fenêtre par-dessus le site. Le son est coupé au départ. Laisse vide pour retirer le bouton.'),
+        field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/… ou media/showreel/showreel.mp4', spell: false }), 'YouTube, Vimeo ou fichier MP4 du site. Le bouton Showreel joue la vidéo sur tout le fond de l’accueil, sous une grille fine, avec une barre de lecture ; depuis la 3D, il ramène à l’accueil et la lance. Le son est coupé au départ. Un fichier MP4 n’affiche aucun logo ; YouTube montre parfois son titre au démarrage. Laisse vide pour retirer le bouton.'),
         h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '-6px' } },
           btn('Choisir le fichier MP4…', () => filePicker('video/mp4,video/webm,.mp4,.webm', false, async files => {
             if (!files[0]) return;
