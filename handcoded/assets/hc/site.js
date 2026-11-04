@@ -447,7 +447,23 @@ async function skillCard(post, w, h) {
   };
   const backBase = ctx => { ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); if (bd) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(0, 0, w, h); } titleOnly(ctx, 0.38); };
   const backHi = ctx => { const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, 'rgba(0,0,0,.7)'); g.addColorStop(1, 'rgba(0,0,0,.3)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); titleOnly(ctx, 1); };
+  /* téléphone : une couverture de magazine. La photo en plein cadre, le nombre de projets en haut,
+     le nom en italique en bas, et sa phrase en petit dessous. */
+  const cover = ctx => {
+    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+    if (bd) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(0, 0, w, h); }
+    const g = ctx.createLinearGradient(0, h * 0.3, 0, h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.82)'); ctx.fillStyle = g; ctx.fillRect(0, h * 0.3, w, h * 0.7);
+    const pad = Math.round(w * 0.07), tw2 = w - 2 * pad, n = relProjects(post).length;
+    ctx.textBaseline = 'top'; ctx.fillStyle = '#fff';
+    if (n) { ctx.font = `600 ${fz(11)}px ${UIF}`; ctx.fillText(`${n} ${ui('nProjects')}`.toUpperCase(), pad, pad); }
+    const sub = tr(post.subtitle).trim(); ctx.font = `${fz(11.5)}px ${UIF}`; const subL = sub ? wrapLines(ctx, sub, tw2).slice(0, 2) : [];
+    let y = h - pad - subL.length * fz(14);
+    subL.forEach((l, i) => ctx.fillText(l, pad, y + i * fz(14)));
+    ctx.font = IT(fz(26)); const tl2 = wrapLines(ctx, title, tw2).slice(0, 2); y -= (subL.length ? fz(6) : 0) + tl2.length * fz(25);
+    tl2.forEach((l, i) => ctx.fillText(l, pad, y + i * fz(25)));
+  };
   const draw = faint => ctx => {
+    if (ph && !faint) { cover(ctx); return; }
     ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
     if (bd && ph && !faint) veil(ctx, bd, w, h, 0.6);
     if (bd && !ph) drawCover(ctx, bd.im, w - iw, 0, iw, h);
@@ -1393,7 +1409,7 @@ function peekCategories(delay = 0.7) {
   catPeekTimer = setTimeout(() => {
     if (!homeGone || P.postOpen || cats.classList.contains('hidden')) return;
     catBox.classList.add('open'); catOpen.setAttribute('aria-expanded', 'true');
-    catPeekTimer = setTimeout(() => { catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }, 2600);
+    catPeekTimer = setTimeout(() => { catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }, 1300);
   }, delay * 1000);
 }
 catBox.addEventListener('pointerenter', () => clearTimeout(catPeekTimer));   // la souris dessus : il reste ouvert
@@ -2063,7 +2079,7 @@ function openPost() {
   hoverCard(null); hoverBackCard(null);
   checkPostOpenAndClose();
   P.postOpen = true;
-  if (P.section.def.open === 'strip' && verticalFiche()) {   // téléphone : la fiche se lit de haut en bas
+  if ((P.section.def.open === 'strip' || P.section.def.open === 'focus3d') && verticalFiche()) {   // téléphone : la fiche (projet, savoir-faire, personne) se lit de haut en bas
     postV.build(P.data.posts[P.selected], P.section.def.card);
     cats.classList.add('hidden');
     isClicking = false; canvas.classList.remove('dragging');
@@ -2357,7 +2373,11 @@ function setupHomeVideo() {
   }
   buildHomeDock(cfg.controls !== false);
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
-  if (reelPlayable() && isHomeHash() && !/[?&]p=/.test(location.search) && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) hvReelStart(true);
+  /* il attend que la 3D ait fini de se charger : lancé en même temps, le lecteur faisait ramer l'accueil les premières secondes */
+  if (reelPlayable() && isHomeHash() && !/[?&]p=/.test(location.search) && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) {
+    const t0 = performance.now(), go = () => { if (!homeGone && !hv.reelOn && !hv.cam && !hv.userReel && isHomeHash()) hvReelStart(true); };
+    const wait = setInterval(() => { if (assetsLoaded || performance.now() - t0 > 6000) { clearInterval(wait); setTimeout(go, 500); } }, 150);
+  }
   const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
   hvSize();
 }
@@ -2374,6 +2394,7 @@ function buildHomeDock(withKeys) {
   const src = camOK ? `<div id="hv-src" class="seg" role="group"><button type="button" data-src="video" aria-pressed="true"></button><button type="button" data-src="cam" aria-pressed="false"></button></div>` : '';
   const dock = document.createElement('div'); dock.id = 'home-dock';
   dock.innerHTML = `<span class="hv-note" role="status" hidden></span>
+    <input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done" hidden>
     <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>
     ${withKeys ? '' : src}
     <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>`;
@@ -2388,6 +2409,7 @@ function buildHomeDock(withKeys) {
   ctl.querySelector('#home-reel').addEventListener('click', () => { if (hv.reelOn) hvReelStop(); else showreelClick(); });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   dock.querySelector('#hv-shot').addEventListener('click', hvPhoto);
+  dock.querySelector('#hv-words').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
   dock.querySelector('#story-btn').addEventListener('click', () => toggleStory());
   buildStory(); dockLabels();
 }
@@ -2396,6 +2418,7 @@ function dockLabels() {
   const cam = !!(hv && hv.cam);
   document.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.textContent = ui(b.dataset.src === 'cam' ? 'hv_cam' : 'hv_video'); });
   const src = document.getElementById('hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
+  const words = dock.querySelector('#hv-words'); words.hidden = !cam; words.placeholder = ui('hv_words'); words.setAttribute('aria-label', ui('hv_words'));
   const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
@@ -2431,8 +2454,7 @@ async function hvPhoto() {
   ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 330);
   const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
   ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
-  const tagline = ((CONTENT.settings.taglines || {})[LANG] || (CONTENT.settings.taglines || {}).en || []).join(' ');
-  const slogan = (tagline || 'Hand Coded.').toUpperCase();
+  const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur ; sans texte, la photo n'a que la signature
   const grotesk = getComputedStyle(document.documentElement).getPropertyValue('--grotesk').trim() || 'sans-serif';
   const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
   const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
@@ -2446,12 +2468,12 @@ async function hvPhoto() {
   ctx.textBaseline = 'top';
   const tw = W - 2 * mx; let size = 104, lines = [];
   for (; size >= 40; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
-  lines = lines.slice(0, 4);
+  lines = slogan ? lines.slice(0, 4) : [];
   const lh = Math.round(size * 1.05), urlY = H - 96, y0 = urlY - 44 - lines.length * lh;
-  ctx.fillStyle = accent(); ctx.fillRect(mx, y0 - 38, 54, 7);
+  ctx.fillStyle = accent(); if (lines.length) ctx.fillRect(mx, y0 - 38, 54, 7);
   ctx.fillStyle = '#fff'; ctx.font = `bold ${size}px ${grotesk}`;
   lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, y0 + i * lh));
-  ctx.fillStyle = '#8f8f8f'; ctx.font = `28px ${grotesk}`; ctx.fillText((location.host + location.pathname).replace(/\/(index\.html)?$/, '').replace(/^www\./, ''), mx, urlY);
+  ctx.fillStyle = '#8f8f8f'; ctx.font = `28px ${grotesk}`; ctx.fillText('hand-coded.net', mx, urlY);
   const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
   countView('photo-souvenir', 'Photo souvenir', true);
   const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';
@@ -2534,6 +2556,7 @@ function buildHvPanel(home, src, host = home) {
   panel.querySelectorAll('.tgl').forEach(b => b.addEventListener('click', () => act(b.dataset.a)));
   window.addEventListener('keydown', e => {
     if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
+    if (e.target && e.target.id === 'hv-words') return;   // on tape le texte de la photo
     if (e.code === 'Escape' && panel.classList.contains('open')) { setOpen(false); toggle.focus({ preventScroll: true }); return; }
     if (e.code === 'Escape' && hv.reelOn) { hvReelStop(); return; }
     const k = { KeyK: 'panel', KeyC: 'color', KeyI: 'invert', KeyV: 'cam' }[e.code]; if (!k) return;
@@ -2601,12 +2624,25 @@ function makeReelPlayer(kind, src) {
     const post = m => { try { f.contentWindow.postMessage(JSON.stringify(m), '*'); } catch (e) {} };
     const cmd = yt ? (func, args = []) => post({ event: 'command', func, args }) : (method, value) => post(value === undefined ? { method } : { method, value });
     f.addEventListener('load', () => { if (yt) post({ event: 'listening', id: 'hvreel', channel: 'widget' }); });
+    /* YouTube pose son titre et la photo de la chaîne sur les premières secondes, et à chaque pause :
+       le lecteur reste caché (les carrés continuent dessous) jusqu'à ce que cet habillage soit parti */
+    rp.showAt = yt ? 3.2 : 0.4; box.classList.add('wait');
     Object.assign(rp, { el: f, post,
-      play: () => { rp.paused = false; cmd(yt ? 'playVideo' : 'play'); hvReelBar(); },
-      pause: () => { rp.paused = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelBar(); },
+      play: () => { rp.paused = false; rp.showAt = rp.t + (yt ? 2.6 : 0.3); cmd(yt ? 'playVideo' : 'play'); hvReelVeil(); hvReelBar(); },
+      pause: () => { rp.paused = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelVeil(); hvReelBar(); },
       mute: m => { if (yt) { cmd(m ? 'mute' : 'unMute'); if (!m) cmd('setVolume', [100]); } else { cmd('setMuted', m); if (!m) cmd('setVolume', 1); } },
       seek: x => { if (yt) cmd('seekTo', [x, true]); else cmd('setCurrentTime', x); rp.t = x; hvReelBar(); } });
   }
+  return finishReel(rp, box);
+}
+function hvReelVeil() {   // le lecteur YouTube / Vimeo apparaît quand son habillage a disparu ; d'ici là, les carrés de l'accueil restent visibles
+  const rp = hv && hv.rp; if (!rp || rp.kind === 'video') return;
+  const show = hv.reelOn && !rp.paused && rp.t >= (rp.showAt || 0);
+  if (show === !!rp.shown) return; rp.shown = show;
+  rp.box.classList.toggle('wait', !show);
+  if (hv.video && !homeGone && !hv.frozen) { if (show) hv.video.pause(); else if (hv.reelOn) hv.video.play().catch(() => {}); }
+}
+function finishReel(rp, box) {
   const grid = document.createElement('div'); grid.className = 'grid';
   box.append(rp.el, grid);
   return rp;
@@ -2627,7 +2663,7 @@ window.addEventListener('message', e => {
     else if (d.event === 'pause') rp.paused = true;
     else if (d.event === 'ended' && hv.reelOn) { hvReelStop(); return; }
   }
-  hvReelBar();
+  hvReelBar(); hvReelVeil();
 });
 function hvReelFit() {   // la vidéo couvre l'écran ; sur un écran en hauteur, elle s'y tient entière
   const rp = hv && hv.rp; if (!rp) return;
@@ -2638,6 +2674,7 @@ function hvReelFit() {   // la vidéo couvre l'écran ; sur un écran en hauteur
 }
 function hvReelStart(auto = false) {
   if (!hv || !reelPlayable()) return false;
+  if (!auto) hv.userReel = true;
   if (hv.reelOn) return true;
   if (hv.setOpen) hv.setOpen(false);
   if (hv.cam) hvCamOff();
@@ -2650,14 +2687,14 @@ function hvReelStart(auto = false) {
     if (reel.kind === 'video') hv.rp.play();
   } else { hv.rp.seek(0); hv.rp.play(); hv.rp.mute(!hv.sound); }
   hv.reelOn = true; hv.rp.box.hidden = false;
-  if (hv.video) hv.video.pause();
+  if (hv.rp.kind === 'video') { if (hv.video) hv.video.pause(); } else { hv.rp.shown = true; hvReelVeil(); }   // YouTube / Vimeo : les carrés jouent jusqu'à ce que le lecteur soit propre
   home.classList.add('reel-on'); hvReelFit(); hvReelBar(); hvLabels();
   if (!auto) countView('showreel', 'Showreel', true);
   return true;
 }
 function hvReelStop() {
   if (!hv || !hv.reelOn) return;
-  hv.reelOn = false; hv.rp.pause(); hv.rp.box.hidden = true; hv.fresh = true;
+  hv.reelOn = false; hv.rp.pause(); hv.rp.box.hidden = true; hv.fresh = true; hv.rp.shown = false; if (hv.rp.kind !== 'video') hv.rp.box.classList.add('wait');
   if (hv.video && !homeGone && !hv.frozen) { hv.video.muted = !hv.sound; hv.video.play().catch(() => {}); }
   home.classList.remove('reel-on'); hvReelBar(); hvLabels();
 }

@@ -78,8 +78,8 @@ button { font: inherit; }
 .row .lbl { margin: 0 3px; }
 
 /* Grands écrans : le clavier avait été dessiné pour les écrans d'avant, on l'agrandit depuis son coin */
-@media (min-width: 701px) and (min-height: 521px) { #kb { transform: scale(1.4); transform-origin: 100% 100%; } }
-@media (min-width: 1200px) and (min-height: 760px) { #kb { transform: scale(1.7); } }
+@media (min-width: 701px) and (min-height: 521px) { #kb { transform: scale(1.25); transform-origin: 100% 100%; } }
+@media (min-width: 1200px) and (min-height: 760px) { #kb { transform: scale(1.5); } }
 
 /* Fiches 2D */
 #whiteboard { position: fixed; inset: 0; background: rgba(255,255,255,.6); z-index: 3; cursor: pointer; }
@@ -716,3 +716,16 @@ html.neg #postv .pv-cover .play::after { border-left-color: var(--accent-raw, #f
 html.neg #postv .pv-lgrid img.raw { filter: grayscale(1) invert(1) brightness(1.6); }
 html.neg #postv .pv-face img { filter: invert(1) grayscale(1); }
 body.pv-open #kb, body.pv-open #menu, body.pv-open #langs { visibility: hidden; }
+
+/* Accueil : la signature en blanc */
+#home #home-band .sl, #home #home-band .sl span { color: #fff; }
+/* Showreel YouTube / Vimeo : caché tant que le lecteur montre son habillage (titre, chaîne) ; les carrés restent visibles dessous */
+#hv-rv > iframe { transition: opacity .7s ease; }
+#hv-rv.wait { background: transparent; }
+#hv-rv.wait > iframe, #hv-rv.wait .grid { opacity: 0; }
+/* Photo souvenir : le texte du visiteur */
+#home-dock > #hv-words { position: absolute; right: 0; bottom: 54px; height: 34px; width: 300px; max-width: calc(100vw - 40px); box-sizing: border-box; border: 1px solid #444; padding: 0 10px; background: rgba(20,20,20,.85); color: #fff; font: 13px/32px var(--ui); border-radius: 0; outline: none; }
+#home-dock > #hv-words::placeholder { color: #9a9a9a; }
+#home-dock > #hv-words:focus { border-color: var(--accent); }
+@media (max-width: 700px) { #home-dock > #hv-words { font-size: 16px; } }   /* 16 px : iOS ne zoome pas la page en tapant */
+#home-dock:has(#hv-words:not([hidden])) .hv-note { bottom: 96px; }   /* le texte de la photo au-dessus des boutons, la note encore au-dessus */
