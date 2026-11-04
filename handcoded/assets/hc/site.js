@@ -1279,7 +1279,7 @@ const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, i
 function drawLogos() {
   const s = CONTENT.settings, accent = s.accent || '#ffcc00';
   const logo = s.logo ? url(s.logo) : ringLogo(negMode ? '#ffffff' : accent, negMode);   // en négatif, l'image est pré-inversée : la page inversée la remet à l'endroit
-  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = id === 'home-logo' && !s.logo ? ringLogo(accent, false) : logo; el.classList.toggle('raw', !s.logo); } });   // l'accueil reste sombre : son logo ne s'inverse jamais
+  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = id === 'home-logo' && !s.logo ? ringLogo('#ffffff', false) : logo; el.classList.toggle('raw', !s.logo); } });   // l'accueil reste sombre : il prend toujours le logo de nuit, anneau blanc, ombre jaune
   setFavicon(s.logo ? logo : (negMode ? ringLogo(accent) : logo));
 }
 function setFavicon(href) {
@@ -1509,16 +1509,65 @@ const post2D = {
   addGallery(list) {
     const isImg = m => mediaKind(m.src) === 'image';
     if (list.filter(isImg).length < 3) { list.forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption)); return; }
-    const RHYTHM = ['mat', 'grid', 'bleed', 'bleed'];
-    let i = 0, k = 0;
+    /* Dix mises en page qui alternent fond blanc et fond noir. Chaque projet entre dans le cycle à un endroit différent,
+       pour que deux fiches voisines ne se ressemblent pas. Une mise en page qui demande plus d'images qu'il n'en reste devient une image pleine. */
+    const CYCLE = ['mat', 'big2', 'bleed', 'collage', 'strip', 'bleed', 'duo', 'grid', 'offset', 'bleed', 'detail', 'bleed'];
+    const NEED = { duo: 2, big2: 3, collage: 3, strip: 3, grid: 4 };
+    const id = String(this.post && this.post.id || ''); let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    let k = h % CYCLE.length; if (CYCLE[k] === 'bleed') k++;
+    let i = 0;
     while (i < list.length) {
       const m = list[i];
       if (!isImg(m)) { this.addMedia(m.src, 355, m.credit, true, m.caption); i++; continue; }
-      let mode = RHYTHM[k++ % RHYTHM.length];
-      if (mode === 'grid') { const four = list.slice(i, i + 4); if (four.length === 4 && four.every(isImg)) { this.addGrid(four); i += 4; continue; } mode = 'mat'; }
-      if (mode === 'mat') this.addMat(m); else this.addMedia(m.src, 355, m.credit, true, m.caption);
-      i++;
+      const mode = CYCLE[k++ % CYCLE.length], n = NEED[mode] || 1, run = list.slice(i, i + n);
+      if (n > 1 && !(run.length === n && run.every(isImg))) { this.addMedia(m.src, 355, m.credit, true, m.caption); i++; continue; }
+      if (mode === 'mat') this.addMat(m);
+      else if (mode === 'grid') this.addGrid(run);
+      else if (mode === 'duo') this.addDuo(run);
+      else if (mode === 'big2') this.addBig2(run);
+      else if (mode === 'collage') this.addCollage(run);
+      else if (mode === 'strip') this.addFilm(run);
+      else if (mode === 'offset') this.addOffset(m);
+      else if (mode === 'detail') this.addDetail(m);
+      else this.addMedia(m.src, 355, m.credit, true, m.caption);
+      i += n;
     }
+  },
+  addComp(cls, w, items, cap = '') {   // une planche : des images recadrées, posées à la main, et une légende éventuelle
+    const img = ([m, x, y, iw, ih, st = '']) => `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" style="left:${Math.round(x)}px;top:${Math.round(y)}px;width:${Math.round(iw)}px;height:${Math.round(ih)}px;${st}">`;
+    const el = this.addPanel('media comp ' + cls, Math.round(w), items.map(img).join('') + cap);
+    el.querySelectorAll('img').forEach(im => im.addEventListener('error', () => { im.style.visibility = 'hidden'; }));
+    return el;
+  },
+  capOf(list) { const m = list.find(x => x.caption && tr(x.caption).trim()); return m ? tr(m.caption).trim() : ''; },
+  addDuo(two) {   // deux images en vis-à-vis sur blanc, comme une double page
+    const M = 46, g = 14, ih = 355 - 2 * M, iw = Math.round(ih * .76);
+    this.addComp('wht duo', 2 * iw + g + 2 * M, two.map((m, j) => [m, M + j * (iw + g), M, iw, ih]));
+  },
+  addBig2(three) {   // une grande image et deux petites empilées à côté, sur noir
+    const M = Math.max(16, Math.min(34, ficheM().top)), g = 8, H = 355 - 2 * M, W = Math.round(H * 1.3), sh = (H - g) / 2, sw = Math.round(sh * 1.25);
+    this.addComp('big2', W + g + sw + 2 * M, [[three[0], M, M, W, H], [three[1], M + W + g, M, sw, sh], [three[2], M + W + g, M + sh + g, sw, sh]]);
+  },
+  addCollage(three) {   // trois tailles, décalées, sur blanc : une verticale, une horizontale, un petit carré, la légende à côté du carré
+    const cap = this.capOf(three);
+    this.addComp('wht collage', 500, [[three[0], 46, 46, 180, 240], [three[1], 250, 30, 204, 136], [three[2], 250, 190, 118, 118]],
+      cap ? `<p class="mcap2" style="left:382px;top:192px;width:90px">${escapeHTML(cap)}</p>` : '');
+  },
+  addFilm(three) {   // trois bandes larges empilées, comme des photogrammes
+    const M = Math.max(16, Math.min(34, ficheM().top)), g = 6, fh = (355 - 2 * M - 2 * g) / 3, fw = Math.round(fh * 3.1);
+    this.addComp('film', fw + 2 * M, three.map((m, j) => [m, M, M + j * (fh + g), fw, fh]));
+  },
+  addOffset(m) {   // une petite image posée en bas, beaucoup de blanc autour, la légende en haut à droite : une respiration
+    const M = 46, ih = 170, cap = m.caption ? tr(m.caption).trim() : '';
+    const el = this.addComp('wht offset', 420, [[m, M, 355 - M - ih, Math.round(ih * 1.4), ih, 'object-fit:contain;object-position:left bottom']],
+      cap ? `<p class="mcap2" style="right:${M}px;top:${M}px;width:130px;text-align:right">${escapeHTML(cap)}</p>` : '');
+    const im = el.querySelector('img');
+    const fit = () => { if (!im.naturalWidth) return; const w = Math.round(im.naturalWidth * ih / im.naturalHeight); im.style.width = w + 'px'; el.style.width = Math.max(360, w + 2 * M + 150) + 'px'; this.layout(); };
+    im.addEventListener('load', fit); if (im.complete) fit();
+  },
+  addDetail(m) {   // un carré plein cadre : l'image recadrée sur une zone, sans agrandir
+    const pos = ['30% 40%', '65% 45%', '50% 60%', '40% 50%'][this.panels.length % 4];
+    this.addComp('detail', 355, [[m, 0, 0, 355, 355, `object-position:${pos}`]]);
   },
   addMat(m) {   // marie-louise : l'image sur fond blanc, avec une marge égale tout autour ; la légende dans la marge du bas
     const M = 46, cap = m.caption ? tr(m.caption).trim() : '', ih = 355 - 2 * M;

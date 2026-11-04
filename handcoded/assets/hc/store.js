@@ -444,12 +444,14 @@ export function typoFontLoads(settings) {   // pour document.fonts.load avant de
 export function ringLogoURL(ring, settings, invert = false) {   // invert : dessiné pré-inversé pour la page en négatif (aucun filtre CSS sur le logo)
   const r = typoOf(settings, 'logo'), c = document.createElement('canvas'); c.width = c.height = 240; const x = c.getContext('2d');
   x.fillStyle = ring; x.beginPath(); x.arc(120, 120, 112, 0, Math.PI * 2); x.fill();
-  x.fillStyle = '#111'; x.beginPath(); x.arc(120, 120, 88, 0, Math.PI * 2); x.fill();
+  x.fillStyle = '#111'; x.beginPath(); x.arc(120, 120, 106, 0, Math.PI * 2); x.fill();   // un anneau fin, le disque noir, le texte blanc qui le remplit presque
   const text = String(r.text ?? 'hc').slice(0, 4);
   x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
-  x.font = `${r.italic ? 'italic ' : ''}${r.weight || 400} ${Math.max(8, +r.size || 38) * 2}px ${r.css}`;
-  const m = x.measureText(text), hgt = (m.actualBoundingBoxAscent || r.size * 1.4) - (m.actualBoundingBoxDescent || 0);
-  x.fillText(text, 120, 120 + hgt / 2);
+  const font = px => `${r.italic ? 'italic ' : ''}${r.weight || 400} ${px}px ${r.css}`;
+  let px = Math.max(8, +r.size || 38) * 2; x.font = font(px);
+  const w0 = x.measureText(text).width; if (w0 > 172) { px = Math.floor(px * 172 / w0); x.font = font(px); }   // jamais plus large que le disque
+  const m = x.measureText(text), hgt = (m.actualBoundingBoxAscent || px * .7) - (m.actualBoundingBoxDescent || 0);
+  x.fillText(text, 120 + ((m.actualBoundingBoxLeft ?? m.width / 2) - (m.actualBoundingBoxRight ?? m.width / 2)) / 2, 120 + hgt / 2 - 4);
   if (invert) { const d = x.getImageData(0, 0, 240, 240), px = d.data; for (let i = 0; i < px.length; i += 4) { px[i] = 255 - px[i]; px[i + 1] = 255 - px[i + 1]; px[i + 2] = 255 - px[i + 2]; } x.putImageData(d, 0, 0); }
   return c.toDataURL('image/png');
 }

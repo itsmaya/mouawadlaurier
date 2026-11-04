@@ -77,6 +77,10 @@ button { font: inherit; }
 .row { display: flex; gap: 2px; align-items: center; }
 .row .lbl { margin: 0 3px; }
 
+/* Grands écrans : le clavier avait été dessiné pour les écrans d'avant, on l'agrandit depuis son coin */
+@media (min-width: 701px) and (min-height: 521px) { #kb { transform: scale(1.4); transform-origin: 100% 100%; } }
+@media (min-width: 1200px) and (min-height: 760px) { #kb { transform: scale(1.7); } }
+
 /* Fiches 2D */
 #whiteboard { position: fixed; inset: 0; background: rgba(255,255,255,.6); z-index: 3; cursor: pointer; }
 #post2d { position: fixed; left: 20px; top: 150px; right: 0; height: 400px; z-index: 4; transform-origin: 0 0; transition: opacity .8s; cursor: url("ui/hand-open.svg") 8 8, grab; }
@@ -199,9 +203,11 @@ html.neg #strip img, html.neg #strip video, html.neg .face img { filter: invert(
 html body { transition: filter .45s ease; }
 /* Survol du logo : ombre noire nette sur fond blanc ; en négatif, un croissant jaune (la couleur d'accent) derrière le logo */
 #logo.toggle, #home-logo.toggle { pointer-events: auto; cursor: pointer; border-radius: 50%; transition: filter .22s cubic-bezier(.17,.84,.44,1); filter: drop-shadow(0 0 0 transparent); }
-#logo.toggle:hover, #logo.toggle:focus-visible, #home-logo.toggle:hover, #home-logo.toggle:focus-visible { filter: drop-shadow(7px 6px 0 #000); }
-html.neg #logo.toggle, html.neg #home-logo.toggle { filter: drop-shadow(0 0 0 transparent); }
-html.neg #logo.toggle:hover, html.neg #logo.toggle:focus-visible, html.neg #home-logo.toggle:hover, html.neg #home-logo.toggle:focus-visible { filter: drop-shadow(7px 6px 0 var(--accent-inv, #0033ff)); }
+/* Au survol, le disque projette son ombre décalée : noire le jour, jaune la nuit (comme les maquettes de Maya). L'accueil est toujours de nuit. */
+#logo.toggle:hover, #logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 #000); }
+html.neg #logo.toggle { filter: drop-shadow(0 0 0 transparent); }
+html.neg #logo.toggle:hover, html.neg #logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent-inv, #0033ff)); }
+#home-logo.toggle:hover, #home-logo.toggle:focus-visible, html.neg #home-logo.toggle:hover, html.neg #home-logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent)); }
 #logo.toggle:focus-visible, #home-logo.toggle:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 4px; }
 html:not(.neg) #home-logo.toggle:hover, html:not(.neg) #home-logo.toggle:focus-visible { filter: drop-shadow(4px 3px 0 #5c5c5c); }   /* sur la bande noire, l'ombre noire ne se verrait pas */
 
@@ -616,6 +622,12 @@ html:not(.neg) .face.on img { filter: brightness(1.12); }
 .pnl.mat .in img, .pnl.grid4 .in img { position: absolute; display: block; width: auto; object-fit: cover; user-select: none; -webkit-user-drag: none; }
 .pnl.mat .mcap2 { position: absolute; margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 13px; line-height: 15px; color: #111; }
 .pnl.grid4 .bgx { background: var(--panel); }
+/* Planches d'images : blanc ou noir, images recadrées posées à la main */
+.pnl.comp .in { overflow: hidden; }
+.pnl.comp .in img { position: absolute; display: block; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+.pnl.comp .bgx { background: var(--panel); }
+.pnl.comp.wht .bgx { background: #fff; }
+.pnl.comp .mcap2 { position: absolute; margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 13px; line-height: 15px; color: #111; }
 
 /* Partenaires : logos en blanc, grille à filets fins (les filets ne touchent pas les bords de la fiche) */
 .pnl.logos .lbl { position: absolute; margin: 0; font-family: var(--f-h3, var(--serif)); font-style: var(--st-h3, italic); font-weight: 400; font-size: 20px; line-height: 22px; color: #fff; }
