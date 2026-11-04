@@ -1304,7 +1304,7 @@ function renderTexts() {
     if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
     else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
   });
-  const off = document.getElementById('offices'); off.innerHTML = '';
+  const off = document.getElementById('offices') || document.createElement('div'); off.innerHTML = '';   // les bureaux ne sont plus sur l'accueil (section Contact)
   (s.offices || []).forEach(o => {
     const el = document.createElement('section');
     el.innerHTML = `<h3>${escapeHTML(tr(o.name))}</h3>${(o.lines || []).map(l => `<p>${escapeHTML(l)}</p>`).join('')}${o.mail ? `<p><a href="mailto:${escapeHTML(o.mail)}">${escapeHTML(o.mail)}</a></p>` : ''}`;
@@ -1449,11 +1449,7 @@ const post2D = {
     const fm = ficheM(), txt = this.panels[this.panels.length - 1], inSkill = P.section.def.skills && txt && txt.classList.contains('txt');
     const padL = inSkill ? Math.max(12, fm.gutter - fm.side) : fm.side, W = Math.max(200, Math.min(300, fm.col)) + padL + fm.side;
     const head = `<h2 class="ttl" style="left:${padL}px;right:${fm.side}px;top:${fm.top}px">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n" style="left:${padL}px;bottom:${fm.bottom}px">${projects.length}</span>`;
-    if (inSkill) {   // savoir-faire : l'en-tête des projets rejoint le bloc de la description, comme une colonne de plus
-      const w0 = txt.offsetWidth || parseFloat(txt.style.width) || 0;
-      txt.style.width = (w0 + W) + 'px';
-      txt.querySelector('.in').insertAdjacentHTML('beforeend', `<div class="relh relh-in" style="left:${w0}px;width:${W}px">${head}</div>`);
-    } else this.addPanel('relh', W, head);
+    if (!inSkill) this.addPanel('relh', W, head);   // savoir-faire : l'en-tête est déjà dans la cartouche (moitié basse)
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
       const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
@@ -1551,18 +1547,36 @@ const post2D = {
       const metaHTML = `<div class="fecha">${fecha}</div>${posted ? `<div class="posted">${posted}</div>` : ''}${sklLine ? `<div class="posted skl-tags">${sklLine}</div>` : ''}`;
       measure.innerHTML = `<div class="meta" style="position:static">${metaHTML}</div>`;
       const mH = measure.firstChild.offsetHeight, metaBottom = low - 13, metaTop = metaBottom - mH;
+      /* savoir-faire : la cartouche se partage en deux, la description en haut, ses projets en bas (un filet, le libellé, leur nombre, la flèche vers les vignettes) */
+      const relN = P.section.def.skills ? relProjects(post).length : 0;
+      let relHTML = '', relH = 0;
+      if (relN) {
+        relHTML = `<span class="lbl">${escapeHTML(ui(projectsOf(CONTENT, post).length ? 'skillProjects' : 'together'))}</span><span class="row"><span class="n">${relN}</span><span class="arr" aria-hidden="true">→</span></span>`;
+        measure.innerHTML = `<div class="relp" style="position:static">${relHTML}</div>`; relH = measure.firstChild.offsetHeight;
+      }
+      const stackTop = relH ? metaTop - relH - 18 : metaTop;   // le haut de ce qui est posé en bas de la dernière colonne
       const sy = fm.top + tH + 6, top = fm.top + tH + sH + 20;
       const pages = paginate(html, colW, [low - top, low - fm.top], measure);   // pages pleines ; le bloc du bas se loge sur la dernière
       measure.innerHTML = `<div class="body" style="position:static">${pages[pages.length - 1]}</div>`;
-      const lastTop = pages.length === 1 ? top : fm.top;
-      if (pages[pages.length - 1] && lastTop + measure.firstChild.offsetHeight > metaTop - 12) {   // pas la place : la dernière page se recoupe
-        const tail = paginate(pages.pop(), colW, [metaTop - 12 - lastTop, metaTop - 12 - fm.top], measure);
+      let lastTop = pages.length === 1 ? top : fm.top;
+      if (pages[pages.length - 1] && lastTop + measure.firstChild.offsetHeight > stackTop - 12) {   // pas la place : la dernière page se recoupe
+        /* savoir-faire : la colonne reste pleine, la suite et le bloc des projets passent dans la colonne d'à côté */
+        const tail = paginate(pages.pop(), colW, relH ? [low - lastTop, stackTop - 12 - fm.top] : [stackTop - 12 - lastTop, stackTop - 12 - fm.top], measure);
         pages.push(...tail);
+        if (relH && tail.length === 1) pages.push('');
+      }
+      let relTop = 0;
+      if (relH) {   // au milieu de la cartouche si le texte le permet, sinon juste sous le texte
+        lastTop = pages.length === 1 ? top : fm.top;
+        measure.innerHTML = `<div class="body" style="position:static">${pages[pages.length - 1] || ''}</div>`;
+        const end = lastTop + (pages[pages.length - 1] ? measure.firstChild.offsetHeight : 0) + 18;
+        relTop = pages[pages.length - 1] ? Math.min(stackTop, Math.max(Math.round((fm.top + low) / 2) - 10, end)) : fm.top + 4;   // colonne à lui seul : en haut, à la hauteur du titre
       }
       pages.forEach((pg, i) => {
         const last = i === pages.length - 1, [x, rp] = pads(i, pages.length);
         this.addPanel('txt', x + colW + rp, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:${fm.top}px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : fm.top}px;width:${colW}px">${pg}</div>` +
+          (last && relH ? `<div class="relp" style="left:${x}px;top:${relTop}px;width:${colW}px">${relHTML}</div>` : '') +
           (last ? `<div class="meta" style="left:${x}px;top:${metaTop}px;width:${colW}px">${metaHTML}</div>` : ''));
       });
     } else {
@@ -1920,7 +1934,7 @@ function renderReel() {
     box.innerHTML = '<div class="scrim"></div><div class="scr"><div class="bar"><b>Showreel</b><a class="ext" target="_blank" rel="noopener"></a><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button></div><div class="vid"></div></div>';
     document.body.append(btn, box);
     reel = { btn, box, scr: box.querySelector('.scr'), vid: box.querySelector('.vid'), snd: box.querySelector('.snd'), x: box.querySelector('.x'), ext: box.querySelector('.ext'), src: null, kind: '', player: null, muted: true, open: false, last: null };
-    btn.addEventListener('click', () => openReel());
+    btn.addEventListener('click', () => showreelClick());
     reel.x.addEventListener('click', closeReel);
     box.querySelector('.scrim').addEventListener('click', closeReel);
     reel.snd.addEventListener('click', () => setReelMuted(!reel.muted));
@@ -2049,9 +2063,12 @@ function buildHomeDock(withKeys) {
     <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>
     ${withKeys ? '' : src}
     <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>
+    <button type="button" id="home-reel" aria-pressed="false" hidden><i aria-hidden="true"></i><span>Showreel</span></button>
     ${withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false">${ICON.faders}</button>` : ''}`;
   home.appendChild(dock);
   if (withKeys) buildHvPanel(home, src);
+  buildReelBar(home);
+  dock.querySelector('#home-reel').addEventListener('click', () => { if (hv.reelOn) hvReelStop(); else showreelClick(); });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   dock.querySelector('#hv-shot').addEventListener('click', hvPhoto);
   dock.querySelector('#story-btn').addEventListener('click', () => toggleStory());
@@ -2064,6 +2081,8 @@ function dockLabels() {
   const src = document.getElementById('hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
   const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
+  const rb = dock.querySelector('#home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
+  const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', 'Showreel');
 }
 let noteTimer = 0;
 function hvNote(text, ms) {
@@ -2190,7 +2209,7 @@ function buildHvPanel(home, src) {
   const act = a => {
     if (a === 'color') hv.color = HV_COLORS[(HV_COLORS.indexOf(hv.color) + 1) % HV_COLORS.length];
     else if (a === 'invert') hv.mode = hv.mode === 'light' ? 'dark' : 'light';
-    else if (a === 'sound') { if (!hv.video || hv.cam) return; hv.sound = !hv.sound; hv.video.muted = !hv.sound; hv.video.volume = 1; hv.video.play().catch(() => {}); }
+    else if (a === 'sound') { hvSound(!hv.sound); return; }
     else if (a === 'cam') { if (!document.getElementById('hv-src')) return; if (hv.cam) hvCamOff(); else hvCamOn(); }
     hvLabels();
   };
@@ -2199,6 +2218,7 @@ function buildHvPanel(home, src) {
   window.addEventListener('keydown', e => {
     if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
     if (e.code === 'Escape' && panel.classList.contains('open')) { setOpen(false); toggle.focus({ preventScroll: true }); return; }
+    if (e.code === 'Escape' && hv.reelOn) { hvReelStop(); return; }
     const k = { KeyK: 'panel', KeyC: 'color', KeyI: 'invert', KeyS: 'sound', KeyV: 'cam' }[e.code]; if (!k) return;
     e.preventDefault();
     if (k === 'panel') { setOpen(!panel.classList.contains('open')); return; }
@@ -2222,7 +2242,7 @@ function hvLabels() {
   P.querySelectorAll('[data-c]').forEach(b => { const on = b.dataset.c === hv.color; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui('hv_color') + ' ' + ui('hv_c_' + b.dataset.c)); });
   const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
   tg('invert', hv.mode === 'dark'); tg('sound', hv.sound && !hv.cam);
-  P.querySelector('.tgl[data-a="sound"]').disabled = !hv.video || !!hv.cam;
+  P.querySelector('.tgl[data-a="sound"]').disabled = !hvPlayer() || !!hv.cam;
   hvStat();
 }
 function hvStat() {
@@ -2230,11 +2250,80 @@ function hvStat() {
   const cell = Math.max(hv.cell, hv.floor);
   st.textContent = `${Math.ceil(hv.W / cell)}×${Math.ceil(hv.H / cell)} · ${Math.round(1000 / hv.interval)} FPS`;
 }
+/* ================================================================ Showreel en points
+   Un showreel en fichier MP4 (Réglages › Showreel) se joue sur le fond de l'accueil : la grille passe à sa finesse maximale et aux couleurs de la vidéo,
+   une barre de lecture apparaît. Depuis la 3D, le bouton Showreel ramène à l'accueil et lance la lecture. Un lien YouTube ou Vimeo garde sa fenêtre. */
+const hvPlayer = () => (hv ? (hv.reelOn ? hv.reelV : hv.video) : null);
+function hvSound(on) {
+  hv.sound = on; const v = hvPlayer();
+  if (v) { v.muted = !on; if (on) v.volume = 1; if (v.paused && !hv.frozen) v.play().catch(() => {}); }
+  hvLabels(); hvReelBar();
+}
+const reelFile = () => (reel && reel.src && reel.kind === 'video' ? reel.src : '');
+function showreelClick() {
+  if (reelFile() && hv) { if (homeGone) backToHome(); hvReelStart(); }
+  else openReel();
+}
+function hvReelStart() {
+  const src = reelFile(); if (!src || !hv) return false;
+  if (hv.reelOn) return true;
+  if (hv.cam) hvCamOff();
+  if (!hv.reelV || hv.reelSrc !== src) {
+    if (hv.reelV) hv.reelV.pause();
+    const v = document.createElement('video');
+    if (/^https?:/.test(src) && !src.startsWith(location.origin)) v.crossOrigin = 'anonymous';
+    Object.assign(v, { muted: true, playsInline: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
+    v.addEventListener('ended', () => hvReelStop());
+    ['timeupdate', 'play', 'pause', 'durationchange'].forEach(ev => v.addEventListener(ev, hvReelBar));
+    hv.reelV = v; hv.reelSrc = src;
+  }
+  hv.saved = { cell: hv.cell, color: hv.color, delay: hv.delay, mode: hv.mode, gamma: hv.gamma, fill: hv.fill };
+  Object.assign(hv, { cell: 6, color: 'source', delay: 1, mode: 'light', gamma: 1, fill: 0.96, reelOn: true, fresh: true, lo: 0, hi: 1 });   // finesse maximale, vraies couleurs
+  if (hv.video) hv.video.pause();
+  try { hv.reelV.currentTime = 0; } catch (e) {}
+  hv.reelV.muted = !hv.sound; hv.reelV.play().catch(() => {});
+  home.classList.add('reel-on'); hvReelBar(); hvLabels();
+  countView('showreel', 'Showreel', true);
+  return true;
+}
+function hvReelStop() {
+  if (!hv || !hv.reelOn) return;
+  hv.reelOn = false; hv.reelV.pause();
+  if (hv.saved) Object.assign(hv, hv.saved); hv.fresh = true; hv.lo = 0; hv.hi = 1;
+  if (hv.video && !homeGone && !hv.frozen) { hv.video.muted = !hv.sound; hv.video.play().catch(() => {}); }
+  home.classList.remove('reel-on'); hvReelBar(); hvLabels();
+}
+const PLAY_ICON = p => p ? '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>' : '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z" fill="currentColor"/></svg>';
+const mmss = x => { x = Math.max(0, Math.floor(x || 0)); return Math.floor(x / 60) + ':' + String(x % 60).padStart(2, '0'); };
+function buildReelBar(home) {
+  const bar = document.createElement('div'); bar.id = 'hv-reel'; bar.hidden = true; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Showreel');
+  bar.innerHTML = `<button type="button" class="pp"></button><div class="tl" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100"><i></i></div><span class="tm"></span><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button>`;
+  home.appendChild(bar); hv.reelBar = bar;
+  bar.querySelector('.pp').addEventListener('click', () => { const v = hv.reelV; if (!v) return; if (v.paused) v.play().catch(() => {}); else v.pause(); });
+  bar.querySelector('.snd').addEventListener('click', () => hvSound(!hv.sound));
+  bar.querySelector('.x').addEventListener('click', hvReelStop);
+  const tl = bar.querySelector('.tl');
+  const seek = f => { const v = hv.reelV; if (v && isFinite(v.duration)) { v.currentTime = Math.max(0, Math.min(1, f)) * v.duration; hv.fresh = true; } };
+  tl.addEventListener('pointerdown', e => { const r = tl.getBoundingClientRect(); seek((e.clientX - r.left) / r.width); });
+  tl.addEventListener('keydown', e => { const v = hv.reelV; if (!v) return; if (e.code === 'ArrowRight' || e.code === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); v.currentTime = Math.max(0, v.currentTime + (e.code === 'ArrowRight' ? 5 : -5)); hv.fresh = true; } });
+}
+function hvReelBar() {
+  const bar = hv && hv.reelBar; if (!bar) return;
+  bar.hidden = !hv.reelOn; dockLabels(); if (!hv.reelOn) return;
+  const v = hv.reelV, d = v && isFinite(v.duration) ? v.duration : 0, c = v ? v.currentTime : 0, paused = !v || v.paused;
+  const pp = bar.querySelector('.pp'); pp.innerHTML = PLAY_ICON(paused); pp.setAttribute('aria-label', ui(paused ? 'play' : 'pause'));
+  bar.querySelector('.tl i').style.width = (d ? c / d * 100 : 0).toFixed(2) + '%';
+  bar.querySelector('.tl').setAttribute('aria-valuenow', String(d ? Math.round(c / d * 100) : 0)); bar.querySelector('.tl').setAttribute('aria-label', 'Showreel');
+  bar.querySelector('.tm').textContent = `${mmss(c)} / ${mmss(d)}`;
+  const snd = bar.querySelector('.snd'); snd.innerHTML = SPEAKER(hv.sound); snd.setAttribute('aria-label', ui(hv.sound ? 'soundOff' : 'soundOn')); snd.setAttribute('aria-pressed', String(hv.sound));
+  bar.querySelector('.x').setAttribute('aria-label', ui('close'));
+}
 async function hvCamOn() {
   hvNote('');
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false });
     const v = document.createElement('video'); Object.assign(v, { muted: true, playsInline: true, autoplay: true, srcObject: stream }); v.setAttribute('playsinline', ''); await v.play().catch(() => {});
+    if (hv.reelOn) hvReelStop();
     hv.cam = { stream, video: v }; hv.lo = 0; hv.hi = 1;
     if (hv.video) hv.video.pause();
     hvNote(ui('hv_camNote'), 6000);
@@ -2242,12 +2331,12 @@ async function hvCamOn() {
   hvLabels();
 }
 function hvCamOff() {
-  if (hv && hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; if (hv.video) hv.video.play().catch(() => {}); hvNote(''); }
+  if (hv && hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; const v = hvPlayer(); if (v && !homeGone) v.play().catch(() => {}); hvNote(''); }
   if (hv) hvLabels();
 }
-function stopHomeVideo() { if (!hv) return; hvCamOff(); if (hv.video) hv.video.pause(); }
-function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false) {
-  const c = hv.rctx, cw = hv.raw.width, ch = hv.raw.height, s = Math.max(cw / sw, ch / sh) * zoom, w = sw * s, h = sh * s;
+function stopHomeVideo() { if (!hv) return; hvReelStop(); hvCamOff(); if (hv.video) hv.video.pause(); }
+function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false, fit = false) {   // fit : l'image entière, bandes noires autour
+  const c = hv.rctx, cw = hv.raw.width, ch = hv.raw.height, s = (fit ? Math.min(cw / sw, ch / sh) : Math.max(cw / sw, ch / sh)) * zoom, w = sw * s, h = sh * s;
   if (mirror) { c.save(); c.translate(cw, 0); c.scale(-1, 1); }
   c.drawImage(src, (cw - w) / 2 + dx * cw, (ch - h) / 2 + dy * ch, w, h);
   if (mirror) c.restore();
@@ -2255,6 +2344,7 @@ function hvCover(src, sw, sh, zoom = 1, dx = 0, dy = 0, mirror = false) {
 function hvSource(t) {
   const c = hv.rctx; c.globalAlpha = 1; c.fillStyle = '#000'; c.fillRect(0, 0, hv.raw.width, hv.raw.height);
   if (hv.cam && hv.cam.video.readyState >= 2) { hvCover(hv.cam.video, hv.cam.video.videoWidth, hv.cam.video.videoHeight, 1, 0, 0, true); return true; }
+  if (hv.reelOn && hv.reelV.readyState >= 2 && hv.reelV.videoWidth) { hvCover(hv.reelV, hv.reelV.videoWidth, hv.reelV.videoHeight, 1, 0, 0, false, true); return true; }   // le showreel en entier
   if (hv.video) { if (hv.video.readyState < 2) return false; hvCover(hv.video, hv.video.videoWidth, hv.video.videoHeight); return true; }
   const ok = hv.pics.filter(p => p.complete && p.naturalWidth); if (!ok.length) return false;
   const per = 7, k = Math.max(0, t) / per, n = ok.length, i = ((Math.floor(k) % n) + n) % n, f = k - Math.floor(k);
@@ -2300,47 +2390,85 @@ function hvComposite(cols, rows, cell) {
 }
 /* Coût mesuré à chaque image : sur un ordinateur lent, la grille grossit d'office et la cadence descend (30 → 24 → 20 images/s), puis remonte quand ça va mieux. */
 const HV_REDUCE = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
-const RGB = new Map();   // couleurs déjà écrites, pour ne pas reconstruire la chaîne à chaque carré
-const rgbStr = (r, g, b) => { const k = (r >> 3) << 10 | (g >> 3) << 5 | (b >> 3); let v = RGB.get(k); if (!v) { v = `rgb(${r & 248},${g & 248},${b & 248})`; RGB.set(k, v); } return v; };
 /* le delay ne s'applique que si l'ordinateur suit : dès que la machine peine, le mouvement redevient direct */
 const hvDelay = () => (hv.floor || hv.interval > 1000 / 29 ? 1 : hv.delay);
 function homeVideoStep(now) {
-  if (!hv || !hv.W || now - hv.last < hv.interval) return; hv.last = now;
+  if (!hv || !hv.W) return;
+  const ex = hv.exit ? now - hv.exit : -1;
+  if (ex > HV_EXIT) { if (!hv.cleared) { hv.cleared = true; hv.ctx.fillStyle = '#0b0b0b'; hv.ctx.fillRect(0, 0, hv.W, hv.H); } return; }   // tout est aspiré : plus rien à calculer, la 3D a la main
+  if (now - hv.last < (ex >= 0 ? 1000 / 60 : hv.interval)) return; hv.last = now;   // l'aspiration se dessine à 60 images/s : ce n'est plus que du dessin
   const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
-  const ctx = hv.ctx, W = hv.W, H = hv.H, cell = Math.max(hv.cell, hv.floor), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+  const ctx = hv.ctx, W = hv.W, H = hv.H;
   if (hv.panel && hv.panel.classList.contains('open') && now - (hv.statAt || 0) > 500) { hv.statAt = now; hvStat(); }
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
+  if (hv.intro && now < hv.intro) return;   // retour à l'accueil : le noir, le temps que la fenêtre remonte
+  const intro = hv.intro ? now - hv.intro : -1; if (intro > HV_INTRO) hv.intro = 0;
+  if (hv.frozen || (ex >= 0 && hv.frozenAt && now - hv.sampleAt < hv.interval)) {   // flux arrêté, ou image pas encore renouvelée : on redessine la dernière
+    const f = hv.frozenAt; if (!f) return;
+    if (hv.tainted) { if (ex < HV_EXIT / 3) hvComposite(f.cols, f.rows, f.cell); }
+    else hvSquares(f.d, f.cols, f.rows, f.cell, ex, -1);
+    return;
+  }
+  const cell = Math.max(hv.cell, hv.floor), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
   if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows; hv.fresh = true; }
   if (!hvSource(t)) return;
   /* delay : le lissage du site Fat-Man, valeur = valeur − (valeur − cible) / delay, sur chaque pixel de la grille */
   const dl = hvDelay(); hv.octx.globalAlpha = hv.fresh || dl <= 1 ? 1 : 1 / dl; hv.octx.drawImage(hv.raw, 0, 0); hv.octx.globalAlpha = 1; hv.fresh = false;
   let d = null;
   if (!hv.tainted) { try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) { hv.tainted = true; } }
-  if (hv.tainted) hvComposite(cols, rows, cell); else hvSquares(d, cols, rows, cell);
+  hv.frozenAt = { d, cols, rows, cell }; hv.sampleAt = now;
+  if (hv.tainted) hvComposite(cols, rows, cell);
+  else hvSquares(d, cols, rows, cell, ex, intro);
+  if (ex >= 0) return;   // pendant l'aspiration, on ne touche pas aux réglages de la machine
   /* adaptation à la machine */
   const cost = performance.now() - t0; hv.cost = hv.cost * 0.9 + cost * 0.1;
   if (hv.cost > 14 && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(40, Math.max(hv.floor, cell) + 2); }
   else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.panel) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
 }
-function hvSquares(d, cols, rows, cell) {
+/* Sortie de l'accueil : chaque carré rétrécit jusqu'à disparaître, avec le delay du site Fat-Man (taille = taille − taille / delay, à chaque image) :
+   très vite au début, puis il ralentit (ease out). Le delay suit la taille d'origine : les petits carrés partent presque tout de suite,
+   les gros (les lumières de l'image) tiennent un peu plus. Retour à l'accueil : la même courbe, les carrés regrandissent depuis rien.
+   Calculé sur le temps écoulé : même rythme à 30 ou à 120 images/s. */
+const HV_EXIT = 420, HV_INTRO = 650;
+const zeno = (delay, ms) => Math.pow(1 - 1 / delay, ms * 0.06);   // ce qui reste après ms millisecondes (60 images/s de référence)
+function hvSquares(d, cols, rows, cell, ex = -1, intro = -1) {
   const ctx = hv.ctx, n = cols * rows, lum = hv.lum && hv.lum.length === n ? hv.lum : (hv.lum = new Float32Array(n));
   let mn = 1, mx = 0;
   for (let i = 0, q = 0; i < n; i++, q += 4) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; lum[i] = l; if (l < mn) mn = l; if (l > mx) mx = l; }
   hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;   // contraste automatique, lissé dans le temps
   const lo = hv.lo, k = 1 / (hv.hi - lo), dark = hv.mode === 'dark', g = hv.gamma, max = cell * hv.fill;
   const ox = (hv.W - cols * cell) / 2, oy = (hv.H - rows * cell) / 2, useSrc = hv.color === 'source';
-  if (!useSrc) { ctx.fillStyle = hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2'; ctx.beginPath(); }
+  const anim = ex >= 0 || intro >= 0;
+  /* vraies couleurs : les carrés forment un masque, l'image agrandie (pixels nets) le remplit. Un seul tracé et deux copies, au lieu d'une couleur par carré. */
+  const m = useSrc ? hvMask(ctx) : ctx;
+  m.fillStyle = useSrc ? '#fff' : hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2'; m.beginPath();
   for (let y = 0, i = 0; y < rows; y++) {
     const cy = oy + y * cell + cell / 2;
     for (let x = 0; x < cols; x++, i++) {
       let l = (lum[i] - lo) * k; l = l < 0 ? 0 : l > 1 ? 1 : l; if (dark) l = 1 - l;
-      const sz = (g === 1 ? l : Math.pow(l, g)) * max; if (sz < 0.6) continue;
-      const px = ox + x * cell + (cell - sz) / 2, py = cy - sz / 2;
-      if (useSrc) { const q = i * 4; ctx.fillStyle = rgbStr(d[q], d[q + 1], d[q + 2]); ctx.fillRect(px, py, sz, sz); }
-      else ctx.rect(px, py, sz, sz);   // une seule forme pour toute la grille : un seul dessin
+      let sz = (g === 1 ? l : Math.pow(l, g)) * max; if (sz < 0.6) continue;
+      const cx = ox + x * cell + cell / 2, cyy = cy;
+      if (anim) {
+        const w = sz / max;   // 0 : petit carré, 1 : carré plein
+        if (ex >= 0) sz *= zeno(2.4 + 4.6 * w, ex);   // delay 2,4 pour les plus petits, 7 pour les carrés pleins
+        else sz *= 1 - zeno(3 + 4 * w, intro);
+        if (sz < 0.6) continue;
+      }
+      m.rect(cx - sz / 2, cyy - sz / 2, sz, sz);   // une seule forme pour toute la grille : un seul dessin
     }
   }
-  if (!useSrc) ctx.fill();
+  m.fill();
+  if (useSrc) {
+    m.globalCompositeOperation = 'source-in'; m.imageSmoothingEnabled = false; m.drawImage(hv.off, ox, oy, cols * cell, rows * cell); m.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(m.canvas, 0, 0); ctx.restore();
+  }
+}
+function hvMask(ctx) {   // calque de la taille du dessin en cours (écran ou photo souvenir)
+  const c = ctx.canvas;
+  if (!hv.mask) { hv.mask = document.createElement('canvas'); hv.mctx = hv.mask.getContext('2d'); }
+  if (hv.mask.width !== c.width || hv.mask.height !== c.height) { hv.mask.width = c.width; hv.mask.height = c.height; }
+  const m = hv.mctx; m.setTransform(1, 0, 0, 1, 0, 0); m.globalCompositeOperation = 'source-over'; m.clearRect(0, 0, c.width, c.height); m.setTransform(ctx.getTransform());
+  return m;
 }
 
 /* ================================================================ Home */
@@ -2429,12 +2557,31 @@ function drawTicker(dt) {   // le texte avance d'une colonne de points à la foi
 let homeGone = false, assetsLoaded = false, clickedEnter = false;
 const isHomeHash = () => /^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash || '');
 let homeTimer = 0, behindUntil = 0;   // la 3D derrière l'accueil ne se dessine que pendant les glissements
-function enterToTheWeb() {
+/* Entrer : 1. le flux s'arrête (vidéo, showreel, caméra) et les carrés de la dernière image rétrécissent ; ce n'est plus que du dessin, sans lecture de pixels ;
+   2. vers 180 ms, la 3D démarre, puis la fenêtre descend à l'image suivante (Quart.easeOut, 1,2 s, comme le site de 2008) ;
+   3. vers 420 ms, il ne reste plus un carré : l'accueil ne calcule plus rien. La vidéo et la 3D ne se calculent jamais en même temps. */
+let leaving = false;
+const HV_SLIDE_AT = 180;
+function enterToTheWeb(animate = clickedEnter) {
+  if (homeGone || leaving) return;
+  if (!(animate && hv && hv.W && !home.hidden && !HV_REDUCE.matches)) { goInside(); return; }
+  leaving = true; home.classList.add('leaving');
+  if (hv.setOpen) hv.setOpen(false);
+  hvFreeze(); hv.exit = performance.now(); hv.cleared = false; hv.intro = 0;
+  setTimeout(() => { leaving = false; goInside(); }, HV_SLIDE_AT);
+}
+function hvFreeze() {   // le flux s'arrête : vidéo, showreel et caméra
+  if (!hv) return; hv.frozen = true;
+  if (hv.video) hv.video.pause();
+  if (hv.reelV) hv.reelV.pause();
+  if (hv.cam) { hv.cam.stream.getTracks().forEach(t => t.stop()); hv.cam = null; }
+}
+function goInside() {
   if (homeGone) return;
   homeGone = true; clearTimeout(homeTimer); enteredAt = performance.now();
   if (!PREVIEW && isHomeHash()) try { history.pushState(null, '', location.pathname + location.search + '#' + ((CONTENT.sections.find(x => x.id === CONTENT.settings.startSection && x.visible) || SECTIONS[0].def).id)); } catch (e) {}   // le bouton Retour du navigateur ramène à l'accueil
-  home.classList.add('out'); homeTimer = setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1100);
-  startRender(); mainEntrance();
+  startRender(); mainEntrance();   // la 3D se prépare (compilation) pendant que la fenêtre est encore en place…
+  requestAnimationFrame(() => requestAnimationFrame(() => { home.classList.add('out'); homeTimer = setTimeout(() => { home.hidden = true; stopHomeVideo(); }, 1250); }));   // …puis elle descend, sans à-coup au départ
   sloganEl.classList.add('on');
   setTimeout(openMenu, 1500);
   kb.hidden = false; cats.classList.remove('hidden');
@@ -2446,6 +2593,8 @@ function backToHome(push = true) {
   checkPostOpenAndClose(); closeKeyboard(); closeCategory(); hideNetTip(); hoverCard(null); resetZoom();
   homeGone = false; clickedEnter = false; clearTimeout(homeTimer); behindUntil = performance.now() + 1300;
   enterBtn.classList.remove('wait'); setEnterLabel(tr(CONTENT.settings.home.enter) || ui('enter')); homeShownAt = performance.now();
+  if (hv) { hv.exit = 0; hv.frozen = false; hv.cleared = false; hv.fresh = true; hv.intro = performance.now() + 450; }   // les carrés renaissent quand la fenêtre est presque remontée
+  home.classList.remove('leaving');
   home.hidden = false; void home.offsetWidth; home.classList.remove('out');
   if (hv && hv.video) hv.video.play().catch(() => {});
   if (push && !PREVIEW) try { history.pushState(null, '', location.pathname + location.search + '#accueil'); } catch (e) {}
@@ -2481,6 +2630,7 @@ home.addEventListener('touchend', () => { touchY = null; }, { passive: true });
 window.addEventListener('keydown', e => {
   if (homeGone || e.ctrlKey || e.metaKey || e.altKey || (reel && reel.open)) return;
   const t = e.target, onCtl = t && t.closest && t.closest('button, a, input, select, textarea, [contenteditable="true"]');
+  if (e.code === 'Space' && !onCtl && hv && hv.reelOn) { e.preventDefault(); const v = hv.reelV; if (v.paused) v.play().catch(() => {}); else v.pause(); return; }   // showreel : espace = pause
   if (e.code === 'ArrowDown' || e.code === 'PageDown' || ((e.code === 'Space' || e.code === 'Enter') && !onCtl)) {
     if (t && t.tagName === 'INPUT') return;   // un curseur du panneau garde ses flèches
     e.preventDefault(); scrollEnter();

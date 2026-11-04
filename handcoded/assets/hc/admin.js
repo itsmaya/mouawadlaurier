@@ -119,6 +119,7 @@ function usedPaths(c = S.content) {
   c.models.forEach(m => { if (m.file) { set.add(m.file); (m.textures || []).forEach(tx => set.add(m.file.replace(/[^/]+$/, '') + tx)); } });
   if (c.settings.logo) set.add(c.settings.logo);
   if (c.settings.homeVideo && c.settings.homeVideo.src) set.add(c.settings.homeVideo.src);
+  if (c.settings.showreel) set.add(c.settings.showreel);
   return new Set([...set].filter(p => !/^(https?:|data:|blob:)/.test(p)));
 }
 const IMG_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg' };
@@ -1471,7 +1472,14 @@ function viewSettings() {
       ficheBlock(s),
       typoBlock(s),
       h('div', { class: 'block' }, h('h3', null, 'Showreel'),
-        field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/…', spell: false }), 'YouTube, Vimeo ou adresse d’un fichier MP4. Un bouton « Showreel » sous le logo l’ouvre à tout moment : l’écran glisse au premier plan, la vidéo part son coupé, le visiteur active le son d’un clic. Laisse vide pour retirer le bouton.')),
+        field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/… ou media/showreel/showreel.mp4', spell: false }), 'Avec un fichier MP4 du site, le showreel se joue en points sur tout l’écran de l’accueil, dans les couleurs de la vidéo, avec une barre de lecture ; depuis la 3D, le bouton Showreel ramène à l’accueil et le lance. Avec un lien YouTube ou Vimeo, il s’ouvre dans une fenêtre par-dessus le site. Le son est coupé au départ. Laisse vide pour retirer le bouton.'),
+        h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '-6px' } },
+          btn('Choisir le fichier MP4…', () => filePicker('video/mp4,video/webm,.mp4,.webm', false, async files => {
+            if (!files[0]) return;
+            try { const up = await prepareUpload(files[0], 'media/showreel', 'media'); stageFile(up.path, up.blob); s.showreel = up.path; change(); renderMain(); toast('Showreel ajouté : il part sur le site à la prochaine publication.'); }
+            catch (e) { toast(e.message, 'bad', 8000); }
+          }), 'sm'),
+          h('span', { class: 'hint', style: { margin: 0 } }, 'H.264, 720p ou 1080p, moins de 40 Mo de préférence (GitHub refuse au-delà de 100 Mo).'))),
       h('div', { class: 'block' }, h('h3', null, 'Langues du site'), langBox,
         h('p', { class: 'hint' }, 'Le site s’ouvre dans la langue du navigateur du visiteur quand elle est proposée. Il peut ensuite en changer en bas à gauche. Le back-office affiche un champ par langue activée.')),
       h('div', { class: 'block' }, h('h3', null, 'Signature', h('small', null, 'en haut à gauche du site, une ligne par ligne')), h('div', { class: 'pair' }, siteLangs().map(tagl))),
