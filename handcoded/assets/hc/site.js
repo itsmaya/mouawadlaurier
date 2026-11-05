@@ -1311,7 +1311,7 @@ function placeReel() {
 /* la sélection (tags) sous la signature, en haut à gauche : au même endroit que le bouton Showreel de l'accueil */
 function placeCats() {   // grand écran : en bas au centre, sous les flèches de pages ; téléphone : sous la signature
   catBox.style.top = catBox.style.left = ''; catList.style.maxHeight = Math.max(140, H - 200) + 'px';   // en bas, comme sur ordinateur ; une longue liste défile au lieu de sortir de l'écran
-  document.body.classList.toggle('cats-left', !wideScreen() && W < 560);   // téléphone debout : à gauche, pour laisser la place aux langues et au clavier
+  document.body.classList.toggle('cats-up', !wideScreen() && W < 560);   // téléphone debout : au centre, sous les flèches de pages, une ligne au-dessus des langues et du clavier
 }
 /* Logo par défaut : anneau, disque noir, lettres réglées dans Typographie › Logo rond */
 const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, invert);
@@ -2282,7 +2282,7 @@ function toggleNeg() {
    L'ombre est un trou dans le disque (masque) : on voit le vrai fond à travers, de jour comme de nuit. */
 (() => {
   const el = document.getElementById('logo'); if (!el) return;
-  let mx = 0, my = 0, ang = Math.atan2(0.38, -1), ta = ang, tm = 2.3, ca = ang, cm = 2.3, raf = 0;   // l'ombre : angle et distance au centre, en rayons ; au repos, hors du cercle
+  let mx = 0, my = 0, ang = Math.atan2(0.38, -1), ta = ang, tm = 2.3, ca = ang, cm = 2.3;   // l'ombre : angle et distance au centre, en rayons ; au repos, hors du cercle
   const draw = () => {
     const R = el.offsetWidth / 2; if (!R) return;
     if (cm > 2.02) { el.style.webkitMaskImage = el.style.maskImage = ''; return; }
@@ -2290,18 +2290,11 @@ function toggleNeg() {
     const k = Math.max(0, Math.min(1, 1 - cm / 0.28)), h = R - k * Math.max(2, R * 0.085);   // près du centre, l'ombre rétrécit un peu : il reste un anneau (noir le jour, jaune la nuit), l'éclipse totale
     el.style.webkitMaskImage = el.style.maskImage = `radial-gradient(circle ${R}px at ${x.toFixed(2)}px ${y.toFixed(2)}px, transparent ${(h - 0.6).toFixed(2)}px, #000 ${(h + 0.6).toFixed(2)}px)`;
   };
-  const step = () => {   // l'angle et la distance glissent séparément : l'ombre tourne autour du disque, elle ne le traverse jamais
-    raf = 0; let da = ta - ca; da = Math.atan2(Math.sin(da), Math.cos(da));
-    if (cm > 2.02) ca = ta; else ca += da * 0.2;
-    cm += (tm - cm) * 0.16;
-    if (Math.abs(da) < 0.003) ca = ta; if (Math.abs(tm - cm) < 0.003) cm = tm;
-    draw(); if (ca !== ta || cm !== tm) raf = requestAnimationFrame(step);
-  };
-  const aim = m => { ta = ang; tm = m; if (!raf) raf = requestAnimationFrame(step); };
+  const aim = m => { ca = ta = ang; cm = tm = m; draw(); };   // l'ombre suit la souris directement, sans inertie
   const track = () => {
     const r = el.getBoundingClientRect(), R = r.width / 2; if (!R) return;
     const dx = mx - (r.left + R), dy = my - (r.top + R), d = Math.hypot(dx, dy);
-    if (d > R * 0.25) ang = Math.atan2(dy, dx);
+    if (d > 0.5) ang = Math.atan2(dy, dx);   // sur le disque, l'ombre suit la souris en ligne droite : elle passe par le centre sans sauter
     const u = d / R, t = Math.max(0, Math.min(1, (5.5 - u) / 4.5)), e = t * t * (3 - 2 * t);
     aim(u <= 1 ? 0.62 * u : 0.62 + 1.68 * (1 - e));   // la souris à 5 rayons : l'ombre arrive ; au bord du disque : un croissant ; au centre : l'ombre couvre tout le disque
   };
@@ -2427,6 +2420,8 @@ function setupHomeVideo() {
     color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', delay: Math.max(1, Math.min(HV_MAX_DELAY, +cfg.delay || 1)), sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
     tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, interval: 1000 / 30, floor: 0, cost: 0, slow: 0, fast: 0 };
   hv.octx = hv.off.getContext('2d', { willReadFrequently: true });
+  hv.gl = hvGLInit(cv);   // les carrés dessinés par la carte graphique : un seul dessin, quel que soit leur nombre
+  if (hv.gl) hv.interval = 1000 / 60;   // la carte graphique suit : 60 images/s
   hv.raw = document.createElement('canvas'); hv.rctx = hv.raw.getContext('2d', { willReadFrequently: true });   // l'image du moment ; « off » garde l'image lissée par le delay
   const src = (cfg.src || '').trim();
   if (src && /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
@@ -2457,7 +2452,7 @@ function setupHomeVideo() {
 const ICON = {
   video: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.5v9l7.5-4.5z" fill="currentColor"/></svg>',
   cam: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h3l1.4-2h4.2l1.4 2h3v9h-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="11" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
-  shot: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="10" r="4" fill="currentColor"/></svg>',
+  shot: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 6.5h3.3l1.6-2.3h5.2l1.6 2.3h3.3v9.6h-15z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="11.1" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',   // un appareil photo
   faders: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3v14M10 3v14M15 3v14" stroke="currentColor" stroke-width="1.3" opacity=".55"/><rect x="2.5" y="10" width="5" height="3" rx=".5" fill="currentColor"/><rect x="7.5" y="5" width="5" height="3" rx=".5" fill="currentColor"/><rect x="12.5" y="12" width="5" height="3" rx=".5" fill="currentColor"/></svg>',
 };
 function buildHomeDock(withKeys) {
@@ -2466,8 +2461,8 @@ function buildHomeDock(withKeys) {
   const src = camOK ? `<div id="hv-src" class="seg" role="group"><button type="button" data-src="video" aria-pressed="true"></button><button type="button" data-src="cam" aria-pressed="false"></button></div>` : '';
   const dock = document.createElement('div'); dock.id = 'home-dock';
   dock.innerHTML = `<span class="hv-note" role="status" hidden></span>
-    <input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done" hidden>
-    <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>
+    ${withKeys ? '' : `<input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done" hidden>
+    <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>`}
     ${withKeys ? '' : src}
     <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>`;
   home.appendChild(dock);
@@ -2480,18 +2475,20 @@ function buildHomeDock(withKeys) {
   buildReelBar(home);
   ctl.querySelector('#home-reel').addEventListener('click', () => { if (hv.reelOn) hvReelStop(); else showreelClick(); });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
-  dock.querySelector('#hv-shot').addEventListener('click', hvPhoto);
-  dock.querySelector('#hv-words').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
+  document.getElementById('hv-shot').addEventListener('click', hvPhoto);
+  document.getElementById('hv-words').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
   dock.querySelector('#story-btn').addEventListener('click', () => toggleStory());
   buildStory(); dockLabels();
 }
 function dockLabels() {
   const dock = document.getElementById('home-dock'); if (!dock) return;
   const cam = !!(hv && hv.cam);
-  document.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.textContent = ui(b.dataset.src === 'cam' ? 'hv_cam' : 'hv_video'); });
+  document.querySelectorAll('#hv-src button').forEach(b => { const on = (b.dataset.src === 'cam') === cam; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.textContent = ui(b.dataset.src === 'cam' ? 'hv_cam' : hv && hv.video ? 'hv_video' : 'hv_slides'); });
   const src = document.getElementById('hv-src'); if (src) src.setAttribute('aria-label', ui('hv_src'));
-  const words = dock.querySelector('#hv-words'); words.hidden = !cam; words.placeholder = ui('hv_words'); words.setAttribute('aria-label', ui('hv_words'));
-  const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
+  const inPanel = !!(hv && hv.panel);   // dans le panneau des paramètres : la photo marche aussi avec le diaporama
+  const words = document.getElementById('hv-words'); words.hidden = !inPanel && !cam; words.placeholder = ui('hv_words'); words.setAttribute('aria-label', ui('hv_words'));
+  const shot = document.getElementById('hv-shot'); shot.hidden = !inPanel && !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui(inPanel ? 'hv_shot' : 'photo');
+  const priv = document.querySelector('#hv-panel .priv'); if (priv) priv.textContent = ui('hv_private');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
   const tl = document.querySelector('#hv-toggle .lbl'); if (tl) tl.textContent = ui('params');
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
@@ -2505,7 +2502,7 @@ function hvNote(text, ms) {
 }
 /* Photo souvenir : l'image de la caméra en carrés, le slogan tapé et la signature du studio. Elle reste sur l'appareil du visiteur. */
 async function hvPhoto() {
-  if (!hv || !hv.cam || hv.cam.video.readyState < 2) return;
+  if (!hv || (hv.cam && hv.cam.video.readyState < 2)) return;   // caméra ou diaporama : l'image du moment
   const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
   const band = document.getElementById('home-band'); band.classList.remove('flash'); void band.offsetWidth; band.classList.add('flash');
@@ -2516,7 +2513,7 @@ async function hvPhoto() {
   try {
     hv.ctx = ctx; hv.W = W; hv.H = H;
     hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows;
-    hvSource(0); hv.octx.globalAlpha = 1; hv.octx.drawImage(hv.raw, 0, 0);
+    if (!hvSource(HV_REDUCE.matches ? 0 : (performance.now() - hv.t0) / 1000)) return; hv.octx.globalAlpha = 1; hv.octx.drawImage(hv.raw, 0, 0);
     let d = null; try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) {}
     if (d) hvSquares(d, cols, rows, cell); else hvComposite(cols, rows, cell);   // même contraste qu'à l'écran
   } finally {
@@ -2583,7 +2580,7 @@ function toggleStory(open) {
   else { box.classList.remove('on'); storyT = setTimeout(() => { if (!box.classList.contains('on')) box.hidden = true; }, 700); }
 }
 window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
-function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.reelOn) hvReelFit(); }
+function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.gl) { hv.gl.c.width = hv.W * d; hv.gl.c.height = hv.H * d; hv.gl.dpr = d; } if (hv.reelOn) hvReelFit(); }
 /* Le panneau de réglages de la vidéo, comme une console de lumière : des faders, des boutons à témoin, la grille et la cadence en direct.
    Raccourcis : K ouvre ou ferme, C couleur, I inverser, V caméra. */
 const HV_FADERS = [
@@ -2596,10 +2593,11 @@ const paintFader = i => i.style.setProperty('--p', ((i.value - i.min) / (i.max -
 function buildHvPanel(home, src, host = home) {
   const panel = document.createElement('div'); panel.id = 'hv-panel'; panel.setAttribute('role', 'group'); panel.hidden = true;
   panel.innerHTML = `<div class="hd"><i class="led" aria-hidden="true"></i><b data-k="panel"></b><span class="stat" aria-hidden="true"></span></div>` +
-    (src ? `<div class="rw"><span class="lb" data-k="source"></span>${src}</div>` : '') +
+    (src ? `<div class="rw"><span class="lb" data-k="source"></span>${src}</div><p class="priv"></p>` : '') +
     HV_FADERS.map(f => `<label class="rw"><span class="lb" data-k="${f.p}"></span><input type="range" data-p="${f.p}" min="${f.min}" max="${f.max}" step="${f.step}"><output></output></label>`).join('') +
     `<div class="rw"><span class="lb" data-k="color"></span><div class="seg sw" role="group">${HV_COLORS.map(c => `<button type="button" data-c="${c}"><i class="c-${c}"></i></button>`).join('')}</div></div>` +
-    `<div class="rw tg"><button type="button" class="tgl" data-a="invert"><i aria-hidden="true"></i><span data-k="invert"></span></button></div>`;
+    `<div class="rw tg"><button type="button" class="tgl" data-a="invert"><i aria-hidden="true"></i><span data-k="invert"></span></button></div>` +
+    `<div class="pic"><input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done"><button type="button" id="hv-shot">${ICON.shot}<span></span></button></div>`;   // tout en bas : le titre de la photo, puis le bouton
   host.appendChild(panel);
   const toggle = document.getElementById('hv-toggle');
   hv.panel = panel; hv.toggle = toggle;
@@ -2613,7 +2611,7 @@ function buildHvPanel(home, src, host = home) {
   };
   hv.setOpen = setOpen;
   toggle.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
-  home.addEventListener('pointerdown', e => { if (panel.classList.contains('open') && !e.target.closest('#hv-panel, #hv-toggle, #hv-src')) setOpen(false); });
+  home.addEventListener('pointerdown', e => { if (panel.classList.contains('open') && !e.target.closest('#hv-panel, #hv-toggle, #hv-src, #hv-consent')) setOpen(false); });
   panel.querySelectorAll('input[data-p]').forEach(i => {
     const f = HV_FADERS.find(x => x.p === i.dataset.p);
     i.addEventListener('input', () => { f.set(+i.value); hvLabels(); });
@@ -2796,15 +2794,30 @@ function hvReelBar() {
   const snd = bar.querySelector('.snd'); snd.innerHTML = SPEAKER(hv.sound); snd.setAttribute('aria-label', ui(hv.sound ? 'soundOff' : 'soundOn')); snd.setAttribute('aria-pressed', String(hv.sound));
   bar.querySelector('.x').setAttribute('aria-label', ui('close'));
 }
+/* Avant la demande du navigateur, la nôtre : la vidéo de la caméra reste sur l'écran du visiteur */
+function hvConsent() {
+  return new Promise(res => {
+    const band = document.getElementById('home-band'); let box = document.getElementById('hv-consent'); if (box) box.remove();
+    box = document.createElement('div'); box.id = 'hv-consent'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+    box.innerHTML = `<p>${escapeHTML(ui('hv_consent'))}</p><div class="bt"><button type="button" class="ok">${ICON.shot}<span>${escapeHTML(ui('hv_camYes'))}</span></button><button type="button" class="no">${escapeHTML(ui('cancel'))}</button></div>`;
+    band.appendChild(box); box.setAttribute('aria-label', ui('hv_cam'));
+    const done = v => { window.removeEventListener('keydown', key, true); box.classList.remove('on'); setTimeout(() => box.remove(), 250); res(v); };
+    const key = e => { if (e.code === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); done(false); } };
+    window.addEventListener('keydown', key, true);
+    box.querySelector('.ok').addEventListener('click', () => done(true)); box.querySelector('.no').addEventListener('click', () => done(false));
+    requestAnimationFrame(() => { box.classList.add('on'); box.querySelector('.ok').focus({ preventScroll: true }); });
+  });
+}
 async function hvCamOn() {
   hvNote('');
+  if (!hv.camOK) { if (!(await hvConsent())) { hvLabels(); return; } hv.camOK = true; }   // une fois accepté, on ne redemande pas pendant la visite
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false });
     const v = document.createElement('video'); Object.assign(v, { muted: true, playsInline: true, autoplay: true, srcObject: stream }); v.setAttribute('playsinline', ''); await v.play().catch(() => {});
     if (hv.reelOn) hvReelStop();
     hv.cam = { stream, video: v }; hv.lo = 0; hv.hi = 1;
     if (hv.video) hv.video.pause();
-    hvNote(ui('hv_camNote'), 6000);
+    if (!hv.panel) hvNote(ui('hv_camNote'), 6000);
   } catch (e) { hvNote(ui('hv_camDenied'), 4000); }
   hvLabels();
 }
@@ -2868,40 +2881,41 @@ function hvComposite(cols, rows, cell) {
 /* Coût mesuré à chaque image : sur un ordinateur lent, la grille grossit d'office et la cadence descend (30 → 24 → 20 images/s), puis remonte quand ça va mieux. */
 const HV_REDUCE = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 /* le delay ne s'applique que si l'ordinateur suit : dès que la machine peine, le mouvement redevient direct */
-const hvDelay = () => (hv.floor || hv.interval > 1000 / 29 ? 1 : hv.delay);
+const hvDelay = () => (hv.floor || hv.interval > 1000 / 29 ? 1 : hv.delay);   // 30 ou 60 images/s : le delay ; en dessous, le mouvement direct
 function homeVideoStep(now) {
   if (!hv || !hv.W) return;
   const ex = hv.exit ? now - hv.exit : -1;
-  if (ex > HV_EXIT) { if (!hv.cleared) { hv.cleared = true; hv.ctx.fillStyle = '#0b0b0b'; hv.ctx.fillRect(0, 0, hv.W, hv.H); } return; }   // tout est aspiré : plus rien à calculer, la 3D a la main
+  if (ex > HV_EXIT) { if (!hv.cleared) { hv.cleared = true; hv.ctx.fillStyle = '#0b0b0b'; hv.ctx.fillRect(0, 0, hv.W, hv.H); hvGLClear(); } return; }   // tout est aspiré : plus rien à calculer, la 3D a la main
   if (hv.reelOn) return;   // le showreel joue : les carrés se reposent
-  if (now - hv.last < (ex >= 0 ? 1000 / 60 : hv.interval)) return; hv.last = now;   // l'aspiration se dessine à 60 images/s : ce n'est plus que du dessin
+  if (now - hv.last < (ex >= 0 ? 1000 / 60 : hv.interval) - 2) return; hv.last = now;   // l'aspiration se dessine à 60 images/s : ce n'est plus que du dessin
   const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
   const ctx = hv.ctx, W = hv.W, H = hv.H;
   if (hv.panel && hv.panel.classList.contains('open') && now - (hv.statAt || 0) > 500) { hv.statAt = now; hvStat(); }
-  ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
-  if (hv.intro && now < hv.intro) return;   // retour à l'accueil : le noir, le temps que la fenêtre remonte
+  if (!hvGLOn()) { ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H); }
+  if (hv.intro && now < hv.intro) { hvGLClear(); return; }   // retour à l'accueil : le noir, le temps que la fenêtre remonte
   const intro = hv.intro ? now - hv.intro : -1; if (intro > HV_INTRO) hv.intro = 0;
   if (hv.frozen || (ex >= 0 && hv.frozenAt && now - hv.sampleAt < hv.interval)) {   // flux arrêté, ou image pas encore renouvelée : on redessine la dernière
     const f = hv.frozenAt; if (!f) return;
     if (hv.tainted) { if (ex < HV_EXIT / 3) hvComposite(f.cols, f.rows, f.cell); }
-    else hvSquares(f.d, f.cols, f.rows, f.cell, ex, -1);
+    else hvDraw(f.d, f.cols, f.rows, f.cell, ex, -1);
     return;
   }
   const cell = Math.max(hv.cell, hv.floor), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
   if (hv.off.width !== cols || hv.off.height !== rows) { hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows; hv.fresh = true; }
   if (!hvSource(t)) return;
   /* delay : le lissage du site Fat-Man, valeur = valeur − (valeur − cible) / delay, sur chaque pixel de la grille */
-  const dl = hvDelay(); hv.octx.globalAlpha = hv.fresh || dl <= 1 ? 1 : 1 / dl; hv.octx.drawImage(hv.raw, 0, 0); hv.octx.globalAlpha = 1; hv.fresh = false;
+  const dl = hvDelay(); hv.octx.globalAlpha = hv.fresh || dl <= 1 ? 1 : 1 - Math.pow(1 - 1 / dl, hv.interval / (1000 / 30)); hv.octx.drawImage(hv.raw, 0, 0); hv.octx.globalAlpha = 1; hv.fresh = false;   // le delay garde le même rythme à 30 ou à 60 images/s
   let d = null;
   if (!hv.tainted) { try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) { hv.tainted = true; } }
   hv.frozenAt = { d, cols, rows, cell }; hv.sampleAt = now;
-  if (hv.tainted) hvComposite(cols, rows, cell);
-  else hvSquares(d, cols, rows, cell, ex, intro);
+  if (hv.tainted) { if (hv.gl) { hv.gl.c.style.display = 'none'; hv.gl = null; } hvComposite(cols, rows, cell); }
+  else hvDraw(d, cols, rows, cell, ex, intro);
   if (ex >= 0) return;   // pendant l'aspiration, on ne touche pas aux réglages de la machine
   /* adaptation à la machine */
   const cost = performance.now() - t0; hv.cost = hv.cost * 0.9 + cost * 0.1;
-  if (hv.cost > 14 && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (hv.interval < 1000 / 21) hv.interval = hv.interval < 1000 / 25 ? 1000 / 24 : 1000 / 20; else hv.floor = Math.min(Math.max(hv.cell + 6, 14), Math.max(hv.floor, cell) + 2); }   // au plus 6 px de plus que le réglage
-  else if (hv.cost < 5 && ++hv.fast > 60) { if (hv.panel) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (hv.interval > 1000 / 30) hv.interval = hv.interval > 1000 / 22 ? 1000 / 24 : 1000 / 30; }
+  const LADDER = hv.gl ? [60, 30, 24, 20] : [30, 24, 20], fps = Math.round(1000 / hv.interval), at = Math.max(0, LADDER.indexOf(fps));
+  if (hv.cost > (hv.gl ? 9 : 14) && ++hv.slow > 15) { if (hv.panel) setTimeout(hvLabels, 0); hv.slow = 0; if (at < LADDER.length - 1) hv.interval = 1000 / LADDER[at + 1]; else hv.floor = Math.min(Math.max(hv.cell + 6, 14), Math.max(hv.floor, cell) + 2); }   // au plus 6 px de plus que le réglage
+  else if (hv.cost < 4 && ++hv.fast > 60) { if (hv.panel) setTimeout(hvLabels, 0); hv.fast = 0; if (hv.floor) hv.floor = Math.max(0, hv.floor - 2); else if (at > 0) hv.interval = 1000 / LADDER[at - 1]; }
 }
 /* Sortie de l'accueil : chaque carré rétrécit jusqu'à disparaître, avec le delay du site Fat-Man (taille = taille − taille / delay, à chaque image) :
    très vite au début, puis il ralentit (ease out). Le delay suit la taille d'origine : les petits carrés partent presque tout de suite,
@@ -2940,6 +2954,61 @@ function hvSquares(d, cols, rows, cell, ex = -1, intro = -1) {
     m.globalCompositeOperation = 'source-in'; m.imageSmoothingEnabled = false; m.drawImage(hv.off, ox, oy, cols * cell, rows * cell); m.globalCompositeOperation = 'source-over';
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(m.canvas, 0, 0); ctx.restore();
   }
+}
+/* Les carrés en WebGL : la grille lissée (une petite image, une case = un pixel) part sur la carte graphique, qui dessine chaque carré
+   d'après la luminosité de sa case. Même calcul que hvSquares (contraste automatique, gamma, inversion, aspiration), en un seul passage. */
+function hvGLInit(under) {
+  try {
+    const c = document.createElement('canvas'); c.id = 'home-gl'; c.setAttribute('aria-hidden', 'true');
+    const gl = c.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, powerPreference: 'high-performance' });
+    if (!gl) return null;
+    const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+    const pr = gl.createProgram();
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+    gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, `precision highp float;
+uniform sampler2D T;uniform vec2 grid,org,res;uniform float cell,maxs,lo,k,gam,dark,ex,intro,dpr,src;uniform vec3 col,bg;
+void main(){
+  vec2 p=vec2(gl_FragCoord.x,res.y-gl_FragCoord.y)/dpr-org;vec2 ci=floor(p/cell);
+  if(ci.x<0.||ci.y<0.||ci.x>=grid.x||ci.y>=grid.y){gl_FragColor=vec4(bg,1.);return;}
+  vec4 s=texture2D(T,(ci+.5)/grid);
+  float l=clamp((dot(s.rgb,vec3(.2126,.7152,.0722))-lo)*k,0.,1.);if(dark>.5)l=1.-l;
+  float sz=(gam==1.?l:pow(max(l,1e-4),gam))*maxs;
+  if(sz<.6){gl_FragColor=vec4(bg,1.);return;}
+  float w=sz/maxs;
+  if(ex>=0.)sz*=pow(1.-1./(2.4+4.6*w),ex*.06);else if(intro>=0.)sz*=1.-pow(1.-1./(3.+4.*w),intro*.06);
+  vec2 d=abs(p-(ci+.5)*cell);float h=sz*.5;
+  float a=clamp((h-d.x)*dpr+.5,0.,1.)*clamp((h-d.y)*dpr+.5,0.,1.);if(sz<.6)a=0.;
+  gl_FragColor=vec4(mix(bg,src>.5?s.rgb:col,a),1.);
+}`));
+    gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    gl.useProgram(pr);
+    const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    [[gl.TEXTURE_MIN_FILTER, gl.NEAREST], [gl.TEXTURE_MAG_FILTER, gl.NEAREST], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(([a, b]) => gl.texParameteri(gl.TEXTURE_2D, a, b));
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    const u = {}; ['grid', 'org', 'res', 'cell', 'maxs', 'lo', 'k', 'gam', 'dark', 'ex', 'intro', 'dpr', 'src', 'col', 'bg'].forEach(n => { u[n] = gl.getUniformLocation(pr, n); });
+    under.after(c);
+    return { c, gl, u, dpr: 1, data: null };
+  } catch (e) { return null; }
+}
+const hvGLOn = () => !!(hv && hv.gl && !hv.gl.gl.isContextLost());
+function hvGLClear() { if (!hvGLOn()) return; const g = hv.gl.gl; g.viewport(0, 0, hv.gl.c.width, hv.gl.c.height); g.clearColor(11 / 255, 11 / 255, 11 / 255, 1); g.clear(g.COLOR_BUFFER_BIT); }
+const hexRGB = h => { const m = /^#?([0-9a-f]{6})$/i.exec(String(h || '').trim()); const n = m ? parseInt(m[1], 16) : 0xf2f2f2; return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; };
+function hvDraw(d, cols, rows, cell, ex = -1, intro = -1) {
+  if (!hvGLOn()) { hvSquares(d, cols, rows, cell, ex, intro); return; }
+  const G = hv.gl, gl = G.gl, u = G.u, n = cols * rows;
+  let mn = 1, mx = 0;
+  for (let i = 0, q = 0; i < n; i++, q += 4) { const l = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255; if (l < mn) mn = l; if (l > mx) mx = l; }
+  hv.lo += (mn - hv.lo) * 0.15; hv.hi += (Math.max(mx, hv.lo + 0.15) - hv.hi) * 0.15;   // le même contraste automatique que hvSquares
+  if (G.data !== d) { G.data = d; gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, cols, rows, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(d.buffer, d.byteOffset, n * 4)); }
+  gl.viewport(0, 0, G.c.width, G.c.height);
+  const col = hexRGB(hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2');
+  gl.uniform2f(u.grid, cols, rows); gl.uniform2f(u.org, (hv.W - cols * cell) / 2, (hv.H - rows * cell) / 2); gl.uniform2f(u.res, G.c.width, G.c.height);
+  gl.uniform1f(u.cell, cell); gl.uniform1f(u.maxs, cell * hv.fill); gl.uniform1f(u.lo, hv.lo); gl.uniform1f(u.k, 1 / (hv.hi - hv.lo)); gl.uniform1f(u.gam, hv.gamma);
+  gl.uniform1f(u.dark, hv.mode === 'dark' ? 1 : 0); gl.uniform1f(u.ex, ex); gl.uniform1f(u.intro, intro); gl.uniform1f(u.dpr, G.dpr); gl.uniform1f(u.src, hv.color === 'source' ? 1 : 0);
+  gl.uniform3f(u.col, col[0], col[1], col[2]); gl.uniform3f(u.bg, 11 / 255, 11 / 255, 11 / 255);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 function hvMask(ctx) {   // calque de la taille du dessin en cours (écran ou photo souvenir)
   const c = ctx.canvas;

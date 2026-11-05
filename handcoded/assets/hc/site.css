@@ -148,7 +148,7 @@ html.neg #home { filter: invert(1); }   /* la page inversée la remet à l'endro
 #home-band { position: absolute; left: 0; right: 0; bottom: 0; top: calc(30px + env(safe-area-inset-top, 0px)); background: var(--band); color: #777; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding-block: 26px calc(24px + env(safe-area-inset-bottom, 0px)); padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
 #home.no-ticker #home-band { top: 0; }
 #home-band > * { position: relative; z-index: 1; }
-#home-video { position: absolute !important; inset: 0; width: 100%; height: 100%; display: block; z-index: 0 !important; }
+#home-video, #home-gl { position: absolute !important; inset: 0; width: 100%; height: 100%; display: block; z-index: 0 !important; }
 /* un dégradé noir tout autour : la signature, le logo, les langues et les boutons restent lisibles sur la vidéo */
 .hv-shade { position: absolute !important; inset: 0; z-index: 0 !important; pointer-events: none; background:
   linear-gradient(180deg, rgba(11,11,11,.95) 0, rgba(11,11,11,.6) 110px, rgba(11,11,11,0) 260px),
@@ -465,7 +465,7 @@ body:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 #hv-rv { position: absolute !important; inset: 0; z-index: 0 !important; overflow: hidden; background: #000; }
 #hv-rv > video, #hv-rv > iframe { position: absolute; display: block; border: 0; pointer-events: none; }
 #hv-rv .grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(0,0,0,.42) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.42) 1px, transparent 1px); background-size: 4px 4px; }
-#home.reel-on #home-video { visibility: hidden; }
+#home.reel-on #home-video, #home.reel-on #home-gl { visibility: hidden; }
 
 /* Showreel et réglages sous la signature, en haut à gauche ; le « ? » reste seul en bas à droite */
 #home-ctl { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; position: relative; margin-top: 6px; }
@@ -791,10 +791,10 @@ body #reel-btn:hover, body #reel-btn:focus-visible { background: none; border: 1
    (au centre, ou à gauche sur un téléphone debout), langues et clavier en bas à droite. */
 @media (max-width: 700px), (max-height: 520px) {
   #cat-box { position: fixed; left: 50% !important; right: auto; top: auto !important; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); min-width: 0; width: auto; }
-  body.cats-left #cat-box { left: calc(12px + env(safe-area-inset-left, 0px)) !important; transform: none; }
+  body.cats-up #cat-box { bottom: calc(58px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); }
   #cat-cap { display: none; }
   #cat-list { top: auto; bottom: calc(100% + 6px); left: 50%; translate: -50% 0; transform-origin: bottom; }
-  body.cats-left #cat-list { left: 0; translate: none; }
+  body.cats-up #pager { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
   #pager { bottom: calc(62px + env(safe-area-inset-bottom, 0px)); }
 }
 
@@ -807,4 +807,37 @@ body #reel-btn:hover, body #reel-btn:focus-visible { background: none; border: 1
 @media (hover: none) { #home-ctl > button > span { display: none; } }
 #cat-box.open #cat-open .tri { transform: rotate(-90deg); }   /* la liste s'ouvre vers le haut : le triangle aussi, comme pour les langues */
 #cat-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-body.cats-left #cat-box { max-width: calc(100vw - 170px); }
+
+/* maj-75 : la langue a la taille et le gris clair du clavier ; le panneau du clavier prend le même cadre que les autres menus */
+#langs .lg-open, #langs .lg-open:hover { font: bold 11px/16px var(--ui); letter-spacing: .1em; color: #bdbdbd; gap: 11px; }
+#langs .lg-open:hover, #langs.open .lg-open { color: var(--ink); }
+#langs .lg-list button, #langs .lg-list button:hover { font: bold 11px/16px var(--ui); letter-spacing: .1em; color: var(--ink); padding-left: 31px; }
+#kb-panel { bottom: 30px; width: auto; min-width: 77px; box-sizing: border-box; padding: 10px 10px 12px; background: #fff; border: 1px solid var(--hair); border-top: 1px solid var(--hair); box-shadow: 0 -10px 30px rgba(40,40,40,.08); transform-origin: 100% 100%; transform: scaleY(0); opacity: 0; pointer-events: none; transition: transform .45s cubic-bezier(.77,0,.18,1), opacity .3s; }
+#kb.open #kb-panel { transform: none; opacity: 1; pointer-events: auto; }
+#kb-panel .lbl { font: bold 8px/10px var(--ui); letter-spacing: .1em; color: var(--ink); }
+#kb .key { height: 14px; min-width: 14px; border: 1px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); box-shadow: none; font: bold 7.5px/12px var(--ui); letter-spacing: .04em; }
+#kb .key:hover { background: #f1f1f1; }
+#kb .key.down, #kb .key:active { background: var(--ink); color: #fff; }
+#kb .key.anim.off { background: #fff; color: #bdbdbd; border-color: #bdbdbd; }
+@media (max-height: 520px) { #kb-panel { transform: scale(.8, 0); } #kb.open #kb-panel { transform: scale(.8); } }
+@media (max-height: 420px) { #kb-panel { transform: scale(.7, 0); } #kb.open #kb-panel { transform: scale(.7); } }
+
+/* Paramètres de l'accueil : la mention caméra, puis tout en bas le titre de la photo et le bouton photo */
+#hv-panel .priv { margin: -4px 0 0 82px; font: 9px/12px var(--ui); color: #7d7d7d; }
+#hv-panel .pic { display: grid; gap: 6px; margin: 3px -12px 0; padding: 11px 12px 0; border-top: 1px solid #262626; }
+#hv-panel #hv-words { width: 100%; height: 32px; box-sizing: border-box; border: 1px solid #333; border-radius: 0; padding: 0 10px; background: #0c0c0c; color: #fff; font: 13px/30px var(--ui); outline: none; }
+#hv-panel #hv-words::placeholder { color: #767676; }
+#hv-panel #hv-words:focus { border-color: var(--accent); }
+#hv-panel #hv-shot { display: flex; align-items: center; justify-content: center; gap: 9px; height: 34px; padding: 0 12px !important; border: 0; background: var(--accent) !important; color: #000 !important; font: bold 10px/34px var(--ui); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; animation: none; }
+#hv-panel #hv-shot svg { width: 19px; height: 19px; flex: none; }
+#hv-panel #hv-shot:hover, #hv-panel #hv-shot:focus-visible { background: #fff !important; outline: none; }
+@media (max-width: 700px) { #hv-panel #hv-words { font-size: 16px; } }
+#hv-consent { position: absolute; z-index: 9; left: 50%; top: 50%; width: min(360px, calc(100vw - 40px)); box-sizing: border-box; padding: 22px 22px 18px; background: rgba(16,16,16,.96); border: 1px solid #2c2c2c; box-shadow: 0 20px 60px rgba(0,0,0,.6); color: #e6e6e6; opacity: 0; transform: translate(-50%, -46%); transition: opacity .25s, transform .3s cubic-bezier(.17,.84,.44,1); }
+#hv-consent.on { opacity: 1; transform: translate(-50%, -50%); }
+#hv-consent p { margin: 0 0 18px; font: 16px/22px var(--ui); color: #fff; }
+#hv-consent .bt { display: flex; flex-wrap: wrap; gap: 8px; }
+#hv-consent button { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border: 1px solid #444; background: none; color: #ddd; cursor: pointer; font: bold 10px/32px var(--ui); letter-spacing: .1em; text-transform: uppercase; }
+#hv-consent button:hover, #hv-consent button:focus-visible { border-color: #888; color: #fff; outline: none; }
+#hv-consent .ok, #hv-consent .ok:hover, #hv-consent .ok:focus-visible { background: var(--accent); border-color: var(--accent); color: #000; }
+#hv-consent .ok:hover, #hv-consent .ok:focus-visible { background: #fff; border-color: #fff; }
+#hv-consent svg { width: 18px; height: 18px; }
