@@ -423,19 +423,10 @@
     {
      "id": "advertising",
      "label": {
-      "en": "Brands and events",
-      "fr": "Marques et événements",
-      "ca": "Marques i esdeveniments",
-      "es": "Marcas y eventos"
-     }
-    },
-    {
-     "id": "permanent",
-     "label": {
-      "en": "Permanent sites",
-      "fr": "Lieux permanents",
-      "ca": "Espais permanents",
-      "es": "Espacios permanentes"
+      "en": "Brands",
+      "fr": "Marques",
+      "ca": "Marques",
+      "es": "Marcas"
      }
     },
     {
@@ -459,7 +450,7 @@
     {
      "id": "collab",
      "label": {
-      "en": "With artists",
+      "en": "With Artists",
       "fr": "Avec les artistes",
       "ca": "Amb els artistes",
       "es": "Con los artistas"
@@ -484,36 +475,18 @@
      }
     },
     {
-     "id": "art",
+     "id": "permanent",
      "label": {
-      "en": "Mouawad + Laurier",
-      "fr": "Mouawad + Laurier",
-      "ca": "Mouawad + Laurier",
-      "es": "Mouawad + Laurier"
-     }
-    },
-    {
-     "id": "archive",
-     "label": {
-      "en": "Archives",
-      "fr": "Archives",
-      "ca": "Arxius",
-      "es": "Archivos"
-     }
-    },
-    {
-     "id": "art-contemporain",
-     "label": {
-      "en": "Art Contemporain",
-      "fr": "Art Contemporain",
-      "ca": "Art Contemporain",
-      "es": "Art Contemporain"
+      "en": "Permanent sites",
+      "fr": "Lieux permanents",
+      "ca": "Espais permanents",
+      "es": "Espacios permanentes"
      }
     },
     {
      "id": "exposition",
      "label": {
-      "en": "Exposition",
+      "en": "Exhibition",
       "fr": "Exposition",
       "ca": "Exposition",
       "es": "Exposition"
@@ -721,7 +694,9 @@
    "visible": true,
    "tags": [],
    "network": true,
-   "skills": false
+   "skills": false,
+   "camera": 60,
+   "cardScale": 110
   }
  ],
  "posts": [
@@ -751,7 +726,6 @@
    "date": "2022 – 2025",
    "tags": [
     "featured",
-    "art",
     "permanent",
     "touring",
     "advertising"
@@ -941,9 +915,7 @@
     "permanent",
     "collab",
     "ai",
-    "software",
-    "art",
-    "art-contemporain"
+    "software"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
@@ -1121,7 +1093,6 @@
    "date": "2022 – 2025",
    "tags": [
     "featured",
-    "art",
     "touring"
    ],
    "thumb": "media/rising/img-8648-copy-mpdh.jpg",
@@ -1292,7 +1263,6 @@
    "date": "2023",
    "tags": [
     "featured",
-    "art",
     "permanent"
    ],
    "thumb": "media/ephemere/it-is-now-san-joan-de-deu-small-108-1e2g.jpg",
@@ -5049,7 +5019,6 @@
    },
    "date": "2008",
    "tags": [
-    "archive",
     "software"
    ],
    "thumb": "media/fat-site-2008/fatsite.jpg",
@@ -5116,9 +5085,7 @@
     "es": "Londres"
    },
    "date": "2008",
-   "tags": [
-    "archive"
-   ],
+   "tags": [],
    "thumb": "media/nokia-navigator/nokianavigator.jpg",
    "media": [
     {
@@ -6047,7 +6014,6 @@
    },
    "date": "2022 – 2024",
    "tags": [
-    "art",
     "touring"
    ],
    "thumb": "media/paysage-sonore/01.jpg",
@@ -6176,8 +6142,7 @@
    },
    "date": "2024",
    "tags": [
-    "permanent",
-    "art"
+    "permanent"
    ],
    "thumb": "media/etre-absorbe/01.jpg",
    "thumbBack": "",
@@ -6268,8 +6233,7 @@
    },
    "date": "2018",
    "tags": [
-    "touring",
-    "art"
+    "touring"
    ],
    "thumb": "media/upperground/01.jpg",
    "thumbBack": "",
@@ -6356,8 +6320,7 @@
    "date": "2022",
    "tags": [
     "permanent",
-    "touring",
-    "art"
+    "touring"
    ],
    "thumb": "media/albatros/01.jpg",
    "thumbBack": "",
@@ -6653,7 +6616,6 @@
    },
    "date": "2020",
    "tags": [
-    "art",
     "ai"
    ],
    "thumb": "media/poussiere-detoile/01.jpg",
@@ -6732,9 +6694,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "art"
-   ],
+   "tags": [],
    "thumb": "",
    "thumbBack": "",
    "body": {
