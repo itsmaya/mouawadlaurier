@@ -841,3 +841,71 @@ body #reel-btn:hover, body #reel-btn:focus-visible { background: none; border: 1
 #hv-consent .ok, #hv-consent .ok:hover, #hv-consent .ok:focus-visible { background: var(--accent); border-color: var(--accent); color: #000; }
 #hv-consent .ok:hover, #hv-consent .ok:focus-visible { background: #fff; border-color: #fff; }
 #hv-consent svg { width: 18px; height: 18px; }
+
+/* Accueil : la langue, puis un carré « i » qui dit en une phrase ce que fait le studio ; le « ? » de l'histoire montre son titre au survol */
+#home-ctl { position: relative; }
+#home-reel.on .ic i { width: 10px; height: 10px; border: 0; background: #000; }   /* pendant la lecture : stop */
+#home-ctl > #home-langs { position: static; display: inline-flex; align-items: stretch; height: 34px; box-sizing: border-box; border: 1px solid #333; background: rgba(20,20,20,.8); gap: 0; }
+#home-ctl > #home-langs[hidden] { display: none; }
+#home-langs .cur { flex: none; width: 32px; height: 32px; padding: 0; border: 0; background: none; box-shadow: none !important; color: #cfcfcf; cursor: pointer; display: grid; place-items: center; }
+#home-langs .cur .ic { font: bold 11px/1 var(--ui); letter-spacing: .06em; }
+#home-langs .opts { display: flex; align-items: center; max-width: 0; overflow: hidden; opacity: 0; transform: translateX(-10px); transition: max-width .45s cubic-bezier(.77,0,.18,1), opacity .3s, transform .45s cubic-bezier(.17,.84,.44,1); }
+#home-langs:hover .opts, #home-langs:focus-within .opts, #home-langs.open .opts { max-width: 160px; opacity: 1; transform: none; transition-delay: 0s, .08s, 0s; }
+#home-ctl > #home-langs .opts button { flex: none; height: 32px; padding: 0 7px; border: 0; background: none; box-shadow: none; color: #8a8a8a; font: bold 11px/32px var(--ui); letter-spacing: .08em; cursor: pointer; }
+#home-ctl > #home-langs .opts button:last-child { margin-right: 6px; }
+#home-ctl > #home-langs .opts button:hover, #home-ctl > #home-langs .opts button:focus-visible { color: #fff; outline: none; }
+#home-ctl > #home-langs:hover, #home-ctl > #home-langs.open { border-color: #666; }
+#home-ctl > #home-langs:hover .cur, #home-ctl > #home-langs.open .cur { color: #fff; }
+#home-about .ic svg { width: 19px; height: 19px; }
+#home-about.on { color: #fff; border-color: #666; }
+#home-dock > #story-btn { width: auto; min-width: 34px; padding: 0; gap: 0; justify-content: flex-end; }
+#story-btn .ic { flex: none; width: 32px; height: 32px; display: grid; place-items: center; font: bold 15px/1 var(--ui); }
+#story-btn .lbl { display: block; max-width: 0; overflow: hidden; opacity: 0; transform: translateX(10px); padding-left: 0; white-space: nowrap; font: bold 11px/32px var(--ui); letter-spacing: .08em; text-transform: uppercase; transition: max-width .45s cubic-bezier(.77,0,.18,1), padding .45s cubic-bezier(.77,0,.18,1), opacity .3s, transform .45s cubic-bezier(.17,.84,.44,1); }
+#story-btn:hover .lbl, #story-btn:focus-visible .lbl { max-width: 260px; padding-left: 13px; opacity: 1; transform: none; transition-delay: 0s, 0s, .08s, 0s; }
+@media (hover: none) { #story-btn .lbl { display: none; } }
+@media (max-width: 700px), (max-height: 520px) {
+}
+
+/* La fiche du « i » : une photo de projet, le nom du studio, la phrase en grand */
+#home-pitch { position: absolute; z-index: 7; left: 46px; top: var(--y, 0px); width: min(440px, calc(100vw - 110px)); margin: 0; box-sizing: border-box; background: #111; border: 1px solid #2c2c2c; box-shadow: 0 24px 60px rgba(0,0,0,.6); color: #fff; pointer-events: none;
+  opacity: 0; clip-path: inset(0 100% 0 0); transition: clip-path .55s cubic-bezier(.77,0,.18,1), opacity .3s; }
+#home-pitch.on { opacity: 1; clip-path: inset(0 0 0 0); }
+#home-pitch img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transform: scale(1.06); transition: transform 1.6s cubic-bezier(.17,.84,.44,1); }
+#home-pitch.on img { transform: none; }
+#home-pitch figcaption { padding: 20px 24px 24px; }
+#home-pitch b { display: block; margin-bottom: 12px; padding-top: 12px; border-top: 3px solid var(--accent); width: max-content; font: bold 11px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; color: #bdbdbd; border-top-width: 0; position: relative; }
+#home-pitch b::before { content: ''; position: absolute; left: 0; top: 0; width: 28px; height: 3px; background: var(--accent); }
+#home-pitch p { margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-weight: 400; font-size: 24px; line-height: 30px; text-wrap: pretty; }
+@media (max-width: 700px), (max-height: 520px) {
+  #home-pitch { left: 0; top: calc(100% + 8px) !important; width: calc(100vw - 40px); }
+  #home-pitch figcaption { padding: 16px 18px 20px; }
+  #home-pitch p { font-size: 21px; line-height: 27px; }
+}
+
+/* Dans la 3D : le carré « i » sous le Showreel, et sa fiche (blanche le jour ; la nuit, la page inversée la rend noire) */
+#about-btn { position: fixed; z-index: 21; width: 32px; height: 32px; padding: 0; border: 1px solid var(--ink); background: none; color: var(--ink); box-sizing: border-box; display: grid; place-items: center; cursor: pointer; transition: opacity .3s; }
+#about-btn[hidden] { display: none; }
+#about-btn .ic { display: grid; place-items: center; }
+#about-btn svg { width: 18px; height: 18px; }
+#about-btn:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 3px; }
+body:has(#home:not([hidden]):not(.out)) #about-btn, body.post-open-wide #about-btn, body.post-short #about-btn, body.pv-open #about-btn { opacity: 0; pointer-events: none; }
+#about-card { position: fixed; z-index: 22; left: 0; top: 0; width: min(440px, calc(100vw - 100px)); margin: 0; box-sizing: border-box; background: #fff; border: 1px solid var(--hair); box-shadow: 0 24px 60px rgba(40,40,40,.14); color: var(--ink); pointer-events: none;
+  opacity: 0; clip-path: inset(0 100% 0 0); transition: clip-path .55s cubic-bezier(.77,0,.18,1), opacity .3s; }
+#about-card.on { opacity: 1; clip-path: inset(0 0 0 0); }
+#about-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transform: scale(1.06); transition: transform 1.6s cubic-bezier(.17,.84,.44,1); }
+#about-card.on img { transform: none; }
+html.neg #about-card img { filter: invert(1); }   /* la photo garde ses vraies couleurs la nuit */
+#about-card figcaption { padding: 20px 24px 24px; }
+#about-card b { position: relative; display: block; margin-bottom: 12px; padding-top: 12px; font: bold 11px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
+#about-card b::before { content: ''; position: absolute; left: 0; top: 0; width: 28px; height: 3px; background: var(--accent); }
+#about-card p { margin: 0; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-weight: 400; font-size: 24px; line-height: 30px; text-wrap: pretty; }
+@media (max-width: 700px), (max-height: 520px) {
+  #about-btn { width: 30px; height: 30px; }
+  #about-card { width: calc(100vw - 40px); }
+  #about-card figcaption { padding: 16px 18px 20px; }
+  #about-card p { font-size: 19px; line-height: 25px; }
+  #about-card img { aspect-ratio: 2 / 1; }
+  #home-pitch p { font-size: 19px; line-height: 25px; }
+  #home-pitch img { aspect-ratio: 2 / 1; }
+}
+#home-pitch { z-index: 30; }

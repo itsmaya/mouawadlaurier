@@ -1498,7 +1498,7 @@ function viewSettings() {
       h('div', { class: 'block' }, h('h3', null, 'Signature', h('small', null, 'en haut à gauche du site, une ligne par ligne')), h('div', { class: 'pair' }, siteLangs().map(tagl))),
       h('div', { class: 'block' }, h('h3', null, 'Accueil'),
         h('p', { class: 'hint', style: { marginTop: 0 } }, 'L’accueil montre la vidéo en carrés sur tout l’écran, la phrase du studio sur le bandeau LED et une flèche vers le bas. On entre en cliquant la flèche ou en faisant défiler vers le bas (glisser vers le haut sur téléphone).'),
-        pairInput('Phrase du bandeau LED', s.home, 'sub', { hint: 'Ce que fait le studio, en une phrase. Elle défile en points LED tout en haut de l’accueil, dans la langue du visiteur.' }),
+        pairInput('Phrase du studio', s.home, 'sub', { hint: 'Ce que fait le studio, en une phrase, dans la langue du visiteur. Elle défile sur le bandeau LED de l’accueil et s’affiche en grand dans la fiche du bouton « i » (accueil et 3D).' }),
         h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
         pairInput('Mot au-dessus de la flèche', s.home, 'enter', { hint: 'En petites capitales, au-dessus de la flèche d’entrée.' }),
         storyEditor(s),

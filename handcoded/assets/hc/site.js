@@ -803,12 +803,12 @@ const ZOOMF = () => CAMERA.zoom * CAMERA.focus * Math.min(1, W / 900);   // pixe
 function freeRect() {   // la zone de l'écran que l'interface laisse libre
   const box = id => { const el = document.getElementById(id); if (!el || el.hidden) return null; const b = el.getBoundingClientRect(); return b.width && b.height ? b : null; };
   const m = 12, r = { l: m, t: m, r: W - m, b: H - m };
-  const tops = ['slogan', 'logo', 'reel-btn'].map(box).filter(Boolean), bots = ['menu', 'langs', 'cats', 'kb'].map(box).filter(Boolean);
+  const tops = ['slogan', 'logo', 'reel-btn', 'about-btn'].map(box).filter(Boolean), bots = ['menu', 'langs', 'cats', 'kb'].map(box).filter(Boolean);
   if (H >= W) {   // debout : la signature en haut, le menu en bas
     tops.forEach(b => { r.t = Math.max(r.t, b.bottom + 8); });
     bots.forEach(b => { r.b = Math.min(r.b, b.top - 8); });
   } else {        // couché : la signature et le menu à gauche, le logo à droite, les tags en bas à droite
-    [box('slogan'), box('menu'), box('langs')].filter(Boolean).forEach(b => { if (b.left < W / 2) r.l = Math.max(r.l, b.right + 10); });
+    [box('slogan'), box('menu'), box('langs'), box('reel-btn'), box('about-btn')].filter(Boolean).forEach(b => { if (b.left < W / 2) r.l = Math.max(r.l, b.right + 10); });
     [box('logo'), box('reel-btn')].filter(Boolean).forEach(b => { if (b.left > W / 2) r.r = Math.min(r.r, b.left - 10); });
     [box('cats'), box('kb')].filter(Boolean).forEach(b => { if (b.left < r.r && b.right > r.l) r.b = Math.min(r.b, b.top - 8); });
   }
@@ -1307,6 +1307,7 @@ function placeReel() {
   if (!reel || !reel.btn) return;
   const b = reel.btn;
   b.style.top = Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16)) + 'px'; b.style.left = (sloganEl.offsetLeft + 2) + 'px'; b.style.right = 'auto';   // la même place sur ordinateur, tablette et téléphone
+  placeAbout();
 }
 /* la sélection (tags) sous la signature, en haut à gauche : au même endroit que le bouton Showreel de l'accueil */
 function placeCats() {   // grand écran : en bas au centre, sous les flèches de pages ; téléphone : sous la signature
@@ -1321,8 +1322,9 @@ function drawLogos() {
   const logo = s.logo ? url(s.logo) : ringLogo(negMode ? '#ffffff' : accent, negMode);   // en négatif, l'image est pré-inversée : la page inversée la remet à l'endroit
   const hl = document.getElementById('home-logo'); if (hl) { hl.src = s.logo ? logo : ringLogo('#ffffff', false); hl.classList.toggle('raw', !s.logo); }
   const sl = document.getElementById('logo'); if (sl) { sl.style.backgroundImage = s.logo ? `url("${logo}")` : ''; sl.classList.toggle('img', !!s.logo); }   // le logo du site est un simple disque : noir le jour, jaune la nuit   // l'accueil reste sombre : il prend toujours le logo de nuit, anneau blanc, ombre jaune
-  setFavicon(s.logo ? logo : (negMode ? ringLogo(accent) : logo));
+  setFavicon(s.logo ? logo : WHITE_DOT);   // le favicon : un simple disque blanc, cerclé d'un gris léger pour se voir sur un onglet clair
 }
+const WHITE_DOT = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="#fff" stroke="#c4c4c4" stroke-width="2.5"/></svg>');
 function setFavicon(href) {
   let l = document.querySelector('link[rel~="icon"]'); if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
   if (l.getAttribute('href') !== href) { l.removeAttribute('type'); l.href = href; }
@@ -1373,17 +1375,22 @@ function renderTexts() {
   });
   home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff));
   if (!enterBtn.classList.contains('wait')) setEnterLabel(tr(s.home.enter) || ui('enter'));
-  renderReel(); hvLabels();
+  renderReel(); renderAbout(); hvLabels();
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = ui(el.dataset.i18n); });
   document.getElementById('kb-toggle').setAttribute('aria-label', ui('keys'));
   pgPrev.setAttribute('aria-label', ui('prev')); pgNext.setAttribute('aria-label', ui('next'));
   const cap = document.getElementById('cat-cap'); if (cap) cap.textContent = ui('category');
   const langs = s.langs && s.langs.length ? s.langs : LANGS;
   renderLangMenu(langs);
-  [document.getElementById('home-langs')].forEach(box => {
-    box.innerHTML = '';
+  [document.getElementById('home-langs')].forEach(box => {   // accueil : un carré avec la langue, les autres glissent dedans au survol
+    box.innerHTML = ''; box.classList.add('hlg'); box.classList.remove('open'); box.hidden = langs.length < 2;
     if (langs.length < 2) return;
-    langs.forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.textContent = l.toUpperCase(); b.setAttribute('aria-pressed', String(l === LANG)); b.setAttribute('aria-label', ui('lang') + ' ' + l.toUpperCase()); b.addEventListener('click', () => setLang(l)); box.appendChild(b); });
+    const cur = document.createElement('button'); cur.type = 'button'; cur.className = 'cur'; cur.setAttribute('aria-expanded', 'false'); cur.setAttribute('aria-label', ui('lang') + ' : ' + LANG.toUpperCase());
+    cur.innerHTML = `<b class="ic">${LANG.toUpperCase()}</b>`;
+    cur.addEventListener('click', () => { const o = box.classList.toggle('open'); cur.setAttribute('aria-expanded', String(o)); });
+    const opts = document.createElement('span'); opts.className = 'opts';
+    langs.filter(l => l !== LANG).forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.textContent = l.toUpperCase(); b.lang = l; b.setAttribute('aria-label', ui('lang') + ' ' + l.toUpperCase()); b.addEventListener('click', () => setLang(l)); opts.appendChild(b); });
+    box.append(cur, opts);
   });
   document.documentElement.style.setProperty('--accent', accent());
   document.documentElement.style.setProperty('--accent-raw', CONTENT.settings.accent || '#ffcc00');
@@ -2445,11 +2452,13 @@ function setupHomeVideo() {
     const t0 = performance.now(), go = () => { if (!homeGone && !hv.reelOn && !hv.cam && !hv.userReel && isHomeHash()) hvReelStart(true); };
     const wait = setInterval(() => { if (assetsLoaded || performance.now() - t0 > 6000) { clearInterval(wait); setTimeout(go, 500); } }, 150);
   }
-  const langs = document.getElementById('home-langs'); if (langs) document.getElementById('home').appendChild(langs);   // les langues passent dans la partie blanche, juste au-dessus de la bande
+  const langs = document.getElementById('home-langs'), ctl = document.getElementById('home-ctl');
+  if (langs && ctl) ctl.insertBefore(langs, document.getElementById('home-about')); else if (langs) document.getElementById('home').appendChild(langs);   // la langue rejoint les carrés sous la signature
   hvSize();
 }
 /* ================================================================ À côté du clavier de la vidéo : vidéo ou caméra, la photo souvenir, et le « ? » de l'histoire du site */
 const ICON = {
+  about: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.3" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10 8.8v5.2" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="6.3" r="1.05" fill="currentColor"/></svg>',
   video: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.5v9l7.5-4.5z" fill="currentColor"/></svg>',
   cam: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h3l1.4-2h4.2l1.4 2h3v9h-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="11" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
   shot: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 6.5h3.3l1.6-2.3h5.2l1.6 2.3h3.3v9.6h-15z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="11.1" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',   // un appareil photo
@@ -2464,16 +2473,32 @@ function buildHomeDock(withKeys) {
     ${withKeys ? '' : `<input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done" hidden>
     <button type="button" id="hv-shot" hidden>${ICON.shot}<span></span></button>`}
     ${withKeys ? '' : src}
-    <button type="button" id="story-btn" aria-expanded="false" hidden>?</button>`;
+    <button type="button" id="story-btn" aria-expanded="false" hidden><span class="lbl"></span><b class="ic">?</b></button>`;
   home.appendChild(dock);
   /* sous la signature, en haut à gauche : le Showreel, et dessous les réglages des carrés (cachés pendant que le showreel joue) */
   const ctl = document.createElement('div'); ctl.id = 'home-ctl';
   ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><b class="ic"><i aria-hidden="true"></i></b><span>Showreel</span></button>` +
-    (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false"><b class="ic">${ICON.faders}</b><span class="lbl"></span></button>` : '');   // des carrés : le mot glisse dedans au survol
+    (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false"><b class="ic">${ICON.faders}</b><span class="lbl"></span></button>` : '') +
+    `<button type="button" id="home-about" aria-expanded="false" hidden><b class="ic">${ICON.about}</b></button><figure id="home-pitch" hidden><img alt="" decoding="async"><figcaption><b></b><p></p></figcaption></figure>`;   // des carrés : le mot glisse dedans au survol ; le dernier dit en une phrase ce que fait le studio
   const band = document.getElementById('home-band'), lg = band.querySelector('.lg'); if (lg) lg.after(ctl); else band.appendChild(ctl);
   if (withKeys) buildHvPanel(home, src, ctl);
   buildReelBar(home);
   ctl.querySelector('#home-reel').addEventListener('click', () => { if (hv.reelOn) hvReelStop(); else showreelClick(); });
+  const ab = ctl.querySelector('#home-about'), pitch = ctl.querySelector('#home-pitch');
+  /* une petite fiche : une photo de projet (une autre à chaque ouverture), le nom du studio, la phrase en grand */
+  const showPitch = on => {
+    if (on) {
+      fillPitch(pitch);
+      pitch.hidden = false; void pitch.offsetWidth;
+      const ct = ctl.getBoundingClientRect().top, room = window.innerHeight - 20 - ct - pitch.offsetHeight;   // la fiche reste dans l'écran
+      pitch.style.setProperty('--y', Math.max(-ct + 20, Math.min(ab.offsetTop, room)) + 'px');
+    }
+    pitch.classList.toggle('on', on); ab.classList.toggle('on', on); ab.setAttribute('aria-expanded', String(on));
+  };
+  ab.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') showPitch(true); }); ab.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') showPitch(false); });
+  ab.addEventListener('focus', () => { if (ab.matches(':focus-visible')) showPitch(true); }); ab.addEventListener('blur', () => showPitch(false));
+  ab.addEventListener('click', e => { if (e.pointerType === 'mouse') return; showPitch(!pitch.classList.contains('on')); });   // au doigt : on touche pour lire, on retouche pour fermer
+  home.addEventListener('pointerdown', e => { if (pitch.classList.contains('on') && !e.target.closest('#home-about')) showPitch(false); if (!e.target.closest('#home-langs')) { const hl = document.getElementById('home-langs'); if (hl) hl.classList.remove('open'); } });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   document.getElementById('hv-shot').addEventListener('click', hvPhoto);
   document.getElementById('hv-words').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
@@ -2489,12 +2514,63 @@ function dockLabels() {
   const words = document.getElementById('hv-words'); words.hidden = !inPanel && !cam; words.placeholder = ui('hv_words'); words.setAttribute('aria-label', ui('hv_words'));
   const shot = document.getElementById('hv-shot'); shot.hidden = !inPanel && !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui(inPanel ? 'hv_shot' : 'photo');
   const priv = document.querySelector('#hv-panel .priv'); if (priv) priv.textContent = ui('hv_private');
-  const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
+  const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.querySelector('.lbl').textContent = ui('story');
+  const ab = document.getElementById('home-about'), pitch = document.getElementById('home-pitch'), say = tr((CONTENT.settings.home || {}).sub || {}).trim();
+  if (ab) { ab.hidden = !say; fillPitch(pitch, false); ab.setAttribute('aria-label', say); }
   const tl = document.querySelector('#hv-toggle .lbl'); if (tl) tl.textContent = ui('params');
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
-  const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', 'Showreel');
+  const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', on ? ui('stop') + ' : Showreel' : 'Showreel');
+  rb.querySelector('span').textContent = on ? ui('stop') : 'Showreel';   // pendant la lecture : un carré « stop »
 }
 let noteTimer = 0;
+/* La fiche « i » (accueil et 3D) : une photo de la sélection des réalisations, le nom du studio, la phrase du studio (Réglages › Accueil) */
+const pitchText = () => tr((CONTENT.settings.home || {}).sub || {}).trim();
+function pitchPhotos() {
+  const work = CONTENT.sections.find(x => x.visible && x.card === 'image' && !x.skills) || {}, tag = work.defaultTag;
+  const ok = p => p.published !== false && p.section === work.id && p.thumb && /\.(jpe?g|png|webp)$/i.test(p.thumb);
+  const sel = CONTENT.posts.filter(p => ok(p) && (!tag || (p.tags || []).includes(tag)));
+  return (sel.length ? sel : CONTENT.posts.filter(ok)).map(p => url(p.thumb));
+}
+function fillPitch(fig, photo = true) {
+  fig.querySelector('b').textContent = CONTENT.settings.name || 'Hand Coded';
+  fig.querySelector('p').textContent = pitchText();
+  if (!photo) return;
+  const list = pitchPhotos(), im = fig.querySelector('img');
+  if (list.length) { let src = list[Math.floor(Math.random() * list.length)]; if (list.length > 1 && src === fig.dataset.last) src = list[(list.indexOf(src) + 1) % list.length]; fig.dataset.last = src; im.src = src; im.hidden = false; } else im.hidden = true;   // jamais deux fois la même de suite
+}
+/* Dans la 3D : le même carré « i » sous le Showreel, la même fiche au survol */
+let aboutBtn = null, aboutCard = null;
+function renderAbout() {
+  if (!aboutBtn) {
+    aboutBtn = document.createElement('button'); aboutBtn.type = 'button'; aboutBtn.id = 'about-btn'; aboutBtn.className = 'ui'; aboutBtn.setAttribute('aria-expanded', 'false');
+    aboutBtn.innerHTML = `<b class="ic">${ICON.about}</b>`;
+    aboutCard = document.createElement('figure'); aboutCard.id = 'about-card'; aboutCard.className = 'ui'; aboutCard.hidden = true;
+    aboutCard.innerHTML = '<img alt="" decoding="async"><figcaption><b></b><p></p></figcaption>';
+    document.body.append(aboutBtn, aboutCard);
+    const show = on => {
+      if (on) { fillPitch(aboutCard); aboutCard.hidden = false; placeAbout(); void aboutCard.offsetWidth; }
+      aboutCard.classList.toggle('on', on); aboutBtn.classList.toggle('on', on); aboutBtn.setAttribute('aria-expanded', String(on));
+    };
+    aboutBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') show(true); });
+    aboutBtn.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') show(false); });
+    aboutBtn.addEventListener('focus', () => { if (aboutBtn.matches(':focus-visible')) show(true); }); aboutBtn.addEventListener('blur', () => show(false));
+    aboutBtn.addEventListener('click', e => { if (e.pointerType !== 'mouse') show(!aboutCard.classList.contains('on')); });
+    document.addEventListener('pointerdown', e => { if (aboutCard.classList.contains('on') && !e.target.closest('#about-btn')) show(false); });
+  }
+  const say = pitchText(); aboutBtn.hidden = !say; aboutBtn.setAttribute('aria-label', say); fillPitch(aboutCard, false);
+  placeAbout();
+}
+function placeAbout() {   // sous le Showreel ; la fiche à droite du carré (grand écran) ou dessous (téléphone)
+  if (!aboutBtn) return;
+  const rb = reel && reel.btn && !reel.btn.hidden ? reel.btn : null;
+  const top = rb ? rb.offsetTop + rb.offsetHeight + 8 : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16));
+  aboutBtn.style.top = top + 'px'; aboutBtn.style.left = (sloganEl.offsetLeft + 2) + 'px';
+  if (!aboutCard.hidden) {
+    const wide = wideScreen(), l = sloganEl.offsetLeft + 2;
+    if (wide) { const y = Math.max(16, Math.min(top, H - 20 - aboutCard.offsetHeight)); aboutCard.style.left = (l + aboutBtn.offsetWidth + 12) + 'px'; aboutCard.style.top = y + 'px'; }
+    else { aboutCard.style.left = l + 'px'; aboutCard.style.top = (top + aboutBtn.offsetHeight + 8) + 'px'; }
+  }
+}
 function hvNote(text, ms) {
   const n = document.querySelector('#home-dock .hv-note'); if (!n) return;
   clearTimeout(noteTimer); n.textContent = text || ''; n.hidden = !text;
@@ -2528,14 +2604,16 @@ async function hvPhoto() {
   const grotesk = getComputedStyle(document.documentElement).getPropertyValue('--grotesk').trim() || 'sans-serif';
   const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
   const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
-  try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
-  const mx = 72, top = 70, logoS = 128;
-  const logo = document.getElementById('home-logo');
-  if (logo && logo.complete && logo.naturalWidth) { try { ctx.drawImage(logo, mx, top, logoS, logoS); } catch (e) {} }
-  const studio = (CONTENT.settings.name || 'Hand Coded') + '.', wx = mx + logoS + 34;
-  let ws = 120; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - wx - mx && ws > 48) { ws -= 4; ctx.font = wmFont(ws); }
-  ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(studio, wx, top + logoS / 2 + ws * 0.04);
-  ctx.textBaseline = 'top';
+  try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(`500 27px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
+  /* en haut : « Hand Coded. » et, en petit à sa droite, les mots du slogan, comme sur le site */
+  const mx = 72, top = 78, tl = (CONTENT.settings.taglines && (CONTENT.settings.taglines[LANG] || CONTENT.settings.taglines.en)) || [];
+  const studio = tl[0] || ((CONTENT.settings.name || 'Hand Coded') + '.'), words = tl.slice(1), ss = 27, slh = 31;
+  ctx.font = `500 ${ss}px ${grotesk}`; const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + 30 : 0;
+  let ws = 130; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - 2 * mx - sw && ws > 48) { ws -= 4; ctx.font = wmFont(ws); }
+  const nameW = ctx.measureText(studio).width;
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, top + ws * 0.8);
+  ctx.font = `500 ${ss}px ${grotesk}`; ctx.textBaseline = 'top';
+  words.forEach((w, i) => ctx.fillText(w, mx + nameW + 30, top + ws * 0.12 + i * slh));
   const tw = W - 2 * mx; let size = 104, lines = [];
   for (; size >= 40; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
   lines = slogan ? lines.slice(0, 4) : [];
@@ -3040,7 +3118,7 @@ const LED_FONT = {
   '*': '0004150e150400', '=': '00001f001f0000', '%': '18190204081303', '✚': '0004 0e1f0e0400'.replace(/ /g, ''),
 };
 const ledGlyph = ch => {
-  const c = String(ch).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+  const c = String(ch).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[‘’]/g, "'").replace(/[“”«»]/g, '"').toUpperCase();   // apostrophes et guillemets typographiques : le glyphe droit
   const hex = LED_FONT[c] || LED_FONT['?'];
   return Array.from({ length: 7 }, (_, r) => parseInt(hex.substr(r * 2, 2), 16) || 0);
 };
