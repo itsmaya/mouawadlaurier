@@ -363,3 +363,12 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 .logo-swap { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--ink); font: 14px/22px system-ui, sans-serif; cursor: pointer; opacity: 0; transition: opacity .15s; padding: 0; }
 .logo-cell:hover .logo-swap, .logo-swap:focus-visible { opacity: 1; }
 @media (hover: none) { .logo-swap { opacity: 1; } }
+
+/* Réordonner les images en les glissant */
+.media-item .pv, .story-shot img { cursor: grab; position: relative; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.media-item .pv img, .media-item .pv video, .story-shot img { -webkit-user-drag: none; pointer-events: none; }
+.story-shot img { pointer-events: auto; }
+.media-item .pv .rank { position: absolute; left: 6px; top: 6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: rgba(0,0,0,.55); color: #fff; font: 600 11px/20px system-ui, sans-serif; text-align: center; }
+.sorting, .sorting * { cursor: grabbing !important; }
+.sort-hole { opacity: .25; outline: 2px dashed var(--accent, #f1b800); outline-offset: -2px; }
+.sort-ghost { position: fixed; z-index: 9999; pointer-events: none; margin: 0; box-shadow: 0 14px 34px rgba(0,0,0,.28); opacity: .95; transition: none; }

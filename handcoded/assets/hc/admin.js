@@ -72,6 +72,67 @@ function paintBrand() {
 }
 const rand = () => Math.random().toString(36).slice(2, 6);
 const move = (arr, from, to) => { const [x] = arr.splice(from, 1); arr.splice(to, 0, x); };
+
+/* Glisser-déposer pour réordonner des vignettes : on attrape l'image (souris : tout de suite ; doigt : appui long),
+   une copie suit le pointeur et la place vide se déplace dans la grille ; au lâcher, onDrop(ancien rang, nouveau rang). */
+function sortable(box, itemSel, handleSel, onDrop) {
+  box.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    const handle = e.target.closest(handleSel); if (!handle || !box.contains(handle)) return;
+    const item = handle.closest(itemSel); if (!item) return;
+    const items = () => [...box.querySelectorAll(':scope > ' + itemSel)];
+    const from = items().indexOf(item), x0 = e.clientX, y0 = e.clientY, touch = e.pointerType !== 'mouse';
+    let on = false, ghost = null, ox = 0, oy = 0, px = x0, py = y0, timer = 0, raf = 0;
+    const scroller = (() => { for (let n = box.parentElement; n; n = n.parentElement) { const o = getComputedStyle(n).overflowY; if (/(auto|scroll)/.test(o) && n.scrollHeight > n.clientHeight) return n; } return document.scrollingElement; })();
+    const start = () => {
+      on = true; const r = item.getBoundingClientRect(); ox = x0 - r.left; oy = y0 - r.top;
+      ghost = item.cloneNode(true); ghost.classList.add('sort-ghost');
+      Object.assign(ghost.style, { width: r.width + 'px', height: r.height + 'px', left: '0', top: '0' });
+      document.body.appendChild(ghost); item.classList.add('sort-hole'); box.classList.add('sorting');
+      try { handle.setPointerCapture(e.pointerId); } catch (_) {}
+      if (navigator.vibrate && touch) navigator.vibrate(12);
+      place(); raf = requestAnimationFrame(tick);
+    };
+    const place = () => { if (ghost) ghost.style.transform = `translate(${px - ox}px, ${py - oy}px) rotate(1.5deg)`; };
+    const tick = () => {   // défilement automatique près des bords
+      const r = scroller === document.scrollingElement ? { top: 0, bottom: innerHeight } : scroller.getBoundingClientRect();
+      const d = py < r.top + 70 ? -1 : py > r.bottom - 70 ? 1 : 0;
+      if (d) { scroller.scrollTop += d * 12; hover(); }
+      raf = requestAnimationFrame(tick);
+    };
+    const hover = () => {
+      const el = document.elementFromPoint(px, py), over = el && el.closest(itemSel);
+      if (!over || over === item || over.parentElement !== box) return;
+      const list = items(), a = list.indexOf(item), b = list.indexOf(over);
+      box.insertBefore(item, a < b ? over.nextSibling : over);
+    };
+    const moveH = ev => {
+      px = ev.clientX; py = ev.clientY;
+      if (!on) {
+        const far = Math.hypot(px - x0, py - y0) > (touch ? 10 : 5);
+        if (touch) { if (far) cleanup(); return; }
+        if (far) start(); else return;
+      }
+      ev.preventDefault(); place(); hover();
+    };
+    const blockScroll = ev => { if (on) ev.preventDefault(); };
+    const end = ev => {
+      const was = on; cleanup();
+      if (was && ev.type === 'pointerup') { const to = items().indexOf(item); if (to !== from && to > -1) onDrop(from, to); }
+    };
+    const cleanup = () => {
+      clearTimeout(timer); cancelAnimationFrame(raf);
+      removeEventListener('pointermove', moveH); removeEventListener('pointerup', end); removeEventListener('pointercancel', end);
+      handle.removeEventListener('touchmove', blockScroll);
+      if (ghost) ghost.remove(); item.classList.remove('sort-hole'); box.classList.remove('sorting');
+      if (on) { const stop = ev => { ev.stopPropagation(); ev.preventDefault(); }; addEventListener('click', stop, { capture: true, once: true }); setTimeout(() => removeEventListener('click', stop, true), 0); }
+      on = false;
+    };
+    addEventListener('pointermove', moveH, { passive: false }); addEventListener('pointerup', end); addEventListener('pointercancel', end);
+    handle.addEventListener('touchmove', blockScroll, { passive: false });
+    if (touch) timer = setTimeout(start, 280); else e.preventDefault();
+  });
+}
 const fmtSize = n => n == null ? '' : n < 1024 ? n + ' o' : n < 1048576 ? Math.round(n / 1024) + ' Ko' : (n / 1048576).toFixed(1) + ' Mo';
 const initials = s => String(s || '').split(/[\s&/]+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '·';
 function btn(label, onclick, cls = '', extra = {}) { return h('button', { type: 'button', class: 'btn ' + cls, onclick, ...extra }, label); }
@@ -913,6 +974,7 @@ function postEditor(p, redrawList, redraw) {
 
   /* Images et vidéos du bandeau */
   const mediaBox = h('div', { class: 'media-list' });
+  sortable(mediaBox, '.media-item', '.pv', (a, b) => { move(p.media, a, b); change(); drawMedia(); });
   const drawMedia = () => {
     const add = h('div', { class: 'media-add', role: 'button', tabindex: 0, onclick: () => filePicker('image/*,video/mp4,video/webm', true, addMedia), onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } }, h('span', null, '+ Ajouter des images ou des vidéos', h('br'), h('small', null, 'ou glisse-les ici')));
     dropTarget(add, addMedia);
@@ -926,7 +988,7 @@ function postEditor(p, redrawList, redraw) {
       const el = k === 'youtube' ? h('img', { src: `https://i.ytimg.com/vi/${ytIdOf(m.src)}/hqdefault.jpg`, alt: '', loading: 'lazy' })
         : k === 'vimeo' ? h('span', { style: { color: '#888', font: 'italic 18px Georgia, serif' } }, 'Vimeo')
         : vid ? h('video', { src: fileURL(m.src), muted: true, preload: 'metadata', playsinline: true }) : h('img', { src: fileURL(m.src), alt: '', loading: 'lazy' });
-      return h('div', { class: 'media-item' }, h('div', { class: 'pv' }, el),
+      return h('div', { class: 'media-item' }, h('div', { class: 'pv', title: 'Glisse pour changer l’ordre' }, el, h('b', { class: 'rank' }, String(i + 1))),
         h('div', { class: 'ft' }, h('span', { title: m.src }, (k === 'image' ? '' : '▶ ') + (k === 'youtube' ? 'YouTube' : k === 'vimeo' ? 'Vimeo ' + m.src.split('/').pop() : decodeURIComponent(m.src.split('?')[0].split('/').pop()))),
           btn('←', () => { if (i) { move(p.media, i, i - 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Avant', disabled: !i }),
           btn('→', () => { if (i < p.media.length - 1) { move(p.media, i, i + 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Après', disabled: i === p.media.length - 1 }),
@@ -1404,6 +1466,7 @@ function typoBlock(s) {
 function storyEditor(s) {
   const st = s.home.story;
   const shots = h('div', { class: 'story-shots' });
+  sortable(shots, '.story-shot', 'img', (a, b) => { move(st.images, a, b); change(); drawShots(); });
   const drawShots = () => fill(shots, ...st.images.map((src, i) => h('div', { class: 'story-shot' },
       h('img', { src: fileURL(src), alt: '' }),
       h('div', { class: 'acts' },
