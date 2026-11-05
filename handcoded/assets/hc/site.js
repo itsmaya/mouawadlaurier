@@ -379,26 +379,6 @@ async function portraitCard(post, w, h) {
     : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2) : canvasTex(w, h, washed(face), 2);
   return [canvasTex(w, h, face, 3), backTex, (im || bd || isLogo(post)) ? hoverBand(post, w) : null];
 }
-/* Grande carte du cœur du studio : le portrait à gauche, le nom, le rôle et la bio à droite, lisibles sans ouvrir la carte */
-async function bioCard(post, w, h) {
-  const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
-  await fontsReady();
-  const pw = Math.round(h * 0.68), x0 = pw + 14, tw = w - x0 - 14;
-  const face = ctx => {
-    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
-    if (im) drawCover(ctx, im, 0, 0, pw, h);
-    ctx.textBaseline = 'top'; ctx.fillStyle = '#fff';
-    let y = 12; ctx.font = TF(fz(15)); wrapLines(ctx, tr(post.title).trim(), tw).slice(0, 2).forEach(l => { ctx.fillText(l, x0, y); y += fz(16); });
-    const role = tr(post.subtitle).trim();
-    if (role) { y += 1; ctx.font = IT(fz(9.5)); wrapLines(ctx, role, tw).slice(0, 3).forEach(l => { ctx.fillText(l, x0, y); y += fz(11); }); }
-    y += 5; ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fillRect(x0, y, tw, 0.6); y += 6; ctx.fillStyle = '#fff';
-    const bio = htmlToText(tr(post.body)).join(' ').replace(/\s+/g, ' ').trim(), lh = fz(9.6), room = Math.max(1, Math.floor((h - 10 - y) / lh));
-    ctx.font = `${fz(7.6)}px ${UIF}`;
-    let ls = wrapLines(ctx, bio, tw); if (ls.length > room) { ls = ls.slice(0, room); let last = ls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); ls[room - 1] = last + '…'; }
-    ls.forEach(l => { ctx.fillText(l, x0, y); y += lh; });
-  };
-  return [canvasTex(w, h, face, 4), canvasTex(w, h, washed(face), 2)];
-}
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
   if (bd) return textCardPhoto(post, w, h, bd);
@@ -821,12 +801,12 @@ function computeGrid(view) {
   const w = view.w * view.k + STYLE.planeFrameDistance, h = view.h * view.k + STYLE.planeFrameDistance;
   const uw = place ? 1.5 * w + 102.5 : w, uh = place ? Math.max(h, 130) : h, g = Math.round(Math.min(uw, uh) * 0.1) + 6;   // un lieu : la carte et sa fiche, côte à côte
   let best = null; const n = Math.max(1, view.n);
-  for (let c = view.bio && W > H ? n : 1; c <= n; c++) {   // grandes cartes sur écran large : côte à côte
+  for (let c = 1; c <= n; c++) {
     const rows = Math.ceil(n / c), gw = c * uw + (c - 1) * g, gh = rows * uh + (rows - 1) * g, sc = Math.min(aw / gw, ah / gh);
     if (!best || sc > best.sc + 1e-9) best = { cols: c, rows, gw, gh, sc };
   }
   const yOff = view.container.position.y - view.section.container.position.y, floor = place ? 140 : 40;
-  return { ...best, sc: best.sc * (view.bio ? 0.84 : 0.94), uw, uh, g, aw, ah, rk: [fr.l, fr.t, fr.r, fr.b].map(Math.round).join(), fx: (fr.l + fr.r) / 2 - W / 2, fy: (fr.t + fr.b) / 2 - H / 2,
+  return { ...best, sc: best.sc * 0.94, uw, uh, g, aw, ah, rk: [fr.l, fr.t, fr.r, fr.b].map(Math.round).join(), fx: (fr.l + fr.r) / 2 - W / 2, fy: (fr.t + fr.b) / 2 - H / 2,
     zg: 200, gy: floor + best.gh / 2 - yOff, yOff, dx: place ? (w / 2 + 102.5) / 2 : 0 };
 }
 const gridPos = (view, i) => {
@@ -860,14 +840,11 @@ class PostsView3D {
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
     this.tex = this.def.skills ? skillCard : CARD_TEX[this.card];   // savoir-faire : le texte d'abord, l'image l'illustre
     [this.w, this.h] = this.def.skills ? (this.card === 'text' ? CARDS.text.size : CARDS.image.size) : CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
-    /* quelques personnes seulement, toutes avec portrait et bio (le cœur du studio) : de grandes cartes, le portrait et la bio côte à côte */
-    this.bio = this.card === 'portrait' && !this.def.skills && this.n > 0 && this.n <= 4 && this.posts.every(p => p.thumb && !isLogo(p) && htmlToText(tr(p.body)).join(' ').length > 80);
-    if (this.bio) { this.tex = bioCard; [this.w, this.h] = [340, 150]; }
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
     this.L.preset.call(this.L, this);
-    if (gridWanted(this.def) || this.bio) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }   // les grandes cartes se rangent face à l'écran, dans la place libre
+    if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
     this.openPosts();
   }
@@ -987,7 +964,7 @@ class PostsView3D {
     this.grid = G || old; this.L = want ? (this.gridL || (this.gridL = gridLayout(this.base))) : this.base;
     if (same) return true;   // même grille : seule la caméra recadre
     const T = STYLE.tween * 1.2;
-    const held = P.postOpen && this.def.open === 'focus3d' ? P.selected : -1;   // la personne ouverte reste devant la caméra
+    const held = P.postOpen && curOpenMode() === 'focus3d' ? P.selected : -1;   // la personne ouverte reste devant la caméra
     this.postViews.forEach((p, i) => {
       if (!p.ready) return;
       const pos = this.L.position.call(this.L, this, p, i); p.setPosition(pos.x, pos.y, pos.z, pos.rotY);
@@ -1138,7 +1115,7 @@ function reflow(before) {   // grille ↔ disposition d'origine, ou grille recad
   killTweensOf(cam); killTweensOf(camTarget); orbitE = before;
   if (gridView()) P.degreeCamera = frontDeg(P.degreeCamera);
   P.cameraY = camHeight(); closeTurn = true; easeSpeed = STYLE.cameraEaseSpeed;
-  const pv2 = P.postOpen && P.section.def.open === 'focus3d' && postsView.postViews[P.selected];
+  const pv2 = P.postOpen && curOpenMode() === 'focus3d' && !post2D.open && postsView.postViews[P.selected];
   if (pv2 && pv2.ready) { if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(60, STYLE.tween / 2); }
 }
 let gridTick = 0;
@@ -1182,7 +1159,7 @@ function setCamera() { const hmax = 1000, max = 680, div = STYLE.cameraDistanceP
 function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
   const s = orbitCenter();
-  if (P.postOpen && P.section.def.open === 'focus3d' && postsView && postsView.postViews[P.selected]) { const pv2 = postsView.postViews[P.selected]; if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(100, 0); }
+  if (P.postOpen && curOpenMode() === 'focus3d' && !post2D.open && postsView && postsView.postViews[P.selected]) { const pv2 = postsView.postViews[P.selected]; if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(100, 0); }
   const fixed = isMap() || gridView();
   cameraOnlyGoto(s.x + camD() * Math.sin(P.actualDeg), fixed ? P.cameraY : cam.y, s.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
   if (fixed) cameraTarget(s.x, s.ty, s.z, STYLE.cameraSpeed / 2);
@@ -2089,7 +2066,7 @@ function getToSectionView(index = -1, indexPost = 0) {
   checkPostOpenAndClose();
   if (index !== P.currentSection) resetZoom();
   P.currentSection = index; P.resetData(); P.selected = indexPost;
-  changeSection3D(); changeActiveButton(); initCategorieData(); if (performance.now() - enteredAt > 1500) peekCategories(0.7);   // à l'arrivée sur le site, le menu reste fermé ; il s'entrouvre seulement quand on change de section
+  changeSection3D(); changeActiveButton(); initCategorieData();   // le menu des catégories ne s'ouvre jamais tout seul
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
   countView('#' + P.section.def.id, tr(P.section.def.name).trim());
 }
@@ -2113,24 +2090,28 @@ function goToPost(id) {
   if (pageMoved) { const per = d.per; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
   const sel = d.posts.indexOf(post);
   if (!moved && !catMoved && !pageMoved && postsView) { openThatPost(sel); return; }
-  P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData(); if (moved) peekCategories();
+  P.selected = sel; changeSection3D(); changeActiveButton(); initCategorieData();
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
   countView('#' + P.section.def.id, tr(P.section.def.name).trim());
   const token = ++goToken;
   delayedCall(0.5, () => { if (token === goToken && P.data === d && d.posts[sel] === post) openThatPost(sel); });
 }
 strip.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); goToPost(b.dataset.go); } });
+/* Ouverture d'une fiche : celle de la section, sauf pour un tag réglé « pleine page » (le cœur du studio) : la fiche 2D au premier plan */
+const postOpenMode = (post, def = P.section && P.section.def) => (!def ? '' : post && def.open === 'focus3d' && (def.tags || []).some(t => t.page && (post.tags || []).includes(t.id)) ? 'strip' : def.open);
+const curOpenMode = () => postOpenMode(P.data && P.data.posts[P.selected]);
 function openPost() {
   if (!postsView || !P.data.posts[P.selected]) return;
+  const mode = curOpenMode();
   hoverCard(null); hoverBackCard(null);
   checkPostOpenAndClose();
   P.postOpen = true;
-  if ((P.section.def.open === 'strip' || P.section.def.open === 'focus3d') && verticalFiche()) {   // téléphone : la fiche (projet, savoir-faire, personne) se lit de haut en bas
+  if ((mode === 'strip' || mode === 'focus3d') && verticalFiche()) {   // téléphone : la fiche (projet, savoir-faire, personne) se lit de haut en bas
     postV.build(P.data.posts[P.selected], P.section.def.card);
     cats.classList.add('hidden');
     isClicking = false; canvas.classList.remove('dragging');
     closeTurn = true; focusPost(P.selected);
-  } else if (P.section.def.open === 'strip') {
+  } else if (mode === 'strip') {
     whiteboard.hidden = false;
     post2D.build(P.data.posts[P.selected], P.section.def.card);
     cats.classList.add('hidden');
@@ -2479,7 +2460,7 @@ function buildHomeDock(withKeys) {
   const ctl = document.createElement('div'); ctl.id = 'home-ctl';
   ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><b class="ic"><i aria-hidden="true"></i></b><span>Showreel</span></button>` +
     (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false"><b class="ic">${ICON.faders}</b><span class="lbl"></span></button>` : '') +
-    `<button type="button" id="home-about" aria-expanded="false" hidden><b class="ic">${ICON.about}</b></button><figure id="home-pitch" hidden><img alt="" decoding="async"><figcaption><b></b><p></p></figcaption></figure>`;   // des carrés : le mot glisse dedans au survol ; le dernier dit en une phrase ce que fait le studio
+    `<button type="button" id="home-about" aria-expanded="false" hidden><b class="ic">${ICON.about}</b></button><figure id="home-pitch" hidden><img alt="" decoding="async"><figcaption><p></p></figcaption></figure>`;   // des carrés : le mot glisse dedans au survol ; le dernier dit en une phrase ce que fait le studio
   const band = document.getElementById('home-band'), lg = band.querySelector('.lg'); if (lg) lg.after(ctl); else band.appendChild(ctl);
   if (withKeys) buildHvPanel(home, src, ctl);
   buildReelBar(home);
@@ -2532,7 +2513,6 @@ function pitchPhotos() {
   return (sel.length ? sel : CONTENT.posts.filter(ok)).map(p => url(p.thumb));
 }
 function fillPitch(fig, photo = true) {
-  fig.querySelector('b').textContent = CONTENT.settings.name || 'Hand Coded';
   fig.querySelector('p').textContent = pitchText();
   if (!photo) return;
   const list = pitchPhotos(), im = fig.querySelector('img');
@@ -2545,7 +2525,7 @@ function renderAbout() {
     aboutBtn = document.createElement('button'); aboutBtn.type = 'button'; aboutBtn.id = 'about-btn'; aboutBtn.className = 'ui'; aboutBtn.setAttribute('aria-expanded', 'false');
     aboutBtn.innerHTML = `<b class="ic">${ICON.about}</b>`;
     aboutCard = document.createElement('figure'); aboutCard.id = 'about-card'; aboutCard.className = 'ui'; aboutCard.hidden = true;
-    aboutCard.innerHTML = '<img alt="" decoding="async"><figcaption><b></b><p></p></figcaption>';
+    aboutCard.innerHTML = '<img alt="" decoding="async"><figcaption><p></p></figcaption>';
     document.body.append(aboutBtn, aboutCard);
     const show = on => {
       if (on) { fillPitch(aboutCard); aboutCard.hidden = false; placeAbout(); void aboutCard.offsetWidth; }

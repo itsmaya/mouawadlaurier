@@ -614,7 +614,8 @@
       "fr": "Le cœur du studio",
       "ca": "El nucli de l’estudi",
       "es": "El núcleo del estudio"
-     }
+     },
+     "page": true
     },
     {
      "id": "artists",

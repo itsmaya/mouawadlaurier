@@ -283,7 +283,7 @@ async function publish() {
     if (orphans.length && cleanup.checked) orphans.forEach(p => dels.add(p));
     const sha = await S.backend.publish(S.content, [...files, ...[...dels].map(path => ({ path, delete: true }))], msg.value.trim() || 'Mise à jour du contenu');
     S.base = JSON.stringify(S.content); if (S.backend.kind === 'github') S.head = sha;
-    files.forEach(f => { S.recent.set(f.path, S.staged.get(f.path)); S.staged.delete(f.path); });
+    files.forEach(f => { const st = S.staged.get(f.path); if (st) S.recent.set(f.path, st); S.staged.delete(f.path); });   // seulement les images et fichiers envoyés (content.js, index.html… n'ont pas d'aperçu local)
     S.staged.forEach(s => URL.revokeObjectURL(s.url)); S.staged.clear(); S.deletes.clear(); S.files = null;
     await kvDel(S.draftKey);
     toast(S.backend.kind === 'github' ? 'Publié. Le site sera à jour dans une minute ou deux.' : S.backend.kind === 'folder' ? `Enregistré dans le dossier « ${S.backend.name} ».` : 'Publié dans la démo (dans ce navigateur seulement).');
@@ -782,6 +782,7 @@ function tagsEditor(sec, redraw) {
           siteLangs().map(l => l === 'en' ? en : textInput(() => tg.label[l] ?? '', v => { tg.label[l] = v; }, { placeholder: LANG_NAMES[l] })),
           h('span', { class: 'id', title: tg.id }, tg.id), h('span', { class: 'n' }, n),
           h('span', { style: { display: 'flex', gap: '2px' } },
+            sec.open !== 'strip' ? btn(tg.page ? '▤' : '▢', () => { if (tg.page) delete tg.page; else tg.page = true; change(); draw(); }, 'sm icon ghost', { 'aria-label': 'Fiches en pleine page 2D', 'aria-pressed': String(!!tg.page), title: tg.page ? 'Fiches en pleine page 2D, à lire au premier plan' : 'Fiches en 3D, comme le reste de la section' }) : null,
             btn(tg.menu === false ? '◌' : '●', () => { if (tg.menu === false) delete tg.menu; else tg.menu = false; change(); draw(); }, 'sm icon ghost', { 'aria-label': 'Afficher dans le menu du site', title: tg.menu === false ? 'Caché du menu du site (le tag sert au tri)' : 'Dans le menu du site' }),
             btn('↑', () => { if (i) { move(sec.tags, i, i - 1); change(); draw(); } }, 'sm icon ghost', { 'aria-label': 'Monter', disabled: !i }),
             btn('↓', () => { if (i < sec.tags.length - 1) { move(sec.tags, i, i + 1); change(); draw(); } }, 'sm icon ghost', { 'aria-label': 'Descendre', disabled: i === sec.tags.length - 1 }),
@@ -1622,7 +1623,7 @@ function drawBackups(box) {
 /* ================================================================ Aperçu du brouillon */
 function openPreview(start) {
   const files = {};
-  S.recent.forEach((s, p) => { files[p] = s.url; }); S.staged.forEach((s, p) => { files[p] = s.url; });
+  S.recent.forEach((s, p) => { if (s && s.url) files[p] = s.url; }); S.staged.forEach((s, p) => { if (s && s.url) files[p] = s.url; });   // après une publication, l'aperçu doit toujours s'ouvrir
   if ((S.backend.kind === 'demo' || S.backend.kind === 'folder') && S.backend.urls) S.backend.urls.forEach((u, p) => { if (!files[p]) files[p] = u; });
   const sections = S.content.sections.filter(s => s.visible);
   let current = start || (S.view === 'posts' ? S.filter.section : S.view === 'sections' ? S.sel.section : S.view === 'settings' ? '__home' : '') || S.content.settings.startSection;

@@ -909,3 +909,33 @@ html.neg #about-card img { filter: invert(1); }   /* la photo garde ses vraies c
   #home-pitch img { aspect-ratio: 2 / 1; }
 }
 #home-pitch { z-index: 30; }
+
+/* La fiche « i » : une photo fine en hauteur à gauche, la phrase en linéaire, plus facile à lire */
+#home-pitch, #about-card { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: stretch; width: min(430px, calc(100vw - 100px)); }
+#home-pitch img, #about-card img { width: 100%; height: 100%; min-height: 100%; aspect-ratio: auto !important; object-fit: cover; }
+#home-pitch img[hidden], #about-card img[hidden] { display: none; }
+#home-pitch:has(img[hidden]), #about-card:has(img[hidden]) { grid-template-columns: minmax(0, 1fr); }
+#home-pitch figcaption, #about-card figcaption { position: relative; padding: 26px 24px 24px; }
+#home-pitch figcaption::before, #about-card figcaption::before { content: ''; position: absolute; left: 24px; top: 0; width: 28px; height: 3px; background: var(--accent); }
+#home-pitch p, #about-card p { font-family: var(--ui); font-style: normal; font-weight: 400; font-size: 18px; line-height: 26px; letter-spacing: 0; }
+@media (max-width: 700px), (max-height: 520px) {
+  #home-pitch, #about-card { grid-template-columns: 72px minmax(0, 1fr); width: calc(100vw - 40px); }
+  #home-pitch figcaption, #about-card figcaption { padding: 22px 18px 20px; }
+  #home-pitch figcaption::before, #about-card figcaption::before { left: 18px; }
+  #home-pitch p, #about-card p { font-size: 16px; line-height: 23px; }
+}
+#home-pitch figcaption, #about-card figcaption { padding-top: 42px; }
+#home-pitch figcaption::before, #about-card figcaption::before { top: 24px; }
+@media (max-width: 700px), (max-height: 520px) { #home-pitch figcaption, #about-card figcaption { padding-top: 36px; } #home-pitch figcaption::before, #about-card figcaption::before { top: 20px; } }
+
+/* La fiche « i » : la photo carrée, plus large, à gauche ; la phrase à droite */
+#home-pitch, #about-card { grid-template-columns: 210px minmax(0, 1fr); align-items: start; width: min(580px, calc(100vw - 100px)); }
+#home-pitch img, #about-card img { width: 210px; height: 210px; min-height: 0; aspect-ratio: 1 / 1 !important; }
+#home-pitch figcaption, #about-card figcaption { padding: 38px 24px 24px; }
+#home-pitch p, #about-card p { font-size: 16px; line-height: 23px; }
+@media (max-width: 700px), (max-height: 520px) {
+  #home-pitch, #about-card { grid-template-columns: 112px minmax(0, 1fr); width: calc(100vw - 40px); }
+  #home-pitch img, #about-card img { width: 112px; height: 112px; }
+  #home-pitch figcaption, #about-card figcaption { padding: 32px 16px 18px; }
+  #home-pitch p, #about-card p { font-size: 15px; line-height: 21px; }
+}
