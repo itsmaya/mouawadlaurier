@@ -604,7 +604,7 @@
    "card": "portrait",
    "open": "focus3d",
    "perPage": 20,
-   "defaultTag": "",
+   "defaultTag": "core",
    "visible": true,
    "tags": [
     {
@@ -617,15 +617,6 @@
      }
     },
     {
-     "id": "specialists",
-     "label": {
-      "en": "Specialists",
-      "fr": "Spécialistes",
-      "ca": "Especialistes",
-      "es": "Especialistas"
-     }
-    },
-    {
      "id": "artists",
      "label": {
       "en": "Artists",
@@ -635,17 +626,82 @@
      }
     },
     {
+     "id": "specialists",
+     "label": {
+      "en": "Specialists",
+      "fr": "Spécialistes",
+      "ca": "Especialistes",
+      "es": "Especialistas"
+     }
+    },
+    {
+     "id": "brands",
+     "label": {
+      "en": "Brands",
+      "fr": "Marques",
+      "ca": "Marques",
+      "es": "Marcas"
+     }
+    },
+    {
+     "id": "agencies",
+     "label": {
+      "en": "Agencies & production",
+      "fr": "Agences et production",
+      "ca": "Agències i producció",
+      "es": "Agencias y producción"
+     }
+    },
+    {
+     "id": "venues",
+     "label": {
+      "en": "Venues",
+      "fr": "Lieux",
+      "ca": "Espais",
+      "es": "Espacios"
+     }
+    },
+    {
+     "id": "festivals",
+     "label": {
+      "en": "Festivals & events",
+      "fr": "Festivals et événements",
+      "ca": "Festivals i esdeveniments",
+      "es": "Festivales y eventos"
+     }
+    },
+    {
+     "id": "institutions",
+     "label": {
+      "en": "Institutions",
+      "fr": "Institutions",
+      "ca": "Institucions",
+      "es": "Instituciones"
+     }
+    },
+    {
+     "id": "research",
+     "label": {
+      "en": "Research & tools",
+      "fr": "Recherche et outils",
+      "ca": "Recerca i eines",
+      "es": "Investigación y herramientas"
+     }
+    },
+    {
      "id": "partners",
      "label": {
       "en": "Partners",
       "fr": "Partenaires",
       "ca": "Col·laboradors",
       "es": "Colaboradores"
-     }
+     },
+     "menu": false
     }
    ],
    "network": false,
-   "skills": false
+   "skills": false,
+   "noAll": true
   },
   {
    "id": "contact",
@@ -6732,6 +6788,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/ruinart.png",
@@ -6777,6 +6834,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/absolut.png",
@@ -6822,6 +6880,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/audi.png",
@@ -6867,6 +6926,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/fc-barcelona.png",
@@ -6912,6 +6972,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/bnp-paribas-real-estate.png",
@@ -6957,6 +7018,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/la-prairie.png",
@@ -7002,6 +7064,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/nestle.png",
@@ -7047,6 +7110,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/marque-peugeot.png",
@@ -7092,6 +7156,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/marque-lexus.png",
@@ -7137,6 +7202,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/marque-coors.png",
@@ -7182,6 +7248,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/marque-cadbury.png",
@@ -7227,6 +7294,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/churchills.png",
@@ -7272,6 +7340,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/fisheye.png",
@@ -7317,6 +7386,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/tetro.png",
@@ -7362,6 +7432,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/ddb.png",
@@ -7407,6 +7478,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/artexplora.png",
@@ -7452,6 +7524,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/itisnow.png",
@@ -7497,6 +7570,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/caringgallery.png",
@@ -7542,6 +7616,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/palaisdetokyo.png",
@@ -7587,6 +7662,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/grandpalais.png",
@@ -7632,6 +7708,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/centquatre.png",
@@ -7677,6 +7754,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/gaite-lyrique.png",
@@ -7722,6 +7800,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/fundacion-telefonica.png",
@@ -7767,6 +7846,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/learningplanet.png",
@@ -7812,6 +7892,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/nanomusee.png",
@@ -7857,6 +7938,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/biennalevenise.png",
@@ -7902,6 +7984,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/biennaledakar.png",
@@ -7947,6 +8030,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/riyadhart.png",
@@ -7992,6 +8076,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/lumiere.png",
@@ -8037,6 +8122,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/nuit-blanche.png",
@@ -8082,6 +8168,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/llum-bcn.png",
@@ -8127,6 +8214,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/mira.png",
@@ -8172,6 +8260,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/eufonic.png",
@@ -8217,6 +8306,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/sharjah-light-festival.png",
@@ -8262,6 +8352,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/proyecta.png",
@@ -8307,6 +8398,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/signal-festival.png",
@@ -8352,6 +8444,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/into-the-great-wide-open.png",
@@ -8397,6 +8490,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/music-tech-fest.png",
@@ -8442,6 +8536,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/societe-du-grand-paris.png",
@@ -8487,6 +8582,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/institutfrancais.png",
@@ -8532,6 +8628,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/generalitat.png",
@@ -8577,6 +8674,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/catalanarts.png",
@@ -8622,6 +8720,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/ramonllull.png",
@@ -8667,6 +8766,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/scam.png",
@@ -8712,6 +8812,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/cnrs.png",
@@ -8757,6 +8858,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/upf.png",
@@ -8802,6 +8904,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/ircam.png",
@@ -8847,6 +8950,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/cea.png",
@@ -8892,6 +8996,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/cupra.png",
@@ -8937,6 +9042,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/red-bull.png",
@@ -8982,6 +9088,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/danone.png",
@@ -9027,6 +9134,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/nokia.png",
@@ -9072,6 +9180,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/pommery.png",
@@ -9117,6 +9226,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/santander.png",
@@ -9162,6 +9272,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/eventide.png",
@@ -9207,6 +9318,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/france-24.png",
@@ -9252,6 +9364,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/rai.png",
@@ -9297,6 +9410,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/tv3.png",
@@ -9342,6 +9456,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/cite-de-la-musique.png",
@@ -9387,6 +9502,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/mta-festival.png",
@@ -9432,6 +9548,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/chataigne.png",
@@ -9477,6 +9594,7 @@
    },
    "date": "",
    "tags": [
+    "brands",
     "partners"
    ],
    "thumb": "media/logos/alpine.png",
@@ -9730,6 +9848,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/aubio.png",
@@ -10013,6 +10132,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/le-fresnoy.png",
@@ -10058,6 +10178,7 @@
    },
    "date": "",
    "tags": [
+    "research",
     "partners"
    ],
    "thumb": "media/logos/la-rochelle-universite.png",
@@ -10103,6 +10224,7 @@
    },
    "date": "",
    "tags": [
+    "agencies",
     "partners"
    ],
    "thumb": "media/logos/nasonmoretti.png",
@@ -10148,6 +10270,7 @@
    },
    "date": "",
    "tags": [
+    "festivals",
     "partners"
    ],
    "thumb": "media/logos/hub-montreal.png",
@@ -10193,6 +10316,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/musee-de-l-elysee.png",
@@ -10238,6 +10362,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/fondation-ove.png",
@@ -10283,6 +10408,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/sant-joan-de-deu.png",
@@ -10328,6 +10454,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/chu-lille.png",
@@ -10373,6 +10500,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/chu-bordeaux.png",
@@ -10418,6 +10546,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/abbaye-de-fontevraud.png",
@@ -10463,6 +10592,7 @@
    },
    "date": "",
    "tags": [
+    "venues",
     "partners"
    ],
    "thumb": "media/logos/abbaye-de-vivoin.png",

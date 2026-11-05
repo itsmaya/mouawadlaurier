@@ -73,12 +73,15 @@ class Provider {
     this.defaultCategory = section.defaultTag || '';
     this.changeCategory(this.defaultCategory);
   }
-  get categoryList() {   // "Tout" + les tags qui ont au moins un contenu publié
-    const used = new Set(this.all.flatMap(p => p.tags));
-    return [{ id: '', label: Object.fromEntries(LANGS.map(l => [l, (UI[l] || UI.en).all])) }, ...this.section.tags.filter(tg => used.has(tg.id))];
+  get categoryList() {   // "Tout" (sauf si la section s'en passe) + les tags du menu qui ont au moins un contenu publié
+    const used = new Set(this.all.flatMap(p => p.tags)), tags = this.section.tags.filter(tg => used.has(tg.id) && tg.menu !== false);
+    const all = { id: '', label: Object.fromEntries(LANGS.map(l => [l, (UI[l] || UI.en).all])) };
+    return this.section.noAll && tags.length ? tags : [all, ...tags];
   }
+  tagOf(post) { const c = this.categoryList; return post.tags.find(id => c.some(x => x.id === id)) || (c[0] ? c[0].id : ''); }   // le groupe du menu où ranger ce contenu
   changeCategory(id) {
-    if (id && !this.categoryList.some(c => c.id === id)) id = '';
+    const list = this.categoryList;
+    if (!list.some(c => c.id === id)) id = list.some(c => c.id === this.defaultCategory) ? this.defaultCategory : (list[0] ? list[0].id : '');
     this.category = id;
     this.list = id ? this.all.filter(p => p.tags.includes(id)) : this.all;
     this.first = 0; this.posts = this.list.slice(0, this.per); this.last = this.posts.length;
@@ -375,6 +378,26 @@ async function portraitCard(post, w, h) {
   const backTex = back ? canvasTex(w, h, ctx => drawCover(ctx, back, 0, 0, w, h), 3)
     : bd ? canvasTex(w, h, mirrored(w, ctx => face(ctx, true)), 2) : canvasTex(w, h, washed(face), 2);
   return [canvasTex(w, h, face, 3), backTex, (im || bd || isLogo(post)) ? hoverBand(post, w) : null];
+}
+/* Grande carte du cœur du studio : le portrait à gauche, le nom, le rôle et la bio à droite, lisibles sans ouvrir la carte */
+async function bioCard(post, w, h) {
+  const im = post.thumb ? await loadImage(post.thumb).catch(() => null) : null;
+  await fontsReady();
+  const pw = Math.round(h * 0.68), x0 = pw + 14, tw = w - x0 - 14;
+  const face = ctx => {
+    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+    if (im) drawCover(ctx, im, 0, 0, pw, h);
+    ctx.textBaseline = 'top'; ctx.fillStyle = '#fff';
+    let y = 12; ctx.font = TF(fz(15)); wrapLines(ctx, tr(post.title).trim(), tw).slice(0, 2).forEach(l => { ctx.fillText(l, x0, y); y += fz(16); });
+    const role = tr(post.subtitle).trim();
+    if (role) { y += 1; ctx.font = IT(fz(9.5)); wrapLines(ctx, role, tw).slice(0, 3).forEach(l => { ctx.fillText(l, x0, y); y += fz(11); }); }
+    y += 5; ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fillRect(x0, y, tw, 0.6); y += 6; ctx.fillStyle = '#fff';
+    const bio = htmlToText(tr(post.body)).join(' ').replace(/\s+/g, ' ').trim(), lh = fz(9.6), room = Math.max(1, Math.floor((h - 10 - y) / lh));
+    ctx.font = `${fz(7.6)}px ${UIF}`;
+    let ls = wrapLines(ctx, bio, tw); if (ls.length > room) { ls = ls.slice(0, room); let last = ls[room - 1]; while (last && ctx.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); ls[room - 1] = last + '…'; }
+    ls.forEach(l => { ctx.fillText(l, x0, y); y += lh; });
+  };
+  return [canvasTex(w, h, face, 4), canvasTex(w, h, washed(face), 2)];
 }
 async function textCard(post, w, h) {
   const bd = await skillBackdrop(post);
@@ -798,12 +821,12 @@ function computeGrid(view) {
   const w = view.w * view.k + STYLE.planeFrameDistance, h = view.h * view.k + STYLE.planeFrameDistance;
   const uw = place ? 1.5 * w + 102.5 : w, uh = place ? Math.max(h, 130) : h, g = Math.round(Math.min(uw, uh) * 0.1) + 6;   // un lieu : la carte et sa fiche, côte à côte
   let best = null; const n = Math.max(1, view.n);
-  for (let c = 1; c <= n; c++) {
+  for (let c = view.bio && W > H ? n : 1; c <= n; c++) {   // grandes cartes sur écran large : côte à côte
     const rows = Math.ceil(n / c), gw = c * uw + (c - 1) * g, gh = rows * uh + (rows - 1) * g, sc = Math.min(aw / gw, ah / gh);
     if (!best || sc > best.sc + 1e-9) best = { cols: c, rows, gw, gh, sc };
   }
   const yOff = view.container.position.y - view.section.container.position.y, floor = place ? 140 : 40;
-  return { ...best, sc: best.sc * 0.94, uw, uh, g, aw, ah, rk: [fr.l, fr.t, fr.r, fr.b].map(Math.round).join(), fx: (fr.l + fr.r) / 2 - W / 2, fy: (fr.t + fr.b) / 2 - H / 2,
+  return { ...best, sc: best.sc * (view.bio ? 0.84 : 0.94), uw, uh, g, aw, ah, rk: [fr.l, fr.t, fr.r, fr.b].map(Math.round).join(), fx: (fr.l + fr.r) / 2 - W / 2, fy: (fr.t + fr.b) / 2 - H / 2,
     zg: 200, gy: floor + best.gh / 2 - yOff, yOff, dx: place ? (w / 2 + 102.5) / 2 : 0 };
 }
 const gridPos = (view, i) => {
@@ -837,11 +860,14 @@ class PostsView3D {
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
     this.tex = this.def.skills ? skillCard : CARD_TEX[this.card];   // savoir-faire : le texte d'abord, l'image l'illustre
     [this.w, this.h] = this.def.skills ? (this.card === 'text' ? CARDS.text.size : CARDS.image.size) : CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
+    /* quelques personnes seulement, toutes avec portrait et bio (le cœur du studio) : de grandes cartes, le portrait et la bio côte à côte */
+    this.bio = this.card === 'portrait' && !this.def.skills && this.n > 0 && this.n <= 4 && this.posts.every(p => p.thumb && !isLogo(p) && htmlToText(tr(p.body)).join(' ').length > 80);
+    if (this.bio) { this.tex = bioCard; [this.w, this.h] = [340, 150]; }
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
     this.L.preset.call(this.L, this);
-    if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
+    if (gridWanted(this.def) || this.bio) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }   // les grandes cartes se rangent face à l'écran, dans la place libre
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
     this.openPosts();
   }
@@ -1269,7 +1295,8 @@ function setMenuPosition() {
     y = Math.min(y, langsEl.getBoundingClientRect().top - menu.offsetHeight - 22);   // toujours au-dessus des langues
     menu.style.left = STYLE.margin + 'px'; menu.style.top = y + 'px';
   } else {   // en bas à gauche, au-dessus des langues (plus haut sur grand écran, au niveau des flèches de pages)
-    const lt = langsEl.hidden ? H - 30 : langsEl.getBoundingClientRect().top;
+    let lt = langsEl.hidden ? H - 30 : langsEl.getBoundingClientRect().top;
+    if (!wideScreen() && !catBox.hidden) { const cb = catBox.getBoundingClientRect(); if (cb.height && cb.left < W / 2) lt = Math.min(lt, cb.top); }   // téléphone : le menu passe au-dessus de la Sélection
     menu.style.left = (wideScreen() ? 26 : STYLE.margin) + 'px'; menu.style.top = Math.round(Math.min(H - (menu.offsetHeight || 86) - (wideScreen() ? 100 : 56), lt - (menu.offsetHeight || 86) - 24)) + 'px';
   }
   document.body.classList.toggle('post-open-wide', wideScreen() && !!P.postOpen);   // fiche ouverte : le Showreel sous la signature s'efface
@@ -1279,15 +1306,12 @@ function setMenuPosition() {
 function placeReel() {
   if (!reel || !reel.btn) return;
   const b = reel.btn;
-  if (wideScreen()) { b.style.top = Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + 26) + 'px'; b.style.left = (sloganEl.offsetLeft + 2) + 'px'; b.style.right = 'auto'; }
-  else b.style.top = b.style.left = b.style.right = '';
+  b.style.top = Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16)) + 'px'; b.style.left = (sloganEl.offsetLeft + 2) + 'px'; b.style.right = 'auto';   // la même place sur ordinateur, tablette et téléphone
 }
 /* la sélection (tags) sous la signature, en haut à gauche : au même endroit que le bouton Showreel de l'accueil */
 function placeCats() {   // grand écran : en bas au centre, sous les flèches de pages ; téléphone : sous la signature
-  if (wideScreen()) { catBox.style.top = catBox.style.left = ''; catList.style.maxHeight = Math.max(140, H - 200) + 'px'; return; }
-  const y = sloganEl.offsetTop + sloganEl.offsetHeight + 10;
-  catBox.style.top = Math.round(y) + 'px'; catBox.style.left = sloganEl.offsetLeft + 'px';
-  catList.style.maxHeight = Math.max(140, H - y - 120) + 'px';   // une longue liste défile au lieu de sortir de l'écran
+  catBox.style.top = catBox.style.left = ''; catList.style.maxHeight = Math.max(140, H - 200) + 'px';   // en bas, comme sur ordinateur ; une longue liste défile au lieu de sortir de l'écran
+  document.body.classList.toggle('cats-left', !wideScreen() && W < 560);   // téléphone debout : à gauche, pour laisser la place aux langues et au clavier
 }
 /* Logo par défaut : anneau, disque noir, lettres réglées dans Typographie › Logo rond */
 const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, invert);
@@ -1295,7 +1319,8 @@ const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, i
 function drawLogos() {
   const s = CONTENT.settings, accent = s.accent || '#ffcc00';
   const logo = s.logo ? url(s.logo) : ringLogo(negMode ? '#ffffff' : accent, negMode);   // en négatif, l'image est pré-inversée : la page inversée la remet à l'endroit
-  ['logo', 'home-logo'].forEach(id => { const el = document.getElementById(id); if (el) { el.src = id === 'home-logo' && !s.logo ? ringLogo('#ffffff', false) : logo; el.classList.toggle('raw', !s.logo); } });   // l'accueil reste sombre : il prend toujours le logo de nuit, anneau blanc, ombre jaune
+  const hl = document.getElementById('home-logo'); if (hl) { hl.src = s.logo ? logo : ringLogo('#ffffff', false); hl.classList.toggle('raw', !s.logo); }
+  const sl = document.getElementById('logo'); if (sl) { sl.style.backgroundImage = s.logo ? `url("${logo}")` : ''; sl.classList.toggle('img', !!s.logo); }   // le logo du site est un simple disque : noir le jour, jaune la nuit   // l'accueil reste sombre : il prend toujours le logo de nuit, anneau blanc, ombre jaune
   setFavicon(s.logo ? logo : (negMode ? ringLogo(accent) : logo));
 }
 function setFavicon(href) {
@@ -1334,7 +1359,7 @@ function renderTexts() {
   if (!P.postOpen) document.title = BASE_TITLE || s.name || 'Hand Coded';
   const tl = (s.taglines && (s.taglines[LANG] || s.taglines.en)) || [];
   const sloganHTML = tl.length ? `<b class="wm">${escapeHTML(tl[0])}</b>${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}` : escapeHTML(s.name);
-  sloganEl.innerHTML = tl.length ? sloganHTML.replace('<b class="wm">', `<b class="wm" role="link" tabindex="0" title="${escapeHTML(ui('homeLink'))}">`) : sloganHTML;
+  sloganEl.innerHTML = tl.length ? `<b class="wm" role="link" tabindex="0" title="${escapeHTML(ui('homeLink'))}">${escapeHTML(tl[0])}</b><span class="tls">${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}</span>` : sloganHTML;   // les mots du slogan en petit, à droite de la signature
   document.getElementById('home-slogan').innerHTML = sloganHTML;
   /* Logo par défaut : anneau à la couleur d'accent sur fond blanc, anneau blanc sur fond noir. Il échappe à l'inversion (classe raw). */
   drawLogos();
@@ -1343,8 +1368,8 @@ function renderTexts() {
   ['logo'].forEach(id => {   // le logo du site bascule jour / nuit (l'accueil, lui, reste sombre)
     const logoEl = document.getElementById(id); if (!logoEl) return;
     logoEl.classList.toggle('toggle', canToggle);
-    if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.alt = logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); }
-    else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.alt = ''; logoEl.removeAttribute('title'); }
+    if (canToggle) { logoEl.setAttribute('role', 'button'); logoEl.tabIndex = 0; logoEl.setAttribute('aria-pressed', String(negMode)); logoEl.title = ui(negMode ? 'toPos' : 'toNeg'); logoEl.setAttribute('aria-label', logoEl.title); }
+    else { logoEl.removeAttribute('role'); logoEl.removeAttribute('tabindex'); logoEl.removeAttribute('aria-pressed'); logoEl.removeAttribute('aria-label'); logoEl.removeAttribute('title'); }
   });
   home.classList.toggle('no-ticker', !!(s.home && s.home.tickerOff));
   if (!enterBtn.classList.contains('wait')) setEnterLabel(tr(s.home.enter) || ui('enter'));
@@ -1354,7 +1379,8 @@ function renderTexts() {
   pgPrev.setAttribute('aria-label', ui('prev')); pgNext.setAttribute('aria-label', ui('next'));
   const cap = document.getElementById('cat-cap'); if (cap) cap.textContent = ui('category');
   const langs = s.langs && s.langs.length ? s.langs : LANGS;
-  [langsEl, document.getElementById('home-langs')].forEach(box => {
+  renderLangMenu(langs);
+  [document.getElementById('home-langs')].forEach(box => {
     box.innerHTML = '';
     if (langs.length < 2) return;
     langs.forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.textContent = l.toUpperCase(); b.setAttribute('aria-pressed', String(l === LANG)); b.setAttribute('aria-label', ui('lang') + ' ' + l.toUpperCase()); b.addEventListener('click', () => setLang(l)); box.appendChild(b); });
@@ -1364,6 +1390,19 @@ function renderTexts() {
   document.documentElement.style.setProperty('--accent-inv', invertHex(CONTENT.settings.accent || '#ffcc00'));   // affiché en jaune une fois la page inversée
   buildTickerDots();
 }
+/* Langues du site : un petit menu déroulant vertical (▸ FR), qui s'ouvre vers le haut */
+function renderLangMenu(langs) {
+  langsEl.innerHTML = ''; langsEl.classList.remove('open');
+  if (langs.length < 2) return;
+  const open = document.createElement('button'); open.type = 'button'; open.className = 'lg-open'; open.setAttribute('aria-expanded', 'false'); open.setAttribute('aria-haspopup', 'true');
+  open.setAttribute('aria-label', ui('lang') + ' : ' + LANG.toUpperCase()); open.innerHTML = `<i class="tri"></i><span>${LANG.toUpperCase()}</span>`;
+  const list = document.createElement('ul'); list.className = 'lg-list';
+  langs.filter(l => l !== LANG).forEach(l => { const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.textContent = l.toUpperCase(); b.lang = l; b.setAttribute('aria-label', ui('lang') + ' ' + l.toUpperCase()); b.addEventListener('click', () => { langsEl.classList.remove('open'); setLang(l); }); li.appendChild(b); list.appendChild(li); });
+  open.addEventListener('click', () => { const o = langsEl.classList.toggle('open'); open.setAttribute('aria-expanded', String(o)); });
+  langsEl.append(list, open);
+}
+document.addEventListener('pointerdown', e => { if (langsEl.classList.contains('open') && !langsEl.contains(e.target)) { langsEl.classList.remove('open'); const o = langsEl.querySelector('.lg-open'); if (o) o.setAttribute('aria-expanded', 'false'); } });
+langsEl.addEventListener('keydown', e => { if (e.code === 'Escape' && langsEl.classList.contains('open')) { e.stopPropagation(); langsEl.classList.remove('open'); const o = langsEl.querySelector('.lg-open'); if (o) { o.setAttribute('aria-expanded', 'false'); o.focus(); } } });
 function setLang(l) {
   if (l === LANG) return;
   LANG = l; try { localStorage.setItem('hc-lang', l); } catch (e) {}
@@ -2043,7 +2082,7 @@ function getToSectionView(index = -1, indexPost = 0) {
   checkPostOpenAndClose();
   if (index !== P.currentSection) resetZoom();
   P.currentSection = index; P.resetData(); P.selected = indexPost;
-  changeSection3D(); changeActiveButton(); initCategorieData(); peekCategories(performance.now() - enteredAt < 1500 ? 2.2 : 0.7);   // à l'entrée, après le zoom d'arrivée
+  changeSection3D(); changeActiveButton(); initCategorieData(); if (performance.now() - enteredAt > 1500) peekCategories(0.7);   // à l'arrivée sur le site, le menu reste fermé ; il s'entrouvre seulement quand on change de section
   try { history.replaceState(null, '', '#' + P.section.def.id); } catch (e) {}
   countView('#' + P.section.def.id, tr(P.section.def.name).trim());
 }
@@ -2061,7 +2100,7 @@ function goToPost(id) {
   if (moved) resetZoom();
   P.currentSection = si; if (moved) P.resetData();
   const d = P.data;
-  const catMoved = !d.list.includes(post); if (catMoved) d.changeCategory('');
+  const catMoved = !d.list.includes(post); if (catMoved) d.changeCategory(d.categoryList.some(c => c.id === '') ? '' : d.tagOf(post));
   const idx = d.list.indexOf(post); if (idx < 0) return;
   const pageMoved = idx < d.first || idx >= d.last;
   if (pageMoved) { const per = d.per; d.first = Math.floor(idx / per) * per; d.last = Math.min(d.list.length, d.first + per); d.posts = d.list.slice(d.first, d.last); }
@@ -2239,6 +2278,39 @@ function toggleNeg() {
   renderTexts();
   if (postsView) postsView.retexture();
 }
+/* Le disque du logo : quand la souris s'approche, un disque d'ombre glisse devant, du côté de la souris, et fait une éclipse.
+   L'ombre est un trou dans le disque (masque) : on voit le vrai fond à travers, de jour comme de nuit. */
+(() => {
+  const el = document.getElementById('logo'); if (!el) return;
+  let mx = 0, my = 0, ang = Math.atan2(0.38, -1), ta = ang, tm = 2.3, ca = ang, cm = 2.3, raf = 0;   // l'ombre : angle et distance au centre, en rayons ; au repos, hors du cercle
+  const draw = () => {
+    const R = el.offsetWidth / 2; if (!R) return;
+    if (cm > 2.02) { el.style.webkitMaskImage = el.style.maskImage = ''; return; }
+    const x = R + Math.cos(ca) * cm * R, y = R + Math.sin(ca) * cm * R;
+    const k = Math.max(0, Math.min(1, 1 - cm / 0.28)), h = R - k * Math.max(2, R * 0.085);   // près du centre, l'ombre rétrécit un peu : il reste un anneau (noir le jour, jaune la nuit), l'éclipse totale
+    el.style.webkitMaskImage = el.style.maskImage = `radial-gradient(circle ${R}px at ${x.toFixed(2)}px ${y.toFixed(2)}px, transparent ${(h - 0.6).toFixed(2)}px, #000 ${(h + 0.6).toFixed(2)}px)`;
+  };
+  const step = () => {   // l'angle et la distance glissent séparément : l'ombre tourne autour du disque, elle ne le traverse jamais
+    raf = 0; let da = ta - ca; da = Math.atan2(Math.sin(da), Math.cos(da));
+    if (cm > 2.02) ca = ta; else ca += da * 0.2;
+    cm += (tm - cm) * 0.16;
+    if (Math.abs(da) < 0.003) ca = ta; if (Math.abs(tm - cm) < 0.003) cm = tm;
+    draw(); if (ca !== ta || cm !== tm) raf = requestAnimationFrame(step);
+  };
+  const aim = m => { ta = ang; tm = m; if (!raf) raf = requestAnimationFrame(step); };
+  const track = () => {
+    const r = el.getBoundingClientRect(), R = r.width / 2; if (!R) return;
+    const dx = mx - (r.left + R), dy = my - (r.top + R), d = Math.hypot(dx, dy);
+    if (d > R * 0.25) ang = Math.atan2(dy, dx);
+    const u = d / R, t = Math.max(0, Math.min(1, (5.5 - u) / 4.5)), e = t * t * (3 - 2 * t);
+    aim(u <= 1 ? 0.62 * u : 0.62 + 1.68 * (1 - e));   // la souris à 5 rayons : l'ombre arrive ; au bord du disque : un croissant ; au centre : l'ombre couvre tout le disque
+  };
+  let q = false;
+  window.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || !el.classList.contains('toggle')) return; mx = e.clientX; my = e.clientY; if (!q) { q = true; requestAnimationFrame(() => { q = false; track(); }); } }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => aim(2.3));
+  el.addEventListener('focus', () => { if (el.matches(':focus-visible')) { ang = Math.atan2(0.38, -1); aim(0.55); } });
+  el.addEventListener('blur', () => aim(2.3));
+})();
 ['logo'].forEach(id => {
   const logoClick = document.getElementById(id); if (!logoClick) return;
   logoClick.addEventListener('click', toggleNeg);
@@ -2254,7 +2326,7 @@ function renderReel() {
   const src = (CONTENT.settings.showreel || '').trim();
   if (!reel) {
     const btn = document.createElement('button'); btn.id = 'reel-btn'; btn.type = 'button'; btn.className = 'ui';
-    btn.innerHTML = '<i aria-hidden="true"></i><span>Showreel</span>';
+    btn.innerHTML = '<i class="tri"></i><span>Showreel</span>';   // un carré et un triangle « lecture » ; au survol, le mot glisse dans le rectangle
     const box = document.createElement('div'); box.id = 'reel'; box.hidden = true; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Showreel');
     box.innerHTML = '<div class="scrim"></div><div class="scr"><div class="bar"><b>Showreel</b><a class="ext" target="_blank" rel="noopener"></a><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button></div><div class="vid"></div></div>';
     document.body.append(btn, box);
@@ -2401,8 +2473,8 @@ function buildHomeDock(withKeys) {
   home.appendChild(dock);
   /* sous la signature, en haut à gauche : le Showreel, et dessous les réglages des carrés (cachés pendant que le showreel joue) */
   const ctl = document.createElement('div'); ctl.id = 'home-ctl';
-  ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><i aria-hidden="true"></i><span>Showreel</span></button>` +
-    (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false">${ICON.faders}</button>` : '');
+  ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><b class="ic"><i aria-hidden="true"></i></b><span>Showreel</span></button>` +
+    (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false"><b class="ic">${ICON.faders}</b><span class="lbl"></span></button>` : '');   // des carrés : le mot glisse dedans au survol
   const band = document.getElementById('home-band'), lg = band.querySelector('.lg'); if (lg) lg.after(ctl); else band.appendChild(ctl);
   if (withKeys) buildHvPanel(home, src, ctl);
   buildReelBar(home);
@@ -2421,6 +2493,7 @@ function dockLabels() {
   const words = dock.querySelector('#hv-words'); words.hidden = !cam; words.placeholder = ui('hv_words'); words.setAttribute('aria-label', ui('hv_words'));
   const shot = dock.querySelector('#hv-shot'); shot.hidden = !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui('photo');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.title = ui('story');
+  const tl = document.querySelector('#hv-toggle .lbl'); if (tl) tl.textContent = ui('params');
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
   const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', 'Showreel');
 }

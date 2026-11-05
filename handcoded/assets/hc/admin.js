@@ -741,7 +741,8 @@ function sectionEditor(sec, redrawList, redraw) {
     h('div', { class: 'block' }, h('h3', null, 'Tags', h('small', null, 'pour trier les contenus, comme le menu « catégories » du site')),
       tagsEditor(sec, redraw),
       h('div', { class: 'grid2', style: { marginTop: '16px' } },
-        field('Tag affiché à l’ouverture', selectInput([{ value: '', label: 'Tout' }, ...sec.tags.map(tg => ({ value: tg.id, label: fr(tg.label) || tg.id }))], () => sec.defaultTag || '', v => { sec.defaultTag = v; })),
+        h('div', null, field('Tag affiché à l’ouverture', selectInput([{ value: '', label: 'Tout' }, ...sec.tags.map(tg => ({ value: tg.id, label: fr(tg.label) || tg.id }))], () => sec.defaultTag || '', v => { sec.defaultTag = v; })),
+          toggle('Sans « Tout » : un seul groupe à la fois', () => !!sec.noAll, v => { if (v) sec.noAll = true; else delete sec.noAll; })),
         field('Cartes par page', textInput(() => sec.perPage, v => { sec.perPage = Math.max(1, Math.min(40, v || 1)); }, { type: 'number', min: 1, max: 40 }), 'Au-delà, les flèches du site passent à la page suivante.')),
       h('div', { class: 'grid2', style: { marginTop: '16px' } },
         field('Taille des cartes (%)', textInput(() => sec.cardScale || '', v => { if (v === '' || v === 100) delete sec.cardScale; else sec.cardScale = Math.max(40, Math.min(250, v)); }, { type: 'number', min: 40, max: 250, step: 5, placeholder: '100' }), 'Agrandit ou réduit les cartes 3D de cette section. 100 = taille d’origine.'),
@@ -781,6 +782,7 @@ function tagsEditor(sec, redraw) {
           siteLangs().map(l => l === 'en' ? en : textInput(() => tg.label[l] ?? '', v => { tg.label[l] = v; }, { placeholder: LANG_NAMES[l] })),
           h('span', { class: 'id', title: tg.id }, tg.id), h('span', { class: 'n' }, n),
           h('span', { style: { display: 'flex', gap: '2px' } },
+            btn(tg.menu === false ? '◌' : '●', () => { if (tg.menu === false) delete tg.menu; else tg.menu = false; change(); draw(); }, 'sm icon ghost', { 'aria-label': 'Afficher dans le menu du site', title: tg.menu === false ? 'Caché du menu du site (le tag sert au tri)' : 'Dans le menu du site' }),
             btn('↑', () => { if (i) { move(sec.tags, i, i - 1); change(); draw(); } }, 'sm icon ghost', { 'aria-label': 'Monter', disabled: !i }),
             btn('↓', () => { if (i < sec.tags.length - 1) { move(sec.tags, i, i + 1); change(); draw(); } }, 'sm icon ghost', { 'aria-label': 'Descendre', disabled: i === sec.tags.length - 1 }),
             btn('×', async () => {
