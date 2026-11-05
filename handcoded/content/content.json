@@ -675,7 +675,9 @@
    ],
    "network": false,
    "skills": false,
-   "noAll": true
+   "noAll": true,
+   "cardScale": 120,
+   "camera": 70
   },
   {
    "id": "contact",
