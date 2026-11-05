@@ -1509,6 +1509,7 @@ const post2D = {
     const fm = ficheM(), txt = this.panels[this.panels.length - 1], inSkill = P.section.def.skills && txt && txt.classList.contains('txt');
     const padL = inSkill ? Math.max(12, fm.gutter - fm.side) : fm.side, W = Math.max(200, Math.min(300, fm.col)) + padL + fm.side;
     const head = `<h2 class="ttl" style="left:${padL}px;right:${fm.side}px;top:${fm.top}px">${escapeHTML(ui(skill ? 'skillProjects' : 'together'))}.</h2><span class="n" style="left:${padL}px;bottom:${fm.bottom}px">${projects.length}</span>`;
+    if (!skill) { this.addIndex(projects, fm); return; }   // une personne : ses projets en sommaire, page après page
     if (!inSkill) this.addPanel('relh', W, head);   // savoir-faire : l'en-tête est déjà dans la cartouche (moitié basse)
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
@@ -1516,6 +1517,29 @@ const post2D = {
         (ph ? `<img src="${escapeHTML(url(ph))}" alt="" draggable="false">` : '') + `<span class="mono"${ph ? ' hidden' : ''}>${escapeHTML(initials(tr(p.title)))}</span>` +
         `<span class="cap"><span class="t">${escapeHTML(tr(p.title).trim())}</span>${meta ? `<span class="m">${escapeHTML(meta)}</span>` : ''}</span></button>`);
       const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
+    });
+  },
+  /* Les projets d'une personne, comme le sommaire d'un magazine : des pages de deux colonnes, une petite vignette carrée,
+     le numéro, le titre et l'année à côté. La première page porte le titre « Nos projets ensemble. » */
+  addIndex(projects, fm) {
+    const top = fm.top, low = 355 - fm.bottom, rowH = 66, headH = 58, colW = 252, gap = 30, L = fm.side;
+    const rowsFirst = Math.max(1, Math.floor((low - top - headH) / rowH)), rows = Math.max(1, Math.floor((low - top) / rowH));
+    const pages = []; let i = 0;
+    while (i < projects.length) { const per = (pages.length ? rows : rowsFirst) * 2; pages.push(projects.slice(i, i + per)); i += per; }
+    const E = escapeHTML, n2 = k => String(k).padStart(2, '0');
+    let k = 0;
+    pages.forEach((list, pi) => {
+      const r = pi ? rows : rowsFirst, cols = list.length > r ? 2 : 1;
+      const head = pi ? '' : `<h2 class="ttl" style="left:${L}px;top:${top}px">${E(ui('together'))}.<span class="n">${projects.length}</span></h2>`;
+      const items = list.map(p => {
+        const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | '); k++;
+        return `<button type="button" class="go" data-go="${E(p.id)}" aria-label="${E(tr(p.title))}"><span class="no">${n2(k)}</span>` +
+          `<span class="th">${ph ? `<img src="${E(url(ph))}" alt="" draggable="false" loading="lazy">` : ''}<span class="mono"${ph ? ' hidden' : ''}>${E(initials(tr(p.title)))}</span></span>` +
+          `<span class="cap"><span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</span></button>`;
+      }).join('');
+      const el = this.addPanel('idx', L * 2 + cols * colW + (cols - 1) * gap, head +
+        `<div class="list" style="left:${L}px;top:${pi ? top : top + headH}px;grid-template-columns:repeat(${cols},${colW}px);grid-template-rows:repeat(${Math.min(r, list.length)},${rowH}px);column-gap:${gap}px">${items}</div>`);
+      el.querySelectorAll('img').forEach(im => im.addEventListener('error', () => { const m = im.nextElementSibling; im.remove(); if (m) m.hidden = false; }));   // photo introuvable : les initiales
     });
   },
   addLogos(post) {   // les partenaires : leurs logos en blanc sur le noir de la fiche, dans une grille aux filets fins, comme une page de crédits de magazine
@@ -3160,7 +3184,7 @@ function tickerStripFor(on) {
   return (tickerStrip = { canvas: c, dots: tickerDots, key, shown: -1 });
 }
 function drawTicker(dt) {   // le texte avance d'une colonne de points à la fois, comme un vrai panneau
-  tickerAcc += dt * 26;
+  const sp = +((CONTENT.settings.home || {}).tickerSpeed); tickerAcc += dt * (sp > 0 ? Math.min(120, sp) : 26);   // vitesse réglable : Réglages › Accueil
   if (tickerAcc >= 1) { tickerX = (tickerX + Math.floor(tickerAcc)) % tickerDots.w; tickerAcc %= 1; }
   const st = tickerStripFor(CONTENT.settings.accent || '#ffcc00');   // l'accueil est remis à l'endroit en négatif : la vraie couleur
   if (st.shown === tickerX) return;   // rien n'a bougé : rien à redessiner
