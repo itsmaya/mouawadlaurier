@@ -1788,15 +1788,18 @@
     "touring",
     "collab"
    ],
-   "thumb": "media/ox/14589861-1442393279393479-4417632417371852675-o-4bxv.webp",
+   "thumb": "media/ox/14500265-1442393136060160-9109871764192015582-o-z11u.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>The first machine sensitive to music: a DJ stage made of moving LED structures, driven by an artificial intelligence that listens to the live mix and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image.</p><p>We designed the audio-reactive concept with Romain Tardy, then developed the music-analysis AI, the electronics and the light animation. Two hundred graphic elements combine in real time according to the energy, tempo and mood of the track: no two nights look alike, and the DJ drives the installation without thinking about it. The whole thing sets up and strikes in a few hours, for a club tour.</p><p>Designed from 2014 and officially launched in 2015, OX was produced by Tetro for The Absolut Company Creation and toured France for a year and a half, in more than fifteen venues: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris on the Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation</strong> Maya Benaïnous</li><li><strong>Tempo detection (aubio)</strong> Paul Brossier</li><li><strong>Printed circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Press</h3><ul><li>“Hand Coded is hiding behind all your favourite installations.” Vice France, 2015</li><li>“The man who made the machine sensitive.” Le Monde</li><li>“A sensitive machine, created at the initiative of The Absolut Company Creation, that analyses the DJ’s mix in real time.” L’ADN, 2016</li><li>“Rennes could pride itself on hosting a national and world exclusive: the OX project. The DJ drives the installation.” Unidivers, 2016</li><li>Libération, 2016 · Brain Magazine, 2016 · Tsugi, 2016 · France 3, 2016</li></ul>",
-    "fr": "<p>La première machine sensible à la musique : une scène DJ faite de structures LED en mouvement, pilotée par une intelligence artificielle qui écoute le mix en direct et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image.</p><p>Nous avons conçu le concept audio-réactif avec Romain Tardy, puis développé l’IA d’analyse musicale, l’électronique et l’animation lumière. Deux cents éléments graphiques se combinent en temps réel selon l’énergie, le tempo et l’humeur du morceau : aucun soir ne ressemble au précédent, et le DJ pilote l’installation sans y penser. Le tout se monte et se démonte en quelques heures, pour une tournée de clubs.</p><p>Conçue dès 2014 et présentée officiellement en 2015, OX a été produite par Tetro pour The Absolut Company Creation et a tourné un an et demi en France, dans plus de quinze lieux : Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris sur le Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Presse</h3><ul><li>« Hand Coded se cache derrière toutes vos installations préférées. » Vice France, 2015</li><li>« L’homme qui a rendu la machine sensible. » Le Monde</li><li>« Une machine sensible, créée à l’initiative de The Absolut Company Creation, qui analyse en temps réel le mix du DJ. » L’ADN, 2016</li><li>« Rennes pouvait s’enorgueillir d’accueillir une exclu nationale et mondiale : le projet OX. Le DJ pilote l’installation. » Unidivers, 2016</li><li>Libération, 2016 · Brain Magazine, 2016 · Tsugi, 2016 · France 3, 2016</li></ul>",
+    "fr": "<p>La première machine sensible à la musique : une scène DJ faite de structures LED en mouvement, pilotée par une intelligence artificielle qui écoute le mix en direct et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image.</p><p>Nous avons conçu le concept audio-réactif avec Romain Tardy, puis développé l’IA d’analyse musicale, l’électronique et l’animation lumière. Deux cents éléments graphiques se combinent en temps réel selon l’énergie, le tempo et l’humeur du morceau : aucun soir ne ressemble au précédent, et le DJ pilote l’installation sans y penser. Le tout se monte et se démonte en quelques heures, pour une tournée de clubs.</p><p>Conçue dès 2014 et présentée officiellement en 2015, OX a été produite par Tetro pour The Absolut Company Creation et a tourné un an et demi en France, dans plus de quinze lieux : Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche Paris sur le Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Presse</h3><ul><li>« Hand Coded se cache derrière toutes vos installations préférées. » <b>Vice France, 2015</b></li><li>« L’homme qui a rendu la machine sensible. » <b>Le Monde</b></li><li>« Une machine sensible, créée à l’initiative de The Absolut Company Creation, qui analyse en temps réel le mix du DJ. » <b>L’ADN, 2016</b></li><li>« Rennes pouvait s’enorgueillir d’accueillir une exclu nationale et mondiale : le projet OX. Le DJ pilote l’installation. » <b>Unidivers, 2016</b></li><li><b>Libération</b>, 2016 · <b>Brain Magazine,</b> 2016 · <b>Tsugi</b>, 2016 · France 3, 2016</li></ul>",
     "ca": "<p>La primera màquina sensible a la música: un escenari de DJ fet d’estructures LED en moviment, pilotat per una intel·ligència artificial que escolta la sessió en directe i decideix què mostrar, quan i com. Un sistema semigeneratiu que segueix el dibuix de l’artista sense perdre el control de la imatge.</p><p>Vam concebre el concepte audioreactiu amb Romain Tardy, i després vam desenvolupar la IA d’anàlisi musical, l’electrònica i l’animació de la llum. Dos-cents elements gràfics es combinen en temps real segons l’energia, el tempo i l’estat d’ànim del tema: cap nit s’assembla a l’anterior, i el DJ pilota la instal·lació sense pensar-hi. Tot es munta i es desmunta en poques hores, per a una gira de clubs.</p><p>Concebuda des del 2014 i presentada oficialment el 2015, OX va ser produïda per Tetro per a The Absolut Company Creation i va fer una gira d’un any i mig per França, en més de quinze espais: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche París al Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepte audioreactiu</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, anàlisi musical i electrònica</strong> Cyril Laurier</li><li><strong>Animació de la llum</strong> Maya Benaïnous</li><li><strong>Detecció del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits impresos</strong> Tom Magnier</li><li><strong>Estructures, estudi tècnic i construcció</strong> Studio Julien Carretero</li><li><strong>Agència</strong> Tetro</li><li><strong>Mecenatge</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Premsa</h3><ul><li>«Hand Coded s’amaga darrere de totes les vostres instal·lacions preferides.» Vice França, 2015</li><li>«L’home que va fer la màquina sensible.» Le Monde</li><li>«Una màquina sensible, creada per iniciativa de The Absolut Company Creation, que analitza en temps real la sessió del DJ.» L’ADN, 2016</li><li>«Rennes podia enorgullir-se d’acollir una exclusiva nacional i mundial: el projecte OX. El DJ pilota la instal·lació.» Unidivers, 2016</li><li>Libération, 2016 · Brain Magazine, 2016 · Tsugi, 2016 · France 3, 2016</li></ul>",
     "es": "<p>La primera máquina sensible a la música: un escenario de DJ hecho de estructuras LED en movimiento, pilotado por una inteligencia artificial que escucha la sesión en directo y decide qué mostrar, cuándo y cómo. Un sistema semigenerativo que sigue el dibujo del artista sin perder el control de la imagen.</p><p>Concebimos el concepto audiorreactivo con Romain Tardy, y después desarrollamos la IA de análisis musical, la electrónica y la animación de la luz. Doscientos elementos gráficos se combinan en tiempo real según la energía, el tempo y el estado de ánimo del tema: ninguna noche se parece a la anterior, y el DJ pilota la instalación sin pensarlo. Todo se monta y se desmonta en pocas horas, para una gira de clubes.</p><p>Concebida desde 2014 y presentada oficialmente en 2015, OX fue producida por Tetro para The Absolut Company Creation y giró un año y medio por Francia, en más de quince espacios: Palais de Tokyo, La Gaîté Lyrique, Nuit Blanche París en el Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepto audiorreactivo</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, análisis musical y electrónica</strong> Cyril Laurier</li><li><strong>Animación de la luz</strong> Maya Benaïnous</li><li><strong>Detección del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuitos impresos</strong> Tom Magnier</li><li><strong>Estructuras, estudio técnico y construcción</strong> Studio Julien Carretero</li><li><strong>Agencia</strong> Tetro</li><li><strong>Mecenazgo</strong> The Absolut Company Creation</li><li><strong>DJ</strong> Solomun, Vitalic, La Mverte, Ben Vedren, Joris Delacroix, Saint WKND, Zimmer, Marek Hemmann, Mathias Kaden, Monkey Maffia, Applescal, Kartell, Soul Clap, Moscoman, Sven Väth, Maurizio Schmitz, Alejandro Paz, Agoria</li></ul><h3>Prensa</h3><ul><li>«Hand Coded se esconde detrás de todas vuestras instalaciones favoritas.» Vice Francia, 2015</li><li>«El hombre que hizo sensible a la máquina.» Le Monde</li><li>«Una máquina sensible, creada por iniciativa de The Absolut Company Creation, que analiza en tiempo real la sesión del DJ.» L’ADN, 2016</li><li>«Rennes podía enorgullecerse de acoger una exclusiva nacional y mundial: el proyecto OX. El DJ pilota la instalación.» Unidivers, 2016</li><li>Libération, 2016 · Brain Magazine, 2016 · Tsugi, 2016 · France 3, 2016</li></ul>"
    },
    "media": [
+    {
+     "src": "https://vimeo.com/1244195736"
+    },
     {
      "src": "media/ox/14589861-1442393279393479-4417632417371852675-o-whxi.jpg",
      "credit": "Bobby"
@@ -1838,16 +1841,81 @@
      "credit": "Bobby"
     },
     {
-     "src": "media/ox/13254942-1418474195118721-521053108248655354-o-z7bv.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/ox/12006607-969989916391371-7640113856885493518-o-4zh7.jpg",
-     "credit": ""
+     "src": "media/ox/maya-makingof-ox-atelier-de-romain-bruxelles-r898.jpg"
     },
     {
      "src": "media/ox/screen-shot-2015-10-08-at-16-25-21-mvto.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/ox/920788-1413188472313960-2866183898598500213-o-68fj.jpg"
+    },
+    {
+     "src": "media/ox/980139-1413189678980506-4262870975427029754-o-zb9v.jpg"
+    },
+    {
+     "src": "media/ox/1782386-1413188308980643-5667499231184465353-o-253o.jpg"
+    },
+    {
+     "src": "media/ox/11958277-960389967351366-5347063302765623530-o-ua4p.jpg"
+    },
+    {
+     "src": "media/ox/12628358-1410201152612692-7595146612808850909-o-y77a.jpg"
+    },
+    {
+     "src": "media/ox/12628595-1410201195946021-8765572311999269613-o--06ti.jpg"
+    },
+    {
+     "src": "media/ox/12633693-1410201459279328-7265653113544875708-o-tvtz.jpg"
+    },
+    {
+     "src": "media/ox/12640229-1410201255946015-4821485355931212968-o-28im.jpg"
+    },
+    {
+     "src": "media/ox/12841174-1413188702313937-5991346491883041264-o-24vn.jpg"
+    },
+    {
+     "src": "media/ox/13254942-1418474195118721-521053108248655354-o-z7bv.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/ox/12841187-1413188532313954-7087798944714252278-o-kltm.jpg"
+    },
+    {
+     "src": "media/ox/13064645-1418473665118774-2853025921182592390-o-nyly.jpg"
+    },
+    {
+     "src": "media/ox/13217135-1418474278452046-5340400970754301886-o-4i1w.jpg"
+    },
+    {
+     "src": "media/ox/13217463-1418473551785452-7530978678552622269-o-6swd.jpg"
+    },
+    {
+     "src": "media/ox/13227455-1418473761785431-5082264405020925982-o-1jog.jpg"
+    },
+    {
+     "src": "media/ox/13244159-1418473275118813-1333584256930286272-o-2b8g.jpg"
+    },
+    {
+     "src": "media/ox/13254942-1418474195118721-521053108248655354-o-9org.jpg"
+    },
+    {
+     "src": "media/ox/13603678-1422948161337991-3486531361075584512-o--j3w6.jpg"
+    },
+    {
+     "src": "media/ox/13698279-1424594931173314-6579967308036871707-o-fu8f.jpg"
+    },
+    {
+     "src": "media/ox/13708226-1424595064506634-5546691808832716525-o-840g.jpg"
+    },
+    {
+     "src": "media/ox/13717260-1424594971173310-7527651496980519421-o--yire.jpg"
+    },
+    {
+     "src": "media/ox/14500754-1442391396060334-3018683953380987970-o-ltdn.jpg"
+    },
+    {
+     "src": "media/ox/14525164-1442394752726665-7710403301381164037-o-wjnp.jpg"
     }
    ],
    "link": "http://romaintardy.com",
