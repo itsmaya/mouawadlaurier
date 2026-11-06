@@ -6064,10 +6064,6 @@
      "credit": ""
     },
     {
-     "src": "media/paysage-sonore/01.jpg",
-     "credit": ""
-    },
-    {
      "src": "https://vimeo.com/772392954",
      "credit": ""
     },
@@ -6096,16 +6092,33 @@
      "credit": ""
     },
     {
-     "src": "media/villa-al-qamar/01.jpg",
-     "credit": ""
-    },
-    {
      "src": "media/villa-al-qamar/02.jpg",
      "credit": ""
     },
     {
      "src": "media/villa-al-qamar/03.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/paysage-sonore/5d57436e-659b-469b-9553-738318021bec-7d4l.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/288872913-422466433227724-5074042424921776057-n-039k.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/img-2266-9yvj.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/img-2336-rtsj.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/ocean-topview-2p93.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/whatsapp-image-2022-05-16-at-7-49-04-pm-mlwd.jpg"
+    },
+    {
+     "src": "media/paysage-sonore/whatsapp-image-2024-04-02-at-11-44-38-qzmy.jpg"
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -6113,7 +6126,7 @@
     "maya",
     "joan-sandoval"
    ],
-   "credits": "Fisheye, Grand Palais RMN",
+   "credits": "Abel Sierra Sánchez, Grand Palais RMN",
    "location": null,
    "spots": [
     {
@@ -6151,7 +6164,8 @@
     "media/logos/grandpalais.png",
     "media/logos/fisheye.png",
     "media/logos/riyadhart.png",
-    "media/logos/institutfrancais.png"
+    "media/logos/institutfrancais.png",
+    "media/logos/rmn-grand-palais-zrc8.png"
    ]
   },
   {
