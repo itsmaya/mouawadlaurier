@@ -1594,7 +1594,7 @@
   {
    "id": "future-ruins",
    "section": "work",
-   "order": 8,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Future Ruins",
@@ -1681,7 +1681,8 @@
    "team": [
     "romain-tardy",
     "maya",
-    "cyril"
+    "cyril",
+    "nouveau-contenu-7"
    ],
    "credits": "Squeaky Lobster, Julien Carretero",
    "location": null,
@@ -2049,7 +2050,7 @@
   {
    "id": "mgntrn",
    "section": "work",
-   "order": 7,
+   "order": 8,
    "published": true,
    "title": {
     "en": "MGNTRN",
@@ -2137,7 +2138,8 @@
    "team": [
     "romain-tardy",
     "maya",
-    "cyril"
+    "cyril",
+    "nouveau-contenu-7"
    ],
    "credits": "Squeaky Lobster",
    "location": null,
@@ -2164,7 +2166,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 9,
+   "order": 10,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -2186,7 +2188,6 @@
    },
    "date": "2015 – 2026",
    "tags": [
-    "featured",
     "software",
     "ai"
    ],
@@ -2199,6 +2200,10 @@
     "es": "<p>Ledotron es la herramienta que escribimos para nuestras propias instalaciones. Ha hecho funcionar más de cuarenta desde 2015, de OX a Retour aux Sources. Tiras LED, luces motorizadas, muros de vídeo y el espacio se dibujan en 3D; el espectáculo se compone en una línea de tiempo, y se ve el resultado antes de haber tendido un solo cable.</p><p>Tres maneras de jugar. En bucle, una línea de tiempo escrita funciona en horario de apertura, bloqueada, y se reinicia sola si hay algún problema. Por sorteo, el Brain compone un espectáculo nuevo a cada pulsación, cada hora o cada mensaje, a partir del tiempo, la estación y la fecha: cada visita es única. En directo, el Brain escucha la música y hace evolucionar la imagen tanto como cambia la música.</p><p>La IA que escucha la música viene de la tesis de Cyril Laurier sobre la clasificación automática del estado de ánimo musical, en el Music Technology Group de la Universitat Pompeu Fabra, en Barcelona (2011). Los tiempos y los ataques se detectan con aubio, la biblioteca libre nacida de la tesis de Paul Brossier en la Queen Mary University of London.</p><p>Entradas: audio en directo, tiempo y clima local, reloj y calendario, OSC, botones y teclas, Chataigne. Salidas: Art-Net y DMX, muros de vídeo, motores, OSC hacia Ableton Live. Veintitrés efectos generativos, todos capaces de reaccionar al sonido o al tiempo. In situ: arranque automático, pantalla bloqueada, registro, reconexión y reinicio automáticos. Es lo que nos permite prometer a un cliente que una instalación aguantará diez años sin técnico in situ.</p><h3>Créditos</h3><ul><li><strong>Creado por</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>IA musical</strong> Cyril Laurier, tesis doctoral, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Detección de tiempos y ataques</strong> aubio, de Paul Brossier</li><li><strong>Construido con</strong> openFrameworks</li></ul><h3>Utilizado en</h3><ul><li>Retour aux Sources</li><li>Rising</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>"
    },
    "media": [
+    {
+     "src": "media/ledotron/ledotronpresentation-vj38.jpg",
+     "credit": ""
+    },
     {
      "src": "media/ledotron/01-vue-ensemble.jpg",
      "credit": "",
@@ -2318,10 +2323,6 @@
       "ca": "La pantalla bloquejada. El que veu l’equip in situ: l’estat de la instal·lació, botons grans per reiniciar, apagar-ho tot, provar, ajustar el volum, i què fer si hi ha un problema. La resta queda amagada.",
       "es": "La pantalla bloqueada. Lo que ve el equipo in situ: el estado de la instalación, botones grandes para reiniciar, apagarlo todo, probar, ajustar el volumen, y qué hacer si algo falla. El resto queda oculto."
      }
-    },
-    {
-     "src": "media/ledotron/ledotronpresentation-vj38.jpg",
-     "credit": ""
     },
     {
      "src": "media/ledotron/screen-shot-2015-11-25-at-18-49-20-heup.jpg",
@@ -3120,7 +3121,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 11,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -3145,7 +3146,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "media/gyrotope/image-asset-ttqk.webp",
+   "thumb": "media/gyrotope/gyrotope-pic-ivqh.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A large circle of columns forms a sculptural volume that unfolds in time. Light and sound are its material, and it applies the sequencing of cinema to space. Walk around it: it is an object; step inside: it becomes an environment.</p><p>We designed the light and sound spatialisation system: each column is both a light source and a loudspeaker, and everything is animated and triggered from a single timeline, so the work plays identically every night, outdoors.</p><p>Commissioned by Grand Paris Express for KM1, the launch celebration of the construction works, Paris, 5 June 2016, then Nuit Blanche Brussels, 1 October 2016.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Executive production</strong> Hannah Standen</li><li><strong>Light and sound spatialisation</strong> Hand Coded: Cyril Laurier, Jesse Watts, Maya Benaïnous</li><li><strong>Production</strong> Société du Grand Paris</li></ul>",
@@ -3155,12 +3156,21 @@
    },
    "media": [
     {
+     "src": "media/gyrotope/gyrotope-pic-rpim.jpg"
+    },
+    {
      "src": "media/gyrotope/image-asset-n810.jpg",
      "credit": ""
     },
     {
      "src": "media/gyrotope/image-asset-oxw3.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/gyrotope/unnamed-1-so3n.jpg"
+    },
+    {
+     "src": "media/gyrotope/unnamed-4lpn.jpg"
     }
    ],
    "link": "http://www.pablovalbuena.com/",
@@ -3190,7 +3200,6 @@
     "audio",
     "hardware",
     "real-time",
-    "tools",
     "accompagner"
    ],
    "logos": [
@@ -6015,7 +6024,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 12,
+   "order": 5,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -6037,7 +6046,9 @@
    },
    "date": "2022 – 2024",
    "tags": [
-    "touring"
+    "featured",
+    "touring",
+    "collab"
    ],
    "thumb": "media/paysage-sonore/01.jpg",
    "thumbBack": "",
@@ -6119,6 +6130,11 @@
      "city": "Deir el Qamar",
      "lat": 33.7,
      "lon": 35.56
+    },
+    {
+     "city": "Bagdad",
+     "lat": 33.31,
+     "lon": 44.37
     }
    ],
    "skills": [
@@ -9499,7 +9515,7 @@
   {
    "id": "batalla-de-los-gallos",
    "section": "work",
-   "order": 6,
+   "order": 7,
    "published": true,
    "title": {
     "en": "Red Bull Batalla, beyond language",
@@ -9595,7 +9611,7 @@
   {
    "id": "cupra-tracking",
    "section": "work",
-   "order": 10,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Cupra, giant LED screen",
@@ -9623,7 +9639,7 @@
    "thumbBack": "",
    "body": {
     "en": "<p>A giant LED screen that watches passers-by. Their shadows are embedded into the image in real time and blend with the brand film: the wall comes alive, with no instructions needed.</p><p>For Cupra in Berlin, we developed the tracking system and its link to the content on screen: a camera, live analysis of the silhouettes and their integration into the video wall.</p><h3>Credits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
-    "fr": "<p>Un écran LED géant qui regarde les passants. Leurs ombres s’incrustent dans l’image en temps réel et se mêlent au film de la marque : le mur devient vivant, sans mode d’emploi.</p><p>Pour Cupra à Berlin, nous avons développé le système de tracking et son lien avec le contenu diffusé : une caméra, une analyse en direct des silhouettes et leur intégration dans le mur vidéo.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Développement</strong> Hand Coded : Maya Benaïnous, Cyril Laurier</li></ul>",
+    "fr": "<p>Un écran LED géant qui regarde les passants. Leurs ombres s’incrustent dans l’image en temps réel et se mêlent au film de la marque : le mur devient vivant, sans mode d’emploi.</p><p>Pour Cupra à Berlin, nous avons développé le système de tracking et son lien avec le contenu diffusé : une caméra, une analyse en direct des silhouettes et leur intégration dans le mur vidéo.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Développement</strong> Hand Coded :&nbsp; Cyril Laurier</li></ul>",
     "ca": "<p>Una pantalla LED gegant que mira els vianants. Les seves ombres s’incrusten a la imatge en temps real i es barregen amb el film de la marca: el mur cobra vida, sense instruccions.</p><p>Per a Cupra a Berlín vam desenvolupar el sistema de tracking i la seva connexió amb el contingut emès: una càmera, una anàlisi en directe de les siluetes i la seva integració al mur de vídeo.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
     "es": "<p>Una pantalla LED gigante que mira a los transeúntes. Sus sombras se incrustan en la imagen en tiempo real y se mezclan con la película de la marca: el muro cobra vida, sin instrucciones.</p><p>Para Cupra en Berlín desarrollamos el sistema de tracking y su conexión con el contenido emitido: una cámara, un análisis en directo de las siluetas y su integración en el muro de vídeo.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Cupra</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>"
    },
@@ -9635,12 +9651,17 @@
    ],
    "link": "https://www.youtube.com/watch?v=TMzf7Swxa94",
    "team": [
-    "maya",
     "cyril"
    ],
    "credits": "Cupra",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Berlin",
+     "lat": 52.52,
+     "lon": 13.4
+    }
+   ],
    "skills": [
     "tracking",
     "real-time",
@@ -9657,7 +9678,7 @@
   {
    "id": "alpine-mondial-2024",
    "section": "work",
-   "order": 5,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Alpine, Paris Motor Show",
