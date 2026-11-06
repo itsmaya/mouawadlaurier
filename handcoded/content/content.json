@@ -636,21 +636,21 @@
      }
     },
     {
-     "id": "festivals",
-     "label": {
-      "en": "Festivals & events",
-      "fr": "Festivals et événements",
-      "ca": "Festivals i esdeveniments",
-      "es": "Festivales y eventos"
-     }
-    },
-    {
      "id": "institutions",
      "label": {
       "en": "Institutions",
       "fr": "Institutions",
       "ca": "Institucions",
       "es": "Instituciones"
+     }
+    },
+    {
+     "id": "festivals",
+     "label": {
+      "en": "Festivals & events",
+      "fr": "Festivals et événements",
+      "ca": "Festivals i esdeveniments",
+      "es": "Festivales y eventos"
      }
     },
     {
@@ -839,7 +839,6 @@
     "clement-rignault",
     "joan-sandoval",
     "gaetan-cerrillo",
-    "marie-flament",
     "gustavo-valera"
    ],
    "credits": "Benoît Baume (Fisheye), UltraLab, BNP Real Estate",
@@ -1013,7 +1012,6 @@
    "team": [
     "maya",
     "cyril",
-    "salvador-mauri",
     "marco-nason",
     "guillaume-faure",
     "stephanie",
@@ -1811,8 +1809,7 @@
     "romain-tardy",
     "cyril",
     "maya",
-    "paul-brossier",
-    "tom-magnier"
+    "paul-brossier"
    ],
    "credits": "Studio Julien Carretero, Tetro",
    "location": null,
@@ -4377,16 +4374,16 @@
     "es": "Matemáticas, arte y nuevas tecnologías, diseño sostenible."
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Barcelona",
+    "fr": "Barcelone",
+    "ca": "Barcelona",
+    "es": "Barcelona"
    },
    "date": "",
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/stephanie/20160909041144-copy-evzr.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Ten years at Walt Disney Imagineering R&D, where she led a 3D AI simulation tool to study crowd flow and visitor experience in theme parks, and brought sustainable design into the process. She likes riding her bike.</p>",
@@ -4680,10 +4677,10 @@
    "order": 16,
    "published": true,
    "title": {
-    "en": "Pedra",
-    "fr": "Pedra",
-    "ca": "Pedra",
-    "es": "Pedra"
+    "en": "Marina Pujadas",
+    "fr": "Marina Pujadas",
+    "ca": "Marina Pujadas",
+    "es": "Marina Pujadas"
    },
    "subtitle": {
     "en": "Artist and costume designer",
@@ -4701,7 +4698,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/pedra/marina-pujadas-uko5.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -4749,10 +4746,10 @@
    "thumb": "",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Pilote de drone, et preneur de son.",
+    "fr": "<p>Pilote de drone, et preneur de son.</p>",
+    "ca": "Pilote de drone, et preneur de son.",
+    "es": "Pilote de drone, et preneur de son."
    },
    "media": [],
    "link": "",
@@ -4836,58 +4833,13 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/thomas-aussenac/thomas-e85t.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "author": "",
-   "skills": [],
-   "logos": []
-  },
-  {
-   "id": "tom-magnier",
-   "section": "studio",
-   "order": 18,
-   "published": true,
-   "title": {
-    "en": "Tom Magnier",
-    "fr": "Tom Magnier",
-    "ca": "Tom Magnier",
-    "es": "Tom Magnier"
-   },
-   "subtitle": {
-    "en": "Electronic engineer",
-    "fr": "Ingénieur électronique",
-    "ca": "Enginyer electrònic",
-    "es": "Ingeniero electrónico"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Composer, Musician, voice over",
+    "fr": "Composer, Musician, voice over",
+    "ca": "Composer, Musician, voice over",
+    "es": "Composer, Musician, voice over"
    },
    "media": [],
    "link": "",
@@ -4917,16 +4869,16 @@
     "es": "Creative coder"
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Barcelona",
+    "fr": "Barcelone",
+    "ca": "Barcelona",
+    "es": "Barcelona"
    },
    "date": "",
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/joan-sandoval/bfd2f61a22174fb9-u6c6.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Creative coding and audio development on Maestro, Peupler, Éphémère and Paysage Sonore.</p>",
@@ -5290,7 +5242,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/ben-kuper/benkuper-uw9i.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Technical director and coder, inventor of Chataigne, the open-source software that links show control, sensors and media. Creative coding on Peupler.</p>",
@@ -5335,7 +5287,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/clement-rignault/rignault-clement-stellar-drift-3-agence-alan-cop-vzhx.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Creative coding on Peupler.</p>",
@@ -5380,7 +5332,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/louis-raveton/louisraveton-yu60.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Music with Cyril Laurier for Peupler, Rising and Être Absorbé.</p>",
@@ -5425,7 +5377,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/fanny-fortage/fanny-y19m.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Production of Éphémère and Être Absorbé.</p>",
@@ -5470,7 +5422,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/gaetan-cerrillo/gaetan-a48u.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Production of Peupler.</p>",
@@ -5515,61 +5467,16 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/gustavo-valera/gustavo-valera-ty8y.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Directeur de UltraLab, director technique",
+    "fr": "Directeur de UltraLab, director technique",
+    "ca": "Directeur de UltraLab, director technique",
+    "es": "Directeur de UltraLab, director technique"
    },
    "media": [],
    "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "salvador-mauri",
-   "section": "studio",
-   "order": 10,
-   "published": true,
-   "title": {
-    "en": "Salvador Mauri",
-    "fr": "Salvador Mauri",
-    "ca": "Salvador Mauri",
-    "es": "Salvador Mauri"
-   },
-   "subtitle": {
-    "en": "Inventor, LED systems specialist",
-    "fr": "Inventeur, spécialiste des systèmes LED",
-    "ca": "Inventor, especialista en sistemes LED",
-    "es": "Inventor, especialista en sistemas LED"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Founder of Sakma. Lamps of Retour aux Sources.</p>",
-    "fr": "<p>Fondateur de Sakma. Les lampes de Retour aux Sources.</p>",
-    "ca": "<p>Fundador de Sakma. Les làmpades de Retour aux Sources.</p>",
-    "es": "<p>Fundador de Sakma. Las lámparas de Retour aux Sources.</p>"
-   },
-   "media": [],
-   "link": "https://www.sakma.com",
    "team": [],
    "credits": "",
    "location": null,
@@ -5605,7 +5512,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/guillaume-faure/guillaume-faure-retrat-e1716389240637-dor8.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Films and photographs of Retour aux Sources.</p>",
@@ -5650,103 +5557,13 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/antoni-hadzijanev/antoni-05ee.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "marie-flament",
-   "section": "studio",
-   "order": 13,
-   "published": true,
-   "title": {
-    "en": "Marie Flament",
-    "fr": "Marie Flament",
-    "ca": "Marie Flament",
-    "es": "Marie Flament"
-   },
-   "subtitle": {
-    "en": "Photographer",
-    "fr": "Photographe",
-    "ca": "Fotògrafa",
-    "es": "Fotógrafa"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Photographs of Peupler.</p>",
-    "fr": "<p>Photos de Peupler.</p>",
-    "ca": "<p>Fotos de Peupler.</p>",
-    "es": "<p>Fotos de Peupler.</p>"
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "abel-sierra",
-   "section": "studio",
-   "order": 19,
-   "published": true,
-   "title": {
-    "en": "Abel Sierra Sánchez",
-    "fr": "Abel Sierra Sánchez",
-    "ca": "Abel Sierra Sánchez",
-    "es": "Abel Sierra Sánchez"
-   },
-   "subtitle": {
-    "en": "Unity developer",
-    "fr": "Développeur Unity",
-    "ca": "Desenvolupador Unity",
-    "es": "Desarrollador Unity"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Augmented reality development of Paysage Sonore.</p>",
-    "fr": "<p>Développement en réalité augmentée de Paysage Sonore.</p>",
-    "ca": "<p>Desenvolupament en realitat augmentada de Paysage Sonore.</p>",
-    "es": "<p>Desarrollo en realidad aumentada de Paysage Sonore.</p>"
+    "en": "Director, Filmmaker, motion grapher",
+    "fr": "Director, Filmmaker, motion grapher",
+    "ca": "Director, Filmmaker, motion grapher",
+    "es": "Director, Filmmaker, motion grapher"
    },
    "media": [],
    "link": "",
@@ -5875,7 +5692,7 @@
    "tags": [
     "artists"
    ],
-   "thumb": "media/logos/viktoria-modesta.png",
+   "thumb": "media/viktoria-modesta-artist/screenshot-2026-11-06-at-01-16-02-2upj.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Interactive projections for her bionic performance, Music Tech Fest, Funkhaus Berlin, 2016.</p>",
@@ -6071,7 +5888,6 @@
    "link": "https://mouawadlaurier.com",
    "team": [
     "maya",
-    "abel-sierra",
     "joan-sandoval",
     "nestor-catala"
    ],
@@ -9551,7 +9367,7 @@
     "brands",
     "partners"
    ],
-   "thumb": "media/logos/alpine.png",
+   "thumb": "media/alpine/logo-ecriture-alfa-romeo-0yyc.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10554,6 +10370,49 @@
    "body": {
     "en": "",
     "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nouveau-contenu-5",
+   "section": "studio",
+   "order": 107,
+   "published": false,
+   "title": {
+    "en": "Valentin Ducros",
+    "fr": "Valentin Ducros",
+    "ca": "Valentin Ducros",
+    "es": "Valentin Ducros"
+   },
+   "subtitle": {
+    "en": "Curator",
+    "fr": "Curateur",
+    "ca": "Curator",
+    "es": "Curator"
+   },
+   "place": {
+    "en": "Barcelona",
+    "fr": "Barcelone",
+    "ca": "Barcelona",
+    "es": "Barcelona"
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "media/nouveau-contenu-5/mouawadlaurier-valentinducros-copy-yg61.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "Curateur, Chef de projet",
     "ca": "",
     "es": ""
    },
