@@ -61,10 +61,10 @@
     "es": "Artesanos de la tecnología desde 2008."
    },
    "sub": {
-    "en": "A studio of artists and engineers creating responsive, sensitive and immersive experiences where light, sound and space respond to people, for museums, festivals, brands and the stage, worldwide.",
-    "fr": "Studio d’artistes et d’ingénieurs, nous créons des expériences réactives, sensibles et immersives, où la lumière, le son et l’espace répondent au public, pour les musées, les festivals, les marques et la scène, partout dans le monde.",
-    "ca": "Estudi d’artistes i enginyers, creem experiències reactives, sensibles i immersives, on la llum, el so i l’espai responen al públic, per a museus, festivals, marques i escena, arreu del món.",
-    "es": "Estudio de artistas e ingenieros, creamos experiencias reactivas, sensibles e inmersivas, donde la luz, el sonido y el espacio responden al público, para museos, festivales, marcas y escena, en todo el mundo."
+    "en": "A studio of artists and engineers creating responsive, sensitive and immersive experiences\nwhere light, sound and space respond to people,\nfor museums, festivals, brands and the stage,\nworldwide.",
+    "fr": "Studio d’artistes et d’ingénieurs, nous créons des expériences réactives, sensibles et immersives,\noù la lumière, le son et l’espace répondent au public,\npour les musées, les festivals, les marques et la scène,\npartout dans le monde.",
+    "ca": "Estudi d’artistes i enginyers, creem experiències reactives, sensibles i immersives,\non la llum, el so i l’espai responen al públic,\nper a museus, festivals, marques i escena,\narreu del món.",
+    "es": "Estudio de artistas e ingenieros, creamos experiencias reactivas, sensibles e inmersivas,\ndonde la luz, el sonido y el espacio responden al público,\npara museos, festivales, marcas y escena,\nen todo el mundo."
    },
    "ticker": [
     "BULLSHIT SLOGAN",
@@ -164,12 +164,6 @@
      "ca": "Veure el Fat-Site del 2008",
      "es": "Ver el Fat-Site de 2008"
     }
-   },
-   "intro": {
-    "en": "A studio of artists and engineers creating responsive, sensitive and immersive experiences\nwhere light, sound and space respond to people,\nfor museums, festivals, brands and the stage,\nworldwide.",
-    "fr": "Studio d’artistes et d’ingénieurs, nous créons des expériences réactives, sensibles et immersives,\noù la lumière, le son et l’espace répondent au public,\npour les musées, les festivals, les marques et la scène,\npartout dans le monde.",
-    "ca": "Estudi d’artistes i enginyers, creem experiències reactives, sensibles i immersives,\non la llum, el so i l’espai responen al públic,\nper a museus, festivals, marques i escena,\narreu del món.",
-    "es": "Estudio de artistas e ingenieros, creamos experiencias reactivas, sensibles e inmersivas,\ndonde la luz, el sonido y el espacio responden al público,\npara museos, festivales, marcas y escena,\nen todo el mundo."
    }
   },
   "offices": [

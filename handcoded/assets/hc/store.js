@@ -60,7 +60,8 @@ export function normalizeContent(c) {
   const h = c.settings.home;
   h.headline = h.headline || emptyField(); h.sub = h.sub || emptyField(); h.enter = h.enter || { en: 'Enter', fr: 'Entrer', ca: 'Entra', es: 'Entrar' };
   h.ticker = Array.isArray(h.ticker) ? h.ticker : []; h.figures = Array.isArray(h.figures) ? h.figures : [];
-  h.intro = h.intro && typeof h.intro === 'object' ? h.intro : emptyField();   // l'ouverture : la phrase du studio, une ligne par ligne
+  if (h.intro && typeof h.intro === 'object') { Object.entries(h.intro).forEach(([l, t]) => { if (String(t || '').trim()) h.sub[l] = t; }); }   // l'ancien champ « Ouverture » rejoint la phrase du studio (ses retours à la ligne font les coupures)
+  delete h.intro;
   /* Référencement et audience (back-office › Audience) */
   const seo = c.settings.seo = c.settings.seo && typeof c.settings.seo === 'object' ? c.settings.seo : {};
   seo.url = typeof seo.url === 'string' ? seo.url : ''; seo.image = typeof seo.image === 'string' ? seo.image : '';

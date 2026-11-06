@@ -97,10 +97,10 @@ export function seoParts(content, opts = {}) {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls.map((u, i) => `  <url><loc>${esc(u)}</loc><lastmod>${day}</lastmod><priority>${i === 0 ? '1.0' : i <= langs.length ? '0.8' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
 
-  /* ---------------- l'ouverture : la phrase du studio, au centre, ligne par ligne, avant même les scripts du site (Réglages › Accueil › Ouverture).
+  /* ---------------- l'ouverture : la phrase du studio, au centre, ligne par ligne, avant même les scripts du site (Réglages › Accueil › Phrase du studio).
      Chaque ligne entre en glissant vers la droite, au rythme de la lecture ; le site les fait repartir une à une et lance la vidéo sur la dernière. */
   const cutLines = t => { const out = []; let cur = ''; String(t).split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; }); if (cur) out.push(cur); return out; };   // sans lignes écrites : coupée aux virgules
-  const lines = {}; langs.forEach(l => { const own = tr((s.home || {}).intro, l), t = own ? own.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(tr((s.home || {}).sub, l)); if (t.length) lines[l] = t; });
+  const lines = {}; langs.forEach(l => { const ph = tr((s.home || {}).sub, l), t = /\n/.test(ph) ? ph.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(ph); if (t.length) lines[l] = t; });   // les retours à la ligne de la phrase du studio font les coupures
   const sf = (() => { const r = (s.typo || {}).sig2 || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic ? 1 : 0, w = +(r.weight || 400);
     return { fam, it, w, css: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap` }; })();   // la police du slogan sous la signature (« Réactif. Sensible. Immersif. »), même adresse que le site
   const data = { langs, def: lang, lines, f: sf };

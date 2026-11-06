@@ -2533,7 +2533,7 @@ function dockLabels() {
   const shot = document.getElementById('hv-shot'); shot.hidden = !inPanel && !cam; shot.setAttribute('aria-label', ui('hv_shot')); shot.querySelector('span').textContent = ui(inPanel ? 'hv_shot' : 'photo');
   const priv = document.querySelector('#hv-panel .priv'); if (priv) priv.textContent = ui('hv_private');
   const sb = dock.querySelector('#story-btn'); sb.setAttribute('aria-label', ui('story')); sb.querySelector('.lbl').textContent = ui('story');
-  const ab = document.getElementById('home-about'), pitch = document.getElementById('home-pitch'), say = tr((CONTENT.settings.home || {}).sub || {}).trim();
+  const ab = document.getElementById('home-about'), pitch = document.getElementById('home-pitch'), say = pitchText();
   if (ab) { ab.hidden = !say; fillPitch(pitch, false); ab.setAttribute('aria-label', say); }
   const tl = document.querySelector('#hv-toggle .lbl'); if (tl) tl.textContent = ui('params');
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
@@ -2551,7 +2551,7 @@ function pressKind(el) {
 }
 let noteTimer = 0;
 /* La fiche « i » (accueil et 3D) : une photo de la sélection des réalisations, le nom du studio, la phrase du studio (Réglages › Accueil) */
-const pitchText = () => tr((CONTENT.settings.home || {}).sub || {}).trim();
+const pitchText = () => tr((CONTENT.settings.home || {}).sub || {}).replace(/\s*\n\s*/g, ' ').trim();   // la phrase sur une ligne (ses retours à la ligne ne servent qu'à l'ouverture)
 function pitchPhotos() {
   const work = CONTENT.sections.find(x => x.visible && x.card === 'image' && !x.skills) || {}, tag = work.defaultTag;
   const ok = p => p.published !== false && p.section === work.id && p.thumb && /\.(jpe?g|png|webp)$/i.test(p.thumb);
@@ -3170,7 +3170,7 @@ function figureValue(v) {
 const homeFigures = () => ((CONTENT.settings.home && CONTENT.settings.home.figures) || []).map(f => ({ value: figureValue(f.value), label: tr(f.label) })).filter(f => f.value && f.label);
 const homeFigureLines = () => homeFigures().map(f => `${f.value} ${f.label}`);   // les chiffres du studio défilent sur le bandeau LED, dans la langue du visiteur
 function buildTickerDots() {   // la phrase du studio en colonnes de 7 points (Réglages › Accueil) ; sans phrase, les chiffres
-  const phrase = tr(CONTENT.settings.home.sub || {}).trim();
+  const phrase = tr(CONTENT.settings.home.sub || {}).replace(/\s*\n\s*/g, ' ').trim();
   const items = phrase ? [phrase] : [...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
   const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
   tickerDots = dotsOf(text);
@@ -3393,13 +3393,23 @@ async function awaitPreview() {
    Un geste du visiteur (clic, touche, molette) accélère tout. Si la vidéo tarde, cinq secondes de patience au plus. */
 /* Le « i » : la phrase de l'ouverture, rejouée au centre de l'écran avec la même animation, quoi qu'il se passe derrière (vidéo, 3D, fiche).
    Rien ne s'arrête dessous. Un nouveau clic sur « i » ou n'importe où la fait partir tout de suite. */
-const sentenceLines = () => {
-  const own = tr((CONTENT.settings.home || {}).intro || {}).trim();
-  if (own) return own.split(/\n+/).map(x => x.trim()).filter(Boolean);
+const sentenceLines = () => {   // les retours à la ligne de la phrase du studio font les coupures ; sans eux, coupée aux virgules
+  const ph = tr((CONTENT.settings.home || {}).sub || {}).trim();
+  if (/\n/.test(ph)) return ph.split(/\n+/).map(x => x.trim()).filter(Boolean);
   const out = []; let cur = '';
-  tr((CONTENT.settings.home || {}).sub || {}).trim().split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; });
+  ph.split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; });
   if (cur) out.push(cur); return out;
 };
+/* Dans l'aperçu du back-office, l'ouverture écrite dans index.html est celle de la dernière publication : on la refait avec le contenu en cours */
+function introRebuild() {
+  const el = document.getElementById('hc-intro'); if (!el) return;
+  const box = el.querySelector('.ln'), lines = sentenceLines(); if (!lines.length) { el.remove(); return; }
+  box.querySelectorAll('.l').forEach(x => x.getAnimations().forEach(a => a.cancel()));
+  box.innerHTML = ''; lines.forEach(t => { const x = document.createElement('span'); x.className = 'l'; x.textContent = t; box.appendChild(x); });
+  let at = 0, va = 0;
+  [...box.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1000, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); if (i === lines.length - 1) va = at; at += Math.max(650, Math.min(1700, 120 + 16 * lines[i].length)); });
+  window.HC_INTRO = { t0: performance.now(), video: va, depart: at + 150 };
+}
 let sayBox = null;
 function saySentence() {
   if (sayBox) { sayGo(sayBox, true); return; }   // déjà là : un clic la fait partir
@@ -3503,7 +3513,7 @@ function introWatch() {
   } catch (e) {}
   setupStats();
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
-  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo(); introWatch();
+  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo(); if (PREVIEW) introRebuild(); introWatch();
   resizeViewport(); setCamera(); sizeTicker();
   requestAnimationFrame(frame);
   sections = SECTIONS.map((s, i) => new SectionObject3D(s.def, i));
