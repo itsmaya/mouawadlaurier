@@ -8354,7 +8354,7 @@
    "tags": [
     "festivals"
    ],
-   "thumb": "media/logos/sharjah-light-festival.png",
+   "thumb": "media/sharjah-light-festival/sharjahlogo-va6m.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -8466,7 +8466,7 @@
    "id": "into-the-great-wide-open",
    "section": "studio",
    "order": 74,
-   "published": true,
+   "published": false,
    "title": {
     "en": "Into the Great Wide Open",
     "fr": "Into the Great Wide Open",
@@ -8535,7 +8535,7 @@
     "festivals",
     "partners"
    ],
-   "thumb": "media/logos/music-tech-fest.png",
+   "thumb": "media/music-tech-fest/musictechfest-2glp.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -8580,7 +8580,7 @@
    "tags": [
     "institutions"
    ],
-   "thumb": "media/logos/societe-du-grand-paris.png",
+   "thumb": "media/societe-du-grand-paris/logo-societe-du-grand-paris-eu90.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10264,7 +10264,7 @@
     "institutions",
     "partners"
    ],
-   "thumb": "media/logos/la-rochelle-universite.png",
+   "thumb": "media/la-rochelle-universite/la-rochelle-universite-wo03.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10309,7 +10309,7 @@
    "tags": [
     "agencies"
    ],
-   "thumb": "media/logos/nasonmoretti.png",
+   "thumb": "media/nasonmoretti/nasonmoretti-qjex.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10354,7 +10354,7 @@
    "tags": [
     "festivals"
    ],
-   "thumb": "media/logos/hub-montreal.png",
+   "thumb": "media/hub-montreal/hubmontreal-xzgy.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10399,7 +10399,7 @@
    "tags": [
     "venues"
    ],
-   "thumb": "media/logos/musee-de-l-elysee.png",
+   "thumb": "media/musee-de-l-elysee/photoelysee-v1-1-32dr.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10444,7 +10444,7 @@
    "tags": [
     "institutions"
    ],
-   "thumb": "media/logos/fondation-ove.png",
+   "thumb": "media/fondation-ove/ove-4zhw.png",
    "thumbBack": "",
    "body": {
     "en": "",
