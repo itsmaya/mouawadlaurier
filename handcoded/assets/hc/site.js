@@ -2515,10 +2515,7 @@ function buildHomeDock(withKeys) {
     }
     pitch.classList.toggle('on', on); ab.classList.toggle('on', on); ab.setAttribute('aria-expanded', String(on));
   };
-  ab.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') showPitch(true); }); ab.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') showPitch(false); });
-  ab.addEventListener('focus', () => { if (ab.matches(':focus-visible')) showPitch(true); }); ab.addEventListener('blur', () => showPitch(false));
-  const abKind = pressKind(ab);
-  ab.addEventListener('click', () => { if (abKind() === 'mouse') return; showPitch(!pitch.classList.contains('on')); });   // au doigt : on touche pour lire, on retouche pour fermer
+  ab.addEventListener('click', () => saySentence());   // le « i » rejoue la phrase de l'ouverture, au centre, par-dessus ce qui se passe
   home.addEventListener('pointerdown', e => { if (pitch.classList.contains('on') && !e.target.closest('#home-about')) showPitch(false); if (!e.target.closest('#home-langs')) { const hl = document.getElementById('home-langs'); if (hl) hl.classList.remove('open'); } });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   document.getElementById('hv-shot').addEventListener('click', hvPhoto);
@@ -2580,12 +2577,7 @@ function renderAbout() {
       if (on) { fillPitch(aboutCard); aboutCard.hidden = false; placeAbout(); void aboutCard.offsetWidth; }
       aboutCard.classList.toggle('on', on); aboutBtn.classList.toggle('on', on); aboutBtn.setAttribute('aria-expanded', String(on));
     };
-    aboutBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') show(true); });
-    aboutBtn.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') show(false); });
-    aboutBtn.addEventListener('focus', () => { if (aboutBtn.matches(':focus-visible')) show(true); }); aboutBtn.addEventListener('blur', () => show(false));
-    const kind = pressKind(aboutBtn);
-    aboutBtn.addEventListener('click', () => { if (kind() !== 'mouse') show(!aboutCard.classList.contains('on')); });
-    document.addEventListener('pointerdown', e => { if (aboutCard.classList.contains('on') && !e.target.closest('#about-btn')) show(false); });
+    aboutBtn.addEventListener('click', () => saySentence());   // dans la 3D aussi : la phrase, ligne par ligne, au centre
   }
   const say = pitchText(); aboutBtn.hidden = !say; aboutBtn.setAttribute('aria-label', say); fillPitch(aboutCard, false);
   placeAbout();
@@ -3399,6 +3391,40 @@ async function awaitPreview() {
    Pendant ce temps le showreel se charge, puis s'arrête sur sa première image, caché. Quand la dernière ligne est lue,
    les lignes repartent une à une vers la droite ; sur le départ de la dernière, la vidéo démarre et le bouton son clignote deux fois.
    Un geste du visiteur (clic, touche, molette) accélère tout. Si la vidéo tarde, cinq secondes de patience au plus. */
+/* Le « i » : la phrase de l'ouverture, rejouée au centre de l'écran avec la même animation, quoi qu'il se passe derrière (vidéo, 3D, fiche).
+   Rien ne s'arrête dessous. Un nouveau clic sur « i » ou n'importe où la fait partir tout de suite. */
+const sentenceLines = () => {
+  const own = tr((CONTENT.settings.home || {}).intro || {}).trim();
+  if (own) return own.split(/\n+/).map(x => x.trim()).filter(Boolean);
+  const out = []; let cur = '';
+  tr((CONTENT.settings.home || {}).sub || {}).trim().split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; });
+  if (cur) out.push(cur); return out;
+};
+let sayBox = null;
+function saySentence() {
+  if (sayBox) { sayGo(sayBox, true); return; }   // déjà là : un clic la fait partir
+  const lines = sentenceLines(); if (!lines.length) return;
+  const onHome = !homeGone, box = document.createElement('div'); box.id = 'hc-say'; box.className = onHome ? 'home' : 'world'; box.setAttribute('role', 'status');
+  const ln = document.createElement('div'); ln.className = 'ln'; box.appendChild(ln);
+  const ref = document.querySelector('#home-band .sl span, #slogan span');   // la police du slogan sous la signature
+  if (ref) { const cs = getComputedStyle(ref); ln.style.fontFamily = cs.fontFamily; ln.style.fontWeight = cs.fontWeight; ln.style.fontStyle = cs.fontStyle; }
+  lines.forEach(t => { const x = document.createElement('span'); x.className = 'l'; x.textContent = t; ln.appendChild(x); });
+  (onHome ? document.getElementById('home') : document.body).appendChild(box); sayBox = box;
+  let at = 0;
+  [...ln.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1300, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); at += Math.max(1000, Math.min(3400, 300 + 30 * lines[i].length)); });
+  box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, fill: 'both' });
+  box._t = setTimeout(() => sayGo(box), at + 500);
+  const away = e => { if (e.target.closest && e.target.closest('#home-about, #about-btn')) return; sayGo(box, true); };
+  setTimeout(() => { if (sayBox === box) { box._away = away; window.addEventListener('pointerdown', away, true); window.addEventListener('keydown', away, true); } }, 50);
+}
+function sayGo(box, fast = false) {
+  if (box._gone) return; box._gone = true; clearTimeout(box._t); if (sayBox === box) sayBox = null;   // un nouveau « i » pendant le départ relance la phrase
+  if (box._away) { window.removeEventListener('pointerdown', box._away, true); window.removeEventListener('keydown', box._away, true); }
+  const ls = [...box.querySelectorAll('.l')], step = fast ? 90 : INTRO_STEP, dur = fast ? 500 : 1000, last = (ls.length - 1) * step;
+  ls.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateX(36px)', filter: 'blur(5px)' }], { duration: dur, delay: i * step, easing: 'cubic-bezier(.45,0,.75,.3)', fill: 'forwards' }));
+  box.animate([{ opacity: 0 }], { duration: 600, delay: last + dur * 0.4, fill: 'forwards' });
+  setTimeout(() => box.remove(), last + dur + 50);
+}
 let introDone = false, introKicked = false;
 const INTRO_STEP = 420;
 function introOut(now = false, fast = false) {

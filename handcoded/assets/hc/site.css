@@ -997,9 +997,9 @@ html.neg #hc-intro { filter: invert(1); }   /* comme l’accueil : remis à l’
 
 /* L'ouverture : la phrase du studio au centre de l'accueil, ligne par ligne ; la vidéo reste noire jusqu'au départ de la dernière ligne */
 #hc-intro { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 0 max(24px, 6vw); pointer-events: none; }
-#hc-intro .ln { max-width: 1240px; text-align: center; color: #fff; font: italic 400 clamp(22px, 2.15vw, 42px)/1.22 var(--serif); }
+#hc-intro .ln { max-width: 1240px; text-align: center; color: #fff; font: 500 clamp(20px, 1.95vw, 38px)/1.3 var(--ui); letter-spacing: -.005em; }
 #hc-intro .l { display: block; opacity: 0; text-wrap: balance; }
-@media (max-width: 560px) { #hc-intro .ln { font-size: clamp(21px, 5.8vw, 27px); line-height: 1.25; } #hc-intro .l + .l { margin-top: .35em; } }
+@media (max-width: 560px) { #hc-intro .ln { font-size: clamp(19px, 5.2vw, 24px); line-height: 1.3; } #hc-intro .l + .l { margin-top: .35em; } }
 body:has(#hc-intro.hold) #home-video, body:has(#hc-intro.hold) #home-gl, body:has(#hc-intro.hold) #hv-rv { opacity: 0 !important; }
 body:has(#hc-intro) #home-video, body:has(#hc-intro) #home-gl, body:has(#hc-intro) #hv-rv { transition: opacity 1.6s ease !important; }   /* la vidéo arrive en fondu sous la dernière ligne */
 #home-ctl > #home-snd.blink { animation: sndBlink .6s ease-in-out 2; }   /* deux clignements : pensez au son */
@@ -1013,3 +1013,13 @@ body:has(#hc-intro) #home-video, body:has(#hc-intro) #home-gl, body:has(#hc-intr
   #home-ctl > #home-snd { position: absolute; top: 0; left: calc(var(--rw, 120px) + 8px); }
 }
 body:has(#hc-intro) { transition: none !important; }   /* pendant l’ouverture, le passage en négatif ne fait pas de flash */
+/* Le « i » : la phrase de l'ouverture rejouée au centre, par-dessus l'accueil ou la 3D ; un voile doux derrière les lignes pour qu'elles se lisent sur tout */
+#hc-say { position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; padding: 0 max(24px, 6vw); pointer-events: none; }
+#hc-say .ln { position: relative; max-width: 1240px; text-align: center; font: 500 clamp(20px, 1.95vw, 38px)/1.3 var(--ui); letter-spacing: -.005em; }
+#hc-say .ln::before { content: ''; position: absolute; inset: -1.6em -2.4em; z-index: -1; border-radius: 50%; filter: blur(30px); }
+#hc-say .l { display: block; opacity: 0; text-wrap: balance; }
+#hc-say.home .ln { color: #fff; text-shadow: 0 1px 14px rgba(0,0,0,.55); }
+#hc-say.home .ln::before { background: rgba(11,11,11,.55); }
+#hc-say.world .ln { color: var(--ink); }
+#hc-say.world .ln::before { background: var(--bg); opacity: .78; }
+@media (max-width: 560px) { #hc-say .ln { font-size: clamp(19px, 5.2vw, 24px); line-height: 1.3; } #hc-say .l + .l { margin-top: .35em; } }
