@@ -90,7 +90,6 @@
 - [Gustavo Valera](https://mouawadlaurier.com/handcoded/?p=gustavo-valera): Electronics, 3D printing, art building. Directeur de UltraLab, director technique
 - [Guillaume Faure](https://mouawadlaurier.com/handcoded/?p=guillaume-faure): Filmmaker, photographer. Films and photographs of Retour aux Sources.
 - [Antoni Hadzijanev](https://mouawadlaurier.com/handcoded/?p=antoni-hadzijanev): Filmmaker. Director, Filmmaker, motion grapher
-- [Nestor Català](https://mouawadlaurier.com/handcoded/?p=nestor-catala): Pure Data developer. Real-time audio of Paysage Sonore.
 - [Marco Nason](https://mouawadlaurier.com/handcoded/?p=marco-nason): Master glassblower, NasonMoretti, Murano. Hand-blew every glass piece of Retour aux Sources during a residency at the NasonMoretti glassworks.
 - [Viktoria Modesta](https://mouawadlaurier.com/handcoded/?p=viktoria-modesta-artist): Bionic pop artist. Interactive projections for her bionic performance, Music Tech Fest, Funkhaus Berlin, 2016.
 - [Patricia Guerrero](https://mouawadlaurier.com/handcoded/?p=patricia-guerrero): Flamenco dancer and choreographer. Tientos al tiempo, with Pablo Valbuena, CENTQUATRE Paris, 2020.
@@ -169,8 +168,6 @@
 - [Sant Joan de Déu](https://mouawadlaurier.com/handcoded/?p=sant-joan-de-deu): Hospital
 - [CHU de Lille](https://mouawadlaurier.com/handcoded/?p=chu-lille): Hospital
 - [CHU de Bordeaux](https://mouawadlaurier.com/handcoded/?p=chu-bordeaux): Hospital
-- [Abbaye de Fontevraud](https://mouawadlaurier.com/handcoded/?p=abbaye-de-fontevraud): Venue
-- [Abbaye de Vivoin](https://mouawadlaurier.com/handcoded/?p=abbaye-de-vivoin): Venue
 
 ## Contact
 - Hand Coded, Barcelona, Carrer Perez Galdos 6, 08012 Barcelona, +34 666 19 94 29, maya@hand-coded.net

@@ -5576,51 +5576,6 @@
    "logos": []
   },
   {
-   "id": "nestor-catala",
-   "section": "studio",
-   "order": 20,
-   "published": true,
-   "title": {
-    "en": "Nestor Català",
-    "fr": "Nestor Català",
-    "ca": "Nestor Català",
-    "es": "Nestor Català"
-   },
-   "subtitle": {
-    "en": "Pure Data developer",
-    "fr": "Développeur Pure Data",
-    "ca": "Desenvolupador Pure Data",
-    "es": "Desarrollador Pure Data"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "specialists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Real-time audio of Paysage Sonore.</p>",
-    "fr": "<p>Audio temps réel de Paysage Sonore.</p>",
-    "ca": "<p>Àudio en temps real de Paysage Sonore.</p>",
-    "es": "<p>Audio en tiempo real de Paysage Sonore.</p>"
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
    "id": "marco-nason",
    "section": "studio",
    "order": 21,
@@ -5888,8 +5843,7 @@
    "link": "https://mouawadlaurier.com",
    "team": [
     "maya",
-    "joan-sandoval",
-    "nestor-catala"
+    "joan-sandoval"
    ],
    "credits": "Fisheye, Grand Palais RMN",
    "location": null,
@@ -8582,7 +8536,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/cnrs.png",
@@ -8628,7 +8581,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/upf.png",
@@ -8674,7 +8626,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/ircam.png",
@@ -8720,7 +8671,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/cea.png",
@@ -9318,7 +9268,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/chataigne.png",
@@ -9618,7 +9567,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/aubio.png",
@@ -9948,7 +9896,6 @@
    },
    "date": "",
    "tags": [
-    "research",
     "partners"
    ],
    "thumb": "media/logos/la-rochelle-universite.png",
@@ -10274,98 +10221,6 @@
     "partners"
    ],
    "thumb": "media/logos/chu-bordeaux.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "abbaye-de-fontevraud",
-   "section": "studio",
-   "order": 105,
-   "published": true,
-   "title": {
-    "en": "Abbaye de Fontevraud",
-    "fr": "Abbaye de Fontevraud",
-    "ca": "Abbaye de Fontevraud",
-    "es": "Abbaye de Fontevraud"
-   },
-   "subtitle": {
-    "en": "Venue",
-    "fr": "Lieu",
-    "ca": "Espai",
-    "es": "Espacio"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "venues",
-    "partners"
-   ],
-   "thumb": "media/logos/abbaye-de-fontevraud.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "abbaye-de-vivoin",
-   "section": "studio",
-   "order": 106,
-   "published": true,
-   "title": {
-    "en": "Abbaye de Vivoin",
-    "fr": "Abbaye de Vivoin",
-    "ca": "Abbaye de Vivoin",
-    "es": "Abbaye de Vivoin"
-   },
-   "subtitle": {
-    "en": "Venue",
-    "fr": "Lieu",
-    "ca": "Espai",
-    "es": "Espacio"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "venues",
-    "partners"
-   ],
-   "thumb": "media/logos/abbaye-de-vivoin.png",
    "thumbBack": "",
    "body": {
     "en": "",
