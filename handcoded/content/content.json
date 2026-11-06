@@ -1937,6 +1937,16 @@
      "city": "Lyon",
      "lat": 45.76,
      "lon": 4.84
+    },
+    {
+     "city": "La Rochelle",
+     "lat": 46.16,
+     "lon": -1.15
+    },
+    {
+     "city": "Lille",
+     "lat": 50.62,
+     "lon": 3.07
     }
    ],
    "author": "Romain Tardy & Mouawad Laurier",
@@ -1949,7 +1959,14 @@
     "hardware",
     "tools",
     "projection-mapping",
-    "fabriquer"
+    "fabriquer",
+    "imaginer",
+    "accompagner",
+    "explorer",
+    "tracking",
+    "concept-design",
+    "project-management",
+    "nouveau-contenu"
    ],
    "logos": [
     "media/logos/palaisdetokyo.png",
