@@ -3411,29 +3411,35 @@ function saySentence() {
   lines.forEach(t => { const x = document.createElement('span'); x.className = 'l'; x.textContent = t; ln.appendChild(x); });
   (onHome ? document.getElementById('home') : document.body).appendChild(box); sayBox = box;
   let at = 0;
-  [...ln.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1300, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); at += Math.max(1000, Math.min(3400, 300 + 30 * lines[i].length)); });
-  box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, fill: 'both' });
-  box._t = setTimeout(() => sayGo(box), at + 500);
+  [...ln.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1000, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); at += Math.max(650, Math.min(1700, 120 + 16 * lines[i].length)); });
+  box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, fill: 'both' });
+  box._t = setTimeout(() => sayGo(box), at + 900);   // le « i » : un peu plus de temps pour lire, on l'a demandé
   const away = e => { if (e.target.closest && e.target.closest('#home-about, #about-btn')) return; sayGo(box, true); };
   setTimeout(() => { if (sayBox === box) { box._away = away; window.addEventListener('pointerdown', away, true); window.addEventListener('keydown', away, true); } }, 50);
 }
 function sayGo(box, fast = false) {
   if (box._gone) return; box._gone = true; clearTimeout(box._t); if (sayBox === box) sayBox = null;   // un nouveau « i » pendant le départ relance la phrase
   if (box._away) { window.removeEventListener('pointerdown', box._away, true); window.removeEventListener('keydown', box._away, true); }
-  const ls = [...box.querySelectorAll('.l')], step = fast ? 90 : INTRO_STEP, dur = fast ? 500 : 1000, last = (ls.length - 1) * step;
+  const ls = [...box.querySelectorAll('.l')], step = fast ? 80 : INTRO_STEP, dur = fast ? 450 : 750, last = (ls.length - 1) * step;
   ls.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateX(36px)', filter: 'blur(5px)' }], { duration: dur, delay: i * step, easing: 'cubic-bezier(.45,0,.75,.3)', fill: 'forwards' }));
   box.animate([{ opacity: 0 }], { duration: 600, delay: last + dur * 0.4, fill: 'forwards' });
   setTimeout(() => box.remove(), last + dur + 50);
 }
-let introDone = false, introKicked = false;
-const INTRO_STEP = 420;
+let introDone = false, introKicked = false, introShown = false;
+const INTRO_STEP = 240;
+function introRelease() {   // la vidéo apparaît sous les lignes
+  if (introShown) return; introShown = true;
+  const el = document.getElementById('hc-intro'); if (el) el.classList.remove('hold');
+  introVideo();
+}
 function introOut(now = false, fast = false) {
   const el = document.getElementById('hc-intro'); if (!el || introDone) return; introDone = true;
-  if (now || !el.animate) { el.remove(); introVideo(); return; }
-  const ls = [...el.querySelectorAll('.l')], step = fast ? 90 : INTRO_STEP, dur = fast ? 500 : 1000, last = (ls.length - 1) * step;
+  if (now || !el.animate) { el.remove(); introRelease(); return; }
+  if (fast) introRelease();
+  const ls = [...el.querySelectorAll('.l')], step = fast ? 80 : INTRO_STEP, dur = fast ? 450 : 750, last = (ls.length - 1) * step;
   ls.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateX(36px)', filter: 'blur(5px)' }], { duration: dur, delay: i * step, easing: 'cubic-bezier(.45,0,.75,.3)', fill: 'forwards' }));
-  setTimeout(() => { el.classList.remove('hold'); introVideo(); }, last);   // la dernière ligne s'en va : la vidéo apparaît
-  setTimeout(() => el.remove(), last + dur + 1700);
+  setTimeout(introRelease, last);   // au plus tard au départ de la dernière ligne
+  setTimeout(() => el.remove(), last + dur + 1300);
 }
 function introVideo() {
   if (!hv || homeGone) return;
@@ -3451,24 +3457,25 @@ function introBlink() {
 function introWatch() {
   const el = document.getElementById('hc-intro'); if (!el) return;
   const wantsReel = !!hv && reelPlayable() && isHomeHash() && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start);
-  const n = el.querySelectorAll('.l').length || 1;
   let started = false, primed = !wantsReel, kickAt = 0;
   const hurry = () => introOut(false, true);
   ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(ev => window.addEventListener(ev, hurry, { once: true, passive: true, capture: true }));
   const tick = setInterval(() => {
-    if (introDone) { clearInterval(tick); return; }
+    if (introDone && introShown) { clearInterval(tick); return; }
     if (homeGone) { clearInterval(tick); introOut(true); return; }
-    if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam) started = hvReelStart(true);   // le showreel se charge pendant la lecture de la phrase…
+    if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam) started = hvReelStart(true);   // le showreel se charge pendant la phrase…
     if (started && !primed && hv.rp && hv.rp.t > 0.05) { hv.rp.pause(); hv.rp.seek(0); primed = true; }   // …et attend sur sa première image, caché
     if (started && !hv.reelOn) primed = true;   // arrêté par le visiteur
     const I = window.HC_INTRO; if (!I) return;
-    const now = performance.now(), departAt = I.t0 + I.depart, lastAt = departAt + (n - 1) * INTRO_STEP;
-    /* YouTube et Vimeo couvrent leurs premières secondes de leur habillage : on relance un peu avant, caché, pour qu'ils soient nets au départ de la dernière ligne */
+    const now = performance.now(), videoAt = I.t0 + (I.video ?? I.depart), departAt = I.t0 + I.depart;
+    /* YouTube et Vimeo couvrent leurs premières secondes de leur habillage : on les relance un peu avant, caché, pour qu'ils soient nets quand ils apparaissent */
     const lead = !hv || !hv.rp ? 0 : hv.rp.kind === 'youtube' ? 2900 : hv.rp.kind === 'vimeo' ? 500 : 0;
-    if (lead && primed && hv.reelOn && !introKicked && now >= lastAt - lead) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
-    if (now < departAt) return;
-    const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && now >= kickAt + lead - (n - 1) * INTRO_STEP;   // vidéo du site : elle part avec la dernière ligne
-    if (ready || now - departAt > 6000) { clearInterval(tick); introOut(); }
+    if (lead && primed && hv.reelOn && !introKicked && now >= videoAt - lead) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
+    if (!introShown && now >= videoAt) {
+      const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && now >= kickAt + lead;
+      if (ready || now - videoAt > 6000) introRelease();   // la vidéo apparaît avec la dernière ligne
+    }
+    if (!introDone && introShown && now >= Math.max(departAt, videoAt + 600)) introOut();   // puis les lignes s'en vont, par-dessus la vidéo
   }, 60);
 }
 (async function boot() {

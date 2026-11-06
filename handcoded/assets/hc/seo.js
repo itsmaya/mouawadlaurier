@@ -113,9 +113,9 @@ export function seoParts(content, opts = {}) {
     `var T=D.lines[L]||D.lines[D.def]||D.lines[Object.keys(D.lines)[0]],box=el.querySelector('.ln');` +
     `if(D.f){box.style.fontFamily='"'+D.f.fam+'", var(--ui)';box.style.fontStyle=D.f.it?'italic':'normal';box.style.fontWeight=D.f.w;}` +
     `T.forEach(function(t){var x=document.createElement('span');x.className='l';x.textContent=t;box.appendChild(x);});` +
-    /* le rythme : une ligne, le temps de la lire (0,3 s + 30 ms par lettre, entre 1 et 3,4 s), puis la suivante ; un temps après la dernière, le départ */
-    `var go=function(){if(go.d)return;go.d=1;var at=0;for(var i=0;i<T.length;i++){box.children[i].animate([{opacity:0,transform:'translateX(-36px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1300,delay:at,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});` +
-    `at+=Math.max(1000,Math.min(3400,300+30*T[i].length));}window.HC_INTRO={t0:performance.now(),depart:at+500};};` +
+    /* le rythme : une ligne, le temps de la parcourir (0,12 s + 16 ms par lettre, entre 0,65 et 1,7 s), puis la suivante ; la vidéo apparaît avec la dernière ligne, puis les lignes s'en vont par-dessus */
+    `var go=function(){if(go.d)return;go.d=1;var at=0;for(var i=0;i<T.length;i++){box.children[i].animate([{opacity:0,transform:'translateX(-36px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1000,delay:at,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});` +
+    `if(i===T.length-1)var va=at;at+=Math.max(650,Math.min(1700,120+16*T[i].length));}window.HC_INTRO={t0:performance.now(),video:va,depart:at+150};};` +
     `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);` +
     `document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"').then(go,go);setTimeout(go,800);}else go();}catch(e){el.remove();}})();</script>`;
 
