@@ -9500,7 +9500,7 @@
     "advertising",
     "touring"
    ],
-   "thumb": "media/alpine-mondial-2024/img-6549-i9gi.jpg",
+   "thumb": "media/alpine-mondial-2024/screenshot-2025-01-23-at-12-11-00-wzeb.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which responds in real time to their presence and gestures.</p><p>A field of particles pushed by a wind computed in real time, bending as visitors walk by. Four Kinects along the wall analyse the scene as one, thanks to Pleiade, our system developed with Ben Kuper for Peupler. Every now and then a car crosses the particle field, lifts it and lets its engine be heard, a sound created by Cyril Laurier.</p><p>We developed the device end to end, from visitor detection to generative image and sound, for a stand open every day for two weeks. Produced with Fisheye.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production</strong> Fisheye</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Sound</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
@@ -9518,9 +9518,6 @@
     },
     {
      "src": "media/alpine-mondial-2024/ad133196-90e4-414b-9c8e-86a872d5d313-rjvo.jpg"
-    },
-    {
-     "src": "media/alpine-mondial-2024/screenshot-2025-01-23-at-12-11-00-8lt7.jpg"
     },
     {
      "src": "media/alpine-mondial-2024/enscape-2024-07-02-10-51-23-i3v3.jpg",
