@@ -10528,6 +10528,49 @@
    "skills": [],
    "author": "",
    "logos": []
+  },
+  {
+   "id": "nouveau-contenu-7",
+   "section": "studio",
+   "order": 109,
+   "published": false,
+   "title": {
+    "en": "Laurent Delforge",
+    "fr": "Laurent Delforge",
+    "ca": "Laurent Delforge",
+    "es": "Laurent Delforge"
+   },
+   "subtitle": {
+    "en": "Composer",
+    "fr": "Composer",
+    "ca": "Composer",
+    "es": "Composer"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
   }
  ]
 }
