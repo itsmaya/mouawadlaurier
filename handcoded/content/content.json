@@ -624,7 +624,8 @@
       "fr": "Agences et production",
       "ca": "Agències i producció",
       "es": "Agencias y producción"
-     }
+     },
+     "menu": false
     },
     {
      "id": "venues",
@@ -633,7 +634,8 @@
       "fr": "Lieux",
       "ca": "Espais",
       "es": "Espacios"
-     }
+     },
+     "menu": false
     },
     {
      "id": "institutions",
@@ -660,7 +662,8 @@
       "fr": "Recherche et outils",
       "ca": "Recerca i eines",
       "es": "Investigación y herramientas"
-     }
+     },
+     "menu": false
     },
     {
      "id": "partners",
@@ -669,8 +672,7 @@
       "fr": "Partenaires",
       "ca": "Col·laboradors",
       "es": "Colaboradores"
-     },
-     "menu": false
+     }
     }
    ],
    "network": false,
@@ -1426,7 +1428,6 @@
    "link": "http://www.pablovalbuena.com/",
    "team": [
     "pablo-valbuena",
-    "patricia-guerrero",
     "cyril",
     "maya",
     "joan-sandoval"
@@ -5602,9 +5603,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "specialists"
-   ],
+   "tags": [],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -5669,51 +5668,6 @@
    "logos": []
   },
   {
-   "id": "patricia-guerrero",
-   "section": "studio",
-   "order": 29,
-   "published": true,
-   "title": {
-    "en": "Patricia Guerrero",
-    "fr": "Patricia Guerrero",
-    "ca": "Patricia Guerrero",
-    "es": "Patricia Guerrero"
-   },
-   "subtitle": {
-    "en": "Flamenco dancer and choreographer",
-    "fr": "Danseuse et chorégraphe de flamenco",
-    "ca": "Ballarina i coreògrafa de flamenc",
-    "es": "Bailaora y coreógrafa de flamenco"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "artists"
-   ],
-   "thumb": "",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>Tientos al tiempo, with Pablo Valbuena, CENTQUATRE Paris, 2020.</p>",
-    "fr": "<p>Tientos al tiempo, avec Pablo Valbuena, CENTQUATRE Paris, 2020.</p>",
-    "ca": "<p>Tientos al tiempo, amb Pablo Valbuena, CENTQUATRE París, 2020.</p>",
-    "es": "<p>Tientos al tiempo, con Pablo Valbuena, CENTQUATRE París, 2020.</p>"
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
    "id": "tigre-lab",
    "section": "studio",
    "order": 30,
@@ -5738,7 +5692,7 @@
    },
    "date": "",
    "tags": [
-    "artists"
+    "agencies"
    ],
    "thumb": "",
    "thumbBack": "",
@@ -6561,8 +6515,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/absolut.png",
    "thumbBack": "",
@@ -6607,8 +6560,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/audi.png",
    "thumbBack": "",
@@ -6653,8 +6605,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/fc-barcelona.png",
    "thumbBack": "",
@@ -6699,56 +6650,9 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/bnp-paribas-real-estate.png",
-   "thumbBack": "",
-   "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "media": [],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "skills": [],
-   "author": "",
-   "logos": []
-  },
-  {
-   "id": "la-prairie",
-   "section": "studio",
-   "order": 36,
-   "published": true,
-   "title": {
-    "en": "La Prairie",
-    "fr": "La Prairie",
-    "ca": "La Prairie",
-    "es": "La Prairie"
-   },
-   "subtitle": {
-    "en": "Brand",
-    "fr": "Marque",
-    "ca": "Marca",
-    "es": "Marca"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "",
-   "tags": [
-    "brands",
-    "partners"
-   ],
-   "thumb": "media/logos/la-prairie.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -6791,8 +6695,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/nestle.png",
    "thumbBack": "",
@@ -6837,8 +6740,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/marque-peugeot.png",
    "thumbBack": "",
@@ -6883,8 +6785,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/marque-lexus.png",
    "thumbBack": "",
@@ -6929,8 +6830,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/marque-coors.png",
    "thumbBack": "",
@@ -6975,8 +6875,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/marque-cadbury.png",
    "thumbBack": "",
@@ -7021,8 +6920,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/churchills.png",
    "thumbBack": "",
@@ -7113,8 +7011,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/logos/tetro.png",
    "thumbBack": "",
@@ -7159,8 +7056,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/logos/ddb.png",
    "thumbBack": "",
@@ -7343,8 +7239,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "venues"
    ],
    "thumb": "media/logos/palaisdetokyo.png",
    "thumbBack": "",
@@ -7389,8 +7284,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "venues"
    ],
    "thumb": "media/logos/grandpalais.png",
    "thumbBack": "",
@@ -7435,8 +7329,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/centquatre.png",
    "thumbBack": "",
@@ -7481,8 +7374,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "venues"
    ],
    "thumb": "media/logos/gaite-lyrique.png",
    "thumbBack": "",
@@ -7527,8 +7419,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/fundacion-telefonica.png",
    "thumbBack": "",
@@ -7573,8 +7464,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/learningplanet.png",
    "thumbBack": "",
@@ -7619,8 +7509,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/nanomusee.png",
    "thumbBack": "",
@@ -7665,8 +7554,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/biennalevenise.png",
    "thumbBack": "",
@@ -7711,8 +7599,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/biennaledakar.png",
    "thumbBack": "",
@@ -7757,8 +7644,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/riyadhart.png",
    "thumbBack": "",
@@ -7803,8 +7689,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/lumiere.png",
    "thumbBack": "",
@@ -7849,8 +7734,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/nuit-blanche.png",
    "thumbBack": "",
@@ -7895,8 +7779,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/llum-bcn.png",
    "thumbBack": "",
@@ -7941,8 +7824,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/mira.png",
    "thumbBack": "",
@@ -7987,8 +7869,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/eufonic.png",
    "thumbBack": "",
@@ -8033,8 +7914,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/sharjah-light-festival.png",
    "thumbBack": "",
@@ -8079,8 +7959,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/proyecta.png",
    "thumbBack": "",
@@ -8125,8 +8004,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/signal-festival.png",
    "thumbBack": "",
@@ -8171,8 +8049,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/into-the-great-wide-open.png",
    "thumbBack": "",
@@ -8263,8 +8140,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/societe-du-grand-paris.png",
    "thumbBack": "",
@@ -8538,9 +8414,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "partners"
-   ],
+   "tags": [],
    "thumb": "media/logos/cnrs.png",
    "thumbBack": "",
    "body": {
@@ -8673,9 +8547,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "partners"
-   ],
+   "tags": [],
    "thumb": "media/logos/cea.png",
    "thumbBack": "",
    "body": {
@@ -8719,8 +8591,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/cupra.png",
    "thumbBack": "",
@@ -8765,8 +8636,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/red-bull.png",
    "thumbBack": "",
@@ -8811,8 +8681,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/danone.png",
    "thumbBack": "",
@@ -8857,8 +8726,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/nokia.png",
    "thumbBack": "",
@@ -8903,8 +8771,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/pommery.png",
    "thumbBack": "",
@@ -8949,8 +8816,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/santander.png",
    "thumbBack": "",
@@ -8995,8 +8861,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/eventide.png",
    "thumbBack": "",
@@ -9041,8 +8906,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/france-24.png",
    "thumbBack": "",
@@ -9087,8 +8951,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/rai.png",
    "thumbBack": "",
@@ -9133,8 +8996,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/logos/tv3.png",
    "thumbBack": "",
@@ -9179,8 +9041,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "venues"
    ],
    "thumb": "media/logos/cite-de-la-musique.png",
    "thumbBack": "",
@@ -9225,8 +9086,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/mta-festival.png",
    "thumbBack": "",
@@ -9316,8 +9176,7 @@
    },
    "date": "",
    "tags": [
-    "brands",
-    "partners"
+    "brands"
    ],
    "thumb": "media/alpine/logo-ecriture-alfa-romeo-0yyc.jpg",
    "thumbBack": "",
@@ -9569,9 +9428,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "partners"
-   ],
+   "tags": [],
    "thumb": "media/logos/aubio.png",
    "thumbBack": "",
    "body": {
@@ -9853,8 +9710,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/le-fresnoy.png",
    "thumbBack": "",
@@ -9899,6 +9755,7 @@
    },
    "date": "",
    "tags": [
+    "institutions",
     "partners"
    ],
    "thumb": "media/logos/la-rochelle-universite.png",
@@ -9944,8 +9801,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/logos/nasonmoretti.png",
    "thumbBack": "",
@@ -9990,8 +9846,7 @@
    },
    "date": "",
    "tags": [
-    "festivals",
-    "partners"
+    "festivals"
    ],
    "thumb": "media/logos/hub-montreal.png",
    "thumbBack": "",
@@ -10036,8 +9891,7 @@
    },
    "date": "",
    "tags": [
-    "venues",
-    "partners"
+    "venues"
    ],
    "thumb": "media/logos/musee-de-l-elysee.png",
    "thumbBack": "",
@@ -10082,8 +9936,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/fondation-ove.png",
    "thumbBack": "",
@@ -10128,8 +9981,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/sant-joan-de-deu.png",
    "thumbBack": "",
@@ -10174,8 +10026,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/chu-lille.png",
    "thumbBack": "",
@@ -10220,8 +10071,7 @@
    },
    "date": "",
    "tags": [
-    "institutions",
-    "partners"
+    "institutions"
    ],
    "thumb": "media/logos/chu-bordeaux.png",
    "thumbBack": "",
@@ -10265,12 +10115,59 @@
     "es": "Barcelona"
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "specialists"
+   ],
    "thumb": "media/nouveau-contenu-5/mouawadlaurier-valentinducros-copy-yg61.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
     "fr": "Curateur, Chef de projet",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
+  },
+  {
+   "id": "nouveau-contenu-6",
+   "section": "studio",
+   "order": 108,
+   "published": false,
+   "title": {
+    "en": "Marine Budin",
+    "fr": "Marine Budin",
+    "ca": "Marine Budin",
+    "es": "Marine Budin"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "specialists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
     "ca": "",
     "es": ""
    },
