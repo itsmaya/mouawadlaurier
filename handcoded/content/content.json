@@ -1512,7 +1512,8 @@
     "real-time",
     "hardware",
     "tools",
-    "accompagner"
+    "accompagner",
+    "explorer"
    ],
    "logos": [
     "media/logos/centquatre.png"
@@ -2918,7 +2919,7 @@
    "tags": [
     "collab"
    ],
-   "thumb": "media/covers/wave.jpg",
+   "thumb": "media/wave/wave-1-1024x576-sv24.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A walk-through installation of undulating columns, light and ambient sound, evoking light dancing on a wave. The ebb and flow of the ocean, drawn by the precise choreography of thousands of points of light.</p><p>Presented by La Prairie facing the ocean in Miami Beach, during Art Basel Miami Beach, on 6 December 2019: the first public artwork commissioned by the house.</p><p>It is part of our long collaboration with Pablo Valbuena: we design and develop his creation and control tools, the ones that let him compose light and sound in space the way you edit a film.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Creation and control tools</strong> Hand Coded</li><li><strong>Client</strong> La Prairie</li></ul><h3>Press</h3><ul><li>“Valbuena’s Wave in Miami was the first public artwork commissioned by La Prairie. Wave illustrated the ocean’s ebb and flow through the precise choreography of blinking lights.” Artnet News, 2019</li><li>Surface · Haute Living · Harper’s Bazaar Art · Cultured, 2019 – 2020</li></ul>",
@@ -2926,12 +2927,19 @@
     "ca": "<p>Una instal·lació que es travessa, feta de columnes ondulants, de llum i de so ambient, que evoca la llum ballant sobre una ona. El flux i el reflux de l’oceà, dibuixats per la coreografia precisa de milers de punts de llum.</p><p>Presentada per La Prairie davant de l’oceà, a Miami Beach, durant Art Basel Miami Beach, el 6 de desembre del 2019: la primera obra pública encarregada per la casa.</p><p>Forma part de la nostra llarga col·laboració amb Pablo Valbuena: concebem i desenvolupem les seves eines de creació i de control, les que li permeten compondre la llum i el so a l’espai com es munta una pel·lícula.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Eines de creació i control</strong> Hand Coded</li><li><strong>Client</strong> La Prairie</li></ul><h3>Premsa</h3><ul><li>«Valbuena’s Wave in Miami was the first public artwork commissioned by La Prairie. Wave illustrated the ocean’s ebb and flow through the precise choreography of blinking lights.» Artnet News, 2019</li><li>Surface · Haute Living · Harper’s Bazaar Art · Cultured, 2019 – 2020</li></ul>",
     "es": "<p>Una instalación que se atraviesa, hecha de columnas ondulantes, de luz y de sonido ambiente, que evoca la luz bailando sobre una ola. El flujo y el reflujo del océano, dibujados por la coreografía precisa de miles de puntos de luz.</p><p>Presentada por La Prairie frente al océano, en Miami Beach, durante Art Basel Miami Beach, el 6 de diciembre de 2019: la primera obra pública encargada por la casa.</p><p>Forma parte de nuestra larga colaboración con Pablo Valbuena: concebimos y desarrollamos sus herramientas de creación y de control, las que le permiten componer la luz y el sonido en el espacio como se monta una película.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Herramientas de creación y control</strong> Hand Coded</li><li><strong>Cliente</strong> La Prairie</li></ul><h3>Prensa</h3><ul><li>«Valbuena’s Wave in Miami was the first public artwork commissioned by La Prairie. Wave illustrated the ocean’s ebb and flow through the precise choreography of blinking lights.» Artnet News, 2019</li><li>Surface · Haute Living · Harper’s Bazaar Art · Cultured, 2019 – 2020</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "https://https://vimeo.com/414695662"
+    },
+    {
+     "src": "media/wave/wave-c916.jpg"
+    }
+   ],
    "link": "https://www.pablovalbuena.com",
    "team": [
     "pablo-valbuena",
     "cyril",
-    "maya"
+    "joan-sandoval"
    ],
    "credits": "La Prairie",
    "location": null,
@@ -3146,7 +3154,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "media/gyrotope/gyrotope-pic-ivqh.jpg",
+   "thumb": "media/gyrotope/girotope-ns2z.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A large circle of columns forms a sculptural volume that unfolds in time. Light and sound are its material, and it applies the sequencing of cinema to space. Walk around it: it is an object; step inside: it becomes an environment.</p><p>We designed the light and sound spatialisation system: each column is both a light source and a loudspeaker, and everything is animated and triggered from a single timeline, so the work plays identically every night, outdoors.</p><p>Commissioned by Grand Paris Express for KM1, the launch celebration of the construction works, Paris, 5 June 2016, then Nuit Blanche Brussels, 1 October 2016.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Executive production</strong> Hannah Standen</li><li><strong>Light and sound spatialisation</strong> Hand Coded: Cyril Laurier, Jesse Watts, Maya Benaïnous</li><li><strong>Production</strong> Société du Grand Paris</li></ul>",
@@ -3156,7 +3164,7 @@
    },
    "media": [
     {
-     "src": "media/gyrotope/gyrotope-pic-rpim.jpg"
+     "src": "media/gyrotope/girotope-4mx0.jpg"
     },
     {
      "src": "media/gyrotope/image-asset-n810.jpg",
@@ -3167,10 +3175,10 @@
      "credit": ""
     },
     {
-     "src": "media/gyrotope/unnamed-1-so3n.jpg"
+     "src": "media/gyrotope/unnamed-4lpn.jpg"
     },
     {
-     "src": "media/gyrotope/unnamed-4lpn.jpg"
+     "src": "media/gyrotope/gyrotope-pic-rpim.jpg"
     }
    ],
    "link": "http://www.pablovalbuena.com/",
@@ -6024,7 +6032,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 5,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -6254,10 +6262,17 @@
     "tools",
     "concept-design",
     "nouveau-contenu",
-    "imaginer"
+    "imaginer",
+    "explorer",
+    "fabriquer",
+    "generative",
+    "project-management",
+    "sustainable"
    ],
    "author": "Maya Mouawad",
-   "logos": []
+   "logos": [
+    "media/logos/ruinart.png"
+   ]
   },
   {
    "id": "upperground",
@@ -9647,13 +9662,14 @@
    },
    "date": "",
    "tags": [
-    "advertising"
+    "advertising",
+    "touring"
    ],
    "thumb": "media/cupra-tracking/hq720-7meu.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A giant LED screen that watches passers-by. Their shadows are embedded into the image in real time and blend with the brand film: the wall comes alive, with no instructions needed.</p><p>For Cupra in Berlin, we developed the tracking system and its link to the content on screen: a camera, live analysis of the silhouettes and their integration into the video wall.</p><h3>Credits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
-    "fr": "<p>Un écran LED géant qui regarde les passants. Leurs ombres s’incrustent dans l’image en temps réel et se mêlent au film de la marque : le mur devient vivant, sans mode d’emploi.</p><p>Pour Cupra à Berlin, nous avons développé le système de tracking et son lien avec le contenu diffusé : une caméra, une analyse en direct des silhouettes et leur intégration dans le mur vidéo.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Développement</strong> Hand Coded :&nbsp; Cyril Laurier</li></ul>",
+    "fr": "<p>Un écran LED géant qui regarde les passants. Leurs ombres s’incrustent dans l’image en temps réel et se mêlent au film de la marque : le mur devient vivant, sans mode d’emploi.</p><p>Pour Cupra à Berlin, nous avons développé le système de tracking et son lien avec le contenu diffusé : une caméra, une analyse en direct des silhouettes et leur intégration dans le mur vidéo.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Cupra</li><li><b>Production</b>&nbsp;TigreLab . Lanscape</li><li><strong>Développement</strong> Hand Coded :&nbsp; Cyril Laurier</li></ul>",
     "ca": "<p>Una pantalla LED gegant que mira els vianants. Les seves ombres s’incrusten a la imatge en temps real i es barregen amb el film de la marca: el mur cobra vida, sense instruccions.</p><p>Per a Cupra a Berlín vam desenvolupar el sistema de tracking i la seva connexió amb el contingut emès: una càmera, una anàlisi en directe de les siluetes i la seva integració al mur de vídeo.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Cupra</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>",
     "es": "<p>Una pantalla LED gigante que mira a los transeúntes. Sus sombras se incrustan en la imagen en tiempo real y se mezclan con la película de la marca: el muro cobra vida, sin instrucciones.</p><p>Para Cupra en Berlín desarrollamos el sistema de tracking y su conexión con el contenido emitido: una cámara, un análisis en directo de las siluetas y su integración en el muro de vídeo.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Cupra</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li></ul>"
    },
@@ -9686,13 +9702,15 @@
    ],
    "author": "",
    "logos": [
-    "media/logos/cupra.png"
+    "media/logos/cupra.png",
+    "media/logos/job-fair-logos-web-t06h.jpg",
+    "media/logos/landscape-b3xd.png"
    ]
   },
   {
    "id": "alpine-mondial-2024",
    "section": "work",
-   "order": 6,
+   "order": 5,
    "published": true,
    "title": {
     "en": "Alpine, Paris Motor Show",
