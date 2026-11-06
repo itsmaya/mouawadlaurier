@@ -5191,9 +5191,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "specialists"
-   ],
+   "tags": [],
    "thumb": "",
    "thumbBack": "",
    "body": {
@@ -5825,9 +5823,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "specialists"
-   ],
+   "tags": [],
    "thumb": "media/gaetan-cerrillo/gaetan-a48u.jpg",
    "thumbBack": "",
    "body": {
@@ -10601,7 +10597,7 @@
    "id": "nouveau-contenu-5",
    "section": "studio",
    "order": 99,
-   "published": false,
+   "published": true,
    "title": {
     "en": "Valentin Ducros",
     "fr": "Valentin Ducros",
