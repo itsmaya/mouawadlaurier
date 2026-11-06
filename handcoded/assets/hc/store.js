@@ -277,10 +277,15 @@ export class GitHubBackend {
     const ref = await this.req(`${this.repoPath}/git/ref/heads/${encodeURIComponent(this.cfg.branch)}`);
     const head = ref.object.sha;
     const commit = await this.req(`${this.repoPath}/git/commits/${head}`);
+    /* GitHub refuse tout le commit (422 GitRPC::BadObjectState) si on lui demande de supprimer un fichier qui n'existe plus :
+       on ne garde que les suppressions de fichiers vraiment présents dans le dépôt. */
+    let present = null;
+    try { const t = await this.req(`${this.repoPath}/git/trees/${commit.tree.sha}?recursive=1`); if (!t.truncated) present = new Set(t.tree.filter(e => e.type === 'blob').map(e => e.path)); } catch (e) {}
+    this.lastPaths = present;
     const tree = [];
     const all = [...files, { path: 'content/content.json', text: JSON.stringify(content, null, 1) + '\n' }];
     for (const f of all) {
-      if (f.delete) { tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: null }); continue; }
+      if (f.delete) { if (!present || present.has(this.full(f.path))) tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: null }); continue; }
       if (f.blob && f.blob.size > 90 * 1024 * 1024) throw onFile(f.path, Object.assign(new Error(`fichier trop lourd pour GitHub (${Math.round(f.blob.size / 1048576)} Mo, 90 Mo au plus). Réduis-le ou publie une vidéo YouTube / Vimeo.`), { status: 413 }));
       try {
         const body = f.text != null ? { content: f.text, encoding: 'utf-8' } : { content: await blobToBase64(f.blob), encoding: 'base64' };

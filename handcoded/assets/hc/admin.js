@@ -347,7 +347,9 @@ async function publish() {
     files.forEach(f => { const st = S.staged.get(f.path); if (st) S.recent.set(f.path, st); S.staged.delete(f.path); });   // seulement les images et fichiers envoyés (content.js, index.html… n'ont pas d'aperçu local)
     S.staged.forEach(s => URL.revokeObjectURL(s.url)); S.staged.clear(); S.deletes.clear(); S.files = null;
     await kvDel(S.draftKey);
-    toast(S.backend.kind === 'github' ? 'Publié. Le site sera à jour dans une minute ou deux.' : S.backend.kind === 'folder' ? `Enregistré dans le dossier « ${S.backend.name} ».` : 'Publié dans la démo (dans ce navigateur seulement).');
+    const lost = S.backend.kind === 'github' && S.backend.lastPaths ? [...usedPaths()].filter(p => !S.backend.lastPaths.has(S.backend.full(p)) && !files.some(f => f.path === p)) : [];
+    if (lost.length) toast(`Publié, mais ${lost.length > 1 ? lost.length + ' images utilisées sont introuvables' : 'une image utilisée est introuvable'} dans le dépôt : ${lost.map(p => p.split('/').slice(-2).join('/')).join(', ')}. Remets-${lost.length > 1 ? 'les' : 'la'} depuis la fiche concernée.`, 'bad', 15000);
+    else toast(S.backend.kind === 'github' ? 'Publié. Le site sera à jour dans une minute ou deux.' : S.backend.kind === 'folder' ? `Enregistré dans le dossier « ${S.backend.name} ».` : 'Publié dans la démo (dans ce navigateur seulement).');
     if (S.backend.kind === 'folder') await S.backend.prepare(S.content);
   } catch (err) {
     console.error(err); toast('La publication a échoué : ' + humanError(err), 'bad', 9000);
