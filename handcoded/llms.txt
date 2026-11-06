@@ -70,41 +70,34 @@
 ## Studio
 - [Cyril Laurier](https://mouawadlaurier.com/handcoded/?p=cyril): Co-founder. PhD in music AI, Sony CSL researcher. · Barcelona. His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music…
 - [Maya Benaïnous](https://mouawadlaurier.com/handcoded/?p=maya): Co-founder. Artist and engineer, creator of Ledotron. · Barcelona. Artist and engineer, she creates immersive installations at the crossroads of ecology, technology and the senses, and has worked with real-time data since 2008. She invented a new way to work with LEDs: Ledotron. Trained in mathematics, biology and art and technology (IMAC engineering school), she…
-- [Stéphanie Huerre](https://mouawadlaurier.com/handcoded/?p=stephanie): Maths, art and new technologies, sustainable design.. Ten years at Walt Disney Imagineering R&D, where she led a 3D AI simulation tool to study crowd flow and visitor experience in theme parks, and brought sustainable design into the process. She likes riding her bike.
+- [Stéphanie Huerre](https://mouawadlaurier.com/handcoded/?p=stephanie): Maths, art and new technologies, sustainable design. · Barcelona. Ten years at Walt Disney Imagineering R&D, where she led a 3D AI simulation tool to study crowd flow and visitor experience in theme parks, and brought sustainable design into the process. She likes riding her bike.
 - [Romain Tardy](https://mouawadlaurier.com/handcoded/?p=romain-tardy): Visual artist. OX, S.A.T., MGNTRN, Future Ruins, TGIC. Hand Coded designed and developed his creation and control tools from 2014 to 2021.
 - [Pablo Valbuena](https://mouawadlaurier.com/handcoded/?p=pablo-valbuena): Visual artist. Kinematope, Gyrotope, Wave, Methods, Tientos al tiempo. Hand Coded designed and developed his creation and control tools from 2014 to 2020.
 - [Adrien M & Claire B](https://mouawadlaurier.com/handcoded/?p=adrien-m-claire-b): Digital arts and performance company. Mouvement de l’air, world tour.
 - [Beardyman](https://mouawadlaurier.com/handcoded/?p=beardyman-musician): Musician
 - [Maotik](https://mouawadlaurier.com/handcoded/?p=maotik): Visual artist. EKO, with Ezra, MIRA Festival 2014.
 - [Ezra](https://mouawadlaurier.com/handcoded/?p=ezra): Beatboxer, Organic Orchestra. Bionic Orchestra and EKO, with the Organic Orchestra company, from 2008.
-- [Pedra](https://mouawadlaurier.com/handcoded/?p=pedra): Artist and costume designer
-- [Jesse Watts](https://mouawadlaurier.com/handcoded/?p=jesse-watts): Sound engineer
+- [Marina Pujadas](https://mouawadlaurier.com/handcoded/?p=pedra): Artist and costume designer
+- [Jesse Watts](https://mouawadlaurier.com/handcoded/?p=jesse-watts): Sound engineer. Pilote de drone, et preneur de son.
 - [Paul Brossier](https://mouawadlaurier.com/handcoded/?p=paul-brossier): PhD, music developer
-- [Thomas Aussenac](https://mouawadlaurier.com/handcoded/?p=thomas-aussenac): Sound designer
-- [Tom Magnier](https://mouawadlaurier.com/handcoded/?p=tom-magnier): Electronic engineer
-- [Joan Sandoval](https://mouawadlaurier.com/handcoded/?p=joan-sandoval): Creative coder. Creative coding and audio development on Maestro, Peupler, Éphémère and Paysage Sonore.
+- [Thomas Aussenac](https://mouawadlaurier.com/handcoded/?p=thomas-aussenac): Sound designer. Composer, Musician, voice over
+- [Joan Sandoval](https://mouawadlaurier.com/handcoded/?p=joan-sandoval): Creative coder · Barcelona. Creative coding and audio development on Maestro, Peupler, Éphémère and Paysage Sonore.
 - [Ben Kuper](https://mouawadlaurier.com/handcoded/?p=ben-kuper): Technical director, creative coder. Technical director and coder, inventor of Chataigne, the open-source software that links show control, sensors and media. Creative coding on Peupler.
 - [Clément Gamgie Rignault](https://mouawadlaurier.com/handcoded/?p=clement-rignault): Creative coder. Creative coding on Peupler.
 - [Louis Raveton](https://mouawadlaurier.com/handcoded/?p=louis-raveton): Composer, musician. Music with Cyril Laurier for Peupler, Rising and Être Absorbé.
 - [Fanny Fortage](https://mouawadlaurier.com/handcoded/?p=fanny-fortage): Production manager. Production of Éphémère and Être Absorbé.
 - [Gaëtan Cerrillo](https://mouawadlaurier.com/handcoded/?p=gaetan-cerrillo): Project manager, producer. Production of Peupler.
-- [Gustavo Valera](https://mouawadlaurier.com/handcoded/?p=gustavo-valera): Electronics, 3D printing, art building
-- [Salvador Mauri](https://mouawadlaurier.com/handcoded/?p=salvador-mauri): Inventor, LED systems specialist. Founder of Sakma. Lamps of Retour aux Sources.
+- [Gustavo Valera](https://mouawadlaurier.com/handcoded/?p=gustavo-valera): Electronics, 3D printing, art building. Directeur de UltraLab, director technique
 - [Guillaume Faure](https://mouawadlaurier.com/handcoded/?p=guillaume-faure): Filmmaker, photographer. Films and photographs of Retour aux Sources.
-- [Antoni Hadzijanev](https://mouawadlaurier.com/handcoded/?p=antoni-hadzijanev): Filmmaker
-- [Marie Flament](https://mouawadlaurier.com/handcoded/?p=marie-flament): Photographer. Photographs of Peupler.
-- [Abel Sierra Sánchez](https://mouawadlaurier.com/handcoded/?p=abel-sierra): Unity developer. Augmented reality development of Paysage Sonore.
-- [Nestor Català](https://mouawadlaurier.com/handcoded/?p=nestor-catala): Pure Data developer. Real-time audio of Paysage Sonore.
+- [Antoni Hadzijanev](https://mouawadlaurier.com/handcoded/?p=antoni-hadzijanev): Filmmaker. Director, Filmmaker, motion grapher
 - [Marco Nason](https://mouawadlaurier.com/handcoded/?p=marco-nason): Master glassblower, NasonMoretti, Murano. Hand-blew every glass piece of Retour aux Sources during a residency at the NasonMoretti glassworks.
 - [Viktoria Modesta](https://mouawadlaurier.com/handcoded/?p=viktoria-modesta-artist): Bionic pop artist. Interactive projections for her bionic performance, Music Tech Fest, Funkhaus Berlin, 2016.
-- [Patricia Guerrero](https://mouawadlaurier.com/handcoded/?p=patricia-guerrero): Flamenco dancer and choreographer. Tientos al tiempo, with Pablo Valbuena, CENTQUATRE Paris, 2020.
 - [Tigre Lab](https://mouawadlaurier.com/handcoded/?p=tigre-lab): Studio. Maestro, Sharjah Light Festival, 2017.
 - [Ruinart](https://mouawadlaurier.com/handcoded/?p=ruinart): Brand
 - [The Absolut Company](https://mouawadlaurier.com/handcoded/?p=absolut): Brand
 - [Audi](https://mouawadlaurier.com/handcoded/?p=audi): Brand
 - [FC Barcelona](https://mouawadlaurier.com/handcoded/?p=fc-barcelona): Brand
 - [BNP Paribas Real Estate](https://mouawadlaurier.com/handcoded/?p=bnp-paribas-real-estate): Brand
-- [La Prairie](https://mouawadlaurier.com/handcoded/?p=la-prairie): Brand
 - [Nestlé](https://mouawadlaurier.com/handcoded/?p=nestle): Brand
 - [Peugeot](https://mouawadlaurier.com/handcoded/?p=marque-peugeot): Brand
 - [Lexus](https://mouawadlaurier.com/handcoded/?p=marque-lexus): Brand
@@ -173,8 +166,6 @@
 - [Sant Joan de Déu](https://mouawadlaurier.com/handcoded/?p=sant-joan-de-deu): Hospital
 - [CHU de Lille](https://mouawadlaurier.com/handcoded/?p=chu-lille): Hospital
 - [CHU de Bordeaux](https://mouawadlaurier.com/handcoded/?p=chu-bordeaux): Hospital
-- [Abbaye de Fontevraud](https://mouawadlaurier.com/handcoded/?p=abbaye-de-fontevraud): Venue
-- [Abbaye de Vivoin](https://mouawadlaurier.com/handcoded/?p=abbaye-de-vivoin): Venue
 
 ## Contact
 - Hand Coded, Barcelona, Carrer Perez Galdos 6, 08012 Barcelona, +34 666 19 94 29, maya@hand-coded.net
