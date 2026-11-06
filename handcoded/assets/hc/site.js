@@ -278,7 +278,9 @@ const onSite = p => SECTIONS.some(s => s.def.id === p.section);
 const byOrder = (a, b) => SECTIONS.findIndex(s => s.def.id === a.section) - SECTIONS.findIndex(s => s.def.id === b.section) || (a.order ?? 0) - (b.order ?? 0);
 const linkedProjects = post => CONTENT.posts.filter(p => p.published && p !== post && onSite(p) && ((p.team || []).includes(post.id) || (post.thumb && (p.logos || []).includes(post.thumb)))).sort(byOrder);
 const relProjects = post => { const s = projectsOf(CONTENT, post).filter(onSite); return s.length ? s : linkedProjects(post); };
-const isLogo = post => /(^|\/)media\/logos\//.test(post.thumb || '') || (post.tags || []).includes('partners');
+const PERSON_TAGS = ['core', 'artists', 'specialists', 'team', 'people'];
+/* un partenaire (marque, agence, lieu, festival, institution…) : tout ce qui, dans le studio, n'est pas une personne. Son logo est posé entier sur blanc. */
+const isLogo = post => /(^|\/)media\/logos\//.test(post.thumb || '') || (post.section === 'studio' || (post.tags || []).includes('partners')) && (post.tags || []).length > 0 && !(post.tags || []).some(t => PERSON_TAGS.includes(t));
 const relSkills = post => skillsOf(CONTENT, post).filter(onSite);
 const photoOf = p => p.thumb || ((p.media || []).find(m => m && m.src && mediaKind(m.src) === 'image') || {}).src || '';
 /* Photo de fond d'une carte savoir-faire : celle d'un de ses projets, tirée au hasard une fois par visite */
@@ -1862,7 +1864,7 @@ const postV = {
     const subtitle = tr(post.subtitle).trim(), out = [];
     out.push(`<div class="pv-bar"><span class="pv-sec">${E(tr(sec.name).trim())}</span><button type="button" class="pv-x" aria-label="${E(ui('close'))}"><span></span><span></span></button></div>`);
     const first = media[0] ? media[0] : (post.thumb ? { src: post.thumb } : null);
-    if (first) out.push(this.media(first, 'pv-hero'));
+    if (first) out.push(this.media(first, 'pv-hero' + (!media[0] && isLogo(post) ? ' pv-logo' : '')));
     if (card === 'place') {
       const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
       out.push(`<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
@@ -2035,7 +2037,19 @@ function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit 
     const clone = b.cloneNode(true); box.appendChild(clone);
     if (box.offsetHeight <= limit()) continue;
     box.removeChild(clone);
-    if (b.nodeName === 'UL' || b.nodeName === 'OL' || b.nodeName === 'H3') { if (box.childNodes.length) flush(); box.appendChild(b.cloneNode(true)); continue; }
+    if (b.nodeName === 'H3') { if (box.childNodes.length) flush(); box.appendChild(b.cloneNode(true)); continue; }
+    if (b.nodeName === 'UL' || b.nodeName === 'OL') {   // une liste trop longue se coupe entre deux puces ; son intertitre la suit toujours
+      const start = +(b.getAttribute('start') || 1); let list = b.cloneNode(false), n = 0; box.appendChild(list);
+      for (const li of [...b.children]) {
+        const c = li.cloneNode(true); list.appendChild(c); n++;
+        if (box.offsetHeight <= limit()) continue;
+        if (list.children.length === 1 && [...box.children].every(e => e === list || e.nodeName === 'H3')) continue;   // colonne déjà neuve : rien à gagner à passer à la suivante
+        list.removeChild(c); flush();
+        list = b.cloneNode(false); if (b.nodeName === 'OL') list.setAttribute('start', String(start + n - 1));
+        box.appendChild(list); list.appendChild(c);
+      }
+      continue;
+    }
     const words = []; (function walk(node, path) { node.childNodes.forEach(c => { if (c.nodeType === 3) c.textContent.split(/(\s+)/).forEach(w => w && words.push({ w, path })); else walk(c, [...path, c]); }); })(b, []);
     let p = document.createElement('p'); box.appendChild(p);
     const append = ({ w, path }) => { let parent = p; for (const el of path) { let last = parent.lastChild; if (!last || last.nodeType !== 1 || last.dataset.src !== el.outerHTML) { last = el.cloneNode(false); last.dataset.src = el.outerHTML; parent.appendChild(last); } parent = last; } parent.appendChild(document.createTextNode(w)); };
@@ -2453,7 +2467,7 @@ function setupHomeVideo() {
   buildHomeDock(cfg.controls !== false);
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
   /* il attend que la 3D ait fini de se charger : lancé en même temps, le lecteur faisait ramer l'accueil les premières secondes */
-  if (reelPlayable() && isHomeHash() && !/[?&]p=/.test(location.search) && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) {
+  if (reelPlayable() && isHomeHash() && !/[?&]p=/.test(location.search) && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start) && !document.getElementById('hc-intro')) {   // avec l'ouverture, c'est elle qui lance le showreel
     const t0 = performance.now(), go = () => { if (!homeGone && !hv.reelOn && !hv.cam && !hv.userReel && isHomeHash()) hvReelStart(true); };
     const wait = setInterval(() => { if (assetsLoaded || performance.now() - t0 > 6000) { clearInterval(wait); setTimeout(go, 500); } }, 150);
   }
@@ -2482,13 +2496,14 @@ function buildHomeDock(withKeys) {
   home.appendChild(dock);
   /* sous la signature, en haut à gauche : le Showreel, et dessous les réglages des carrés (cachés pendant que le showreel joue) */
   const ctl = document.createElement('div'); ctl.id = 'home-ctl';
-  ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><b class="ic"><i aria-hidden="true"></i></b><span>Showreel</span></button>` +
+  ctl.innerHTML = `<button type="button" id="home-reel" aria-pressed="false" hidden><b class="ic"><i aria-hidden="true"></i></b><span>Showreel</span></button><button type="button" id="home-snd" aria-pressed="false" hidden><b class="ic"></b></button>` +
     (withKeys ? `<button type="button" id="hv-toggle" aria-expanded="false"><b class="ic">${ICON.faders}</b><span class="lbl"></span></button>` : '') +
     `<button type="button" id="home-about" aria-expanded="false" hidden><b class="ic">${ICON.about}</b></button><figure id="home-pitch" hidden><img alt="" decoding="async"><figcaption><p></p></figcaption></figure>`;   // des carrés : le mot glisse dedans au survol ; le dernier dit en une phrase ce que fait le studio
   const band = document.getElementById('home-band'), lg = band.querySelector('.lg'); if (lg) lg.after(ctl); else band.appendChild(ctl);
   if (withKeys) buildHvPanel(home, src, ctl);
   buildReelBar(home);
   ctl.querySelector('#home-reel').addEventListener('click', () => { if (hv.reelOn) hvReelStop(); else showreelClick(); });
+  ctl.querySelector('#home-snd').addEventListener('click', () => hvSound(!hv.sound));   // le son du showreel, à côté de lecture / stop (plus de barre de temps)
   const ab = ctl.querySelector('#home-about'), pitch = ctl.querySelector('#home-pitch');
   /* une petite fiche : une photo de projet (une autre à chaque ouverture), le nom du studio, la phrase en grand */
   const showPitch = on => {
@@ -2502,7 +2517,8 @@ function buildHomeDock(withKeys) {
   };
   ab.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') showPitch(true); }); ab.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') showPitch(false); });
   ab.addEventListener('focus', () => { if (ab.matches(':focus-visible')) showPitch(true); }); ab.addEventListener('blur', () => showPitch(false));
-  ab.addEventListener('click', e => { if (e.pointerType === 'mouse') return; showPitch(!pitch.classList.contains('on')); });   // au doigt : on touche pour lire, on retouche pour fermer
+  const abKind = pressKind(ab);
+  ab.addEventListener('click', () => { if (abKind() === 'mouse') return; showPitch(!pitch.classList.contains('on')); });   // au doigt : on touche pour lire, on retouche pour fermer
   home.addEventListener('pointerdown', e => { if (pitch.classList.contains('on') && !e.target.closest('#home-about')) showPitch(false); if (!e.target.closest('#home-langs')) { const hl = document.getElementById('home-langs'); if (hl) hl.classList.remove('open'); } });
   document.querySelectorAll('#hv-src button').forEach(b => b.addEventListener('click', () => { if (b.dataset.src === 'cam' && !hv.cam) hvCamOn(); else if (b.dataset.src === 'video' && hv.cam) hvCamOff(); }));
   document.getElementById('hv-shot').addEventListener('click', hvPhoto);
@@ -2526,6 +2542,15 @@ function dockLabels() {
   const rb = document.getElementById('home-reel'); rb.hidden = !(CONTENT.settings.showreel || '').trim();
   const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', on ? ui('stop') + ' : Showreel' : 'Showreel');
   rb.querySelector('span').textContent = on ? ui('stop') : 'Showreel';   // pendant la lecture : un carré « stop »
+  const sb2 = document.getElementById('home-snd');
+  if (sb2) { sb2.hidden = !on; if (on) requestAnimationFrame(() => sb2.style.setProperty('--rw', rb.offsetWidth + 'px')); const snd = !!(hv && hv.sound); sb2.querySelector('.ic').innerHTML = SPEAKER(snd); sb2.classList.toggle('on', snd); sb2.setAttribute('aria-pressed', String(snd)); sb2.setAttribute('aria-label', ui(snd ? 'soundOff' : 'soundOn')); sb2.title = ui(snd ? 'soundOff' : 'soundOn'); }
+}
+/* Sur iPhone, le « click » d'un doigt se dit souvent « mouse » : on regarde plutôt ce qui a appuyé (pointerdown). Clavier : pas d'appui, on bascule. */
+function pressKind(el) {
+  let k = '', at = 0;
+  el.addEventListener('pointerdown', e => { k = e.pointerType; at = performance.now(); }, true);
+  el.addEventListener('touchstart', () => { k = 'touch'; at = performance.now(); }, { capture: true, passive: true });
+  return () => (performance.now() - at < 1500 ? k : '');
 }
 let noteTimer = 0;
 /* La fiche « i » (accueil et 3D) : une photo de la sélection des réalisations, le nom du studio, la phrase du studio (Réglages › Accueil) */
@@ -2558,7 +2583,8 @@ function renderAbout() {
     aboutBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') show(true); });
     aboutBtn.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') show(false); });
     aboutBtn.addEventListener('focus', () => { if (aboutBtn.matches(':focus-visible')) show(true); }); aboutBtn.addEventListener('blur', () => show(false));
-    aboutBtn.addEventListener('click', e => { if (e.pointerType !== 'mouse') show(!aboutCard.classList.contains('on')); });
+    const kind = pressKind(aboutBtn);
+    aboutBtn.addEventListener('click', () => { if (kind() !== 'mouse') show(!aboutCard.classList.contains('on')); });
     document.addEventListener('pointerdown', e => { if (aboutCard.classList.contains('on') && !e.target.closest('#about-btn')) show(false); });
   }
   const say = pitchText(); aboutBtn.hidden = !say; aboutBtn.setAttribute('aria-label', say); fillPitch(aboutCard, false);
@@ -2652,6 +2678,10 @@ function buildStory() {
     (st.link ? `<a class="go" href="${escapeHTML(st.link)}" target="_blank" rel="noopener">${escapeHTML(tr(st.linkLabel || {}).trim() || st.link.replace(/^https?:\/\//, ''))} <span aria-hidden="true">↗</span></a>` : '') + '</div>' +
     (imgs.length ? `<div class="shots scroll-x">${imgs.map(src => `<a href="${escapeHTML(url(src))}" target="_blank" rel="noopener"><img src="${escapeHTML(url(src))}" alt="" loading="lazy" draggable="false"></a>`).join('')}</div>` : '') + '</div></div>';
   box.querySelector('.x').addEventListener('click', () => toggleStory(false));
+  if (!buildStory.out) {   // un panneau, plus une page : on le ferme en touchant ailleurs
+    buildStory.out = true;
+    document.addEventListener('pointerdown', e => { const b = document.getElementById('hc-story'); if (b && b.classList.contains('on') && !e.target.closest('#hc-story, #story-btn')) toggleStory(false); });
+  }
 }
 let storyT = 0;
 function toggleStory(open) {
@@ -2674,7 +2704,7 @@ const HV_FADERS = [
 const paintFader = i => i.style.setProperty('--p', ((i.value - i.min) / (i.max - i.min) * 100).toFixed(1) + '%');
 function buildHvPanel(home, src, host = home) {
   const panel = document.createElement('div'); panel.id = 'hv-panel'; panel.setAttribute('role', 'group'); panel.hidden = true;
-  panel.innerHTML = `<div class="hd"><i class="led" aria-hidden="true"></i><b data-k="panel"></b><span class="stat" aria-hidden="true"></span></div>` +
+  panel.innerHTML = `<div class="hd"><i class="led" aria-hidden="true"></i><b data-k="panel"></b><span class="stat" aria-hidden="true"></span><button type="button" class="more" aria-expanded="false">+</button></div>` +
     (src ? `<div class="rw"><span class="lb" data-k="source"></span>${src}</div><p class="priv"></p>` : '') +
     HV_FADERS.map(f => `<label class="rw"><span class="lb" data-k="${f.p}"></span><input type="range" data-p="${f.p}" min="${f.min}" max="${f.max}" step="${f.step}"><output></output></label>`).join('') +
     `<div class="rw"><span class="lb" data-k="color"></span><div class="seg sw" role="group">${HV_COLORS.map(c => `<button type="button" data-c="${c}"><i class="c-${c}"></i></button>`).join('')}</div></div>` +
@@ -2693,6 +2723,9 @@ function buildHvPanel(home, src, host = home) {
   };
   hv.setOpen = setOpen;
   toggle.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  /* téléphone + caméra : le panneau se réduit à une barre en bas (source, titre, photo) pour qu'on se voie ; « + » rouvre les curseurs */
+  const more = panel.querySelector('.more');
+  more.addEventListener('click', () => { const on = !panel.classList.contains('more-on'); panel.classList.toggle('more-on', on); more.setAttribute('aria-expanded', String(on)); more.textContent = on ? '−' : '+'; });
   home.addEventListener('pointerdown', e => { if (panel.classList.contains('open') && !e.target.closest('#hv-panel, #hv-toggle, #hv-src, #hv-consent')) setOpen(false); });
   panel.querySelectorAll('input[data-p]').forEach(i => {
     const f = HV_FADERS.find(x => x.p === i.dataset.p);
@@ -2735,6 +2768,9 @@ function hvLabels() {
   P.querySelectorAll('[data-c]').forEach(b => { const on = b.dataset.c === hv.color; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui('hv_color') + ' ' + ui('hv_c_' + b.dataset.c)); });
   const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
   tg('invert', hv.mode === 'dark');
+  P.classList.toggle('cam', !!hv.cam);
+  if (!hv.cam && P.classList.contains('more-on')) P.querySelector('.more').click();
+  P.querySelector('.more').setAttribute('aria-label', ui('params'));
   hvStat();
 }
 function hvStat() {
@@ -3342,7 +3378,7 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 function showError(err) {
-  console.error(err);
+  console.error(err); introOut(true);
   const box = document.getElementById('load-error'); box.textContent = ui('loadError') + (err && err.message ? err.message : err); box.hidden = false;
 }
 /* Aperçu du back-office ouvert depuis le disque : le navigateur cloisonne les pages file://, le brouillon arrive alors par message */
@@ -3358,6 +3394,56 @@ async function awaitPreview() {
     });
     try { window.parent.postMessage({ type: 'hc-preview-ready', version: SITE_VERSION }, '*'); } catch (e) {}
   });
+}
+/* L'ouverture (posée dans index.html à chaque publication) : la phrase du studio, ligne par ligne, au rythme de la lecture.
+   Pendant ce temps le showreel se charge, puis s'arrête sur sa première image, caché. Quand la dernière ligne est lue,
+   les lignes repartent une à une vers la droite ; sur le départ de la dernière, la vidéo démarre et le bouton son clignote deux fois.
+   Un geste du visiteur (clic, touche, molette) accélère tout. Si la vidéo tarde, cinq secondes de patience au plus. */
+let introDone = false, introKicked = false;
+const INTRO_STEP = 420;
+function introOut(now = false, fast = false) {
+  const el = document.getElementById('hc-intro'); if (!el || introDone) return; introDone = true;
+  if (now || !el.animate) { el.remove(); introVideo(); return; }
+  const ls = [...el.querySelectorAll('.l')], step = fast ? 90 : INTRO_STEP, dur = fast ? 500 : 1000, last = (ls.length - 1) * step;
+  ls.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateX(36px)', filter: 'blur(5px)' }], { duration: dur, delay: i * step, easing: 'cubic-bezier(.45,0,.75,.3)', fill: 'forwards' }));
+  setTimeout(() => { el.classList.remove('hold'); introVideo(); }, last);   // la dernière ligne s'en va : la vidéo apparaît
+  setTimeout(() => el.remove(), last + dur + 1700);
+}
+function introVideo() {
+  if (!hv || homeGone) return;
+  if (hv.reelOn && hv.rp && !hv.userReel) { if (!introKicked) { introKicked = true; hv.rp.seek(0); hv.rp.play(); } }
+  else if (!hv.reelOn && !hv.userReel && !hv.cam && reelPlayable() && isHomeHash() && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) {   // le visiteur a pressé le pas avant que le showreel soit prêt : il part dès que possible
+    const wait = setInterval(() => { if (homeGone || hv.reelOn || hv.cam) { clearInterval(wait); return; } if (assetsLoaded) { clearInterval(wait); hvReelStart(true); dockLabels(); introBlink(); } }, 150);
+    return;
+  }
+  introBlink();
+}
+function introBlink() {
+  const sb = document.getElementById('home-snd');
+  if (sb && !sb.hidden && !hv.sound) { sb.classList.remove('blink'); void sb.offsetWidth; sb.classList.add('blink'); setTimeout(() => sb.classList.remove('blink'), 1400); }
+}
+function introWatch() {
+  const el = document.getElementById('hc-intro'); if (!el) return;
+  const wantsReel = !!hv && reelPlayable() && isHomeHash() && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start);
+  const n = el.querySelectorAll('.l').length || 1;
+  let started = false, primed = !wantsReel, kickAt = 0;
+  const hurry = () => introOut(false, true);
+  ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(ev => window.addEventListener(ev, hurry, { once: true, passive: true, capture: true }));
+  const tick = setInterval(() => {
+    if (introDone) { clearInterval(tick); return; }
+    if (homeGone) { clearInterval(tick); introOut(true); return; }
+    if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam) started = hvReelStart(true);   // le showreel se charge pendant la lecture de la phrase…
+    if (started && !primed && hv.rp && hv.rp.t > 0.05) { hv.rp.pause(); hv.rp.seek(0); primed = true; }   // …et attend sur sa première image, caché
+    if (started && !hv.reelOn) primed = true;   // arrêté par le visiteur
+    const I = window.HC_INTRO; if (!I) return;
+    const now = performance.now(), departAt = I.t0 + I.depart, lastAt = departAt + (n - 1) * INTRO_STEP;
+    /* YouTube et Vimeo couvrent leurs premières secondes de leur habillage : on relance un peu avant, caché, pour qu'ils soient nets au départ de la dernière ligne */
+    const lead = !hv || !hv.rp ? 0 : hv.rp.kind === 'youtube' ? 2900 : hv.rp.kind === 'vimeo' ? 500 : 0;
+    if (lead && primed && hv.reelOn && !introKicked && now >= lastAt - lead) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
+    if (now < departAt) return;
+    const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && now >= kickAt + lead - (n - 1) * INTRO_STEP;   // vidéo du site : elle part avec la dernière ligne
+    if (ready || now - departAt > 6000) { clearInterval(tick); introOut(); }
+  }, 60);
 }
 (async function boot() {
   try {
@@ -3384,7 +3470,7 @@ async function awaitPreview() {
   } catch (e) {}
   setupStats();
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
-  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo();
+  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo(); introWatch();
   resizeViewport(); setCamera(); sizeTicker();
   requestAnimationFrame(frame);
   sections = SECTIONS.map((s, i) => new SectionObject3D(s.def, i));

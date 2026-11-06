@@ -51,7 +51,9 @@ function brandFont(settings) {
   const r = typoOf(settings, 'sig1');
   return { fontFamily: r.css, fontWeight: String(r.weight || 400), fontStyle: r.italic ? 'italic' : 'normal', letterSpacing: r.ls ? r.ls + 'em' : 'normal', textTransform: r.upper ? 'uppercase' : 'none' };
 }
-function setFavicon(href) {
+const ADMIN_ICON = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#000"/></svg>');
+function setFavicon() {   // le back-office se reconnaît à son rond noir dans les onglets (le site garde son logo)
+  const href = ADMIN_ICON;
   let l = document.querySelector('link[rel~="icon"]'); if (!l) { l = document.createElement('link'); l.rel = 'icon'; document.head.appendChild(l); }
   if (l.getAttribute('href') !== href) { l.removeAttribute('type'); l.href = href; }
 }
@@ -573,7 +575,8 @@ function tiles(options, current, onPick, label) {
 /* ================================================================ Champs */
 function field(label, input, hint) { return h('label', { class: 'f' }, h('span', null, label), input, hint ? h('p', { class: 'hint' }, hint) : null); }
 function textInput(get, set, opts = {}) {
-  const i = h('input', { type: opts.type || 'text', value: get() ?? '', placeholder: opts.placeholder, min: opts.min, max: opts.max, step: opts.step, spellcheck: opts.spell === false ? 'false' : null });
+  const i = opts.rows ? h('textarea', { rows: opts.rows, placeholder: opts.placeholder }) : h('input', { type: opts.type || 'text', value: get() ?? '', placeholder: opts.placeholder, min: opts.min, max: opts.max, step: opts.step, spellcheck: opts.spell === false ? 'false' : null });
+  if (opts.rows) i.value = get() ?? '';
   i.addEventListener('input', () => { set(opts.type === 'number' ? (i.value === '' ? '' : +i.value) : i.value); change(opts); });
   if (opts.onBlur) i.addEventListener('blur', () => opts.onBlur(i));
   return i;
@@ -696,6 +699,18 @@ function renderMain() {
 }
 function page(title, intro, acts, ...content) {
   return h('div', { class: 'page' }, h('header', null, h('h1', null, title), acts && acts.length ? h('div', { class: 'acts' }, acts) : null, intro ? h('p', null, intro) : null), content);
+}
+/* Grand écran : en passant d'un contenu à l'autre, le même bloc de la fiche (Textes, Images, Équipe…) reste à la même hauteur à l'écran */
+function keepPlace(box, redraw) {
+  const main = box.closest('.main');
+  if (!main || window.innerWidth < 980) { redraw(); return; }
+  const top = main.getBoundingClientRect().top, keyOf = b => { const t = b.querySelector(':scope > h3'); return t ? (t.firstChild && t.firstChild.textContent || t.textContent).trim() : ''; };
+  const blocks = [...box.querySelectorAll('.block')], bottom = main.getBoundingClientRect().bottom;
+  const at = blocks.find(b => { const r = b.getBoundingClientRect(); return r.top >= top - 4 && r.top < bottom - 60; }) || blocks.find(b => b.getBoundingClientRect().bottom > top + 80);   // le premier bloc dont le titre est à l'écran
+  const key = at ? keyOf(at) : '', dy = at ? at.getBoundingClientRect().top - top : 0, before = main.scrollTop;
+  redraw();
+  const same = key && [...box.querySelectorAll('.block')].find(b => keyOf(b) === key);
+  if (same) main.scrollTop += same.getBoundingClientRect().top - top - dy; else main.scrollTop = before;
 }
 function toEditor(el) { if (window.innerWidth < 980) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); }   // colonnes empilées : on descend vers la fiche
 function makeSortable(ul, onMove) {
@@ -901,14 +916,14 @@ function viewPosts() {
       selectInput([{ value: '', label: 'Tous les tags' }, ...s.tags.map(tg => ({ value: tg.id, label: fr(tg.label) || tg.id }))], () => S.filter.tag, v => { S.filter.tag = v; drawRows(); }),
       selectInput([{ value: '', label: 'Tous' }, { value: 'on', label: 'Visibles' }, { value: 'off', label: 'Masqués' }, { value: 'todo', label: 'À compléter' }], () => S.filter.status, v => { S.filter.status = v; drawRows(); }),
       search);
-    const rows = h('div');
+    const rows = h('div', { class: 'list-scroll' });
     function drawRows() {
-      const list = filtered(), filt = S.filter.tag || S.filter.q || S.filter.status;
+      const list = filtered(), filt = S.filter.tag || S.filter.q || S.filter.status, keepTop = rows.scrollTop;
       const ul = h('ul', { class: 'list' }, list.map((p, i) => {
         const miss = missing(p);
         const th = h('div', { class: 'th' + (s.card === 'portrait' ? ' portrait' : '') }, p.thumb ? null : initials(fr(p.title)));
         if (p.thumb) th.style.backgroundImage = `url("${fileURL(p.thumb)}")`;
-        return h('li', { class: 'row', 'data-i': i, tabindex: 0, 'aria-current': String(p.id === S.sel.post), onclick: () => { S.sel.post = p.id; drawRows(); drawEd(); toEditor(edBox); }, onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } },
+        return h('li', { class: 'row', 'data-i': i, tabindex: 0, 'aria-current': String(p.id === S.sel.post), onclick: () => { S.sel.post = p.id; drawRows(); keepPlace(edBox, drawEd); toEditor(edBox); }, onkeydown: e => { if (e.key === 'Enter') e.currentTarget.click(); } },
           filt ? null : h('span', { class: 'grip', 'aria-hidden': 'true' }, '⋮⋮'), th,
           h('div', null, h('div', { class: 't' }, fr(p.title) || h('i', { style: { color: 'var(--ink-4)' } }, 'Sans titre')),
             h('div', { class: 'm' }, [p.tags.map(id => { const tg = s.tags.find(x => x.id === id); return tg ? fr(tg.label) : null; }).filter(Boolean).join(', '), p.date].filter(Boolean).join(' · ') || ' ')),
@@ -917,6 +932,7 @@ function viewPosts() {
       if (!filt) makeSortable(ul, (f, to) => { const all = postsOf(c, s.id, { all: true }); move(all, f, to); all.forEach((p, k) => { p.order = k; }); change(); drawRows(); });
       fill(rows, list.length ? ul : h('div', { class: 'empty' }, filtering ? 'Aucun contenu ne correspond.' : 'Aucun contenu dans cette section.'),
         h('p', { class: 'hint', style: { padding: '10px 12px', margin: 0 } }, filt ? 'Retire les filtres pour changer l’ordre.' : 'Glisse pour changer l’ordre des cartes sur le site.'));
+      rows.scrollTop = keepTop;   // la liste ne saute pas quand on choisit un autre contenu
     }
     drawRows();
     fill(listBox, tabs, h('div', { class: 'toolbar', style: { justifyContent: 'space-between' } }, h('span', { class: 'lbl', style: { margin: 0 } }, `${posts.length} contenu${posts.length > 1 ? 's' : ''}`), btn('+ Nouveau contenu', () => addPost(s), 'sm dark')), tools, rows);
@@ -1565,6 +1581,7 @@ function viewSettings() {
       h('div', { class: 'block' }, h('h3', null, 'Accueil'),
         h('p', { class: 'hint', style: { marginTop: 0 } }, 'L’accueil montre la vidéo en carrés sur tout l’écran, la phrase du studio sur le bandeau LED et une flèche vers le bas. On entre en cliquant la flèche ou en faisant défiler vers le bas (glisser vers le haut sur téléphone).'),
         pairInput('Phrase du studio', s.home, 'sub', { hint: 'Ce que fait le studio, en une phrase, dans la langue du visiteur. Elle défile sur le bandeau LED de l’accueil et s’affiche en grand dans la fiche du bouton « i » (accueil et 3D).' }),
+        pairInput('Ouverture du site', s.home, 'intro', { rows: 5, hint: 'Au chargement de l’accueil, cette phrase s’écrit au centre, une ligne après l’autre, au rythme de la lecture, puis les lignes s’en vont et le showreel démarre. Va à la ligne là où tu veux une coupure. Vide : la phrase du studio, coupée aux virgules.' }),
         h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
         hvFader(s.home, 'tickerSpeed', 'Vitesse du bandeau LED', 26, 4, 80, 1, 'En colonnes de points par seconde. Plus petit : le texte défile lentement ; plus grand : il file. 26 au départ.'),
         pairInput('Mot au-dessus de la flèche', s.home, 'enter', { hint: 'En petites capitales, au-dessus de la flèche d’entrée.' }),

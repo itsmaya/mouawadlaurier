@@ -372,3 +372,9 @@ code { font: 12px var(--mono); background: var(--soft-2); padding: 1px 4px; bord
 .sorting, .sorting * { cursor: grabbing !important; }
 .sort-hole { opacity: .25; outline: 2px dashed var(--accent, #f1b800); outline-offset: -2px; }
 .sort-ghost { position: fixed; z-index: 9999; pointer-events: none; margin: 0; box-shadow: 0 14px 34px rgba(0,0,0,.28); opacity: .95; transition: none; }
+
+/* Contenus : la liste a son propre défilement, la fiche le sien (grand écran) */
+@media (min-width: 981px) {
+  .cols > .card.sticky:has(> .list-scroll) { top: 14px; max-height: calc(100vh - 56px - 28px); display: flex; flex-direction: column; overflow: hidden; }
+  .cols > .card.sticky > .list-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}

@@ -97,7 +97,29 @@ export function seoParts(content, opts = {}) {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls.map((u, i) => `  <url><loc>${esc(u)}</loc><lastmod>${day}</lastmod><priority>${i === 0 ? '1.0' : i <= langs.length ? '0.8' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
 
-  return { head, body, llms: md, sitemap, base };
+  /* ---------------- l'ouverture : la phrase du studio, au centre, ligne par ligne, avant même les scripts du site (Réglages › Accueil › Ouverture).
+     Chaque ligne entre en glissant vers la droite, au rythme de la lecture ; le site les fait repartir une à une et lance la vidéo sur la dernière. */
+  const cutLines = t => { const out = []; let cur = ''; String(t).split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; }); if (cur) out.push(cur); return out; };   // sans lignes écrites : coupée aux virgules
+  const lines = {}; langs.forEach(l => { const own = tr((s.home || {}).intro, l), t = own ? own.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(tr((s.home || {}).sub, l)); if (t.length) lines[l] = t; });
+  const sf = (() => { const r = (s.typo || {}).subtitle || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic === false ? 0 : 1, w = +(r.weight || 400);
+    return { fam, it, w, css: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap` }; })();   // la police des sous-titres (italique), même adresse que le site
+  const data = { langs, def: lang, lines, f: sf };
+  const opening = !Object.keys(lines).length ? '' :
+    `<div id="hc-intro" class="hold" aria-hidden="true"><div class="ln"></div></div>\n` +
+    `<script>(function(){var D=${JSON.stringify(data).replace(/</g, '\\u003c')},el=document.getElementById('hc-intro');try{var q=new URLSearchParams(location.search);` +
+    `if(q.get('p')||!/^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash||'')||(matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||!el.animate){el.remove();return;}` +
+    `var sv=null;try{sv=localStorage.getItem('hc-lang')}catch(e){}var nl=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).map(function(x){return String(x).toLowerCase().slice(0,2)});` +
+    `var ql=(q.get('lang')||'').toLowerCase(),has=function(l){return D.langs.indexOf(l)>=0},L=has(ql)?ql:has(sv)?sv:(nl.filter(has)[0]||D.def);` +
+    `var T=D.lines[L]||D.lines[D.def]||D.lines[Object.keys(D.lines)[0]],box=el.querySelector('.ln');` +
+    `if(D.f){box.style.fontFamily='"'+D.f.fam+'", var(--serif)';box.style.fontStyle=D.f.it?'italic':'normal';box.style.fontWeight=D.f.w;}` +
+    `T.forEach(function(t){var x=document.createElement('span');x.className='l';x.textContent=t;box.appendChild(x);});` +
+    /* le rythme : une ligne, le temps de la lire (0,3 s + 30 ms par lettre, entre 1 et 3,4 s), puis la suivante ; un temps après la dernière, le départ */
+    `var go=function(){if(go.d)return;go.d=1;var at=0;for(var i=0;i<T.length;i++){box.children[i].animate([{opacity:0,transform:'translateX(-36px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1300,delay:at,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});` +
+    `at+=Math.max(1000,Math.min(3400,300+30*T[i].length));}window.HC_INTRO={t0:performance.now(),depart:at+500};};` +
+    `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);` +
+    `document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"').then(go,go);setTimeout(go,800);}else go();}catch(e){el.remove();}})();</script>`;
+
+  return { head, body, llms: md, sitemap, base, intro: opening };
 }
 
 /* Remplace les blocs générés entre leurs marqueurs dans index.html ; le reste de la page ne bouge pas */
@@ -106,5 +128,10 @@ export function applySEO(indexHTML, parts) {
     const a = `<!--${tag}-->`, b = `<!--/${tag}-->`, i = html.indexOf(a), j = html.indexOf(b);
     return i >= 0 && j > i ? html.slice(0, i + a.length) + '\n' + inner + '\n' + html.slice(j) : html;
   };
-  return put(put(indexHTML, 'seo-head', parts.head), 'seo-body', parts.body);
+  let out = put(put(indexHTML, 'seo-head', parts.head), 'seo-body', parts.body);
+  if (parts.intro != null) {
+    if (out.indexOf('<!--hc-intro-->') < 0) out = out.replace('<body>', '<body>\n<!--hc-intro-->\n<!--/hc-intro-->');   // première fois : on pose les marqueurs juste après <body>
+    out = put(out, 'hc-intro', parts.intro);
+  }
+  return out;
 }
