@@ -2028,7 +2028,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "media/mgntrn/mgntrn-03-2500px-zwp5.jpg",
+   "thumb": "media/mgntrn/mgntrn-preentaion-hd-io34.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>An immersive show built around a Ferris wheel, projection screens and 10-metre LED strips, all synchronised to the music: starfields, black holes and retro-futuristic spaceships on a fairground wheel.</p><p>We wrote the software that previews, animates and controls every light from a single timeline, in 3D, before anything was rigged. And we built a robot that turns the wheel’s levers to the beat of the music, driven from an iPad or from the timeline: the wheel itself becomes an instrument.</p><p>PROYECTA Festival, Puebla, Mexico, 9 to 11 May 2014.</p><h3>Credits</h3><ul><li><strong>Concept, design, animation and light control</strong> Romain Tardy</li><li><strong>Software and engineering</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Production</strong> PROYECTA</li></ul><h3>Press</h3><ul><li>“A giant ferris wheel in Puebla, Mexico became starfields, black holes, and retro-futuristic spaceships.” The Creators Project (Vice), the best projection mapping of 2014</li><li>“A breathtaking 10-minute video presentation of MGNTRN. Software development & engineering: Maya Benaïnous, Cyril Laurier.” Benoit Palop, The Creators Project (Vice), 2014</li></ul>",
@@ -2036,7 +2036,56 @@
     "ca": "<p>Un espectacle immersiu construït al voltant d’una sínia, pantalles de projecció i tires LED de 10 metres, tot sincronitzat amb la música: camps d’estrelles, forats negres i naus retrofuturistes sobre una roda de fira.</p><p>Vam escriure el programari que previsualitza, anima i controla tots els llums des d’una sola línia de temps, en 3D, abans fins i tot del muntatge. I vam construir un robot que gira les palanques de la sínia al ritme dels esdeveniments musicals, pilotat des d’un iPad o des de la línia de temps: la roda mateixa es converteix en un instrument.</p><p>Festival PROYECTA, Puebla, Mèxic, del 9 a l’11 de maig del 2014.</p><h3>Crèdits</h3><ul><li><strong>Concepte, disseny, animació i control de la llum</strong> Romain Tardy</li><li><strong>Programari i enginyeria</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producció</strong> PROYECTA</li></ul><h3>Premsa</h3><ul><li>«A giant ferris wheel in Puebla, Mexico became starfields, black holes, and retro-futuristic spaceships.» The Creators Project (Vice), els millors mappings del 2014</li><li>«A breathtaking 10-minute video presentation of MGNTRN. Software development & engineering: Maya Benaïnous, Cyril Laurier.» Benoit Palop, The Creators Project (Vice), 2014</li></ul>",
     "es": "<p>Un espectáculo inmersivo construido alrededor de una noria, pantallas de proyección y tiras LED de 10 metros, todo sincronizado con la música: campos de estrellas, agujeros negros y naves retrofuturistas sobre una rueda de feria.</p><p>Escribimos el software que previsualiza, anima y controla todas las luces desde una sola línea de tiempo, en 3D, antes incluso del montaje. Y construimos un robot que gira las palancas de la noria al ritmo de los eventos musicales, pilotado desde un iPad o desde la línea de tiempo: la propia rueda se convierte en un instrumento.</p><p>Festival PROYECTA, Puebla, México, del 9 al 11 de mayo de 2014.</p><h3>Créditos</h3><ul><li><strong>Concepto, diseño, animación y control de la luz</strong> Romain Tardy</li><li><strong>Software e ingeniería</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li><li><strong>Música</strong> Squeaky Lobster</li><li><strong>Producción</strong> PROYECTA</li></ul><h3>Prensa</h3><ul><li>«A giant ferris wheel in Puebla, Mexico became starfields, black holes, and retro-futuristic spaceships.» The Creators Project (Vice), los mejores mappings de 2014</li><li>«A breathtaking 10-minute video presentation of MGNTRN. Software development & engineering: Maya Benaïnous, Cyril Laurier.» Benoit Palop, The Creators Project (Vice), 2014</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/mgntrn/10338473-10152423385507718-5695403440652523857-o-smhx.jpg"
+    },
+    {
+     "src": "https://vimeo.com/117922436"
+    },
+    {
+     "src": "media/mgntrn/dsc06546-5giu.jpg"
+    },
+    {
+     "src": "media/mgntrn/screen-shot-2014-04-29-at-1-58-51-pm-pfo4.jpg"
+    },
+    {
+     "src": "media/mgntrn/mgntrn-preentaion-hd-tdb2.jpg"
+    },
+    {
+     "src": "media/mgntrn/980048-10152444565452718-2834362511972515773-o-rw6f.jpg"
+    },
+    {
+     "src": "media/mgntrn/1559341-10152423351347718-3579523694972417479-o-1bv2.jpg"
+    },
+    {
+     "src": "media/mgntrn/1921162-10152444641282718-3246718273389304251-o-83ye.jpg"
+    },
+    {
+     "src": "media/mgntrn/10273146-10152423353622718-4149676647764779246-o-0d1n.jpg"
+    },
+    {
+     "src": "media/mgntrn/10308089-10152428689377718-7406185960833589375-n-1o8o.jpg"
+    },
+    {
+     "src": "media/mgntrn/10314727-10152424819867718-3941884657624188365-n-4kz0.jpg"
+    },
+    {
+     "src": "media/mgntrn/1-img-3398-axvm.jpg"
+    },
+    {
+     "src": "media/mgntrn/10344781-10152436838097718-4151032956371230214-n-dumc.jpg"
+    },
+    {
+     "src": "media/mgntrn/screen-shot-2014-05-06-at-10-26-28-pm-8s5x.jpg"
+    },
+    {
+     "src": "media/mgntrn/timeline-fbdm.jpg"
+    },
+    {
+     "src": "media/mgntrn/screen-shot-2014-09-30-at-16-56-39-zyif.jpg"
+    }
+   ],
    "link": "",
    "team": [
     "romain-tardy",
@@ -9372,8 +9421,9 @@
    "tags": [
     "featured",
     "advertising",
-    "ai",
-    "performance"
+    "touring",
+    "performance",
+    "ai"
    ],
    "thumb": "media/batalla-de-los-gallos/screenshot-2026-11-06-at-13-42-31-z5mg.jpg",
    "thumbBack": "",
@@ -9432,7 +9482,8 @@
     "audio",
     "real-time",
     "concept-design",
-    "fabriquer"
+    "fabriquer",
+    "accompagner"
    ],
    "author": "",
    "logos": [
