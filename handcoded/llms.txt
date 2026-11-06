@@ -92,7 +92,7 @@
 - [Antoni Hadzijanev](https://mouawadlaurier.com/handcoded/?p=antoni-hadzijanev): Filmmaker. Director, Filmmaker, motion grapher
 - [Marco Nason](https://mouawadlaurier.com/handcoded/?p=marco-nason): Master glassblower, NasonMoretti, Murano. Hand-blew every glass piece of Retour aux Sources during a residency at the NasonMoretti glassworks.
 - [Viktoria Modesta](https://mouawadlaurier.com/handcoded/?p=viktoria-modesta-artist): Bionic pop artist. Interactive projections for her bionic performance, Music Tech Fest, Funkhaus Berlin, 2016.
-- [Tigre Lab](https://mouawadlaurier.com/handcoded/?p=tigre-lab): Studio. Maestro, Sharjah Light Festival, 2017.
+- [TigreLab](https://mouawadlaurier.com/handcoded/?p=tigre-lab): Studio. Maestro, Sharjah Light Festival, 2017.
 - [Ruinart](https://mouawadlaurier.com/handcoded/?p=ruinart): Brand
 - [The Absolut Company](https://mouawadlaurier.com/handcoded/?p=absolut): Brand
 - [Audi](https://mouawadlaurier.com/handcoded/?p=audi): Brand
@@ -156,7 +156,6 @@
 - [Alpine](https://mouawadlaurier.com/handcoded/?p=alpine): Brand
 - [aubio](https://mouawadlaurier.com/handcoded/?p=aubio): Software
 - [Rossella Piccinno](https://mouawadlaurier.com/handcoded/?p=rossella-piccinno): Artist and filmmaker. Eruption of the end, 2011. Italian artist born in Salento, trained in documentary and experimental cinema at the University of Bologna, then at Le Fresnoy.
-- [Emma Haziza](https://mouawadlaurier.com/handcoded/?p=emma-haziza): Systemic hydrologist. Scientific advisor of Rising. Gave the public talk on oceans and climate change at Nuit Blanche Paris 2024.
 - [Le Fresnoy](https://mouawadlaurier.com/handcoded/?p=le-fresnoy): Institution
 - [La Rochelle Université](https://mouawadlaurier.com/handcoded/?p=la-rochelle-universite): Research
 - [NasonMoretti](https://mouawadlaurier.com/handcoded/?p=nasonmoretti): Glassworks
@@ -166,6 +165,7 @@
 - [Sant Joan de Déu](https://mouawadlaurier.com/handcoded/?p=sant-joan-de-deu): Hospital
 - [CHU de Lille](https://mouawadlaurier.com/handcoded/?p=chu-lille): Hospital
 - [CHU de Bordeaux](https://mouawadlaurier.com/handcoded/?p=chu-bordeaux): Hospital
+- [Laurent Delforge](https://mouawadlaurier.com/handcoded/?p=nouveau-contenu-7): Composer · Brussels. Laurent Delforge is a belgian music composer based in Brussels. Born the 1st of June 1982, graduated from the Royal Conservatory of Belgium in contemporary music composition. Following classes alongside famous composers such as Annette Vandegorne, Francois Bayle or Bernard Parmeggiani, he achieved…
 
 ## Contact
 - Hand Coded, Barcelona, Carrer Perez Galdos 6, 08012 Barcelona, +34 666 19 94 29, maya@hand-coded.net
