@@ -1449,7 +1449,7 @@
   {
    "id": "tientos",
    "section": "work",
-   "order": 15,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Tientos al tiempo",
@@ -1521,7 +1521,7 @@
   {
    "id": "maestro",
    "section": "work",
-   "order": 18,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Maestro",
@@ -1594,7 +1594,7 @@
   {
    "id": "future-ruins",
    "section": "work",
-   "order": 9,
+   "order": 8,
    "published": true,
    "title": {
     "en": "Future Ruins",
@@ -1617,11 +1617,11 @@
    "date": "2015 – 2018",
    "tags": [
     "featured",
+    "touring",
     "collab",
-    "performance",
-    "touring"
+    "exposition"
    ],
-   "thumb": "media/future-ruins/futurruins-tclm.webp",
+   "thumb": "media/future-ruins/screen-shot-2015-09-28-at-11-22-46-1e21.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A music and light performance on twelve handmade light structures, laid on the ground like the debris of an imaginary world, in front of a monumental projection. The challenge: keeping LED animation, video mapping and music perfectly in sync.</p><p>We supported Romain Tardy from the technical choice of his custom LED structures, made them controllable over Art-Net, and adapted our tools so he could edit the animation in real time, on site, during rehearsals.</p><p>Premiered at La Nuit des Images at the Musée de l’Élysée, Lausanne, on 17 June 2015: the organisers expected 4,000 visitors, 11,000 came. Revived at Signal Festival Prague in 2018, on the church of Saints Cyril and Methodius.</p><h3>Credits</h3><ul><li><strong>Concept, design and animation</strong> Romain Tardy</li><li><strong>Music</strong> Squeaky Lobster</li><li><strong>Structures</strong> Julien Carretero</li><li><strong>Software and electrical engineering</strong> Hand Coded: Maya Benaïnous, Cyril Laurier</li><li><strong>Production</strong> La Nuit des Images</li></ul><h3>Press</h3><ul><li>“An immersive audiovisual experience powered by impressive projection mappings and 12 geometric, ground-located LED structures. Software development: Hand Coded.” Benoit Palop, The Creators Project (Vice), 2016</li></ul>",
@@ -1633,6 +1633,48 @@
     {
      "src": "media/future-ruins/futurruins-rtbd.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/future-ruins/img-8439-onhl.jpg"
+    },
+    {
+     "src": "media/future-ruins/romain-tardy-future-ruins02-2000px-1000-djgb.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8448-bmwk.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8276-smom.jpg"
+    },
+    {
+     "src": "media/future-ruins/future1-cmg6.jpg"
+    },
+    {
+     "src": "media/future-ruins/future2-p8hv.jpg"
+    },
+    {
+     "src": "media/future-ruins/future3-4b7q.jpg"
+    },
+    {
+     "src": "media/future-ruins/future4-dz7r.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8389-kb26.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8446-4z3h.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8450-5vfw.jpg"
+    },
+    {
+     "src": "media/future-ruins/ledotron2-0-2pku.jpg"
+    },
+    {
+     "src": "media/future-ruins/img-8217-xjoj.jpg"
+    },
+    {
+     "src": "media/future-ruins/screen-shot-2015-09-28-at-11-22-46-sq2a.jpg"
     }
    ],
    "link": "http://www.romaintardy.com",
@@ -1653,6 +1695,11 @@
      "city": "Prague",
      "lat": 50.08,
      "lon": 14.44
+    },
+    {
+     "city": "Pekin",
+     "lat": 39.91,
+     "lon": 116.4
     }
    ],
    "author": "Romain Tardy",
@@ -1661,18 +1708,18 @@
     "light",
     "real-time",
     "hardware",
-    "tools",
     "accompagner"
    ],
    "logos": [
     "media/logos/signal-festival.png",
-    "media/logos/musee-de-l-elysee.png"
+    "media/logos/musee-de-l-elysee.png",
+    "media/logos/12991102-863726190417056-3543782032934754619-n-tdss.jpg"
    ]
   },
   {
    "id": "sat",
    "section": "work",
-   "order": 21,
+   "order": 20,
    "published": true,
    "title": {
     "en": "S.A.T.",
@@ -2117,7 +2164,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 10,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -2322,7 +2369,7 @@
   {
    "id": "viktoria-modesta",
    "section": "work",
-   "order": 20,
+   "order": 19,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -2431,7 +2478,7 @@
   {
    "id": "beardyman",
    "section": "work",
-   "order": 17,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -2488,7 +2535,7 @@
   {
    "id": "tgic",
    "section": "work",
-   "order": 19,
+   "order": 18,
    "published": true,
    "title": {
     "en": "TGIC",
@@ -2554,7 +2601,7 @@
   {
    "id": "bionic-orchestra",
    "section": "work",
-   "order": 30,
+   "order": 29,
    "published": true,
    "title": {
     "en": "Bionic Orchestra",
@@ -2673,7 +2720,7 @@
   {
    "id": "mouvement-de-l-air",
    "section": "work",
-   "order": 28,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Mouvement de l'air",
@@ -2754,7 +2801,7 @@
   {
    "id": "slush",
    "section": "work",
-   "order": 26,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Slush",
@@ -2846,7 +2893,7 @@
   {
    "id": "wave",
    "section": "work",
-   "order": 16,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Wave",
@@ -2909,7 +2956,7 @@
   {
    "id": "methods",
    "section": "work",
-   "order": 22,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Methods",
@@ -2973,7 +3020,7 @@
   {
    "id": "kinematope",
    "section": "work",
-   "order": 23,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Kinematope",
@@ -3073,7 +3120,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 12,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -3154,7 +3201,7 @@
   {
    "id": "eko",
    "section": "work",
-   "order": 29,
+   "order": 28,
    "published": true,
    "title": {
     "en": "EKO",
@@ -3222,7 +3269,7 @@
   {
    "id": "audi-mind-race",
    "section": "work",
-   "order": 8,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Audi Mind Race",
@@ -5968,7 +6015,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 13,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -6094,7 +6141,7 @@
   {
    "id": "etre-absorbe",
    "section": "work",
-   "order": 14,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Être Absorbé",
@@ -6185,7 +6232,7 @@
   {
    "id": "upperground",
    "section": "work",
-   "order": 24,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Upperground",
@@ -6271,7 +6318,7 @@
   {
    "id": "albatros",
    "section": "work",
-   "order": 25,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Albatros",
@@ -9548,7 +9595,7 @@
   {
    "id": "cupra-tracking",
    "section": "work",
-   "order": 11,
+   "order": 10,
    "published": true,
    "title": {
     "en": "Cupra, giant LED screen",
@@ -9751,7 +9798,7 @@
   {
    "id": "nouveau-contenu-4",
    "section": "work",
-   "order": 27,
+   "order": 26,
    "published": true,
    "title": {
     "en": "La Traversée du temps",
