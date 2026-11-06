@@ -437,7 +437,7 @@ export function googleFontURLs(settings) {
   const want = new Map();
   for (const role of TYPO) {
     const r = typoOf(settings, role.id), g = googleName(r.font); if (!g) continue;
-    const ws = new Set([+(r.weight || 400), 400, 700]);
+    const ws = new Set([+(r.weight || 400), 400, 700, ...(role.id === 'body' ? [800] : [])]);   // texte des fiches : le gras un cran plus fort
     ws.forEach(w => want.set(`${g}|${r.italic ? 1 : 0}|${w}`, [g, r.italic ? 1 : 0, w]));
   }
   return [...want.values()].map(([g, it, w]) => `https://fonts.googleapis.com/css2?family=${encodeURIComponent(g).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap`);

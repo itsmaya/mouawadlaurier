@@ -785,12 +785,12 @@ const ZOOMF = () => CAMERA.zoom * CAMERA.focus * Math.min(1, W / 900);   // pixe
 function freeRect() {   // la zone de l'écran que l'interface laisse libre
   const box = id => { const el = document.getElementById(id); if (!el || el.hidden) return null; const b = el.getBoundingClientRect(); return b.width && b.height ? b : null; };
   const m = 12, r = { l: m, t: m, r: W - m, b: H - m };
-  const tops = ['slogan', 'logo', 'reel-btn', 'about-btn'].map(box).filter(Boolean), bots = ['menu', 'langs', 'cats', 'kb'].map(box).filter(Boolean);
+  const tops = ['slogan', 'logo', 'reel-btn', 'lang-sq', 'about-btn'].map(box).filter(Boolean), bots = ['menu', 'langs', 'cats', 'kb'].map(box).filter(Boolean);
   if (H >= W) {   // debout : la signature en haut, le menu en bas
     tops.forEach(b => { r.t = Math.max(r.t, b.bottom + 8); });
     bots.forEach(b => { r.b = Math.min(r.b, b.top - 8); });
   } else {        // couché : la signature et le menu à gauche, le logo à droite, les tags en bas à droite
-    [box('slogan'), box('menu'), box('langs'), box('reel-btn'), box('about-btn')].filter(Boolean).forEach(b => { if (b.left < W / 2) r.l = Math.max(r.l, b.right + 10); });
+    [box('slogan'), box('menu'), box('langs'), box('reel-btn'), box('lang-sq'), box('about-btn')].filter(Boolean).forEach(b => { if (b.left < W / 2) r.l = Math.max(r.l, b.right + 10); });
     [box('logo'), box('reel-btn')].filter(Boolean).forEach(b => { if (b.left > W / 2) r.r = Math.min(r.r, b.left - 10); });
     [box('cats'), box('kb')].filter(Boolean).forEach(b => { if (b.left < r.r && b.right > r.l) r.b = Math.min(r.b, b.top - 8); });
   }
@@ -1267,14 +1267,15 @@ function fitPost2D() {
   post2dEl.style.height = Math.ceil(need) + 'px';
   document.body.classList.toggle('post-cramped', H - (top + need * s) < menu.offsetHeight + 60);
 }
+const langsTop = () => { const r = langsEl.getBoundingClientRect(); return r.height ? r.top : H - (wideScreen() ? 44 : 48); };   // l'ancien « ▸ FR » du bas est masqué (la langue est dans un carré en haut) : le menu garde sa place d'avant
 function setMenuPosition() {
   if (!P.postOpen) document.body.classList.remove('post-cramped', 'post-short');
   if (P.postOpen && post2D.open && post2D.height > 100) {
     let y = sloganEl.offsetTop + sloganEl.offsetHeight + post2D.height * (post2D.scale || 1) + 2 * STYLE.margin + 30;
-    y = Math.min(y, langsEl.getBoundingClientRect().top - menu.offsetHeight - 22);   // toujours au-dessus des langues
+    y = Math.min(y, langsTop() - menu.offsetHeight - 22);   // toujours au-dessus du bas de l'écran
     menu.style.left = STYLE.margin + 'px'; menu.style.top = y + 'px';
   } else {   // en bas à gauche, au-dessus des langues (plus haut sur grand écran, au niveau des flèches de pages)
-    let lt = langsEl.hidden ? H - 30 : langsEl.getBoundingClientRect().top;
+    let lt = langsEl.hidden ? H - 30 : langsTop();
     if (!wideScreen() && !catBox.hidden) { const cb = catBox.getBoundingClientRect(); if (cb.height && cb.left < W / 2) lt = Math.min(lt, cb.top); }   // téléphone : le menu passe au-dessus de la Sélection
     menu.style.left = (wideScreen() ? 26 : STYLE.margin) + 'px'; menu.style.top = Math.round(Math.min(H - (menu.offsetHeight || 86) - (wideScreen() ? 100 : 56), lt - (menu.offsetHeight || 86) - 24)) + 'px';
   }
@@ -1361,7 +1362,10 @@ function renderTexts() {
   const cap = document.getElementById('cat-cap'); if (cap) cap.textContent = ui('category');
   const langs = s.langs && s.langs.length ? s.langs : LANGS;
   renderLangMenu(langs);
-  [document.getElementById('home-langs')].forEach(box => {   // accueil : un carré avec la langue, les autres glissent dedans au survol
+  let sq = document.getElementById('lang-sq');
+  if (!sq) { sq = document.createElement('div'); sq.id = 'lang-sq'; sq.className = 'ui'; document.body.appendChild(sq);   // dans la 3D aussi : le carré de la langue, comme sur l'accueil
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('#lang-sq')) sq.classList.remove('open'); }); }
+  [document.getElementById('home-langs'), sq].forEach(box => {   // accueil et 3D : un carré avec la langue, les autres glissent dedans au survol
     box.innerHTML = ''; box.classList.add('hlg'); box.classList.remove('open'); box.hidden = langs.length < 2;
     if (langs.length < 2) return;
     const cur = document.createElement('button'); cur.type = 'button'; cur.className = 'cur'; cur.setAttribute('aria-expanded', 'false'); cur.setAttribute('aria-label', ui('lang') + ' : ' + LANG.toUpperCase());
@@ -1371,6 +1375,7 @@ function renderTexts() {
     langs.filter(l => l !== LANG).forEach(l => { const b = document.createElement('button'); b.type = 'button'; b.textContent = l.toUpperCase(); b.lang = l; b.setAttribute('aria-label', ui('lang') + ' ' + l.toUpperCase()); b.addEventListener('click', () => setLang(l)); opts.appendChild(b); });
     box.append(cur, opts);
   });
+  placeAbout();   // la langue s'insère entre le Showreel et le « i »
   document.documentElement.style.setProperty('--accent', accent());
   document.documentElement.style.setProperty('--accent-raw', CONTENT.settings.accent || '#ffcc00');
   document.documentElement.style.setProperty('--accent-inv', invertHex(CONTENT.settings.accent || '#ffcc00'));   // affiché en jaune une fois la page inversée
@@ -1465,6 +1470,10 @@ function signature(post, credit) {
 const isVideo = src => /\.(mp4|webm|mov)(\?|#|$)/i.test(src || '');
 const ytId = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
 const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
+/* La vignette d'une vidéo Vimeo (son oEmbed public). La première vidéo d'une fiche garde la vignette de la fiche ; les suivantes ont chacune la leur. */
+const vimeoThumbs = new Map();
+const vimeoThumb = id => { if (!vimeoThumbs.has(id)) vimeoThumbs.set(id, fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent('https://vimeo.com/' + id)}&width=1280`).then(r => (r.ok ? r.json() : null)).then(j => (j && j.thumbnail_url) || '').catch(() => '')); return vimeoThumbs.get(id); };
+const firstEmbed = (post, src) => { const v = ((post && post.media) || []).filter(m => m && /youtu\.?be|vimeo\.com/.test(m.src || '')); return !v.length || v[0].src === src; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
 const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
@@ -1694,8 +1703,9 @@ const post2D = {
     const w = Math.round(h * 16 / 9), el = this.addPanel('media embed', w, '');
     const inner = el.querySelector('.in'), id = kind === 'youtube' ? ytId(src) : vimeoId(src);
     const cover = document.createElement('div'); cover.className = 'cover';
-    const poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : (this.post && this.post.thumb ? url(this.post.thumb) : '');
-    if (poster) { const im = document.createElement('img'); im.src = poster; im.alt = ''; im.draggable = false; im.onerror = () => im.remove(); cover.appendChild(im); }
+    const own = kind === 'vimeo' && id && !firstEmbed(this.post, src), fallback = this.post && this.post.thumb ? url(this.post.thumb) : '';
+    const poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : own ? '' : fallback;
+    if (poster || own) { const im = document.createElement('img'); im.alt = ''; im.draggable = false; im.onerror = () => im.remove(); if (poster) im.src = poster; else vimeoThumb(id).then(u => { if (u || fallback) im.src = u || fallback; else im.remove(); }); cover.appendChild(im); }
     cover.insertAdjacentHTML('beforeend', `<span class="brand">${kind === 'youtube' ? 'YouTube' : 'Vimeo'}</span>`);
     const play = document.createElement('button'); play.type = 'button'; play.className = 'play'; play.setAttribute('aria-label', ui('play'));
     play.addEventListener('click', () => {
@@ -1907,8 +1917,9 @@ const postV = {
     const E = escapeHTML, kind = mediaKind(m.src), cap = m.caption ? tr(m.caption).trim() : '';
     const fc = cap ? `<figcaption>${E(cap)}</figcaption>` : '';
     if (kind === 'youtube' || kind === 'vimeo') {
-      const id = kind === 'youtube' ? ytId(m.src) : vimeoId(m.src), poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : (this.post && this.post.thumb ? url(this.post.thumb) : '');
-      return `<figure class="${cls} pv-embed" data-kind="${kind}" data-id="${E(id || '')}"><div class="pv-cover">${poster ? `<img src="${E(poster)}" alt="">` : ''}<button type="button" class="play" aria-label="${E(ui('play'))}"></button><span class="brand">${kind === 'youtube' ? 'YouTube' : 'Vimeo'}</span></div>${fc}</figure>`;
+      const id = kind === 'youtube' ? ytId(m.src) : vimeoId(m.src), own = kind === 'vimeo' && id && !firstEmbed(this.post, m.src);
+      const poster = kind === 'youtube' && id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : own ? '' : (this.post && this.post.thumb ? url(this.post.thumb) : '');
+      return `<figure class="${cls} pv-embed" data-kind="${kind}" data-id="${E(id || '')}"><div class="pv-cover">${poster ? `<img src="${E(poster)}" alt="">` : own ? `<img data-vimeo="${E(id)}" alt="">` : ''}<button type="button" class="play" aria-label="${E(ui('play'))}"></button><span class="brand">${kind === 'youtube' ? 'YouTube' : 'Vimeo'}</span></div>${fc}</figure>`;
     }
     if (kind === 'video') return `<figure class="${cls}"><video src="${E(url(m.src) + (/#t=/.test(m.src) ? '' : '#t=0.1'))}" controls playsinline preload="metadata"></video>${fc}</figure>`;
     return `<figure class="${cls}"><img src="${E(url(m.src))}" alt="" loading="lazy">${fc}</figure>`;
@@ -1961,6 +1972,7 @@ const postV = {
       const set = () => { if (im.naturalWidth) im.style.flexGrow = (im.naturalWidth / im.naturalHeight).toFixed(3); };
       im.addEventListener('load', set); if (im.complete) set();
     });
+    postvEl.querySelectorAll('img[data-vimeo]').forEach(im => { const fb = this.post && this.post.thumb ? url(this.post.thumb) : ''; vimeoThumb(im.dataset.vimeo).then(u => { if (u || fb) im.src = u || fb; else im.remove(); }); });   // chaque vidéo Vimeo sa vignette
     postvEl.querySelectorAll('img').forEach(im => im.addEventListener('error', () => { const f = im.closest('figure.pv-full, figure.pv-mat'); if (f && !f.classList.contains('pv-hero')) f.remove(); else im.style.visibility = 'hidden'; }));
     postvEl.querySelectorAll('.pv-lgrid img[data-src]').forEach(im => monoLogo(im.dataset.src).then(u => { im.src = u.src; im.classList.toggle('raw', !!u.raw); }));
     postvEl.querySelectorAll('.pv-embed').forEach(fg => fg.querySelector('.play').addEventListener('click', () => {
@@ -2096,6 +2108,13 @@ post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('p
 post2dEl.addEventListener('lostpointercapture', e => { if (e.target === post2dEl) stopDrag2D(); });   // au doigt, la capture passe de l'élément touché à la bande : ce transfert ne doit pas arrêter le glissement
 window.addEventListener('pointerup', () => { if (pend2D || post2D.dragging) stopDrag2D(); });
 whiteboard.addEventListener('pointerdown', () => closePost());
+/* Au bout de la fiche, un clic dans le vide à droite (ou avant le début, à gauche) : on sort, retour à la 3D */
+post2dEl.addEventListener('click', e => {
+  if (!post2D.open || post2D.justDragged || e.target.closest('.pnl, a, button, iframe, video, input')) return;
+  const ps = post2dEl.querySelectorAll('#strip .pnl'); if (!ps.length) return;
+  const first = ps[0].getBoundingClientRect(), last = ps[ps.length - 1].getBoundingClientRect();
+  if (e.clientX > last.right + 4 || e.clientX < first.left - 4) closePost();
+});
 
 /* ================================================================ StageView : navigation générale */
 function getToSectionView(index = -1, indexPost = 0) {
@@ -2585,7 +2604,9 @@ function renderAbout() {
 function placeAbout() {   // sous le Showreel ; la fiche à droite du carré (grand écran) ou dessous (téléphone)
   if (!aboutBtn) return;
   const rb = reel && reel.btn && !reel.btn.hidden ? reel.btn : null;
-  const top = rb ? rb.offsetTop + rb.offsetHeight + 8 : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16));
+  let top = rb ? rb.offsetTop + rb.offsetHeight + 8 : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16));
+  const sq = document.getElementById('lang-sq');   // sous le Showreel : la langue, puis le « i » (le même ordre que l'accueil)
+  if (sq && !sq.hidden) { sq.style.top = top + 'px'; sq.style.left = (sloganEl.offsetLeft + 2) + 'px'; top += aboutBtn.offsetHeight + 8; }
   aboutBtn.style.top = top + 'px'; aboutBtn.style.left = (sloganEl.offsetLeft + 2) + 'px';
   if (!aboutCard.hidden) {
     const wide = wideScreen(), l = sloganEl.offsetLeft + 2;
@@ -2714,7 +2735,7 @@ function buildHvPanel(home, src, host = home) {
     if (open) hvLabels();
   };
   hv.setOpen = setOpen;
-  toggle.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  toggle.addEventListener('click', () => { if (hv.reelOn) { hvReelStop(); setOpen(true); return; } setOpen(!panel.classList.contains('open')); });   // pendant le showreel aussi : un clic l'arrête et ouvre les réglages (caméra, photo)
   /* téléphone + caméra : le panneau se réduit à une barre en bas (source, titre, photo) pour qu'on se voie ; « + » rouvre les curseurs */
   const more = panel.querySelector('.more');
   more.addEventListener('click', () => { const on = !panel.classList.contains('more-on'); panel.classList.toggle('more-on', on); more.setAttribute('aria-expanded', String(on)); more.textContent = on ? '−' : '+'; });
