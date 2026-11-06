@@ -7044,7 +7044,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/fc-barcelona/fcbcn-vid5.jpg",
+   "thumb": "media/logos/fc-barcelona.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7089,7 +7089,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/bnp-paribas-real-estate/bnplogo-l5u6.jpg",
+   "thumb": "media/logos/bnp-paribas-real-estate.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7450,7 +7450,7 @@
    "tags": [
     "agencies"
    ],
-   "thumb": "media/tetro/tetro-logo-jc5q.jpg",
+   "thumb": "media/logos/tetro.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7768,7 +7768,7 @@
    "tags": [
     "institutions"
    ],
-   "thumb": "media/centquatre/logo-104-owps.jpg",
+   "thumb": "media/logos/centquatre.png",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7811,9 +7811,10 @@
    },
    "date": "",
    "tags": [
-    "venues"
+    "venues",
+    "institutions"
    ],
-   "thumb": "media/gaite-lyrique/gaitelyrique-newf.jpg",
+   "thumb": "media/logos/gaite-lyrique.png",
    "thumbBack": "",
    "body": {
     "en": "",
