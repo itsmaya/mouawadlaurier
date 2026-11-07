@@ -2604,9 +2604,17 @@ function renderAbout() {
 function placeAbout() {   // sous le Showreel ; la fiche à droite du carré (grand écran) ou dessous (téléphone)
   if (!aboutBtn) return;
   const rb = reel && reel.btn && !reel.btn.hidden ? reel.btn : null;
+  const sq = document.getElementById('lang-sq'), langOn = sq && !sq.hidden;
+  if (H <= 520 && W > H) {   // téléphone couché : les carrés en ligne sous la signature, comme sur l'accueil ; la langue en dernier, elle s'ouvre vers la droite
+    const top = rb ? rb.offsetTop : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + 16);
+    let left = rb ? rb.offsetLeft + rb.offsetWidth + 8 : sloganEl.offsetLeft + 2;
+    aboutBtn.style.top = top + 'px'; aboutBtn.style.left = left + 'px'; if (!aboutBtn.hidden) left += aboutBtn.offsetWidth + 8;
+    if (langOn) { sq.style.top = top + 'px'; sq.style.left = left + 'px'; }
+    if (!aboutCard.hidden) { aboutCard.style.left = (sloganEl.offsetLeft + 2) + 'px'; aboutCard.style.top = (top + aboutBtn.offsetHeight + 8) + 'px'; }
+    return;
+  }
   let top = rb ? rb.offsetTop + rb.offsetHeight + 8 : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + (wideScreen() ? 26 : 16));
-  const sq = document.getElementById('lang-sq');   // sous le Showreel : la langue, puis le « i » (le même ordre que l'accueil)
-  if (sq && !sq.hidden) { sq.style.top = top + 'px'; sq.style.left = (sloganEl.offsetLeft + 2) + 'px'; top += aboutBtn.offsetHeight + 8; }
+  if (langOn) { sq.style.top = top + 'px'; sq.style.left = (sloganEl.offsetLeft + 2) + 'px'; top += aboutBtn.offsetHeight + 8; }   // sous le Showreel : la langue, puis le « i » (le même ordre que l'accueil)
   aboutBtn.style.top = top + 'px'; aboutBtn.style.left = (sloganEl.offsetLeft + 2) + 'px';
   if (!aboutCard.hidden) {
     const wide = wideScreen(), l = sloganEl.offsetLeft + 2;
