@@ -3236,19 +3236,20 @@ function tickerStripFor(on) {
   const k = tickerDpr, p = LED.pitch, cols = Math.ceil(window.innerWidth / p) + 1, key = [tickerDots.w, cols, k, on].join('|');
   if (tickerStrip && tickerStrip.dots === tickerDots && tickerStrip.key === key) return tickerStrip;
   if (!ledSprites || ledColor !== on) { ledColor = on; ledSprites = { on: ledSprite(on, true), off: ledSprite(on, false) }; }
-  const n = tickerDots.w + cols, c = document.createElement('canvas'); c.width = Math.ceil(n * p * k); c.height = Math.round(LED.h * k);
+  const n = cols + tickerDots.w + cols, c = document.createElement('canvas'); c.width = Math.ceil(n * p * k); c.height = Math.round(LED.h * k);   // un écran de points éteints devant : la phrase arrive par la droite, comme si rien n'était écrit avant
   const x = c.getContext('2d'), top = (LED.h - LED.rows * p) / 2, half = ledSprites.on.width / 2;
   x.fillStyle = '#000'; x.fillRect(0, 0, c.width, c.height);
   for (let i = 0; i < n; i++) {
-    const m = tickerDots.cols[i % tickerDots.w], cx = (i * p + p / 2) * k - half;
+    const m = i < cols ? 0 : tickerDots.cols[(i - cols) % tickerDots.w], cx = (i * p + p / 2) * k - half;
     for (let r = 0; r < LED.rows; r++) x.drawImage((m >> r) & 1 ? ledSprites.on : ledSprites.off, cx, (top + r * p + p / 2) * k - half);
   }
-  return (tickerStrip = { canvas: c, dots: tickerDots, key, shown: -1 });
+  return (tickerStrip = { canvas: c, dots: tickerDots, key, shown: -1, lead: cols });
 }
 function drawTicker(dt) {   // le texte avance d'une colonne de points à la fois, comme un vrai panneau
   const sp = +((CONTENT.settings.home || {}).tickerSpeed); tickerAcc += dt * (sp > 0 ? Math.min(120, sp) : 26);   // vitesse réglable : Réglages › Accueil
-  if (tickerAcc >= 1) { tickerX = (tickerX + Math.floor(tickerAcc)) % tickerDots.w; tickerAcc %= 1; }
   const st = tickerStripFor(CONTENT.settings.accent || '#ffcc00');   // l'accueil est remis à l'endroit en négatif : la vraie couleur
+  if (tickerAcc >= 1) { tickerX += Math.floor(tickerAcc); tickerAcc %= 1; }
+  if (tickerX >= st.lead + tickerDots.w) tickerX = st.lead + (tickerX - st.lead) % tickerDots.w;   // après le premier passage, la phrase boucle sans revenir au noir
   if (st.shown === tickerX) return;   // rien n'a bougé : rien à redessiner
   st.shown = tickerX;
   tctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -3522,6 +3523,7 @@ function introStage() {
 function introLate(now = false) {   // le bandeau LED, « Entrer » et le « ? » arrivent en dernier
   if (!R0.classList.contains('hc-late')) return;
   R0.classList.remove('hc-stage', 'hc-late');
+  tickerX = 0; tickerAcc = 0; if (tickerStrip) tickerStrip.shown = -1;   // le bandeau part du noir : la phrase entre par la droite
   if (now) return;
   ['#ticker', '#enter', '#home-dock'].forEach((q, i) => { const el = document.querySelector(q); if (el) el.animate([{ opacity: 0 }, { opacity: getComputedStyle(el).opacity }], { duration: 1200, delay: i * 220, easing: 'ease', fill: 'backwards' }); });
 }
