@@ -130,12 +130,13 @@ button { font: inherit; }
 .txt .posted { position: absolute; font: 10px/14px var(--ui); color: var(--grey-2); letter-spacing: .03em; }
 .contact .bgx { background: #000; }
 .contact .in { padding: 16px 26px 20px 32px; display: flex; flex-direction: column; }
-.contact .in > div { position: static; width: auto; max-width: 323px; }
+.contact .in > div { position: static; width: auto; max-width: 440px; }
 .contact .cn { font: 44px/50px var(--serif); color: #fff; }
 .contact .ac { margin-top: 6px; font: 18px/24px var(--serif); color: #979797; }
 .contact .site { margin-top: 12px; font: 14px/20px var(--ui); color: var(--accent); }
 .contact .ad { margin-top: 14px; font: 14px/20px var(--ui); color: #fff; }
 .contact .ad p { margin: 0; }
+.contact .ad p:first-child { margin-bottom: 8px; }   /* la phrase d'accueil, puis l'adresse */
 .contact .ad a { color: #fff; }
 .contact .ct { margin-top: auto; font: 15px/20px var(--ui); color: var(--accent); }
 
@@ -1039,3 +1040,4 @@ body:has(#home:not([hidden]):not(.out)) #lang-sq, body.post-open-wide #lang-sq, 
 @media (max-width: 700px), (max-height: 520px) { #lang-sq { height: 30px; } #lang-sq .cur { width: 28px; height: 28px; } #lang-sq .opts button { height: 28px; line-height: 28px; } }
 /* Le gras dans le texte des fiches : un cran plus fort, qu'on le voie même en petit */
 .txt .body strong, .txt .body b, #postv .pv-body strong, #postv .pv-body b { font-weight: 800; }
+.contact .site:empty { display: none; }   /* pas de lien : pas de ligne vide */

@@ -1824,7 +1824,7 @@ const post2D = {
 
   addContact(post) {
     const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
-    this.addPanel('contact', Math.min(380, Math.max(260, Math.floor((W - 2 * STYLE.margin) / (this.scale || 1)))), `<div class="cn">${escapeHTML(tr(post.title))}.</div><div class="ac">${escapeHTML(tr(post.subtitle))}</div>` +
+    this.addPanel('contact', Math.min(500, Math.max(260, Math.floor((W - 2 * STYLE.margin) / (this.scale || 1)))), `<div class="cn">${escapeHTML(tr(post.title))}.</div><div class="ac">${escapeHTML(tr(post.subtitle))}</div>` +
       `<div class="site">${post.link ? `<a href="${escapeHTML(post.link)}" target="_blank" rel="noopener">${escapeHTML(site)}</a>` : ''}</div>` +
       `<div class="ad">${sanitizeHTML(tr(post.body))}</div><div class="ct">${escapeHTML(tr(post.place))}</div>`);
   },
@@ -3192,8 +3192,9 @@ const homeFigures = () => ((CONTENT.settings.home && CONTENT.settings.home.figur
 const homeFigureLines = () => homeFigures().map(f => `${f.value} ${f.label}`);   // les chiffres du studio défilent sur le bandeau LED, dans la langue du visiteur
 function buildTickerDots() {   // la phrase du studio en colonnes de 7 points (Réglages › Accueil) ; sans phrase, les chiffres
   const phrase = tr(CONTENT.settings.home.sub || {}).replace(/\s*\n\s*/g, ' ').trim();
-  const items = phrase ? [phrase] : [...homeFigureLines(), ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
-  const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
+  const quotes = tr(CONTENT.settings.home.quotes || {}).split(/\n+/).map(x => x.trim()).filter(Boolean);   // après la phrase : les citations de presse (Réglages › Accueil)
+  const items = phrase ? [phrase, ...quotes] : [...homeFigureLines(), ...quotes, ...(CONTENT.settings.home.ticker || [])].filter(Boolean);
+  const text = (items.length ? items : [CONTENT.settings.name]).map(x => String(x).replace(/œ/g, 'oe').replace(/Œ/g, 'OE').replace(/æ/g, 'ae').replace(/…/g, '...').replace(/·/g, '.').toUpperCase().trim()).join('   ✚   ') + '   ✚   ';
   tickerDots = dotsOf(text);
 }
 function dotsOf(text) {

@@ -1581,6 +1581,7 @@ function viewSettings() {
       h('div', { class: 'block' }, h('h3', null, 'Accueil'),
         h('p', { class: 'hint', style: { marginTop: 0 } }, 'L’accueil montre la vidéo en carrés sur tout l’écran, la phrase du studio sur le bandeau LED et une flèche vers le bas. On entre en cliquant la flèche ou en faisant défiler vers le bas (glisser vers le haut sur téléphone).'),
         pairInput('Phrase du studio', s.home, 'sub', { rows: 5, hint: 'Ce que fait le studio, en une phrase, dans la langue du visiteur. Elle s’écrit au centre à l’ouverture du site et quand on touche « i », une ligne après l’autre : va à la ligne (Entrée) là où tu veux couper. Sur le bandeau LED, elle défile d’un seul tenant.' }),
+        pairInput('Citations du bandeau LED', s.home, 'quotes', { rows: 5, hint: 'Sur le bandeau LED, après la phrase du studio, ces citations défilent l’une après l’autre : une par ligne, avec sa source. Les accents passent ; les guillemets s’affichent droits.' }),
         h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
         hvFader(s.home, 'tickerSpeed', 'Vitesse du bandeau LED', 26, 4, 80, 1, 'En colonnes de points par seconde. Plus petit : le texte défile lentement ; plus grand : il file. 26 au départ.'),
         pairInput('Mot au-dessus de la flèche', s.home, 'enter', { hint: 'En petites capitales, au-dessus de la flèche d’entrée.' }),

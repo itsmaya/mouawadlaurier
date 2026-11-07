@@ -62,6 +62,7 @@ export function normalizeContent(c) {
   h.ticker = Array.isArray(h.ticker) ? h.ticker : []; h.figures = Array.isArray(h.figures) ? h.figures : [];
   if (h.intro && typeof h.intro === 'object') { Object.entries(h.intro).forEach(([l, t]) => { if (String(t || '').trim()) h.sub[l] = t; }); }   // l'ancien champ « Ouverture » rejoint la phrase du studio (ses retours à la ligne font les coupures)
   delete h.intro;
+  h.quotes = h.quotes && typeof h.quotes === 'object' ? h.quotes : emptyField();   // citations de presse qui défilent sur le bandeau LED, une par ligne
   /* Référencement et audience (back-office › Audience) */
   const seo = c.settings.seo = c.settings.seo && typeof c.settings.seo === 'object' ? c.settings.seo : {};
   seo.url = typeof seo.url === 'string' ? seo.url : ''; seo.image = typeof seo.image === 'string' ? seo.image : '';
