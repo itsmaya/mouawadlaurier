@@ -2,7 +2,7 @@
  "version": 1,
  "settings": {
   "name": "Hand Coded",
-  "since": "2012",
+  "since": "2008",
   "langs": [
    "en",
    "fr",
@@ -588,18 +588,17 @@
    "card": "portrait",
    "open": "focus3d",
    "perPage": 20,
-   "defaultTag": "core",
+   "defaultTag": "specialists",
    "visible": true,
    "tags": [
     {
-     "id": "core",
+     "id": "specialists",
      "label": {
-      "en": "Core team",
-      "fr": "Le cœur du studio",
-      "ca": "El nucli de l’estudi",
-      "es": "El núcleo del estudio"
-     },
-     "page": true
+      "en": "The team",
+      "fr": "L’équipe",
+      "ca": "L’equip",
+      "es": "El equipo"
+     }
     },
     {
      "id": "artists",
@@ -608,15 +607,6 @@
       "fr": "Artistes",
       "ca": "Artistes",
       "es": "Artistes"
-     }
-    },
-    {
-     "id": "specialists",
-     "label": {
-      "en": "Specialists",
-      "fr": "Spécialistes",
-      "ca": "Especialistes",
-      "es": "Especialistas"
      }
     },
     {
@@ -638,16 +628,6 @@
      }
     },
     {
-     "id": "venues",
-     "label": {
-      "en": "Venues",
-      "fr": "Lieux",
-      "ca": "Espais",
-      "es": "Espacios"
-     },
-     "menu": false
-    },
-    {
      "id": "institutions",
      "label": {
       "en": "Institutions",
@@ -666,6 +646,36 @@
      }
     },
     {
+     "id": "partners",
+     "label": {
+      "en": "Partners",
+      "fr": "Partenaires",
+      "ca": "Col·laboradors",
+      "es": "Colaboradores"
+     }
+    },
+    {
+     "id": "core",
+     "label": {
+      "en": "Core team",
+      "fr": "Le cœur du studio",
+      "ca": "El nucli de l’estudi",
+      "es": "El núcleo del estudio"
+     },
+     "page": true,
+     "menu": false
+    },
+    {
+     "id": "venues",
+     "label": {
+      "en": "Venues",
+      "fr": "Lieux",
+      "ca": "Espais",
+      "es": "Espacios"
+     },
+     "menu": false
+    },
+    {
      "id": "research",
      "label": {
       "en": "Research & tools",
@@ -674,15 +684,6 @@
       "es": "Investigación y herramientas"
      },
      "menu": false
-    },
-    {
-     "id": "partners",
-     "label": {
-      "en": "Partners",
-      "fr": "Partenaires",
-      "ca": "Col·laboradors",
-      "es": "Colaboradores"
-     }
     }
    ],
    "network": false,
@@ -890,7 +891,7 @@
     "audio",
     "concept-design",
     "project-management",
-    "nouveau-contenu",
+    "immersive",
     "sustainable",
     "light",
     "hardware",
@@ -1071,7 +1072,7 @@
     "concept-design",
     "sustainable",
     "project-management",
-    "nouveau-contenu",
+    "immersive",
     "audio",
     "tracking",
     "hardware",
@@ -1269,7 +1270,7 @@
     "fabriquer",
     "machine-learning",
     "tracking",
-    "nouveau-contenu",
+    "immersive",
     "project-management"
    ],
    "logos": [
@@ -1444,7 +1445,7 @@
     "generative",
     "audio",
     "concept-design",
-    "nouveau-contenu",
+    "immersive",
     "imaginer",
     "explorer",
     "projection-mapping"
@@ -1708,7 +1709,7 @@
     "romain-tardy",
     "maya",
     "cyril",
-    "nouveau-contenu-7"
+    "laurent-delforge"
    ],
    "credits": "Squeaky Lobster, Julien Carretero",
    "location": null,
@@ -2086,7 +2087,7 @@
     "tracking",
     "concept-design",
     "project-management",
-    "nouveau-contenu"
+    "immersive"
    ],
    "logos": [
     "media/logos/palaisdetokyo.png",
@@ -2205,7 +2206,7 @@
     "romain-tardy",
     "maya",
     "cyril",
-    "nouveau-contenu-7"
+    "laurent-delforge"
    ],
    "credits": "Squeaky Lobster",
    "location": null,
@@ -2658,7 +2659,7 @@
     "light",
     "audio",
     "tools",
-    "nouveau-contenu",
+    "immersive",
     "accompagner"
    ],
    "logos": [
@@ -3347,7 +3348,7 @@
     "projection-mapping",
     "tracking",
     "tools",
-    "nouveau-contenu",
+    "immersive",
     "accompagner"
    ],
    "logos": [
@@ -4703,6 +4704,7 @@
    },
    "date": "",
    "tags": [
+    "specialists",
     "core"
    ],
    "thumb": "media/cyril/cyril-profile-cqcg.jpg",
@@ -4748,6 +4750,7 @@
    },
    "date": "",
    "tags": [
+    "specialists",
     "core"
    ],
    "thumb": "media/maya/screen-shot-2014-05-28-at-7-49-53-pm-copy-g8gl.jpg",
@@ -4771,7 +4774,7 @@
   {
    "id": "stephanie",
    "section": "studio",
-   "order": 2,
+   "order": 5,
    "published": true,
    "title": {
     "en": "Stéphanie Huerre",
@@ -4816,7 +4819,7 @@
   {
    "id": "romain-tardy",
    "section": "studio",
-   "order": 17,
+   "order": 19,
    "published": true,
    "title": {
     "en": "Romain Tardy",
@@ -4861,7 +4864,7 @@
   {
    "id": "pablo-valbuena",
    "section": "studio",
-   "order": 18,
+   "order": 20,
    "published": true,
    "title": {
     "en": "Pablo Valbuena",
@@ -4906,7 +4909,7 @@
   {
    "id": "adrien-m-claire-b",
    "section": "studio",
-   "order": 19,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Adrien M & Claire B",
@@ -4951,7 +4954,7 @@
   {
    "id": "beardyman-musician",
    "section": "studio",
-   "order": 24,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -4996,7 +4999,7 @@
   {
    "id": "maotik",
    "section": "studio",
-   "order": 22,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Maotik",
@@ -5041,7 +5044,7 @@
   {
    "id": "ezra",
    "section": "studio",
-   "order": 20,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Ezra",
@@ -5086,7 +5089,7 @@
   {
    "id": "pedra",
    "section": "studio",
-   "order": 14,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Marina Pujadas",
@@ -5131,7 +5134,7 @@
   {
    "id": "jesse-watts",
    "section": "studio",
-   "order": 13,
+   "order": 10,
    "published": true,
    "title": {
     "en": "Jesse Watts",
@@ -5176,7 +5179,7 @@
   {
    "id": "paul-brossier",
    "section": "studio",
-   "order": 15,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Paul Brossier",
@@ -5219,7 +5222,7 @@
   {
    "id": "thomas-aussenac",
    "section": "studio",
-   "order": 12,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Thomas Aussenac",
@@ -5486,7 +5489,7 @@
    ]
   },
   {
-   "id": "nouveau-contenu",
+   "id": "immersive",
    "section": "expertise",
    "order": 12,
    "published": true,
@@ -5628,7 +5631,7 @@
   {
    "id": "ben-kuper",
    "section": "studio",
-   "order": 4,
+   "order": 2,
    "published": true,
    "title": {
     "en": "Ben Kuper",
@@ -5673,7 +5676,7 @@
   {
    "id": "clement-rignault",
    "section": "studio",
-   "order": 5,
+   "order": 4,
    "published": true,
    "title": {
     "en": "Clément Gamgie Rignault",
@@ -5718,7 +5721,7 @@
   {
    "id": "louis-raveton",
    "section": "studio",
-   "order": 6,
+   "order": 7,
    "published": true,
    "title": {
     "en": "Louis Raveton",
@@ -5763,7 +5766,7 @@
   {
    "id": "fanny-fortage",
    "section": "studio",
-   "order": 7,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Fanny Fortage",
@@ -5808,7 +5811,7 @@
   {
    "id": "gaetan-cerrillo",
    "section": "studio",
-   "order": 8,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Gaëtan Cerrillo",
@@ -5851,7 +5854,7 @@
   {
    "id": "gustavo-valera",
    "section": "studio",
-   "order": 9,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Gustavo Valera",
@@ -5896,7 +5899,7 @@
   {
    "id": "guillaume-faure",
    "section": "studio",
-   "order": 10,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Guillaume Faure",
@@ -5941,7 +5944,7 @@
   {
    "id": "antoni-hadzijanev",
    "section": "studio",
-   "order": 11,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Antoni Hadzijanev",
@@ -5986,7 +5989,7 @@
   {
    "id": "marco-nason",
    "section": "studio",
-   "order": 16,
+   "order": 18,
    "published": false,
    "title": {
     "en": "Marco Nason",
@@ -6029,7 +6032,7 @@
   {
    "id": "viktoria-modesta-artist",
    "section": "studio",
-   "order": 23,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -6074,7 +6077,7 @@
   {
    "id": "tigre-lab",
    "section": "studio",
-   "order": 25,
+   "order": 26,
    "published": true,
    "title": {
     "en": "TigreLab",
@@ -6257,7 +6260,7 @@
     "generative",
     "tracking",
     "concept-design",
-    "nouveau-contenu",
+    "immersive",
     "imaginer"
    ],
    "author": "Maya Mouawad",
@@ -6354,7 +6357,7 @@
     "hardware",
     "tools",
     "concept-design",
-    "nouveau-contenu",
+    "immersive",
     "imaginer",
     "explorer",
     "fabriquer",
@@ -6821,7 +6824,7 @@
     "concept-design",
     "sustainable",
     "project-management",
-    "nouveau-contenu",
+    "immersive",
     "imaginer"
    ],
    "author": "Mouawad + Laurier",
@@ -6885,7 +6888,7 @@
   {
    "id": "ruinart",
    "section": "studio",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Ruinart",
@@ -6931,7 +6934,7 @@
   {
    "id": "absolut",
    "section": "studio",
-   "order": 27,
+   "order": 28,
    "published": true,
    "title": {
     "en": "The Absolut Company",
@@ -6976,7 +6979,7 @@
   {
    "id": "audi",
    "section": "studio",
-   "order": 28,
+   "order": 29,
    "published": true,
    "title": {
     "en": "Audi",
@@ -7021,7 +7024,7 @@
   {
    "id": "fc-barcelona",
    "section": "studio",
-   "order": 29,
+   "order": 30,
    "published": true,
    "title": {
     "en": "FC Barcelona",
@@ -7066,7 +7069,7 @@
   {
    "id": "bnp-paribas-real-estate",
    "section": "studio",
-   "order": 30,
+   "order": 31,
    "published": true,
    "title": {
     "en": "BNP Paribas Real Estate",
@@ -7111,7 +7114,7 @@
   {
    "id": "nestle",
    "section": "studio",
-   "order": 31,
+   "order": 32,
    "published": true,
    "title": {
     "en": "Nestlé",
@@ -7156,7 +7159,7 @@
   {
    "id": "marque-peugeot",
    "section": "studio",
-   "order": 32,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -7201,7 +7204,7 @@
   {
    "id": "marque-lexus",
    "section": "studio",
-   "order": 33,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -7246,7 +7249,7 @@
   {
    "id": "marque-coors",
    "section": "studio",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Coors",
@@ -7291,7 +7294,7 @@
   {
    "id": "marque-cadbury",
    "section": "studio",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -7336,7 +7339,7 @@
   {
    "id": "churchills",
    "section": "studio",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Churchill’s",
@@ -7381,7 +7384,7 @@
   {
    "id": "fisheye",
    "section": "studio",
-   "order": 48,
+   "order": 49,
    "published": true,
    "title": {
     "en": "Fisheye",
@@ -7427,7 +7430,7 @@
   {
    "id": "tetro",
    "section": "studio",
-   "order": 49,
+   "order": 50,
    "published": true,
    "title": {
     "en": "Tetro",
@@ -7472,7 +7475,7 @@
   {
    "id": "ddb",
    "section": "studio",
-   "order": 50,
+   "order": 51,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -7517,7 +7520,7 @@
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -7563,7 +7566,7 @@
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -7609,7 +7612,7 @@
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -7655,7 +7658,7 @@
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -7701,7 +7704,7 @@
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -7747,7 +7750,7 @@
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -7792,7 +7795,7 @@
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -7838,7 +7841,7 @@
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -7883,7 +7886,7 @@
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -7928,7 +7931,7 @@
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -7973,7 +7976,7 @@
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -8018,7 +8021,7 @@
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -8063,7 +8066,7 @@
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -8108,7 +8111,7 @@
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -8153,7 +8156,7 @@
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -8198,7 +8201,7 @@
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -8243,7 +8246,7 @@
   {
    "id": "mira",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -8288,7 +8291,7 @@
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -8333,7 +8336,7 @@
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -8378,7 +8381,7 @@
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -8423,7 +8426,7 @@
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -8468,7 +8471,7 @@
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": false,
    "title": {
     "en": "Into the Great Wide Open",
@@ -8513,7 +8516,7 @@
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -8559,7 +8562,7 @@
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -8604,7 +8607,7 @@
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -8650,7 +8653,7 @@
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -8696,7 +8699,7 @@
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -8742,7 +8745,7 @@
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -8788,7 +8791,7 @@
   {
    "id": "scam",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Scam",
@@ -8834,7 +8837,7 @@
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -8877,7 +8880,7 @@
   {
    "id": "upf",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -8922,7 +8925,7 @@
   {
    "id": "ircam",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -8967,7 +8970,7 @@
   {
    "id": "cea",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9010,7 +9013,7 @@
   {
    "id": "cupra",
    "section": "studio",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Cupra",
@@ -9055,7 +9058,7 @@
   {
    "id": "red-bull",
    "section": "studio",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Red Bull",
@@ -9100,7 +9103,7 @@
   {
    "id": "danone",
    "section": "studio",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Danone",
@@ -9145,7 +9148,7 @@
   {
    "id": "nokia",
    "section": "studio",
-   "order": 41,
+   "order": 42,
    "published": true,
    "title": {
     "en": "Nokia",
@@ -9190,7 +9193,7 @@
   {
    "id": "pommery",
    "section": "studio",
-   "order": 42,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Pommery",
@@ -9235,7 +9238,7 @@
   {
    "id": "santander",
    "section": "studio",
-   "order": 43,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Santander",
@@ -9280,7 +9283,7 @@
   {
    "id": "eventide",
    "section": "studio",
-   "order": 44,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Eventide",
@@ -9325,7 +9328,7 @@
   {
    "id": "france-24",
    "section": "studio",
-   "order": 45,
+   "order": 46,
    "published": true,
    "title": {
     "en": "France 24",
@@ -9370,7 +9373,7 @@
   {
    "id": "rai",
    "section": "studio",
-   "order": 46,
+   "order": 47,
    "published": true,
    "title": {
     "en": "Rai",
@@ -9415,7 +9418,7 @@
   {
    "id": "tv3",
    "section": "studio",
-   "order": 47,
+   "order": 48,
    "published": true,
    "title": {
     "en": "TV3",
@@ -9460,7 +9463,7 @@
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -9506,7 +9509,7 @@
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -9551,7 +9554,7 @@
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -9596,7 +9599,7 @@
   {
    "id": "alpine",
    "section": "studio",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Alpine",
@@ -9846,10 +9849,10 @@
    "thumb": "media/alpine-mondial-2024/screenshot-2025-01-23-at-12-11-00-wzeb.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p><strong>Our role</strong> Tracking, generative visuals, sound, real-time software, installation.</p><p>An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which responds in real time to their presence and gestures.</p><p>A field of particles pushed by a wind computed in real time, bending as visitors walk by. Four Kinects along the wall analyse the scene as one, thanks to Pleiade, our system developed with Ben Kuper for Peupler. Every now and then a car crosses the particle field, lifts it and lets its engine be heard, a sound created by Cyril Laurier.</p><p>We developed the device end to end, from visitor detection to generative image and sound, for a stand open every day for two weeks. Produced with Fisheye. The 2024 Paris Motor Show welcomed more than 500,000 visitors.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production</strong> Fisheye</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Sound</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Tracking, image générative, son, logiciel temps réel, installation.</p><p>Un écran interactif pour le stand Alpine du Mondial de l’Auto 2024 : les visiteurs jouent avec l’image, qui répond en temps réel à leur présence et à leurs gestes.</p><p>Un champ de particules poussé par un vent calculé en temps réel, qui se déforme au passage des visiteurs. Quatre Kinect le long du mur analysent la scène comme une seule, grâce à Pleiade, notre système développé avec Ben Kuper pour Peupler. De temps en temps, une voiture traverse le champ de particules, les soulève et fait entendre son moteur, un son créé par Cyril Laurier.</p><p>Nous avons développé le dispositif de bout en bout, de la détection des visiteurs à l’image générative et au son, pour un stand ouvert tous les jours pendant deux semaines. Produit avec Fisheye. Le Mondial de l’Auto 2024 a accueilli plus de 500 000 visiteurs.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production</strong> Fisheye</li><li><strong>Développement</strong> Hand Coded : Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Son</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
-    "ca": "<p><strong>El nostre paper</strong> Tracking, imatge generativa, so, programari en temps real, instal·lació.</p><p>Una pantalla interactiva per a l’estand d’Alpine al Saló de l’Automòbil de París 2024: els visitants juguen amb la imatge, que respon en temps real a la seva presència i als seus gestos.</p><p>Un camp de partícules empès per un vent calculat en temps real, que es deforma quan passen els visitants. Quatre Kinect al llarg del mur analitzen l’escena com una de sola, gràcies a Pleiade, el nostre sistema desenvolupat amb Ben Kuper per a Peupler. De tant en tant, un cotxe travessa el camp de partícules, les aixeca i fa sentir el seu motor, un so creat per Cyril Laurier.</p><p>Vam desenvolupar el dispositiu de cap a cap, de la detecció dels visitants a la imatge generativa i al so, per a un estand obert cada dia durant dues setmanes. Produït amb Fisheye. El Saló de l’Automòbil de París 2024 va rebre més de 500.000 visitants.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Producció</strong> Fisheye</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>So</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
-    "es": "<p><strong>Nuestro papel</strong> Tracking, imagen generativa, sonido, software en tiempo real, instalación.</p><p>Una pantalla interactiva para el stand de Alpine en el Salón del Automóvil de París 2024: los visitantes juegan con la imagen, que responde en tiempo real a su presencia y a sus gestos.</p><p>Un campo de partículas empujado por un viento calculado en tiempo real, que se deforma al paso de los visitantes. Cuatro Kinect a lo largo del muro analizan la escena como una sola, gracias a Pleiade, nuestro sistema desarrollado con Ben Kuper para Peupler. De vez en cuando, un coche atraviesa el campo de partículas, las levanta y hace oír su motor, un sonido creado por Cyril Laurier.</p><p>Desarrollamos el dispositivo de principio a fin, de la detección de los visitantes a la imagen generativa y al sonido, para un stand abierto cada día durante dos semanas. Producido con Fisheye. El Salón del Automóvil de París 2024 recibió más de 500.000 visitantes.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Alpine</li><li><strong>Producción</strong> Fisheye</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Sonido</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>"
+    "en": "<p><strong>Our role</strong> Creative proposal, tracking, generative visuals, sound, real-time software, installation.</p><p>An interactive screen for the Alpine stand at the 2024 Paris Motor Show: visitors play with the image, which responds in real time to their presence and gestures.</p><p>A field of particles pushed by a wind computed in real time, bending as visitors walk by. Four Kinects along the wall analyse the scene as one, thanks to Pleiade, our system developed with Ben Kuper for Peupler. Every now and then a car crosses the particle field, lifts it and lets its engine be heard, a sound created by Cyril Laurier.</p><p>We built the creative proposal in coordination with the studio in charge of the brand’s art direction. Alpine wanted something interactive, and our successive proposals evolved in that direction. We then developed the device end to end, from visitor detection to generative image and sound, in two weeks. Produced with Fisheye. The 2024 Paris Motor Show welcomed more than 500,000 visitors.</p><h3>Credits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production</strong> Fisheye</li><li><strong>Development</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Sound</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
+    "fr": "<p><strong>Notre rôle</strong> Proposition créative, tracking, image générative, son, logiciel temps réel, installation.</p><p>Un écran interactif pour le stand Alpine du Mondial de l’Auto 2024 : les visiteurs jouent avec l’image, qui répond en temps réel à leur présence et à leurs gestes.</p><p>Un champ de particules poussé par un vent calculé en temps réel, qui se déforme au passage des visiteurs. Quatre Kinect le long du mur analysent la scène comme une seule, grâce à Pleiade, notre système développé avec Ben Kuper pour Peupler. De temps en temps, une voiture traverse le champ de particules, les soulève et fait entendre son moteur, un son créé par Cyril Laurier.</p><p>Nous avons construit la proposition créative en coordination avec le studio en charge de la direction artistique de la marque. Alpine voulait de l’interactif : nos propositions successives ont évolué dans ce sens. Puis nous avons développé le dispositif de bout en bout, de la détection des visiteurs à l’image générative et au son, en deux semaines. Produit avec Fisheye. Le Mondial de l’Auto 2024 a accueilli plus de 500 000 visiteurs.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Production</strong> Fisheye</li><li><strong>Développement</strong> Hand Coded : Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Son</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
+    "ca": "<p><strong>El nostre paper</strong> Proposta creativa, tracking, imatge generativa, so, programari en temps real, instal·lació.</p><p>Una pantalla interactiva per a l’estand d’Alpine al Saló de l’Automòbil de París 2024: els visitants juguen amb la imatge, que respon en temps real a la seva presència i als seus gestos.</p><p>Un camp de partícules empès per un vent calculat en temps real, que es deforma quan passen els visitants. Quatre Kinect al llarg del mur analitzen l’escena com una de sola, gràcies a Pleiade, el nostre sistema desenvolupat amb Ben Kuper per a Peupler. De tant en tant, un cotxe travessa el camp de partícules, les aixeca i fa sentir el seu motor, un so creat per Cyril Laurier.</p><p>Vam construir la proposta creativa en coordinació amb l’estudi encarregat de la direcció artística de la marca. Alpine volia una cosa interactiva, i les nostres propostes successives van evolucionar en aquest sentit. Després vam desenvolupar el dispositiu de cap a cap, de la detecció dels visitants a la imatge generativa i al so, en dues setmanes. Produït amb Fisheye. El Saló de l’Automòbil de París 2024 va rebre més de 500.000 visitants.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Alpine</li><li><strong>Producció</strong> Fisheye</li><li><strong>Desenvolupament</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>So</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>",
+    "es": "<p><strong>Nuestro papel</strong> Propuesta creativa, tracking, imagen generativa, sonido, software en tiempo real, instalación.</p><p>Una pantalla interactiva para el stand de Alpine en el Salón del Automóvil de París 2024: los visitantes juegan con la imagen, que responde en tiempo real a su presencia y a sus gestos.</p><p>Un campo de partículas empujado por un viento calculado en tiempo real, que se deforma al paso de los visitantes. Cuatro Kinect a lo largo del muro analizan la escena como una sola, gracias a Pleiade, nuestro sistema desarrollado con Ben Kuper para Peupler. De vez en cuando, un coche atraviesa el campo de partículas, las levanta y hace oír su motor, un sonido creado por Cyril Laurier.</p><p>Construimos la propuesta creativa en coordinación con el estudio a cargo de la dirección artística de la marca. Alpine quería algo interactivo, y nuestras propuestas sucesivas evolucionaron en ese sentido. Después desarrollamos el dispositivo de principio a fin, de la detección de los visitantes a la imagen generativa y al sonido, en dos semanas. Producido con Fisheye. El Salón del Automóvil de París 2024 recibió más de 500.000 visitantes.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Alpine</li><li><strong>Producción</strong> Fisheye</li><li><strong>Desarrollo</strong> Hand Coded: Maya Benaïnous, Cyril Laurier, Joan Sandoval</li><li><strong>Sonido</strong> Cyril Laurier</li><li><strong>Pleiade</strong> Ben Kuper</li></ul>"
    },
    "media": [
     {
@@ -9918,7 +9921,7 @@
   {
    "id": "aubio",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "aubio",
@@ -9959,7 +9962,7 @@
    "logos": []
   },
   {
-   "id": "nouveau-contenu-4",
+   "id": "la-traversee-du-temps",
    "section": "work",
    "order": 1,
    "published": true,
@@ -10012,7 +10015,7 @@
    "skills": [
     "light",
     "concept-design",
-    "nouveau-contenu",
+    "immersive",
     "fabriquer"
    ],
    "author": "Hand Coded",
@@ -10110,7 +10113,7 @@
   {
    "id": "rossella-piccinno",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "Rossella Piccinno",
@@ -10155,7 +10158,7 @@
   {
    "id": "emma-haziza",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": false,
    "title": {
     "en": "Emma Haziza",
@@ -10200,7 +10203,7 @@
   {
    "id": "le-fresnoy",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": true,
    "title": {
     "en": "Le Fresnoy",
@@ -10245,7 +10248,7 @@
   {
    "id": "la-rochelle-universite",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": true,
    "title": {
     "en": "La Rochelle Université",
@@ -10291,7 +10294,7 @@
   {
    "id": "nasonmoretti",
    "section": "studio",
-   "order": 92,
+   "order": 93,
    "published": true,
    "title": {
     "en": "NasonMoretti",
@@ -10336,7 +10339,7 @@
   {
    "id": "hub-montreal",
    "section": "studio",
-   "order": 93,
+   "order": 94,
    "published": true,
    "title": {
     "en": "Hub Montréal",
@@ -10381,7 +10384,7 @@
   {
    "id": "musee-de-l-elysee",
    "section": "studio",
-   "order": 94,
+   "order": 95,
    "published": true,
    "title": {
     "en": "Musée de l’Élysée",
@@ -10427,7 +10430,7 @@
   {
    "id": "fondation-ove",
    "section": "studio",
-   "order": 95,
+   "order": 96,
    "published": true,
    "title": {
     "en": "Fondation OVE",
@@ -10472,7 +10475,7 @@
   {
    "id": "sant-joan-de-deu",
    "section": "studio",
-   "order": 96,
+   "order": 97,
    "published": true,
    "title": {
     "en": "Sant Joan de Déu",
@@ -10517,7 +10520,7 @@
   {
    "id": "chu-lille",
    "section": "studio",
-   "order": 97,
+   "order": 98,
    "published": true,
    "title": {
     "en": "CHU de Lille",
@@ -10562,7 +10565,7 @@
   {
    "id": "chu-bordeaux",
    "section": "studio",
-   "order": 98,
+   "order": 99,
    "published": true,
    "title": {
     "en": "CHU de Bordeaux",
@@ -10605,9 +10608,9 @@
    "logos": []
   },
   {
-   "id": "nouveau-contenu-5",
+   "id": "valentin-ducros",
    "section": "studio",
-   "order": 99,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Valentin Ducros",
@@ -10616,10 +10619,10 @@
     "es": "Valentin Ducros"
    },
    "subtitle": {
-    "en": "Curator",
-    "fr": "Curateur",
-    "ca": "Curator",
-    "es": "Curator"
+    "en": "Curator, production and project management",
+    "fr": "Curateur, production et gestion de projet",
+    "ca": "Comissari, producció i gestió de projectes",
+    "es": "Comisario, producción y gestión de proyectos"
    },
    "place": {
     "en": "Barcelona",
@@ -10650,7 +10653,7 @@
    "logos": []
   },
   {
-   "id": "nouveau-contenu-6",
+   "id": "marine-budin",
    "section": "studio",
    "order": 100,
    "published": false,
@@ -10695,9 +10698,9 @@
    "logos": []
   },
   {
-   "id": "nouveau-contenu-7",
+   "id": "laurent-delforge",
    "section": "studio",
-   "order": 21,
+   "order": 8,
    "published": true,
    "title": {
     "en": "Laurent Delforge",
@@ -10706,10 +10709,10 @@
     "es": "Laurent Delforge"
    },
    "subtitle": {
-    "en": "Composer",
-    "fr": "Composer",
-    "ca": "Composer",
-    "es": "Composer"
+    "en": "Composer and sound designer, NONE Studio",
+    "fr": "Compositeur et designer sonore, NONE Studio",
+    "ca": "Compositor i dissenyador sonor, NONE Studio",
+    "es": "Compositor y diseñador sonoro, NONE Studio"
    },
    "place": {
     "en": "Brussels",
@@ -10725,10 +10728,10 @@
    "thumb": "media/nouveau-contenu-7/laurent-5nvh.jpg",
    "thumbBack": "",
    "body": {
-    "en": "Laurent Delforge is a belgian music composer based in Brussels.<br>Born the 1st of June 1982, graduated from the Royal Conservatory of Belgium in contemporary music composition. Following classes alongside famous composers such as Annette Vandegorne, Francois Bayle or Bernard Parmeggiani, he achieved a master degree in Electroacoustic Music in 2008.&nbsp;",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "<p>Belgian composer and sound designer based in Brussels, co-founder of the NONE collective. A graduate in contemporary music composition from the Royal Conservatory of Belgium, he studied with Annette Vande Gorne, François Bayle and Bernard Parmegiani, and holds a master’s degree in electroacoustic music.</p>",
+    "fr": "<p>Compositeur et designer sonore belge installé à Bruxelles, cofondateur du collectif NONE. Diplômé en composition de musique contemporaine du Conservatoire royal de Belgique, il a suivi l’enseignement d’Annette Vande Gorne, de François Bayle et de Bernard Parmegiani, et obtenu un master en musique électroacoustique.</p>",
+    "ca": "<p>Compositor i dissenyador sonor belga establert a Brussel·les, cofundador del col·lectiu NONE. Graduat en composició de música contemporània pel Conservatori Reial de Bèlgica, es va formar amb Annette Vande Gorne, François Bayle i Bernard Parmegiani, i té un màster en música electroacústica.</p>",
+    "es": "<p>Compositor y diseñador sonoro belga afincado en Bruselas, cofundador del colectivo NONE. Graduado en composición de música contemporánea por el Real Conservatorio de Bélgica, se formó con Annette Vande Gorne, François Bayle y Bernard Parmegiani, y tiene un máster en música electroacústica.</p>"
    },
    "media": [],
    "link": "https://none-studio.net/",

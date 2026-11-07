@@ -3571,7 +3571,8 @@ function introWatch() {
   if (!SECTIONS.length) { showError(new Error('aucune section visible')); return; }
   /* ?p=identifiant : l'adresse d'une fiche. On entre directement dans sa section, puis la fiche s'ouvre. */
   if (!PREVIEW) try {
-    const id = new URLSearchParams(location.search).get('p'), post = id && CONTENT.posts.find(p => p.id === id && p.published !== false && SECTIONS.some(x => x.def.id === p.section));
+    const OLD_IDS = { 'nouveau-contenu': 'immersive', 'nouveau-contenu-4': 'la-traversee-du-temps', 'nouveau-contenu-5': 'valentin-ducros', 'nouveau-contenu-7': 'laurent-delforge' };   // les anciennes adresses mènent toujours à la bonne fiche
+    const q = new URLSearchParams(location.search).get('p'), id = q && !CONTENT.posts.some(p => p.id === q) && OLD_IDS[q] ? OLD_IDS[q] : q, post = id && CONTENT.posts.find(p => p.id === id && p.published !== false && SECTIONS.some(x => x.def.id === p.section));
     if (post) { deepPost = post.id; history.replaceState(null, '', location.pathname + location.search + '#' + post.section); }
   } catch (e) {}
   setupStats();
