@@ -61,10 +61,10 @@
     "es": "Artesanos de la tecnología desde 2008."
    },
    "sub": {
-    "en": "A studio of artists and engineers creating responsive, sensitive and immersive experiences\nwhere light, sound and space respond to people,\nfor museums, festivals, brands and the stage,\nworldwide.",
-    "fr": "Studio d’artistes et d’ingénieurs, nous créons des expériences réactives, sensibles et immersives,\noù la lumière, le son et l’espace répondent au public,\npour les musées, les festivals, les marques et la scène,\npartout dans le monde.",
-    "ca": "Estudi d’artistes i enginyers, creem experiències reactives, sensibles i immersives,\non la llum, el so i l’espai responen al públic,\nper a museus, festivals, marques i escena,\narreu del món.",
-    "es": "Estudio de artistas e ingenieros, creamos experiencias reactivas, sensibles e inmersivas,\ndonde la luz, el sonido y el espacio responden al público,\npara museos, festivales, marcas y escena,\nen todo el mundo."
+    "fr": "Studio d’artistes et d’ingénieurs,\nnous créons pour les marques des expériences réactives, sensibles et immersives,\net nous sommes l’atelier technique des agences et des artistes,\npartout dans le monde.",
+    "en": "A studio of artists and engineers,\nwe create responsive, sensitive and immersive experiences for brands,\nand we are the technical workshop behind agencies and artists,\nworldwide.",
+    "ca": "Estudi d’artistes i enginyers,\ncreem per a les marques experiències reactives, sensibles i immersives,\ni som el taller tècnic d’agències i artistes,\narreu del món.",
+    "es": "Estudio de artistas e ingenieros,\ncreamos para las marcas experiencias reactivas, sensibles e inmersivas,\ny somos el taller técnico de agencias y artistas,\nen todo el mundo."
    },
    "ticker": [
     "BULLSHIT SLOGAN",
@@ -276,10 +276,10 @@
    "url": "",
    "image": "",
    "description": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "fr": "Hand Coded est un studio de Barcelone qui conçoit et fabrique des expériences interactives et immersives pour les marques, et l’atelier technique des agences et des artistes : lumière, son, IA et nos propres outils.",
+    "en": "Hand Coded is a Barcelona studio that designs and builds interactive, immersive experiences for brands, and the technical workshop behind agencies and artists: light, sound, AI and our own tools.",
+    "ca": "Hand Coded és un estudi de Barcelona que dissenya i fabrica experiències interactives i immersives per a marques, i el taller tècnic d’agències i artistes: llum, so, IA i les nostres pròpies eines.",
+    "es": "Hand Coded es un estudio de Barcelona que diseña y fabrica experiencias interactivas e inmersivas para marcas, y el taller técnico de agencias y artistas: luz, sonido, IA y nuestras propias herramientas."
    }
   },
   "analytics": {
@@ -710,7 +710,7 @@
   {
    "id": "peupler",
    "section": "work",
-   "order": 0,
+   "order": 8,
    "published": true,
    "title": {
     "en": "Peupler / Populate",
@@ -904,7 +904,7 @@
   {
    "id": "retour-aux-sources",
    "section": "work",
-   "order": 1,
+   "order": 0,
    "published": true,
    "title": {
     "en": "Retour aux Sources",
@@ -913,10 +913,10 @@
     "es": "Retour aux Sources"
    },
    "subtitle": {
-    "en": "Mouawad + Laurier",
-    "fr": "Mouawad + Laurier",
-    "ca": "Mouawad + Laurier",
-    "es": "Mouawad + Laurier"
+    "fr": "Maison Ruinart · une œuvre de Mouawad + Laurier",
+    "en": "Maison Ruinart · an artwork by Mouawad + Laurier",
+    "ca": "Maison Ruinart · una obra de Mouawad + Laurier",
+    "es": "Maison Ruinart · una obra de Mouawad + Laurier"
    },
    "place": {
     "en": "Maison Ruinart, Reims, UNESCO World Heritage",
@@ -1080,7 +1080,7 @@
   {
    "id": "rising",
    "section": "work",
-   "order": 2,
+   "order": 9,
    "published": true,
    "title": {
     "en": "Rising",
@@ -1283,7 +1283,7 @@
   {
    "id": "ephemere",
    "section": "work",
-   "order": 4,
+   "order": 10,
    "published": true,
    "title": {
     "en": "Hors du temps",
@@ -1305,7 +1305,6 @@
    },
    "date": "2023",
    "tags": [
-    "featured",
     "collab",
     "permanent",
     "exposition"
@@ -1455,7 +1454,7 @@
   {
    "id": "tientos",
    "section": "work",
-   "order": 14,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Tientos al tiempo",
@@ -1528,7 +1527,7 @@
   {
    "id": "maestro",
    "section": "work",
-   "order": 17,
+   "order": 18,
    "published": true,
    "title": {
     "en": "Maestro",
@@ -1601,7 +1600,7 @@
   {
    "id": "future-ruins",
    "section": "work",
-   "order": 9,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Future Ruins",
@@ -1623,7 +1622,6 @@
    },
    "date": "2015 – 2018",
    "tags": [
-    "featured",
     "touring",
     "collab",
     "exposition"
@@ -1741,7 +1739,7 @@
   {
    "id": "sat",
    "section": "work",
-   "order": 20,
+   "order": 21,
    "published": true,
    "title": {
     "en": "S.A.T.",
@@ -1850,7 +1848,7 @@
   {
    "id": "ox",
    "section": "work",
-   "order": 3,
+   "order": 5,
    "published": true,
    "title": {
     "en": "OX",
@@ -2095,7 +2093,7 @@
   {
    "id": "mgntrn",
    "section": "work",
-   "order": 8,
+   "order": 7,
    "published": true,
    "title": {
     "en": "MGNTRN",
@@ -2227,7 +2225,7 @@
   {
    "id": "ledotron",
    "section": "work",
-   "order": 10,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Ledotron",
@@ -2431,7 +2429,7 @@
   {
    "id": "viktoria-modesta",
    "section": "work",
-   "order": 19,
+   "order": 20,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -2540,7 +2538,7 @@
   {
    "id": "beardyman",
    "section": "work",
-   "order": 16,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -2597,7 +2595,7 @@
   {
    "id": "tgic",
    "section": "work",
-   "order": 18,
+   "order": 19,
    "published": true,
    "title": {
     "en": "TGIC",
@@ -2863,7 +2861,7 @@
   {
    "id": "slush",
    "section": "work",
-   "order": 25,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Slush",
@@ -2955,7 +2953,7 @@
   {
    "id": "wave",
    "section": "work",
-   "order": 15,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Wave",
@@ -2977,6 +2975,7 @@
    },
    "date": "2019",
    "tags": [
+    "featured",
     "collab"
    ],
    "thumb": "media/wave/wave-1-1024x576-sv24.jpg",
@@ -3027,7 +3026,7 @@
   {
    "id": "methods",
    "section": "work",
-   "order": 21,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Methods",
@@ -3091,7 +3090,7 @@
   {
    "id": "kinematope",
    "section": "work",
-   "order": 22,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Kinematope",
@@ -3191,7 +3190,7 @@
   {
    "id": "gyrotope",
    "section": "work",
-   "order": 12,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Gyrotope",
@@ -3955,10 +3954,10 @@
     "es": "Imaginar"
    },
    "subtitle": {
-    "en": "Artistic and advertising concepts",
-    "fr": "Concepts artistiques et publicitaires",
-    "ca": "Conceptes artístics i publicitaris",
-    "es": "Conceptos artísticos y publicitarios"
+    "fr": "Concepts pour les marques et les lieux",
+    "en": "Concepts for brands and venues",
+    "ca": "Conceptes per a marques i espais",
+    "es": "Conceptos para marcas y espacios"
    },
    "place": {
     "en": "",
@@ -3973,10 +3972,10 @@
    "thumb": "",
    "thumbBack": "",
    "body": {
-    "en": "<p>We start from an intuition, a brand or a place, and invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds.</p>",
-    "fr": "<p>On part d’une intuition, d’une marque ou d’un lieu, et on invente l’expérience : ce que le public va voir, entendre, déclencher. Nous écrivons le concept, le dispositif et la façon dont il réagit.</p>",
-    "ca": "<p>Partim d’una intuïció, d’una marca o d’un lloc, i inventem l’experiència: el que el públic veurà, sentirà i desencadenarà. Escrivim el concepte, el dispositiu i la manera com reacciona.</p>",
-    "es": "<p>Partimos de una intuición, de una marca o de un lugar, e inventamos la experiencia: lo que el público verá, oirá y desencadenará. Escribimos el concepto, el dispositivo y la forma en que reacciona.</p>"
+    "fr": "<p>Pour une marque, un lancement ou un lieu, on invente l’expérience : ce que le public va voir, entendre, déclencher. Nous écrivons le concept, le dispositif et la façon dont il réagit.</p>",
+    "en": "<p>For a brand, a launch or a venue, we invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds.</p>",
+    "ca": "<p>Per a una marca, un llançament o un espai, inventem l’experiència: el que el públic veurà, sentirà i desencadenarà. Escrivim el concepte, el dispositiu i la manera com reacciona.</p>",
+    "es": "<p>Para una marca, un lanzamiento o un espacio, inventamos la experiencia: lo que el público verá, oirá y desencadenará. Escribimos el concepto, el dispositivo y la forma en que reacciona.</p>"
    },
    "media": [],
    "link": "",
@@ -4090,10 +4089,10 @@
     "es": "Acompañar"
    },
    "subtitle": {
-    "en": "Technical support for artists",
-    "fr": "Soutien technique aux artistes",
-    "ca": "Suport tècnic als artistes",
-    "es": "Apoyo técnico a artistas"
+    "fr": "Soutien technique aux agences et aux artistes",
+    "en": "Technical support for agencies and artists",
+    "ca": "Suport tècnic a agències i artistes",
+    "es": "Apoyo técnico a agencias y artistas"
    },
    "place": {
     "en": "",
@@ -4108,10 +4107,10 @@
    "thumb": "",
    "thumbBack": "",
    "body": {
-    "en": "<p>An artist has the work in mind. We give them the tools to make it exist, from prototype to installation, without taking their place.</p>",
-    "fr": "<p>Un artiste a son œuvre en tête. Nous lui donnons les outils pour qu’elle existe, du prototype au montage, sans prendre sa place.</p>",
-    "ca": "<p>Un artista té la seva obra al cap. Li donem les eines perquè existeixi, del prototip al muntatge, sense ocupar el seu lloc.</p>",
-    "es": "<p>Un artista tiene su obra en mente. Le damos las herramientas para que exista, del prototipo al montaje, sin ocupar su lugar.</p>"
+    "fr": "<p>Une agence ou un artiste a son projet en tête. Nous lui donnons les outils pour qu’il existe, du prototype au montage, sans prendre sa place : votre idée, votre signature, notre atelier.</p>",
+    "en": "<p>An agency or an artist has the project in mind. We give them the tools to make it exist, from prototype to installation, without taking their place: your idea, your signature, our workshop.</p>",
+    "ca": "<p>Una agència o un artista té el projecte al cap. Li donem les eines perquè existeixi, del prototip al muntatge, sense ocupar el seu lloc: la vostra idea, la vostra signatura, el nostre taller.</p>",
+    "es": "<p>Una agencia o un artista tiene su proyecto en mente. Le damos las herramientas para que exista, del prototipo al montaje, sin ocupar su lugar: vuestra idea, vuestra firma, nuestro taller.</p>"
    },
    "media": [],
    "link": "",
@@ -4702,10 +4701,10 @@
    "thumb": "media/cyril/cyril-profile-cqcg.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music improvisation.</p><p>He was technical director of the European research project PHAROS and research coordinator of the European project MusicBricks, worked in research and development at IK Multimedia and Eventide, then on deep learning tools for music at Sony CSL Paris from 2018 to 2024. A member of the Music Tech Fest community since 2012, he loves new technologies, solving problems and building small robots.</p>",
-    "fr": "<p>Sa thèse au Music Technology Group de l’Universitat Pompeu Fabra utilisait l’apprentissage automatique pour détecter les émotions dans la musique. Avant cela, il a étudié l’acoustique, le traitement du signal et l’informatique appliqués à la musique à l’IRCAM (master ATIAM), où il a écrit un algorithme génératif d’improvisation musicale automatique.</p><p>Il a été directeur technique du projet de recherche européen PHAROS et coordinateur de recherche du projet européen MusicBricks, a travaillé en recherche et développement chez IK Multimedia et Eventide, puis sur des outils de deep learning pour la musique chez Sony CSL Paris de 2018 à 2024. Membre de la communauté Music Tech Fest depuis 2012, il aime les nouvelles technologies, résoudre des problèmes et construire de petits robots.</p>",
-    "ca": "<p>La seva tesi al Music Technology Group de la Universitat Pompeu Fabra feia servir l’aprenentatge automàtic per detectar les emocions a la música. Abans, va estudiar acústica, tractament del senyal i informàtica aplicats a la música a l’IRCAM (màster ATIAM), on va escriure un algorisme generatiu d’improvisació musical automàtica.</p><p>Va ser director tècnic del projecte de recerca europeu PHAROS i coordinador de recerca del projecte europeu MusicBricks, va treballar en recerca i desenvolupament a IK Multimedia i Eventide, i després en eines de deep learning per a la música a Sony CSL París del 2018 al 2024. Membre de la comunitat Music Tech Fest des del 2012, li agraden les noves tecnologies, resoldre problemes i construir petits robots.</p>",
-    "es": "<p>Su tesis en el Music Technology Group de la Universitat Pompeu Fabra usaba el aprendizaje automático para detectar las emociones en la música. Antes, estudió acústica, tratamiento de la señal e informática aplicados a la música en el IRCAM (máster ATIAM), donde escribió un algoritmo generativo de improvisación musical automática.</p><p>Fue director técnico del proyecto de investigación europeo PHAROS y coordinador de investigación del proyecto europeo MusicBricks, trabajó en investigación y desarrollo en IK Multimedia y Eventide, y después en herramientas de deep learning para la música en Sony CSL París de 2018 a 2024. Miembro de la comunidad Music Tech Fest desde 2012, le gustan las nuevas tecnologías, resolver problemas y construir pequeños robots.</p>"
+    "en": "<p>His PhD at the Music Technology Group of the Universitat Pompeu Fabra used machine learning to detect emotions in music. Before that, he studied acoustics, signal processing and computer science applied to music at IRCAM (ATIAM master), where he wrote a generative algorithm for automatic music improvisation.</p><p>He was technical director of the European research project PHAROS and research coordinator of the European project MusicBricks, worked in research and development at IK Multimedia and Eventide, then on deep learning tools for music at Sony CSL Paris from 2018 to 2024. A member of the Music Tech Fest community since 2012, he loves new technologies, solving problems and building small robots.</p><p>With Maya, he signs artworks as Mouawad + Laurier.</p>",
+    "fr": "<p>Sa thèse au Music Technology Group de l’Universitat Pompeu Fabra utilisait l’apprentissage automatique pour détecter les émotions dans la musique. Avant cela, il a étudié l’acoustique, le traitement du signal et l’informatique appliqués à la musique à l’IRCAM (master ATIAM), où il a écrit un algorithme génératif d’improvisation musicale automatique.</p><p>Il a été directeur technique du projet de recherche européen PHAROS et coordinateur de recherche du projet européen MusicBricks, a travaillé en recherche et développement chez IK Multimedia et Eventide, puis sur des outils de deep learning pour la musique chez Sony CSL Paris de 2018 à 2024. Membre de la communauté Music Tech Fest depuis 2012, il aime les nouvelles technologies, résoudre des problèmes et construire de petits robots.</p><p>Avec Maya, il signe des œuvres sous le nom Mouawad + Laurier.</p>",
+    "ca": "<p>La seva tesi al Music Technology Group de la Universitat Pompeu Fabra feia servir l’aprenentatge automàtic per detectar les emocions a la música. Abans, va estudiar acústica, tractament del senyal i informàtica aplicats a la música a l’IRCAM (màster ATIAM), on va escriure un algorisme generatiu d’improvisació musical automàtica.</p><p>Va ser director tècnic del projecte de recerca europeu PHAROS i coordinador de recerca del projecte europeu MusicBricks, va treballar en recerca i desenvolupament a IK Multimedia i Eventide, i després en eines de deep learning per a la música a Sony CSL París del 2018 al 2024. Membre de la comunitat Music Tech Fest des del 2012, li agraden les noves tecnologies, resoldre problemes i construir petits robots.</p><p>Amb la Maya, signa obres com a Mouawad + Laurier.</p>",
+    "es": "<p>Su tesis en el Music Technology Group de la Universitat Pompeu Fabra usaba el aprendizaje automático para detectar las emociones en la música. Antes, estudió acústica, tratamiento de la señal e informática aplicados a la música en el IRCAM (máster ATIAM), donde escribió un algoritmo generativo de improvisación musical automática.</p><p>Fue director técnico del proyecto de investigación europeo PHAROS y coordinador de investigación del proyecto europeo MusicBricks, trabajó en investigación y desarrollo en IK Multimedia y Eventide, y después en herramientas de deep learning para la música en Sony CSL París de 2018 a 2024. Miembro de la comunidad Music Tech Fest desde 2012, le gustan las nuevas tecnologías, resolver problemas y construir pequeños robots.</p><p>Con Maya, firma obras como Mouawad + Laurier.</p>"
    },
    "media": [],
    "link": "",
@@ -4747,10 +4746,10 @@
    "thumb": "media/maya/screen-shot-2014-05-28-at-7-49-53-pm-copy-g8gl.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>Artist and engineer, she creates immersive installations at the crossroads of ecology, technology and the senses, and has worked with real-time data since 2008. She invented a new way to work with LEDs: Ledotron.</p><p>Trained in mathematics, biology and art and technology (IMAC engineering school), she also studied acting in Paris. She began in research and development for cinema special effects at Duboi Duran, made two animated short films for the RAI and interactive web works with the Fat-Man Collective, then set up and art-directed a 3D animation studio for BRB International in Barcelona (104 episodes).</p><p>Laureate of the Villa Al Qamar residency of the Institut Français du Liban in 2024, in residency at ElClimamola, Barcelona, in 2025.</p><p>“Technology is a tool, nature is the path.”</p>",
-    "fr": "<p>Artiste et ingénieure, elle crée des installations immersives au croisement de l’écologie, de la technologie et des sens, et travaille avec les données en temps réel depuis 2008. Elle a inventé une nouvelle façon de travailler avec les LED : Ledotron.</p><p>Formée aux mathématiques, à la biologie et aux arts et technologies (école d’ingénieurs IMAC), elle a aussi étudié le jeu d’acteur à Paris. Elle a commencé en recherche et développement d’effets spéciaux pour le cinéma chez Duboi Duran, réalisé deux courts métrages d’animation pour la RAI et des créations web interactives avec le Fat-Man Collective, puis créé et dirigé artistiquement un studio d’animation 3D pour BRB International à Barcelone (104 épisodes).</p><p>Lauréate de la résidence Villa Al Qamar de l’Institut Français du Liban en 2024, en résidence à ElClimamola, Barcelone, en 2025.</p><p>« La technologie est un outil, la nature est le chemin. »</p>",
-    "ca": "<p>Artista i enginyera, crea instal·lacions immersives a la cruïlla de l’ecologia, la tecnologia i els sentits, i treballa amb dades en temps real des del 2008. Va inventar una nova manera de treballar amb els LED: Ledotron.</p><p>Formada en matemàtiques, biologia i art i tecnologia (escola d’enginyeria IMAC), també va estudiar interpretació a París. Va començar en recerca i desenvolupament d’efectes especials per al cinema a Duboi Duran, va fer dos curtmetratges d’animació per a la RAI i creacions web interactives amb el Fat-Man Collective, i després va crear i dirigir artísticament un estudi d’animació 3D per a BRB International a Barcelona (104 episodis).</p><p>Guardonada amb la residència Villa Al Qamar de l’Institut Français del Líban el 2024, en residència a ElClimamola, Barcelona, el 2025.</p><p>« La tecnologia és una eina, la natura és el camí. »</p>",
-    "es": "<p>Artista e ingeniera, crea instalaciones inmersivas en el cruce de la ecología, la tecnología y los sentidos, y trabaja con datos en tiempo real desde 2008. Inventó una nueva manera de trabajar con los LED: Ledotron.</p><p>Formada en matemáticas, biología y arte y tecnología (escuela de ingeniería IMAC), también estudió interpretación en París. Empezó en investigación y desarrollo de efectos especiales para el cine en Duboi Duran, realizó dos cortometrajes de animación para la RAI y creaciones web interactivas con el Fat-Man Collective, y luego creó y dirigió artísticamente un estudio de animación 3D para BRB International en Barcelona (104 episodios).</p><p>Galardonada con la residencia Villa Al Qamar del Institut Français du Liban en 2024, en residencia en ElClimamola, Barcelona, en 2025.</p><p>« La tecnología es una herramienta, la naturaleza es el camino. »</p>"
+    "en": "<p>Artist and engineer, she creates immersive installations at the crossroads of ecology, technology and the senses, and has worked with real-time data since 2008. She invented a new way to work with LEDs: Ledotron. With Cyril, she signs her artworks as Mouawad + Laurier.</p><p>Trained in mathematics, biology and art and technology (IMAC engineering school), she also studied acting in Paris. She began in research and development for cinema special effects at Duboi Duran, made two animated short films for the RAI and interactive web works with the Fat-Man Collective, then set up and art-directed a 3D animation studio for BRB International in Barcelona (104 episodes).</p><p>Laureate of the Villa Al Qamar residency of the Institut Français du Liban in 2024, in residency at ElClimamola, Barcelona, in 2025.</p><p>“Technology is a tool, nature is the path.”</p>",
+    "fr": "<p>Artiste et ingénieure, elle crée des installations immersives au croisement de l’écologie, de la technologie et des sens, et travaille avec les données en temps réel depuis 2008. Elle a inventé une nouvelle façon de travailler avec les LED : Ledotron. Avec Cyril, elle signe ses œuvres sous le nom Mouawad + Laurier.</p><p>Formée aux mathématiques, à la biologie et aux arts et technologies (école d’ingénieurs IMAC), elle a aussi étudié le jeu d’acteur à Paris. Elle a commencé en recherche et développement d’effets spéciaux pour le cinéma chez Duboi Duran, réalisé deux courts métrages d’animation pour la RAI et des créations web interactives avec le Fat-Man Collective, puis créé et dirigé artistiquement un studio d’animation 3D pour BRB International à Barcelone (104 épisodes).</p><p>Lauréate de la résidence Villa Al Qamar de l’Institut Français du Liban en 2024, en résidence à ElClimamola, Barcelone, en 2025.</p><p>« La technologie est un outil, la nature est le chemin. »</p>",
+    "ca": "<p>Artista i enginyera, crea instal·lacions immersives a la cruïlla de l’ecologia, la tecnologia i els sentits, i treballa amb dades en temps real des del 2008. Va inventar una nova manera de treballar amb els LED: Ledotron. Amb el Cyril, signa les seves obres com a Mouawad + Laurier.</p><p>Formada en matemàtiques, biologia i art i tecnologia (escola d’enginyeria IMAC), també va estudiar interpretació a París. Va començar en recerca i desenvolupament d’efectes especials per al cinema a Duboi Duran, va fer dos curtmetratges d’animació per a la RAI i creacions web interactives amb el Fat-Man Collective, i després va crear i dirigir artísticament un estudi d’animació 3D per a BRB International a Barcelona (104 episodis).</p><p>Guardonada amb la residència Villa Al Qamar de l’Institut Français del Líban el 2024, en residència a ElClimamola, Barcelona, el 2025.</p><p>« La tecnologia és una eina, la natura és el camí. »</p>",
+    "es": "<p>Artista e ingeniera, crea instalaciones inmersivas en el cruce de la ecología, la tecnología y los sentidos, y trabaja con datos en tiempo real desde 2008. Inventó una nueva manera de trabajar con los LED: Ledotron. Con Cyril, firma sus obras como Mouawad + Laurier.</p><p>Formada en matemáticas, biología y arte y tecnología (escuela de ingeniería IMAC), también estudió interpretación en París. Empezó en investigación y desarrollo de efectos especiales para el cine en Duboi Duran, realizó dos cortometrajes de animación para la RAI y creaciones web interactivas con el Fat-Man Collective, y luego creó y dirigió artísticamente un estudio de animación 3D para BRB International en Barcelona (104 episodios).</p><p>Galardonada con la residencia Villa Al Qamar del Institut Français du Liban en 2024, en residencia en ElClimamola, Barcelona, en 2025.</p><p>« La tecnología es una herramienta, la naturaleza es el camino. »</p>"
    },
    "media": [],
    "link": "",
@@ -5328,10 +5327,10 @@
    "thumb": "",
    "thumbBack": "",
    "body": {
-    "en": "<p>Carrer de la Providència, 55</p><p>08012 Barcelona, Spain</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
-    "fr": "<p>Carrer de la Providència, 55</p><p>08012 Barcelone, Espagne</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
-    "ca": "<p>Carrer de la Providència, 55</p><p>08012 Barcelona, Espanya</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
-    "es": "<p>Carrer de la Providència, 55</p><p>08012 Barcelona, España</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>"
+    "en": "<p>A brand, an agency, an artist: let’s talk about your project.</p><p>Carrer de la Providència, 55</p><p>08012 Barcelona, Spain</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
+    "fr": "<p>Une marque, une agence, un artiste : parlons de votre projet.</p><p>Carrer de la Providència, 55</p><p>08012 Barcelone, Espagne</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
+    "ca": "<p>Una marca, una agència, un artista: parlem del vostre projecte.</p><p>Carrer de la Providència, 55</p><p>08012 Barcelona, Espanya</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>",
+    "es": "<p>Una marca, una agencia, un artista: hablemos de vuestro proyecto.</p><p>Carrer de la Providència, 55</p><p>08012 Barcelona, España</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p>"
    },
    "media": [],
    "link": "https://www.facebook.com/handcoders",
@@ -6113,7 +6112,7 @@
   {
    "id": "paysage-sonore",
    "section": "work",
-   "order": 6,
+   "order": 11,
    "published": true,
    "title": {
     "en": "Paysage Sonore",
@@ -6135,7 +6134,6 @@
    },
    "date": "2022 – 2024",
    "tags": [
-    "featured",
     "touring",
     "collab"
    ],
@@ -6267,7 +6265,7 @@
   {
    "id": "etre-absorbe",
    "section": "work",
-   "order": 13,
+   "order": 15,
    "published": true,
    "title": {
     "en": "Être Absorbé",
@@ -6276,10 +6274,10 @@
     "es": "Être Absorbé"
    },
    "subtitle": {
-    "en": "Mouawad + Laurier",
-    "fr": "Mouawad + Laurier",
-    "ca": "Mouawad + Laurier",
-    "es": "Mouawad + Laurier"
+    "fr": "Maison Ruinart · une œuvre de Mouawad + Laurier",
+    "en": "Maison Ruinart · an artwork by Mouawad + Laurier",
+    "ca": "Maison Ruinart · una obra de Mouawad + Laurier",
+    "es": "Maison Ruinart · una obra de Mouawad + Laurier"
    },
    "place": {
     "en": "Maison Ruinart, Reims",
@@ -6365,7 +6363,7 @@
   {
    "id": "upperground",
    "section": "work",
-   "order": 23,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Upperground",
@@ -6451,7 +6449,7 @@
   {
    "id": "albatros",
    "section": "work",
-   "order": 24,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Albatros",
@@ -9633,7 +9631,7 @@
   {
    "id": "batalla-de-los-gallos",
    "section": "work",
-   "order": 7,
+   "order": 4,
    "published": true,
    "title": {
     "en": "Red Bull Batalla, beyond language",
@@ -9737,7 +9735,7 @@
   {
    "id": "cupra-tracking",
    "section": "work",
-   "order": 11,
+   "order": 3,
    "published": true,
    "title": {
     "en": "Cupra, giant LED screen",
@@ -9759,6 +9757,7 @@
    },
    "date": "",
    "tags": [
+    "featured",
     "advertising",
     "touring"
    ],
@@ -9808,7 +9807,7 @@
   {
    "id": "alpine-mondial-2024",
    "section": "work",
-   "order": 5,
+   "order": 2,
    "published": true,
    "title": {
     "en": "Alpine, Paris Motor Show",
@@ -9952,7 +9951,7 @@
   {
    "id": "nouveau-contenu-4",
    "section": "work",
-   "order": 26,
+   "order": 1,
    "published": true,
    "title": {
     "en": "La Traversée du temps",
@@ -9974,6 +9973,7 @@
    },
    "date": "2026",
    "tags": [
+    "featured",
     "advertising"
    ],
    "thumb": "media/nouveau-contenu-4/eb66f26b-437d-4842-8311-0a7df0761446-386p.jpg",
