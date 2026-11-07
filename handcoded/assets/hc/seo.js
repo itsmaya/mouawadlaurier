@@ -116,8 +116,11 @@ export function seoParts(content, opts = {}) {
     /* le rythme : une ligne, le temps de la parcourir (0,12 s + 16 ms par lettre, entre 0,65 et 1,7 s), puis la suivante ; la vidéo apparaît avec la dernière ligne, puis les lignes s'en vont par-dessus */
     `var go=function(){if(go.d)return;go.d=1;var at=0;for(var i=0;i<T.length;i++){box.children[i].animate([{opacity:0,transform:'translateX(-36px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1000,delay:at,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});` +
     `if(i===T.length-1)var va=at;at+=Math.max(650,Math.min(1700,120+16*T[i].length));}window.HC_INTRO={t0:performance.now(),video:va,depart:at+150};};` +
-    `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);` +
-    `document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"').then(go,go);setTimeout(go,800);}else go();}catch(e){el.remove();}})();</script>`;
+    /* l'ordre de l'ouverture : le site pose d'abord la signature et les carrés (hc-stage), lance la phrase (HC_GO), puis le bandeau et « Entrer » à la toute fin (hc-late) */
+    `var R=document.documentElement;R.classList.add('hc-stage','hc-late');var fl=null;` +
+    `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);fl=document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"');}` +
+    `window.HC_GO=function(){if(fl){fl.then(go,go);setTimeout(go,800);}else go();};` +
+    `setTimeout(function(){if(!go.d){R.classList.remove('hc-stage','hc-late');go();}},7000);}catch(e){document.documentElement.classList.remove('hc-stage','hc-late');el.remove();}})();</script>`;
 
   return { head, body, llms: md, sitemap, base, intro: opening };
 }

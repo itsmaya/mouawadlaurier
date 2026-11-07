@@ -3393,7 +3393,7 @@ function sceneSig() {
 }
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
-  if (!homeGone && tickerDots) drawTicker(dt);
+  if (!homeGone && tickerDots && !R0.classList.contains('hc-late')) drawTicker(dt);   // caché pendant l'ouverture : il ne calcule rien
   if (hv && !home.hidden) homeVideoStep(now);
   if (started && (homeGone || now < behindUntil)) {
     updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
@@ -3478,11 +3478,12 @@ function introRelease() {   // la vidéo apparaît sous les lignes
 }
 function introOut(now = false, fast = false) {
   const el = document.getElementById('hc-intro'); if (!el || introDone) return; introDone = true;
-  if (now || !el.animate) { el.remove(); introRelease(); return; }
-  if (fast) introRelease();
+  if (now || !el.animate) { el.remove(); introRelease(); introLate(true); return; }
+  if (fast) { introRelease(); R0.classList.remove('hc-stage'); }
   const ls = [...el.querySelectorAll('.l')], step = fast ? 80 : INTRO_STEP, dur = fast ? 450 : 750, last = (ls.length - 1) * step;
   ls.forEach((l, i) => l.animate([{ opacity: 0, transform: 'translateX(36px)', filter: 'blur(5px)' }], { duration: dur, delay: i * step, easing: 'cubic-bezier(.45,0,.75,.3)', fill: 'forwards' }));
   setTimeout(introRelease, last);   // au plus tard au départ de la dernière ligne
+  setTimeout(() => introLate(), last + dur + (fast ? 0 : 500));   // la toute fin : le bandeau
   setTimeout(() => el.remove(), last + dur + 1300);
 }
 function introVideo() {
@@ -3497,6 +3498,32 @@ function introVideo() {
 function introBlink() {
   const sb = document.getElementById('home-snd');
   if (sb && !sb.hidden && !hv.sound) { sb.classList.remove('blink'); void sb.offsetWidth; sb.classList.add('blink'); setTimeout(() => sb.classList.remove('blink'), 1400); }
+}
+/* L'ouverture, dans l'ordre : la signature, le slogan et les carrés ; puis la phrase ; puis la vidéo ; le bandeau et « Entrer » à la toute fin.
+   Une seule chose bouge à la fois, en opacité et en translation : rien de lourd pendant que la vidéo se charge. */
+const R0 = document.documentElement;
+const EASE_IN = 'cubic-bezier(.22,.61,.36,1)';
+function introStage() {
+  if (!R0.classList.contains('hc-stage')) return;
+  const run = () => {
+    if (!R0.classList.contains('hc-stage')) return;
+    const wm = document.querySelector('#home-slogan .wm'), sl = [...document.querySelectorAll('#home-slogan > span')], sq = [...document.querySelectorAll('#home-ctl > *')];   // les carrés encore cachés aussi (le son arrive avec la vidéo) : ils prennent leur tour
+    R0.classList.remove('hc-stage');
+    const show = (el, delay, dx = -24, dur = 900) => el && el.animate([{ opacity: 0, transform: `translateX(${dx}px)`, filter: 'blur(6px)' }, { opacity: getComputedStyle(el).opacity, transform: 'none', filter: 'blur(0)' }], { duration: dur, delay, easing: EASE_IN, fill: 'backwards' });
+    show(wm, 0, -30, 1100);
+    sl.forEach((x, i) => show(x, 380 + i * 130, -18, 800));
+    sq.forEach((x, i) => x.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: getComputedStyle(x).opacity, transform: 'none' }], { duration: 520, delay: 760 + i * 90, easing: 'cubic-bezier(.34,1.4,.64,1)', fill: 'backwards' }));
+    setTimeout(() => { if (window.HC_GO) window.HC_GO(); }, 1150 + sq.length * 60);   // la phrase entre quand les carrés se posent
+  };
+  /* la signature dans sa vraie police, sinon elle apparaît en police de secours puis change */
+  const f = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]) : Promise.resolve();
+  f.then(() => requestAnimationFrame(run));
+}
+function introLate(now = false) {   // le bandeau LED, « Entrer » et le « ? » arrivent en dernier
+  if (!R0.classList.contains('hc-late')) return;
+  R0.classList.remove('hc-stage', 'hc-late');
+  if (now) return;
+  ['#ticker', '#enter', '#home-dock'].forEach((q, i) => { const el = document.querySelector(q); if (el) el.animate([{ opacity: 0 }, { opacity: getComputedStyle(el).opacity }], { duration: 1200, delay: i * 220, easing: 'ease', fill: 'backwards' }); });
 }
 function introWatch() {
   const el = document.getElementById('hc-intro'); if (!el) return;
@@ -3547,7 +3574,7 @@ function introWatch() {
   } catch (e) {}
   setupStats();
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setAnimationMode(false);
-  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo(); if (PREVIEW) introRebuild(); introWatch();
+  toggleActivityButton(); renderTexts(); buildMenu(); setupHomeVideo(); if (PREVIEW) introRebuild(); introWatch(); introStage();
   resizeViewport(); setCamera(); sizeTicker();
   requestAnimationFrame(frame);
   sections = SECTIONS.map((s, i) => new SectionObject3D(s.def, i));

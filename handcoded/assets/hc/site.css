@@ -1041,3 +1041,6 @@ body:has(#home:not([hidden]):not(.out)) #lang-sq, body.post-open-wide #lang-sq, 
 /* Le gras dans le texte des fiches : un cran plus fort, qu'on le voie même en petit */
 .txt .body strong, .txt .body b, #postv .pv-body strong, #postv .pv-body b { font-weight: 800; }
 .contact .site:empty { display: none; }   /* pas de lien : pas de ligne vide */
+/* L'ouverture : la signature, le slogan et les carrés attendent leur tour ; le bandeau et « Entrer » arrivent à la fin */
+html.hc-stage #home-slogan > *, html.hc-stage #home-ctl > * { opacity: 0 !important; }
+html.hc-late #ticker, html.hc-late #enter, html.hc-late #home-dock { opacity: 0 !important; }
