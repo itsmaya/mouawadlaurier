@@ -983,7 +983,14 @@ function postEditor(p, redrawList, redraw) {
     };
     const pick = async files => {
       if (!files[0]) return;
-      try { const up = await prepareUpload(files[0], folder, 'thumb'); stageFile(up.path, up.blob); p[key] = up.path; change(opts); draw(); }
+      try {
+        const up = await prepareUpload(files[0], folder, 'thumb'); stageFile(up.path, up.blob);
+        const old = p[key]; p[key] = up.path;
+        /* le logo d'un partenaire change : les projets qui l'affichaient prennent le nouveau, le lien partenaire ↔ projet reste */
+        let n = 0; if (key === 'thumb' && old) c.posts.forEach(x => { if (x !== p && (x.logos || []).includes(old)) { x.logos = x.logos.map(v => v === old ? up.path : v); n++; } });
+        change(opts); draw();
+        if (n) toast(`Nouveau logo repris aussi dans ${n} projet${n > 1 ? 's' : ''}.`);
+      }
       catch (e) { toast(e.message, 'bad', 7000); }
     };
     dropTarget(box, pick); draw();
@@ -1038,7 +1045,11 @@ function postEditor(p, redrawList, redraw) {
       const label = await askText('Nouveau tag', `Nom du tag (section « ${fr(sec.name)} »)`, '', 'Créer'); if (!label) return;
       const tg = { id: uniqueId(label, sec.tags.map(x => x.id)), label: Object.fromEntries(LANGS.map(l => [l, label])) }; sec.tags.push(tg); p.tags.push(tg.id); change(opts); drawTags();
       toast('Tag créé. Tu peux traduire son nom dans Sections.');
-    }, 'sm ghost'));
+    }, 'sm ghost'),
+      /* rangé seulement dans des tags cachés du menu : la carte n'apparaît nulle part dans la 3D */
+      sec.noAll && sec.tags.some(tg => tg.menu !== false) && !p.tags.some(id => sec.tags.some(tg => tg.id === id && tg.menu !== false))
+        ? h('p', { class: 'hint', style: { color: 'var(--bad, #c33)', flexBasis: '100%' } }, p.tags.length ? 'Ses tags sont cachés du menu du site : cette carte n’apparaît dans aucune catégorie de la 3D. Ajoute un tag visible (●), ou affiche le tag dans Sections.' : 'Sans tag, cette carte n’apparaît dans aucune catégorie de la 3D.')
+        : null);
   };
   drawTags();
 
@@ -1051,10 +1062,19 @@ function postEditor(p, redrawList, redraw) {
   /* Logos des partenaires : une bibliothèque commune (tous les logos déjà utilisés), on coche ceux du projet ou on en ajoute */
   const logoBox = h('div');
   const drawLogos = () => {
-    const lib = [...new Set(c.posts.flatMap(x => x.logos || []).concat(p.logos, S.logoFiles || [], [...S.staged.keys()].filter(k => k.startsWith('media/logos/'))))].sort((a, b) => (p.logos.indexOf(b) >= 0) - (p.logos.indexOf(a) >= 0) || a.localeCompare(b));
-    if (!S.logoFiles && S.backend.listFiles) { S.logoFiles = []; S.backend.listFiles(['media/logos/']).then(fs => { S.logoFiles = fs.map(f => f.path).filter(x => /\.(png|jpe?g|svg|webp|gif)$/i.test(x)); if (logoBox.isConnected) drawLogos(); }).catch(() => {}); }   // tous les logos du dossier media/logos
     const name = path => { const owner = c.posts.find(x => x.thumb === path && fr(x.title)); return owner ? fr(owner.title) : rawName(path); };   // le nom du partenaire quand il existe
     const rawName = path => decodeURIComponent(path.split('/').pop().replace(/-[a-z0-9]{4}\.[a-z]+$/i, '').replace(/\.[a-z]+$/i, '')).replace(/[-_]+/g, ' ');
+    /* les logos des fiches partenaires (marques, agences, institutions…) d'abord : cocher l'un d'eux relie le projet au partenaire */
+    const PEOPLE = ['core', 'artists', 'specialists', 'team', 'people'];
+    const partners = c.posts.filter(x => x !== p && x.thumb && x.section !== p.section && x.tags.length && !x.tags.some(t => PEOPLE.includes(t)) && c.sections.some(s => s.id === x.section && !s.skills));
+    const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const known = new Set(partners.flatMap(x => [norm(x.id), norm(fr(x.title))]));
+    const usedL = new Set(c.posts.flatMap(x => (x.logos || []).concat(x.thumb || [])));
+    const isP = path => partners.some(x => x.thumb === path);
+    const lib = [...new Set(partners.map(x => x.thumb).concat(c.posts.flatMap(x => x.logos || []), p.logos, S.logoFiles || [], [...S.staged.keys()].filter(k => k.startsWith('media/logos/'))))]
+      .filter(path => p.logos.includes(path) || isP(path) || usedL.has(path) || !known.has(norm(rawName(path))))   // un ancien fichier, remplacé par le logo d'une fiche partenaire, ne fait plus doublon
+      .sort((a, b) => (p.logos.indexOf(b) >= 0) - (p.logos.indexOf(a) >= 0) || isP(b) - isP(a) || name(a).localeCompare(name(b), 'fr'));
+    if (!S.logoFiles && S.backend.listFiles) { S.logoFiles = []; S.backend.listFiles(['media/logos/']).then(fs => { S.logoFiles = fs.map(f => f.path).filter(x => /\.(png|jpe?g|svg|webp|gif)$/i.test(x)); if (logoBox.isConnected) drawLogos(); }).catch(() => {}); }   // tous les logos du dossier media/logos
     /* remplacer un logo : le nouveau fichier prend sa place dans tous les projets, et sur la fiche du partenaire */
     const replaceLogo = async (old, f) => {
       if (!f) return;
