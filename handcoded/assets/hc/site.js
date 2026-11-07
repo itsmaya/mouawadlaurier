@@ -1281,6 +1281,10 @@ function setMenuPosition() {
   }
   document.body.classList.toggle('post-open-wide', wideScreen() && !!P.postOpen);   // fiche ouverte : le Showreel sous la signature s'efface
   placeCats(); placeReel();
+  if (!(P.postOpen && post2D.open && post2D.height > 100)) {   // le menu ne passe jamais sur les carrés (téléphone couché : peu de hauteur)
+    const sb = Math.max(0, ...['reel-btn', 'about-btn', 'lang-sq'].map(id => document.getElementById(id)).filter(e => e && !e.hidden && e.offsetHeight).map(e => e.offsetTop + e.offsetHeight));
+    if (sb && menu.offsetTop < sb + 18) menu.style.top = (sb + 18) + 'px';
+  }
 }
 /* grand écran : le Showreel sous la signature, en haut à gauche ; téléphone : sous le logo */
 function placeReel() {
@@ -2605,7 +2609,7 @@ function placeAbout() {   // sous le Showreel ; la fiche à droite du carré (gr
   if (!aboutBtn) return;
   const rb = reel && reel.btn && !reel.btn.hidden ? reel.btn : null;
   const sq = document.getElementById('lang-sq'), langOn = sq && !sq.hidden;
-  if (H <= 520 && W > H) {   // téléphone couché : les carrés en ligne sous la signature, comme sur l'accueil ; la langue en dernier, elle s'ouvre vers la droite
+  if (!wideScreen()) {   // téléphone, debout ou couché : les carrés en ligne sous la signature, comme sur l'accueil ; la langue en dernier, elle s'ouvre vers la droite
     const top = rb ? rb.offsetTop : Math.round(sloganEl.offsetTop + sloganEl.offsetHeight + 16);
     let left = rb ? rb.offsetLeft + rb.offsetWidth + 8 : sloganEl.offsetLeft + 2;
     aboutBtn.style.top = top + 'px'; aboutBtn.style.left = left + 'px'; if (!aboutBtn.hidden) left += aboutBtn.offsetWidth + 8;
