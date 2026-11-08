@@ -5,7 +5,7 @@
  * Le brouillon (textes et fichiers pas encore publiés) est gardé dans le navigateur tant qu'il n'est pas publié.
  */
 import * as THREE from 'three';
-import { seoParts, applySEO, SEO_DEFAULT } from './seo.js';
+import { seoParts, applySEO, SEO_DEFAULT, buildPages } from './seo.js';
 import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
 import { LANGS, LANG_NAMES, t, LAYOUTS, CARDS, CITIES, findCities, normalizeContent, emptyField, postsOf, slugify, uniqueId, sanitizeHTML, htmlToText,
   resizeImage, extOf, blobToBase64, kvGet, kvSet, kvDel, GitHubBackend, DemoBackend,
@@ -337,14 +337,28 @@ async function publish() {
     if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // référencement : balises et résumé dans index.html, llms.txt, sitemap.xml
       try {
         updateStatus('Référencement…');
+        /* la date de mise à jour de chaque fiche modifiée (pages, sitemap : les moteurs et les IA préfèrent le récent) */
+        const before = new Map((JSON.parse(S.base).posts || []).map(p => [p.id, JSON.stringify({ ...p, updated: undefined })])), today = new Date().toISOString().slice(0, 10);
+        S.content.posts.forEach(p => { if (before.get(p.id) !== JSON.stringify({ ...p, updated: undefined })) p.updated = today; });
+        const seo = S.content.settings.seo = S.content.settings.seo || {};
+        if (!seo.indexnow) seo.indexnow = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join('');   // clé IndexNow (Bing, donc ChatGPT)
         const parts = seoParts(S.content, { base: siteBase() }), idx = await S.backend.readText('index.html'), next = applySEO(idx, parts);
         if (next !== idx) files.push({ path: 'index.html', text: next });
-        files.push({ path: 'llms.txt', text: parts.llms }, { path: 'sitemap.xml', text: parts.sitemap });
+        files.push({ path: 'llms.txt', text: parts.llms }, { path: 'sitemap.xml', text: parts.sitemap }, { path: seo.indexnow + '.txt', text: seo.indexnow });
+        /* une vraie page par fiche et par langue ; le dépôt ne reçoit que celles qui ont changé, les pages des fiches retirées sont effacées */
+        const pages = buildPages(next, S.content, { base: siteBase() }), keep = new Set(pages.map(p => p.path));
+        pages.forEach(p => files.push({ ...p, page: true }));
+        if (S.backend.listFiles) {
+          const langs = S.content.settings.langs && S.content.settings.langs.length ? S.content.settings.langs : ['en', 'fr', 'ca', 'es'];
+          const old = await S.backend.listFiles(langs.map(l => l + '/')).catch(() => []);
+          old.filter(f => /(^|\/)index\.html$/.test(f.path) && !keep.has(f.path)).forEach(f => S.deletes.add(f.path));
+        }
       } catch (e) { console.warn('référencement non mis à jour', e); }
     }
     const dels = new Set([...S.deletes].filter(p => !used.has(p)));
     if (orphans.length && cleanup.checked) orphans.forEach(p => dels.add(p));
     const sha = await S.backend.publish(S.content, [...files, ...[...dels].map(path => ({ path, delete: true }))], msg.value.trim() || 'Mise à jour du contenu');
+    pingIndexNow(S.backend.written || []);
     S.base = JSON.stringify(S.content); if (S.backend.kind === 'github') S.head = sha;
     files.forEach(f => { const st = S.staged.get(f.path); if (st) S.recent.set(f.path, st); S.staged.delete(f.path); });   // seulement les images et fichiers envoyés (content.js, index.html… n'ont pas d'aperçu local)
     S.staged.forEach(s => URL.revokeObjectURL(s.url)); S.staged.clear(); S.deletes.clear(); S.files = null;
@@ -826,6 +840,14 @@ function sectionEditor(sec, redrawList, redraw) {
         field('Taille des cartes (%)', textInput(() => sec.cardScale || '', v => { if (v === '' || v === 100) delete sec.cardScale; else sec.cardScale = Math.max(40, Math.min(250, v)); }, { type: 'number', min: 40, max: 250, step: 5, placeholder: '100' }), 'Agrandit ou réduit les cartes 3D de cette section. 100 = taille d’origine.'),
         field('Distance de la caméra (%)', textInput(() => sec.camera || '', v => { if (v === '' || v === (sec.layout === 'map' ? 58 : 100)) delete sec.camera; else sec.camera = Math.max(30, Math.min(250, v)); }, { type: 'number', min: 30, max: 250, step: 5, placeholder: sec.layout === 'map' ? '58' : '100' }), 'Plus petit : la caméra s’approche de l’objet. Vide : ' + (sec.layout === 'map' ? '58 pour la carte du monde.' : '100.'))),
       sec.tags.length ? clientLinks(sec) : null));
+}
+/* IndexNow : on prévient Bing (et donc la recherche de ChatGPT) des pages nouvelles ou modifiées, le temps que GitHub Pages les mette en ligne */
+function pingIndexNow(paths) {
+  const key = ((S.content.settings.seo || {}).indexnow || ''), base = siteBase();
+  if (!key || S.backend.kind !== 'github' || !/^https:\/\//.test(base)) return;
+  const urls = [...new Set(paths.filter(p => /(^|\/)index\.html$/.test(p)).map(p => base + p.replace(/index\.html$/, '')))].slice(0, 60);
+  if (!urls.length) return;
+  setTimeout(() => urls.forEach((u, i) => setTimeout(() => fetch(`https://api.indexnow.org/indexnow?url=${encodeURIComponent(u)}&key=${key}&keyLocation=${encodeURIComponent(base + key + '.txt')}`, { mode: 'no-cors' }).catch(() => {}), i * 400)), 120000);
 }
 function siteBase() {   // adresse publique du site : celle réglée dans Audience, sinon devinée depuis celle du back-office
   const u = ((S.content && S.content.settings.seo && S.content.settings.seo.url) || '').trim();
@@ -1648,7 +1670,7 @@ function viewAudience() {
         field('Adresse du site', textInput(() => seo.url, v => { seo.url = v.trim(); }, { placeholder: siteBase(), spell: false }), 'L’adresse publique de la page d’accueil. Vide : elle est déduite de l’adresse de ce back-office.'),
         pairInput('Description', seo, 'description', { placeholder: SEO_DEFAULT, hint: 'Une ou deux phrases : ce qui s’affiche sous le titre dans Google et dans les aperçus de partage. Vide : la phrase proposée en gris.' }),
         field('Image de partage', textInput(() => seo.image, v => { seo.image = v.trim(); }, { placeholder: 'media/peupler/01.jpg', spell: false }), 'Chemin d’une image du site, montrée quand on partage le lien (WhatsApp, LinkedIn…). Vide : la photo du premier projet.'),
-        h('p', { class: 'hint' }, 'À chaque publication, le back-office réécrit : le titre, la description et les données structurées de la page (studio, projets), un résumé texte de tout le site lisible sans JavaScript, ', h('code', null, 'llms.txt'), ' pour les assistants IA, et ', h('code', null, 'sitemap.xml'), '. Chaque fiche a sa propre adresse : ', h('code', null, siteBase() + '?p=identifiant'), ', et chaque langue la sienne : ', h('code', null, '?lang=fr'), '.'),
+        h('p', { class: 'hint' }, 'À chaque publication, le back-office réécrit : le titre, la description et les données structurées de la page, ', h('code', null, 'llms.txt'), ', ', h('code', null, 'sitemap.xml'), ', et une vraie page par fiche et par langue, lisible même par les IA qui ne lancent pas le JavaScript : ', h('code', null, siteBase() + 'fr/identifiant/'), '. Chaque langue a son accueil : ', h('code', null, siteBase() + 'fr/'), '. Seules les pages qui ont changé partent sur GitHub, et Bing est prévenu (IndexNow) deux minutes après.'),
         h('p', { class: 'hint' }, 'Pour suivre les recherches Google : ajoute le site dans ', h('a', { href: 'https://search.google.com/search-console', target: '_blank', rel: 'noopener' }, 'Google Search Console'), ' et donne-lui l’adresse du plan : ', h('code', null, siteBase() + 'sitemap.xml'), '.'))));
 }
 

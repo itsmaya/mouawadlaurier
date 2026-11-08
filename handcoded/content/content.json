@@ -61,10 +61,10 @@
     "es": "Artesanos de la tecnología desde 2008."
    },
    "sub": {
-    "fr": "Studio d’artistes et d’ingénieurs,\nnous créons pour les marques des expériences réactives, sensibles et immersives,\net nous sommes l’atelier technique des agences et des artistes,\npartout dans le monde.",
-    "en": "A studio of artists and engineers,\nwe create responsive, sensitive and immersive experiences for brands,\nand we are the technical workshop behind agencies and artists,\nworldwide.",
-    "ca": "Estudi d’artistes i enginyers,\ncreem per a les marques experiències reactives, sensibles i immersives,\ni som el taller tècnic d’agències i artistes,\narreu del món.",
-    "es": "Estudio de artistas e ingenieros,\ncreamos para las marcas experiencias reactivas, sensibles e inmersivas,\ny somos el taller técnico de agencias y artistas,\nen todo el mundo."
+    "fr": "Studio d’artistes et d’ingénieurs,\nnous créons des expériences réactives, sensibles et immersives,\net nous sommes l’atelier technique des agences et des artistes,\npartout dans le monde.",
+    "en": "A studio of artists and engineers,\nwe create responsive, sensitive and immersive experiences,\nand we are the technical workshop behind agencies and artists,\nworldwide.",
+    "ca": "Estudi d’artistes i enginyers,\ncreem experiències reactives, sensibles i immersives,\ni som el taller tècnic d’agències i artistes,\narreu del món.",
+    "es": "Estudio de artistas e ingenieros,\ncreamos experiencias reactivas, sensibles e inmersivas,\ny somos el taller técnico de agencias y artistas,\nen todo el mundo."
    },
    "ticker": [],
    "figures": [
@@ -288,7 +288,8 @@
     "en": "Hand Coded is a Barcelona studio that designs and builds interactive, immersive experiences for brands, and the technical workshop behind agencies and artists: light, sound, AI and our own tools.",
     "ca": "Hand Coded és un estudi de Barcelona que dissenya i fabrica experiències interactives i immersives per a marques, i el taller tècnic d’agències i artistes: llum, so, IA i les nostres pròpies eines.",
     "es": "Hand Coded es un estudio de Barcelona que diseña y fabrica experiencias interactivas e inmersivas para marcas, y el taller técnico de agencias y artistas: luz, sonido, IA y nuestras propias herramientas."
-   }
+   },
+   "indexnow": "20e61ecf00c0a4d411fc1ef4b983cc11"
   },
   "analytics": {
    "goatcounter": "handcoded"
@@ -907,7 +908,8 @@
     "media/logos/chataigne.png",
     "media/logos/logounifrance-b39w.jpg",
     "media/bnp-paribas-real-estate/bnplogo-o7ev.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "retour-aux-sources",
@@ -1083,7 +1085,8 @@
     "media/logos/fisheye.png",
     "media/logos/ruinart.png",
     "media/nasonmoretti/nasonmoretti-qjex.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "rising",
@@ -1286,7 +1289,8 @@
     "media/la-rochelle-universite/la-rochelle-universite-wo03.png",
     "media/nasonmoretti/nasonmoretti-qjex.jpg",
     "media/hub-montreal/hubmontreal-xzgy.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "ephemere",
@@ -1457,7 +1461,8 @@
     "media/sant-joan-de-deu/san-joan-de-deu-q40m.jpg",
     "media/chu-lille/chu-lille-logo-czwg.jpg",
     "media/chu-bordeaux/chubordeaux-aek4.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "tientos",
@@ -1530,7 +1535,8 @@
    ],
    "logos": [
     "media/centquatre/logo-104-we8h.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "maestro",
@@ -1603,7 +1609,8 @@
    ],
    "logos": [
     "media/sharjah-light-festival/sharjahlogo-va6m.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "future-ruins",
@@ -1742,7 +1749,8 @@
     "media/signal-festival/signal-nnru.jpg",
     "media/musee-de-l-elysee/photoelysee-v1-1-32dr.jpg",
     "media/logos/12991102-863726190417056-3543782032934754619-n-tdss.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "sat",
@@ -1851,7 +1859,8 @@
    ],
    "logos": [
     "media/logos/mta-festival.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "ox",
@@ -1888,10 +1897,10 @@
    "thumb": "media/ox/14500265-1442393136060160-9109871764192015582-o-z11u.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p><strong>Our role</strong> Concept, AI, electronics, light and LEDs, touring.</p><p>The first machine sensitive to music: a DJ stage made of moving LED structures, driven by an artificial intelligence that listens to the live mix and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image.</p><p>We designed the audio-reactive concept with Romain Tardy, then developed the music-analysis AI, the electronics and the light animation. Two hundred graphic elements combine in real time according to the energy, tempo and mood of the track: no two nights look alike, and the DJ drives the installation without thinking about it. The whole thing sets up and strikes in a few hours, for a club tour.</p><p>Designed from 2014 and launched in 2015 at the Palais de Tokyo at a private party, with Agoria on the decks, OX was produced by Tetro for The Absolut Company Creation and toured France for a year and a half, in more than fifteen venues: La Gaîté Lyrique, Nuit Blanche Paris on the Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival in Biarritz, R2 in Marseille, Nuits Fauves, Nuits Sonores in Lyon.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation</strong> Maya Benaïnous</li><li><strong>Tempo detection (aubio)</strong> Paul Brossier</li><li><strong>Printed circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs and artists</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, <b>Max Cooper</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Press</h3><ul><li>“Hand Coded is hiding behind all your favourite installations.” <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice France, 2015</b></a></li><li>“The man who made the machine sensitive.” <b>Le Monde</b></li><li>“A sensitive machine, created at the initiative of The Absolut Company Creation, that analyses the DJ’s mix in real time.” <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>“Rennes could pride itself on hosting a national and world exclusive: the OX project. The DJ drives the installation.” <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Concept, IA, électronique, lumière et LED, tournée.</p><p>La première machine sensible à la musique : une scène DJ faite de structures LED en mouvement, pilotée par une intelligence artificielle qui écoute le mix en direct et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image.</p><p>Nous avons conçu le concept audio-réactif avec Romain Tardy, puis développé l’IA d’analyse musicale, l’électronique et l’animation lumière. Deux cents éléments graphiques se combinent en temps réel selon l’énergie, le tempo et l’humeur du morceau : aucun soir ne ressemble au précédent, et le DJ pilote l’installation sans y penser. Le tout se monte et se démonte en quelques heures, pour une tournée de clubs.</p><p>Conçue dès 2014 et lancée en 2015 au Palais de Tokyo lors d’une soirée privée, avec Agoria aux platines, OX a été produite par Tetro pour The Absolut Company Creation et a tourné un an et demi en France, dans plus de quinze lieux : La Gaîté Lyrique, Nuit Blanche Paris sur le Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival à Biarritz, R2 à Marseille, Nuits Fauves, Nuits Sonores à Lyon.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ et artistes</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, <b>Max Cooper</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Presse</h3><ul><li>« Hand Coded se cache derrière toutes vos installations préférées. » <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice France, 2015</b></a></li><li>« L’homme qui a rendu la machine sensible. » <b>Le Monde</b></li><li>« Une machine sensible, créée à l’initiative de The Absolut Company Creation, qui analyse en temps réel le mix du DJ. » <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>« Rennes pouvait s’enorgueillir d’accueillir une exclu nationale et mondiale : le projet OX. Le DJ pilote l’installation. » <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
-    "ca": "<p><strong>El nostre paper</strong> Concepte, IA, electrònica, llum i LED, gira.</p><p>La primera màquina sensible a la música: un escenari de DJ fet d’estructures LED en moviment, pilotat per una intel·ligència artificial que escolta la sessió en directe i decideix què mostrar, quan i com. Un sistema semigeneratiu que segueix el dibuix de l’artista sense perdre el control de la imatge.</p><p>Vam concebre el concepte audioreactiu amb Romain Tardy, i després vam desenvolupar la IA d’anàlisi musical, l’electrònica i l’animació de la llum. Dos-cents elements gràfics es combinen en temps real segons l’energia, el tempo i l’estat d’ànim del tema: cap nit s’assembla a l’anterior, i el DJ pilota la instal·lació sense pensar-hi. Tot es munta i es desmunta en poques hores, per a una gira de clubs.</p><p>Concebuda des del 2014 i llançada el 2015 al Palais de Tokyo en una festa privada, amb Agoria als plats, OX va ser produïda per Tetro per a The Absolut Company Creation i va fer una gira d’un any i mig per França, en més de quinze espais: La Gaîté Lyrique, Nuit Blanche París al Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival a Biarritz, R2 a Marsella, Nuits Fauves, Nuits Sonores a Lió.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepte audioreactiu</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, anàlisi musical i electrònica</strong> Cyril Laurier</li><li><strong>Animació de la llum</strong> Maya Benaïnous</li><li><strong>Detecció del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits impresos</strong> Tom Magnier</li><li><strong>Estructures, estudi tècnic i construcció</strong> Studio Julien Carretero</li><li><strong>Agència</strong> Tetro</li><li><strong>Mecenatge</strong> The Absolut Company Creation</li><li><strong>DJ i artistes</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, <b>Max Cooper</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Premsa</h3><ul><li>«Hand Coded s’amaga darrere de totes les vostres instal·lacions preferides.» <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice França, 2015</b></a></li><li>«L’home que va fer la màquina sensible.» <b>Le Monde</b></li><li>«Una màquina sensible, creada per iniciativa de The Absolut Company Creation, que analitza en temps real la sessió del DJ.» <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>«Rennes podia enorgullir-se d’acollir una exclusiva nacional i mundial: el projecte OX. El DJ pilota la instal·lació.» <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
-    "es": "<p><strong>Nuestro papel</strong> Concepto, IA, electrónica, luz y LED, gira.</p><p>La primera máquina sensible a la música: un escenario de DJ hecho de estructuras LED en movimiento, pilotado por una inteligencia artificial que escucha la sesión en directo y decide qué mostrar, cuándo y cómo. Un sistema semigenerativo que sigue el dibujo del artista sin perder el control de la imagen.</p><p>Concebimos el concepto audiorreactivo con Romain Tardy, y después desarrollamos la IA de análisis musical, la electrónica y la animación de la luz. Doscientos elementos gráficos se combinan en tiempo real según la energía, el tempo y el estado de ánimo del tema: ninguna noche se parece a la anterior, y el DJ pilota la instalación sin pensarlo. Todo se monta y se desmonta en pocas horas, para una gira de clubes.</p><p>Concebida desde 2014 y lanzada en 2015 en el Palais de Tokyo en una fiesta privada, con Agoria a los platos, OX fue producida por Tetro para The Absolut Company Creation y giró un año y medio por Francia, en más de quince espacios: La Gaîté Lyrique, Nuit Blanche París en el Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival en Biarritz, R2 en Marsella, Nuits Fauves, Nuits Sonores en Lyon.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepto audiorreactivo</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, análisis musical y electrónica</strong> Cyril Laurier</li><li><strong>Animación de la luz</strong> Maya Benaïnous</li><li><strong>Detección del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuitos impresos</strong> Tom Magnier</li><li><strong>Estructuras, estudio técnico y construcción</strong> Studio Julien Carretero</li><li><strong>Agencia</strong> Tetro</li><li><strong>Mecenazgo</strong> The Absolut Company Creation</li><li><strong>DJ y artistas</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, <b>Max Cooper</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Prensa</h3><ul><li>«Hand Coded se esconde detrás de todas vuestras instalaciones favoritas.» <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice Francia, 2015</b></a></li><li>«El hombre que hizo sensible a la máquina.» <b>Le Monde</b></li><li>«Una máquina sensible, creada por iniciativa de The Absolut Company Creation, que analiza en tiempo real la sesión del DJ.» <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>«Rennes podía enorgullecerse de acoger una exclusiva nacional y mundial: el proyecto OX. El DJ pilota la instalación.» <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>"
+    "en": "<p><strong>Our role</strong> Concept, AI, electronics, light and LEDs, touring.</p><p>The first machine sensitive to music: a DJ stage made of moving LED structures, driven by an artificial intelligence that listens to the live mix and decides what to show, when and how. A semi-generative system that follows the artist’s design while keeping control of the image.</p><p>We designed the audio-reactive concept with Romain Tardy, then developed the music-analysis AI, the electronics and the light animation. Two hundred graphic elements combine in real time according to the energy, tempo and mood of the track: no two nights look alike, and the DJ drives the installation without thinking about it. The whole thing sets up and strikes in a few hours, for a club tour.</p><p><b>Sven Väth, Derrick May, Max Cooper, Apparat and Vitalic</b> played on OX, among some forty DJs and artists.</p><p>Designed from 2014 and launched in 2015 at the Palais de Tokyo at a private party, with Agoria on the decks, OX was produced by Tetro for The Absolut Company Creation and toured France for a year and a half, in more than fifteen venues: La Gaîté Lyrique, Nuit Blanche Paris on the Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival in Biarritz, R2 in Marseille, Nuits Fauves, Nuits Sonores in Lyon.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Audio-reactive concept</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>AI, music analysis and electronics</strong> Cyril Laurier</li><li><strong>Light animation</strong> Maya Benaïnous</li><li><strong>Tempo detection (aubio)</strong> Paul Brossier</li><li><strong>Printed circuit boards</strong> Tom Magnier</li><li><strong>Structures, technical study and construction</strong> Studio Julien Carretero</li><li><strong>Agency</strong> Tetro</li><li><strong>Patronage</strong> The Absolut Company Creation</li><li><strong>DJs and artists</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Max Cooper</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Press</h3><ul><li>“Hand Coded is hiding behind all your favourite installations.” <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice France, 2015</b></a></li><li>“The man who made the machine sensitive.” <b>Le Monde</b></li><li>“A sensitive machine, created at the initiative of The Absolut Company Creation, that analyses the DJ’s mix in real time.” <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>“Rennes could pride itself on hosting a national and world exclusive: the OX project. The DJ drives the installation.” <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
+    "fr": "<p><strong>Notre rôle</strong> Concept, IA, électronique, lumière et LED, tournée.</p><p>La première machine sensible à la musique : une scène DJ faite de structures LED en mouvement, pilotée par une intelligence artificielle qui écoute le mix en direct et décide quoi montrer, quand et comment. Un système semi-génératif qui suit le dessin de l’artiste en gardant la maîtrise de l’image.</p><p>Nous avons conçu le concept audio-réactif avec Romain Tardy, puis développé l’IA d’analyse musicale, l’électronique et l’animation lumière. Deux cents éléments graphiques se combinent en temps réel selon l’énergie, le tempo et l’humeur du morceau : aucun soir ne ressemble au précédent, et le DJ pilote l’installation sans y penser. Le tout se monte et se démonte en quelques heures, pour une tournée de clubs.</p><p><b>Sven Väth, Derrick May, Max Cooper, Apparat et Vitalic</b> ont joué sur OX, parmi une quarantaine de DJ et d’artistes.</p><p>Conçue dès 2014 et lancée en 2015 au Palais de Tokyo lors d’une soirée privée, avec Agoria aux platines, OX a été produite par Tetro pour The Absolut Company Creation et a tourné un an et demi en France, dans plus de quinze lieux : La Gaîté Lyrique, Nuit Blanche Paris sur le Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival à Biarritz, R2 à Marseille, Nuits Fauves, Nuits Sonores à Lyon.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Concept audio-réactif</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, analyse musicale et électronique</strong> Cyril Laurier</li><li><strong>Animation lumière</strong> Maya Benaïnous</li><li><strong>Détection du tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits imprimés</strong> Tom Magnier</li><li><strong>Structures, étude technique et construction</strong> Studio Julien Carretero</li><li><strong>Agence</strong> Tetro</li><li><strong>Mécénat</strong> The Absolut Company Creation</li><li><strong>DJ et artistes</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Max Cooper</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Presse</h3><ul><li>« Hand Coded se cache derrière toutes vos installations préférées. » <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice France, 2015</b></a></li><li>« L’homme qui a rendu la machine sensible. » <b>Le Monde</b></li><li>« Une machine sensible, créée à l’initiative de The Absolut Company Creation, qui analyse en temps réel le mix du DJ. » <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>« Rennes pouvait s’enorgueillir d’accueillir une exclu nationale et mondiale : le projet OX. Le DJ pilote l’installation. » <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
+    "ca": "<p><strong>El nostre paper</strong> Concepte, IA, electrònica, llum i LED, gira.</p><p>La primera màquina sensible a la música: un escenari de DJ fet d’estructures LED en moviment, pilotat per una intel·ligència artificial que escolta la sessió en directe i decideix què mostrar, quan i com. Un sistema semigeneratiu que segueix el dibuix de l’artista sense perdre el control de la imatge.</p><p>Vam concebre el concepte audioreactiu amb Romain Tardy, i després vam desenvolupar la IA d’anàlisi musical, l’electrònica i l’animació de la llum. Dos-cents elements gràfics es combinen en temps real segons l’energia, el tempo i l’estat d’ànim del tema: cap nit s’assembla a l’anterior, i el DJ pilota la instal·lació sense pensar-hi. Tot es munta i es desmunta en poques hores, per a una gira de clubs.</p><p><b>Sven Väth, Derrick May, Max Cooper, Apparat i Vitalic</b> han tocat a OX, entre una quarantena de DJ i artistes.</p><p>Concebuda des del 2014 i llançada el 2015 al Palais de Tokyo en una festa privada, amb Agoria als plats, OX va ser produïda per Tetro per a The Absolut Company Creation i va fer una gira d’un any i mig per França, en més de quinze espais: La Gaîté Lyrique, Nuit Blanche París al Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival a Biarritz, R2 a Marsella, Nuits Fauves, Nuits Sonores a Lió.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepte audioreactiu</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, anàlisi musical i electrònica</strong> Cyril Laurier</li><li><strong>Animació de la llum</strong> Maya Benaïnous</li><li><strong>Detecció del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuits impresos</strong> Tom Magnier</li><li><strong>Estructures, estudi tècnic i construcció</strong> Studio Julien Carretero</li><li><strong>Agència</strong> Tetro</li><li><strong>Mecenatge</strong> The Absolut Company Creation</li><li><strong>DJ i artistes</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Max Cooper</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Premsa</h3><ul><li>«Hand Coded s’amaga darrere de totes les vostres instal·lacions preferides.» <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice França, 2015</b></a></li><li>«L’home que va fer la màquina sensible.» <b>Le Monde</b></li><li>«Una màquina sensible, creada per iniciativa de The Absolut Company Creation, que analitza en temps real la sessió del DJ.» <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>«Rennes podia enorgullir-se d’acollir una exclusiva nacional i mundial: el projecte OX. El DJ pilota la instal·lació.» <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>",
+    "es": "<p><strong>Nuestro papel</strong> Concepto, IA, electrónica, luz y LED, gira.</p><p>La primera máquina sensible a la música: un escenario de DJ hecho de estructuras LED en movimiento, pilotado por una inteligencia artificial que escucha la sesión en directo y decide qué mostrar, cuándo y cómo. Un sistema semigenerativo que sigue el dibujo del artista sin perder el control de la imagen.</p><p>Concebimos el concepto audiorreactivo con Romain Tardy, y después desarrollamos la IA de análisis musical, la electrónica y la animación de la luz. Doscientos elementos gráficos se combinan en tiempo real según la energía, el tempo y el estado de ánimo del tema: ninguna noche se parece a la anterior, y el DJ pilota la instalación sin pensarlo. Todo se monta y se desmonta en pocas horas, para una gira de clubes.</p><p><b>Sven Väth, Derrick May, Max Cooper, Apparat y Vitalic</b> han pinchado en OX, entre una cuarentena de DJ y artistas.</p><p>Concebida desde 2014 y lanzada en 2015 en el Palais de Tokyo en una fiesta privada, con Agoria a los platos, OX fue producida por Tetro para The Absolut Company Creation y giró un año y medio por Francia, en más de quince espacios: La Gaîté Lyrique, Nuit Blanche París en el Pont des Invalides, Trabendo, L’UBU, Zig Zag Club, L’Envers Club, Le Sucre, La Sirène, La Belle Électrique, Badaboum, Le Bikini, Calvi on the Rocks, Big Festival en Biarritz, R2 en Marsella, Nuits Fauves, Nuits Sonores en Lyon.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Concepto audiorreactivo</strong> Cyril Laurier, Maya Benaïnous</li><li><strong>IA, análisis musical y electrónica</strong> Cyril Laurier</li><li><strong>Animación de la luz</strong> Maya Benaïnous</li><li><strong>Detección del tempo (aubio)</strong> Paul Brossier</li><li><strong>Circuitos impresos</strong> Tom Magnier</li><li><strong>Estructuras, estudio técnico y construcción</strong> Studio Julien Carretero</li><li><strong>Agencia</strong> Tetro</li><li><strong>Mecenazgo</strong> The Absolut Company Creation</li><li><strong>DJ y artistas</strong> <b>Sven Väth</b>, <b>Solomun</b>, <b>Derrick May</b>, <b>Max Cooper</b>, <b>Apparat</b>, <b>Vitalic</b>, <b>Agoria</b>, <b>Breakbot</b>, <b>Joe Goddard (Hot Chip)</b>, <b>Kiasmos</b>, <b>James Shaw (Simian Mobile Disco)</b>, <b>Soul Clap</b>, Mykki Blanco, Joris Delacroix, Kartell, Bambounou, Moscoman, Margaret Dygas, Marek Hemmann, Mathias Kaden, Applescal, Irfane, FunkinEven, La Mverte, Clara Moto, Arandel, Zimmer, Saint WKND, Ben Vedren, Maurizio Schmitz, Monkey Maffia, Jean Tonique, Alejandro Paz, Gordon, Almeeva, Dresde, K!SSY, The Deep Brothers, JDLM</li></ul><h3>Prensa</h3><ul><li>«Hand Coded se esconde detrás de todas vuestras instalaciones favoritas.» <a href=\"https://www.vice.com/fr/article/hand-coded-se-cache-derriere-toutes-vos-installations-preferes/\"><b>Vice Francia, 2015</b></a></li><li>«El hombre que hizo sensible a la máquina.» <b>Le Monde</b></li><li>«Una máquina sensible, creada por iniciativa de The Absolut Company Creation, que analiza en tiempo real la sesión del DJ.» <a href=\"https://www.ladn.eu/mondes-creatifs/top-des-pubs/the-absolut-company-creation-presente-loeuvre-ox-sur-le-pont-des-invalides/\"><b>L’ADN, 2016</b></a></li><li>«Rennes podía enorgullecerse de acoger una exclusiva nacional y mundial: el proyecto OX. El DJ pilota la instalación.» <a href=\"https://unidivers.fr/projet-ox-romain-tardy-absolut-company-ubu-rennes/\"><b>Unidivers, 2016</b></a></li><li><a href=\"http://next.liberation.fr/musique/2016/03/04/les-annees-lumieres_1437503\"><b>Libération</b>, 2016</a> · <a href=\"http://www.brain-magazine.fr/article/brainorama/28467-On-a-rencontre-OX-machine-sensible-et-sensitive-de-la-techno\"><b>Brain Magazine</b>, 2016</a> · <a href=\"https://www.tsugi.fr/en-direct-dox-au-trabendo-avec-bambounou-simian-mobile-disco-et-gordon/\"><b>Tsugi</b>, 2016</a> · <a href=\"https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/the-absolute-company-creation-presente-ox-lyon-990645.html\"><b>France 3</b>, 2016</a></li></ul>"
    },
    "media": [
     {
@@ -2096,7 +2105,8 @@
     "media/gaite-lyrique/gaitelyrique-ycty.jpg",
     "media/nuit-blanche/muitblanche-rngg.jpg",
     "media/logos/aubio.png"
-   ]
+   ],
+   "updated": "2026-11-08"
   },
   {
    "id": "mgntrn",
@@ -2228,7 +2238,8 @@
    ],
    "logos": [
     "media/logos/proyecta.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "ledotron",
@@ -2432,7 +2443,8 @@
     "media/logos/upf.png",
     "media/logos/aubio.png",
     "media/logos/chataigne.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "viktoria-modesta",
@@ -2541,7 +2553,8 @@
    "logos": [
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/viktoria-modesta.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "beardyman",
@@ -2598,7 +2611,8 @@
     "tools",
     "accompagner"
    ],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tgic",
@@ -2664,7 +2678,8 @@
    ],
    "logos": [
     "media/logos/into-the-great-wide-open.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "bionic-orchestra",
@@ -2783,7 +2798,8 @@
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/abbaye-de-fontevraud.png",
     "media/logos/abbaye-de-vivoin.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "mouvement-de-l-air",
@@ -2864,7 +2880,8 @@
     "tools",
     "accompagner"
    ],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "slush",
@@ -2956,7 +2973,8 @@
    ],
    "logos": [
     "media/music-tech-fest/musictechfest-2glp.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "wave",
@@ -3029,7 +3047,8 @@
    ],
    "logos": [
     "media/logos/la-prairie.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "methods",
@@ -3093,7 +3112,8 @@
    ],
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "kinematope",
@@ -3193,7 +3213,8 @@
    ],
    "logos": [
     "media/fundacion-telefonica/screenshot-2026-11-06-at-17-21-06-6h2j.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "gyrotope",
@@ -3285,7 +3306,8 @@
    "logos": [
     "media/nuit-blanche/muitblanche-rngg.jpg",
     "media/societe-du-grand-paris/logo-societe-du-grand-paris-eu90.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "eko",
@@ -3353,7 +3375,8 @@
    ],
    "logos": [
     "media/mira/logomira-2vo2.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "audi-mind-race",
@@ -3504,7 +3527,8 @@
     "media/logos/audi.png",
     "media/fc-barcelona/fcbcn-ndni.jpg",
     "media/logos/ddb.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "sonaris",
@@ -3556,7 +3580,8 @@
     "audio",
     "tools"
    ],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nestle-crunch",
@@ -3624,7 +3649,8 @@
    ],
    "logos": [
     "media/logos/nestle.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "peugeot",
@@ -3751,7 +3777,8 @@
    ],
    "logos": [
     "media/logos/churchills.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "cadbury",
@@ -3878,7 +3905,8 @@
    ],
    "logos": [
     "media/logos/marque-coors.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "lexus",
@@ -3993,7 +4021,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "explorer",
@@ -4038,7 +4067,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fabriquer",
@@ -4083,7 +4113,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "accompagner",
@@ -4128,7 +4159,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "machine-learning",
@@ -4173,7 +4205,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "real-time",
@@ -4219,7 +4252,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "audio",
@@ -4264,7 +4298,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "generative",
@@ -4310,7 +4345,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "projection-mapping",
@@ -4356,7 +4392,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "light",
@@ -4402,7 +4439,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tracking",
@@ -4447,7 +4485,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "concept-design",
@@ -4492,7 +4531,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "sustainable",
@@ -4542,7 +4582,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "project-management",
@@ -4587,7 +4628,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tools",
@@ -4632,7 +4674,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "hardware",
@@ -4677,7 +4720,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "cyril",
@@ -4723,7 +4767,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "maya",
@@ -4769,7 +4814,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "stephanie",
@@ -4814,7 +4860,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "romain-tardy",
@@ -4859,7 +4906,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "pablo-valbuena",
@@ -4904,7 +4952,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "adrien-m-claire-b",
@@ -4949,7 +4998,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "beardyman-musician",
@@ -4994,7 +5044,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "maotik",
@@ -5039,7 +5090,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "ezra",
@@ -5084,7 +5136,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "pedra",
@@ -5129,7 +5182,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "jesse-watts",
@@ -5174,7 +5228,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "paul-brossier",
@@ -5217,7 +5272,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "thomas-aussenac",
@@ -5262,7 +5318,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "joan-sandoval",
@@ -5307,7 +5364,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "barcelona",
@@ -5354,7 +5412,8 @@
    "spots": [],
    "author": "",
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fat-site-2008",
@@ -5421,7 +5480,8 @@
     "concept-design",
     "tools"
    ],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nokia-navigator",
@@ -5486,7 +5546,8 @@
    ],
    "logos": [
     "media/logos/nokia.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "immersive",
@@ -5540,7 +5601,8 @@
     }
    ],
    "skills": [],
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nouveau-contenu-2",
@@ -5671,7 +5733,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "clement-rignault",
@@ -5716,7 +5779,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "louis-raveton",
@@ -5761,7 +5825,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fanny-fortage",
@@ -5806,7 +5871,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "gaetan-cerrillo",
@@ -5849,7 +5915,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "gustavo-valera",
@@ -5894,7 +5961,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "guillaume-faure",
@@ -5939,7 +6007,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "antoni-hadzijanev",
@@ -5984,7 +6053,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marco-nason",
@@ -6072,7 +6142,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tigre-lab",
@@ -6117,7 +6188,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "paysage-sonore",
@@ -6270,7 +6342,8 @@
     "media/logos/riyadhart.png",
     "media/logos/institutfrancais.png",
     "media/logos/rmn-grand-palais-zrc8.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "etre-absorbe",
@@ -6368,7 +6441,8 @@
    "author": "Maya Mouawad",
    "logos": [
     "media/logos/ruinart.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "upperground",
@@ -6454,7 +6528,8 @@
    "author": "Maya Mouawad",
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "albatros",
@@ -6556,7 +6631,8 @@
     "media/logos/cnrs.png",
     "media/nanomusee/identite-graphique-bordeaux-nano-musee-2-txup.jpg",
     "media/la-rochelle-universite/la-rochelle-universite-wo03.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "prometheus",
@@ -6670,7 +6746,8 @@
    "author": "Hand Coded",
    "logos": [
     "media/logos/upf.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "augmented-paper",
@@ -6830,7 +6907,8 @@
    "author": "Mouawad + Laurier",
    "logos": [
     "media/logos/fisheye.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "fuurin",
@@ -6929,7 +7007,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "absolut",
@@ -6974,7 +7053,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "audi",
@@ -7019,7 +7099,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fc-barcelona",
@@ -7064,7 +7145,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "bnp-paribas-real-estate",
@@ -7109,7 +7191,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nestle",
@@ -7154,7 +7237,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marque-peugeot",
@@ -7199,7 +7283,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marque-lexus",
@@ -7244,7 +7329,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marque-coors",
@@ -7289,7 +7375,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marque-cadbury",
@@ -7334,7 +7421,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "churchills",
@@ -7379,7 +7467,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fisheye",
@@ -7425,7 +7514,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tetro",
@@ -7470,7 +7560,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "ddb",
@@ -7515,7 +7606,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "art-explora",
@@ -7561,7 +7653,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "it-is-now",
@@ -7607,7 +7700,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "the-caring-gallery",
@@ -7653,7 +7747,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "palais-de-tokyo",
@@ -7699,7 +7794,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "grand-palais",
@@ -7745,7 +7841,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "centquatre",
@@ -7790,7 +7887,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "gaite-lyrique",
@@ -7836,7 +7934,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fundacion-telefonica",
@@ -7881,7 +7980,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "learning-planet",
@@ -7926,7 +8026,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nanomusee",
@@ -7971,7 +8072,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "biennale-venezia",
@@ -8016,7 +8118,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "biennale-dakar",
@@ -8061,7 +8164,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "riyadh-art",
@@ -8106,7 +8210,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "lumiere",
@@ -8151,7 +8256,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nuit-blanche",
@@ -8196,7 +8302,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "llum-bcn",
@@ -8241,7 +8348,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "mira",
@@ -8286,7 +8394,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "eufonic",
@@ -8331,7 +8440,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "sharjah-light-festival",
@@ -8376,7 +8486,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "proyecta",
@@ -8421,7 +8532,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "signal-festival",
@@ -8466,7 +8578,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "into-the-great-wide-open",
@@ -8557,7 +8670,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "societe-du-grand-paris",
@@ -8602,7 +8716,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "institut-francais",
@@ -8648,7 +8763,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "generalitat",
@@ -8694,7 +8810,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "catalan-arts",
@@ -8740,7 +8857,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "institut-ramon-llull",
@@ -8786,7 +8904,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "scam",
@@ -8832,7 +8951,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "cnrs",
@@ -8875,7 +8995,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "upf",
@@ -8920,7 +9041,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "ircam",
@@ -8965,7 +9087,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "cea",
@@ -9008,7 +9131,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "cupra",
@@ -9053,7 +9177,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "red-bull",
@@ -9098,7 +9223,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "danone",
@@ -9143,7 +9269,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nokia",
@@ -9188,7 +9315,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "pommery",
@@ -9233,7 +9361,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "santander",
@@ -9278,7 +9407,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "eventide",
@@ -9323,7 +9453,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "france-24",
@@ -9368,7 +9499,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "rai",
@@ -9413,7 +9545,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "tv3",
@@ -9458,7 +9591,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "cite-de-la-musique",
@@ -9504,7 +9638,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "mta-festival",
@@ -9549,7 +9684,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "chataigne",
@@ -9594,7 +9730,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "alpine",
@@ -9639,7 +9776,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "batalla-de-los-gallos",
@@ -9743,7 +9881,8 @@
    "author": "",
    "logos": [
     "media/logos/red-bull.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "cupra-tracking",
@@ -9815,7 +9954,8 @@
     "media/logos/cupra.png",
     "media/tigre-lab/job-fair-logos-web-4xib.jpg",
     "media/logos/landscape-b3xd.png"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "alpine-mondial-2024",
@@ -9916,7 +10056,8 @@
    "logos": [
     "media/logos/fisheye.png",
     "media/alpine/logo-ecriture-alfa-romeo-0yyc.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "aubio",
@@ -9959,7 +10100,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "la-traversee-du-temps",
@@ -10022,7 +10164,8 @@
    "logos": [
     "media/logos/fisheye.png",
     "media/logos/logo-moet-wyrb.jpg"
-   ]
+   ],
+   "updated": "2026-11-07"
   },
   {
    "id": "eruption-of-the-end",
@@ -10108,7 +10251,8 @@
     "fr": "<p><strong>Notre rôle</strong> Tracking, mapping vidéo, son, logiciel temps réel.</p><p>La vieille cheminée de la savonnerie du Congo, à Roubaix, construite pour Victor Vaissier à la fin du XIXe siècle, reprend vie. Des bulles de savon s’échappent de cette dernière éruption, et les images qui s’y reflètent nous font voyager dans les souvenirs d’un lieu qui a traversé le temps. La cheminée, totem désormais abandonné, en est le témoin.</p><p>Une installation de Rossella Piccinno, créée au Fresnoy, Studio national des arts contemporains, pour Panorama 13. Nous avons conçu sa partie interactive avec une Kinect : quand un visiteur s’approche, les bulles naissent, et dans chacune apparaissent des vidéos, les témoignages des habitants du quartier.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Rossella Piccinno</li><li><strong>Interaction</strong> Hand Coded</li><li><strong>Production</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Prix</h3><ul><li>Prix des Amis du Fresnoy de la meilleure installation, Panorama 13, 2011</li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Tracking, mapping de vídeo, so, programari en temps real.</p><p>La vella xemeneia de la fàbrica de sabó del Congo, a Roubaix, construïda per a Victor Vaissier a finals del segle XIX, torna a la vida. Bombolles de sabó s’escapen d’aquesta darrera erupció, i les imatges que s’hi reflecteixen ens fan viatjar pels records d’un lloc que ha travessat el temps. La xemeneia, tòtem ara abandonat, n’és el testimoni.</p><p>Una instal·lació de Rossella Piccinno, creada a Le Fresnoy, Studio national des arts contemporains, per a Panorama 13. En vam concebre la part interactiva amb una Kinect: quan un visitant s’hi acosta, neixen les bombolles, i a cadascuna hi apareixen vídeos, els testimonis dels veïns del barri.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacció</strong> Hand Coded</li><li><strong>Producció</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premis</h3><ul><li>Premi dels Amics de Le Fresnoy a la millor instal·lació, Panorama 13, 2011</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Tracking, mapping de vídeo, sonido, software en tiempo real.</p><p>La vieja chimenea de la fábrica de jabón del Congo, en Roubaix, construida para Victor Vaissier a finales del siglo XIX, vuelve a la vida. Burbujas de jabón escapan de esta última erupción, y las imágenes que se reflejan en ellas nos hacen viajar por los recuerdos de un lugar que ha atravesado el tiempo. La chimenea, tótem ahora abandonado, es su testigo.</p><p>Una instalación de Rossella Piccinno, creada en Le Fresnoy, Studio national des arts contemporains, para Panorama 13. Concebimos su parte interactiva con una Kinect: cuando un visitante se acerca, nacen las burbujas, y en cada una aparecen vídeos, los testimonios de los vecinos del barrio.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacción</strong> Hand Coded</li><li><strong>Producción</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premios</h3><ul><li>Premio de los Amigos de Le Fresnoy a la mejor instalación, Panorama 13, 2011</li></ul>"
-   }
+   },
+   "updated": "2026-11-07"
   },
   {
    "id": "rossella-piccinno",
@@ -10153,7 +10297,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "emma-haziza",
@@ -10243,7 +10388,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "la-rochelle-universite",
@@ -10289,7 +10435,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "nasonmoretti",
@@ -10334,7 +10481,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "hub-montreal",
@@ -10379,7 +10527,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "musee-de-l-elysee",
@@ -10425,7 +10574,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "fondation-ove",
@@ -10470,7 +10620,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "sant-joan-de-deu",
@@ -10515,7 +10666,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "chu-lille",
@@ -10560,7 +10712,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "chu-bordeaux",
@@ -10605,7 +10758,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "valentin-ducros",
@@ -10650,7 +10804,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   },
   {
    "id": "marine-budin",
@@ -10741,7 +10896,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-07"
   }
  ]
 }

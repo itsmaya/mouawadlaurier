@@ -1044,3 +1044,8 @@ body:has(#home:not([hidden]):not(.out)) #lang-sq, body.post-open-wide #lang-sq, 
 /* L'ouverture : la signature, le slogan et les carrés attendent leur tour ; le bandeau et « Entrer » arrivent à la fin */
 html.hc-stage #home-slogan > *, html.hc-stage #home-ctl > * { opacity: 0 !important; }
 html.hc-late #ticker, html.hc-late #enter, html.hc-late #home-dock { opacity: 0 !important; }
+/* Le texte des pages pour les robots et sans JavaScript : sous le site en 3D, qui le retire une fois prêt */
+#seo-page { position: absolute; inset: 0; overflow: auto; z-index: 0; padding: 48px max(24px, 6vw); background: #0b0b0b; color: #d8d8d8; font: 16px/1.55 var(--ui, system-ui, sans-serif); }
+#seo-page h1 { font-size: 32px; margin: 0 0 8px; color: #fff; } #seo-page h2 { font-size: 20px; margin: 32px 0 8px; color: #fff; }
+#seo-page a { color: #ffcc00; } #seo-page img { max-width: min(100%, 720px); height: auto; display: block; margin: 12px 0 4px; }
+#seo-page article, #seo-page header, #seo-page section, #seo-page aside, #seo-page footer { max-width: 760px; }

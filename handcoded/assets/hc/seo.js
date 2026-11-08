@@ -21,95 +21,137 @@ export const SEO_DEFAULT = {
   es: 'Hand Coded es un estudio de Barcelona que diseña y construye instalaciones artísticas interactivas, espacios inmersivos y software en tiempo real: luz, sonido, IA y nuestras propias herramientas.',
 };
 
-export function seoParts(content, opts = {}) {
+/* ---------------- des pages réelles : une par fiche et par langue (/fr/ox/), et l'accueil de chaque langue (/fr/).
+   Les robots qui ne lancent pas le JavaScript (ChatGPT, Claude, Perplexity) y lisent tout le texte ; les visiteurs y trouvent le site en 3D, ouvert sur la fiche. */
+export const PEOPLE_TAGS = ['core', 'artists', 'specialists', 'team', 'people'];
+export function pageable(content, p) {
+  const sec = (content.sections || []).find(s => s.id === p.section && s.visible !== false);
+  if (!sec || p.published === false) return false;
+  const person = (p.tags || []).some(t => PEOPLE_TAGS.includes(t));
+  if (sec.card === 'portrait') return person && (text(tr(p.body, 'en')).join(' ') + text(tr(p.body, 'fr')).join(' ')).length > 40;   // les portraits avec une bio ; pas les logos des partenaires
+  return true;
+}
+const L10N = {
+  home: { en: 'Home', fr: 'Accueil', ca: 'Inici', es: 'Inicio' },
+  updated: { en: 'Updated', fr: 'Mis à jour le', ca: 'Actualitzat el', es: 'Actualizado el' },
+  team: { en: 'Team', fr: 'Équipe', ca: 'Equip', es: 'Equipo' },
+  videos: { en: 'Videos', fr: 'Vidéos', ca: 'Vídeos', es: 'Vídeos' },
+  photos: { en: 'Photos', fr: 'Photos', ca: 'Fotos', es: 'Fotos' },
+  more: { en: 'More', fr: 'Voir aussi', ca: 'Vegeu també', es: 'Ver también' },
+  langs: { en: 'Languages', fr: 'Langues', ca: 'Llengües', es: 'Idiomas' },
+  tagline: { en: 'interactive art and technology studio', fr: 'studio d’art et de technologies interactives', ca: 'estudi d’art i tecnologies interactives', es: 'estudio de arte y tecnologías interactivas' },
+  not: { en: 'Interactive art and technology studio based in Barcelona, founded in %Y. Not to be confused with “hand-coded”, the generic term for code written by hand.',
+    fr: 'Studio d’art et de technologies interactives basé à Barcelone, fondé en %Y. À ne pas confondre avec « hand-coded », l’expression générique pour du code écrit à la main.',
+    ca: 'Estudi d’art i tecnologies interactives amb seu a Barcelona, fundat el %Y. No s’ha de confondre amb «hand-coded», l’expressió genèrica per a codi escrit a mà.',
+    es: 'Estudio de arte y tecnologías interactivas con sede en Barcelona, fundado en %Y. No confundir con «hand-coded», la expresión genérica para código escrito a mano.' },
+};
+const L = (k, l) => tr(L10N[k], l);
+const year = d => (String(d || '').match(/\d{4}/) || [''])[0];
+const clean = html => String(html || '').replace(/<(script|style|iframe|object|embed)\b[\s\S]*?<\/\1>/gi, '').replace(/\son\w+="[^"]*"/gi, '').replace(/&nbsp;/g, ' ');
+const isVideo = u => /youtu\.?be|vimeo\.com/i.test(u || '');
+const isImage = u => /\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(u || '');
+const ytId = u => (String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/) || [])[1];
+const fmtDate = (d, l) => { try { return new Intl.DateTimeFormat(l, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(d + 'T12:00:00Z')); } catch (e) { return d; } };
+/* le récit d'une fiche sans la ligne « Notre rôle » du début : pour la description et les résumés */
+const story = html => { const h = String(html || '').split(/<h3/i)[0]; return text(h.replace(/^\s*<p>\s*<(strong|b)>[^<]*<\/\1>[^<]*<\/p>/i, '')).join(' ') || intro(html); };
+
+function site(content, opts) {
   const s = content.settings || {}, seo = s.seo || {};
   const base = (seo.url || opts.base || '').replace(/\/?$/, '/');
-  const lang = s.defaultLang || 'en', langs = (s.langs && s.langs.length ? s.langs : LANGS);
+  const def = s.defaultLang || 'en', langs = (s.langs && s.langs.length ? s.langs : LANGS);
   const name = s.name || 'Hand Coded';
-  const desc = tr(seo.description, lang) || SEO_DEFAULT[lang] || SEO_DEFAULT.en;
   const sections = (content.sections || []).filter(x => x.visible !== false);
-  const posts = (content.posts || []).filter(p => p.published !== false && sections.some(x => x.id === p.section));
-  const photo = p => p.thumb || ((p.media || []).find(m => m && m.src && /\.(jpe?g|png|webp)(\?|$)/i.test(m.src)) || {}).src || '';
-  const image = abs(base, seo.image || photo(posts.find(p => photo(p) && !/^https?:/.test(photo(p))) || {}) || 'assets/hc/ui/logo-default.svg');
-  const people = posts.filter(p => (p.tags || []).includes('core'));
+  const posts = (content.posts || []).filter(p => p.published !== false && sections.some(x => x.id === p.section))
+    .sort((a, b) => sections.findIndex(x => x.id === a.section) - sections.findIndex(x => x.id === b.section) || (a.order ?? 0) - (b.order ?? 0));
+  const pages = posts.filter(p => pageable(content, p));
+  const photo = p => p.thumb && !/^https?:/.test(p.thumb) ? p.thumb : ((p.media || []).find(m => m && isImage(m.src) && !/^https?:/.test(m.src)) || {}).src || '';
+  const image = abs(base, seo.image || photo(posts.find(p => photo(p)) || {}) || 'assets/hc/ui/logo-default.svg');
   const office = (s.offices || [])[0];
-  const city = office ? (tr(office.name, lang) || '').split(',').pop().trim() : '';
-  const addr = office ? [tr(office.name, lang), ...(office.lines || []).map(x => String(x).replace(/,\s*$/, '')), office.mail].filter(Boolean).join(', ') : '';
   const social = (s.social || []).map(x => x && (x.url || x.href || x.link)).filter(u => /^https?:\/\//.test(u || ''));
-  const works = posts.filter(p => p.section === (sections[0] || {}).id);
+  const desc = l => tr(seo.description, l) || SEO_DEFAULT[l] || SEO_DEFAULT.en;
+  const founded = String(s.founded || s.since || '');
+  const href = (l, p) => p ? `${l}/${encodeURIComponent(p.id)}/` : `${l}/`;          // relatif à la racine du site
+  const url = (l, p) => base + href(l, p);
+  const has = p => pages.includes(p);
+  const updated = p => (p && p.updated) || '';
+  const lastmod = [...posts.map(updated)].filter(Boolean).sort().pop() || '';
+  /* l'adresse du studio, en morceaux pour les données structurées */
+  const address = (() => {
+    if (!office) return null;
+    const lines = (office.lines || []).map(x => String(x).replace(/,\s*$/, '').trim());
+    const pc = lines.map(x => x.match(/^(\d{4,5})\s+(.+)$/)).find(Boolean);
+    const street = lines.find(x => !/^\+?[\d\s().-]{7,}$/.test(x) && !/^\d{4,5}\s/.test(x));
+    const phone = lines.find(x => /^\+?[\d\s().-]{7,}$/.test(x));
+    const city = pc ? pc[2] : (tr(office.name, def) || '').split(',').pop().trim();
+    return { street, postalCode: pc && pc[1], city, phone, mail: office.mail };
+  })();
+  const org = l => ({ '@type': 'Organization', '@id': base + '#studio', name, alternateName: [name + ' Studio', name.replace(/\s+/g, '-')], url: base,
+    logo: abs(base, 'assets/hc/ui/logo-default.svg'), image, description: desc(l),
+    disambiguatingDescription: L('not', l).replace('%Y', founded || '2008'),
+    ...(founded ? { foundingDate: founded } : {}),
+    ...(address ? { address: { '@type': 'PostalAddress', ...(address.street ? { streetAddress: address.street } : {}), ...(address.postalCode ? { postalCode: address.postalCode } : {}), addressLocality: address.city, addressCountry: 'ES' },
+      ...(address.mail ? { email: address.mail } : {}), ...(address.phone ? { telephone: address.phone.replace(/\s+/g, ' ') } : {}) } : {}),
+    areaServed: 'Worldwide',
+    founder: posts.filter(p => (p.tags || []).includes('core')).map(p => ({ '@id': url(l, p) + '#person' })),
+    knowsAbout: posts.filter(p => (sections.find(x => x.id === p.section) || {}).skills).map(p => tr(p.title, l)).filter(Boolean),
+    ...(social.length ? { sameAs: social } : {}) });
+  return { s, seo, base, def, langs, name, sections, posts, pages, photo, image, office, social, desc, href, url, has, updated, lastmod, address, org };
+}
 
-  /* ---------------- <head> */
-  const title = `${name} · ${tr({ en: 'interactive art and technology studio', fr: 'studio d’art et de technologies interactives', ca: 'estudi d’art i tecnologies interactives', es: 'estudio de arte y tecnologías interactivas' }, lang)}`;
-  const ld = { '@context': 'https://schema.org', '@graph': [
-    { '@type': 'Organization', '@id': base + '#studio', name, url: base, logo: abs(base, 'assets/hc/ui/logo-default.svg'), description: desc,
-      ...(s.since || s.founded ? { foundingDate: String(s.founded || s.since) } : {}),
-      ...(city ? { address: { '@type': 'PostalAddress', addressLocality: city } } : {}),
-      ...(people.length ? { founder: people.map(p => ({ '@type': 'Person', name: tr(p.title, lang), jobTitle: tr(p.subtitle, lang) })) } : {}),
-      ...(social.length ? { sameAs: social } : {}) },
-    { '@type': 'ItemList', name: tr((sections[0] || {}).name, lang) || 'Work', itemListElement: works.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: {
-      '@type': 'CreativeWork', name: tr(p.title, lang), url: base + '?p=' + encodeURIComponent(p.id),
-      ...(p.date ? { dateCreated: String(p.date).match(/\d{4}/) ? String(p.date).match(/\d{4}/)[0] : String(p.date) } : {}),
-      ...(intro(tr(p.body, lang)) ? { description: cut(intro(tr(p.body, lang)), 280) } : {}),
-      ...(photo(p) ? { image: abs(base, photo(p)) } : {}),
-      ...(tr(p.place, lang) ? { locationCreated: { '@type': 'Place', name: tr(p.place, lang) } } : {}),
-      ...(p.author ? { creator: { '@type': 'Person', name: p.author } } : {}),
-      producer: { '@id': base + '#studio' } } })) },
-  ] };
+export function seoParts(content, opts = {}) {
+  const S = site(content, opts), { base, def: lang, langs, name, sections, posts } = S;
+  const desc = S.desc(lang);
+  const title = `${name} · ${L('tagline', lang)}`;
+  const ld = { '@context': 'https://schema.org', '@graph': [S.org(lang), { '@type': 'WebSite', '@id': base + '#website', url: base, name, inLanguage: langs, publisher: { '@id': base + '#studio' } }] };
   const head = [
+    `<script>window.HC_ROUTE={"pages":1}</script>`,
     `<title>${esc(title)}</title>`,
     `<meta name="description" content="${esc(desc)}">`,
     `<link rel="canonical" href="${esc(base)}">`,
-    ...langs.map(l => `<link rel="alternate" hreflang="${l}" href="${esc(base + '?lang=' + l)}">`),
+    ...langs.map(l => `<link rel="alternate" hreflang="${l}" href="${esc(S.url(l))}">`),
     `<link rel="alternate" hreflang="x-default" href="${esc(base)}">`,
+    `<meta name="robots" content="max-image-preview:large">`,
     `<meta property="og:type" content="website">`, `<meta property="og:site_name" content="${esc(name)}">`,
     `<meta property="og:title" content="${esc(title)}">`, `<meta property="og:description" content="${esc(desc)}">`,
-    `<meta property="og:url" content="${esc(base)}">`, `<meta property="og:image" content="${esc(image)}">`,
+    `<meta property="og:url" content="${esc(base)}">`, `<meta property="og:image" content="${esc(S.image)}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`,
   ].join('\n');
-
-  /* ---------------- résumé lisible sans JavaScript */
+  const body = homeArticle(S, lang);
   const line = p => [tr(p.subtitle, lang), p.date, tr(p.place, lang)].filter(Boolean).join(' · ');
-  const body = [`<div id="seo-text" lang="${lang}">`, `<h1>${esc(name)}</h1>`, `<p>${esc(desc)}</p>`,
-    ...sections.map(sec => {
-      const list = posts.filter(p => p.section === sec.id); if (!list.length) return '';
-      return `<section><h2>${esc(tr(sec.name, lang))}</h2>` + list.map(p => {
-        const story = cut(intro(tr(p.body, lang)), 420);
-        return `<article><h3><a href="?p=${esc(encodeURIComponent(p.id))}">${esc(tr(p.title, lang))}</a></h3>` + (line(p) ? `<p>${esc(line(p))}</p>` : '') + (story ? `<p>${esc(story)}</p>` : '') + '</article>';
-      }).join('') + '</section>';
-    }),
-    addr ? `<address>${esc(addr)}</address>` : '',
-    `<p>${langs.map(l => `<a href="?lang=${l}" hreflang="${l}">${l.toUpperCase()}</a>`).join(' ')}</p>`, '</div>'].filter(Boolean).join('\n');
 
   /* ---------------- llms.txt */
-  const md = [`# ${name}`, '', `> ${desc}`, '',
-    ...(people.length ? ['## ' + tr({ en: 'Founders', fr: 'Fondateurs', ca: 'Fundadors', es: 'Fundadores' }, lang), ...people.map(p => `- ${tr(p.title, lang)}: ${tr(p.subtitle, lang)}`), ''] : []),
+  const people = posts.filter(p => (p.tags || []).includes('core'));
+  const md = [`# ${name}`, '', `> ${desc}`, '', S.org(lang).disambiguatingDescription, '',
+    ...(people.length ? ['## ' + tr({ en: 'Founders', fr: 'Fondateurs', ca: 'Fundadors', es: 'Fundadores' }, lang), ...people.map(p => `- [${tr(p.title, lang)}](${S.url(lang, p)}): ${tr(p.subtitle, lang)}`), ''] : []),
     ...sections.flatMap(sec => {
-      const list = posts.filter(p => p.section === sec.id && sec.layout !== 'map'); if (!list.length) return [];
-      return [`## ${tr(sec.name, lang)}`, ...list.map(p => { const st = cut(intro(tr(p.body, lang)), 300); return `- [${tr(p.title, lang)}](${base}?p=${encodeURIComponent(p.id)})${line(p) ? `: ${line(p)}` : ''}${st ? `. ${st}` : ''}`; }), ''];
+      const list = S.pages.filter(p => p.section === sec.id); if (!list.length) return [];
+      return [`## ${tr(sec.name, lang)}`, ...list.map(p => { const st = cut(story(tr(p.body, lang)), 300); return `- [${tr(p.title, lang)}](${S.url(lang, p)})${line(p) ? `: ${line(p)}` : ''}${st ? `. ${st}` : ''}`; }), ''];
     }),
-    ...(addr ? ['## Contact', `- ${addr}`, ...social.map(u => `- ${u}`), ''] : []),
-    ...(langs.length > 1 ? [`${tr({ en: 'Other languages', fr: 'Autres langues', ca: 'Altres llengües', es: 'Otros idiomas' }, lang)}: ${langs.map(l => `${base}?lang=${l}`).join(' ')}`, ''] : [])].join('\n');
+    ...(S.address ? ['## Contact', `- ${[tr(S.office.name, lang), S.address.street, [S.address.postalCode, S.address.city].filter(Boolean).join(' '), S.address.mail].filter(Boolean).join(', ')}`, ...S.social.map(u => `- ${u}`), ''] : []),
+    `${tr({ en: 'Other languages', fr: 'Autres langues', ca: 'Altres llengües', es: 'Otros idiomas' }, lang)}: ${langs.map(l => S.url(l)).join(' ')}`, ''].join('\n');
 
-  /* ---------------- sitemap.xml */
-  const day = (opts.date || new Date()).toISOString().slice(0, 10);
-  const urls = [base, ...langs.map(l => base + '?lang=' + l), ...posts.filter(p => !(p.tags || []).includes('partners')).map(p => base + '?p=' + encodeURIComponent(p.id))];
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls.map((u, i) => `  <url><loc>${esc(u)}</loc><lastmod>${day}</lastmod><priority>${i === 0 ? '1.0' : i <= langs.length ? '0.8' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
-
+  /* ---------------- sitemap.xml : chaque page avec ses langues (hreflang) et ses images */
+  const alt = (p) => langs.map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${esc(S.url(l, p))}"/>`).concat(`    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(p ? S.url(lang, p) : base)}"/>`).join('\n');
+  const imgs = p => [S.photo(p), ...(p.media || []).filter(m => m && isImage(m.src)).map(m => m.src)].filter((x, i, a) => x && a.indexOf(x) === i).slice(0, 8).map(u => `    <image:image><image:loc>${esc(abs(base, u))}</image:loc></image:image>`).join('\n');
+  const entry = (loc, mod, pri, extra) => `  <url>\n    <loc>${esc(loc)}</loc>${mod ? `\n    <lastmod>${mod}</lastmod>` : ''}\n    <priority>${pri}</priority>${extra ? '\n' + extra : ''}\n  </url>`;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n` +
+    [entry(base, S.lastmod, '1.0', alt(null)),
+     ...langs.map(l => entry(S.url(l), S.lastmod, '0.9', alt(null))),
+     ...S.pages.flatMap(p => langs.map(l => entry(S.url(l, p), S.updated(p), sections[0] && p.section === sections[0].id ? '0.8' : '0.6', alt(p) + (imgs(p) ? '\n' + imgs(p) : ''))))].join('\n') + '\n</urlset>\n';
   /* ---------------- l'ouverture : la phrase du studio, au centre, ligne par ligne, avant même les scripts du site (Réglages › Accueil › Phrase du studio).
      Chaque ligne entre en glissant vers la droite, au rythme de la lecture ; le site les fait repartir une à une et lance la vidéo sur la dernière. */
   const cutLines = t => { const out = []; let cur = ''; String(t).split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; }); if (cur) out.push(cur); return out; };   // sans lignes écrites : coupée aux virgules
-  const lines = {}; langs.forEach(l => { const ph = tr((s.home || {}).sub, l), t = /\n/.test(ph) ? ph.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(ph); if (t.length) lines[l] = t; });   // les retours à la ligne de la phrase du studio font les coupures
-  const sf = (() => { const r = (s.typo || {}).sig2 || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic ? 1 : 0, w = +(r.weight || 400);
+  const lines = {}; langs.forEach(l => { const ph = tr((S.s.home || {}).sub, l), t = /\n/.test(ph) ? ph.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(ph); if (t.length) lines[l] = t; });   // les retours à la ligne de la phrase du studio font les coupures
+  const sf = (() => { const r = (S.s.typo || {}).sig2 || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic ? 1 : 0, w = +(r.weight || 400);
     return { fam, it, w, css: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap` }; })();   // la police du slogan sous la signature (« Réactif. Sensible. Immersif. »), même adresse que le site
   const data = { langs, def: lang, lines, f: sf };
   const opening = !Object.keys(lines).length ? '' :
     `<div id="hc-intro" class="hold" aria-hidden="true"><div class="ln"></div></div>\n` +
     `<script>(function(){var D=${JSON.stringify(data).replace(/</g, '\\u003c')},el=document.getElementById('hc-intro');try{var q=new URLSearchParams(location.search);` +
-    `if(q.get('p')||!/^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash||'')||(matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||!el.animate){el.remove();return;}` +
+    `var RT=window.HC_ROUTE||{};if(q.get('p')||RT.p||!/^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash||'')||(matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||!el.animate){el.remove();return;}` +
     `var sv=null;try{sv=localStorage.getItem('hc-lang')}catch(e){}var nl=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).map(function(x){return String(x).toLowerCase().slice(0,2)});` +
-    `var ql=(q.get('lang')||'').toLowerCase(),has=function(l){return D.langs.indexOf(l)>=0},L=has(ql)?ql:has(sv)?sv:(nl.filter(has)[0]||D.def);` +
+    `var ql=(q.get('lang')||RT.lang||'').toLowerCase(),has=function(l){return D.langs.indexOf(l)>=0},L=has(ql)?ql:has(sv)?sv:(nl.filter(has)[0]||D.def);` +
     `var T=D.lines[L]||D.lines[D.def]||D.lines[Object.keys(D.lines)[0]],box=el.querySelector('.ln');` +
     `if(D.f){box.style.fontFamily='"'+D.f.fam+'", var(--ui)';box.style.fontStyle=D.f.it?'italic':'normal';box.style.fontWeight=D.f.w;}` +
     `T.forEach(function(t){var x=document.createElement('span');x.className='l';x.textContent=t;box.appendChild(x);});` +
@@ -135,6 +177,107 @@ export function applySEO(indexHTML, parts) {
   if (parts.intro != null) {
     if (out.indexOf('<!--hc-intro-->') < 0) out = out.replace('<body>', '<body>\n<!--hc-intro-->\n<!--/hc-intro-->');   // première fois : on pose les marqueurs juste après <body>
     out = put(out, 'hc-intro', parts.intro);
+  }
+  return out;
+}
+
+/* ---------------- le texte visible des pages : lisible sans JavaScript ; le site en 3D se pose par-dessus et le retire une fois prêt */
+function footer(S, l, p) {
+  const a = S.address;
+  return `<footer><p><strong>${esc(S.name)}</strong>. ${esc(S.desc(l))}</p>` +
+    (a ? `<address>${esc([tr(S.office.name, l), a.street, [a.postalCode, a.city].filter(Boolean).join(' ')].filter(Boolean).join(', '))}${a.mail ? ` · <a href="mailto:${esc(a.mail)}">${esc(a.mail)}</a>` : ''}</address>` : '') +
+    (S.social.length ? `<p>${S.social.map(u => `<a href="${esc(u)}" rel="me">${esc(u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>`).join(' · ')}</p>` : '') +
+    `<p>${esc(L('langs', l))} : ${S.langs.map(x => `<a href="${S.href(x, p)}" hreflang="${x}" lang="${x}">${x.toUpperCase()}</a>`).join(' ')}</p></footer>`;
+}
+function homeArticle(S, l) {
+  const phrase = tr((S.s.home || {}).sub, l).replace(/\s*\n\s*/g, ' ');
+  return `<main id="seo-page" lang="${l}"><header><h1>${esc(S.name)}</h1><p>${esc(L('tagline', l))}</p>${phrase ? `<p>${esc(phrase)}</p>` : ''}</header>` +
+    S.sections.map(sec => {
+      const list = S.posts.filter(p => p.section === sec.id); if (!list.length) return '';
+      return `<section><h2>${esc(tr(sec.name, l))}</h2><ul>` + list.map(p => {
+        const t = esc(tr(p.title, l)), sub = [tr(p.subtitle, l), p.date, tr(p.place, l)].filter(Boolean).join(' · '), st = cut(story(tr(p.body, l)), 220);
+        return `<li>${S.has(p) ? `<a href="${S.href(l, p)}">${t}</a>` : `<strong>${t}</strong>`}${sub ? ` · ${esc(sub)}` : ''}${st && S.has(p) ? `<br>${esc(st)}` : ''}</li>`;
+      }).join('') + '</ul></section>';
+    }).join('') + footer(S, l, null) + '</main>';
+}
+function postArticle(S, content, l, p) {
+  const sec = S.sections.find(x => x.id === p.section), t = tr(p.title, l);
+  const imgs = [S.photo(p), ...(p.media || []).filter(m => m && isImage(m.src)).map(m => m.src)].filter((x, i, a) => x && a.indexOf(x) === i);
+  const cap = src => { const m = (p.media || []).find(x => x && x.src === src) || {}; return { alt: (m.caption && tr(m.caption, l)) || `${t}${tr(p.subtitle, l) ? ', ' + tr(p.subtitle, l) : ''}`, credit: m.credit || '' }; };
+  const vids = (p.media || []).filter(m => m && isVideo(m.src)).map(m => m.src);
+  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(Boolean);
+  const skills = (p.skills || []).map(id => S.posts.find(x => x.id === id)).filter(Boolean);
+  const projects = S.posts.filter(x => x !== p && ((x.skills || []).includes(p.id) || (x.team || []).includes(p.id)) && S.has(x));
+  const sibs = S.pages.filter(x => x.section === p.section && x !== p).slice(0, 12);
+  const link = x => S.has(x) ? `<a href="${S.href(l, x)}">${esc(tr(x.title, l))}</a>` : esc(tr(x.title, l));
+  const meta = [tr(p.subtitle, l), p.date, tr(p.place, l)].filter(Boolean).join(' · ');
+  return `<main id="seo-page" lang="${l}"><nav aria-label="breadcrumb"><a href="${S.href(l)}">${esc(S.name)}</a> › <a href="${S.href(l)}#${esc(p.section)}">${esc(tr(sec.name, l))}</a> › ${esc(t)}</nav>` +
+    `<article><h1>${esc(t)}</h1>${meta ? `<p>${esc(meta)}</p>` : ''}` + clean(tr(p.body, l)) +
+    (imgs.length ? `<section><h2>${esc(L('photos', l))}</h2>` + imgs.slice(0, 12).map((u, i) => { const c = cap(u); return `<figure><img src="${esc(u)}" alt="${esc(c.alt)}" loading="${i ? 'lazy' : 'eager'}" decoding="async">${c.credit ? `<figcaption>© ${esc(c.credit)}</figcaption>` : ''}</figure>`; }).join('') + '</section>' : '') +
+    (vids.length ? `<section><h2>${esc(L('videos', l))}</h2><ul>${vids.map(u => `<li><a href="${esc(u)}">${esc(u.replace(/^https?:\/\/(www\.)?/, ''))}</a></li>`).join('')}</ul></section>` : '') +
+    (team.length ? `<section><h2>${esc(L('team', l))}</h2><ul>${team.map(x => `<li>${link(x)}${tr(x.subtitle, l) ? ` · ${esc(tr(x.subtitle, l))}` : ''}</li>`).join('')}</ul></section>` : '') +
+    (skills.length ? `<section><h2>${esc(tr((S.sections.find(x => x.skills) || {}).name, l))}</h2><ul>${skills.map(x => `<li>${link(x)}</li>`).join('')}</ul></section>` : '') +
+    (projects.length ? `<section><h2>${esc(tr(S.sections[0].name, l))}</h2><ul>${projects.map(x => `<li>${link(x)}${tr(x.subtitle, l) ? ` · ${esc(tr(x.subtitle, l))}` : ''}</li>`).join('')}</ul></section>` : '') +
+    (S.updated(p) ? `<p><time datetime="${S.updated(p)}">${esc(L('updated', l))} ${esc(fmtDate(S.updated(p), l))}</time></p>` : '') + '</article>' +
+    (sibs.length ? `<aside><h2>${esc(L('more', l))} : ${esc(tr(sec.name, l))}</h2><ul>${sibs.map(x => `<li>${link(x)}</li>`).join('')}</ul></aside>` : '') +
+    footer(S, l, p) + '</main>';
+}
+function postLD(S, content, l, p) {
+  const sec = S.sections.find(x => x.id === p.section), u = S.url(l, p), t = tr(p.title, l);
+  const imgs = [S.photo(p), ...(p.media || []).filter(m => m && isImage(m.src)).map(m => m.src)].filter((x, i, a) => x && a.indexOf(x) === i).slice(0, 8);
+  const imageObjs = imgs.map(src => { const m = (p.media || []).find(x => x && x.src === src) || {}; return { '@type': 'ImageObject', contentUrl: abs(S.base, src), ...(m.caption && tr(m.caption, l) ? { caption: tr(m.caption, l) } : {}), ...(m.credit ? { creditText: m.credit, creator: { '@type': 'Person', name: m.credit } } : {}) }; });
+  const isPerson = x => (x.tags || []).some(t2 => PEOPLE_TAGS.includes(t2)) || (!(x.tags || []).length && (S.sections.find(z => z.id === x.section) || {}).card === 'portrait');
+  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(Boolean)
+    .map(x => S.has(x) ? { '@id': S.url(l, x) + '#person' } : { '@type': isPerson(x) ? 'Person' : 'Organization', name: tr(x.title, l) });
+  const creators = String(p.author || '').split(/\s*&\s*/).filter(Boolean).map(n => /mouawad\s*\+?\s*laurier/i.test(n) ? { '@type': 'Organization', name: 'Mouawad + Laurier' } : { '@type': /\+|studio|collective/i.test(n) ? 'Organization' : 'Person', name: n });
+  const vids = (p.media || []).filter(m => m && isVideo(m.src)).map(m => { const y = ytId(m.src); return { '@type': 'VideoObject', name: t, description: cut(story(tr(p.body, l)), 200) || t, embedUrl: y ? `https://www.youtube.com/embed/${y}` : m.src.replace(/vimeo\.com\/(\d+)/, 'player.vimeo.com/video/$1'), thumbnailUrl: y ? `https://i.ytimg.com/vi/${y}/hqdefault.jpg` : (imgs[0] ? abs(S.base, imgs[0]) : S.image) }; });
+  const press = (() => { const b = tr(p.body, l), i = b.search(/<h3>\s*(Press|Presse|Premsa|Prensa)\s*<\/h3>/i); if (i < 0) return []; const out = []; b.slice(i).replace(/<a href="(https?:[^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (m, h, n) => { out.push({ '@type': 'CreativeWork', url: h, name: text(n).join(' ') }); return m; }); return out; })();
+  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [{ name: S.name, item: S.url(l) }, { name: tr(sec.name, l), item: S.url(l) + '#' + p.section }, { name: t, item: u }].map((x, i) => ({ '@type': 'ListItem', position: i + 1, ...x })) };
+  const descr = cut(story(tr(p.body, l)), 300);
+  const person = (p.tags || []).some(x => PEOPLE_TAGS.includes(x));
+  const main = sec.skills ? { '@type': 'Service', name: t, description: descr, provider: { '@id': S.base + '#studio' }, areaServed: 'Worldwide', url: u }
+    : person ? { '@type': 'Person', '@id': u + '#person', name: t, jobTitle: tr(p.subtitle, l), description: descr, url: u, ...(imgs[0] ? { image: abs(S.base, imgs[0]) } : {}),
+        ...((p.tags || []).includes('core') ? { worksFor: { '@id': S.base + '#studio' } } : {}), ...(/^https?:/.test(p.link || '') ? { sameAs: [p.link] } : {}) }
+    : sec.card === 'place' ? { '@type': 'ContactPage', name: t, url: u, about: { '@id': S.base + '#studio' } }
+    : { '@type': 'CreativeWork', '@id': u + '#work', name: t, url: u, inLanguage: l, description: descr, ...(tr(p.subtitle, l) ? { alternativeHeadline: tr(p.subtitle, l) } : {}),
+        ...(year(p.date) ? { dateCreated: year(p.date) } : {}), ...(tr(p.place, l) ? { locationCreated: { '@type': 'Place', name: tr(p.place, l) } } : {}),
+        ...(creators.length ? { creator: creators.length > 1 ? creators : creators[0] } : {}), producer: { '@id': S.base + '#studio' },
+        ...(team.length ? { contributor: team } : {}), ...(imageObjs.length ? { image: imageObjs } : {}), ...(vids.length ? { video: vids } : {}), ...(press.length ? { subjectOf: press } : {}) };
+  const page = { '@type': 'WebPage', '@id': u, url: u, name: t, inLanguage: l, isPartOf: { '@id': S.base + '#website' }, breadcrumb: crumbs, ...(S.updated(p) ? { dateModified: S.updated(p) } : {}),
+    ...(imgs[0] ? { primaryImageOfPage: { '@type': 'ImageObject', contentUrl: abs(S.base, imgs[0]) } } : {}), mainEntity: main['@id'] ? { '@id': main['@id'] } : main };
+  return { '@context': 'https://schema.org', '@graph': [page, ...(main['@id'] ? [main] : []), S.org(l), { '@type': 'WebSite', '@id': S.base + '#website', url: S.base, name: S.name, publisher: { '@id': S.base + '#studio' } }] };
+}
+const put = (html, tag, inner) => { const a = `<!--${tag}-->`, b = `<!--/${tag}-->`, i = html.indexOf(a), j = html.indexOf(b); return i >= 0 && j > i ? html.slice(0, i + a.length) + '\n' + inner + '\n' + html.slice(j) : html; };
+/* Toutes les pages, à partir de index.html déjà mis à jour : [{ path: 'fr/ox/index.html', text }] */
+export function buildPages(indexHTML, content, opts = {}) {
+  const S = site(content, opts), out = [];
+  const page = (l, p, headInner, bodyInner) => {
+    let h = indexHTML.replace(/<html lang="[^"]*"/, `<html lang="${l}"`);
+    h = put(h, 'seo-head', headInner); h = put(h, 'seo-body', bodyInner);
+    if (p) h = put(h, 'hc-intro', '');   // une fiche s'ouvre directement, sans la phrase d'ouverture
+    return h;
+  };
+  const og = (t, d, u, img, l, type) => [`<meta property="og:type" content="${type}">`, `<meta property="og:site_name" content="${esc(S.name)}">`, `<meta property="og:title" content="${esc(t)}">`,
+    `<meta property="og:description" content="${esc(d)}">`, `<meta property="og:url" content="${esc(u)}">`, `<meta property="og:image" content="${esc(img)}">`,
+    `<meta property="og:locale" content="${{ en: 'en_GB', fr: 'fr_FR', ca: 'ca_ES', es: 'es_ES' }[l] || l}">`, `<meta name="twitter:card" content="summary_large_image">`];
+  for (const l of S.langs) {
+    const t = `${S.name} · ${L('tagline', l)}`, d = S.desc(l), u = S.url(l);
+    const ld = { '@context': 'https://schema.org', '@graph': [S.org(l), { '@type': 'WebSite', '@id': S.base + '#website', url: S.base, name: S.name, inLanguage: S.langs, publisher: { '@id': S.base + '#studio' } },
+      { '@type': 'WebPage', '@id': u, url: u, name: t, inLanguage: l, isPartOf: { '@id': S.base + '#website' }, about: { '@id': S.base + '#studio' }, ...(S.lastmod ? { dateModified: S.lastmod } : {}) }] };
+    out.push({ path: `${l}/index.html`, text: page(l, null, [`<base href="../">`, `<script>window.HC_ROUTE=${JSON.stringify({ pages: 1, lang: l })}</script>`, `<title>${esc(t)}</title>`,
+      `<meta name="description" content="${esc(d)}">`, `<link rel="canonical" href="${esc(u)}">`, ...S.langs.map(x => `<link rel="alternate" hreflang="${x}" href="${esc(S.url(x))}">`),
+      `<link rel="alternate" hreflang="x-default" href="${esc(S.base)}">`, `<meta name="robots" content="max-image-preview:large">`, ...og(t, d, u, S.image, l, 'website'),
+      `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`].join('\n'), homeArticle(S, l)) });
+    for (const p of S.pages) {
+      const pt = tr(p.title, l), sub = tr(p.subtitle, l);
+      const title = (pt + (sub && (pt + sub).length < 58 ? ' · ' + sub : '') + ' · ' + S.name).replace(/\s+/g, ' ');
+      const d = cut(story(tr(p.body, l)), 158) || sub || S.desc(l), pu = S.url(l, p), img = abs(S.base, S.photo(p)) || S.image;
+      out.push({ path: `${l}/${p.id}/index.html`, text: page(l, p, [`<base href="../../">`, `<script>window.HC_ROUTE=${JSON.stringify({ pages: 1, lang: l, p: p.id })}</script>`, `<title>${esc(title)}</title>`,
+        `<meta name="description" content="${esc(d)}">`, `<link rel="canonical" href="${esc(pu)}">`, ...S.langs.map(x => `<link rel="alternate" hreflang="${x}" href="${esc(S.url(x, p))}">`),
+        `<link rel="alternate" hreflang="x-default" href="${esc(S.url(S.def, p))}">`, `<meta name="robots" content="max-image-preview:large">`, ...og(`${pt} · ${S.name}`, d, pu, img, l, 'article'),
+        ...(S.updated(p) ? [`<meta property="article:modified_time" content="${S.updated(p)}">`] : []),
+        `<script type="application/ld+json">${JSON.stringify(postLD(S, content, l, p)).replace(/</g, '\\u003c')}</script>`].join('\n'), postArticle(S, content, l, p)) });
+    }
   }
   return out;
 }

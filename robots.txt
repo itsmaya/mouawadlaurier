@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /handcoded/admin/
 
-Sitemap: https://mayamouawad.com/sitemap.xml
+Sitemap: https://mouawadlaurier.com/sitemap.xml
+Sitemap: https://mouawadlaurier.com/handcoded/sitemap.xml

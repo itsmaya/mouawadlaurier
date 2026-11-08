@@ -10,6 +10,7 @@ import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { daylight } from './sun.js';
+import { pageable } from './seo.js';
 import { t, UI, CARDS, LANGS, StaticBackend, DemoBackend, postsOf, sanitizeHTML, htmlToText, mapCoords, escapeHTML, normalizeContent, validLoc, typoOf, typoCSS, googleFontURLs, typoFontLoads, ringLogoURL, skillsOf, projectsOf } from './store.js';
 
 const BASE = window.HC_BASE || '';
@@ -1321,7 +1322,16 @@ function setPageMeta(post) {
   if (PREVIEW || !CONTENT) return;
   document.title = post ? `${tr(post.title).trim()} · ${CONTENT.settings.name || 'Hand Coded'}` : BASE_TITLE;
   if (metaDesc) metaDesc.content = post ? (htmlToText(tr(post.body).split(/<h3/i)[0]).join(' ').slice(0, 160) || tr(post.subtitle) || BASE_DESC) : BASE_DESC;
-  try { const u = new URL(location.href); if (post) u.searchParams.set('p', post.id); else u.searchParams.delete('p'); if (u.href !== location.href) history.replaceState(history.state, '', u.pathname + u.search + u.hash); } catch (e) {}
+  try {
+    const u = new URL(location.href), R = window.HC_ROUTE || {};
+    if (R.pages && location.protocol !== 'file:') {   // les vraies pages existent : /fr/ox/ pour une fiche, /fr/ pour le reste, comme les moteurs les connaissent
+      const root = new URL(document.querySelector('base') ? document.baseURI : location.href.replace(/[^/]*([?#].*)?$/, ''));
+      u.searchParams.delete('p'); u.searchParams.delete('lang');
+      u.pathname = root.pathname + (post && pageable(CONTENT, post) ? `${LANG}/${encodeURIComponent(post.id)}/` : R.p || u.pathname !== root.pathname ? `${LANG}/` : '');
+      if (post && !pageable(CONTENT, post)) u.searchParams.set('p', post.id);
+    } else if (post) u.searchParams.set('p', post.id); else u.searchParams.delete('p');
+    if (u.href !== location.href) history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+  } catch (e) {}
   if (post) countView('?p=' + post.id, document.title);
 }
 /* Audience : GoatCounter (sans cookie, sans bandeau de consentement). Le code se règle dans le back-office, onglet Audience. */
@@ -1401,6 +1411,7 @@ langsEl.addEventListener('keydown', e => { if (e.code === 'Escape' && langsEl.cl
 function setLang(l) {
   if (l === LANG) return;
   LANG = l; try { localStorage.setItem('hc-lang', l); } catch (e) {}
+  document.documentElement.lang = l;
   renderTexts();
   if (started) {
     menuButtons.forEach((b, i) => { b.textContent = tr(SECTIONS[i].def.name); });
@@ -1410,6 +1421,7 @@ function setLang(l) {
     P.selected = sel; changeSection3D();   // les cartes typographiques se redessinent dans la nouvelle langue
     if (wasOpen) delayedCall(0.6, () => openThatPost(sel));
   }
+  if (!P.postOpen) setPageMeta(null);   // /en/ devient /fr/
 }
 
 /* Catégories (tags) + pagination */
@@ -3566,13 +3578,14 @@ function introWatch() {
   /* langue automatique : la première langue du navigateur que le site propose (ca, es, fr, en), sinon la langue par défaut */
   const nav = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(l => String(l).toLowerCase().slice(0, 2)).find(l => langs.includes(l));
   let qLang = ''; try { qLang = (new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) {}
-  LANG = langs.includes(qLang) ? qLang : langs.includes(saved) ? saved : nav || (CONTENT.settings.defaultLang || langs[0]);   // ?lang=fr : lien vers une langue (référencement)
+  const rLang = ((window.HC_ROUTE || {}).lang || '').toLowerCase();   // /fr/ox/ : la page dit sa langue
+  LANG = langs.includes(qLang) ? qLang : langs.includes(rLang) ? rLang : langs.includes(saved) ? saved : nav || (CONTENT.settings.defaultLang || langs[0]);   // ?lang=fr : lien vers une langue (référencement)
   SECTIONS = CONTENT.sections.filter(s => s.visible).map(def => ({ def }));
   if (!SECTIONS.length) { showError(new Error('aucune section visible')); return; }
   /* ?p=identifiant : l'adresse d'une fiche. On entre directement dans sa section, puis la fiche s'ouvre. */
   if (!PREVIEW) try {
     const OLD_IDS = { 'nouveau-contenu': 'immersive', 'nouveau-contenu-4': 'la-traversee-du-temps', 'nouveau-contenu-5': 'valentin-ducros', 'nouveau-contenu-7': 'laurent-delforge' };   // les anciennes adresses mènent toujours à la bonne fiche
-    const q = new URLSearchParams(location.search).get('p'), id = q && !CONTENT.posts.some(p => p.id === q) && OLD_IDS[q] ? OLD_IDS[q] : q, post = id && CONTENT.posts.find(p => p.id === id && p.published !== false && SECTIONS.some(x => x.def.id === p.section));
+    const q = new URLSearchParams(location.search).get('p') || (window.HC_ROUTE || {}).p, id = q && !CONTENT.posts.some(p => p.id === q) && OLD_IDS[q] ? OLD_IDS[q] : q, post = id && CONTENT.posts.find(p => p.id === id && p.published !== false && SECTIONS.some(x => x.def.id === p.section));
     if (post) { deepPost = post.id; history.replaceState(null, '', location.pathname + location.search + '#' + post.section); }
   } catch (e) {}
   setupStats();
@@ -3590,6 +3603,7 @@ function introWatch() {
     sections.forEach((s, i) => s.place(i));
     await Promise.race([Promise.all(TYPO_LINKS).then(fontsReady), new Promise(r => setTimeout(r, 3000))]);   // cartes et fiches se dessinent directement avec les bonnes polices
     assetsLoaded = true;
+    { const sp = document.getElementById('seo-page'); if (sp) sp.remove(); }   // le texte des robots : le site est prêt, il prend le relais
     if (clickedEnter || !isHomeHash() || (PREVIEW && PREVIEW.start)) enterToTheWeb();
     if (deepPost) { const id = deepPost, t0 = performance.now(), wait = setInterval(() => { if (inputEnabled || performance.now() - t0 > 8000) { clearInterval(wait); if (inputEnabled) goToPost(id); } }, 120); }
   } catch (err) { showError(err); }

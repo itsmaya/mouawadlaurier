@@ -282,20 +282,32 @@ export class GitHubBackend {
     const commit = await this.req(`${this.repoPath}/git/commits/${head}`);
     /* GitHub refuse tout le commit (422 GitRPC::BadObjectState) si on lui demande de supprimer un fichier qui n'existe plus :
        on ne garde que les suppressions de fichiers vraiment présents dans le dépôt. */
-    let present = null;
-    try { const t = await this.req(`${this.repoPath}/git/trees/${commit.tree.sha}?recursive=1`); if (!t.truncated) present = new Set(t.tree.filter(e => e.type === 'blob').map(e => e.path)); } catch (e) {}
+    let present = null, shas = new Map();
+    try { const t = await this.req(`${this.repoPath}/git/trees/${commit.tree.sha}?recursive=1`); if (!t.truncated) { const blobs = t.tree.filter(e => e.type === 'blob'); present = new Set(blobs.map(e => e.path)); shas = new Map(blobs.map(e => [e.path, e.sha])); } } catch (e) {}
     this.lastPaths = present;
-    const tree = [];
+    const tree = []; this.written = [];
     const all = [...files, { path: 'content/content.json', text: JSON.stringify(content, null, 1) + '\n' }];
+    /* un texte identique à celui du dépôt n'est pas renvoyé : les centaines de pages du référencement ne partent que si elles ont changé */
+    const gitSha = async txt => { const b = new TextEncoder().encode(txt), h = new TextEncoder().encode(`blob ${b.length}\0`), all2 = new Uint8Array(h.length + b.length); all2.set(h); all2.set(b, h.length);
+      return [...new Uint8Array(await crypto.subtle.digest('SHA-1', all2))].map(x => x.toString(16).padStart(2, '0')).join(''); };
+    const todo = [];
     for (const f of all) {
       if (f.delete) { if (!present || present.has(this.full(f.path))) tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: null }); continue; }
+      if (f.text != null && shas.size && shas.get(this.full(f.path)) === await gitSha(f.text)) continue;
+      todo.push(f);
+    }
+    if (!todo.length && !tree.length) return head;
+    let k = 0;
+    const work = async f => {
       if (f.blob && f.blob.size > 90 * 1024 * 1024) throw onFile(f.path, Object.assign(new Error(`fichier trop lourd pour GitHub (${Math.round(f.blob.size / 1048576)} Mo, 90 Mo au plus). Réduis-le ou publie une vidéo YouTube / Vimeo.`), { status: 413 }));
       try {
         const body = f.text != null ? { content: f.text, encoding: 'utf-8' } : { content: await blobToBase64(f.blob), encoding: 'base64' };
         const blob = await this.req(`${this.repoPath}/git/blobs`, { method: 'POST', body: JSON.stringify(body) });
-        tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: blob.sha });
+        tree.push({ path: this.full(f.path), mode: '100644', type: 'blob', sha: blob.sha }); this.written.push(f.path);
       } catch (e) { throw onFile(f.path, e); }
-    }
+    };
+    /* plusieurs envois à la fois (les pages sont nombreuses), mais pas trop pour rester poli avec GitHub */
+    await Promise.all(Array.from({ length: Math.min(6, todo.length) }, async () => { while (k < todo.length) await work(todo[k++]); }));
     const newTree = await this.req(`${this.repoPath}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) });
     const newCommit = await this.req(`${this.repoPath}/git/commits`, { method: 'POST', body: JSON.stringify({ message, tree: newTree.sha, parents: [head] }) });
     await this.req(`${this.repoPath}/git/refs/heads/${encodeURIComponent(this.cfg.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
