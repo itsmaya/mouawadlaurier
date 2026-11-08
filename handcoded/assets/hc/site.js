@@ -17,6 +17,13 @@ const BASE = window.HC_BASE || '';
 const backend = window.HC_MODE === 'demo' ? new DemoBackend(BASE) : new StaticBackend(BASE);
 const INLINE = window.HC_ASSETS || null;   // démo, ou site ouvert en local : ressources embarquées
 const LOCAL = location.protocol === 'file:';   // en local, le navigateur interdit de lire les images du disque dans la 3D
+/* Racine du site, fixée une fois pour toutes au chargement. L'adresse change ensuite (/fr/ox/, /es/…) sans recharger la page :
+   une base relative (../../) ou absente se recalculerait depuis la nouvelle adresse, et images, vidéos et liens partiraient au mauvais endroit. */
+const SITE_ROOT = (() => {
+  const b = document.querySelector('base'), root = b ? document.baseURI : new URL('./', location.href).href;
+  if (!LOCAL && (window.HC_ROUTE || {}).pages) { if (b) b.href = root; else { const n = document.createElement('base'); n.href = root; document.head.prepend(n); } }
+  return new URL(root);
+})();
 /* Aperçu depuis le back-office : le brouillon et les fichiers pas encore publiés arrivent de la fenêtre parente. */
 const SITE_VERSION = 20261102; window.HC_SITE_VERSION = SITE_VERSION;   // le back-office vérifie que le site du dossier est à jour
 let PREVIEW = window.HC_PREVIEW || /[?&]preview\b/.test(location.search) ? (() => { try { return (window.parent !== window && window.parent.__hcPreview) || (window.opener && window.opener.__hcPreview) || null; } catch (e) { return null; } })() : null;
@@ -1325,7 +1332,7 @@ function setPageMeta(post) {
   try {
     const u = new URL(location.href), R = window.HC_ROUTE || {};
     if (R.pages && location.protocol !== 'file:') {   // les vraies pages existent : /fr/ox/ pour une fiche, /fr/ pour le reste, comme les moteurs les connaissent
-      const root = new URL(document.querySelector('base') ? document.baseURI : location.href.replace(/[^/]*([?#].*)?$/, ''));
+      const root = SITE_ROOT;
       u.searchParams.delete('p'); u.searchParams.delete('lang');
       u.pathname = root.pathname + (post && pageable(CONTENT, post) ? `${LANG}/${encodeURIComponent(post.id)}/` : R.p || u.pathname !== root.pathname ? `${LANG}/` : '');
       if (post && !pageable(CONTENT, post)) u.searchParams.set('p', post.id);
@@ -1345,7 +1352,7 @@ function setupStats() {
   document.head.appendChild(sc);
 }
 function countView(path, title, event = false) {
-  try { if (window.goatcounter && typeof window.goatcounter.count === 'function') window.goatcounter.count({ path: event ? path : location.pathname.replace(/index\.html$/, '') + path, title, event }); } catch (e) {}
+  try { if (window.goatcounter && typeof window.goatcounter.count === 'function') window.goatcounter.count({ path: event ? path : ((window.HC_ROUTE || {}).pages ? SITE_ROOT.pathname : location.pathname.replace(/index\.html$/, '')) + path, title, event }); } catch (e) {}
 }
 function renderTexts() {
   const s = CONTENT.settings;
