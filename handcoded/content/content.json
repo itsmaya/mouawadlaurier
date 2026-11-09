@@ -7196,7 +7196,7 @@
    "id": "augmented-paper",
    "section": "work",
    "order": 37,
-   "published": false,
+   "published": true,
    "title": {
     "en": "Augmented Paper",
     "fr": "Le papier augmenté",
@@ -7229,6 +7229,9 @@
    },
    "media": [
     {
+     "src": "https://www.youtube.com/watch?v=kh172l_aWDI"
+    },
+    {
      "src": "media/augmented-paper/01.jpg",
      "credit": ""
     },
@@ -7247,6 +7250,15 @@
     {
      "src": "media/augmented-paper/05.jpg",
      "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=4EBcBxGDU_M",
+     "caption": {
+      "en": "Teaser Workshop",
+      "fr": "Teaser Workshop",
+      "ca": "Teaser Workshop",
+      "es": "Teaser Workshop"
+     }
     }
    ],
    "link": "",
