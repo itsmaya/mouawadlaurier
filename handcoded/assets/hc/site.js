@@ -158,9 +158,25 @@ const postLocal = (x, y, z) => [-x, y, z];             // conteneur de posts tou
 
 /* ================================================================ Rendu */
 const canvas = document.getElementById('stage');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+/* Écran Retina : l'image est déjà calculée deux fois plus fine, l'antialiasing matériel n'y ajoute presque rien et coûte cher à la carte graphique */
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: (window.devicePixelRatio || 1) < 1.75, powerPreference: 'high-performance' });
 renderer.debug.checkShaderErrors = false;   // pas de lecture des journaux de compilation : le navigateur compile les shaders sans bloquer l'image
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+/* Finesse de l'image adaptée à la machine : on part de la pleine finesse, on descend par paliers si l'image n'arrive plus à suivre, on remonte quand ça va mieux */
+const DPR_MAX = Math.min(window.devicePixelRatio || 1, 2), DPR_MIN = Math.min(DPR_MAX, DPR_MAX >= 2 ? 1.25 : 1);
+let dpr = DPR_MAX, dprSlow = 0, dprFast = 0, dprAt = 0;
+renderer.setPixelRatio(dpr);
+function dprGovern(now, ms) {   // ms : temps entre deux images dessinées pendant que la 3D bouge
+  if (now - dprAt < 1500) return;
+  if (ms > 30) { dprFast = 0; if (++dprSlow > 24 && dpr > DPR_MIN) { dpr = Math.max(DPR_MIN, Math.round((dpr - 0.25) * 4) / 4); renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprSlow = 0; dprAt = now; } }
+  else if (ms < 19) { dprSlow = Math.max(0, dprSlow - 1); if (++dprFast > 240 && dpr < DPR_MAX) { dpr = Math.min(DPR_MAX, dpr + 0.25); renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprFast = 0; dprAt = now; } }
+}
+/* Vignettes : chaque image du site a une petite copie WebP (640 px) à côté d'elle, « photo.jpg.t.webp ». Les cartes 3D, les sommaires et les
+   pastilles n'ont pas besoin de plus : 5 à 10 fois moins lourd à charger et à décoder. Si la copie manque, l'original prend le relais. */
+const TN = '.t.webp';
+const thumbOf = p => (p && !LOCAL && !PREVIEW_MODE() && !/^(https?:|data:|blob:)/.test(p) && /^media\/.+\.(jpe?g|png|webp)$/i.test(p) && !p.endsWith(TN) ? p + TN : p);
+function PREVIEW_MODE() { return !!(window.HC_PREVIEW || /[?&]preview\b/.test(location.search)); }
+document.addEventListener('error', e => { const im = e.target; if (im && im.tagName === 'IMG' && im.dataset.full && !im.dataset.fell) { im.dataset.fell = '1'; im.src = im.dataset.full; } }, true);
+const smallImg = (path, attrs = '') => { const t = thumbOf(path); return `<img src="${escapeHTML(url(t))}"${t !== path ? ` data-full="${escapeHTML(url(path))}"` : ''} ${attrs}>`; };
 renderer.setClearColor(0xffffff, 1);
 const scene = new THREE.Scene();
 scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d8d8, 2.2));
@@ -174,11 +190,18 @@ const LINE_MATS = [lineMatCenter, lineMatFrame, lineMatSelect, lineMatNet];
 const manager = new THREE.LoadingManager();
 manager.setURLModifier(u => (/^(blob:|data:|https?:)/.test(u) ? u : url(u)));
 const imgCache = new Map();
-function loadImage(path) {
+function loadRaw(path) {
+  if (!imgCache.has(path)) imgCache.set(path, new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; if (/^https?:/.test(url(path))) im.crossOrigin = 'anonymous'; im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(im)); im.onerror = rej; im.src = url(path); }));   // image décodée à l'avance, hors de l'image en cours
+  return imgCache.get(path);
+}
+function loadImage(path, full = false) {   // full : l'image entière ; sinon sa vignette quand elle existe
   if (!path) return Promise.reject(new Error('no image'));
   if (LOCAL && !/^(data:|blob:|https?:)/.test(url(path))) return Promise.reject(new Error('local'));   // la carte reste typographique
-  if (!imgCache.has(path)) imgCache.set(path, new Promise((res, rej) => { const im = new Image(); if (/^https?:/.test(url(path))) im.crossOrigin = 'anonymous'; im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(im)); im.onerror = rej; im.src = url(path); }));   // image décodée à l'avance, hors de l'image en cours
-  return imgCache.get(path);
+  const t = full ? path : thumbOf(path);
+  if (t === path) return loadRaw(path);
+  const key = 'tn:' + path;
+  if (!imgCache.has(key)) imgCache.set(key, loadRaw(t).catch(() => loadRaw(path)));
+  return imgCache.get(key);
 }
 function prepTex(tx) { tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return tx; }
 /* Shaders des cartes gardés en vie : sans ça, détruire les cartes d'une sélection libère leurs programmes et la suivante doit les recompiler
@@ -1548,7 +1571,7 @@ const post2D = {
     projects.forEach(p => {
       const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
       const el = this.addPanel('proj', 248, `<button type="button" class="go" data-go="${escapeHTML(p.id)}" aria-label="${escapeHTML(tr(p.title))}">` +
-        (ph ? `<img src="${escapeHTML(url(ph))}" alt="" draggable="false">` : '') + `<span class="mono"${ph ? ' hidden' : ''}>${escapeHTML(initials(tr(p.title)))}</span>` +
+        (ph ? smallImg(ph, 'alt="" draggable="false"') : '') + `<span class="mono"${ph ? ' hidden' : ''}>${escapeHTML(initials(tr(p.title)))}</span>` +
         `<span class="cap"><span class="t">${escapeHTML(tr(p.title).trim())}</span>${meta ? `<span class="m">${escapeHTML(meta)}</span>` : ''}</span></button>`);
       const im = el.querySelector('img'); if (im) im.addEventListener('error', () => { im.remove(); el.querySelector('.mono').hidden = false; });   // photo introuvable : les initiales
     });
@@ -1568,7 +1591,7 @@ const post2D = {
       const items = list.map(p => {
         const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | '); k++;
         return `<button type="button" class="go" data-go="${E(p.id)}" aria-label="${E(tr(p.title))}"><span class="no">${n2(k)}</span>` +
-          `<span class="th">${ph ? `<img src="${E(url(ph))}" alt="" draggable="false" loading="lazy">` : ''}<span class="mono"${ph ? ' hidden' : ''}>${E(initials(tr(p.title)))}</span></span>` +
+          `<span class="th">${ph ? smallImg(ph, 'alt="" draggable="false" loading="lazy"') : ''}<span class="mono"${ph ? ' hidden' : ''}>${E(initials(tr(p.title)))}</span></span>` +
           `<span class="cap"><span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</span></button>`;
       }).join('');
       const el = this.addPanel('idx', L * 2 + cols * colW + (cols - 1) * gap, head +
@@ -1634,7 +1657,7 @@ const post2D = {
      moyennes, puis se recalcule à mesure que les images arrivent. place(ratios) rend { w, boxes: [[x, y, l, h]…], cap: [x, y, l] }. */
   addFit(cls, list, place, cap = '') {
     const R = list.map(() => 1.5);
-    const el = this.addPanel('media comp ' + cls, 400, list.map(m => `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false">`).join('') + (cap ? `<p class="mcap2">${escapeHTML(cap)}</p>` : ''));
+    const el = this.addPanel('media comp ' + cls, 400, list.map(m => `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" decoding="async">`).join('') + (cap ? `<p class="mcap2">${escapeHTML(cap)}</p>` : ''));
     const ims = [...el.querySelectorAll('img')], pc = el.querySelector('.mcap2'), px = v => Math.round(v) + 'px';
     const apply = relayout => {
       const L = place(R);
@@ -1693,7 +1716,7 @@ const post2D = {
   },
   addMat(m) {   // marie-louise : l'image sur fond blanc, avec une marge égale tout autour ; la légende dans la marge du bas
     const M = 46, cap = m.caption ? tr(m.caption).trim() : '', ih = 355 - 2 * M;
-    const el = this.addPanel('media mat', Math.round(ih * 1.5 + 2 * M), `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" style="left:${M}px;top:${M}px;height:${ih}px">` + (cap ? `<p class="mcap2" style="left:${M}px;top:${355 - M + 10}px">${escapeHTML(cap)}</p>` : ''));
+    const el = this.addPanel('media mat', Math.round(ih * 1.5 + 2 * M), `<img src="${escapeHTML(url(m.src))}" alt="" draggable="false" decoding="async" style="left:${M}px;top:${M}px;height:${ih}px">` + (cap ? `<p class="mcap2" style="left:${M}px;top:${355 - M + 10}px">${escapeHTML(cap)}</p>` : ''));
     const im = el.querySelector('img');
     const fit = () => { if (!im.naturalWidth) return; const w = Math.round(im.naturalWidth * ih / im.naturalHeight); el.style.width = (w + 2 * M) + 'px'; const c = el.querySelector('.mcap2'); if (c) c.style.width = w + 'px'; this.layout(); };
     im.addEventListener('load', fit); if (im.complete) fit();
@@ -1833,7 +1856,7 @@ const post2D = {
       f.dataset.i = j; Object.assign(f.style, { left: x + 'px', top: y + 'px', width: sz + 'px', height: sz + 'px' });
       const other = !p.thumb && (personProjects(p).find(q => q !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
       const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
-      f.innerHTML = (p.thumb ? `<img src="${escapeHTML(url(p.thumb))}" alt="" draggable="false">` : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<b class="n">${num(j)}</b>`;
+      f.innerHTML = (p.thumb ? smallImg(p.thumb, 'alt="" draggable="false"') : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<b class="n">${num(j)}</b>`;
       f.setAttribute('aria-label', tr(p.title));
       inner.appendChild(f);
       colW = Math.max(colW, sz); y += sz + cap; right = Math.max(right, x + sz);
@@ -1945,12 +1968,12 @@ const postV = {
       return `<figure class="${cls} pv-embed" data-kind="${kind}" data-id="${E(id || '')}"><div class="pv-cover">${poster ? `<img src="${E(poster)}" alt="">` : own ? `<img data-vimeo="${E(id)}" alt="">` : ''}<button type="button" class="play" aria-label="${E(ui('play'))}"></button><span class="brand">${kind === 'youtube' ? 'YouTube' : 'Vimeo'}</span></div>${fc}</figure>`;
     }
     if (kind === 'video') return `<figure class="${cls}"><video src="${E(url(m.src) + (/#t=/.test(m.src) ? '' : '#t=0.1'))}" controls playsinline preload="metadata"></video>${fc}</figure>`;
-    return `<figure class="${cls}"><img src="${E(url(m.src))}" alt="" loading="lazy">${fc}</figure>`;
+    return `<figure class="${cls}"><img src="${E(url(m.src))}" alt="" loading="lazy" decoding="async">${fc}</figure>`;
   },
   /* les images à la suite, en rythme : pleine largeur, marie-louise, deux côte à côte, quatre en deux rangs… toujours entières */
   gallery(list) {
     const isImg = m => mediaKind(m.src) === 'image', out = [], E = escapeHTML;
-    const row = two => `<div class="pv-row">${two.map(m => `<img src="${E(url(m.src))}" alt="" loading="lazy">`).join('')}</div>`;
+    const row = two => `<div class="pv-row">${two.map(m => `<img src="${E(url(m.src))}" alt="" loading="lazy" decoding="async">`).join('')}</div>`;
     const CYCLE = ['full', 'mat', 'pair', 'full', 'quad', 'full', 'big2', 'mat', 'full', 'pair'], NEED = { pair: 2, quad: 4, big2: 3 };
     const id = String(this.post.id || ''); let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
     let k = h % CYCLE.length, i = 0;
@@ -1975,19 +1998,19 @@ const postV = {
     const E = escapeHTML, skill = projectsOf(CONTENT, post).length > 0;
     return `<section class="pv-rel"><h2 class="pv-h">${E(ui(skill ? 'skillProjects' : 'together'))} <span>${projects.length}</span></h2><div class="pv-tiles">` +
       projects.map(p => { const ph = photoOf(p), meta = [p.date, tr(p.place)].filter(Boolean).join(' | ');
-        return `<button type="button" class="go pv-tile" data-go="${E(p.id)}">${ph ? `<img src="${E(url(ph))}" alt="" loading="lazy">` : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</button>`; }).join('') + '</div></section>';
+        return `<button type="button" class="go pv-tile" data-go="${E(p.id)}">${ph ? smallImg(ph, 'alt="" loading="lazy"') : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</button>`; }).join('') + '</div></section>';
   },
   team(post) {
     const E = escapeHTML, team = (post.team || []).map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
     return `<section class="pv-team"><h2 class="pv-h">${E(ui('who'))}</h2><div class="pv-faces">` +
       team.map(p => { const go = onSite(p) && p.published !== false, tag = go ? 'button' : 'div';
-        return `<${tag} ${go ? `type="button" class="go pv-face" data-go="${E(p.id)}"` : 'class="pv-face"'}>${p.thumb ? `<img src="${E(url(p.thumb))}" alt="" loading="lazy">` : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${tr(p.subtitle).trim() ? `<span class="m">${E(tr(p.subtitle).trim())}</span>` : ''}</${tag}>`; }).join('') +
+        return `<${tag} ${go ? `type="button" class="go pv-face" data-go="${E(p.id)}"` : 'class="pv-face"'}>${p.thumb ? smallImg(p.thumb, 'alt="" loading="lazy"') : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${tr(p.subtitle).trim() ? `<span class="m">${E(tr(p.subtitle).trim())}</span>` : ''}</${tag}>`; }).join('') +
       '</div>' + (post.credits ? `<p class="pv-with"><i>${E(ui('with'))}</i> ${E(post.credits)}</p>` : '') + '</section>';
   },
   next(post) {   // le projet suivant de la section, pour enchaîner sans repasser par la 3D
     const list = (P.data && P.data.list) || [], i = list.indexOf(post); if (list.length < 2 || i < 0) return '';
     const n = list[(i + 1) % list.length], ph = photoOf(n), E = escapeHTML;
-    return `<button type="button" class="go pv-next" data-go="${E(n.id)}"><span class="l">${E(ui('nextProject'))} →</span><span class="t">${E(tr(n.title).trim())}</span>${ph ? `<img src="${E(url(ph))}" alt="" loading="lazy">` : ''}</button>`;
+    return `<button type="button" class="go pv-next" data-go="${E(n.id)}"><span class="l">${E(ui('nextProject'))} →</span><span class="t">${E(tr(n.title).trim())}</span>${ph ? smallImg(ph, 'alt="" loading="lazy"') : ''}</button>`;
   },
   wire() {
     postvEl.querySelector('.pv-x').addEventListener('click', () => closePost());
@@ -2504,7 +2527,7 @@ function setupHomeVideo() {
     const posts = CONTENT.posts.filter(p => p.published !== false && local(p.thumb)), first = posts.filter(p => p.section === work.id);
     const mix = list => list.map(p => p.thumb).sort(() => Math.random() - 0.5);
     const pick = [...new Set([...mix(first), ...mix(posts)])].slice(0, 10);   // d'abord les réalisations
-    hv.pics = pick.map(x => { const im = new Image(); im.decoding = 'async'; im.src = url(x); return im; });
+    hv.pics = pick.map(x => { const im = new Image(), t = thumbOf(x); im.decoding = 'async'; if (t !== x) im.onerror = () => { im.onerror = null; im.src = url(x); }; im.src = url(t); return im; });   // la grille de carrés n'a pas besoin de plus que la vignette
   }
   buildHomeDock(cfg.controls !== false);
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
@@ -2736,7 +2759,9 @@ function toggleStory(open) {
   else { box.classList.remove('on'); storyT = setTimeout(() => { if (!box.classList.contains('on')) box.hidden = true; }, 700); }
 }
 window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
-function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); hv.W = Math.max(1, Math.round(r.width)); hv.H = Math.max(1, Math.round(r.height)); hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.gl) { hv.gl.c.width = hv.W * d; hv.gl.c.height = hv.H * d; hv.gl.dpr = d; } if (hv.reelOn) hvReelFit(); }
+function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1), w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+  if (r.width < 2 || r.height < 2 || (w === hv.W && h === hv.H && d === hv.dpr)) return;   // accueil caché ou même taille : on ne réalloue pas les deux canvas (très coûteux)
+  hv.W = w; hv.H = h; hv.dpr = d; hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.gl) { hv.gl.c.width = hv.W * d; hv.gl.c.height = hv.H * d; hv.gl.dpr = d; } if (hv.reelOn) hvReelFit(); }
 /* Le panneau de réglages de la vidéo, comme une console de lumière : des faders, des boutons à témoin, la grille et la cadence en direct.
    Raccourcis : K ouvre ou ferme, C couleur, I inverser, V caméra. */
 const HV_FADERS = [
@@ -3411,6 +3436,26 @@ function sceneSig() {
   });
   return s;
 }
+/* Les shaders (petits programmes de la carte graphique) se compilent pendant l'accueil, en arrière-plan quand le navigateur le permet,
+   au lieu de bloquer la première image de la 3D (jusqu'à une seconde et demie sur une machine modeste) */
+function warmShaders() {
+  if (!renderer.compileAsync) return;
+  const g = new LineSegmentsGeometry(); g.setPositions([0, 0, 0, 1, 1, 1]);
+  const lines = new THREE.Scene(); LINE_MATS.forEach(m => lines.add(new LineSegments2(g, m)));
+  /* compilés « dans » la vraie scène (mêmes lumières, donc les mêmes programmes), puis un dessin dans une image de 1 pixel :
+     c'est là que le navigateur finit vraiment le travail, pendant l'accueil plutôt qu'au clic */
+  const prime = () => {
+    if (homeGone) { g.dispose(); return; }   // déjà dans la 3D : plus rien à préparer
+    const tmp = new THREE.Group();   // dessiné sur la vraie toile, cachée sous l'accueil : exactement les mêmes programmes qu'au clic
+    [...KEEP.children, ...lines.children].forEach(o => { const c = o.clone(); c.frustumCulled = false; tmp.add(c); });
+    scene.add(tmp);
+    try { renderer.render(scene, camera); } catch (e) {}
+    scene.remove(tmp); try { renderer.render(scene, camera); } catch (e) {} g.dispose();
+  };
+  const go = () => Promise.all([KEEP, lines, scene].map(sc => renderer.compileAsync(sc, camera, scene).catch(() => {}))).then(() => (window.requestIdleCallback || (f => setTimeout(f, 50)))(prime, { timeout: 800 }));
+  (window.requestIdleCallback || (f => setTimeout(f, 200)))(go, { timeout: 1500 });
+}
+let drewAt = 0;
 function frame(now) {
   const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now; clock += dt; frames = dt * FPS;
   if (!homeGone && tickerDots && !R0.classList.contains('hc-late')) drawTicker(dt);   // caché pendant l'ouverture : il ne calcule rien
@@ -3419,7 +3464,7 @@ function frame(now) {
     updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
     const busy = tweens.length || now < wakeUntil || now < behindUntil || isClicking || closeTurn || orbitE || now - lastDraw > 2000;
     const sig = sceneSig();
-    if (busy || sig !== lastSig) { renderer.render(scene, camera); lastDraw = now; lastSig = sig; }
+    if (busy || sig !== lastSig) { renderer.render(scene, camera); if (now - drewAt < 100 && homeGone && !document.hidden) dprGovern(now, now - drewAt); drewAt = now; lastDraw = now; lastSig = sig; }
   }
   requestAnimationFrame(frame);
 }
@@ -3610,6 +3655,7 @@ function introWatch() {
     sections.forEach((s, i) => s.place(i));
     await Promise.race([Promise.all(TYPO_LINKS).then(fontsReady), new Promise(r => setTimeout(r, 3000))]);   // cartes et fiches se dessinent directement avec les bonnes polices
     assetsLoaded = true;
+    warmShaders();   // pendant que l'accueil joue : la 3D sera prête à s'afficher sans à-coup au clic
     { const sp = document.getElementById('seo-page'); if (sp) sp.remove(); }   // le texte des robots : le site est prêt, il prend le relais
     if (clickedEnter || !isHomeHash() || (PREVIEW && PREVIEW.start)) enterToTheWeb();
     if (deepPost) { const id = deepPost, t0 = performance.now(), wait = setInterval(() => { if (inputEnabled || performance.now() - t0 > 8000) { clearInterval(wait); if (inputEnabled) goToPost(id); } }, 120); }

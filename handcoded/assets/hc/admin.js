@@ -174,6 +174,21 @@ function fileURL(path) {
 function stageFile(path, blob) {
   const old = S.staged.get(path); if (old) URL.revokeObjectURL(old.url);
   S.staged.set(path, { blob, url: URL.createObjectURL(blob) }); S.deletes.delete(path);
+  if (isRaster(path)) makeThumb(blob).then(t => { if (!t || S.staged.get(path)?.blob !== blob) return; const o = S.staged.get(path + TN); if (o) URL.revokeObjectURL(o.url); S.staged.set(path + TN, { blob: t, url: URL.createObjectURL(t) }); }).catch(() => {});
+}
+/* Vignette de chaque image : « photo.jpg.t.webp », 560 px sur le petit côté au plus. Les cartes 3D et les sommaires du site la chargent
+   à la place de l'image entière (5 à 10 fois plus légère). Sans vignette, le site prend l'original : rien ne casse. */
+const TN = '.t.webp';
+const isRaster = p => /^media\/.+\.(jpe?g|png|webp)$/i.test(p) && !p.endsWith(TN);
+const keepStaged = (p, used) => used.has(p) || (p.endsWith(TN) && used.has(p.slice(0, -TN.length)));
+async function makeThumb(blob) {
+  if (!window.createImageBitmap) return null;
+  const bm = await createImageBitmap(blob);
+  const k = Math.min(1, 560 / Math.min(bm.width, bm.height), 1100 / Math.max(bm.width, bm.height));
+  const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(bm.width * k)); c.height = Math.max(1, Math.round(bm.height * k));
+  c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height); if (bm.close) bm.close();
+  const t = await new Promise(r => c.toBlob(r, 'image/webp', 0.76));
+  return t && t.type === 'image/webp' ? t : null;   // un navigateur qui ne sait pas écrire le WebP : pas de vignette, l'original servira
 }
 function usedPaths(c = S.content) {
   const set = new Set();
@@ -223,7 +238,7 @@ async function saveDraft() {
     if (!isDirty()) { await kvDel(S.draftKey); return; }
     const used = usedPaths();
     await kvSet(S.draftKey, { content: S.content, base: S.base, head: S.head, at: Date.now(), deletes: [...S.deletes],
-      staged: [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob })) });
+      staged: [...S.staged].filter(([p]) => keepStaged(p, used)).map(([path, s]) => ({ path, blob: s.blob })) });
   } catch (e) { console.warn('brouillon non sauvegardé', e); }
 }
 /* Fusion à trois : base (le site quand le brouillon a commencé), mine (le brouillon), theirs (le site en ligne maintenant).
@@ -338,7 +353,7 @@ async function publish() {
       p.id = id;
     });
     const used = usedPaths();
-    const files = [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob }));
+    const files = [...S.staged].filter(([p]) => keepStaged(p, used)).map(([path, s]) => ({ path, blob: s.blob }));
     if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // copies en JavaScript pour ouvrir le site en local (double-clic sur index.html)
       files.push({ path: 'content/content.js', text: 'window.HC_CONTENT = ' + JSON.stringify(S.content) + ';\n' });
       if (JSON.stringify(JSON.parse(S.base).models) !== JSON.stringify(S.content.models)) { updateStatus('Préparation des modèles 3D…'); files.push({ path: 'models/models.js', text: await modelsJS() }); }
@@ -1396,13 +1411,13 @@ function viewMedia() {
     let files = [];
     try { files = S.files || (S.files = await S.backend.listFiles(['media/', 'models/'])); }
     catch (e) { fill(box, h('div', { class: 'empty' }, 'Impossible de lister les fichiers : ' + humanError(e))); return; }
-    const all = new Map(files.filter(f => !/(^|\/)\./.test(f.path)).map(f => [f.path, { ...f, state: 'online' }]));
-    S.staged.forEach((s, path) => all.set(path, { path, size: s.blob.size, state: 'new' }));
+    const all = new Map(files.filter(f => !/(^|\/)\./.test(f.path) && !f.path.endsWith(TN)).map(f => [f.path, { ...f, state: 'online' }]));   // les vignettes suivent leur image : on ne les montre pas
+    S.staged.forEach((s, path) => { if (!path.endsWith(TN)) all.set(path, { path, size: s.blob.size, state: 'new' }); });
     const rows = [...all.values()].sort((a, b) => a.path.localeCompare(b.path));
     const builtinFile = path => /^models\/[^/]+$/.test(path);   // les fichiers d'origine, à la racine de models/
     const unused = rows.filter(r => r.state === 'online' && !used.has(r.path) && !S.deletes.has(r.path) && !builtinFile(r.path));
     const selected = new Set();
-    const delBtn = btn('Supprimer la sélection', () => { selected.forEach(p => S.deletes.add(p)); change({ nav: true }); toast(`${selected.size} fichier${selected.size > 1 ? 's' : ''} sera supprimé à la prochaine publication.`); renderMain(); }, 'sm danger', { disabled: true });
+    const delBtn = btn('Supprimer la sélection', () => { selected.forEach(p => { S.deletes.add(p); if (files.some(f => f.path === p + TN)) S.deletes.add(p + TN); }); change({ nav: true }); toast(`${selected.size} fichier${selected.size > 1 ? 's' : ''} sera supprimé à la prochaine publication.`); renderMain(); }, 'sm danger', { disabled: true });
     const sync = () => { delBtn.disabled = !selected.size; delBtn.textContent = selected.size ? `Supprimer la sélection (${selected.size})` : 'Supprimer la sélection'; };
     const table = h('table', { class: 'files' },
       h('thead', null, h('tr', null, h('th', { style: { width: '30px' } }), h('th', { style: { width: '60px' } }), h('th', null, 'Fichier'), h('th', null, 'Utilisé par'), h('th', null, 'Taille'), h('th', null, 'État'))),

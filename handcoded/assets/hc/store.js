@@ -243,6 +243,7 @@ export class StaticBackend {
   constructor(base = '') { this.base = base; this.kind = 'static'; }
   async load() {
     if (window.HC_CONTENT) return normalizeContent(structuredClone(window.HC_CONTENT));
+    if (window.HC_CONTENT_P && !this.base) { const early = await window.HC_CONTENT_P; window.HC_CONTENT_P = null; if (early) return normalizeContent(early); }   // déjà demandé par la page, pendant le chargement du moteur
     const r = await fetch(this.base + 'content/content.json?v=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('content/content.json : ' + r.status);
     return normalizeContent(await r.json());
