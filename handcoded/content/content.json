@@ -1645,7 +1645,9 @@
     "hardware",
     "tools",
     "concept-design",
-    "project-management"
+    "project-management",
+    "fabriquer",
+    "accompagner"
    ],
    "logos": [
     "media/sharjah-light-festival/sharjahlogo-va6m.jpg",
@@ -1796,7 +1798,7 @@
   {
    "id": "sat",
    "section": "work",
-   "order": 21,
+   "order": 20,
    "published": true,
    "title": {
     "en": "S.A.T.",
@@ -1901,7 +1903,7 @@
    "logos": [
     "media/logos/mta-festival.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "ox",
@@ -2490,7 +2492,7 @@
   {
    "id": "viktoria-modesta",
    "section": "work",
-   "order": 20,
+   "order": 19,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -2525,6 +2527,12 @@
     "es": "<p><strong>Nuestro papel</strong> Mapping de vídeo, tracking, electrónica, software en tiempo real.</p><p>Viktoria Modesta es una cantante cuya pierna biónica está en el centro de sus espectáculos. Para el Music Tech Fest 2016 lanzó un reto a un equipo de artistas e ingenieros: controlar la música y la luz con los movimientos de su pierna y sus brazos, su voz y su cerebro.</p><p>El espectáculo se construyó en menos de una semana: sensores en la pierna y el cuerpo, música interactiva, traje luminoso, piel LED y sensores cerebrales. Concebimos el mapping interactivo que viste el escenario y el traje luminoso, conectados en directo a los gestos de la cantante.</p><p>Presentado en el Funkhaus de Berlín el 28 de mayo de 2016.</p><h3>Créditos</h3><ul><li><strong>Producción</strong> Michela Magas, Andrew Dubber</li><li><strong>Vestuario</strong> Joanna Hir, Winde Rienstra</li><li><strong>Mapping interactivo y traje luminoso</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li><li><strong>Sensores de la pierna y música interactiva</strong> Tracy Redhead</li><li><strong>Control de la luz</strong> Jonathan Rutherford</li><li><strong>Piel LED</strong> Katia Vega, Xin Liu, MIT Media Lab</li><li><strong>Sensores cerebrales</strong> Muarts</li></ul><h3>Prensa</h3><ul><li>«If Viktoria represented the potential transformation of the body, then the venue itself represented possibilities in space.» <a href=\"https://cdm.link/watch-interdisciplinary-lab-can-transform-space-body/\">Peter Kirn, CDM, 2017</a></li></ul>"
    },
    "media": [
+    {
+     "src": "https://www.youtube.com/watch?v=u63XuItu63o"
+    },
+    {
+     "src": "media/viktoria-modesta/13350297-1738476413085757-8641520356346561955-o--c2ex.jpg"
+    },
     {
      "src": "media/viktoria-modesta/vm-final-2-bu5y.jpg",
      "credit": ""
@@ -2564,6 +2572,39 @@
     {
      "src": "media/viktoria-modesta/img-5845-bg02.jpg",
      "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=ueYwDGosxiM"
+    },
+    {
+     "src": "media/viktoria-modesta/13308543-10153688204657781-1746321319789574018-o-3m9d.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13317009-1738476649752400-6471302384293373363-o-c7mf.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13317058-1738476036419128-8532999037730676359-o-gs8y.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13320853-1738476339752431-9211143984896636809-o-vz9a.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13329369-1738476756419056-3733453378695006176-o-en10.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13329533-10153688197457781-708764019252486341-o-9yj9.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13329577-1738476039752461-1788910561708207885-o-wnya.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/13332899-10153688190512781-689008266638303432-n-s1d3.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/img-5892-nd0j.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/img-7462-jx8i.jpg"
     }
    ],
    "link": "http://www.viktoriamodesta.com/",
@@ -2595,7 +2636,7 @@
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/viktoria-modesta.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "beardyman",
@@ -2691,7 +2732,7 @@
   {
    "id": "tgic",
    "section": "work",
-   "order": 19,
+   "order": 24,
    "published": true,
    "title": {
     "en": "TGIC",
@@ -2716,15 +2757,19 @@
     "collab",
     "touring"
    ],
-   "thumb": "media/covers/tgic.jpg",
+   "thumb": "media/tgic/romaintardycouncil-6uj8.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Real-time software, generative visuals.</p><p>A large light and sound installation, in a 25-metre circle, fed in real time by the most searched terms on Google in the host country. Visitors stand in the middle of light, words and computer-generated chants: an involuntary self-portrait of our networked society. Who are we really, and what do we confide to Google in the intimacy of our phone?</p><p>We wrote the original software: live collection of the searches, voice synthesis, and the staging in light and sound of a stream that changes with every country and every hour.</p><p>Created at the Into the Great Wide Open festival on the island of Vlieland, Netherlands, in September 2018, with MU, then at GLOW Eindhoven 2018 and on tour.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Romain Tardy</li><li><strong>Music</strong> Loran Delforge</li><li><strong>Original software development</strong> Hand Coded</li><li><strong>Production</strong> Into the Great Wide Open, with MU art space; GLOW Eindhoven with MU and STRP</li><li><strong>Photos</strong> Sander Heezen</li></ul><h3>Press</h3><ul><li>“An image that shows humanity as it really is, not how it wants to be seen. Software programming: Hand Coded.” <a href=\"https://gloweindhoven.nl/en/project/the-great-indecision-council/\">GLOW Eindhoven, 2018</a></li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Logiciel temps réel, image générative.</p><p>Une grande installation de lumière et de son, dans un cercle de 25 mètres, nourrie en temps réel par les termes les plus recherchés sur Google dans le pays qui l’accueille. Les visiteurs se tiennent au milieu de la lumière, des mots et de chants générés par ordinateur : un autoportrait involontaire de notre société en réseau. Qui sommes-nous vraiment, et que confions-nous à Google dans l’intimité de notre téléphone ?</p><p>Nous avons écrit le logiciel original : la collecte des recherches en direct, la synthèse des voix, la mise en lumière et en son d’un flux qui change à chaque pays et à chaque heure.</p><p>Créée au festival Into the Great Wide Open, sur l’île de Vlieland, aux Pays-Bas, en septembre 2018, avec MU, puis à GLOW Eindhoven 2018 et en tournée.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Musique</strong> Loran Delforge</li><li><strong>Développement logiciel original</strong> Hand Coded</li><li><strong>Production</strong> Into the Great Wide Open, avec MU art space ; GLOW Eindhoven avec MU et STRP</li><li><strong>Photos</strong> Sander Heezen</li></ul><h3>Presse</h3><ul><li>« An image that shows humanity as it really is, not how it wants to be seen. Software programming: Hand Coded. » <a href=\"https://gloweindhoven.nl/en/project/the-great-indecision-council/\">GLOW Eindhoven, 2018</a></li></ul>",
+    "fr": "<p><strong>Notre rôle</strong> Logiciel temps réel, image générative.</p><p>Une grande installation de lumière et de son, dans un cercle de 25 mètres, nourrie en temps réel par les termes les plus recherchés sur Google dans le pays qui l’accueille. Les visiteurs se tiennent au milieu de la lumière, des mots et de chants générés par ordinateur : un autoportrait involontaire de notre société en réseau. Qui sommes-nous vraiment, et que confions-nous à Google dans l’intimité de notre téléphone ?</p><p>Nous avons écrit le logiciel original : la collecte des recherches en direct, la synthèse des voix, la mise en lumière et en son d’un flux qui change à chaque pays et à chaque heure.</p><p>Créée au festival Into the Great Wide Open, sur l’île de Vlieland, aux Pays-Bas, en septembre 2018, avec MU, puis à GLOW Eindhoven 2018 et en tournée.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Romain Tardy</li><li><strong>Musique</strong> Loran Delforge</li><li><strong>Développement logiciel original</strong> Hand Coded : Cyril Laurier</li><li><strong>Production</strong> Into the Great Wide Open, avec MU art space ; GLOW Eindhoven avec MU et STRP</li><li><strong>Photos</strong> Sander Heezen</li></ul><h3>Presse</h3><ul><li>« An image that shows humanity as it really is, not how it wants to be seen. Software programming: Hand Coded. » <a href=\"https://gloweindhoven.nl/en/project/the-great-indecision-council/\" target=\"_blank\" rel=\"noopener\">GLOW Eindhoven, 2018</a></li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Programari en temps real, imatge generativa.</p><p>Una gran instal·lació de llum i so, en un cercle de 25 metres, alimentada en temps real pels termes més cercats a Google al país que l’acull. Els visitants són al mig de la llum, de les paraules i de cants generats per ordinador: un autoretrat involuntari de la nostra societat en xarxa. Qui som realment, i què confiem a Google en la intimitat del nostre telèfon?</p><p>Vam escriure el programari original: la recollida de les cerques en directe, la síntesi de les veus, la posada en llum i en so d’un flux que canvia a cada país i a cada hora.</p><p>Creada al festival Into the Great Wide Open, a l’illa de Vlieland, als Països Baixos, el setembre del 2018, amb MU, després a GLOW Eindhoven 2018 i en gira.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Música</strong> Loran Delforge</li><li><strong>Desenvolupament del programari original</strong> Hand Coded</li><li><strong>Producció</strong> Into the Great Wide Open, amb MU art space; GLOW Eindhoven amb MU i STRP</li><li><strong>Fotos</strong> Sander Heezen</li></ul><h3>Premsa</h3><ul><li>«An image that shows humanity as it really is, not how it wants to be seen. Software programming: Hand Coded.» <a href=\"https://gloweindhoven.nl/en/project/the-great-indecision-council/\">GLOW Eindhoven, 2018</a></li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Software en tiempo real, imagen generativa.</p><p>Una gran instalación de luz y sonido, en un círculo de 25 metros, alimentada en tiempo real por los términos más buscados en Google en el país que la acoge. Los visitantes están en medio de la luz, de las palabras y de cantos generados por ordenador: un autorretrato involuntario de nuestra sociedad en red. ¿Quiénes somos realmente, y qué le confiamos a Google en la intimidad de nuestro teléfono?</p><p>Escribimos el software original: la recogida de las búsquedas en directo, la síntesis de las voces, la puesta en luz y en sonido de un flujo que cambia en cada país y a cada hora.</p><p>Creada en el festival Into the Great Wide Open, en la isla de Vlieland, Países Bajos, en septiembre de 2018, con MU, después en GLOW Eindhoven 2018 y en gira.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Romain Tardy</li><li><strong>Música</strong> Loran Delforge</li><li><strong>Desarrollo del software original</strong> Hand Coded</li><li><strong>Producción</strong> Into the Great Wide Open, con MU art space; GLOW Eindhoven con MU y STRP</li><li><strong>Fotos</strong> Sander Heezen</li></ul><h3>Prensa</h3><ul><li>«An image that shows humanity as it really is, not how it wants to be seen. Software programming: Hand Coded.» <a href=\"https://gloweindhoven.nl/en/project/the-great-indecision-council/\">GLOW Eindhoven, 2018</a></li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/tgic/img-6760-copy-cleanup-r1za.jpg"
+    }
+   ],
    "link": "https://romaintardy.com/The-Great-Indecision-Council-2018",
    "team": [
     "romain-tardy",
@@ -2753,7 +2798,7 @@
    "logos": [
     "media/logos/into-the-great-wide-open.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "bionic-orchestra",
@@ -3125,7 +3170,7 @@
   {
    "id": "methods",
    "section": "work",
-   "order": 22,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Methods",
@@ -3185,12 +3230,12 @@
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "kinematope",
    "section": "work",
-   "order": 23,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Kinematope",
@@ -3286,7 +3331,7 @@
    "logos": [
     "media/fundacion-telefonica/screenshot-2026-11-06-at-17-21-06-6h2j.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "gyrotope",
@@ -6523,7 +6568,7 @@
   {
    "id": "upperground",
    "section": "work",
-   "order": 24,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Upperground",
@@ -6605,7 +6650,7 @@
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "albatros",
