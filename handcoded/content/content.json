@@ -11389,6 +11389,280 @@
    "author": "",
    "logos": [],
    "updated": "2026-11-07"
+  },
+  {
+   "id": "nouveau-contenu",
+   "section": "work",
+   "order": 45,
+   "published": true,
+   "title": {
+    "en": "Kinematope (Pommery)",
+    "fr": "Kinematope (Pommery)",
+    "ca": "Kinematope (Pommery)",
+    "es": "Kinematope (Pommery)"
+   },
+   "subtitle": {
+    "en": "Pablo Valbuena",
+    "fr": "Pablo Valbuena",
+    "ca": "Pablo Valbuena",
+    "es": "Pablo Valbuena"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "advertising",
+    "collab"
+   ],
+   "thumb": "media/nouveau-contenu/68639-12419735-hjxw.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "Assitance technique pour le logiciel de controle de l'installation",
+    "ca": "",
+    "es": ""
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu/53-kinematope-pommery-pablovalbuena-03-1200-ll18.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu/kinematope-pommery-pablovalbuena-mail-m-234o.jpg"
+    }
+   ],
+   "link": "",
+   "team": [
+    "cyril",
+    "pablo-valbuena"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "Reims",
+     "lat": 49.26,
+     "lon": 4.03
+    }
+   ],
+   "skills": [
+    "accompagner"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/pommery.png"
+   ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "nouveau-contenu-4",
+   "section": "work",
+   "order": 46,
+   "published": true,
+   "title": {
+    "en": "RAS Ubiquitous",
+    "fr": "RAS Ubiquitous",
+    "ca": "RAS Ubiquitous",
+    "es": "RAS Ubiquitous"
+   },
+   "subtitle": {
+    "en": "Mouawad + Laurier",
+    "fr": "Mouawad + Laurier",
+    "ca": "Mouawad + Laurier",
+    "es": "Mouawad + Laurier"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "collab"
+   ],
+   "thumb": "media/nouveau-contenu-4/arsincampania-captagora-231026-52-lc9c.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu-4/h4a6400-audouin-consulting-tvpe.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6479-audouin-consulting-v9nb.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6491-audouin-consulting-9q9n.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6594-audouin-consulting-tj2u.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-50-ktb7.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-51-n7ar.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-52-0lw4.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-53-wr2w.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-55-mfza.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-114-62kt.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-115-mhwc.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-170-6tz3.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-171-axoz.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-172-zrtb.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-173-h6se.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-174-aau1.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-175-zlxr.jpg"
+    }
+   ],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "accompagner",
+    "fabriquer"
+   ],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "nouveau-contenu-5",
+   "section": "work",
+   "order": 47,
+   "published": true,
+   "title": {
+    "en": "Wizz",
+    "fr": "Wizz",
+    "ca": "Wizz",
+    "es": "Wizz"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "advertising"
+   ],
+   "thumb": "media/nouveau-contenu-5/shape1-fv90.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "Wizz jeu en ligne pour voter en discoteque",
+    "ca": "",
+    "es": ""
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu-5/wizz6-4ht4.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/ecran-pres-cn-acx8.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/ecran-pres-fight-820p.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/launchparty2-34kk.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-1-50-zr5s.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-10-51-nec1.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-11-30-jszw.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-23-at-12-57-vuzj.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2-xtxm.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2u6e.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-09-at-7-12-p7ju.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-10-at-2-36-tihq.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/screen1-ak0g.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/shape1-cxa8.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/shape2-6r3q.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/wizz7-yte7.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/wizz8-k51u.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/wizzwars-v3-kjys.jpg"
+    }
+   ],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "explorer",
+    "fabriquer",
+    "accompagner",
+    "imaginer"
+   ],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-09"
   }
  ]
 }

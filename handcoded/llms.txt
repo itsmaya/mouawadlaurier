@@ -50,6 +50,9 @@ Interactive art and technology studio based in Barcelona, founded in 2008. Not t
 - [Coors](https://mouawadlaurier.com/handcoded/en/coors/): Choose your beer · gesture interface · 2015 · New York. A Kinect interface to pick your beer by hand: stand in front of the screen, point, and the menu answers the gesture. We developed the whole interaction system, the interface and the animations, with one simple requirement: it has to work every time, for anyone, smoothly, in a public place where…
 - [The Fat-Site](https://mouawadlaurier.com/handcoded/en/fat-site-2008/): Fat-Man Collective, before Hand Coded · 2008 · London, Barcelona. Launched on 08.08.08: a real-time 3D website, in the browser, built with Papervision3D. Each section is an object surrounded by cards you spin, open and browse with the mouse or the keyboard. The site you are looking at runs on its engine: the code was ported from ActionScript 3 to Three.js, and…
 - [Nokia Navigator](https://mouawadlaurier.com/handcoded/en/nokia-navigator/): Fat-Man Collective with Work Club · 2008 · London. An interactive video player for Nokia Maps, with the agency Work Club: the visitor guides a lost character across Canvey Island, in Essex, while the Nokia Personal Navigators show how to find your way with the phone.
+- [Kinematope (Pommery)](https://mouawadlaurier.com/handcoded/en/nouveau-contenu/): Pablo Valbuena. Assitance technique pour le logiciel de controle de l'installation
+- [RAS Ubiquitous](https://mouawadlaurier.com/handcoded/en/nouveau-contenu-4/): Mouawad + Laurier
+- [Wizz](https://mouawadlaurier.com/handcoded/en/nouveau-contenu-5/). Wizz jeu en ligne pour voter en discoteque
 
 ## Expertise
 - [Imagine](https://mouawadlaurier.com/handcoded/en/imaginer/): Concepts for brands and venues. For a brand, a launch or a venue, we invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds.
