@@ -3872,13 +3872,18 @@
    "team": [
     "cyril"
    ],
-   "credits": "",
+   "credits": "Michela Magas",
    "location": null,
    "spots": [
     {
      "city": "London",
      "lat": 51.51,
      "lon": -0.13
+    },
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
     }
    ],
    "author": "Michela Magas & Cyril Laurier",
@@ -7169,7 +7174,9 @@
     "real-time",
     "audio",
     "generative",
-    "concept-design"
+    "concept-design",
+    "imaginer",
+    "fabriquer"
    ],
    "author": "Hand Coded",
    "logos": [
