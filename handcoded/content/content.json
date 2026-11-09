@@ -11930,6 +11930,280 @@
    "author": "",
    "logos": [],
    "updated": "2026-11-09"
+  },
+  {
+   "id": "audio-processing",
+   "section": "work",
+   "order": 47,
+   "published": true,
+   "title": {
+    "en": "Audio Processing",
+    "fr": "Audio Processing",
+    "ca": "Audio Processing",
+    "es": "Audio Processing"
+   },
+   "subtitle": {
+    "en": "Eventide",
+    "fr": "Eventide",
+    "ca": "Eventide",
+    "es": "Eventide"
+   },
+   "place": {
+    "en": "New York",
+    "fr": "New York",
+    "ca": "New York",
+    "es": "New York"
+   },
+   "date": "",
+   "tags": [
+    "ai",
+    "software"
+   ],
+   "thumb": "media/nouveau-contenu/eventide-rs43.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [
+    "cyril"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "New York",
+     "lat": 40.71,
+     "lon": -74
+    }
+   ],
+   "skills": [
+    "fabriquer",
+    "audio",
+    "real-time"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/eventide.png"
+   ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "recherche",
+   "section": "work",
+   "order": 48,
+   "published": true,
+   "title": {
+    "en": "Research",
+    "fr": "Recherche",
+    "ca": "Ricerca",
+    "es": "Ricerca"
+   },
+   "subtitle": {
+    "en": "Sony CSL",
+    "fr": "Sony CSL",
+    "ca": "Sony CSL",
+    "es": "Sony CSL"
+   },
+   "place": {
+    "en": "Paris",
+    "fr": "Paris",
+    "ca": "Paris",
+    "es": "Paris"
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "media/nouveau-contenu-4/screenshot-2026-11-10-at-00-48-31-5pf3.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "https://csl.sony.fr/",
+   "team": [
+    "cyril"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "fabriquer",
+    "real-time",
+    "audio"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/sonycsl-re8n.jpg"
+   ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "mood-cloud",
+   "section": "work",
+   "order": 49,
+   "published": true,
+   "title": {
+    "en": "Mood Cloud",
+    "fr": "Mood Cloud",
+    "ca": "Mood Cloud",
+    "es": "Mood Cloud"
+   },
+   "subtitle": {
+    "en": "Phd Cyril Laurier",
+    "fr": "Phd Cyril Laurier",
+    "ca": "Phd Cyril Laurier",
+    "es": "Phd Cyril Laurier"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "software"
+   ],
+   "thumb": "media/nouveau-contenu-5/ios-simulator-screen-shot-feb-13-2014-3-45-40-pm-0vfz.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu-5/audioanalysis-d8ga.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/ipad-mini-0fxu.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/ipad-odbt.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/mood2-ifsd.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/moodcloud-copy-lnpf.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/moodcloud-lk06.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/picture-1-17hn.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/picture-2-mjbw.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-5/picture-3-8e8w.jpg"
+    }
+   ],
+   "link": "",
+   "team": [
+    "cyril"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
+   "skills": [
+    "fabriquer",
+    "tools"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/upf.png"
+   ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "music-tech-fest-2",
+   "section": "work",
+   "order": 50,
+   "published": true,
+   "title": {
+    "en": "Music Tech Fest",
+    "fr": "Music Tech Fest",
+    "ca": "Music Tech Fest",
+    "es": "Music Tech Fest"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "software"
+   ],
+   "thumb": "media/nouveau-contenu-6/screen-shot-2014-11-17-at-23-01-14-654y.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [
+    "cyril"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "London",
+     "lat": 51.51,
+     "lon": -0.13
+    },
+    {
+     "city": "Helsinki",
+     "lat": 60.17,
+     "lon": 24.94
+    },
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
+   "skills": [
+    "explorer",
+    "real-time",
+    "machine-learning",
+    "light",
+    "generative",
+    "audio",
+    "tracking",
+    "concept-design",
+    "hardware"
+   ],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-09"
   }
  ]
 }
