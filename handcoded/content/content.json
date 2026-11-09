@@ -1504,16 +1504,20 @@
      "credit": ""
     },
     {
-     "src": "https://vimeo.com/329206274"
+     "src": "https://vimeo.com/329206274",
+     "credit": ""
     },
     {
-     "src": "media/tientos/tientos-kb30.jpg"
+     "src": "media/tientos/tientos-kb30.jpg",
+     "credit": ""
     },
     {
-     "src": "media/tientos/tientos2-ryks.jpg"
+     "src": "media/tientos/tientos2-ryks.jpg",
+     "credit": ""
     },
     {
-     "src": "media/tientos/tientos3-s1ok.jpg"
+     "src": "media/tientos/tientos3-s1ok.jpg",
+     "credit": ""
     }
    ],
    "link": "http://www.pablovalbuena.com/",
@@ -3842,7 +3846,7 @@
   {
    "id": "sonaris",
    "section": "work",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Sonaris",
@@ -3989,7 +3993,7 @@
   {
    "id": "peugeot",
    "section": "work",
-   "order": 33,
+   "order": 34,
    "published": false,
    "title": {
     "en": "Peugeot",
@@ -4041,7 +4045,8 @@
    ],
    "logos": [
     "media/logos/marque-peugeot.png"
-   ]
+   ],
+   "updated": "2026-11-09"
   },
   {
    "id": "churchill",
@@ -4190,7 +4195,7 @@
   {
    "id": "cadbury",
    "section": "work",
-   "order": 41,
+   "order": 42,
    "published": false,
    "title": {
     "en": "Cadbury",
@@ -4251,7 +4256,7 @@
   {
    "id": "coors",
    "section": "work",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Coors",
@@ -6899,7 +6904,7 @@
   {
    "id": "prometheus",
    "section": "work",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Prometheus",
@@ -7015,7 +7020,7 @@
   {
    "id": "augmented-paper",
    "section": "work",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Augmented Paper",
@@ -7114,7 +7119,7 @@
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -7194,7 +7199,7 @@
   {
    "id": "fuurin",
    "section": "work",
-   "order": 42,
+   "order": 43,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -10448,7 +10453,7 @@
   {
    "id": "eruption-of-the-end",
    "section": "work",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Eruption of the end",
@@ -10473,19 +10478,19 @@
     "collab",
     "exposition"
    ],
-   "thumb": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
+   "thumb": "media/eruption-of-the-end/eoe-1-mbg4.jpg",
    "thumbBack": "",
    "media": [
+    {
+     "src": "media/eruption-of-the-end/handcoded-lefresnoy-7cse.jpg",
+     "credit": ""
+    },
     {
      "src": "https://api.lefresnoy.net/media/production/installation/nJzMstUBjk.png",
      "credit": "Le Fresnoy"
     },
     {
      "src": "media/eruption-of-the-end/eoe-4-lqva.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/eruption-of-the-end/handcoded-lefresnoy-7cse.jpg",
      "credit": ""
     },
     {
@@ -11180,7 +11185,7 @@
   {
    "id": "kinematope-pommery",
    "section": "work",
-   "order": 45,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Kinematope (Pommery)",
@@ -11249,7 +11254,7 @@
   {
    "id": "ras-ubiquitous",
    "section": "work",
-   "order": 46,
+   "order": 33,
    "published": true,
    "title": {
     "en": "RAS Ubiquitous",
@@ -11377,7 +11382,7 @@
   {
    "id": "wizz",
    "section": "work",
-   "order": 47,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Wizz",
@@ -11498,7 +11503,7 @@
   {
    "id": "les-debuts",
    "section": "work",
-   "order": 48,
+   "order": 46,
    "published": true,
    "title": {
     "fr": "Les débuts",
@@ -11659,6 +11664,166 @@
     "generative",
     "audio",
     "tools"
+   ],
+   "logos": [
+    "media/logos/marque-lexus.png",
+    "media/logos/marque-cadbury.png",
+    "media/logos/nokia.png",
+    "media/logos/marque-peugeot.png",
+    "media/logos/danone.png",
+    "media/logos/france-24.png"
+   ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "pubs-interactives",
+   "section": "work",
+   "order": 40,
+   "published": true,
+   "title": {
+    "fr": "Pubs interactives",
+    "en": "Interactive advertising",
+    "ca": "Publicitat interactiva",
+    "es": "Publicidad interactiva"
+   },
+   "subtitle": {
+    "fr": "Applications Flash pour la publicité en ligne",
+    "en": "Flash applications for online advertising",
+    "ca": "Aplicacions Flash per a la publicitat en línia",
+    "es": "Aplicaciones Flash para la publicidad en línea"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "2006 – 2012",
+   "tags": [
+    "advertising",
+    "software"
+   ],
+   "thumb": "media/lexus/picture-10-2zj2.jpg",
+   "thumbBack": "",
+   "body": {
+    "fr": "<p>Des applications Flash en tout genre, pour la publicité en ligne, entre 2006 et 2012.</p>",
+    "en": "<p>All kinds of Flash applications for online advertising, between 2006 and 2012.</p>",
+    "ca": "<p>Aplicacions Flash de tota mena per a la publicitat en línia, entre el 2006 i el 2012.</p>",
+    "es": "<p>Aplicaciones Flash de todo tipo para la publicidad en línea, entre 2006 y 2012.</p>"
+   },
+   "media": [
+    {
+     "src": "media/lexus/advert-00-ppea.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/1a-gjw3.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/screen568x568-1-ckmi.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/image-asset-6t9s.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/image-asset-asvy.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/screen568x568-4-k4qq.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/attitudeaui-xgh6.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-0-kwpg.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-1-v8tx.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-2-75o8.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-4-qyx5.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-5-13d1.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/algo-1-hpox.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/algo-3-j6rv.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-3-xaum.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-8-33z2.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite1-47gy.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite2-y3zj.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite3-ko89.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/04-webcam-start-copy-cn5i.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-14-ai41.jpg",
+     "credit": ""
+    }
+   ],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    },
+    {
+     "city": "London",
+     "lat": 51.51,
+     "lon": -0.13
+    },
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
+   "author": "",
+   "skills": [
+    "audio",
+    "generative",
+    "real-time",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/marque-lexus.png",
