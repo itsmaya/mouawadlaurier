@@ -1527,13 +1527,12 @@
     "real-time",
     "hardware",
     "tools",
-    "explorer",
     "accompagner"
    ],
    "logos": [
     "media/centquatre/logo-104-we8h.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "maestro",
@@ -4407,7 +4406,7 @@
    "tags": [
     "approach"
    ],
-   "thumb": "",
+   "thumb": "media/imaginer/screenshot-2026-11-09-at-19-46-37-he1z.jpg",
    "thumbBack": "",
    "body": {
     "fr": "<p>Pour une marque, un lancement ou un lieu, on invente l’expérience : ce que le public va voir, entendre, déclencher. Nous écrivons le concept, le dispositif et la façon dont il réagit, puis nous le fabriquons jusqu’à l’ouverture au public.</p>",
@@ -11409,10 +11408,12 @@
    },
    "media": [
     {
-     "src": "media/nouveau-contenu/53-kinematope-pommery-pablovalbuena-03-1200-ll18.jpg"
+     "src": "media/nouveau-contenu/53-kinematope-pommery-pablovalbuena-03-1200-ll18.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu/kinematope-pommery-pablovalbuena-mail-m-234o.jpg"
+     "src": "media/nouveau-contenu/kinematope-pommery-pablovalbuena-mail-m-234o.jpg",
+     "credit": ""
     }
    ],
    "link": "",
@@ -11603,58 +11604,76 @@
    },
    "media": [
     {
-     "src": "media/nouveau-contenu-5/wizz6-4ht4.jpg"
+     "src": "media/nouveau-contenu-5/wizz6-4ht4.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/ecran-pres-cn-acx8.jpg"
+     "src": "media/nouveau-contenu-5/ecran-pres-cn-acx8.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/ecran-pres-fight-820p.jpg"
+     "src": "media/nouveau-contenu-5/ecran-pres-fight-820p.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/launchparty2-34kk.jpg"
+     "src": "media/nouveau-contenu-5/launchparty2-34kk.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-1-50-zr5s.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-1-50-zr5s.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-10-51-nec1.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-10-51-nec1.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-11-30-jszw.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-21-at-11-30-jszw.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-05-23-at-12-57-vuzj.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-05-23-at-12-57-vuzj.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2-xtxm.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2-xtxm.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2u6e.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-03-at-3-20-2u6e.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-06-09-at-7-12-p7ju.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-09-at-7-12-p7ju.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen-shot-2013-06-10-at-2-36-tihq.jpg"
+     "src": "media/nouveau-contenu-5/screen-shot-2013-06-10-at-2-36-tihq.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/screen1-ak0g.jpg"
+     "src": "media/nouveau-contenu-5/screen1-ak0g.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/shape1-cxa8.jpg"
+     "src": "media/nouveau-contenu-5/shape1-cxa8.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/shape2-6r3q.jpg"
+     "src": "media/nouveau-contenu-5/shape2-6r3q.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/wizz7-yte7.jpg"
+     "src": "media/nouveau-contenu-5/wizz7-yte7.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/wizz8-k51u.jpg"
+     "src": "media/nouveau-contenu-5/wizz8-k51u.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/wizzwars-v3-kjys.jpg"
+     "src": "media/nouveau-contenu-5/wizzwars-v3-kjys.jpg",
+     "credit": ""
     }
    ],
    "link": "",
