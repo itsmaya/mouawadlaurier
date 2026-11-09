@@ -2854,6 +2854,9 @@
    },
    "media": [
     {
+     "src": "https://www.youtube.com/watch?v=BM6cEIOrGCU"
+    },
+    {
      "src": "https://www.youtube.com/watch?v=A1YB_yTJ9dE",
      "credit": ""
     },
@@ -2888,6 +2891,9 @@
     {
      "src": "https://www.youtube.com/watch?v=1chcthRmmyw",
      "credit": ""
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=vnfzoYkDm1s"
     }
    ],
    "link": "http://organic-orchestra.com/",
@@ -2930,9 +2936,11 @@
     "media/logos/upf.png",
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/abbaye-de-fontevraud.png",
-    "media/logos/abbaye-de-vivoin.png"
+    "media/logos/abbaye-de-vivoin.png",
+    "media/centquatre/logo-104-we8h.jpg",
+    "media/logos/cea.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "mouvement-de-l-air",
@@ -3480,7 +3488,7 @@
     "collab",
     "performance"
    ],
-   "thumb": "media/covers/eko.jpg",
+   "thumb": "media/eko/image-f3n3.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Creation and control tools, real-time software, tracking.</p><p>A complete immersive audiovisual environment for the stage, by visual artist Maotik and beatboxer Ezra. Both improvise with real-time technologies: “EKO is a particle that lives and dies. EKO reveals architecture and space.”</p><p>We built the interactive tools that tighten the dialogue between the two artists during the show: Ezra’s voice feeds Maotik’s image, and the image answers him, live.</p><p>First presented as a work in progress at MIRA Festival, Barcelona, 2014.</p><h3>Credits</h3><ul><li><strong>Visuals</strong> Maotik</li><li><strong>Music</strong> Ezra</li><li><strong>Development</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li></ul>",
@@ -3488,7 +3496,62 @@
     "ca": "<p><strong>El nostre paper</strong> Eines de creació i control, programari en temps real, tracking.</p><p>Un entorn immersiu complet, d’àudio i de vídeo, per a l’escena, de l’artista visual Maotik i el beatboxer Ezra. Tots dos improvisen amb tecnologies en temps real: «EKO és una partícula que viu i que mor. L’EKO revela l’arquitectura i l’espai.»</p><p>Vam construir les eines interactives que estrenyen el diàleg entre els dos artistes durant l’espectacle: la veu d’Ezra alimenta la imatge de Maotik, i la imatge li respon, en directe.</p><p>Presentat per primera vegada com a work in progress al MIRA Festival, Barcelona, 2014.</p><h3>Crèdits</h3><ul><li><strong>Visuals</strong> Maotik</li><li><strong>Música</strong> Ezra</li><li><strong>Desenvolupament</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Herramientas de creación y control, software en tiempo real, tracking.</p><p>Un entorno inmersivo completo, de audio y vídeo, para la escena, del artista visual Maotik y el beatboxer Ezra. Ambos improvisan con tecnologías en tiempo real: «EKO es una partícula que vive y que muere. EKO revela la arquitectura y el espacio.»</p><p>Construimos las herramientas interactivas que estrechan el diálogo entre los dos artistas durante el espectáculo: la voz de Ezra alimenta la imagen de Maotik, y la imagen le responde, en directo.</p><p>Presentado por primera vez como work in progress en el MIRA Festival, Barcelona, 2014.</p><h3>Créditos</h3><ul><li><strong>Visuales</strong> Maotik</li><li><strong>Música</strong> Ezra</li><li><strong>Desarrollo</strong> Hand Coded: Cyril Laurier, Maya Benaïnous</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/eko/67188403717742008-o-a71a.jpg"
+    },
+    {
+     "src": "media/eko/eko-6515-qgd4.jpg"
+    },
+    {
+     "src": "media/eko/eko-omnis-g5bn.jpg"
+    },
+    {
+     "src": "media/eko/gallery2-96fo.jpg"
+    },
+    {
+     "src": "media/eko/img-6475-o939.jpg"
+    },
+    {
+     "src": "media/eko/img-6503-laiz.jpg"
+    },
+    {
+     "src": "media/eko/img-6512-vzcn.jpg"
+    },
+    {
+     "src": "media/eko/img-6517-ytxb.jpg"
+    },
+    {
+     "src": "media/eko/img-6532-copy-m0kf.jpg"
+    },
+    {
+     "src": "media/eko/img-6507-hg10.jpg"
+    },
+    {
+     "src": "media/eko/01-zwfk.jpg"
+    },
+    {
+     "src": "media/eko/02-pkev.jpg"
+    },
+    {
+     "src": "media/eko/04-bq8n.jpg"
+    },
+    {
+     "src": "media/eko/05-drf7.jpg"
+    },
+    {
+     "src": "media/eko/07-14vi.jpg"
+    },
+    {
+     "src": "media/eko/09-kllh.jpg"
+    },
+    {
+     "src": "media/eko/img-6457-qgjr.jpg"
+    },
+    {
+     "src": "https://vimeo.com/1245078614"
+    }
+   ],
    "link": "",
    "team": [
     "maotik",
@@ -3519,7 +3582,7 @@
    "logos": [
     "media/mira/logomira-2vo2.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "audi-mind-race",
