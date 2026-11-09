@@ -10,7 +10,7 @@
    "es"
   ],
   "defaultLang": "en",
-  "accent": "#ffcc00",
+  "accent": "#ffffff",
   "logo": "",
   "negative": "auto",
   "negativeToggle": true,
@@ -273,10 +273,11 @@
     "font": "g:Inter Tight"
    },
    "logo": {
-    "font": "g:Instrument Serif",
+    "font": "arial",
     "italic": false,
-    "weight": 400,
-    "size": 95
+    "weight": 100,
+    "text": ".",
+    "size": 1
    }
   },
   "founded": 2008,
@@ -1291,7 +1292,7 @@
     "media/nasonmoretti/nasonmoretti-qjex.jpg",
     "media/hub-montreal/hubmontreal-xzgy.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "ephemere",
@@ -1463,7 +1464,7 @@
     "media/chu-lille/chu-lille-logo-czwg.jpg",
     "media/chu-bordeaux/chubordeaux-aek4.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "tientos",
@@ -11150,7 +11151,13 @@
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
    "skills": [],
    "author": "",
    "logos": [],
@@ -11517,9 +11524,15 @@
     "maya",
     "cyril"
    ],
-   "credits": "",
+   "credits": " Stello Prod, Stan Walbert, Adrien Winter, Virginie Salvanez",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
    "skills": [
     "real-time",
     "tracking",
