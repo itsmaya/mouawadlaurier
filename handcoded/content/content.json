@@ -4031,7 +4031,7 @@
     "advertising",
     "ai"
    ],
-   "thumb": "media/churchill/tastediscovery-1024x682-2jdz.webp",
+   "thumb": "media/churchill/d16-1985-on50.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, brain-computer interfaces, generative visuals, real-time software.</p><p>What do we really feel when we taste a wine? For the opening of Churchill’s visitor centre, during Port Wine Day 2016 in Porto, guests blind-tasted three ports wearing an EEG headset: a White Port, a 10-year Tawny and a Reserve.</p><p>Working directly with the house, we designed and developed the visual and interactive part: brainwaves turned into music in real time, and visuals projection-mapped across the room following that music. Every tasting became a unique show, visible to everyone.</p><h3>Credits</h3><ul><li><strong>Client</strong> Churchill’s</li><li><strong>Visual and interactive design</strong> Hand Coded</li></ul>",
@@ -4041,8 +4041,62 @@
    },
    "media": [
     {
+     "src": "https://vimeo.com/268976621"
+    },
+    {
      "src": "media/churchill/tastediscovery-1024x682-2jdz.webp",
      "credit": ""
+    },
+    {
+     "src": "media/churchill/17260130-detalle-de-los-azulejos-tradicionales-a-hacp.jpg"
+    },
+    {
+     "src": "media/churchill/20160909041744-0gr3.jpg"
+    },
+    {
+     "src": "media/churchill/a-x2ed.jpg"
+    },
+    {
+     "src": "media/churchill/d16-0230-mn1h.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1910-80ja.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1918-7d36.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1919-u3sm.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1924-qwyb.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1985-16vs.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1994-qm0p.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1996-lb2i.jpg"
+    },
+    {
+     "src": "media/churchill/d16-1999-1gme.jpg"
+    },
+    {
+     "src": "media/churchill/screen-shot-2017-11-27-at-14-03-42-jgjv.jpg"
+    },
+    {
+     "src": "media/churchill/screen-shot-2017-11-27-at-14-09-33-5802.jpg"
+    },
+    {
+     "src": "media/churchill/screen-shot-2017-11-27-at-14-34-53-mxb4.jpg"
+    },
+    {
+     "src": "media/churchill/screen-shot-2017-11-27-at-14-34-54-lygd.jpg"
+    },
+    {
+     "src": "media/churchill/screen-shot-2018-05-10-at-11-56-30-sex0.jpg"
     }
    ],
    "link": "",
@@ -4072,7 +4126,7 @@
    "logos": [
     "media/logos/churchills.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "cadbury",
