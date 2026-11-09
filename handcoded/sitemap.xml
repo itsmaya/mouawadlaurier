@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://mouawadlaurier.com/handcoded/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -12,7 +12,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -544,7 +544,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/peupler/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/peupler/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/peupler/"/>
@@ -562,7 +562,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/peupler/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/peupler/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/peupler/"/>
@@ -580,7 +580,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/peupler/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/peupler/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/peupler/"/>
@@ -598,7 +598,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/peupler/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/peupler/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/peupler/"/>
@@ -760,7 +760,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/paysage-sonore/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/paysage-sonore/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/paysage-sonore/"/>
@@ -773,12 +773,12 @@
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/04.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/05.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/06.jpg</image:loc></image:image>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/07.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/08.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/villa-al-qamar/02.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/paysage-sonore/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/paysage-sonore/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/paysage-sonore/"/>
@@ -791,12 +791,12 @@
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/04.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/05.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/06.jpg</image:loc></image:image>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/07.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/08.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/villa-al-qamar/02.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/paysage-sonore/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/paysage-sonore/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/paysage-sonore/"/>
@@ -809,12 +809,12 @@
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/04.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/05.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/06.jpg</image:loc></image:image>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/07.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/08.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/villa-al-qamar/02.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/paysage-sonore/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/paysage-sonore/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/paysage-sonore/"/>
@@ -827,8 +827,8 @@
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/04.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/05.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/06.jpg</image:loc></image:image>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/07.jpg</image:loc></image:image>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/paysage-sonore/08.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/villa-al-qamar/02.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/future-ruins/</loc>
@@ -1040,7 +1040,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/etre-absorbe/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/etre-absorbe/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/etre-absorbe/"/>
@@ -1056,7 +1056,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/etre-absorbe/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/etre-absorbe/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/etre-absorbe/"/>
@@ -1072,7 +1072,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/etre-absorbe/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/etre-absorbe/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/etre-absorbe/"/>
@@ -1088,7 +1088,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/etre-absorbe/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/etre-absorbe/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/etre-absorbe/"/>
@@ -1152,7 +1152,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/beardyman/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/beardyman/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/beardyman/"/>
@@ -1163,7 +1163,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/beardyman/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/beardyman/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/beardyman/"/>
@@ -1174,7 +1174,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/beardyman/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/beardyman/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/beardyman/"/>
@@ -1185,7 +1185,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/beardyman/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/beardyman/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/beardyman/"/>
