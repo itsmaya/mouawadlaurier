@@ -3852,7 +3852,7 @@
     "software",
     "ai"
    ],
-   "thumb": "media/covers/sonaris.jpg",
+   "thumb": "media/sonaris/sonaris-0ezh.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Design, AI, research.</p><p>A music recommendation engine that listens, developed in London from 2012. Sonaris analyses an audio stream in real time and finds the tracks that sound like it, whatever their name, genre or origin: “I like this track, are there others like it?”</p><p>Discover new artists, build playlists that flow, find music to license for a film or a commercial in minutes. The technology, born from Cyril Laurier’s research on music analysis, is protected by patent WO2014096832A1.</p><h3>Credits</h3><ul><li><strong>Partners</strong> Michela Magas, Cyril Laurier</li></ul>",
@@ -3860,19 +3860,33 @@
     "ca": "<p><strong>El nostre paper</strong> Disseny, IA, recerca.</p><p>Un motor de recomanació musical que escolta, desenvolupat a Londres a partir del 2012. Sonaris analitza un flux d’àudio en temps real i troba les peces que s’hi assemblen, siguin quins siguin el nom, el gènere o l’origen: «M’agrada aquesta peça, n’hi ha d’altres com aquesta?»</p><p>Descobrir artistes nous, compondre llistes ben encadenades, trobar en pocs minuts una música per llicenciar per a una pel·lícula o un anunci. La tecnologia, sorgida de la recerca de Cyril Laurier sobre l’anàlisi musical, està protegida per la patent WO2014096832A1.</p><h3>Crèdits</h3><ul><li><strong>Socis</strong> Michela Magas, Cyril Laurier</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Diseño, IA, investigación.</p><p>Un motor de recomendación musical que escucha, desarrollado en Londres a partir de 2012. Sonaris analiza un flujo de audio en tiempo real y encuentra los temas que se le parecen, sean cuales sean su nombre, su género o su origen: «Me gusta este tema, ¿hay otros como este?»</p><p>Descubrir nuevos artistas, componer listas bien encadenadas, encontrar en pocos minutos una música para licenciar para una película o un anuncio. La tecnología, surgida de la investigación de Cyril Laurier sobre el análisis musical, está protegida por la patente WO2014096832A1.</p><h3>Créditos</h3><ul><li><strong>Socios</strong> Michela Magas, Cyril Laurier</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/sonaris/sonaris-copy-zr83.jpg"
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=aCcJ2r0DPyI"
+    }
+   ],
    "link": "https://patents.google.com/patent/WO2014096832A1/en",
    "team": [
     "cyril"
    ],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "London",
+     "lat": 51.51,
+     "lon": -0.13
+    }
+   ],
    "author": "Michela Magas & Cyril Laurier",
    "skills": [
     "machine-learning",
     "audio",
-    "tools"
+    "tools",
+    "imaginer"
    ],
    "logos": [],
    "updated": "2026-11-09"
