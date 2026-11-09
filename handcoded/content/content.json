@@ -2586,7 +2586,7 @@
     "software",
     "performance"
    ],
-   "thumb": "media/beardyman/beardyman-4-652x367-ipm5.jpg",
+   "thumb": "media/beardyman/beardyman-yhh3.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Design, real-time software, sound.</p><p>Beardyman is an improvising beatboxer who samples and warps his own voice into music, a whole album live. The Beardytron 5000 is the instrument he imagined to compose as fast as he thinks.</p><p>We design and program modules for this software, which lets him drive his entire musical creation live: our latest, for the Beardytron 5000 mkIII, is the Instant Drum Machine. Watchmaker’s work, where latency is counted in milliseconds and the interface has to be played without looking, mid-concert.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Beardyman</li><li><strong>Concept</strong> Darren Foreman</li><li><strong>Production</strong> Sonaris Systems</li><li><strong>Programming</strong> Cyril Laurier</li><li><strong>Interface design</strong> Maya Benaïnous</li><li><strong>Beardytron 5000</strong> DMG Audio, Sugar Bytes</li></ul>",
@@ -2594,7 +2594,38 @@
     "ca": "<p><strong>El nostre paper</strong> Disseny, programari en temps real, so.</p><p>Beardyman és un beatboxer improvisador que mostreja i deforma la seva pròpia veu per fer-ne música, un àlbum sencer en directe. El Beardytron 5000 és l’instrument que va imaginar per compondre tan ràpid com pensa.</p><p>Concebem i programem mòduls d’aquest programari, que li permet pilotar tota la seva creació musical en directe: el darrer, per al Beardytron 5000 mkIII, és l’Instant Drum Machine. Una feina de rellotgeria on la latència es compta en mil·lisegons i la interfície s’ha de tocar sense mirar, en ple concert.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Beardyman</li><li><strong>Concepte</strong> Darren Foreman</li><li><strong>Producció</strong> Sonaris Systems</li><li><strong>Programació</strong> Cyril Laurier</li><li><strong>Disseny d’interfície</strong> Maya Benaïnous</li><li><strong>Beardytron 5000</strong> DMG Audio, Sugar Bytes</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Diseño, software en tiempo real, sonido.</p><p>Beardyman es un beatboxer improvisador que samplea y deforma su propia voz para hacer música, un álbum entero en directo. El Beardytron 5000 es el instrumento que imaginó para componer tan rápido como piensa.</p><p>Concebimos y programamos módulos de este software, que le permite pilotar toda su creación musical en directo: el último, para el Beardytron 5000 mkIII, es el Instant Drum Machine. Un trabajo de relojería donde la latencia se cuenta en milisegundos y la interfaz debe tocarse sin mirar, en pleno concierto.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Beardyman</li><li><strong>Concepto</strong> Darren Foreman</li><li><strong>Producción</strong> Sonaris Systems</li><li><strong>Programación</strong> Cyril Laurier</li><li><strong>Diseño de interfaz</strong> Maya Benaïnous</li><li><strong>Beardytron 5000</strong> DMG Audio, Sugar Bytes</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "https://www.youtube.com/watch?v=dIh8KBOOkYU"
+    },
+    {
+     "src": "media/beardyman/screen-shot-2016-09-20-at-09-52-38-9sx8.jpg"
+    },
+    {
+     "src": "media/beardyman/beardyman-jim-hanner-5i2s.jpg"
+    },
+    {
+     "src": "media/beardyman/beardyman-tsly.jpg"
+    },
+    {
+     "src": "media/beardyman/screen-shot-2016-09-20-at-09-53-16-vtc9.jpg"
+    },
+    {
+     "src": "media/beardyman/with-beardymanatyoutuberecordingstudioinlondon-rc9b.jpg"
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=IYYaLwjXNSk"
+    },
+    {
+     "src": "https://www.facebook.com/therealbeardyman/videos/10153280771914593"
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=cEO4-0Ljd8E"
+    },
+    {
+     "src": "https://www.youtube.com/watch?v=nYMOcp92YOs"
+    }
+   ],
    "link": "http://www.beardyman.co.uk/",
    "team": [
     "beardyman-musician",
