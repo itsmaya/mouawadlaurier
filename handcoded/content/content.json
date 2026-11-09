@@ -11104,7 +11104,7 @@
    "id": "marine-budin",
    "section": "studio",
    "order": 100,
-   "published": false,
+   "published": true,
    "title": {
     "en": "Marine Budin",
     "fr": "Marine Budin",
@@ -11143,7 +11143,8 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-09"
   },
   {
    "id": "laurent-delforge",
@@ -11852,6 +11853,58 @@
     "media/logos/danone.png",
     "media/logos/france-24.png"
    ],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "mouawad-laurier",
+   "section": "studio",
+   "order": 101,
+   "published": true,
+   "title": {
+    "en": "Mouawad + Laurier",
+    "fr": "Mouawad + Laurier",
+    "ca": "Mouawad + Laurier",
+    "es": "Mouawad + Laurier"
+   },
+   "subtitle": {
+    "en": "Digital artists",
+    "fr": "Artistes numériques",
+    "ca": "Artista Digital",
+    "es": "Artistas digital"
+   },
+   "place": {
+    "en": "Barcelona",
+    "fr": "Barcelone",
+    "ca": "Barcelona",
+    "es": "Barcelona"
+   },
+   "date": "",
+   "tags": [
+    "artists"
+   ],
+   "thumb": "media/nouveau-contenu/duo-artists-z4bx.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "mouawadlaurier.com",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
+   "skills": [],
+   "author": "",
+   "logos": [],
    "updated": "2026-11-09"
   }
  ]
