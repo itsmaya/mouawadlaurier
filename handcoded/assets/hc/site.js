@@ -1515,7 +1515,9 @@ function signature(post, credit) {
 }
 const isVideo = src => /\.(mp4|webm|mov)(\?|#|$)/i.test(src || '');
 const ytId = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
-const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
+/* Une vidéo Vimeo « non répertoriée » a une clé privée (vimeo.com/123/abcd ou ?h=abcd) : sans elle, le lecteur intégré refuse de la jouer. On la garde dans l'identifiant, « 123/abcd ». */
+const vimeoId = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)(?:\/([0-9a-f]{6,}))?/i.exec(s || ''); if (!m) return null; const h = m[2] || ((/[?&]h=([0-9a-f]{6,})/i.exec(s) || [])[1]); return h ? m[1] + '/' + h : m[1]; };
+const vimeoPlayer = (id, q) => { const [n, h] = String(id).split('/'); return `https://player.vimeo.com/video/${n}?${h ? 'h=' + h + '&' : ''}${q}`; };
 /* La vignette d'une vidéo Vimeo (son oEmbed public). La première vidéo d'une fiche garde la vignette de la fiche ; les suivantes ont chacune la leur. */
 const vimeoThumbs = new Map();
 const vimeoThumb = id => { if (!vimeoThumbs.has(id)) vimeoThumbs.set(id, fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent('https://vimeo.com/' + id)}&width=1280`).then(r => (r.ok ? r.json() : null)).then(j => (j && j.thumbnail_url) || '').catch(() => '')); return vimeoThumbs.get(id); };
@@ -1756,7 +1758,7 @@ const post2D = {
     const play = document.createElement('button'); play.type = 'button'; play.className = 'play'; play.setAttribute('aria-label', ui('play'));
     play.addEventListener('click', () => {
       const f = document.createElement('iframe');
-      f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
+      f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : vimeoPlayer(id, 'autoplay=1&title=0&byline=0&portrait=0');
       f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
       cover.replaceWith(f);
     });
@@ -2023,7 +2025,7 @@ const postV = {
     postvEl.querySelectorAll('.pv-lgrid img[data-src]').forEach(im => monoLogo(im.dataset.src).then(u => { im.src = u.src; im.classList.toggle('raw', !!u.raw); }));
     postvEl.querySelectorAll('.pv-embed').forEach(fg => fg.querySelector('.play').addEventListener('click', () => {
       const kind = fg.dataset.kind, id = fg.dataset.id, f = document.createElement('iframe');
-      f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
+      f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : vimeoPlayer(id, 'autoplay=1&title=0&byline=0&portrait=0');
       f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
       fg.querySelector('.pv-cover').replaceWith(f);
     }));
@@ -2462,7 +2464,7 @@ function openReel() {
     } else if (k === 'youtube' || k === 'vimeo') {
       const f = document.createElement('iframe'), id = k === 'youtube' ? ytId(src) : vimeoId(src);
       const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
-      f.src = k === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&playsinline=1&rel=0&loop=1&playlist=${id}&enablejsapi=1${origin}` : `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0`;
+      f.src = k === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&playsinline=1&rel=0&loop=1&playlist=${id}&enablejsapi=1${origin}` : vimeoPlayer(id, 'autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0');
       f.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media'; f.allowFullscreen = true; f.title = 'Showreel';
       f.referrerPolicy = 'strict-origin-when-cross-origin';
       f.addEventListener('load', () => { if (k === 'youtube') f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'reel', channel: 'widget' }), '*'); if (!reel.muted) setReelMuted(false); });
@@ -2877,7 +2879,7 @@ function makeReelPlayer(kind, src) {
     const f = document.createElement('iframe'), yt = kind === 'youtube', id = yt ? ytId(src) : vimeoId(src);
     const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
     f.src = yt ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&playsinline=1&rel=0&enablejsapi=1${origin}`
-      : `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1&autopause=0`;
+      : vimeoPlayer(id, 'autoplay=1&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1&autopause=0');
     f.allow = 'autoplay; encrypted-media'; f.tabIndex = -1; f.title = 'Showreel'; f.referrerPolicy = 'strict-origin-when-cross-origin';
     const post = m => { try { f.contentWindow.postMessage(JSON.stringify(m), '*'); } catch (e) {} };
     const cmd = yt ? (func, args = []) => post({ event: 'command', func, args }) : (method, value) => post(value === undefined ? { method } : { method, value });
