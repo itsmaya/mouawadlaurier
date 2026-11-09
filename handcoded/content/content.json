@@ -4321,149 +4321,6 @@
    "updated": "2026-11-09"
   },
   {
-   "id": "pubs-interactives",
-   "section": "work",
-   "order": 39,
-   "published": false,
-   "title": {
-    "fr": "Pubs interactives",
-    "en": "Interactive advertising",
-    "ca": "Publicitat interactiva",
-    "es": "Publicidad interactiva"
-   },
-   "subtitle": {
-    "fr": "Applications Flash pour la publicité en ligne",
-    "en": "Flash applications for online advertising",
-    "ca": "Aplicacions Flash per a la publicitat en línia",
-    "es": "Aplicaciones Flash para la publicidad en línea"
-   },
-   "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
-   },
-   "date": "2006 – 2012",
-   "tags": [
-    "advertising",
-    "software"
-   ],
-   "thumb": "media/lexus/picture-10-2zj2.jpg",
-   "thumbBack": "",
-   "body": {
-    "fr": "<p>Des applications Flash en tout genre, pour la publicité en ligne, entre 2006 et 2012.</p>",
-    "en": "<p>All kinds of Flash applications for online advertising, between 2006 and 2012.</p>",
-    "ca": "<p>Aplicacions Flash de tota mena per a la publicitat en línia, entre el 2006 i el 2012.</p>",
-    "es": "<p>Aplicaciones Flash de todo tipo para la publicidad en línea, entre 2006 y 2012.</p>"
-   },
-   "media": [
-    {
-     "src": "media/lexus/screen568x568-1-ckmi.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/lexus/image-asset-6t9s.webp",
-     "credit": ""
-    },
-    {
-     "src": "media/lexus/image-asset-asvy.webp",
-     "credit": ""
-    },
-    {
-     "src": "media/lexus/screen568x568-4-k4qq.webp",
-     "credit": ""
-    },
-    {
-     "src": "media/lexus/attitudeaui-xgh6.jpg"
-    },
-    {
-     "src": "media/lexus/1a-gjw3.jpg"
-    },
-    {
-     "src": "media/lexus/advert-0-kwpg.jpg"
-    },
-    {
-     "src": "media/lexus/advert-00-ppea.jpg"
-    },
-    {
-     "src": "media/lexus/advert-1-v8tx.jpg"
-    },
-    {
-     "src": "media/lexus/advert-2-75o8.jpg"
-    },
-    {
-     "src": "media/lexus/advert-4-qyx5.jpg"
-    },
-    {
-     "src": "media/lexus/advert-5-13d1.jpg"
-    },
-    {
-     "src": "media/lexus/algo-1-hpox.jpg"
-    },
-    {
-     "src": "media/lexus/algo-3-j6rv.jpg"
-    },
-    {
-     "src": "media/lexus/picture-3-xaum.jpg"
-    },
-    {
-     "src": "media/lexus/picture-8-33z2.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite1-47gy.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite2-y3zj.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite3-ko89.jpg"
-    },
-    {
-     "src": "media/lexus/04-webcam-start-copy-cn5i.jpg"
-    },
-    {
-     "src": "media/lexus/picture-14-ai41.jpg"
-    }
-   ],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [
-    {
-     "city": "Barcelona",
-     "lat": 41.39,
-     "lon": 2.17
-    },
-    {
-     "city": "London",
-     "lat": 51.51,
-     "lon": -0.13
-    },
-    {
-     "city": "Paris",
-     "lat": 48.86,
-     "lon": 2.35
-    }
-   ],
-   "author": "",
-   "skills": [
-    "audio",
-    "generative",
-    "real-time",
-    "fabriquer"
-   ],
-   "logos": [
-    "media/logos/marque-lexus.png",
-    "media/logos/marque-cadbury.png",
-    "media/logos/nokia.png",
-    "media/logos/marque-peugeot.png",
-    "media/logos/danone.png",
-    "media/logos/france-24.png"
-   ],
-   "updated": "2026-11-09"
-  },
-  {
    "id": "imaginer",
    "section": "expertise",
    "order": -4,
@@ -5899,140 +5756,6 @@
    "skills": [],
    "logos": [],
    "updated": "2026-11-07"
-  },
-  {
-   "id": "fat-site-2008",
-   "title": {
-    "en": "The Fat-Site",
-    "fr": "Le Fat-Site",
-    "ca": "El Fat-Site",
-    "es": "El Fat-Site"
-   },
-   "subtitle": {
-    "en": "Fat-Man Collective, before Hand Coded",
-    "fr": "Fat-Man Collective, avant Hand Coded",
-    "ca": "Fat-Man Collective, abans de Hand Coded",
-    "es": "Fat-Man Collective, antes de Hand Coded"
-   },
-   "place": {
-    "en": "London, Barcelona",
-    "fr": "Londres, Barcelone",
-    "ca": "Londres, Barcelona",
-    "es": "Londres, Barcelona"
-   },
-   "date": "2008",
-   "tags": [
-    "software"
-   ],
-   "thumb": "media/fat-site-2008/fatsite.jpg",
-   "media": [
-    {
-     "src": "media/fat-site-2008/fatsite1.jpg",
-     "credit": ""
-    }
-   ],
-   "spots": [
-    {
-     "city": "London",
-     "lat": 51.51,
-     "lon": -0.13
-    },
-    {
-     "city": "Barcelona",
-     "lat": 41.39,
-     "lon": 2.17
-    }
-   ],
-   "body": {
-    "en": "<p><strong>Our role</strong> Interactive website, real-time software.</p><p>Launched on 08.08.08: a real-time 3D website, in the browser, built with Papervision3D. Each section is an object surrounded by cards you spin, open and browse with the mouse or the keyboard.</p><p>The site you are looking at runs on its engine: the code was ported from ActionScript 3 to Three.js, and the navigation is the same. Eighteen years later, the idea still holds.</p><h3>Credits</h3><ul><li><strong>3D engine and interaction</strong> Maya Benaïnous</li><li><strong>Fat-Man Collective team</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Site interactif, logiciel temps réel.</p><p>Mis en ligne le 08.08.08 : un site en 3D temps réel, dans le navigateur, construit avec Papervision3D. Chaque section est un objet entouré de cartes qu’on fait tourner, qu’on ouvre et qu’on parcourt à la souris ou au clavier.</p><p>Le site que tu regardes tourne sur son moteur : le code a été porté d’ActionScript 3 vers Three.js, et la navigation est la même. Dix-huit ans plus tard, l’idée tient toujours.</p><h3>Crédits</h3><ul><li><strong>Moteur 3D et interaction</strong> Maya Benaïnous</li><li><strong>Équipe Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li></ul>",
-    "ca": "<p><strong>El nostre paper</strong> Web interactiva, programari en temps real.</p><p>Publicat el 08.08.08: un web en 3D en temps real, dins el navegador, construït amb Papervision3D. Cada secció és un objecte envoltat de targetes que es fan girar, s’obren i es recorren amb el ratolí o el teclat.</p><p>El web que mires funciona amb el seu motor: el codi s’ha portat d’ActionScript 3 a Three.js, i la navegació és la mateixa. Divuit anys després, la idea encara s’aguanta.</p><h3>Crèdits</h3><ul><li><strong>Motor 3D i interacció</strong> Maya Benaïnous</li><li><strong>Equip Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li></ul>",
-    "es": "<p><strong>Nuestro papel</strong> Web interactiva, software en tiempo real.</p><p>Publicado el 08.08.08: una web en 3D en tiempo real, dentro del navegador, construida con Papervision3D. Cada sección es un objeto rodeado de tarjetas que se giran, se abren y se recorren con el ratón o el teclado.</p><p>La web que estás mirando funciona con su motor: el código se ha portado de ActionScript 3 a Three.js, y la navegación es la misma. Dieciocho años después, la idea sigue en pie.</p><h3>Créditos</h3><ul><li><strong>Motor 3D e interacción</strong> Maya Benaïnous</li><li><strong>Equipo Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li></ul>"
-   },
-   "team": [
-    "maya"
-   ],
-   "credits": "Fat-Man Collective",
-   "section": "work",
-   "order": 43,
-   "published": true,
-   "thumbBack": "",
-   "location": null,
-   "link": "",
-   "author": "Fat-Man Collective",
-   "skills": [
-    "real-time",
-    "concept-design",
-    "tools"
-   ],
-   "logos": [],
-   "updated": "2026-11-09"
-  },
-  {
-   "id": "nokia-navigator",
-   "title": {
-    "en": "Nokia Navigator",
-    "fr": "Nokia Navigator",
-    "ca": "Nokia Navigator",
-    "es": "Nokia Navigator"
-   },
-   "subtitle": {
-    "en": "Fat-Man Collective with Work Club",
-    "fr": "Fat-Man Collective avec Work Club",
-    "ca": "Fat-Man Collective amb Work Club",
-    "es": "Fat-Man Collective con Work Club"
-   },
-   "place": {
-    "en": "London",
-    "fr": "Londres",
-    "ca": "Londres",
-    "es": "Londres"
-   },
-   "date": "2008",
-   "tags": [],
-   "thumb": "media/nokia-navigator/nokianavigator.jpg",
-   "media": [
-    {
-     "src": "media/nokia-navigator/nokianavigator2.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/nokia-navigator/nokianavigator3.jpg",
-     "credit": ""
-    }
-   ],
-   "spots": [
-    {
-     "city": "London",
-     "lat": 51.51,
-     "lon": -0.13
-    }
-   ],
-   "body": {
-    "en": "<p><strong>Our role</strong> Interactive website, design.</p><p>An interactive video player for Nokia Maps, with the agency Work Club: the visitor guides a lost character across Canvey Island, in Essex, while the Nokia Personal Navigators show how to find your way with the phone.</p><h3>Credits</h3><ul><li><strong>Agency</strong> Work Club</li><li><strong>Client</strong> Nokia</li><li><strong>Fat-Man Collective team</strong> Emiliano, Maya Benaïnous, David, Fernando, Adam, Yann</li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Site interactif, conception.</p><p>Un lecteur vidéo interactif pour Nokia Maps, avec l’agence Work Club : le visiteur guide un personnage perdu sur Canvey Island, dans l’Essex, pendant que les Nokia Personal Navigators montrent comment s’orienter avec le téléphone.</p><h3>Crédits</h3><ul><li><strong>Agence</strong> Work Club</li><li><strong>Client</strong> Nokia</li><li><strong>Équipe Fat-Man Collective</strong> Emiliano, Maya Benaïnous, David, Fernando, Adam, Yann</li></ul>",
-    "ca": "<p><strong>El nostre paper</strong> Web interactiva, disseny.</p><p>Un reproductor de vídeo interactiu per a Nokia Maps, amb l’agència Work Club: el visitant guia un personatge perdut a Canvey Island, a Essex, mentre els Nokia Personal Navigators mostren com orientar-se amb el telèfon.</p><h3>Crèdits</h3><ul><li><strong>Agència</strong> Work Club</li><li><strong>Client</strong> Nokia</li><li><strong>Equip Fat-Man Collective</strong> Emiliano, Maya Benaïnous, David, Fernando, Adam, Yann</li></ul>",
-    "es": "<p><strong>Nuestro papel</strong> Web interactiva, diseño.</p><p>Un reproductor de vídeo interactivo para Nokia Maps, con la agencia Work Club: el visitante guía a un personaje perdido en Canvey Island, en Essex, mientras los Nokia Personal Navigators muestran cómo orientarse con el teléfono.</p><h3>Créditos</h3><ul><li><strong>Agencia</strong> Work Club</li><li><strong>Cliente</strong> Nokia</li><li><strong>Equipo Fat-Man Collective</strong> Emiliano, Maya Benaïnous, David, Fernando, Adam, Yann</li></ul>"
-   },
-   "link": "http://www.nokia.co.uk/maps/about-maps",
-   "team": [
-    "maya"
-   ],
-   "credits": "Fat-Man Collective, Work Club",
-   "section": "work",
-   "order": 44,
-   "published": true,
-   "thumbBack": "",
-   "location": null,
-   "author": "Fat-Man Collective, Work Club",
-   "skills": [
-    "real-time",
-    "concept-design"
-   ],
-   "logos": [
-    "media/logos/nokia.png"
-   ],
-   "updated": "2026-11-09"
   },
   {
    "id": "immersive",
@@ -11770,6 +11493,181 @@
    ],
    "author": "",
    "logos": [],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "les-debuts",
+   "section": "work",
+   "order": 48,
+   "published": true,
+   "title": {
+    "fr": "Les débuts",
+    "en": "The early years",
+    "ca": "Els inicis",
+    "es": "Los inicios"
+   },
+   "subtitle": {
+    "fr": "Fat-Man Collective et la publicité interactive",
+    "en": "Fat-Man Collective and interactive advertising",
+    "ca": "Fat-Man Collective i la publicitat interactiva",
+    "es": "Fat-Man Collective y la publicidad interactiva"
+   },
+   "place": {
+    "fr": "Londres, Barcelone, Paris",
+    "en": "London, Barcelona, Paris",
+    "ca": "Londres, Barcelona, París",
+    "es": "Londres, Barcelona, París"
+   },
+   "date": "2006 – 2012",
+   "tags": [
+    "advertising",
+    "software"
+   ],
+   "thumb": "media/fat-site-2008/fatsite.jpg",
+   "thumbBack": "",
+   "body": {
+    "fr": "<p><strong>Notre rôle</strong> Sites et publicités interactives, moteur 3D, son et image générative.</p><p>Avant Hand Coded, il y a Fat-Man Collective, entre Londres et Barcelone. De 2006 à 2012, nous créons des applications Flash en tout genre pour la publicité en ligne, pour des marques comme Lexus, Cadbury, Nokia, Peugeot, Danone ou France 24.</p><p>Le 08.08.08, Fat-Man Collective met en ligne le Fat-Site : un site en 3D temps réel, dans le navigateur, construit avec Papervision3D. Chaque section est un objet entouré de cartes qu’on fait tourner, qu’on ouvre et qu’on parcourt à la souris ou au clavier. Le site que tu regardes tourne sur son moteur : le code a été porté d’ActionScript 3 vers Three.js, et la navigation est la même.</p><p>La même année, avec l’agence Work Club, un lecteur vidéo interactif pour Nokia Maps : le visiteur guide un personnage perdu sur Canvey Island, dans l’Essex, pendant que les Nokia Personal Navigators montrent comment s’orienter avec le téléphone.</p><h3>Crédits</h3><ul><li><strong>Marques</strong> Lexus, Cadbury, Nokia, Peugeot, Danone, France 24</li><li><strong>Fat-Site, moteur 3D et interaction</strong> Maya Benaïnous</li><li><strong>Équipe Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li><li><strong>Nokia Navigator</strong> agence Work Club, client Nokia</li></ul>",
+    "en": "<p><strong>Our role</strong> Interactive websites and ads, 3D engine, sound and generative visuals.</p><p>Before Hand Coded, there was Fat-Man Collective, between London and Barcelona. From 2006 to 2012, we built all kinds of Flash applications for online advertising, for brands such as Lexus, Cadbury, Nokia, Peugeot, Danone and France 24.</p><p>On 08.08.08, Fat-Man Collective launched the Fat-Site: a real-time 3D website, in the browser, built with Papervision3D. Each section is an object surrounded by cards you spin, open and browse with the mouse or the keyboard. The site you are looking at runs on its engine: the code was ported from ActionScript 3 to Three.js, and the navigation is the same.</p><p>The same year, with the agency Work Club, an interactive video player for Nokia Maps: the visitor guides a lost character across Canvey Island, in Essex, while the Nokia Personal Navigators show how to find your way with the phone.</p><h3>Credits</h3><ul><li><strong>Brands</strong> Lexus, Cadbury, Nokia, Peugeot, Danone, France 24</li><li><strong>Fat-Site, 3D engine and interaction</strong> Maya Benaïnous</li><li><strong>Fat-Man Collective team</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li><li><strong>Nokia Navigator</strong> Work Club agency, client Nokia</li></ul>",
+    "ca": "<p><strong>El nostre paper</strong> Webs i publicitat interactiva, motor 3D, so i imatge generativa.</p><p>Abans de Hand Coded hi ha Fat-Man Collective, entre Londres i Barcelona. Del 2006 al 2012 creem aplicacions Flash de tota mena per a la publicitat en línia, per a marques com Lexus, Cadbury, Nokia, Peugeot, Danone o France 24.</p><p>El 08.08.08, Fat-Man Collective publica el Fat-Site: un web en 3D en temps real, dins el navegador, construït amb Papervision3D. Cada secció és un objecte envoltat de targetes que es fan girar, s’obren i es recorren amb el ratolí o el teclat. El web que mires funciona amb el seu motor: el codi s’ha portat d’ActionScript 3 a Three.js, i la navegació és la mateixa.</p><p>El mateix any, amb l’agència Work Club, un reproductor de vídeo interactiu per a Nokia Maps: el visitant guia un personatge perdut a Canvey Island, a Essex, mentre els Nokia Personal Navigators mostren com orientar-se amb el telèfon.</p><h3>Crèdits</h3><ul><li><strong>Marques</strong> Lexus, Cadbury, Nokia, Peugeot, Danone, France 24</li><li><strong>Fat-Site, motor 3D i interacció</strong> Maya Benaïnous</li><li><strong>Equip Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li><li><strong>Nokia Navigator</strong> agència Work Club, client Nokia</li></ul>",
+    "es": "<p><strong>Nuestro papel</strong> Webs y publicidad interactiva, motor 3D, sonido e imagen generativa.</p><p>Antes de Hand Coded está Fat-Man Collective, entre Londres y Barcelona. De 2006 a 2012 creamos aplicaciones Flash de todo tipo para la publicidad en línea, para marcas como Lexus, Cadbury, Nokia, Peugeot, Danone o France 24.</p><p>El 08.08.08, Fat-Man Collective publica el Fat-Site: una web en 3D en tiempo real, dentro del navegador, construida con Papervision3D. Cada sección es un objeto rodeado de tarjetas que se giran, se abren y se recorren con el ratón o el teclado. La web que estás mirando funciona con su motor: el código se ha portado de ActionScript 3 a Three.js, y la navegación es la misma.</p><p>El mismo año, con la agencia Work Club, un reproductor de vídeo interactivo para Nokia Maps: el visitante guía a un personaje perdido en Canvey Island, en Essex, mientras los Nokia Personal Navigators muestran cómo orientarse con el teléfono.</p><h3>Créditos</h3><ul><li><strong>Marcas</strong> Lexus, Cadbury, Nokia, Peugeot, Danone, France 24</li><li><strong>Fat-Site, motor 3D e interacción</strong> Maya Benaïnous</li><li><strong>Equipo Fat-Man Collective</strong> Emiliano, Fernando, David, Barnier, Beatriz, Adam, Yann, Philine</li><li><strong>Nokia Navigator</strong> agencia Work Club, cliente Nokia</li></ul>"
+   },
+   "media": [
+    {
+     "src": "media/fat-site-2008/fatsite1.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/nokia-navigator/nokianavigator2.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/nokia-navigator/nokianavigator3.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/screen568x568-1-ckmi.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/image-asset-6t9s.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/image-asset-asvy.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/screen568x568-4-k4qq.webp",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/attitudeaui-xgh6.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/1a-gjw3.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-0-kwpg.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-00-ppea.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-1-v8tx.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-2-75o8.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-4-qyx5.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/advert-5-13d1.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/algo-1-hpox.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/algo-3-j6rv.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-3-xaum.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-8-33z2.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite1-47gy.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite2-y3zj.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/fatsite3-ko89.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/04-webcam-start-copy-cn5i.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/lexus/picture-14-ai41.jpg",
+     "credit": ""
+    }
+   ],
+   "link": "",
+   "team": [
+    "maya"
+   ],
+   "credits": "Fat-Man Collective",
+   "location": null,
+   "spots": [
+    {
+     "city": "London",
+     "lat": 51.51,
+     "lon": -0.13
+    },
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    },
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
+   "author": "Fat-Man Collective",
+   "skills": [
+    "real-time",
+    "concept-design",
+    "generative",
+    "audio",
+    "tools"
+   ],
+   "logos": [
+    "media/logos/marque-lexus.png",
+    "media/logos/marque-cadbury.png",
+    "media/logos/nokia.png",
+    "media/logos/marque-peugeot.png",
+    "media/logos/danone.png",
+    "media/logos/france-24.png"
+   ],
    "updated": "2026-11-09"
   }
  ]
