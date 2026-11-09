@@ -4275,7 +4275,7 @@
    "tags": [
     "advertising"
    ],
-   "thumb": "media/coors/image-asset-v5lp.jpg",
+   "thumb": "media/coors/screen-shot-2016-09-21-at-00-43-06-7eo8.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, tracking, real-time software.</p><p>A Kinect interface to pick your beer by hand: stand in front of the screen, point, and the menu answers the gesture.</p><p>We developed the whole interaction system, the interface and the animations, with one simple requirement: it has to work every time, for anyone, smoothly, in a public place where nobody reads instructions.</p><h3>Credits</h3><ul><li><strong>Client</strong> Coors</li><li><strong>Interaction, interface and animations</strong> Hand Coded</li></ul>",
@@ -4285,11 +4285,15 @@
    },
    "media": [
     {
-     "src": "media/coors/image-asset-v5lp.jpg",
+     "src": "media/coors/image-asset-bzzz.jpg",
      "credit": ""
     },
     {
-     "src": "media/coors/image-asset-bzzz.jpg",
+     "src": "media/coors/screen-shot-2016-09-21-at-00-43-24-olk8.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/coors/image-asset-v5lp.jpg",
      "credit": ""
     }
    ],
@@ -4322,13 +4326,13 @@
    "order": 39,
    "published": false,
    "title": {
-    "en": "Interactive advertising",
-    "fr": "Pubs interactive",
+    "en": "Lexus",
+    "fr": "Lexus",
     "ca": "Lexus",
     "es": "Lexus"
    },
    "subtitle": {
-    "en": "Visual & sound FX apps",
+    "en": "Visual and sound FX app",
     "fr": "Application d'effets visuels et sonores",
     "ca": "App d'efectes visuals i sonors",
     "es": "App de efectos visuales y sonoros"
@@ -4344,11 +4348,11 @@
     "advertising",
     "software"
    ],
-   "thumb": "media/lexus/picture-10-2zj2.jpg",
+   "thumb": "media/lexus/screen568x568-1-ckmi.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A mobile app of visual and sound effects.</p>",
-    "fr": "<p>Application en flash en tout genre, pour de la publicité en ligne entre 2006 et 2012</p>",
+    "fr": "<p>Une application mobile d'effets visuels et sonores.</p>",
     "ca": "<p>Una aplicació mòbil d'efectes visuals i sonors.</p>",
     "es": "<p>Una aplicación móvil de efectos visuales y sonoros.</p>"
    },
@@ -4368,80 +4372,13 @@
     {
      "src": "media/lexus/screen568x568-4-k4qq.webp",
      "credit": ""
-    },
-    {
-     "src": "media/lexus/attitudeaui-xgh6.jpg"
-    },
-    {
-     "src": "media/lexus/1a-gjw3.jpg"
-    },
-    {
-     "src": "media/lexus/advert-0-kwpg.jpg"
-    },
-    {
-     "src": "media/lexus/advert-00-ppea.jpg"
-    },
-    {
-     "src": "media/lexus/advert-1-v8tx.jpg"
-    },
-    {
-     "src": "media/lexus/advert-2-75o8.jpg"
-    },
-    {
-     "src": "media/lexus/advert-4-qyx5.jpg"
-    },
-    {
-     "src": "media/lexus/advert-5-13d1.jpg"
-    },
-    {
-     "src": "media/lexus/algo-1-hpox.jpg"
-    },
-    {
-     "src": "media/lexus/algo-3-j6rv.jpg"
-    },
-    {
-     "src": "media/lexus/picture-3-xaum.jpg"
-    },
-    {
-     "src": "media/lexus/picture-8-33z2.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite1-47gy.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite2-y3zj.jpg"
-    },
-    {
-     "src": "media/lexus/fatsite3-ko89.jpg"
-    },
-    {
-     "src": "media/lexus/04-webcam-start-copy-cn5i.jpg"
-    },
-    {
-     "src": "media/lexus/picture-14-ai41.jpg"
     }
    ],
    "link": "",
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [
-    {
-     "city": "Barcelona",
-     "lat": 41.39,
-     "lon": 2.17
-    },
-    {
-     "city": "London",
-     "lat": 51.51,
-     "lon": -0.13
-    },
-    {
-     "city": "Paris",
-     "lat": 48.86,
-     "lon": 2.35
-    }
-   ],
+   "spots": [],
    "author": "",
    "skills": [
     "audio",
@@ -4450,12 +4387,7 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/marque-lexus.png",
-    "media/logos/marque-cadbury.png",
-    "media/logos/nokia.png",
-    "media/logos/marque-peugeot.png",
-    "media/logos/danone.png",
-    "media/logos/france-24.png"
+    "media/logos/marque-lexus.png"
    ],
    "updated": "2026-11-09"
   },
@@ -5951,7 +5883,7 @@
    "credits": "Fat-Man Collective",
    "section": "work",
    "order": 43,
-   "published": false,
+   "published": true,
    "thumbBack": "",
    "location": null,
    "link": "",
@@ -6017,7 +5949,7 @@
    "credits": "Fat-Man Collective, Work Club",
    "section": "work",
    "order": 44,
-   "published": false,
+   "published": true,
    "thumbBack": "",
    "location": null,
    "author": "Fat-Man Collective, Work Club",
@@ -7382,8 +7314,7 @@
     "tracking",
     "real-time",
     "hardware",
-    "concept-design",
-    "imaginer"
+    "concept-design"
    ],
    "author": "Hand Coded",
    "logos": [],
