@@ -11391,7 +11391,11 @@
    "updated": "2026-11-07"
   },
   {
+<<<<<<< HEAD
    "id": "kinematope-pommery",
+=======
+   "id": "nouveau-contenu",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "section": "work",
    "order": 45,
    "published": true,
@@ -11402,6 +11406,7 @@
     "es": "Kinematope (Pommery)"
    },
    "subtitle": {
+<<<<<<< HEAD
     "fr": "Pablo Valbuena · assistance technique sur le logiciel de contrôle",
     "en": "Pablo Valbuena · technical support on the control software",
     "ca": "Pablo Valbuena · assistència tècnica en el programari de control",
@@ -11414,6 +11419,20 @@
     "es": "Domaine Pommery, Reims"
    },
    "date": "2016",
+=======
+    "en": "Pablo Valbuena",
+    "fr": "Pablo Valbuena",
+    "ca": "Pablo Valbuena",
+    "es": "Pablo Valbuena"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "tags": [
     "advertising",
     "collab"
@@ -11421,10 +11440,17 @@
    "thumb": "media/nouveau-contenu/68639-12419735-hjxw.jpg",
    "thumbBack": "",
    "body": {
+<<<<<<< HEAD
     "fr": "<p><strong>Notre rôle</strong> Assistance technique pour le logiciel de contrôle de l’installation.</p><p>Une installation cinétique de lumière et de son, créée par Pablo Valbuena pour l’escalier de 116 marches qui descend dans les crayères du Domaine Pommery, à Reims. La version Pommery de Kinematope, après l’Espacio Fundación Telefónica de Madrid.</p><p>Créée en 2016 pour Expérience Pommery #13, « Gigantesque », sous le commissariat de Fabrice Bousteau, puis présentée à nouveau lors des éditions suivantes, dont L’Esprit souterrain (#14, 2018) et Introspection (#15, 2020).</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Pablo Valbuena</li><li><strong>Assistance technique</strong> Hand Coded : Cyril Laurier</li><li><strong>Modules LED</strong> Sakma</li><li><strong>Exposition</strong> Expérience Pommery #13, Gigantesque, commissariat Fabrice Bousteau</li><li><strong>Lieu</strong> Domaine Vranken Pommery, Reims</li></ul><h3>Presse</h3><ul><li>« Pablo Valbuena’s mesmeric sonic-kinetic-luminous installation […] that techno-electrifies the steep 116-step staircase. » <a href=\"https://hyperallergic.com/a-drunk-dark-and-gritty-show-in-a-french-wine-cellar/\" target=\"_blank\" rel=\"noopener\"><b>Joseph Nechvatal, Hyperallergic, 2018</b></a></li></ul>",
     "en": "<p><strong>Our role</strong> Technical support for the installation’s control software.</p><p>A kinetic light and sound installation created by Pablo Valbuena for the 116-step staircase that leads down into the chalk cellars of Domaine Pommery, in Reims. The Pommery version of Kinematope, after the Espacio Fundación Telefónica in Madrid.</p><p>Created in 2016 for Expérience Pommery #13, “Gigantesque”, curated by Fabrice Bousteau, and shown again in the following editions, including L’Esprit souterrain (#14, 2018) and Introspection (#15, 2020).</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Technical support</strong> Hand Coded: Cyril Laurier</li><li><strong>LED modules</strong> Sakma</li><li><strong>Exhibition</strong> Expérience Pommery #13, Gigantesque, curated by Fabrice Bousteau</li><li><strong>Venue</strong> Domaine Vranken Pommery, Reims</li></ul><h3>Press</h3><ul><li>“Pablo Valbuena’s mesmeric sonic-kinetic-luminous installation […] that techno-electrifies the steep 116-step staircase.” <a href=\"https://hyperallergic.com/a-drunk-dark-and-gritty-show-in-a-french-wine-cellar/\" target=\"_blank\" rel=\"noopener\"><b>Joseph Nechvatal, Hyperallergic, 2018</b></a></li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Assistència tècnica per al programari de control de la instal·lació.</p><p>Una instal·lació cinètica de llum i so, creada per Pablo Valbuena per a l’escala de 116 graons que baixa a les caves de guix del Domaine Pommery, a Reims. La versió Pommery de Kinematope, després de l’Espacio Fundación Telefónica de Madrid.</p><p>Creada el 2016 per a Expérience Pommery #13, «Gigantesque», amb el comissariat de Fabrice Bousteau, i presentada de nou en les edicions següents, entre les quals L’Esprit souterrain (#14, 2018) i Introspection (#15, 2020).</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Assistència tècnica</strong> Hand Coded: Cyril Laurier</li><li><strong>Mòduls LED</strong> Sakma</li><li><strong>Exposició</strong> Expérience Pommery #13, Gigantesque, comissariat de Fabrice Bousteau</li><li><strong>Lloc</strong> Domaine Vranken Pommery, Reims</li></ul><h3>Premsa</h3><ul><li>«Pablo Valbuena’s mesmeric sonic-kinetic-luminous installation […] that techno-electrifies the steep 116-step staircase.» <a href=\"https://hyperallergic.com/a-drunk-dark-and-gritty-show-in-a-french-wine-cellar/\" target=\"_blank\" rel=\"noopener\"><b>Joseph Nechvatal, Hyperallergic, 2018</b></a></li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Asistencia técnica para el software de control de la instalación.</p><p>Una instalación cinética de luz y sonido, creada por Pablo Valbuena para la escalera de 116 peldaños que baja a las cavas de tiza del Domaine Pommery, en Reims. La versión Pommery de Kinematope, después del Espacio Fundación Telefónica de Madrid.</p><p>Creada en 2016 para Expérience Pommery #13, «Gigantesque», con el comisariado de Fabrice Bousteau, y presentada de nuevo en las ediciones siguientes, entre ellas L’Esprit souterrain (#14, 2018) e Introspection (#15, 2020).</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Asistencia técnica</strong> Hand Coded: Cyril Laurier</li><li><strong>Módulos LED</strong> Sakma</li><li><strong>Exposición</strong> Expérience Pommery #13, Gigantesque, comisariado de Fabrice Bousteau</li><li><strong>Lugar</strong> Domaine Vranken Pommery, Reims</li></ul><h3>Prensa</h3><ul><li>«Pablo Valbuena’s mesmeric sonic-kinetic-luminous installation […] that techno-electrifies the steep 116-step staircase.» <a href=\"https://hyperallergic.com/a-drunk-dark-and-gritty-show-in-a-french-wine-cellar/\" target=\"_blank\" rel=\"noopener\"><b>Joseph Nechvatal, Hyperallergic, 2018</b></a></li></ul>"
+=======
+    "en": "",
+    "fr": "Assitance technique pour le logiciel de controle de l'installation",
+    "ca": "",
+    "es": ""
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    },
    "media": [
     {
@@ -11458,7 +11484,11 @@
    "updated": "2026-11-09"
   },
   {
+<<<<<<< HEAD
    "id": "ras-ubiquitous",
+=======
+   "id": "nouveau-contenu-4",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "section": "work",
    "order": 46,
    "published": true,
@@ -11469,6 +11499,7 @@
     "es": "RAS Ubiquitous"
    },
    "subtitle": {
+<<<<<<< HEAD
     "fr": "Mouawad + Laurier · exposition Ars in Campania, collection de la Maison Ruinart",
     "en": "Mouawad + Laurier · Ars in Campania exhibition, Maison Ruinart collection",
     "ca": "Mouawad + Laurier · exposició Ars in Campania, col·lecció de la Maison Ruinart",
@@ -11481,12 +11512,27 @@
     "es": "Le Cellier, Reims"
    },
    "date": "2026 – 2027",
+=======
+    "en": "Mouawad + Laurier",
+    "fr": "Mouawad + Laurier",
+    "ca": "Mouawad + Laurier",
+    "es": "Mouawad + Laurier"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "tags": [
     "collab"
    ],
    "thumb": "media/nouveau-contenu-4/arsincampania-captagora-231026-52-lc9c.jpg",
    "thumbBack": "",
    "body": {
+<<<<<<< HEAD
     "fr": "<p><strong>Notre rôle</strong> Œuvre générative, son et lumière.</p><p>Une œuvre générative de Mouawad + Laurier, issue de la collection de la Maison Ruinart, présentée dans l’exposition Ars in Campania, regards d’artistes contemporains sur la nature en Champagne. Elle transforme des données en son et en lumière, et donne une forme sensible aux transformations du climat, dans le chapitre « Futurs climatiques ».</p><p>Une exposition de la Ville de Reims au Cellier, ancien cellier d’expédition de la Maison Mumm construit en 1898, du 24 octobre 2026 au 28 février 2027, sous le commissariat d’Alice Audouin, fondatrice d’Art of Change 21. Vingt-deux artistes, dont Julian Charrière, Eva Jospin, Tadashi Kawamata, Vik Muniz, Tomás Saraceno, David Shrigley.</p><h3>Crédits</h3><ul><li><strong>Artistes</strong> Mouawad + Laurier</li><li><strong>Collection</strong> Maison Ruinart</li><li><strong>Commissariat</strong> Alice Audouin</li><li><strong>Exposition</strong> Ville de Reims, Le Cellier</li></ul><h3>Presse</h3><ul><li>« […] donne à ces transformations une forme sensible. » <a href=\"https://matot-braine.fr/au-sommaire/collectivites/ars-in-campania-regards-d-artistes-contemporains-sur-la-nature-en-champagne\" target=\"_blank\" rel=\"noopener\"><b>Nastasia Desanti, Matot Braine, 2026</b></a></li></ul>",
     "en": "<p><strong>Our role</strong> Generative artwork, sound and light.</p><p>A generative artwork by Mouawad + Laurier, from the Maison Ruinart collection, shown in the exhibition Ars in Campania, contemporary artists’ views on nature in Champagne. It turns data into sound and light, and gives a sensory form to the changes in the climate, in the “Climate futures” chapter.</p><p>An exhibition by the City of Reims at Le Cellier, a former Maison Mumm shipping cellar built in 1898, from 24 October 2026 to 28 February 2027, curated by Alice Audouin, founder of Art of Change 21. Twenty-two artists, including Julian Charrière, Eva Jospin, Tadashi Kawamata, Vik Muniz, Tomás Saraceno, David Shrigley.</p><h3>Credits</h3><ul><li><strong>Artists</strong> Mouawad + Laurier</li><li><strong>Collection</strong> Maison Ruinart</li><li><strong>Curator</strong> Alice Audouin</li><li><strong>Exhibition</strong> City of Reims, Le Cellier</li></ul><h3>Press</h3><ul><li>“[…] donne à ces transformations une forme sensible.” <a href=\"https://matot-braine.fr/au-sommaire/collectivites/ars-in-campania-regards-d-artistes-contemporains-sur-la-nature-en-champagne\" target=\"_blank\" rel=\"noopener\"><b>Nastasia Desanti, Matot Braine, 2026</b></a></li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Obra generativa, so i llum.</p><p>Una obra generativa de Mouawad + Laurier, de la col·lecció de la Maison Ruinart, presentada a l’exposició Ars in Campania, mirades d’artistes contemporanis sobre la natura a la Xampanya. Transforma dades en so i en llum, i dona una forma sensible a les transformacions del clima, al capítol «Futurs climàtics».</p><p>Una exposició de la Ciutat de Reims al Cellier, antic celler d’expedició de la Maison Mumm construït el 1898, del 24 d’octubre del 2026 al 28 de febrer del 2027, amb el comissariat d’Alice Audouin, fundadora d’Art of Change 21. Vint-i-dos artistes, entre els quals Julian Charrière, Eva Jospin, Tadashi Kawamata, Vik Muniz, Tomás Saraceno, David Shrigley.</p><h3>Crèdits</h3><ul><li><strong>Artistes</strong> Mouawad + Laurier</li><li><strong>Col·lecció</strong> Maison Ruinart</li><li><strong>Comissariat</strong> Alice Audouin</li><li><strong>Exposició</strong> Ciutat de Reims, Le Cellier</li></ul><h3>Premsa</h3><ul><li>«[…] donne à ces transformations une forme sensible.» <a href=\"https://matot-braine.fr/au-sommaire/collectivites/ars-in-campania-regards-d-artistes-contemporains-sur-la-nature-en-champagne\" target=\"_blank\" rel=\"noopener\"><b>Nastasia Desanti, Matot Braine, 2026</b></a></li></ul>",
@@ -11576,11 +11622,77 @@
      "lon": 4.03
     }
    ],
+=======
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [
+    {
+     "src": "media/nouveau-contenu-4/h4a6400-audouin-consulting-tvpe.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6479-audouin-consulting-v9nb.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6491-audouin-consulting-9q9n.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/h4a6594-audouin-consulting-tj2u.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-50-ktb7.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-51-n7ar.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-52-0lw4.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-53-wr2w.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-55-mfza.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-114-62kt.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-115-mhwc.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-170-6tz3.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-171-axoz.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-172-zrtb.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-173-h6se.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-174-aau1.jpg"
+    },
+    {
+     "src": "media/nouveau-contenu-4/arsincampania-captagora-231026-175-zlxr.jpg"
+    }
+   ],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "skills": [
     "accompagner",
     "fabriquer"
    ],
    "author": "",
+<<<<<<< HEAD
    "logos": [
     "media/logos/ruinart.png"
    ],
@@ -11588,6 +11700,13 @@
   },
   {
    "id": "wizz",
+=======
+   "logos": [],
+   "updated": "2026-11-09"
+  },
+  {
+   "id": "nouveau-contenu-5",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "section": "work",
    "order": 47,
    "published": true,
@@ -11598,10 +11717,17 @@
     "es": "Wizz"
    },
    "subtitle": {
+<<<<<<< HEAD
     "fr": "Jeu en ligne pour voter en discothèque",
     "en": "Online game for voting in nightclubs",
     "ca": "Joc en línia per votar a la discoteca",
     "es": "Juego en línea para votar en la discoteca"
+=======
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    },
    "place": {
     "en": "",
@@ -11609,17 +11735,28 @@
     "ca": "",
     "es": ""
    },
+<<<<<<< HEAD
    "date": "2013",
+=======
+   "date": "",
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    "tags": [
     "advertising"
    ],
    "thumb": "media/nouveau-contenu-5/shape1-fv90.jpg",
    "thumbBack": "",
    "body": {
+<<<<<<< HEAD
     "fr": "<p>Wizz, un jeu en ligne pour voter en discothèque. Le public choisit son camp et vote pour ses morceaux préférés, les résultats et les meilleurs scores s’affichent en direct sur les écrans du club.</p>",
     "en": "<p>Wizz, an online game for voting in nightclubs. The crowd picks a side and votes for its favourite songs, while results and top scores appear live on the club’s screens.</p>",
     "ca": "<p>Wizz, un joc en línia per votar a la discoteca. El públic tria el seu bàndol i vota les seves cançons preferides, i els resultats i les millors puntuacions apareixen en directe a les pantalles del club.</p>",
     "es": "<p>Wizz, un juego en línea para votar en la discoteca. El público elige su bando y vota sus canciones favoritas, y los resultados y las mejores puntuaciones aparecen en directo en las pantallas del club.</p>"
+=======
+    "en": "",
+    "fr": "Wizz jeu en ligne pour voter en discoteque",
+    "ca": "",
+    "es": ""
+>>>>>>> e118c8417e6dd89f0ed8d53351f650727642366e
    },
    "media": [
     {
