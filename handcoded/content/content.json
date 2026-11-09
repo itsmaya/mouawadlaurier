@@ -3827,7 +3827,7 @@
   {
    "id": "sonaris",
    "section": "work",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Sonaris",
@@ -3875,7 +3875,7 @@
     "tools"
    ],
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "nestle-crunch",
@@ -3908,7 +3908,7 @@
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, tracking, sound, generative visuals, real-time software.</p><p>Si suena es Crunch. An interactive installation where visitors’ movements generate beats and particles on a giant screen: the body becomes an instrument, with sounds by Camilo Lara (Instituto Mexicano del Sonido).</p><p>We developed the interactive core of the piece: body tracking with a Kinect, the interaction of the particles with movement and their animation, for a system that cycles participants through by the minute, in the middle of an event.</p><p>Launched for Nestlé México at the Palacio de los Deportes in Mexico City, in October 2015, with an app and a website.</p><h3>Credits</h3><ul><li><strong>Client</strong> Nestlé México</li><li><strong>Music</strong> Camilo Lara</li><li><strong>Vocals</strong> Santiago Casillas</li><li><strong>Tracking, interaction and particle animation</strong> Hand Coded</li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Concept, tracking, son, image générative, logiciel temps réel.</p><p>Si suena es Crunch. Une installation interactive où les mouvements des visiteurs génèrent des rythmes et des particules sur un écran géant : le corps devient instrument, avec des sons de Camilo Lara (Instituto Mexicano del Sonido).</p><p>Nous avons développé le cœur interactif du dispositif : le tracking des corps avec une Kinect, l’interaction des particules avec les mouvements et leur animation, pour un système qui enchaîne les participants à la minute, en plein événement.</p><p>Lancée pour Nestlé México au Palacio de los Deportes de Mexico, en octobre 2015, avec une application et un site.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Nestlé México</li><li><strong>Musique</strong> Camilo Lara</li><li><strong>Chant</strong> Santiago Casillas</li><li><strong>Tracking, interaction et animation des particules</strong> Hand Coded</li></ul>",
+    "fr": "<p><strong>Notre rôle</strong>&nbsp;Tracking, son, image générative, logiciel temps réel.</p><p>Si suena es Crunch. Une installation interactive où les mouvements des visiteurs génèrent des rythmes et des particules sur un écran géant : le corps devient instrument, avec des sons de Camilo Lara (Instituto Mexicano del Sonido).</p><p>Nous avons développé le cœur interactif du dispositif : le tracking des corps avec une Kinect, l’interaction des particules avec les mouvements et leur animation, pour un système qui enchaîne les participants à la minute, en plein événement.</p><p>Lancée pour Nestlé México au Palacio de los Deportes de Mexico, en octobre 2015, avec une application et un site.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Nestlé México</li><li><b>Agence</b> Antiloop</li><li><strong>Musique</strong> Camilo Lara</li><li><strong>Chant</strong> Santiago Casillas</li><li><strong>Architecture système, tracking, interaction et animation des particules</strong> Hand Coded</li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Concepte, tracking, so, imatge generativa, programari en temps real.</p><p>Si suena es Crunch. Una instal·lació interactiva on els moviments dels visitants generen ritmes i partícules en una pantalla gegant: el cos es converteix en instrument, amb sons de Camilo Lara (Instituto Mexicano del Sonido).</p><p>Vam desenvolupar el cor interactiu del dispositiu: el tracking dels cossos amb una Kinect, la interacció de les partícules amb els moviments i la seva animació, per a un sistema que encadena els participants minut a minut, en ple esdeveniment.</p><p>Llançada per a Nestlé México al Palacio de los Deportes de Ciutat de Mèxic, l’octubre del 2015, amb una aplicació i un web.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Nestlé México</li><li><strong>Música</strong> Camilo Lara</li><li><strong>Veu</strong> Santiago Casillas</li><li><strong>Tracking, interacció i animació de les partícules</strong> Hand Coded</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Concepto, tracking, sonido, imagen generativa, software en tiempo real.</p><p>Si suena es Crunch. Una instalación interactiva donde los movimientos de los visitantes generan ritmos y partículas en una pantalla gigante: el cuerpo se convierte en instrumento, con sonidos de Camilo Lara (Instituto Mexicano del Sonido).</p><p>Desarrollamos el corazón interactivo del dispositivo: el tracking de los cuerpos con una Kinect, la interacción de las partículas con los movimientos y su animación, para un sistema que encadena a los participantes minuto a minuto, en pleno evento.</p><p>Lanzada para Nestlé México en el Palacio de los Deportes de Ciudad de México, en octubre de 2015, con una aplicación y una web.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Nestlé México</li><li><strong>Música</strong> Camilo Lara</li><li><strong>Voz</strong> Santiago Casillas</li><li><strong>Tracking, interacción y animación de las partículas</strong> Hand Coded</li></ul>"
    },
@@ -3916,9 +3916,12 @@
     {
      "src": "media/nestle-crunch/image-asset-1fdl.webp",
      "credit": ""
+    },
+    {
+     "src": "media/nestle-crunch/screenshot-2026-11-09-at-15-35-22-8oo7.jpg"
     }
    ],
-   "link": "",
+   "link": "https://awrd.com/creatives/detail/1021256",
    "team": [
     "cyril",
     "maya"
@@ -3939,12 +3942,13 @@
     "audio",
     "real-time",
     "concept-design",
-    "fabriquer"
+    "fabriquer",
+    "accompagner"
    ],
    "logos": [
     "media/logos/nestle.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "peugeot",
@@ -4035,7 +4039,7 @@
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, brain-computer interfaces, generative visuals, real-time software.</p><p>What do we really feel when we taste a wine? For the opening of Churchill’s visitor centre, during Port Wine Day 2016 in Porto, guests blind-tasted three ports wearing an EEG headset: a White Port, a 10-year Tawny and a Reserve.</p><p>Working directly with the house, we designed and developed the visual and interactive part: brainwaves turned into music in real time, and visuals projection-mapped across the room following that music. Every tasting became a unique show, visible to everyone.</p><h3>Credits</h3><ul><li><strong>Client</strong> Churchill’s</li><li><strong>Visual and interactive design</strong> Hand Coded</li></ul>",
-    "fr": "<p><strong>Notre rôle</strong> Concept, interfaces cérébrales, image générative, logiciel temps réel.</p><p>Que ressent-on vraiment quand on goûte un vin ? Pour l’ouverture du centre de visite de Churchill’s, lors du Port Wine Day 2016 à Porto, les invités ont goûté trois portos à l’aveugle, casque EEG sur la tête : un White Port, un Tawny 10 ans et un Reserve.</p><p>Nous avons conçu et développé, en direct avec la Maison, la partie visuelle et interactive : les ondes cérébrales transformées en musique en temps réel, et les visuels projetés en mapping dans la salle qui suivaient cette musique. Chaque dégustation devenait un spectacle unique, visible de tous.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Churchill’s</li><li><strong>Conception visuelle et interactive</strong> Hand Coded</li></ul>",
+    "fr": "<p><strong>Notre rôle</strong> Concept, design, interfaces cérébrales, image générative, logiciel temps réel.</p><p>Pour l’ouverture du centre de visite de Churchill’s, lors du Port Wine Day 2016 à Porto, les invités ont goûté trois portos à l’aveugle, casque EEG sur la tête : un White Port, un Tawny 10 ans et un Reserve.</p><p>Nous avons conçu et développé, en direct avec la Maison, la partie visuelle et interactive : les ondes cérébrales transformées en musique en temps réel, et les visuels projetés en mapping dans la salle qui suivaient cette musique. Chaque dégustation devenait un spectacle unique, visible de tous.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Churchill’s</li><li>Analyse Cérebral Temps réel Muart</li><li><strong>Conception visuelle et interactive</strong> Hand Coded : Maya Benainous . Stephanie Huerre</li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Concepte, interfícies cerebrals, imatge generativa, programari en temps real.</p><p>Què sentim realment quan tastem un vi? Per a l’obertura del centre de visitants de Churchill’s, durant el Port Wine Day 2016 a Porto, els convidats van tastar tres vins de Porto a cegues, amb un casc EEG al cap: un White Port, un Tawny de 10 anys i un Reserve.</p><p>Vam concebre i desenvolupar, directament amb la casa, la part visual i interactiva: les ones cerebrals transformades en música en temps real, i els visuals projectats en mapping a la sala que seguien aquesta música. Cada tast es convertia en un espectacle únic, visible per a tothom.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Churchill’s</li><li><strong>Concepció visual i interactiva</strong> Hand Coded</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Concepto, interfaces cerebrales, imagen generativa, software en tiempo real.</p><p>¿Qué sentimos realmente al catar un vino? Para la apertura del centro de visitantes de Churchill’s, durante el Port Wine Day 2016 en Oporto, los invitados cataron tres oportos a ciegas, con un casco EEG en la cabeza: un White Port, un Tawny de 10 años y un Reserve.</p><p>Concebimos y desarrollamos, directamente con la casa, la parte visual e interactiva: las ondas cerebrales transformadas en música en tiempo real, y los visuales proyectados en mapping en la sala que seguían esa música. Cada cata se convertía en un espectáculo único, visible para todos.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Churchill’s</li><li><strong>Concepción visual e interactiva</strong> Hand Coded</li></ul>"
    },
@@ -4101,8 +4105,8 @@
    ],
    "link": "",
    "team": [
-    "cyril",
-    "maya"
+    "maya",
+    "stephanie"
    ],
    "credits": "",
    "location": null,
@@ -4121,17 +4125,19 @@
     "projection-mapping",
     "real-time",
     "concept-design",
-    "fabriquer"
+    "fabriquer",
+    "imaginer"
    ],
    "logos": [
-    "media/logos/churchills.png"
+    "media/logos/churchills.png",
+    "media/logos/muartslogo-hgii.jpg"
    ],
    "updated": "2026-11-09"
   },
   {
    "id": "cadbury",
    "section": "work",
-   "order": 40,
+   "order": 41,
    "published": false,
    "title": {
     "en": "Cadbury",
@@ -4186,12 +4192,13 @@
    ],
    "logos": [
     "media/logos/marque-cadbury.png"
-   ]
+   ],
+   "updated": "2026-11-09"
   },
   {
    "id": "coors",
    "section": "work",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Coors",
@@ -4254,12 +4261,12 @@
    "logos": [
     "media/logos/marque-coors.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "lexus",
    "section": "work",
-   "order": 38,
+   "order": 39,
    "published": false,
    "title": {
     "en": "Lexus",
@@ -4324,7 +4331,8 @@
    ],
    "logos": [
     "media/logos/marque-lexus.png"
-   ]
+   ],
+   "updated": "2026-11-09"
   },
   {
    "id": "imaginer",
@@ -5817,7 +5825,7 @@
    ],
    "credits": "Fat-Man Collective",
    "section": "work",
-   "order": 42,
+   "order": 43,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -5829,7 +5837,7 @@
     "tools"
    ],
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "nokia-navigator",
@@ -5883,7 +5891,7 @@
    ],
    "credits": "Fat-Man Collective, Work Club",
    "section": "work",
-   "order": 43,
+   "order": 44,
    "published": true,
    "thumbBack": "",
    "location": null,
@@ -5895,7 +5903,7 @@
    "logos": [
     "media/logos/nokia.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "immersive",
@@ -7043,7 +7051,7 @@
   {
    "id": "prometheus",
    "section": "work",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Prometheus",
@@ -7153,12 +7161,12 @@
    "logos": [
     "media/logos/upf.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "augmented-paper",
    "section": "work",
-   "order": 36,
+   "order": 37,
    "published": false,
    "title": {
     "en": "Augmented Paper",
@@ -7234,12 +7242,13 @@
     "concept-design"
    ],
    "author": "Hand Coded",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-09"
   },
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -7314,12 +7323,12 @@
    "logos": [
     "media/logos/fisheye.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "fuurin",
    "section": "work",
-   "order": 41,
+   "order": 42,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -7367,7 +7376,8 @@
     "sustainable"
    ],
    "author": "Mouawad + Laurier",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-09"
   },
   {
    "id": "ruinart",
@@ -10576,7 +10586,7 @@
   {
    "id": "eruption-of-the-end",
    "section": "work",
-   "order": 44,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Eruption of the end",
@@ -10658,7 +10668,7 @@
     "ca": "<p><strong>El nostre paper</strong> Tracking, mapping de vídeo, so, programari en temps real.</p><p>La vella xemeneia de la fàbrica de sabó del Congo, a Roubaix, construïda per a Victor Vaissier a finals del segle XIX, torna a la vida. Bombolles de sabó s’escapen d’aquesta darrera erupció, i les imatges que s’hi reflecteixen ens fan viatjar pels records d’un lloc que ha travessat el temps. La xemeneia, tòtem ara abandonat, n’és el testimoni.</p><p>Una instal·lació de Rossella Piccinno, creada a Le Fresnoy, Studio national des arts contemporains, per a Panorama 13. En vam concebre la part interactiva amb una Kinect: quan un visitant s’hi acosta, neixen les bombolles, i a cadascuna hi apareixen vídeos, els testimonis dels veïns del barri.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacció</strong> Hand Coded</li><li><strong>Producció</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premis</h3><ul><li>Premi dels Amics de Le Fresnoy a la millor instal·lació, Panorama 13, 2011</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Tracking, mapping de vídeo, sonido, software en tiempo real.</p><p>La vieja chimenea de la fábrica de jabón del Congo, en Roubaix, construida para Victor Vaissier a finales del siglo XIX, vuelve a la vida. Burbujas de jabón escapan de esta última erupción, y las imágenes que se reflejan en ellas nos hacen viajar por los recuerdos de un lugar que ha atravesado el tiempo. La chimenea, tótem ahora abandonado, es su testigo.</p><p>Una instalación de Rossella Piccinno, creada en Le Fresnoy, Studio national des arts contemporains, para Panorama 13. Concebimos su parte interactiva con una Kinect: cuando un visitante se acerca, nacen las burbujas, y en cada una aparecen vídeos, los testimonios de los vecinos del barrio.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Rossella Piccinno</li><li><strong>Interacción</strong> Hand Coded</li><li><strong>Producción</strong> Le Fresnoy, Studio national des arts contemporains</li></ul><h3>Premios</h3><ul><li>Premio de los Amigos de Le Fresnoy a la mejor instalación, Panorama 13, 2011</li></ul>"
    },
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "rossella-piccinno",
