@@ -4321,21 +4321,21 @@
    "updated": "2026-11-09"
   },
   {
-   "id": "lexus",
+   "id": "pubs-interactives",
    "section": "work",
    "order": 39,
    "published": false,
    "title": {
-    "en": "Lexus",
-    "fr": "Lexus",
-    "ca": "Lexus",
-    "es": "Lexus"
+    "fr": "Pubs interactives",
+    "en": "Interactive advertising",
+    "ca": "Publicitat interactiva",
+    "es": "Publicidad interactiva"
    },
    "subtitle": {
-    "en": "Visual and sound FX app",
-    "fr": "Application d'effets visuels et sonores",
-    "ca": "App d'efectes visuals i sonors",
-    "es": "App de efectos visuales y sonoros"
+    "fr": "Applications Flash pour la publicité en ligne",
+    "en": "Flash applications for online advertising",
+    "ca": "Aplicacions Flash per a la publicitat en línia",
+    "es": "Aplicaciones Flash para la publicidad en línea"
    },
    "place": {
     "en": "",
@@ -4343,18 +4343,18 @@
     "ca": "",
     "es": ""
    },
-   "date": "",
+   "date": "2006 – 2012",
    "tags": [
     "advertising",
     "software"
    ],
-   "thumb": "media/lexus/screen568x568-1-ckmi.jpg",
+   "thumb": "media/lexus/picture-10-2zj2.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>A mobile app of visual and sound effects.</p>",
-    "fr": "<p>Une application mobile d'effets visuels et sonores.</p>",
-    "ca": "<p>Una aplicació mòbil d'efectes visuals i sonors.</p>",
-    "es": "<p>Una aplicación móvil de efectos visuales y sonoros.</p>"
+    "fr": "<p>Des applications Flash en tout genre, pour la publicité en ligne, entre 2006 et 2012.</p>",
+    "en": "<p>All kinds of Flash applications for online advertising, between 2006 and 2012.</p>",
+    "ca": "<p>Aplicacions Flash de tota mena per a la publicitat en línia, entre el 2006 i el 2012.</p>",
+    "es": "<p>Aplicaciones Flash de todo tipo para la publicidad en línea, entre 2006 y 2012.</p>"
    },
    "media": [
     {
@@ -4372,13 +4372,80 @@
     {
      "src": "media/lexus/screen568x568-4-k4qq.webp",
      "credit": ""
+    },
+    {
+     "src": "media/lexus/attitudeaui-xgh6.jpg"
+    },
+    {
+     "src": "media/lexus/1a-gjw3.jpg"
+    },
+    {
+     "src": "media/lexus/advert-0-kwpg.jpg"
+    },
+    {
+     "src": "media/lexus/advert-00-ppea.jpg"
+    },
+    {
+     "src": "media/lexus/advert-1-v8tx.jpg"
+    },
+    {
+     "src": "media/lexus/advert-2-75o8.jpg"
+    },
+    {
+     "src": "media/lexus/advert-4-qyx5.jpg"
+    },
+    {
+     "src": "media/lexus/advert-5-13d1.jpg"
+    },
+    {
+     "src": "media/lexus/algo-1-hpox.jpg"
+    },
+    {
+     "src": "media/lexus/algo-3-j6rv.jpg"
+    },
+    {
+     "src": "media/lexus/picture-3-xaum.jpg"
+    },
+    {
+     "src": "media/lexus/picture-8-33z2.jpg"
+    },
+    {
+     "src": "media/lexus/fatsite1-47gy.jpg"
+    },
+    {
+     "src": "media/lexus/fatsite2-y3zj.jpg"
+    },
+    {
+     "src": "media/lexus/fatsite3-ko89.jpg"
+    },
+    {
+     "src": "media/lexus/04-webcam-start-copy-cn5i.jpg"
+    },
+    {
+     "src": "media/lexus/picture-14-ai41.jpg"
     }
    ],
    "link": "",
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    },
+    {
+     "city": "London",
+     "lat": 51.51,
+     "lon": -0.13
+    },
+    {
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
+    }
+   ],
    "author": "",
    "skills": [
     "audio",
@@ -4387,7 +4454,12 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/marque-lexus.png"
+    "media/logos/marque-lexus.png",
+    "media/logos/marque-cadbury.png",
+    "media/logos/nokia.png",
+    "media/logos/marque-peugeot.png",
+    "media/logos/danone.png",
+    "media/logos/france-24.png"
    ],
    "updated": "2026-11-09"
   },
