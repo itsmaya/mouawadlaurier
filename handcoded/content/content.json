@@ -1897,8 +1897,8 @@
     "hardware",
     "real-time",
     "generative",
-    "tools",
-    "accompagner"
+    "accompagner",
+    "fabriquer"
    ],
    "logos": [
     "media/logos/mta-festival.png"
@@ -2605,6 +2605,9 @@
     },
     {
      "src": "media/viktoria-modesta/img-7462-jx8i.jpg"
+    },
+    {
+     "src": "media/viktoria-modesta/schoeneweide-funkhaus-nalepastrasse-nathalie-sch-bnbu.jpg"
     }
    ],
    "link": "http://www.viktoriamodesta.com/",
@@ -2630,7 +2633,9 @@
     "audio",
     "hardware",
     "tools",
-    "accompagner"
+    "accompagner",
+    "fabriquer",
+    "explorer"
    ],
    "logos": [
     "media/music-tech-fest/musictechfest-2glp.jpg",
@@ -3195,7 +3200,7 @@
     "collab",
     "touring"
    ],
-   "thumb": "media/covers/methods.jpg",
+   "thumb": "media/methods/screenshot-2026-11-09-at-12-25-10-45ni.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Creation and control tools, light and LEDs, sound.</p><p>Light runs through Durham Cathedral, inside and out, following its bells. The work draws on change ringing, the seventeenth-century English art of ringing bells in mathematical sequences: the cathedral is divided into ten segments, one per bell, and the light makes these patterns visible.</p><p>Every evening, teams of bell ringers from across the United Kingdom played it live. We designed and developed the tools that link the sound of the bells to the light of a thousand-year-old monument, in real time, at the scale of a cathedral: the largest and most complex work of the festival that year.</p><p>Created with the cathedral’s ringing master, Christopher Crabtree, and the Durham bell team, who wrote the score. Lumiere Durham, 16 to 19 November 2017.</p><h3>Credits</h3><ul><li><strong>Artist</strong> Pablo Valbuena</li><li><strong>Music</strong> Christopher Crabtree and the Durham Cathedral bell team</li><li><strong>Creation and control tools</strong> Hand Coded</li><li><strong>Production</strong> Artichoke, Lumiere Durham</li></ul><h3>Press</h3><ul><li>“By far the largest and most complex piece this year is Methods, the bells and lights at the cathedral.” <a href=\"https://www.inkl.com/news/bellringers-to-create-dazzling-light-show-at-durham-cathedral\">Maev Kennedy, The Guardian, 2017</a></li><li><a href=\"https://churchtimes.co.uk/articles/2017/24-november/news/uk/festival-of-light\">Church Times, 2017</a> · Yorkshire Post, 2017</li></ul>",
@@ -3203,7 +3208,32 @@
     "ca": "<p><strong>El nostre paper</strong> Eines de creació i control, llum i LED, so.</p><p>La llum recorre la catedral de Durham, per dins i per fora, seguint les seves campanes. L’obra s’inspira en el change ringing, l’art anglès del segle XVII de tocar les campanes en seqüències matemàtiques: la catedral es divideix en deu segments, un per campana, i la llum fa visibles aquests motius.</p><p>Cada vespre, equips de campaners vinguts de tot el Regne Unit la van tocar en directe. Vam concebre i desenvolupar les eines que connecten el so de les campanes amb la llum d’un monument mil·lenari, en temps real, a escala d’una catedral: l’obra més gran i més complexa del festival aquell any.</p><p>Creada amb el mestre campaner de la catedral, Christopher Crabtree, i l’equip de campanes de Durham, que en van escriure la partitura. Lumiere Durham, del 16 al 19 de novembre del 2017.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Música</strong> Christopher Crabtree i l’equip de campanes de la catedral de Durham</li><li><strong>Eines de creació i control</strong> Hand Coded</li><li><strong>Producció</strong> Artichoke, Lumiere Durham</li></ul><h3>Premsa</h3><ul><li>«By far the largest and most complex piece this year is Methods, the bells and lights at the cathedral.» <a href=\"https://www.inkl.com/news/bellringers-to-create-dazzling-light-show-at-durham-cathedral\">Maev Kennedy, The Guardian, 2017</a></li><li><a href=\"https://churchtimes.co.uk/articles/2017/24-november/news/uk/festival-of-light\">Church Times, 2017</a> · Yorkshire Post, 2017</li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Herramientas de creación y control, luz y LED, sonido.</p><p>La luz recorre la catedral de Durham, por dentro y por fuera, siguiendo sus campanas. La obra se inspira en el change ringing, el arte inglés del siglo XVII de tocar las campanas en secuencias matemáticas: la catedral se divide en diez segmentos, uno por campana, y la luz hace visibles esos motivos.</p><p>Cada noche, equipos de campaneros venidos de todo el Reino Unido la tocaron en directo. Concebimos y desarrollamos las herramientas que conectan el sonido de las campanas con la luz de un monumento milenario, en tiempo real, a escala de una catedral: la obra más grande y más compleja del festival aquel año.</p><p>Creada con el maestro campanero de la catedral, Christopher Crabtree, y el equipo de campanas de Durham, que escribieron la partitura. Lumiere Durham, del 16 al 19 de noviembre de 2017.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Pablo Valbuena</li><li><strong>Música</strong> Christopher Crabtree y el equipo de campanas de la catedral de Durham</li><li><strong>Herramientas de creación y control</strong> Hand Coded</li><li><strong>Producción</strong> Artichoke, Lumiere Durham</li></ul><h3>Prensa</h3><ul><li>«By far the largest and most complex piece this year is Methods, the bells and lights at the cathedral.» <a href=\"https://www.inkl.com/news/bellringers-to-create-dazzling-light-show-at-durham-cathedral\">Maev Kennedy, The Guardian, 2017</a></li><li><a href=\"https://churchtimes.co.uk/articles/2017/24-november/news/uk/festival-of-light\">Church Times, 2017</a> · Yorkshire Post, 2017</li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "https://www.youtube.com/watch?v=TbOYFjyxdW0"
+    },
+    {
+     "src": "media/methods/874210200-4u2z.jpg"
+    },
+    {
+     "src": "media/methods/screen-shot-2017-12-02-at-15-46-00-m8z7.jpg"
+    },
+    {
+     "src": "media/methods/screen-shot-2017-12-04-at-13-17-21-ex0d.jpg"
+    },
+    {
+     "src": "media/methods/screen-shot-2017-12-04-at-13-17-32-wnfk.jpg"
+    },
+    {
+     "src": "media/methods/screen-shot-2017-12-04-at-13-17-32-copy-v4hi.jpg"
+    },
+    {
+     "src": "media/methods/screenshot-2026-11-09-at-12-24-20-gggv.jpg"
+    },
+    {
+     "src": "media/methods/screenshot-2026-11-09-at-12-26-27-t24j.jpg"
+    }
+   ],
    "link": "https://www.pablovalbuena.com",
    "team": [
     "pablo-valbuena",
@@ -3225,7 +3255,8 @@
     "audio",
     "real-time",
     "tools",
-    "accompagner"
+    "accompagner",
+    "fabriquer"
    ],
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
