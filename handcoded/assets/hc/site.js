@@ -1570,8 +1570,9 @@ const vimeoThumbs = new Map();
 const vimeoThumb = id => { if (!vimeoThumbs.has(id)) vimeoThumbs.set(id, fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent('https://vimeo.com/' + id)}&width=1280`).then(r => (r.ok ? r.json() : null)).then(j => (j && j.thumbnail_url) || '').catch(() => '')); return vimeoThumbs.get(id); };
 const firstEmbed = (post, src) => { const v = ((post && post.media) || []).filter(m => m && /youtu\.?be|vimeo\.com/.test(m.src || '')); return !v.length || v[0].src === src; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
+const OVER_MAX = 56;   // dépassement maximal de la bande à ses bouts, en pixels
 const post2D = {
-  open: false, height: 0, panels: [], x: 0, finalpos: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
+  open: false, height: 0, panels: [], x: 0, finalpos: 0, over: 0, ov: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
     this.clear(); this.post = post;
     /* savoir-faire : un petit bandeau fixe rappelle où l'on est quand la bande a défilé au-delà de la description */
@@ -1606,7 +1607,7 @@ const post2D = {
     }
     if (post.logos && post.logos.length && card !== 'place') this.addLogos(post);   // partenaires, avant le lien
     if (post.link && card !== 'place') this.addLink(post);   // le lien du projet ferme la bande, sur la dernière fiche
-    this.layout(); this.x = 0; this.finalpos = 0; strip.style.transform = 'translateX(0px)';
+    this.layout(); this.x = 0; this.finalpos = 0; this.over = 0; this.ov = 0; this.tx = 0; strip.style.transform = 'translateX(0px)';
   },
   addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
     const projects = relProjects(post); if (!projects.length) return;
@@ -1942,15 +1943,35 @@ const post2D = {
     if (type === 'RIGHT') this.finalpos = -this.panels[Math.min(post + 1, this.panels.length - 1)].offsetLeft;
     if (type === 'LEFT') this.finalpos = -this.panels[Math.max(post - 1, 0)].offsetLeft;
   },
+  /* Aux deux bouts, la bande résiste comme un élastique : elle dépasse un peu, de moins en moins, puis revient en douceur */
+  rubber(v) { const lo = Math.min(0, this.end), M = OVER_MAX, r = e => M * (1 - 1 / (e / M * 0.55 + 1)); return v > 0 ? r(v) : v < lo ? lo - r(lo - v) : v; },
+  push(d) {   // molette, pavé tactile, élan : ce qui dépasse les bouts devient de l'élastique
+    const lo = Math.min(0, this.end), v = this.finalpos + d;
+    if (v > 0 || v < lo) {   // l'excès donne un élan à un ressort amorti : la bande part, ralentit, revient, sans jamais trembler
+      const ex = v > 0 ? v : v - lo, out = !this.over || Math.sign(ex) === Math.sign(this.over);
+      this.finalpos = Math.max(lo, Math.min(0, v)); this.ov += ex * 12 * (out ? Math.pow(Math.max(0, 1 - Math.abs(this.over) / OVER_MAX), 2) : 1);
+    }
+    else this.finalpos = v;
+  },
   step() {   // Navigation._navigation
     if (!this.open) return;
+    let target;
     if (this.dragging) {   // la bande est réduite sur téléphone : le doigt la fait avancer de la même distance à l'écran
       const d = (mouse2D - this.xprev) * 1.5 / (this.scale || 1);
-      this.finalpos += d; this.vel = this.vel * 0.6 + d * 0.4; this.x -= (this.x - this.finalpos) * ease(STYLE.easing); this.xprev = mouse2D;
+      this.finalpos += d; this.vel = this.vel * 0.6 + d * 0.4; this.xprev = mouse2D;
+      target = this.rubber(this.finalpos); this.x -= (this.x - target) * ease(STYLE.easing);
+    } else {
+      const lo = Math.min(0, this.end);
+      if (this.finalpos > 0 || this.finalpos < lo) { this.over += this.rubber(this.finalpos) - Math.max(lo, Math.min(0, this.finalpos)); this.finalpos = Math.max(lo, Math.min(0, this.finalpos)); }   // lâchée au-delà d'un bout
+      if (this.over || this.ov) {   // ressort à amortissement critique, résolu exactement : un seul aller, un seul retour, à toute cadence d'images
+        const t = Math.min(0.1, frames / FPS), w = 11, e = Math.exp(-w * t), o = this.over, v = this.ov, b = v + w * o;
+        this.over = Math.max(-OVER_MAX, Math.min(OVER_MAX, (o + b * t) * e)); this.ov = (v - w * b * t) * e;
+        if (Math.abs(this.over) < 0.2 && Math.abs(this.ov) < 5) this.over = this.ov = 0;
+      }
+      target = this.finalpos + this.over;
+      if (Math.abs(target - this.x) > 0.3) this.x -= (this.x - target) * ease(STYLE.easing * 2 / 3); else this.x = target;
     }
-    else if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
-    else if (this.finalpos > 0) this.finalpos = 0; else if (this.finalpos < this.end) this.finalpos = this.end;
-    strip.style.transform = `translateX(${Math.round(this.x)}px)`;
+    const tx = Math.round(this.x); if (tx !== this.tx) { this.tx = tx; strip.style.transform = `translateX(${tx}px)`; }
   },
 };
 /* ================================================================ Fiche verticale (téléphone)
@@ -2195,10 +2216,10 @@ post2dEl.addEventListener('click', e => { if (post2D.justDragged) { e.preventDef
 post2dEl.addEventListener('wheel', e => {
   e.preventDefault(); if (!post2D.open || post2D.dragging) return;
   const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY, k = e.deltaMode === 1 ? 16 : 1;
-  post2D.finalpos = Math.max(post2D.end - 60, Math.min(60, post2D.finalpos - d * k / (post2D.scale || 1)));
+  post2D.push(-d * k / (post2D.scale || 1));
 }, { passive: false });
 window.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.target.closest('.scroll-x')) e.preventDefault(); }, { passive: false });
-const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); post2D.finalpos += (post2D.vel || 0) * 10; } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
+const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); const lo = Math.min(0, post2D.end), v = post2D.finalpos, c = Math.max(lo, Math.min(0, v)); post2D.over = post2D.rubber(v) - c; post2D.ov = 0; post2D.finalpos = c; post2D.push((post2D.vel || 0) * 10); } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
 post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('pointercancel', stopDrag2D);
 post2dEl.addEventListener('lostpointercapture', e => { if (e.target === post2dEl) stopDrag2D(); });   // au doigt, la capture passe de l'élément touché à la bande : ce transfert ne doit pas arrêter le glissement
 window.addEventListener('pointerup', () => { if (pend2D || post2D.dragging) stopDrag2D(); });
