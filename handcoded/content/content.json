@@ -1970,7 +1970,13 @@
    "media": [
     {
      "src": "https://vimeo.com/1244195736",
-     "credit": ""
+     "credit": "",
+     "caption": {
+      "en": "",
+      "fr": "",
+      "ca": "",
+      "es": ""
+     }
     },
     {
      "src": "media/ox/14589861-1442393279393479-4417632417371852675-o-whxi.jpg",
@@ -11391,10 +11397,10 @@
     "es": "Wizz"
    },
    "subtitle": {
-    "fr": "Jeu en ligne pour voter en discothèque",
-    "en": "Online game for voting in nightclubs",
-    "ca": "Joc en línia per votar a la discoteca",
-    "es": "Juego en línea para votar en la discoteca"
+    "fr": "Voter en dansant avec smartphone en discothèque",
+    "en": "Live voting game  in nightclubs",
+    "ca": "",
+    "es": ""
    },
    "place": {
     "en": "",
@@ -11424,11 +11430,11 @@
      "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/ecran-pres-fight-820p.jpg",
+     "src": "media/nouveau-contenu-5/launchparty2-34kk.jpg",
      "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/launchparty2-34kk.jpg",
+     "src": "media/nouveau-contenu-5/ecran-pres-fight-820p.jpg",
      "credit": ""
     },
     {
