@@ -2089,6 +2089,9 @@
     {
      "src": "media/ox/14525164-1442394752726665-7710403301381164037-o-wjnp.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/ox/screenshot-2026-11-03-at-14-25-40-n79k.jpg"
     }
    ],
    "link": "http://romaintardy.com",
@@ -2149,7 +2152,7 @@
     "media/nuit-blanche/muitblanche-rngg.jpg",
     "media/logos/aubio.png"
    ],
-   "updated": "2026-11-08"
+   "updated": "2026-11-09"
   },
   {
    "id": "mgntrn",
@@ -2312,7 +2315,7 @@
     "software",
     "ai"
    ],
-   "thumb": "media/ledotron/01-vue-ensemble.jpg",
+   "thumb": "media/ledotron/screenshot-2026-11-03-at-14-25-40-8kkx.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Ledotron is the tool we wrote for our own installations. It has run more than forty of them since 2015, from OX to Retour aux Sources. LED strips, moving lights, video walls and the venue itself are drawn in 3D; the show is composed on a timeline, and you see the result before a single cable is pulled.</p><p>Three ways to play. On loop, a written timeline runs during opening hours, locked, and restarts by itself if anything goes wrong. By draw, the Brain composes a new show at every press, every hour or every message, from the weather, the season and the date: every visit is unique. Live, the Brain listens to the music and makes the image evolve as much as the music does.</p><p>The AI that listens to music comes from Cyril Laurier’s PhD thesis on automatic music mood classification at the Music Technology Group of Universitat Pompeu Fabra, Barcelona (2011). Beats and onsets are detected with aubio, the open-source library born from Paul Brossier’s thesis at Queen Mary University of London.</p><p>Inputs: live audio, local weather and climate, clock and calendar, OSC, buttons and keys, Chataigne. Outputs: Art-Net and DMX, video walls, motors, OSC to Ableton Live. Twenty-three generative effects, all able to react to sound or weather. On site: auto-start, locked screen, logging, automatic reconnection and restart. That is what lets us promise a client that an installation will hold for ten years without a technician on site.</p><p>Ledotron can be rented or bought, for an installation, a tour or a permanent venue: write to us for a demo or a quote.</p><h3>Credits</h3><ul><li><strong>Created by</strong> Maya Benaïnous, Cyril Laurier</li><li><strong>Music AI</strong> Cyril Laurier, PhD thesis, Music Technology Group, Universitat Pompeu Fabra</li><li><strong>Beat and onset detection</strong> aubio, by Paul Brossier</li><li><strong>Built with</strong> openFrameworks</li></ul><h3>Used on</h3><ul><li>Retour aux Sources</li><li>Rising</li><li>OX</li><li>MGNTRN</li><li>Kinematope</li><li>Gyrotope</li><li>Future Ruins</li><li>Moët & Chandon</li></ul>",
@@ -2322,8 +2325,24 @@
    },
    "media": [
     {
+     "src": "https://vimeo.com/636992339?fl=pl&fe=vl"
+    },
+    {
      "src": "media/ledotron/ledotronpresentation-vj38.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/ledotron/screenshot-2026-11-03-at-14-25-40-649y.jpg"
+    },
+    {
+     "src": "media/ledotron/04-timeline.jpg",
+     "credit": "",
+     "caption": {
+      "en": "The timeline. One track per part of the installation; each block is an effect with its duration. The eye switches a track off without erasing it, the padlock freezes it.",
+      "fr": "La timeline. Une piste par partie de l’installation, chaque bloc est un effet avec sa durée. L’œil éteint une piste sans rien effacer, le cadenas la fige.",
+      "ca": "La timeline. Una pista per a cada part de la instal·lació, cada bloc és un efecte amb la seva durada. L’ull apaga una pista sense esborrar res, el cadenat la congela.",
+      "es": "La timeline. Una pista por cada parte de la instalación, cada bloque es un efecto con su duración. El ojo apaga una pista sin borrar nada, el candado la congela."
+     }
     },
     {
      "src": "media/ledotron/01-vue-ensemble.jpg",
@@ -2353,16 +2372,6 @@
       "fr": "La scénographie. Chaque bande ou cercle de LEDs est placé dans l’espace, avec son adresse réseau et sa forme ; ici, dix lampes sont sélectionnées et déplacées d’un geste.",
       "ca": "L’escenografia. Cada tira o cercle de LEDs es col·loca a l’espai amb la seva adreça de xarxa i la seva forma; aquí, deu làmpades seleccionades i desplaçades d’un sol gest.",
       "es": "La escenografía. Cada tira o círculo de LEDs se coloca en el espacio con su dirección de red y su forma; aquí, diez lámparas seleccionadas y desplazadas de un solo gesto."
-     }
-    },
-    {
-     "src": "media/ledotron/04-timeline.jpg",
-     "credit": "",
-     "caption": {
-      "en": "The timeline. One track per part of the installation; each block is an effect with its duration. The eye switches a track off without erasing it, the padlock freezes it.",
-      "fr": "La timeline. Une piste par partie de l’installation, chaque bloc est un effet avec sa durée. L’œil éteint une piste sans rien effacer, le cadenas la fige.",
-      "ca": "La timeline. Una pista per a cada part de la instal·lació, cada bloc és un efecte amb la seva durada. L’ull apaga una pista sense esborrar res, el cadenat la congela.",
-      "es": "La timeline. Una pista por cada parte de la instalación, cada bloque es un efecto con su duración. El ojo apaga una pista sin borrar nada, el candado la congela."
      }
     },
     {
@@ -2487,7 +2496,7 @@
     "media/logos/aubio.png",
     "media/logos/chataigne.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "viktoria-modesta",
@@ -3049,15 +3058,7 @@
      "credit": ""
     },
     {
-     "src": "media/slush/02.jpg",
-     "credit": ""
-    },
-    {
      "src": "media/slush/03.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/slush/38725265851-50513e9824-o-6o1y.jpg",
      "credit": ""
     },
     {
@@ -3066,10 +3067,6 @@
     },
     {
      "src": "media/slush/38669816786-1f5fc03587-o-nl9x.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/slush/37854451085-b40093cf42-o-wy7k.jpg",
      "credit": ""
     }
    ],
@@ -3098,7 +3095,7 @@
    "logos": [
     "media/music-tech-fest/musictechfest-2glp.jpg"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "wave",
@@ -6623,7 +6620,7 @@
    "tags": [
     "touring"
    ],
-   "thumb": "media/upperground/01.jpg",
+   "thumb": "media/upperground/s-img-2022-utk8.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, light and LEDs, electronics, installation.</p><p>Bringing nature back where we are furthest from it. St Pancras may be one of the most urban places there is, where control and speed are essential. In the tunnel, the lights are linked to the wind and react to it in real time.</p><p>The wind, a living thing acting in space, is the only raw material: it animates a slow, contemplative light, against the grain of urban life. An anemometer installed at the tunnel exit drives the row of lights, in silence, for a passage used by thousands of travellers a day.</p><p>Lumiere London festival, January 2018, produced by Artichoke.</p><p>To programme this artwork: <a href=\"https://mouawadlaurier.com\">mouawadlaurier.com</a></p><h3>Credits</h3><ul><li><strong>Artists</strong> Mouawad + Laurier</li><li><strong>Production</strong> Artichoke, Lumiere London</li></ul><h3>Press</h3><ul><li>Time Out London, Lumiere London 2018 · <a href=\"https://artlyst.com/?p=152038\">Artlyst, 2018</a></li></ul>",
@@ -6651,6 +6648,15 @@
     {
      "src": "media/upperground/05.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/upperground/s-img-1765-02eh.jpg"
+    },
+    {
+     "src": "media/upperground/s-img-1797-u05g.jpg"
+    },
+    {
+     "src": "media/upperground/s-img-1956-kb2p.jpg"
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -6711,7 +6717,7 @@
     "permanent",
     "touring"
    ],
-   "thumb": "media/albatros/01.jpg",
+   "thumb": "media/albatros/52796996302-1ee2ec0308-o-8e6y.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p><strong>Our role</strong> Concept, design, production.</p><p>Five years without touching land, 150,000 km a year, a 75-year life. The albatross is almost impossible to observe: it spends 80% of its life between water and air and only lands to breed on the island where it was born. We wanted to show it in all its majesty, life-size, in paper.</p><p>A technique blending origami and 3D modelling: open source, light, recyclable and transportable anywhere, with a few lights to bring the bird to life. The data from the CNRS scientists who track albatrosses with sensors is handwritten on the plexiglass and expanded on a web page linked by QR code; Cyril Laurier’s music accompanies the flight.</p><p>The work travels with the NanoMusée of the University of La Rochelle to schools, public spaces and remote places: a piece of science outreach that fits in a box.</p><p>To programme this artwork: <a href=\"https://mouawadlaurier.com\">mouawadlaurier.com</a></p><h3>Credits</h3><ul><li><strong>Artists</strong> Mouawad + Laurier</li><li><strong>Music</strong> Cyril Laurier</li><li><strong>Scientific collaboration</strong> Julien Collet (CNRS)</li><li><strong>Production</strong> NanoMusée, University of La Rochelle</li></ul>",
@@ -6720,10 +6726,6 @@
     "es": "<p><strong>Nuestro papel</strong> Concepto, diseño, producción.</p><p>Cinco años sin tocar tierra, 150.000 km al año, 75 años de vida. El albatros es casi imposible de observar: pasa el 80 % de su vida entre el agua y el aire y solo se posa para reproducirse en la isla donde nació. Queríamos mostrarlo en toda su majestad, a tamaño real, en papel.</p><p>Una técnica que mezcla origami y modelado 3D: de código abierto, ligera, reciclable y transportable a cualquier parte, con algunas luces para dar vida al ave. Los datos de los científicos del CNRS que siguen a los albatros con sensores están escritos a mano sobre el plexiglás y desarrollados en una página web enlazada por código QR; la música de Cyril Laurier acompaña el vuelo.</p><p>La obra viaja con el NanoMusée de la Universidad de La Rochelle por escuelas, espacios públicos y lugares remotos: una pieza de divulgación científica que cabe en una caja.</p><p>Para programar esta obra: <a href=\"https://mouawadlaurier.com\">mouawadlaurier.com</a></p><h3>Créditos</h3><ul><li><strong>Artistas</strong> Mouawad + Laurier</li><li><strong>Música</strong> Cyril Laurier</li><li><strong>Colaboración científica</strong> Julien Collet (CNRS)</li><li><strong>Producción</strong> NanoMusée, Universidad de La Rochelle</li></ul>"
    },
    "media": [
-    {
-     "src": "media/albatros/01.jpg",
-     "credit": ""
-    },
     {
      "src": "media/albatros/02.jpg",
      "credit": ""
@@ -6755,6 +6757,39 @@
     {
      "src": "media/albatros/09.jpg",
      "credit": ""
+    },
+    {
+     "src": "media/albatros/img-9695-2-agut.jpg"
+    },
+    {
+     "src": "media/albatros/img-9785-2-i22d.jpg"
+    },
+    {
+     "src": "media/albatros/img-9849-2-t3bg.jpg"
+    },
+    {
+     "src": "media/albatros/52797568251-d02aa1f192-o-havo.jpg"
+    },
+    {
+     "src": "media/albatros/52797568441-d38bf3e4fb-o-pjcz.jpg"
+    },
+    {
+     "src": "media/albatros/52988268736-c41fe7f008-o-rsil.jpg"
+    },
+    {
+     "src": "media/albatros/53258990237-a2ba76c588-o-copy-ppm1.jpg"
+    },
+    {
+     "src": "media/albatros/53258990237-a2ba76c588-o-8196.jpg"
+    },
+    {
+     "src": "media/albatros/53259869141-62c884ce77-o-42jw.jpg"
+    },
+    {
+     "src": "media/albatros/53260155428-ab11dd3bdd-o-le2d.jpg"
+    },
+    {
+     "src": "media/albatros/albatros-mirror-9u8z.jpg"
     }
    ],
    "link": "https://mouawadlaurier.com",
@@ -6776,7 +6811,9 @@
     "sustainable",
     "hardware",
     "project-management",
-    "imaginer"
+    "imaginer",
+    "fabriquer",
+    "accompagner"
    ],
    "author": "Mouawad + Laurier",
    "logos": [
@@ -6784,7 +6821,7 @@
     "media/nanomusee/identite-graphique-bordeaux-nano-musee-2-txup.jpg",
     "media/la-rochelle-universite/la-rochelle-universite-wo03.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-09"
   },
   {
    "id": "prometheus",
