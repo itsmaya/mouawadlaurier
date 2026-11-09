@@ -328,6 +328,15 @@ async function publish() {
         }
       }
     }
+    /* une fiche publiée quitte son nom provisoire : « nouveau-contenu-4 » devient « ras-ubiquitous », d'après son titre (adresse lisible, page propre) */
+    S.content.posts.forEach(p => {
+      if (!/^nouveau-contenu(-\d+)?$/.test(p.id) || p.published === false) return;
+      const t = String((p.title && (p.title.fr || p.title.en || Object.values(p.title).find(Boolean))) || '').trim(); if (!t) return;
+      const id = uniqueId(slugify(t), S.content.posts.filter(x => x !== p).map(x => x.id)); if (!id || id === p.id) return;
+      S.content.posts.forEach(x => { x.team = (x.team || []).map(v => (v === p.id ? id : v)); x.skills = (x.skills || []).map(v => (v === p.id ? id : v)); });
+      if (S.sel && S.sel.post === p.id) S.sel.post = id;
+      p.id = id;
+    });
     const used = usedPaths();
     const files = [...S.staged].filter(([p]) => used.has(p)).map(([path, s]) => ({ path, blob: s.blob }));
     if (S.backend.kind === 'github' || S.backend.kind === 'folder') {   // copies en JavaScript pour ouvrir le site en local (double-clic sur index.html)

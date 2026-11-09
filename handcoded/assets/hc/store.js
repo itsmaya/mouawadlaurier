@@ -180,11 +180,11 @@ export function loadImageFile(fileOrBlob) {
   return new Promise((res, rej) => { const url = URL.createObjectURL(fileOrBlob); const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = url; });
 }
 /* Réduit une image avant envoi (les vignettes 3D n'ont pas besoin de plus). */
-export async function resizeImage(file, maxW, maxH, quality = 0.86) {
+export async function resizeImage(file, maxW, maxH, quality = 0.82) {
   if (/svg|gif/i.test(file.type)) return file;
   const im = await loadImageFile(file);
   const r = Math.min(1, maxW / im.naturalWidth, maxH / im.naturalHeight);
-  if (r >= 1 && /jpe?g|webp/i.test(file.type) && file.size < 900000) return file;
+  if (r >= 1 && /jpe?g|webp/i.test(file.type) && file.size < 350000) return file;   // déjà à la bonne taille et légère : on n'y touche pas
   const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * r); c.height = Math.round(im.naturalHeight * r);
   c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
   const keepPng = /png/i.test(file.type) && hasAlpha(c);
