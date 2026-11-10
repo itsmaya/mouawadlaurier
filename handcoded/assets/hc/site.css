@@ -1177,3 +1177,12 @@ html #cat-open #cat-name .t { color: #fff; }
 html #cat-name .n { color: #9a9a9a !important; }
 html #cat-open:hover .tri::before, html #cat-open:focus-visible .tri::before, html #cat-box.open #cat-open .tri::before { border-left-color: #111; }
 html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::before, html.neg #cat-box.open #cat-open .tri::before { border-left-color: #fff; }
+
+/* Le clavier, dans la famille des ronds : un cadre en trait fin aux coins arrondis, les titres en petites capitales grises
+   (comme « Catégorie »), des touches rondes en trait fin ; la touche appuyée se remplit, comme le bouton des catégories */
+#kb-panel { border: 1px solid #bdbdbd !important; border-radius: 14px; box-shadow: 0 -10px 30px rgba(40,40,40,.06); padding-top: 12px; padding-bottom: 14px; }
+#kb-panel .lbl { font-weight: 600; color: #8a8a8a; letter-spacing: .14em; }
+#kb .key { border-color: #bdbdbd; border-radius: 7px; background: #fff; color: #111; font-weight: 600; transition: border-color .2s, background .2s, color .2s; }
+#kb .key:hover { border-color: #111; background: #fff; }
+#kb .key.down, #kb .key:active { background: #111; color: #fff; border-color: #111; }
+#kb .key.anim.off { background: #fff; color: #bdbdbd; border-color: #e0e0e0; }
