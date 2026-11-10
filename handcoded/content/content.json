@@ -12200,9 +12200,10 @@
    ],
    "link": "",
    "team": [
-    "cyril"
+    "cyril",
+    "ezra"
    ],
-   "credits": "",
+   "credits": "Michela Magas, Andrew Dubber",
    "location": null,
    "spots": [
     {
@@ -12219,6 +12220,11 @@
      "city": "Paris",
      "lat": 48.86,
      "lon": 2.35
+    },
+    {
+     "city": "Umeå",
+     "lat": 63.82,
+     "lon": 20.26
     }
    ],
    "skills": [
@@ -12233,7 +12239,11 @@
     "hardware"
    ],
    "author": "",
-   "logos": [],
+   "logos": [
+    "media/music-tech-fest/musictechfest-2glp.jpg",
+    "media/logos/ircam.png",
+    "media/logos/upf.png.t.webp"
+   ],
    "updated": "2026-11-10"
   },
   {
