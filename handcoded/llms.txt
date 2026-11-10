@@ -54,7 +54,7 @@ Interactive art and technology studio based in Barcelona, founded in 2008. Not t
 - [Wizz](https://mouawadlaurier.com/handcoded/en/wizz/): Voting by dancing with your smartphone in the club · 2013 · Paris, France. WIZZWORLD turns a club night into a techno-social game: the crowd becomes interactive. With a smartphone app, everyone dances to the beat following a choreographic language, and directly shapes the atmosphere of the night through different game modes. Players influence the DJ’s music, the VJ’s…
 - [The early years](https://mouawadlaurier.com/handcoded/en/les-debuts/): Fat-Man Collective and interactive advertising · 2006 – 2012 · London, Barcelona, Paris. Before Hand Coded, there was Fat-Man Collective, between London and Barcelona. From 2006 to 2012, we built all kinds of Flash applications for online advertising, for brands such as Lexus, Cadbury, Nokia, Peugeot, Danone and France 24. On 08.08.08, Fat-Man Collective launched the Fat-Site: a…
 - [Audio Processing](https://mouawadlaurier.com/handcoded/en/audio-processing/): Eventide · New York
-- [Research](https://mouawadlaurier.com/handcoded/en/recherche/): Sony CSL · Paris
+- [Research](https://mouawadlaurier.com/handcoded/en/recherche/): Sony CSL · Paris. R&D on DSP algorithms Phase matching, EQ matching R&D on Deep Learning music and audio tools Generation of Bass lines, Drums and Orchestration
 - [Mood Cloud](https://mouawadlaurier.com/handcoded/en/mood-cloud/): Phd Cyril Laurier
 - [Music Tech Fest](https://mouawadlaurier.com/handcoded/en/music-tech-fest-2/)
 

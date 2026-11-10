@@ -12025,18 +12025,31 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "<p>R&amp;D on DSP algorithms Phase matching, EQ matching</p><p>R&amp;D on Deep Learning music and audio tools Generation of Bass lines, Drums and Orchestration</p>",
     "ca": "",
     "es": ""
    },
-   "media": [],
+   "media": [
+    {
+     "src": "media/recherche/screenshot-2026-11-10-at-02-40-28-ej8w.jpg"
+    },
+    {
+     "src": "media/recherche/screenshot-2026-11-10-at-02-40-40-uo7s.jpg"
+    }
+   ],
    "link": "https://csl.sony.fr/",
    "team": [
     "cyril"
    ],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Tokyo",
+     "lat": 35.68,
+     "lon": 139.69
+    }
+   ],
    "skills": [
     "fabriquer",
     "real-time",
