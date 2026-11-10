@@ -7815,7 +7815,7 @@
   {
    "id": "ddb",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -7856,12 +7856,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -7903,12 +7903,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -7950,12 +7950,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -7997,12 +7997,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -8044,12 +8044,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -8091,12 +8091,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -8137,12 +8137,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -8184,12 +8184,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -8230,12 +8230,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -8276,12 +8276,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -8322,12 +8322,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -8368,12 +8368,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -8414,12 +8414,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -8460,12 +8460,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -8506,12 +8506,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -8552,12 +8552,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -8598,12 +8598,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "mira",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -8644,12 +8644,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -8690,12 +8690,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -8736,12 +8736,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -8782,12 +8782,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -8828,12 +8828,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": false,
    "title": {
     "en": "Into the Great Wide Open",
@@ -8873,12 +8873,13 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-10"
   },
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -8920,12 +8921,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -8966,12 +8967,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -9013,12 +9014,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -9060,12 +9061,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -9107,12 +9108,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -9154,12 +9155,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "scam",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Scam",
@@ -9201,12 +9202,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -9245,12 +9246,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "upf",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -9291,12 +9292,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "ircam",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -9337,12 +9338,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "cea",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9381,7 +9382,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "cupra",
@@ -9846,7 +9847,7 @@
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -9888,12 +9889,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -9934,12 +9935,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -9980,7 +9981,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "alpine",
@@ -10307,7 +10308,7 @@
   {
    "id": "aubio",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "aubio",
@@ -10346,7 +10347,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "la-traversee-du-temps",
@@ -10502,7 +10503,7 @@
   {
    "id": "rossella-piccinno",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "Rossella Piccinno",
@@ -10548,7 +10549,7 @@
   {
    "id": "emma-haziza",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": false,
    "title": {
     "en": "Emma Haziza",
@@ -10594,7 +10595,7 @@
   {
    "id": "le-fresnoy",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": true,
    "title": {
     "en": "Le Fresnoy",
@@ -10635,12 +10636,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "la-rochelle-universite",
    "section": "studio",
-   "order": 92,
+   "order": 93,
    "published": true,
    "title": {
     "en": "La Rochelle Université",
@@ -10682,12 +10683,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "nasonmoretti",
    "section": "studio",
-   "order": 93,
+   "order": 94,
    "published": true,
    "title": {
     "en": "NasonMoretti",
@@ -10728,12 +10729,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "hub-montreal",
    "section": "studio",
-   "order": 94,
+   "order": 95,
    "published": true,
    "title": {
     "en": "Hub Montréal",
@@ -10774,12 +10775,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "musee-de-l-elysee",
    "section": "studio",
-   "order": 95,
+   "order": 96,
    "published": true,
    "title": {
     "en": "Musée de l’Élysée",
@@ -10821,12 +10822,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "fondation-ove",
    "section": "studio",
-   "order": 96,
+   "order": 97,
    "published": true,
    "title": {
     "en": "Fondation OVE",
@@ -10867,12 +10868,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "sant-joan-de-deu",
    "section": "studio",
-   "order": 97,
+   "order": 98,
    "published": true,
    "title": {
     "en": "Sant Joan de Déu",
@@ -10913,12 +10914,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "chu-lille",
    "section": "studio",
-   "order": 98,
+   "order": 99,
    "published": true,
    "title": {
     "en": "CHU de Lille",
@@ -10959,12 +10960,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "chu-bordeaux",
    "section": "studio",
-   "order": 99,
+   "order": 100,
    "published": true,
    "title": {
     "en": "CHU de Bordeaux",
@@ -11005,7 +11006,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "valentin-ducros",
@@ -11056,7 +11057,7 @@
   {
    "id": "marine-budin",
    "section": "studio",
-   "order": 100,
+   "order": 101,
    "published": true,
    "title": {
     "en": "Marine Budin",
@@ -11826,7 +11827,7 @@
   {
    "id": "mouawad-laurier",
    "section": "studio",
-   "order": 101,
+   "order": 51,
    "published": true,
    "title": {
     "en": "Mouawad + Laurier",
@@ -11850,7 +11851,7 @@
    "tags": [
     "artists"
    ],
-   "thumb": "media/nouveau-contenu/duo-artists-z4bx.jpg",
+   "thumb": "media/mouawad-laurier/photo-cyril-maya-rnpe.jpg",
    "thumbBack": "",
    "body": {
     "fr": "<p>Mouawad + Laurier, c’est le duo d’artistes formé par Maya Mouawad et Cyril Laurier, les deux fondateurs de Hand Coded, à Barcelone. Ils créent des installations immersives au croisement de l’écologie, de la technologie et des sens : lumière, son, données scientifiques en temps réel et intelligence artificielle, pour faire naître une émotion sincère, ancrée dans le lieu où l’œuvre est montrée.</p><p>Leur travail regarde le vivant : le point de vue d’un arbre sur nos villes avec Peupler, la montée des eaux avec Rising, une racine qui écoute la terre à 30 mètres sous terre avec Retour aux Sources, dans les crayères de la Maison Ruinart à Reims, classées au patrimoine mondial de l’UNESCO.</p><p>Leurs œuvres ont été présentées à la Biennale de Venise (Venice Immersive, sélection officielle 2023), à la Biennale de Dakar (sélection du jury 2024), à la Nuit Blanche à Paris, à Lumiere London, au Grand Palais Éphémère, à Noor Riyadh et dans des hôpitaux avec Art Explora. Rising a reçu le prix Pierre Schaeffer de la Scam en 2023.</p><p>Ils conçoivent et fabriquent eux-mêmes leurs œuvres, de l’idée à l’installation sur place, et elles voyagent léger : Peupler tient dans trois valises, Rising fonctionne sur batterie.</p>",
@@ -11873,7 +11874,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "audio-processing",
