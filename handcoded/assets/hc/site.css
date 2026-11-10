@@ -1169,3 +1169,11 @@ html #cat-list { border-color: #bdbdbd; border-radius: 14px; overflow: hidden; }
 /* L'accueil, dans la même famille : des ronds, et une pilule quand le bouton s'ouvre sur son nom */
 #home-ctl > button, #home-ctl > #home-langs { border-radius: 17px; }
 #home-about .ic svg circle:first-of-type { display: none; } #home-about .ic svg { transform: scale(1.3); }
+
+/* Le bouton des catégories, en plein : noir sur fond clair, blanc sur fond noir (le négatif l'inverse) */
+html #cat-open, html #cat-open:focus-visible { background: #111 !important; color: #fff !important; border: 1px solid #111 !important; }
+html #cat-open:hover, html #cat-box.open #cat-open { background: #111 !important; color: #fff !important; border: 1px solid #111 !important; }
+html #cat-open #cat-name .t { color: #fff; }
+html #cat-name .n { color: #9a9a9a !important; }
+html #cat-open:hover .tri::before, html #cat-open:focus-visible .tri::before, html #cat-box.open #cat-open .tri::before { border-left-color: #111; }
+html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::before, html.neg #cat-box.open #cat-open .tri::before { border-left-color: #fff; }
