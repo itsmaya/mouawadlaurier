@@ -203,14 +203,14 @@
    "sig1": {
     "font": "g:Instrument Serif",
     "italic": true,
-    "size": 56,
+    "size": 42,
     "lh": 58
    },
    "sig2": {
     "font": "g:Inter Tight",
     "weight": 500,
-    "size": 20,
-    "lh": 24
+    "size": 16,
+    "lh": 19
    },
    "menu": {
     "font": "g:Inter Tight",
@@ -222,14 +222,14 @@
    "title": {
     "font": "g:Inter Tight",
     "weight": 600,
-    "size": 30,
+    "size": 26,
     "lh": 30,
     "ls": -0.02
    },
    "subtitle": {
     "font": "g:Instrument Serif",
     "italic": true,
-    "size": 25,
+    "size": 21,
     "lh": 25
    },
    "body": {
@@ -261,7 +261,9 @@
     "italic": true
    },
    "csub": {
-    "font": "g:Inter Tight"
+    "font": "g:Inter Tight",
+    "size": 17,
+    "lh": 21
    },
    "cinfo": {
     "font": "g:Inter Tight"
@@ -11884,10 +11886,10 @@
    "order": 47,
    "published": true,
    "title": {
-    "en": "Audio Processing",
-    "fr": "Audio Processing",
-    "ca": "Audio Processing",
-    "es": "Audio Processing"
+    "en": "Music Mood Detection",
+    "fr": "Détection de l'humeur dans la music",
+    "ca": "Mood Analysis",
+    "es": "Mood Analysis"
    },
    "subtitle": {
     "en": "Eventide",
@@ -11901,7 +11903,7 @@
     "ca": "New York",
     "es": "New York"
    },
-   "date": "",
+   "date": "2012-2015",
    "tags": [
     "ai",
     "software"
@@ -11910,7 +11912,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "Création d'une application d'analyse de l'humeur d'une musique en temps reél. En utilisant les résultats du PhD, implémentation d'une version pour iOS et d'un plugIn Audio.",
     "ca": "",
     "es": ""
    },
@@ -11931,13 +11933,14 @@
    "skills": [
     "fabriquer",
     "audio",
-    "real-time"
+    "real-time",
+    "machine-learning"
    ],
-   "author": "",
+   "author": "Mood",
    "logos": [
     "media/logos/eventide.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "recherche",
@@ -11945,10 +11948,10 @@
    "order": 48,
    "published": true,
    "title": {
-    "en": "Research",
-    "fr": "Recherche",
-    "ca": "Ricerca",
-    "es": "Ricerca"
+    "en": "Music AI",
+    "fr": "IA pour la Musique",
+    "ca": "Music AI",
+    "es": "Music AI"
    },
    "subtitle": {
     "en": "Sony CSL",
@@ -11962,7 +11965,7 @@
     "ca": "Paris",
     "es": "Paris"
    },
-   "date": "",
+   "date": "2017-2023",
    "tags": [
     "ai",
     "software"
@@ -11971,7 +11974,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "<p>R&amp;D on DSP algorithms Phase matching, EQ matching</p><p>R&amp;D on Deep Learning music and audio tools Generation of Bass lines, Drums and Orchestration</p>",
+    "fr": "<p>DSP algorithms Phase matching, EQ matching</p><p>Recherche et mise en production de modèles génératifs audio pour la création musicale.</p><p>Projets :</p><p>-Phase et Eq matching. Outils de correction de phase et égaliseur automatique</p><p>-BassNet, DrumNet et DrumGAN, des modèles génératifs livrés aux musiciens via des outils de création.</p><p>Cycle complet : entraînement sur de grands corpus audio. Optimisation de la latence pour un usage en temps réel, puis itérations à partir des retours utilisateurs.</p><p>Foundation models : un des modèles de génération de lignes de basse reposait sur une approche de type LLM. Il a été publié et utilisé par des musiciens comme outil créatif.</p>",
     "ca": "",
     "es": ""
    },
@@ -12001,7 +12004,8 @@
    "skills": [
     "fabriquer",
     "real-time",
-    "audio"
+    "audio",
+    "machine-learning"
    ],
    "author": "",
    "logos": [
@@ -12032,7 +12036,7 @@
     "ca": "",
     "es": ""
    },
-   "date": "",
+   "date": "2006-2011",
    "tags": [
     "ai",
     "software"
@@ -12041,7 +12045,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "Cette thèse porte sur la classification automatique de la musique selon l’émotion (mood), à partir de modèles computationnels exploitant le signal audio. Elle s’appuie sur le traitement du signal, l’apprentissage automatique et la recherche d’information.<p>Les principales contributions :</p><p>-Modélisation de l’émotion : un modèle de représentation des émotions musicales est dérivé de l’analyse des tags d’un réseau social musical.</p><p>-Classification automatique : une méthode de classification par émotion, avec une analyse de la contribution des descripteurs audio et de leur lien avec l’émotion perçue.</p><p>-Approche multimodale : une version combinant audio et paroles, qui contribue aussi au domaine de la recherche d’information textuelle.</p><p>-Lien émotion–genre : après avoir montré la relation entre émotion et genre musical, une nouvelle approche intègre la classification automatique par genre. Les classifieurs fondés sur le genre obtiennent une meilleure précision que les modèles audio standards.</p><p>-Interprétabilité : une technique d’extraction de règles rend les modèles explicites.</p><p>Les résultats de cette thèse ont été exploités commercialement par différentes entités: Bmat, Eventide, Sonaris Systems</p>",
     "ca": "",
     "es": ""
    },
@@ -12083,7 +12087,7 @@
      "credit": ""
     }
    ],
-   "link": "",
+   "link": "https://repositori.upf.edu/items/2a19581c-5778-48f0-b375-c8ea5c629fce?locale=en",
    "team": [
     "cyril"
    ],
@@ -12098,7 +12102,9 @@
    ],
    "skills": [
     "fabriquer",
-    "tools"
+    "tools",
+    "audio",
+    "machine-learning"
    ],
    "author": "",
    "logos": [
@@ -12112,16 +12118,16 @@
    "order": 50,
    "published": true,
    "title": {
+    "en": "MusicBricks",
+    "fr": "MusicBricks",
+    "ca": "MusicBricks",
+    "es": "MusicBricks"
+   },
+   "subtitle": {
     "en": "Music Tech Fest",
     "fr": "Music Tech Fest",
     "ca": "Music Tech Fest",
     "es": "Music Tech Fest"
-   },
-   "subtitle": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
    },
    "place": {
     "en": "",
@@ -12129,7 +12135,7 @@
     "ca": "",
     "es": ""
    },
-   "date": "",
+   "date": "2012-2017",
    "tags": [
     "ai",
     "software"
@@ -12138,7 +12144,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "MusicBricks est un projet européen Horizon 2020 qui faisait le lien entre recherche et industrie en rendant les outils de technologie musicale existants faciles à utiliser, afin d’aider des idées créatives à atteindre le marché. Il s’appuyait sur le Music Tech Fest, lancé à Londres en 2012 par Michela Magas pour rapprocher chercheurs et praticiens, et sur son hackathon de 24 heures, le MTF Hack Camp",
     "ca": "",
     "es": ""
    },
@@ -12347,7 +12353,7 @@
    "id": "echo",
    "section": "work",
    "order": 53,
-   "published": false,
+   "published": true,
    "title": {
     "fr": "Echo",
     "en": "Echo",
@@ -12372,7 +12378,7 @@
     "ai",
     "touring"
    ],
-   "thumb": "",
+   "thumb": "media/echo/img-6598-udn0.jpg",
    "thumbBack": "",
    "body": {
     "fr": "<p><strong>Notre rôle</strong> Intelligence artificielle, analyse de la voix en temps réel.</p><p><i>« Un miroir pour se parler à soi-même. »</i></p><p>Dans une petite cabine noire, on s’assoit face à son reflet et on lui parle. Au bout de quelques secondes, le reflet répond avec nos propres mots, remis en contexte par l’intelligence artificielle. La conversation garde un ton harmonieux, souvent énigmatique, et chacun reste libre de l’interpréter et de la mener où il veut.</p><p>Guillaume Faure part du stade du miroir de Lacan et de Winnicott, pour qui le visage de la mère est le premier miroir de l’enfant. Le miroir est un Pepper’s ghost : une caméra cachée derrière une vitre inclinée filme le visiteur, et un écran dissimulé renvoie son image dans la vitre.</p><p>Avec Joan Sandoval, Cyril a développé l’intelligence de la machine. Elle écoute la musique de la voix plutôt que le sens des mots : elle analyse en temps réel onze dimensions du timbre et de l’intonation et garde la « partition » de tout ce qui a été dit. Quand le visiteur se tait, elle rejoue la phrase passée qui prolonge le mieux sa mélodie, en jouant de la répétition, de l’inversion, de la dissonance ou de la tension. Echo répond ainsi dans toutes les langues, et partage son moteur avec ALEA.</p><p>Présentée pour la première fois aux Forums de l’IRCAM à Paris en 2022, l’œuvre a voyagé à New York, Laval, Grenoble, Lleida, Barcelone et Incheon. L’exposition L’altre costat, au Santa Mònica, a accueilli plus de 5 000 visiteurs dès son premier mois.</p><h3>Crédits</h3><ul><li><strong>Artiste</strong> Guillaume Faure, concept et direction</li><li><strong>Intelligence artificielle</strong> Cyril Laurier</li><li><strong>Développement créatif</strong> Joan Sandoval</li><li><strong>Remerciements</strong> Cléo Paradis, Antoni Hadzijanev, Édouard Decam</li></ul><h3>Expositions</h3><ul><li>Interrogative AI, Incheon Art Platform, Corée du Sud, commissariat Lee Young-ri, 2025</li><li>L’altre costat, Centre d’Arts Santa Mònica, Barcelone, commissariat Enric Puig et Ferran Utzet, 2024</li><li>Festival Intangible, Museu d’Art Jaume Morera, Lleida, 2022</li><li>Biennale Experimenta, Grenoble, 2022</li><li>IRCAM @ NYU, New York University, New York, 2022</li><li>Festival Recto VRso, Laval Virtual, Laval, 2022</li><li>Forums de l’IRCAM, Paris, première présentation, 2022</li></ul><h3>Presse</h3><ul><li>« Echo offre l’expérience déstabilisante, et fascinante à la fois, de converser avec soi-même. » <a href=\"https://www.timeout.cat/barcelona/ca/noticies/un-laberint-ple-dobres-dart-aterra-al-santa-monica-en-una-exposicio-sobre-el-mes-enlla-030424\" target=\"_blank\" rel=\"noopener\">Time Out Barcelona, 2024</a></li><li>« Avec Eco, l’artiste français Guillaume Faure explore le moi à travers une conversation avec un miroir. » <a href=\"https://www.20minutos.es/noticia/5357023/0/ultimo-fin-semana-para-visitar-l-altre-costat-un-viaje-hacia-mundo-los-suenos/\" target=\"_blank\" rel=\"noopener\">20minutos, 2024</a></li><li>« Echo crée une conversation face à soi-même, avec soi-même, impossible dans la vie réelle. » <a href=\"http://m.ingnews.kr/news/articleView.html?idxno=10858\" target=\"_blank\" rel=\"noopener\">Incheon Guerilla News, 2025</a></li><li>« En entrant dans la petite cabine, un autre soi-même généré par l’IA apparaît à l’écran. » <a href=\"https://news.skbroadband.com/news/articleView.html?idxno=212256\" target=\"_blank\" rel=\"noopener\">B tv news, 2025</a></li></ul>",
@@ -12380,7 +12386,24 @@
     "ca": "<p><strong>El nostre paper</strong> Intel·ligència artificial, anàlisi de la veu en temps real.</p><p><i>«Un mirall per parlar amb un mateix.»</i></p><p>En una petita cabina negra, t’asseus davant del teu reflex i li parles. Al cap d’uns segons, el reflex respon amb les teves pròpies paraules, recontextualitzades per la intel·ligència artificial. La conversa manté un to harmoniós, sovint enigmàtic, i cadascú és lliure d’interpretar-la i de portar-la on vulgui.</p><p>Guillaume Faure parteix de l’estadi del mirall de Lacan i de Winnicott, per a qui el rostre de la mare és el primer mirall de l’infant. El mirall és un Pepper’s ghost: una càmera amagada darrere d’un vidre inclinat filma el visitant, i una pantalla oculta en reflecteix la imatge al vidre.</p><p>Amb Joan Sandoval, Cyril ha desenvolupat la intel·ligència de la màquina. Escolta la música de la veu més que el sentit de les paraules: analitza en temps real onze dimensions del timbre i de l’entonació i guarda la «partitura» de tot el que s’ha dit. Quan el visitant calla, torna a reproduir la frase passada que millor en continua la melodia, jugant amb la repetició, la inversió, la dissonància o la tensió. Echo respon en qualsevol llengua, i comparteix el motor amb ALEA.</p><p>Presentada per primera vegada als Fòrums de l’IRCAM a París el 2022, l’obra ha viatjat a Nova York, Laval, Grenoble, Lleida, Barcelona i Incheon. L’exposició L’altre costat, al Santa Mònica, va rebre més de 5.000 visitants el primer mes.</p><h3>Crèdits</h3><ul><li><strong>Artista</strong> Guillaume Faure, concepte i direcció</li><li><strong>Intel·ligència artificial</strong> Cyril Laurier</li><li><strong>Desenvolupament creatiu</strong> Joan Sandoval</li><li><strong>Agraïments</strong> Cléo Paradis, Antoni Hadzijanev, Édouard Decam</li></ul><h3>Exposicions</h3><ul><li>Interrogative AI, Incheon Art Platform, Corea del Sud, comissariat de Lee Young-ri, 2025</li><li>L’altre costat, Centre d’Arts Santa Mònica, Barcelona, comissariat d’Enric Puig i Ferran Utzet, 2024</li><li>Festival Intangible, Museu d’Art Jaume Morera, Lleida, 2022</li><li>Biennal Experimenta, Grenoble, 2022</li><li>IRCAM @ NYU, New York University, Nova York, 2022</li><li>Festival Recto VRso, Laval Virtual, Laval, 2022</li><li>Fòrums de l’IRCAM, París, primera presentació, 2022</li></ul><h3>Premsa</h3><ul><li>«Echo ofereix l’experiència desconcertant, i alhora fascinant, de conversar amb un mateix.» <a href=\"https://www.timeout.cat/barcelona/ca/noticies/un-laberint-ple-dobres-dart-aterra-al-santa-monica-en-una-exposicio-sobre-el-mes-enlla-030424\" target=\"_blank\" rel=\"noopener\">Time Out Barcelona, 2024</a></li><li>«Amb Eco, l’artista francès Guillaume Faure explora el jo a través d’una conversa amb un mirall.» <a href=\"https://www.20minutos.es/noticia/5357023/0/ultimo-fin-semana-para-visitar-l-altre-costat-un-viaje-hacia-mundo-los-suenos/\" target=\"_blank\" rel=\"noopener\">20minutos, 2024</a></li><li>«Echo crea una conversa davant d’un mateix, amb un mateix, impossible a la vida real.» <a href=\"http://m.ingnews.kr/news/articleView.html?idxno=10858\" target=\"_blank\" rel=\"noopener\">Incheon Guerilla News, 2025</a></li><li>«En entrar a la petita cabina, un altre jo generat per la IA apareix a la pantalla.» <a href=\"https://news.skbroadband.com/news/articleView.html?idxno=212256\" target=\"_blank\" rel=\"noopener\">B tv news, 2025</a></li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Inteligencia artificial, análisis de la voz en tiempo real.</p><p><i>«Un espejo para hablar con uno mismo.»</i></p><p>En una pequeña cabina negra, te sientas frente a tu reflejo y le hablas. Al cabo de unos segundos, el reflejo responde con tus propias palabras, recontextualizadas por la inteligencia artificial. La conversación mantiene un tono armonioso, a menudo enigmático, y cada uno es libre de interpretarla y de llevarla adonde quiera.</p><p>Guillaume Faure parte del estadio del espejo de Lacan y de Winnicott, para quien el rostro de la madre es el primer espejo del niño. El espejo es un Pepper’s ghost: una cámara escondida detrás de un cristal inclinado filma al visitante, y una pantalla oculta refleja su imagen en el cristal.</p><p>Con Joan Sandoval, Cyril desarrolló la inteligencia de la máquina. Escucha la música de la voz más que el sentido de las palabras: analiza en tiempo real once dimensiones del timbre y de la entonación y guarda la «partitura» de todo lo que se ha dicho. Cuando el visitante calla, vuelve a reproducir la frase pasada que mejor continúa su melodía, jugando con la repetición, la inversión, la disonancia o la tensión. Echo responde en cualquier idioma, y comparte su motor con ALEA.</p><p>Presentada por primera vez en los Foros del IRCAM en París en 2022, la obra ha viajado a Nueva York, Laval, Grenoble, Lleida, Barcelona e Incheon. La exposición L’altre costat, en el Santa Mònica, recibió más de 5.000 visitantes en su primer mes.</p><h3>Créditos</h3><ul><li><strong>Artista</strong> Guillaume Faure, concepto y dirección</li><li><strong>Inteligencia artificial</strong> Cyril Laurier</li><li><strong>Desarrollo creativo</strong> Joan Sandoval</li><li><strong>Agradecimientos</strong> Cléo Paradis, Antoni Hadzijanev, Édouard Decam</li></ul><h3>Exposiciones</h3><ul><li>Interrogative AI, Incheon Art Platform, Corea del Sur, comisariado de Lee Young-ri, 2025</li><li>L’altre costat, Centre d’Arts Santa Mònica, Barcelona, comisariado de Enric Puig y Ferran Utzet, 2024</li><li>Festival Intangible, Museu d’Art Jaume Morera, Lleida, 2022</li><li>Bienal Experimenta, Grenoble, 2022</li><li>IRCAM @ NYU, New York University, Nueva York, 2022</li><li>Festival Recto VRso, Laval Virtual, Laval, 2022</li><li>Foros del IRCAM, París, primera presentación, 2022</li></ul><h3>Prensa</h3><ul><li>«Echo ofrece la experiencia desconcertante, y a la vez fascinante, de conversar con uno mismo.» <a href=\"https://www.timeout.cat/barcelona/ca/noticies/un-laberint-ple-dobres-dart-aterra-al-santa-monica-en-una-exposicio-sobre-el-mes-enlla-030424\" target=\"_blank\" rel=\"noopener\">Time Out Barcelona, 2024</a></li><li>«Con Eco, el artista francés Guillaume Faure explora el yo a través de una conversación con un espejo.» <a href=\"https://www.20minutos.es/noticia/5357023/0/ultimo-fin-semana-para-visitar-l-altre-costat-un-viaje-hacia-mundo-los-suenos/\" target=\"_blank\" rel=\"noopener\">20minutos, 2024</a></li><li>«Echo crea una conversación frente a uno mismo, con uno mismo, imposible en la vida real.» <a href=\"http://m.ingnews.kr/news/articleView.html?idxno=10858\" target=\"_blank\" rel=\"noopener\">Incheon Guerilla News, 2025</a></li><li>«Al entrar en la pequeña cabina, otro yo generado por la IA aparece en la pantalla.» <a href=\"https://news.skbroadband.com/news/articleView.html?idxno=212256\" target=\"_blank\" rel=\"noopener\">B tv news, 2025</a></li></ul>"
    },
-   "media": [],
+   "media": [
+    {
+     "src": "https://vimeo.com/639651200",
+     "credit": ""
+    },
+    {
+     "src": "media/echo/echo-santamonica-2024-yu8k.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/echo/echo-sceno-nolegends-woc6.jpg",
+     "credit": ""
+    },
+    {
+     "src": "media/echo/analyse-rire-in1y.jpg",
+     "credit": ""
+    }
+   ],
    "link": "https://www.guillaumefaure.eu/art/echo",
    "team": [
     "guillaume-faure",

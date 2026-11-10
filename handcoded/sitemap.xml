@@ -2940,7 +2940,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/audio-processing/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/audio-processing/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/audio-processing/"/>
@@ -2951,7 +2951,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/audio-processing/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/audio-processing/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/audio-processing/"/>
@@ -2962,7 +2962,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/audio-processing/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/audio-processing/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/audio-processing/"/>
@@ -2973,7 +2973,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/audio-processing/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/audio-processing/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/audio-processing/"/>
@@ -3149,6 +3149,62 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/music-tech-fest-2/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/music-tech-fest-2/"/>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/nouveau-contenu-6/screen-shot-2014-11-17-at-23-01-14-654y.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/en/echo/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/echo/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/echo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/echo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/img-6598-udn0.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-santamonica-2024-yu8k.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-sceno-nolegends-woc6.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/analyse-rire-in1y.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/fr/echo/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/echo/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/echo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/echo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/img-6598-udn0.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-santamonica-2024-yu8k.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-sceno-nolegends-woc6.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/analyse-rire-in1y.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/ca/echo/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/echo/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/echo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/echo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/img-6598-udn0.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-santamonica-2024-yu8k.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-sceno-nolegends-woc6.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/analyse-rire-in1y.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/es/echo/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/echo/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/echo/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/echo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/echo/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/img-6598-udn0.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-santamonica-2024-yu8k.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/echo-sceno-nolegends-woc6.jpg</image:loc></image:image>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/echo/analyse-rire-in1y.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/imaginer/</loc>
