@@ -1546,7 +1546,7 @@ const post2D = {
   build(post, card) {
     this.clear(); this.post = post;
     /* savoir-faire : un petit bandeau fixe rappelle où l'on est quand la bande a défilé au-delà de la description */
-    this.open = true; this.height = card === 'place' ? 300 : 355;
+    this.open = true; this.height = 355;   // le contact a la hauteur des autres fiches
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
     fitPost2D(); this.geomKey = JSON.stringify(textGeom('project'));
     { const fm = ficheM(); strip.style.setProperty('--ft', fm.top + 'px'); strip.style.setProperty('--fb', fm.bottom + 'px'); }
@@ -1554,7 +1554,7 @@ const post2D = {
     const media = post.media.filter(m => m && m.src);
     if (card === 'place') {
       const first = media[0] ? media[0].src : post.thumb;
-      if (first) this.addMedia(first, 300, media[0] ? media[0].credit : '', false);
+      if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', false);
       this.addContact(post);
     } else if (card === 'text') {
       this.addText(post, 'blog');
@@ -1888,11 +1888,16 @@ const post2D = {
     inner.querySelectorAll('.idx li[data-i]').forEach(li => { const f = inner.querySelector(`.face.go[data-i="${li.dataset.i}"]`); if (f) { li.classList.add('go'); li.dataset.go = f.dataset.go; } });
   },
 
+  /* Contact : la même fiche que les projets et les personnes (marges, titre, sous-titre et texte des Réglages › Typographie › Fiches) */
   addContact(post) {
-    const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
-    this.addPanel('contact', Math.min(500, Math.max(260, Math.floor((W - 2 * STYLE.margin) / (this.scale || 1)))), `<div class="cn">${escapeHTML(tr(post.title))}.</div><div class="ac">${escapeHTML(tr(post.subtitle))}</div>` +
-      `<div class="site">${post.link ? `<a href="${escapeHTML(post.link)}" target="_blank" rel="noopener">${escapeHTML(site)}</a>` : ''}</div>` +
-      `<div class="ad">${sanitizeHTML(tr(post.body))}</div><div class="ct">${escapeHTML(tr(post.place))}</div>`);
+    const fm = ficheM(), { width, x, colW } = textGeom('project'), E = escapeHTML;
+    const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+    let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
+    const sub = tr(post.subtitle).trim(), place = tr(post.place).trim();
+    this.addPanel('txt contact', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
+      `<h2 class="ttl">${E(title)}</h2>${sub ? `<p class="stl">${E(sub)}</p>` : ''}` +
+      `<div class="body">${sanitizeHTML(tr(post.body))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
+      (place ? `<div class="meta"><span class="fecha">${E(place)}</span></div>` : '') + `</div>`);
   },
   layout() {
     let x = 0; this.panels.forEach(p => { p.style.left = x + 'px'; x += p.offsetWidth - 2; });

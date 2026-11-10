@@ -129,16 +129,14 @@ button { font: inherit; }
 .txt .fecha { position: absolute; font: 13px/18px var(--serif); color: var(--grey-1); }
 .txt .posted { position: absolute; font: 10px/14px var(--ui); color: var(--grey-2); letter-spacing: .03em; }
 .contact .bgx { background: #000; }
-.contact .in { padding: 16px 26px 20px 32px; display: flex; flex-direction: column; }
-.contact .in > div { position: static; width: auto; max-width: 440px; }
-.contact .cn { font: 44px/50px var(--serif); color: #fff; }
-.contact .ac { margin-top: 6px; font: 18px/24px var(--serif); color: #979797; }
-.contact .site { margin-top: 12px; font: 14px/20px var(--ui); color: var(--accent); }
-.contact .ad { margin-top: 14px; font: 14px/20px var(--ui); color: #fff; }
-.contact .ad p { margin: 0; }
-.contact .ad p:first-child { margin-bottom: 8px; }   /* la phrase d'accueil, puis l'adresse */
-.contact .ad a { color: #fff; }
-.contact .ct { margin-top: auto; font: 15px/20px var(--ui); color: var(--accent); }
+.contact .cbox { position: absolute; display: flex; flex-direction: column; }   /* le contact suit la fiche : titre, sous-titre, texte, lieu en bas */
+.contact .cbox > .ttl, .contact .cbox > .stl, .contact .cbox > .body, .contact .cbox > .meta { position: static; width: auto; }
+.contact .cbox > .stl { margin-top: 8px; }
+.contact .cbox > .body { margin-top: 20px; overflow: visible; }
+.contact .cbox .body p { margin: 0; }
+.contact .cbox .body p:first-child { margin-bottom: 14px; }   /* la phrase d'accueil, puis l'adresse ligne à ligne */
+.contact .cbox .body p:last-child:not(:first-child) { margin-top: 14px; }   /* le lien vers les œuvres du duo, détaché */
+.contact .cbox > .meta { margin-top: auto; padding-top: 12px; }
 
 /* Home */
 /* Accueil : la vidéo en carrés plein écran, toujours sombre comme un mur de LED (le jour et la nuit s'appliquent au site 3D derrière) */
@@ -1040,7 +1038,6 @@ body:has(#home:not([hidden]):not(.out)) #lang-sq, body.post-open-wide #lang-sq, 
 @media (max-width: 700px), (max-height: 520px) { #lang-sq { height: 30px; } #lang-sq .cur { width: 28px; height: 28px; } #lang-sq .opts button { height: 28px; line-height: 28px; } }
 /* Le gras dans le texte des fiches : un cran plus fort, qu'on le voie même en petit */
 .txt .body strong, .txt .body b, #postv .pv-body strong, #postv .pv-body b { font-weight: 800; }
-.contact .site:empty { display: none; }   /* pas de lien : pas de ligne vide */
 /* L'ouverture : la signature, le slogan et les carrés attendent leur tour ; le bandeau et « Entrer » arrivent à la fin */
 html.hc-stage #home-slogan > *, html.hc-stage #home-ctl > * { opacity: 0 !important; }
 html.hc-late #ticker, html.hc-late #enter, html.hc-late #home-dock { opacity: 0 !important; }
