@@ -3006,12 +3006,13 @@ function makeReelPlayer(kind, src) {
     f.allow = 'autoplay; encrypted-media'; f.tabIndex = -1; f.title = 'Showreel'; f.referrerPolicy = 'strict-origin-when-cross-origin';
     const post = m => { try { f.contentWindow.postMessage(JSON.stringify(m), '*'); } catch (e) {} };
     const cmd = yt ? (func, args = []) => post({ event: 'command', func, args }) : (method, value) => post(value === undefined ? { method } : { method, value });
-    f.addEventListener('load', () => { if (yt) post({ event: 'listening', id: 'hvreel', channel: 'widget' }); });
+    /* YouTube ne répond qu'une fois son lecteur prêt : on se présente toutes les 250 ms jusqu'à sa première réponse (un seul message pouvait se perdre, et l'accueil restait noir) */
+    f.addEventListener('load', () => { if (!yt) return; let n = 0; clearInterval(rp.hello); post({ event: 'listening', id: 'hvreel', channel: 'widget' }); rp.hello = setInterval(() => { if (rp.heard || ++n > 60) { clearInterval(rp.hello); return; } post({ event: 'listening', id: 'hvreel', channel: 'widget' }); }, 250); });
     /* YouTube pose son titre et la photo de la chaîne sur les premières secondes, et à chaque pause :
        le lecteur reste caché (les carrés continuent dessous) jusqu'à ce que cet habillage soit parti */
     rp.showAt = yt ? 3.2 : 0.4; box.classList.add('wait');
     Object.assign(rp, { el: f, post,
-      play: () => { rp.paused = false; rp.showAt = rp.t + (yt ? 2.6 : 0.3); cmd(yt ? 'playVideo' : 'play'); hvReelVeil(); hvReelBar(); },
+      play: () => { rp.paused = false; rp.playAt = performance.now(); rp.showAt = rp.t + (yt ? 2.6 : 0.3); cmd(yt ? 'playVideo' : 'play'); hvReelVeil(); hvReelBar(); },
       pause: () => { rp.paused = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelVeil(); hvReelBar(); },
       mute: m => { if (yt) { cmd(m ? 'mute' : 'unMute'); if (!m) cmd('setVolume', [100]); } else { cmd('setMuted', m); if (!m) cmd('setVolume', 1); } },
       seek: x => { if (yt) cmd('seekTo', [x, true]); else cmd('setCurrentTime', x); rp.t = x; hvReelBar(); } });
@@ -3020,7 +3021,7 @@ function makeReelPlayer(kind, src) {
 }
 function hvReelVeil() {   // le lecteur YouTube / Vimeo apparaît quand son habillage a disparu ; d'ici là, les carrés de l'accueil restent visibles
   const rp = hv && hv.rp; if (!rp || rp.kind === 'video') return;
-  const show = hv.reelOn && !rp.paused && rp.t >= (rp.showAt || 0);
+  const show = hv.reelOn && !rp.paused && (rp.forced || rp.t >= (rp.showAt || 0));
   if (show === !!rp.shown) return; rp.shown = show;
   rp.box.classList.toggle('wait', !show);
   if (hv.video && !homeGone && !hv.frozen) { if (show) hv.video.pause(); else if (hv.reelOn) hv.video.play().catch(() => {}); }
@@ -3034,6 +3035,7 @@ function finishReel(rp, box) {
 window.addEventListener('message', e => {
   const rp = hv && hv.rp; if (!rp || rp.kind === 'video' || !rp.el.contentWindow || e.source !== rp.el.contentWindow) return;
   let d = e.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (err) { return; } if (!d) return;
+  if (!rp.heard) { rp.heard = true; clearInterval(rp.hello); if (rp.kind === 'youtube') rp.mute(!hv.sound); }   // le lecteur répond : le son choisi avant qu'il soit prêt s'applique maintenant
   if (rp.kind === 'youtube') {
     const i = d.event === 'infoDelivery' && d.info; if (!i) return;
     if (typeof i.currentTime === 'number') rp.t = i.currentTime;
@@ -3069,11 +3071,26 @@ function hvReelStart(auto = false) {
     if (hv.sound && reel.kind === 'video') hv.rp.mute(false);
     if (reel.kind === 'video') hv.rp.play();
   } else { hv.rp.seek(0); hv.rp.play(); hv.rp.mute(!hv.sound); }
-  hv.reelOn = true; hv.rp.box.hidden = false;
+  hv.reelOn = true; hv.rp.box.hidden = false; hv.rp.playAt = performance.now(); reelWatch();
   if (hv.rp.kind === 'video') { if (hv.video) hv.video.pause(); } else { hv.rp.shown = true; hvReelVeil(); }   // YouTube / Vimeo : les carrés jouent jusqu'à ce que le lecteur soit propre
   home.classList.add('reel-on'); hvReelFit(); hvReelBar(); hvLabels();
   if (!auto) countView('showreel', 'Showreel', true);
   return true;
+}
+/* Un lecteur YouTube / Vimeo qui ne se montre pas (bloqué par une extension, réseau lent, vidéo refusée) : au bout de 8 s,
+   le showreel lancé tout seul s'arrête et les carrés reprennent ; lancé par le visiteur, on montre ce que le lecteur affiche */
+let reelWatchT = 0;
+function reelWatch() {
+  clearInterval(reelWatchT);
+  reelWatchT = setInterval(() => {
+    const rp = hv && hv.rp;
+    if (!rp || !hv.reelOn || rp.kind === 'video' || rp.shown) { clearInterval(reelWatchT); return; }
+    if (rp.paused || homeGone || performance.now() - (rp.playAt || 0) < 8000) return;   // en pause (l'ouverture le garde sur sa première image) : on attend
+    clearInterval(reelWatchT);
+    if (!rp.heard || !hv.userReel) { hvReelStop(); return; }
+    rp.showAt = 0; rp.forced = true; rp.shown = true; rp.box.classList.remove('wait');
+    if (hv.video && !hv.frozen) hv.video.pause();
+  }, 500);
 }
 function hvReelStop() {
   if (!hv || !hv.reelOn) return;
@@ -3198,7 +3215,7 @@ function homeVideoStep(now) {
   if (!hv || !hv.W) return;
   const ex = hv.exit ? now - hv.exit : -1;
   if (ex > HV_EXIT) { if (!hv.cleared) { hv.cleared = true; hv.ctx.fillStyle = '#0b0b0b'; hv.ctx.fillRect(0, 0, hv.W, hv.H); hvGLClear(); } return; }   // tout est aspiré : plus rien à calculer, la 3D a la main
-  if (hv.reelOn) return;   // le showreel joue : les carrés se reposent
+  if (hv.reelOn && (!hv.rp || hv.rp.kind === 'video' || hv.rp.shown)) return;   // le showreel joue : les carrés se reposent (tant que YouTube / Vimeo reste caché, ils continuent : l'accueil ne se fige pas)
   if (now - hv.last < (ex >= 0 ? 1000 / 60 : hv.interval) - 2) return; hv.last = now;   // l'aspiration se dessine à 60 images/s : ce n'est plus que du dessin
   const t0 = performance.now(), t = HV_REDUCE.matches ? 0 : (now - hv.t0) / 1000;
   const ctx = hv.ctx, W = hv.W, H = hv.H;
