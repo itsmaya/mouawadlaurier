@@ -5753,7 +5753,7 @@
    },
    "date": "",
    "tags": [],
-   "thumb": "media/barcelona/screenshot-2026-11-10-at-02-12-25-ykaq.jpg",
+   "thumb": "media/barcelona/logohandcoded-2lpt.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>A brand, an agency, an artist: let’s talk about your project.</p><p>Carrer Pérez Galdós, 6</p><p>08012 Barcelona, Spain</p><p>+34 666 19 94 29</p><p><a href=\"mailto:maya@hand-coded.net\">maya@hand-coded.net</a></p><p><a href=\"mailto:cyril@hand-coded.net\">cyril@hand-coded.net</a></p><p><a href=\"https://www.instagram.com/cyrillaurier/\" target=\"_blank\" rel=\"noopener\">Instagram</a> · <a href=\"https://vimeo.com/handcoded\" target=\"_blank\" rel=\"noopener\">Vimeo</a> · <a href=\"https://www.facebook.com/handcoders\" target=\"_blank\" rel=\"noopener\">Facebook</a></p><p>To programme a Mouawad + Laurier artwork in an institution or a festival: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p>",
@@ -12034,10 +12034,12 @@
    },
    "media": [
     {
-     "src": "media/recherche/screenshot-2026-11-10-at-02-40-28-ej8w.jpg"
+     "src": "media/recherche/screenshot-2026-11-10-at-02-40-28-ej8w.jpg",
+     "credit": ""
     },
     {
-     "src": "media/recherche/screenshot-2026-11-10-at-02-40-40-uo7s.jpg"
+     "src": "media/recherche/screenshot-2026-11-10-at-02-40-40-uo7s.jpg",
+     "credit": ""
     }
    ],
    "link": "https://csl.sony.fr/",
