@@ -792,11 +792,12 @@ const LAYOUT = {
     move(view, dx) { view.postViews.forEach((p, i) => { if (!p.ready) return; const th = p.thumb, mv = Math.pow(-1, i) * dx * (Math.random() * 2 + 1); th.y -= (th.y - p.p2.y + mv) * ease(2 * STYLE.cameraEaseSpeed); th.z -= (th.z - p.p2.z + mv) * ease(2 * STYLE.cameraEaseSpeed); }); },
   },
   map: {        // DistributeView3D : les cartes posées par ville
+    /* MAP_CARD_Y : hauteur des fiches au-dessus de la carte (1 = la hauteur d'origine) */
     offsets: [[250, 200], [0, -50], [400, 0], [-600, -100], [-500, 200]],
     preset(view) { view.angle = Math.PI / (view.n + 1); },
     coords(view, i) { return mapCoords(view.posts[i].location) || [((i % 5) - 2) * 160, ((i % 3) - 1) * 120]; },
     offset(i) { return this.offsets[i] || [(i % 2 ? 1 : -1) * (300 + 40 * i), ((i % 3) - 1) * 160]; },
-    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i), k = camK(view.def); return { x: c[0] + d[0], y: (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)) * Math.min(1, 0.2 + k), z: c[1] + d[1], rotY: 180 }; },   // caméra plus proche : les fiches descendent vers la carte
+    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i), k = camK(view.def), y = (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)) * Math.min(1, 0.2 + k); return { x: c[0] + d[0], y: Math.max(p.height / 2 + 60, y * MAP_CARD_Y), z: c[1] + d[1], rotY: 180 }; },   // caméra plus proche : les fiches descendent vers la carte ; posées plus bas, près des lieux
     open: 'oneStep', lineEnd(p, view, i) { const c = this.coords(view, i); return [c[0], 50, c[1]]; }, lineStart: (p, th) => [th.x, th.y - p.height / 2, th.z],
     focus: (view, id) => focusFront(view, id, p => { const xp = p.p2.x * (p.width / 2) / Math.hypot(p.p2.x, p.p2.y) + p.p2.x; p.jump(p.p2.x, p.p2.y * xp / (p.p2.x || 1e-6), p.p2.z); }),
     move(view, dx) { view.postViews.forEach((p, i) => { if (!p.ready || isTweening(p.thumb)) return; const th = p.thumb, mv = -Math.abs(dx * (Math.random() * 2 + 1)) / 2; th.x -= (th.x - p.p2.x + mv) * ease(2 * STYLE.cameraEaseSpeed); const inf = view.infos[i]; if (inf) inf.p.x = p.p2.x - p.width - 20 - (th.x - p.p2.x); }); },
@@ -827,7 +828,8 @@ const LAYOUT = {
    Debout, la grille s'allonge en hauteur ; couché, en largeur. Le nombre de colonnes est celui qui donne les plus grandes
    vignettes dans la place laissée libre par le menu, la signature et le logo, et la caméra s'approche pour la cadrer.
    Sur grand écran, rien ne change. */
-const GRID_LAYOUTS = ['fan', 'arc', 'map'];
+var MAP_CARD_Y = 0.5, MAP_PAN_SX = -1, MAP_PAN_SZ = -1;
+const GRID_LAYOUTS = ['fan', 'arc'];   // la carte du monde reste en 3D sur téléphone : on la parcourt du doigt et on zoome en pinçant
 const gridWanted = def => phoneMode() && GRID_LAYOUTS.includes(def.layout);
 const ZOOMF = () => CAMERA.zoom * CAMERA.focus * Math.min(1, W / 900);   // pixels à l'écran pour une unité à une unité de l'œil
 function freeRect() {   // la zone de l'écran que l'interface laisse libre
@@ -1070,6 +1072,10 @@ class PostsView3D {
       this.net.sc = sc;
     }
     for (const p of this.postViews) if (p.ready) p.apply();
+    if (this.def.layout === 'map' && !this.L.grid) {   // carte zoomée : les fiches s'effacent, la caméra passe entre les pays sans les traverser
+      const show = mapZoomT() < 0.3;
+      if ((this.mapShow ?? true) !== show) { this.mapShow = show; this.postViews.forEach((p, i) => { p.group.visible = show; if (this.lines[i]) this.lines[i].visible = show; const inf = this.infos[i]; if (inf) inf.mesh.visible = show; }); }
+    }
     this.following.forEach(p => this.followLine(p, p.id_));
     this.infos.forEach(inf => { if (!inf) return; inf.mesh.position.set(...postLocal(inf.p.x, inf.p.y, inf.p.z)); inf.mesh.rotation.y = -(inf.p.rotY + 180) * D2R; });
     if (this.focusInfo && this.focusInfo.target) {   // collée au portrait : même orientation, posée sur sa droite
@@ -1143,12 +1149,21 @@ function mapFocus() {   // le cœur du réseau, en coordonnées Papervision
   const f = postsView && postsView.net && postsView.net.focus; if (!f) return null;
   f.getWorldPosition(_fw); return { x: _fw.x, y: _fw.y, z: -_fw.z };
 }
+/* Sur la carte zoomée, on glisse du doigt ou de la souris pour aller voir d'autres pays : mapPan décale le centre de l'orbite */
+const mapPan = { x: 0, z: 0 };
 function orbitCenter() {
   const s = curSec(), t = mapZoomT(), f = t ? mapFocus() : null;
   const ty0 = camTargetY(), v = gridView();
   if (v) return { x: s.p.x - gridCam(v).dx, z: s.p.z, ty: ty0 };   // la grille au centre de la place libre
   if (!f) return { x: s.p.x, z: s.p.z, ty: ty0 };
-  return { x: s.p.x + (f.x - s.p.x) * t, z: s.p.z + (f.z - s.p.z) * t, ty: ty0 + (f.y - ty0) * t };
+  return { x: s.p.x + (f.x - s.p.x + mapPan.x) * t, z: s.p.z + (f.z - s.p.z + mapPan.z) * t, ty: ty0 + (f.y - ty0) * t };
+}
+function panMap(dx, dy) {   // la carte suit le geste, dans le sens où on la tire
+  if (!orbitE) orbitE = orbitNow();
+  const k = (camD() + CAMERA.focus) / ZOOMF() / Math.max(0.2, mapZoomT()), a = P.actualDeg;
+  mapPan.x += (-Math.cos(a) * dx + Math.sin(a) * dy) * k * MAP_PAN_SX;
+  mapPan.z += (Math.sin(a) * dx + Math.cos(a) * dy) * k * MAP_PAN_SZ;
+  mapPan.x = Math.max(-650, Math.min(650, mapPan.x)); mapPan.z = Math.max(-320, Math.min(320, mapPan.z));
 }
 const camHeight = () => {   // sur la carte zoomée, la caméra descend avec la distance : même angle, jamais sous la carte
   if (!isMap() || gridView()) return camHeightBase();
@@ -1216,7 +1231,11 @@ function onStageResize3D() {
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
-  if (isClicking) {
+  if (isClicking && isMap() && !gridView() && mapZoomT() > 0.05) {   // carte zoomée : le geste fait glisser la carte au lieu de tourner autour
+    easeSpeed = STYLE.cameraEaseSpeed;
+    panMap(mouseX - prevX, mouseY - prevY);
+    prevX = mouseX; prevY = mouseY;
+  } else if (isClicking) {
     easeSpeed = STYLE.cameraEaseSpeed;
     const deg = P.degreeCamera;
     P.degreeCamera += (mouseX - prevX) / 150;
@@ -1545,7 +1564,7 @@ const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) 
    La toute première fois, FormSubmit envoie un e-mail d'activation à l'adresse : il faut cliquer le lien une fois. */
 const CONTACT_FORM = { to: 'maya@hand-coded.net' };
 const CF = {
-  fr: { title: 'Parlons-en.', intro: 'Laissez-nous votre e-mail et quelques mots : on vous répond vite.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un artiste', 'Une institution ou un festival', 'Autre'],
+  fr: { title: 'Parlons-en.', intro: 'Laissez-nous votre e-mail et quelques mots : on vous répond vite.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un(e) artiste', 'Une institution ou un festival', 'Autre'],
         what: 'Votre projet', whatO: ['Une installation', 'Un événement ou une tournée', 'Un outil ou un logiciel', 'Du conseil', 'Autre chose'], when: 'Pour quand', whenO: ['Moins de 3 mois', '3 à 6 mois', 'Plus tard', 'Je ne sais pas encore'],
         msg: 'En quelques mots', send: 'Envoyer', sending: 'Envoi…', ok: 'Merci ! Votre message est bien parti, on vous répond très vite.', err: 'L’envoi n’a pas marché. Écrivez-nous directement à ', bad: 'Il manque une adresse e-mail valide.', note: 'Votre e-mail sert seulement à vous répondre.' },
   en: { title: 'Let’s talk.', intro: 'Leave us your email and a few words: we’ll get back to you quickly.', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
@@ -2004,23 +2023,21 @@ const post2D = {
   },
   step() {   // Navigation._navigation
     if (!this.open) return;
-    let target;
+    const lo = Math.min(0, this.end);
     if (this.dragging) {   // la bande est réduite sur téléphone : le doigt la fait avancer de la même distance à l'écran
       const d = (mouse2D - this.xprev) * 1.5 / (this.scale || 1);
-      this.finalpos += d; this.vel = this.vel * 0.6 + d * 0.4; this.xprev = mouse2D;
-      target = this.rubber(this.finalpos); this.x -= (this.x - target) * ease(STYLE.easing);
+      this.finalpos += d; this.vel = this.vel * 0.6 + d * 0.4; this.x -= (this.x - this.finalpos) * ease(STYLE.easing); this.xprev = mouse2D;
     } else {
-      const lo = Math.min(0, this.end);
-      if (this.finalpos > 0 || this.finalpos < lo) { this.over += this.rubber(this.finalpos) - Math.max(lo, Math.min(0, this.finalpos)); this.finalpos = Math.max(lo, Math.min(0, this.finalpos)); }   // lâchée au-delà d'un bout
-      if (this.over || this.ov) {   // ressort à amortissement critique, résolu exactement : un seul aller, un seul retour, à toute cadence d'images
-        const t = Math.min(0.1, frames / FPS), w = 11, e = Math.exp(-w * t), o = this.over, v = this.ov, b = v + w * o;
+      /* tirée à la main au-delà d'un bout : elle file, puis revient d'elle-même, avec l'élan d'origine */
+      if (Math.abs(this.finalpos - this.x) > 0.5) this.x -= (this.x - this.finalpos) * ease(STYLE.easing * 2 / 3);
+      else if (this.finalpos > 0) this.finalpos = 0; else if (this.finalpos < lo) this.finalpos = lo;
+      if (this.over || this.ov) {   // molette et pavé tactile aux bouts : un petit ressort, vif
+        const t = Math.min(0.1, frames / FPS), w = 17, e = Math.exp(-w * t), o = this.over, v = this.ov, b = v + w * o;
         this.over = Math.max(-OVER_MAX, Math.min(OVER_MAX, (o + b * t) * e)); this.ov = (v - w * b * t) * e;
         if (Math.abs(this.over) < 0.2 && Math.abs(this.ov) < 5) this.over = this.ov = 0;
       }
-      target = this.finalpos + this.over;
-      if (Math.abs(target - this.x) > 0.3) this.x -= (this.x - target) * ease(STYLE.easing * 2 / 3); else this.x = target;
     }
-    const tx = Math.round(this.x); if (tx !== this.tx) { this.tx = tx; strip.style.transform = `translateX(${tx}px)`; }
+    const tx = Math.round(this.x + this.over); if (tx !== this.tx) { this.tx = tx; strip.style.transform = `translateX(${tx}px)`; }
   },
 };
 /* ================================================================ Fiche verticale (téléphone)
@@ -2270,7 +2287,7 @@ post2dEl.addEventListener('wheel', e => {
   post2D.push(-d * k / (post2D.scale || 1));
 }, { passive: false });
 window.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && !e.target.closest('.scroll-x')) e.preventDefault(); }, { passive: false });
-const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); const lo = Math.min(0, post2D.end), v = post2D.finalpos, c = Math.max(lo, Math.min(0, v)); post2D.over = post2D.rubber(v) - c; post2D.ov = 0; post2D.finalpos = c; post2D.push((post2D.vel || 0) * 10); } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
+const stopDrag2D = () => { if (post2D.dragging) { post2D.justDragged = true; setTimeout(() => { post2D.justDragged = false; }, 0); post2D.finalpos += (post2D.vel || 0) * 10; } post2D.vel = 0; pend2D = null; post2D.dragging = false; post2dEl.classList.remove('grabbing'); };   // élan : un geste rapide lance la bande
 post2dEl.addEventListener('pointerup', stopDrag2D); post2dEl.addEventListener('pointercancel', stopDrag2D);
 post2dEl.addEventListener('lostpointercapture', e => { if (e.target === post2dEl) stopDrag2D(); });   // au doigt, la capture passe de l'élément touché à la bande : ce transfert ne doit pas arrêter le glissement
 window.addEventListener('pointerup', () => { if (pend2D || post2D.dragging) stopDrag2D(); });
@@ -2361,8 +2378,8 @@ const isMap = () => (((curSec() || {}).def || {}).layout === 'map');
 const zoomMin = () => (isMap() ? 60 : STYLE.cameraZoomMin);
 function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.min(STYLE.cameraZoomMax, Math.trunc(STYLE.cameraDistanceProportion * 1.5)); zoomMoved(); } }
 function zoomIn() { if (STYLE.cameraDistanceProportion > zoomMin()) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); zoomMoved(); } }
-function zoomMoved() { if (isMap() || gridView()) P.cameraY = camHeight(); onStageResize3D(); }
-function resetZoom() { if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
+function zoomMoved() { if (isMap() && STYLE.cameraDistanceProportion >= zoomBase) { mapPan.x = 0; mapPan.z = 0; } if (isMap() || gridView()) P.cameraY = camHeight(); onStageResize3D(); }
+function resetZoom() { mapPan.x = 0; mapPan.z = 0; if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
 let touchedKeyboard = false;
 function keyBoardNavigation(e) {
   if (!inputEnabled) return;
@@ -3701,6 +3718,7 @@ function introStage() {
     show(wm, 0, -30, 1100);
     sl.forEach((x, i) => show(x, 380 + i * 130, -18, 800));
     sq.forEach((x, i) => x.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: getComputedStyle(x).opacity, transform: 'none' }], { duration: 520, delay: 760 + i * 90, easing: 'cubic-bezier(.34,1.4,.64,1)', fill: 'backwards' }));
+    const en = document.getElementById('enter'); if (en) en.animate([{ opacity: 0, transform: 'translate(-50%, 10px)' }, { opacity: 1, transform: 'translateX(-50%)' }], { duration: 700, delay: 900, easing: EASE_IN, fill: 'backwards' });   // « Entrer » tout de suite : on n'est pas obligé de regarder l'ouverture
     setTimeout(() => { if (window.HC_GO) window.HC_GO(); }, 1150 + sq.length * 60);   // la phrase entre quand les carrés se posent
   };
   /* la signature dans sa vraie police, sinon elle apparaît en police de secours puis change */
@@ -3712,7 +3730,7 @@ function introLate(now = false) {   // le bandeau LED, « Entrer » et le « ? �
   R0.classList.remove('hc-stage', 'hc-late');
   tickerX = 0; tickerAcc = 0; if (tickerStrip) tickerStrip.shown = -1;   // le bandeau part du noir : la phrase entre par la droite
   if (now) return;
-  ['#ticker', '#enter', '#home-dock'].forEach((q, i) => { const el = document.querySelector(q); if (el) el.animate([{ opacity: 0 }, { opacity: getComputedStyle(el).opacity }], { duration: 1200, delay: i * 220, easing: 'ease', fill: 'backwards' }); });
+  ['#ticker', '#home-dock'].forEach((q, i) => { const el = document.querySelector(q); if (el) el.animate([{ opacity: 0 }, { opacity: getComputedStyle(el).opacity }], { duration: 1200, delay: i * 220, easing: 'ease', fill: 'backwards' }); });
 }
 function introWatch() {
   const el = document.getElementById('hc-intro'); if (!el) return;
