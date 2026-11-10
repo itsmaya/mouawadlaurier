@@ -11886,10 +11886,10 @@
    "order": 47,
    "published": true,
    "title": {
+    "fr": "Détection de l’humeur musicale",
     "en": "Music Mood Detection",
-    "fr": "Détection de l'humeur dans la music",
-    "ca": "Mood Analysis",
-    "es": "Mood Analysis"
+    "ca": "Detecció de l’estat d’ànim musical",
+    "es": "Detección del estado de ánimo musical"
    },
    "subtitle": {
     "en": "Eventide",
@@ -11911,10 +11911,10 @@
    "thumb": "media/nouveau-contenu/eventide-rs43.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "Création d'une application d'analyse de l'humeur d'une musique en temps reél. En utilisant les résultats du PhD, implémentation d'une version pour iOS et d'un plugIn Audio.",
-    "ca": "",
-    "es": ""
+    "fr": "<p><strong>Notre rôle</strong> Application temps réel, plug-in audio, version iOS.</p><p>Une application qui écoute la musique et en détecte l’humeur en temps réel. À partir des résultats de la thèse de Cyril, nous en avons développé pour Eventide une version iOS et un plug-in audio.</p><p>Le plug-in Mood mesure en direct l’intensité de quatre émotions, la colère, le calme, la joie et la tristesse, et les envoie en MIDI et en OSC : de quoi faire suivre à la lumière d’une scène ou d’un club l’émotion de la musique.</p><h3>Crédits</h3><ul><li><strong>Client</strong> Eventide</li><li><strong>Recherche et développement</strong> Cyril Laurier</li></ul>",
+    "en": "<p><strong>Our role</strong> Real-time application, audio plug-in, iOS version.</p><p>An application that listens to music and detects its mood in real time. Building on the results of Cyril’s PhD, we developed an iOS version and an audio plug-in for Eventide.</p><p>The Mood plug-in measures the intensity of four emotions live, anger, calm, happiness and sadness, and sends them as MIDI and OSC: enough to let the lights of a stage or a club follow the emotion of the music.</p><h3>Credits</h3><ul><li><strong>Client</strong> Eventide</li><li><strong>Research and development</strong> Cyril Laurier</li></ul>",
+    "ca": "<p><strong>El nostre paper</strong> Aplicació en temps real, connector d’àudio, versió iOS.</p><p>Una aplicació que escolta la música i en detecta l’estat d’ànim en temps real. A partir dels resultats de la tesi del Cyril, n’hem desenvolupat per a Eventide una versió iOS i un connector d’àudio.</p><p>El connector Mood mesura en directe la intensitat de quatre emocions, la ràbia, la calma, l’alegria i la tristesa, i les envia en MIDI i en OSC: n’hi ha prou perquè la llum d’un escenari o d’un club segueixi l’emoció de la música.</p><h3>Crèdits</h3><ul><li><strong>Client</strong> Eventide</li><li><strong>Recerca i desenvolupament</strong> Cyril Laurier</li></ul>",
+    "es": "<p><strong>Nuestro papel</strong> Aplicación en tiempo real, plugin de audio, versión iOS.</p><p>Una aplicación que escucha la música y detecta su estado de ánimo en tiempo real. A partir de los resultados de la tesis de Cyril, desarrollamos para Eventide una versión iOS y un plugin de audio.</p><p>El plugin Mood mide en directo la intensidad de cuatro emociones, la ira, la calma, la alegría y la tristeza, y las envía en MIDI y en OSC: lo justo para que la luz de un escenario o de un club siga la emoción de la música.</p><h3>Créditos</h3><ul><li><strong>Cliente</strong> Eventide</li><li><strong>Investigación y desarrollo</strong> Cyril Laurier</li></ul>"
    },
    "media": [],
    "link": "",
@@ -11948,10 +11948,10 @@
    "order": 48,
    "published": true,
    "title": {
+    "fr": "IA pour la musique",
     "en": "Music AI",
-    "fr": "IA pour la Musique",
-    "ca": "Music AI",
-    "es": "Music AI"
+    "ca": "IA per a la música",
+    "es": "IA para la música"
    },
    "subtitle": {
     "en": "Sony CSL",
@@ -11973,10 +11973,10 @@
    "thumb": "media/nouveau-contenu-4/screenshot-2026-11-10-at-00-48-31-5pf3.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "<p>DSP algorithms Phase matching, EQ matching</p><p>Recherche et mise en production de modèles génératifs audio pour la création musicale.</p><p>Projets :</p><p>-Phase et Eq matching. Outils de correction de phase et égaliseur automatique</p><p>-BassNet, DrumNet et DrumGAN, des modèles génératifs livrés aux musiciens via des outils de création.</p><p>Cycle complet : entraînement sur de grands corpus audio. Optimisation de la latence pour un usage en temps réel, puis itérations à partir des retours utilisateurs.</p><p>Foundation models : un des modèles de génération de lignes de basse reposait sur une approche de type LLM. Il a été publié et utilisé par des musiciens comme outil créatif.</p>",
-    "ca": "",
-    "es": ""
+    "fr": "<p><strong>Notre rôle</strong> Recherche, modèles génératifs audio, traitement du signal, mise en production.</p><p>Au sein de l’équipe musique de Sony CSL à Paris, Cyril a travaillé à la recherche et à la mise en production de modèles génératifs audio pour la création musicale.</p><p>Projets :</p><ul><li><strong>Phase et EQ matching</strong> des algorithmes de traitement du signal : correction de phase et égaliseur automatiques.</li><li><strong>BassNet, DrumNet et DrumGAN</strong> des modèles génératifs mis entre les mains des musiciens à travers des outils de création. DrumGAN a ainsi rejoint Backbone, le resynthétiseur de batterie de Steinberg.</li></ul><p>Un cycle complet : l’entraînement sur de grands corpus audio, l’optimisation de la latence pour jouer en temps réel, puis des itérations à partir des retours des musiciens.</p><p>Côté foundation models : l’un des modèles de génération de lignes de basse reposait sur une approche de type LLM. Il a été publié et utilisé par des musiciens comme outil créatif.</p><h3>Crédits</h3><ul><li><strong>Laboratoire</strong> Sony CSL Paris</li><li><strong>Recherche</strong> Cyril Laurier</li></ul>",
+    "en": "<p><strong>Our role</strong> Research, generative audio models, signal processing, production.</p><p>Within the music team at Sony CSL in Paris, Cyril worked on researching generative audio models for music creation and taking them into production.</p><p>Projects:</p><ul><li><strong>Phase and EQ matching</strong> signal processing algorithms: automatic phase correction and automatic equalisation.</li><li><strong>BassNet, DrumNet and DrumGAN</strong> generative models put in musicians’ hands through creative tools. DrumGAN went on to join Backbone, Steinberg’s drum resynthesiser.</li></ul><p>A complete cycle: training on large audio corpora, optimising latency for real-time playing, then iterating on musicians’ feedback.</p><p>On the foundation model side: one of the bass line generation models relied on an LLM-style approach. It was published and used by musicians as a creative tool.</p><h3>Credits</h3><ul><li><strong>Lab</strong> Sony CSL Paris</li><li><strong>Research</strong> Cyril Laurier</li></ul>",
+    "ca": "<p><strong>El nostre paper</strong> Recerca, models generatius d’àudio, tractament del senyal, posada en producció.</p><p>Dins de l’equip de música de Sony CSL a París, el Cyril ha treballat en la recerca i la posada en producció de models generatius d’àudio per a la creació musical.</p><p>Projectes:</p><ul><li><strong>Phase i EQ matching</strong> algorismes de tractament del senyal: correcció de fase i equalitzador automàtics.</li><li><strong>BassNet, DrumNet i DrumGAN</strong> models generatius posats a les mans dels músics a través d’eines de creació. DrumGAN s’ha integrat a Backbone, el ressintetitzador de bateria de Steinberg.</li></ul><p>Un cicle complet: l’entrenament amb grans corpus d’àudio, l’optimització de la latència per tocar en temps real, i després iteracions a partir dels comentaris dels músics.</p><p>Pel que fa als foundation models: un dels models de generació de línies de baix es basava en un enfocament de tipus LLM. Es va publicar i els músics l’han fet servir com a eina creativa.</p><h3>Crèdits</h3><ul><li><strong>Laboratori</strong> Sony CSL París</li><li><strong>Recerca</strong> Cyril Laurier</li></ul>",
+    "es": "<p><strong>Nuestro papel</strong> Investigación, modelos generativos de audio, tratamiento de señal, puesta en producción.</p><p>Dentro del equipo de música de Sony CSL en París, Cyril trabajó en la investigación y la puesta en producción de modelos generativos de audio para la creación musical.</p><p>Proyectos:</p><ul><li><strong>Phase y EQ matching</strong> algoritmos de tratamiento de señal: corrección de fase y ecualizador automáticos.</li><li><strong>BassNet, DrumNet y DrumGAN</strong> modelos generativos puestos en manos de los músicos a través de herramientas de creación. DrumGAN se integró en Backbone, el resintetizador de batería de Steinberg.</li></ul><p>Un ciclo completo: el entrenamiento con grandes corpus de audio, la optimización de la latencia para tocar en tiempo real y, después, iteraciones a partir de los comentarios de los músicos.</p><p>En cuanto a los foundation models: uno de los modelos de generación de líneas de bajo se basaba en un enfoque de tipo LLM. Se publicó y los músicos lo usaron como herramienta creativa.</p><h3>Créditos</h3><ul><li><strong>Laboratorio</strong> Sony CSL París</li><li><strong>Investigación</strong> Cyril Laurier</li></ul>"
    },
    "media": [
     {
@@ -11996,9 +11996,9 @@
    "location": null,
    "spots": [
     {
-     "city": "Tokyo",
-     "lat": 35.68,
-     "lon": 139.69
+     "city": "Paris",
+     "lat": 48.86,
+     "lon": 2.35
     }
    ],
    "skills": [
@@ -12025,16 +12025,16 @@
     "es": "Mood Cloud"
    },
    "subtitle": {
-    "en": "Phd Cyril Laurier",
-    "fr": "Phd Cyril Laurier",
-    "ca": "Phd Cyril Laurier",
-    "es": "Phd Cyril Laurier"
+    "fr": "Thèse de doctorat de Cyril Laurier",
+    "en": "Cyril Laurier’s PhD thesis",
+    "ca": "Tesi doctoral de Cyril Laurier",
+    "es": "Tesis doctoral de Cyril Laurier"
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "fr": "Universitat Pompeu Fabra, Barcelone",
+    "en": "Universitat Pompeu Fabra, Barcelona",
+    "ca": "Universitat Pompeu Fabra, Barcelona",
+    "es": "Universitat Pompeu Fabra, Barcelona"
    },
    "date": "2006-2011",
    "tags": [
@@ -12044,10 +12044,10 @@
    "thumb": "media/nouveau-contenu-5/ios-simulator-screen-shot-feb-13-2014-3-45-40-pm-0vfz.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "Cette thèse porte sur la classification automatique de la musique selon l’émotion (mood), à partir de modèles computationnels exploitant le signal audio. Elle s’appuie sur le traitement du signal, l’apprentissage automatique et la recherche d’information.<p>Les principales contributions :</p><p>-Modélisation de l’émotion : un modèle de représentation des émotions musicales est dérivé de l’analyse des tags d’un réseau social musical.</p><p>-Classification automatique : une méthode de classification par émotion, avec une analyse de la contribution des descripteurs audio et de leur lien avec l’émotion perçue.</p><p>-Approche multimodale : une version combinant audio et paroles, qui contribue aussi au domaine de la recherche d’information textuelle.</p><p>-Lien émotion–genre : après avoir montré la relation entre émotion et genre musical, une nouvelle approche intègre la classification automatique par genre. Les classifieurs fondés sur le genre obtiennent une meilleure précision que les modèles audio standards.</p><p>-Interprétabilité : une technique d’extraction de règles rend les modèles explicites.</p><p>Les résultats de cette thèse ont été exploités commercialement par différentes entités: Bmat, Eventide, Sonaris Systems</p>",
-    "ca": "",
-    "es": ""
+    "fr": "<p><strong>Notre rôle</strong> Thèse de doctorat, apprentissage automatique, analyse audio.</p><p>La thèse de Cyril, « Automatic Classification of Musical Mood by Content-Based Analysis », soutenue en 2011 à l’Universitat Pompeu Fabra de Barcelone. Elle porte sur la classification automatique de la musique selon l’émotion (mood), à partir de modèles qui écoutent le signal audio. Elle s’appuie sur le traitement du signal, l’apprentissage automatique et la recherche d’information.</p><p>Les principales contributions :</p><ul><li><strong>Modéliser l’émotion</strong> un modèle de représentation des émotions musicales, tiré de l’analyse des tags d’un réseau social musical.</li><li><strong>Classer automatiquement</strong> une méthode de classification par émotion, avec l’analyse de ce qu’apporte chaque descripteur audio et de son lien avec l’émotion perçue.</li><li><strong>Croiser audio et paroles</strong> une approche multimodale, qui fait aussi avancer la recherche d’information dans les textes.</li><li><strong>Relier émotion et genre</strong> après avoir montré le lien entre émotion et genre musical, une nouvelle approche intègre la classification automatique par genre. Ces classifieurs sont plus précis que les modèles audio classiques.</li><li><strong>Rendre les modèles lisibles</strong> une technique d’extraction de règles rend les modèles explicites.</li></ul><p>Les résultats de cette thèse ont été exploités commercialement par Bmat, Eventide et Sonaris Systems.</p>",
+    "en": "<p><strong>Our role</strong> PhD thesis, machine learning, audio analysis.</p><p>Cyril’s PhD thesis, “Automatic Classification of Musical Mood by Content-Based Analysis”, defended in 2011 at Universitat Pompeu Fabra in Barcelona. It deals with classifying music automatically by emotion (mood), using models that listen to the audio signal. It draws on signal processing, machine learning and information retrieval.</p><p>The main contributions:</p><ul><li><strong>Modelling emotion</strong> a representation model of musical emotions, derived from analysing the tags of a music social network.</li><li><strong>Automatic classification</strong> a method for classifying music by emotion, with an analysis of what each audio descriptor contributes and how it relates to perceived emotion.</li><li><strong>Combining audio and lyrics</strong> a multimodal approach, which also advances information retrieval in text.</li><li><strong>Linking emotion and genre</strong> after showing the relationship between emotion and musical genre, a new approach integrates automatic genre classification. These classifiers are more accurate than standard audio models.</li><li><strong>Making models readable</strong> a rule extraction technique makes the models explicit.</li></ul><p>The results of this thesis have been used commercially by Bmat, Eventide and Sonaris Systems.</p>",
+    "ca": "<p><strong>El nostre paper</strong> Tesi doctoral, aprenentatge automàtic, anàlisi d’àudio.</p><p>La tesi del Cyril, «Automatic Classification of Musical Mood by Content-Based Analysis», defensada el 2011 a la Universitat Pompeu Fabra de Barcelona. Tracta la classificació automàtica de la música segons l’emoció (mood), a partir de models que escolten el senyal d’àudio. Es basa en el tractament del senyal, l’aprenentatge automàtic i la recuperació d’informació.</p><p>Les principals aportacions:</p><ul><li><strong>Modelar l’emoció</strong> un model de representació de les emocions musicals, extret de l’anàlisi de les etiquetes d’una xarxa social musical.</li><li><strong>Classificar automàticament</strong> un mètode de classificació per emoció, amb l’anàlisi del que aporta cada descriptor d’àudio i de la seva relació amb l’emoció percebuda.</li><li><strong>Creuar àudio i lletres</strong> un enfocament multimodal, que també fa avançar la recuperació d’informació en textos.</li><li><strong>Relacionar emoció i gènere</strong> després de demostrar la relació entre emoció i gènere musical, un nou enfocament integra la classificació automàtica per gènere. Aquests classificadors són més precisos que els models d’àudio habituals.</li><li><strong>Fer llegibles els models</strong> una tècnica d’extracció de regles fa explícits els models.</li></ul><p>Bmat, Eventide i Sonaris Systems han explotat comercialment els resultats d’aquesta tesi.</p>",
+    "es": "<p><strong>Nuestro papel</strong> Tesis doctoral, aprendizaje automático, análisis de audio.</p><p>La tesis de Cyril, «Automatic Classification of Musical Mood by Content-Based Analysis», defendida en 2011 en la Universitat Pompeu Fabra de Barcelona. Trata la clasificación automática de la música según la emoción (mood), a partir de modelos que escuchan la señal de audio. Se apoya en el tratamiento de señal, el aprendizaje automático y la recuperación de información.</p><p>Las principales aportaciones:</p><ul><li><strong>Modelar la emoción</strong> un modelo de representación de las emociones musicales, extraído del análisis de las etiquetas de una red social musical.</li><li><strong>Clasificar automáticamente</strong> un método de clasificación por emoción, con el análisis de lo que aporta cada descriptor de audio y de su relación con la emoción percibida.</li><li><strong>Cruzar audio y letras</strong> un enfoque multimodal, que también hace avanzar la recuperación de información en textos.</li><li><strong>Relacionar emoción y género</strong> tras demostrar la relación entre emoción y género musical, un nuevo enfoque integra la clasificación automática por género. Estos clasificadores son más precisos que los modelos de audio habituales.</li><li><strong>Hacer legibles los modelos</strong> una técnica de extracción de reglas hace explícitos los modelos.</li></ul><p>Bmat, Eventide y Sonaris Systems han explotado comercialmente los resultados de esta tesis.</p>"
    },
    "media": [
     {
@@ -12143,10 +12143,10 @@
    "thumb": "media/nouveau-contenu-6/screen-shot-2014-11-17-at-23-01-14-654y.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "MusicBricks est un projet européen Horizon 2020 qui faisait le lien entre recherche et industrie en rendant les outils de technologie musicale existants faciles à utiliser, afin d’aider des idées créatives à atteindre le marché. Il s’appuyait sur le Music Tech Fest, lancé à Londres en 2012 par Michela Magas pour rapprocher chercheurs et praticiens, et sur son hackathon de 24 heures, le MTF Hack Camp",
-    "ca": "",
-    "es": ""
+    "fr": "<p>MusicBricks est un projet européen Horizon 2020 qui faisait le pont entre la recherche et l’industrie : il rendait les outils de technologie musicale existants faciles à utiliser, pour aider des idées créatives à arriver jusqu’au marché.</p><p>Il s’appuyait sur le Music Tech Fest, lancé à Londres en 2012 par Michela Magas pour rapprocher chercheurs et praticiens, et sur son hackathon de 24 heures, le MTF Hack Camp. À Umeå, en Suède, en 2015, quatre équipes lauréates ont construit leur projet avec les technologies MusicBricks et ont obtenu un financement et une incubation.</p>",
+    "en": "<p>MusicBricks was a European Horizon 2020 project that bridged research and industry: it made existing music technology tools easy to use, to help creative ideas reach the market.</p><p>It built on Music Tech Fest, launched in London in 2012 by Michela Magas to bring researchers and practitioners together, and on its 24-hour hackathon, the MTF Hack Camp. In Umeå, Sweden, in 2015, four winning teams built their projects with MusicBricks technologies and received funding and incubation.</p>",
+    "ca": "<p>MusicBricks va ser un projecte europeu Horizon 2020 que feia de pont entre la recerca i la indústria: feia fàcils d’utilitzar les eines de tecnologia musical existents, per ajudar idees creatives a arribar al mercat.</p><p>Es basava en el Music Tech Fest, llançat a Londres el 2012 per Michela Magas per apropar investigadors i professionals, i en el seu hackató de 24 hores, el MTF Hack Camp. A Umeå, a Suècia, el 2015, quatre equips guanyadors van construir el seu projecte amb les tecnologies MusicBricks i van obtenir finançament i incubació.</p>",
+    "es": "<p>MusicBricks fue un proyecto europeo Horizon 2020 que tendía un puente entre la investigación y la industria: hacía fáciles de usar las herramientas de tecnología musical existentes, para ayudar a que las ideas creativas llegaran al mercado.</p><p>Se apoyaba en el Music Tech Fest, lanzado en Londres en 2012 por Michela Magas para acercar investigadores y profesionales, y en su hackatón de 24 horas, el MTF Hack Camp. En Umeå, Suecia, en 2015, cuatro equipos ganadores construyeron su proyecto con las tecnologías MusicBricks y obtuvieron financiación e incubación.</p>"
    },
    "media": [],
    "link": "",

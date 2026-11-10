@@ -1092,3 +1092,53 @@ html.neg :-webkit-full-screen, html.neg :-webkit-full-screen * { filter: none !i
 #postv .cf-q > span, #postv .cf-q > legend { font-size: 11px; }
 #postv .cf-send { font-size: 13px; line-height: 40px; padding: 0 22px; }
 #postv .cf-end { margin-top: 6px; }
+
+/* Contact : la phrase d'accueil, des lignes nommées comme les questions du formulaire, le mot pour Mouawad + Laurier en bas */
+.contact .cbox > .body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.contact .cbox .body p.lead, .pv-contact p.lead { margin: 0 0 20px; font-weight: 600; }
+.crows { display: grid; gap: 13px; margin: 0; padding: 18px 0 0; border-top: 1px solid rgba(255,255,255,.22); }
+.crows .cr { display: grid; grid-template-columns: 82px minmax(0, 1fr); column-gap: 14px; align-items: baseline; }
+.crows dt { font: 600 9.5px/13px var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--grey-2, #999); }
+.crows dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.crows a.mail { color: var(--accent) !important; font-weight: 600; text-decoration: none !important; }
+.crows a.mail:hover, .crows a.mail:focus-visible { text-decoration: underline !important; text-underline-offset: 3px; outline: none; }
+.crows a[href^="tel:"] { color: inherit !important; text-decoration: none !important; }
+.crows .socs { display: flex; margin: 0 !important; }
+.crows .cr:has(.socs) { align-items: center; }
+.cnote { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.22); font-size: .88em; line-height: 1.45; color: #bdbdbd; }
+.cnote p { margin: 0 !important; }
+.cnote a { color: #fff !important; }
+.contact .cbox .body .crows + .cnote, .contact .cbox .body .crows ~ p { margin-top: auto; }
+#postv .pv-contact .crows { gap: 16px; }
+#postv .pv-contact .crows .cr { grid-template-columns: 74px minmax(0, 1fr); }
+#postv .pv-contact .crows dt { font-size: 10.5px; }
+#postv .pv-contact .cnote { margin-top: 24px; }
+#postv .pv-contact .socs .soc { width: 34px; height: 34px; font-size: 11px; }
+.contact .cbox .body p.lead { margin-bottom: 14px; }
+.contact .cbox .crows { gap: 8px; padding-top: 13px; }
+.contact .cbox .cnote { padding-top: 11px; }
+.contact .cbox .body p.lead { margin-bottom: 11px; }
+.contact .cbox .crows { gap: 6px; padding-top: 11px; }
+.contact .cbox .crows .socs .soc { width: 24px; height: 24px; }
+
+/* Le bouton des catégories : un carré comme le Showreel (le triangle jaune), le nom de la catégorie et son nombre en pastille noire,
+   « Catégorie » écrit petit au-dessus. Il se voit, et il parle la même langue que les carrés sous la signature. */
+#cat-box { gap: 5px; }
+#cat-cap { display: block !important; font: 600 9px/11px var(--ui); letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; padding-left: 1px; }
+#cat-open, #cat-open:hover, #cat-open:focus-visible, #cat-box.open #cat-open { height: 32px; min-width: 0; width: auto; padding: 0 12px 0 0; gap: 11px; border: 1px solid #111 !important; background: #fff !important; color: #111; font: bold 11px/30px var(--ui); letter-spacing: .1em; box-sizing: border-box; outline: none; transition: background .2s; }
+#cat-open .tri, #cat-box.open #cat-open .tri { position: relative; width: 30px; height: 30px; border: 0; border-right: 1px solid #111; transform: none; flex: none; transition: background .2s; }
+#cat-open .tri::before { content: ''; position: absolute; left: 12px; top: 10px; width: 0; height: 0; border-left: 7px solid var(--accent); border-top: 5px solid transparent; border-bottom: 5px solid transparent; transition: transform .25s, border-color .2s; }
+#cat-open:hover .tri, #cat-open:focus-visible .tri, #cat-box.open #cat-open .tri { background: var(--accent); }
+#cat-open:hover .tri::before, #cat-open:focus-visible .tri::before, #cat-box.open #cat-open .tri::before { border-left-color: #111; }
+#cat-box.open #cat-open .tri::before { transform: rotate(-90deg); }
+#cat-open:hover #cat-name, #cat-open:focus-visible #cat-name { text-decoration: none; }
+#cat-name { display: flex; align-items: center; gap: 9px; }
+#cat-name .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+#cat-name .n { flex: none; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; background: #111; color: #fff !important; font: 600 10px/18px var(--ui); letter-spacing: 0; text-align: center; }
+#cat-list .n { margin-left: 6px; color: #9a9a9a !important; font-weight: 400; }
+#cat-list { border: 1px solid #111; box-shadow: none; }
+@media (max-width: 700px), (max-height: 520px) {
+  #cat-box { justify-items: center; }
+  #cat-open, #cat-open:hover, #cat-open:focus-visible, #cat-box.open #cat-open { height: 32px; font-size: 10.5px; }
+}
+#cat-box { justify-items: center; }

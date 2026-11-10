@@ -536,12 +536,19 @@ async function skillCard(post, w, h) {
 function infoTexture(post, kind) {
   return fontsReady().then(() => {
     if (kind === 'place') return canvasTex(380, 300, ctx => {   // MovieClip "contact"
+      const X = 30, TW = 380 - 2 * X, c = contactParts(sanitizeHTML(tr(post.body)));
+      const fit = (t, f) => { ctx.font = f; let l = t; while (l && ctx.measureText(l).width > TW) l = l.slice(0, -2).trim() + '…'; return l; };
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 380, 300); ctx.textBaseline = 'top';
-      ctx.fillStyle = '#fff'; ctx.font = TF(fz(44)); ctx.fillText(tr(post.title) + '.', 32, 18);
-      ctx.font = IT(fz(18)); wrapLines(ctx, tr(post.subtitle), 320).slice(0, 2).forEach((l, i) => ctx.fillText(l, 32, 76 + i * 22));
-      ctx.font = `14px ${UIF}`; ctx.fillText((post.link || '').replace(/^https?:\/\/(www\.)?/, ''), 32, 128);
-      ctx.fillStyle = '#fff'; htmlToText(tr(post.body)).slice(0, 4).forEach((l, i) => ctx.fillText(l, 32, 164 + i * 20));
-      ctx.font = `600 15px ${UIF}`; ctx.fillText(tr(post.place), 32, 260);
+      ctx.fillStyle = accent(); ctx.fillRect(X, 24, 16, 2);
+      let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
+      ctx.fillStyle = '#fff'; ctx.font = TF(fz(40)); let y = 36; wrapLines(ctx, title, TW).slice(0, 1).forEach(l => { ctx.fillText(l, X, y); y += fz(44); });
+      ctx.font = IT(fz(17)); wrapLines(ctx, tr(post.subtitle), TW).slice(0, 2).forEach(l => { ctx.fillText(l, X, y); y += fz(21); });
+      y = Math.max(y + 16, 150);
+      if (!c.ok) { ctx.font = `13px ${UIF}`; htmlToText(tr(post.body)).slice(0, 5).forEach(l => { ctx.fillText(fit(l, `13px ${UIF}`), X, y); y += 19; }); return; }
+      if (c.mail[0]) { ctx.fillStyle = accent(); ctx.fillText(fit(c.mail[0], `600 16px ${UIF}`), X, y); y += 24; }
+      ctx.fillStyle = '#fff'; if (c.tel[0]) { ctx.fillText(fit(c.tel[0], `15px ${UIF}`), X, y); y += 26; }
+      ctx.fillStyle = 'rgba(255,255,255,.62)';
+      (c.addr[0] || '').split(/\s+[.·•|]\s+/).slice(0, 3).forEach(l => { if (y < 282) { ctx.fillText(fit(l, `12.5px ${UIF}`), X, y); y += 17; } });
     }, 1.5);
     if (phoneCards()) return canvasTex(200, 200, ctx => {   // téléphone : le nom, la phrase et les projets en gros, sans le texte long
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
@@ -1481,11 +1488,11 @@ function initCategorieData() {
   catList.innerHTML = '';
   list.forEach(c => {
     const li = document.createElement('li'), b = document.createElement('button');
-    b.type = 'button'; b.innerHTML = `${escapeHTML(tr(c.label))} <span class="n">(${d.countOf(c.id)})</span>`; b.setAttribute('aria-current', String(c.id === d.category));
+    b.type = 'button'; b.innerHTML = `${escapeHTML(tr(c.label))} <span class="n">${d.countOf(c.id)}</span>`; b.setAttribute('aria-current', String(c.id === d.category));
     b.addEventListener('click', () => { closeCategory(); changeCategory(c.id); });
     li.appendChild(b); catList.appendChild(li);
   });
-  catName.innerHTML = `${escapeHTML(d.currentCatName)} <span class="n">(${d.countOf(d.category)})</span>`;
+  catName.innerHTML = `<span class="t">${escapeHTML(d.currentCatName)}</span> <span class="n">${d.countOf(d.category)}</span>`;
   checkAccess(); closeCategory();
 }
 const pgNum = document.getElementById('pg-num');
@@ -1611,6 +1618,39 @@ function socialIcons(html) {
     p.innerHTML = links.map((a, i) => `<a class="soc" href="${escapeHTML(a.getAttribute('href'))}" target="_blank" rel="noopener" aria-label="${nets[i][2]}" title="${nets[i][2]}">${nets[i][1]}</a>`).join('');
   });
   return d.innerHTML;
+}
+/* Contact : le texte des Réglages se range tout seul. La phrase d'accueil, puis des lignes nommées (écrire, appeler, adresse, suivre),
+   puis le mot pour Mouawad + Laurier, détaché en bas. Un paragraphe qu'on ne reconnaît pas reste à sa place, tel quel. */
+function contactParts(html) {
+  const d = document.createElement('div'); d.innerHTML = socialIcons(html || '');
+  const ps = [...d.children], out = { lead: '', mail: [], tel: [], addr: [], socs: '', note: [], rest: [] };
+  ps.forEach((p, i) => {
+    const txt = p.textContent.replace(/\s+/g, ' ').trim(); if (!txt && !p.classList.contains('socs')) return;
+    const links = [...p.querySelectorAll('a[href]')];
+    if (p.classList.contains('socs')) out.socs = p.innerHTML;
+    else if (links.some(a => /^mailto:/i.test(a.getAttribute('href')))) links.filter(a => /^mailto:/i.test(a.getAttribute('href'))).forEach(a => out.mail.push(a.getAttribute('href').replace(/^mailto:/i, '').split('?')[0]));
+    else if (/^\+?[\d\s().\-]{8,}$/.test(txt)) out.tel.push(txt);
+    else if (i === 0 && !links.length && p.querySelector('b, strong') && p.querySelector('b, strong').textContent.trim() === txt) out.lead = p.querySelector('b, strong').innerHTML;
+    else if (links.length) out.note.push(p.innerHTML);
+    else if (/\d/.test(txt) && txt.length < 120) out.addr.push(txt);
+    else out.rest.push(p.outerHTML);
+  });
+  out.ok = !!(out.mail.length || out.tel.length || out.addr.length);
+  return out;
+}
+function contactHTML(html) {
+  const c = contactParts(html), E = escapeHTML; if (!c.ok) return socialIcons(html || '');
+  const row = (k, v) => `<div class="cr"><dt>${E(ui(k))}</dt><dd>${v}</dd></div>`;
+  const tel = t => `<a href="tel:${E(t.replace(/[^\d+]/g, ''))}">${E(t)}</a>`;
+  const addr = a => { const [rue, ...reste] = a.split(/\s+[.·•|]\s+/); return E(rue) + (reste.length ? '<br>' + E(reste.join(' · ')) : ''); };   // « rue . ville . pays » : la rue, puis la ville et le pays
+  return (c.lead ? `<p class="lead">${c.lead}</p>` : '') +
+    `<dl class="crows">` +
+    (c.mail.length ? row('c_write', c.mail.map(m => `<a class="mail" href="mailto:${E(m)}">${E(m)}</a>`).join('<br>')) : '') +
+    (c.tel.length ? row('c_call', c.tel.map(tel).join('<br>')) : '') +
+    (c.addr.length ? row('c_addr', c.addr.map(addr).join('<br>')) : '') +
+    (c.socs ? row('c_follow', `<span class="socs">${c.socs}</span>`) : '') + `</dl>` +
+    c.rest.join('') +
+    (c.note.length ? `<div class="cnote">${c.note.map(n => `<p>${n}</p>`).join('')}</div>` : '');
 }
 const OVER_MAX = 56;   // dépassement maximal de la bande à ses bouts, en pixels
 const post2D = {
@@ -1974,7 +2014,7 @@ const post2D = {
     const sub = tr(post.subtitle).trim();
     this.addPanel('txt contact', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
       `<h2 class="ttl">${E(title)}</h2>${sub ? `<p class="stl">${E(sub)}</p>` : ''}` +
-      `<div class="body">${socialIcons(sanitizeHTML(tr(post.body)))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
+      `<div class="body">${contactHTML(sanitizeHTML(tr(post.body)))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
       `</div>`);   // le lieu est déjà dans l'adresse : pas de ligne en plus
   },
   layout() {
@@ -2046,7 +2086,7 @@ const postV = {
       const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
       out.push(`<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
         (post.link ? `<p class="pv-site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : '') +
-        `<div class="pv-body">${socialIcons(sanitizeHTML(tr(post.body)))}</div>${tr(post.place) ? `<p class="pv-meta">${E(tr(post.place))}</p>` : ''}</div>` +
+        `<div class="pv-body pv-contact">${contactHTML(sanitizeHTML(tr(post.body)))}</div></div>` +
         (CONTACT_FORM.to ? `<div class="pv-form">${contactFormHTML('pv')}</div>` : ''));
     } else {
       out.push(this.text(post, title, subtitle, sec));
