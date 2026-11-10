@@ -11886,10 +11886,10 @@
    "order": 47,
    "published": true,
    "title": {
-    "en": "Audio Processing",
-    "fr": "Audio Processing",
-    "ca": "Audio Processing",
-    "es": "Audio Processing"
+    "en": "Music Mood Detection",
+    "fr": "Détection de l'humeur dans la music",
+    "ca": "Mood Analysis",
+    "es": "Mood Analysis"
    },
    "subtitle": {
     "en": "Eventide",
@@ -11903,7 +11903,7 @@
     "ca": "New York",
     "es": "New York"
    },
-   "date": "",
+   "date": "2012-2015",
    "tags": [
     "ai",
     "software"
@@ -11912,7 +11912,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "Création d'une application d'analyse de l'humeur d'une musique en temps reél. En utilisant les résultats du PhD, implémentation d'une version pour iOS et d'un plugIn Audio.",
     "ca": "",
     "es": ""
    },
@@ -11933,13 +11933,14 @@
    "skills": [
     "fabriquer",
     "audio",
-    "real-time"
+    "real-time",
+    "machine-learning"
    ],
-   "author": "",
+   "author": "Mood",
    "logos": [
     "media/logos/eventide.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "recherche",
@@ -11947,10 +11948,10 @@
    "order": 48,
    "published": true,
    "title": {
-    "en": "Research",
-    "fr": "Recherche",
-    "ca": "Ricerca",
-    "es": "Ricerca"
+    "en": "Music AI",
+    "fr": "IA pour la Musique",
+    "ca": "Music AI",
+    "es": "Music AI"
    },
    "subtitle": {
     "en": "Sony CSL",
@@ -11964,7 +11965,7 @@
     "ca": "Paris",
     "es": "Paris"
    },
-   "date": "",
+   "date": "2017-2023",
    "tags": [
     "ai",
     "software"
@@ -11973,7 +11974,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "<p>R&amp;D on DSP algorithms Phase matching, EQ matching</p><p>R&amp;D on Deep Learning music and audio tools Generation of Bass lines, Drums and Orchestration</p>",
+    "fr": "<p>DSP algorithms Phase matching, EQ matching</p><p>Recherche et mise en production de modèles génératifs audio pour la création musicale.</p><p>Projets :</p><p>-Phase et Eq matching. Outils de correction de phase et égaliseur automatique</p><p>-BassNet, DrumNet et DrumGAN, des modèles génératifs livrés aux musiciens via des outils de création.</p><p>Cycle complet : entraînement sur de grands corpus audio. Optimisation de la latence pour un usage en temps réel, puis itérations à partir des retours utilisateurs.</p><p>Foundation models : un des modèles de génération de lignes de basse reposait sur une approche de type LLM. Il a été publié et utilisé par des musiciens comme outil créatif.</p>",
     "ca": "",
     "es": ""
    },
@@ -12003,7 +12004,8 @@
    "skills": [
     "fabriquer",
     "real-time",
-    "audio"
+    "audio",
+    "machine-learning"
    ],
    "author": "",
    "logos": [
@@ -12034,7 +12036,7 @@
     "ca": "",
     "es": ""
    },
-   "date": "",
+   "date": "2006-2011",
    "tags": [
     "ai",
     "software"
@@ -12043,7 +12045,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "Cette thèse porte sur la classification automatique de la musique selon l’émotion (mood), à partir de modèles computationnels exploitant le signal audio. Elle s’appuie sur le traitement du signal, l’apprentissage automatique et la recherche d’information.<p>Les principales contributions :</p><p>-Modélisation de l’émotion : un modèle de représentation des émotions musicales est dérivé de l’analyse des tags d’un réseau social musical.</p><p>-Classification automatique : une méthode de classification par émotion, avec une analyse de la contribution des descripteurs audio et de leur lien avec l’émotion perçue.</p><p>-Approche multimodale : une version combinant audio et paroles, qui contribue aussi au domaine de la recherche d’information textuelle.</p><p>-Lien émotion–genre : après avoir montré la relation entre émotion et genre musical, une nouvelle approche intègre la classification automatique par genre. Les classifieurs fondés sur le genre obtiennent une meilleure précision que les modèles audio standards.</p><p>-Interprétabilité : une technique d’extraction de règles rend les modèles explicites.</p><p>Les résultats de cette thèse ont été exploités commercialement par différentes entités: Bmat, Eventide, Sonaris Systems</p>",
     "ca": "",
     "es": ""
    },
@@ -12085,7 +12087,7 @@
      "credit": ""
     }
    ],
-   "link": "",
+   "link": "https://repositori.upf.edu/items/2a19581c-5778-48f0-b375-c8ea5c629fce?locale=en",
    "team": [
     "cyril"
    ],
@@ -12100,7 +12102,9 @@
    ],
    "skills": [
     "fabriquer",
-    "tools"
+    "tools",
+    "audio",
+    "machine-learning"
    ],
    "author": "",
    "logos": [
@@ -12114,16 +12118,16 @@
    "order": 50,
    "published": true,
    "title": {
+    "en": "MusicBricks",
+    "fr": "MusicBricks",
+    "ca": "MusicBricks",
+    "es": "MusicBricks"
+   },
+   "subtitle": {
     "en": "Music Tech Fest",
     "fr": "Music Tech Fest",
     "ca": "Music Tech Fest",
     "es": "Music Tech Fest"
-   },
-   "subtitle": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
    },
    "place": {
     "en": "",
@@ -12131,7 +12135,7 @@
     "ca": "",
     "es": ""
    },
-   "date": "",
+   "date": "2012-2017",
    "tags": [
     "ai",
     "software"
@@ -12140,7 +12144,7 @@
    "thumbBack": "",
    "body": {
     "en": "",
-    "fr": "",
+    "fr": "MusicBricks est un projet européen Horizon 2020 qui faisait le lien entre recherche et industrie en rendant les outils de technologie musicale existants faciles à utiliser, afin d’aider des idées créatives à atteindre le marché. Il s’appuyait sur le Music Tech Fest, lancé à Londres en 2012 par Michela Magas pour rapprocher chercheurs et praticiens, et sur son hackathon de 24 heures, le MTF Hack Camp",
     "ca": "",
     "es": ""
    },
@@ -12384,16 +12388,20 @@
    },
    "media": [
     {
-     "src": "https://vimeo.com/639651200"
+     "src": "https://vimeo.com/639651200",
+     "credit": ""
     },
     {
-     "src": "media/echo/echo-santamonica-2024-yu8k.jpg"
+     "src": "media/echo/echo-santamonica-2024-yu8k.jpg",
+     "credit": ""
     },
     {
-     "src": "media/echo/echo-sceno-nolegends-woc6.jpg"
+     "src": "media/echo/echo-sceno-nolegends-woc6.jpg",
+     "credit": ""
     },
     {
-     "src": "media/echo/analyse-rire-in1y.jpg"
+     "src": "media/echo/analyse-rire-in1y.jpg",
+     "credit": ""
     }
    ],
    "link": "https://www.guillaumefaure.eu/art/echo",
