@@ -1540,6 +1540,74 @@ const vimeoThumbs = new Map();
 const vimeoThumb = id => { if (!vimeoThumbs.has(id)) vimeoThumbs.set(id, fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent('https://vimeo.com/' + id)}&width=1280`).then(r => (r.ok ? r.json() : null)).then(j => (j && j.thumbnail_url) || '').catch(() => '')); return vimeoThumbs.get(id); };
 const firstEmbed = (post, src) => { const v = ((post && post.media) || []).filter(m => m && /youtu\.?be|vimeo\.com/.test(m.src || '')); return !v.length || v[0].src === src; };
 const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) ? 'video' : 'image');
+/* ================================================================ Contact : petit questionnaire
+   Le site n'a pas de serveur : le message part par FormSubmit (formsubmit.co), qui le transmet par e-mail.
+   La toute première fois, FormSubmit envoie un e-mail d'activation à l'adresse : il faut cliquer le lien une fois. */
+const CONTACT_FORM = { to: 'maya@hand-coded.net' };
+const CF = {
+  fr: { title: 'Parlons-en.', intro: 'Laissez-nous votre e-mail et quelques mots : on vous répond vite.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un artiste', 'Une institution ou un festival', 'Autre'],
+        what: 'Votre projet', whatO: ['Une installation', 'Un événement ou une tournée', 'Un outil ou un logiciel', 'Du conseil', 'Autre chose'], when: 'Pour quand', whenO: ['Moins de 3 mois', '3 à 6 mois', 'Plus tard', 'Je ne sais pas encore'],
+        msg: 'En quelques mots', send: 'Envoyer', sending: 'Envoi…', ok: 'Merci ! Votre message est bien parti, on vous répond très vite.', err: 'L’envoi n’a pas marché. Écrivez-nous directement à ', bad: 'Il manque une adresse e-mail valide.', note: 'Votre e-mail sert seulement à vous répondre.' },
+  en: { title: 'Let’s talk.', intro: 'Leave us your email and a few words: we’ll get back to you quickly.', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
+        what: 'Your project', whatO: ['An installation', 'An event or a tour', 'A tool or software', 'Consulting', 'Something else'], when: 'When', whenO: ['Within 3 months', '3 to 6 months', 'Later', 'Not sure yet'],
+        msg: 'In a few words', send: 'Send', sending: 'Sending…', ok: 'Thank you! Your message is on its way, we’ll reply very soon.', err: 'Sending failed. Write to us directly at ', bad: 'Please enter a valid email address.', note: 'Your email is only used to reply to you.' },
+  ca: { title: 'Parlem-ne.', intro: 'Deixeu-nos el vostre correu i unes paraules: us responem aviat.', email: 'El vostre correu', who: 'Sou', whoO: ['Una marca', 'Una agència', 'Un artista', 'Una institució o un festival', 'Altres'],
+        what: 'El vostre projecte', whatO: ['Una instal·lació', 'Un esdeveniment o una gira', 'Una eina o un programari', 'Assessorament', 'Una altra cosa'], when: 'Per a quan', whenO: ['Menys de 3 mesos', 'De 3 a 6 mesos', 'Més endavant', 'Encara no ho sé'],
+        msg: 'En poques paraules', send: 'Enviar', sending: 'Enviant…', ok: 'Gràcies! El vostre missatge ha sortit, us responem molt aviat.', err: 'L’enviament no ha funcionat. Escriviu-nos directament a ', bad: 'Falta una adreça de correu vàlida.', note: 'El vostre correu només serveix per respondre-us.' },
+  es: { title: 'Hablemos.', intro: 'Déjanos tu correo y unas palabras: te respondemos pronto.', email: 'Tu correo', who: 'Eres', whoO: ['Una marca', 'Una agencia', 'Un artista', 'Una institución o un festival', 'Otro'],
+        what: 'Tu proyecto', whatO: ['Una instalación', 'Un evento o una gira', 'Una herramienta o un software', 'Asesoría', 'Otra cosa'], when: 'Para cuándo', whenO: ['Menos de 3 meses', 'De 3 a 6 meses', 'Más adelante', 'Aún no lo sé'],
+        msg: 'En pocas palabras', send: 'Enviar', sending: 'Enviando…', ok: '¡Gracias! Tu mensaje ha salido, te respondemos muy pronto.', err: 'El envío no ha funcionado. Escríbenos directamente a ', bad: 'Falta una dirección de correo válida.', note: 'Tu correo solo sirve para responderte.' },
+};
+const cft = () => CF[LANG] || CF.en;
+let cfSeq = 0;
+function contactFormHTML(kind) {
+  const t = cft(), E = escapeHTML, id = 'cf' + (++cfSeq);
+  const chips = (name, label, opts) => `<fieldset class="cf-q"><legend>${E(label)}</legend><div class="cf-chips">${opts.map((o, i) => `<label class="cf-chip"><input type="radio" name="${id}-${name}" value="${E(o)}"${i === -1 ? ' checked' : ''}><span>${E(o)}</span></label>`).join('')}</div></fieldset>`;
+  return `<form class="cform-f cf-${kind}" novalidate>` +
+    `<div class="cf-col"><h2 class="${kind === 'pv' ? 'pv-ttl' : 'ttl'}">${E(t.title)}</h2><p class="cf-intro">${E(t.intro)}</p>` +
+    `<label class="cf-q cf-mail"><span>${E(t.email)}</span><input type="email" name="email" autocomplete="email" required spellcheck="false"></label>` +
+    chips('who', t.who, t.whoO) + chips('when', t.when, t.whenO) + `</div>` +
+    `<div class="cf-col">` + chips('what', t.what, t.whatO) +
+    `<label class="cf-q cf-msg"><span>${E(t.msg)}</span><textarea name="message" rows="${kind === 'pv' ? 3 : 2}"></textarea></label>` +
+    `<input type="text" name="_honey" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">` +
+    `<div class="cf-end"><button type="submit" class="cf-send">${E(t.send)}</button><span class="cf-note">${E(t.note)}</span></div><p class="cf-st" role="status" aria-live="polite"></p></div></form>`;
+}
+function bindContactForm(root) {
+  const f = root.querySelector('.cform-f'); if (!f || f.dataset.bound) return; f.dataset.bound = '1';
+  const st = f.querySelector('.cf-st'), btn = f.querySelector('.cf-send');
+  const val = n => { const x = f.querySelector(`input[name$="-${n}"]:checked`); return x ? x.value : ''; };
+  f.addEventListener('submit', async e => {
+    e.preventDefault(); const t = cft(), mail = f.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) { st.textContent = t.bad; st.className = 'cf-st bad'; f.email.focus(); return; }
+    if (f._honey.value) return;   // un robot a rempli le champ caché
+    btn.disabled = true; btn.textContent = t.sending; st.textContent = ''; st.className = 'cf-st';
+    const body = { email: mail, 'Vous êtes': val('who'), 'Projet': val('what'), 'Pour quand': val('when'), 'Message': f.message.value.trim(), 'Langue': LANG, 'Page': location.href,
+      _subject: 'Hand Coded · nouveau contact' + (val('who') ? ' (' + val('who') + ')' : ''), _template: 'table', _captcha: 'false' };
+    let ok = false;
+    try {
+      const r = await fetch('https://formsubmit.co/ajax/' + CONTACT_FORM.to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
+      const j = await r.json().catch(() => ({})); ok = r.ok && String(j.success) !== 'false';
+    } catch (err) { ok = false; }
+    btn.disabled = false; btn.textContent = t.send;
+    if (ok) { f.reset(); st.textContent = t.ok; st.className = 'cf-st ok'; countView('contact-form', 'Formulaire de contact envoyé', true); }
+    else { st.innerHTML = escapeHTML(t.err) + `<a href="mailto:${escapeHTML(CONTACT_FORM.to)}">${escapeHTML(CONTACT_FORM.to)}</a>`; st.className = 'cf-st bad'; }
+  });
+}
+/* Réseaux sociaux : un lien dont le texte est le nom du réseau devient une petite pastille discrète (initiales, sans logo de marque) */
+const SOCIAL = [[/instagram\.com/i, 'IG', 'Instagram'], [/vimeo\.com/i, 'Vi', 'Vimeo'], [/facebook\.com/i, 'Fb', 'Facebook'], [/linkedin\.com/i, 'in', 'LinkedIn'], [/youtube\.com|youtu\.be/i, 'YT', 'YouTube'], [/tiktok\.com/i, 'TT', 'TikTok'], [/(?:^|\/\/|\.)(?:x|twitter)\.com/i, 'X', 'X'], [/behance\.net/i, 'Be', 'Behance']];
+function socialIcons(html) {
+  const d = document.createElement('div'); d.innerHTML = html;
+  d.querySelectorAll('p').forEach(p => {
+    const links = [...p.querySelectorAll('a[href]')]; if (!links.length) return;
+    const nets = links.map(a => SOCIAL.find(([re, , name]) => re.test(a.getAttribute('href')) && a.textContent.trim().toLowerCase() === name.toLowerCase()));
+    if (nets.some(n => !n)) return;
+    const rest = [...p.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').replace(/[\s·•|,\/-]/g, '');
+    if (rest) return;   // une phrase avec des liens : on n'y touche pas
+    p.className = 'socs';
+    p.innerHTML = links.map((a, i) => `<a class="soc" href="${escapeHTML(a.getAttribute('href'))}" target="_blank" rel="noopener" aria-label="${nets[i][2]}" title="${nets[i][2]}">${nets[i][1]}</a>`).join('');
+  });
+  return d.innerHTML;
+}
 const OVER_MAX = 56;   // dépassement maximal de la bande à ses bouts, en pixels
 const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, over: 0, ov: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
@@ -1556,6 +1624,7 @@ const post2D = {
       const first = media[0] ? media[0].src : post.thumb;
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', false);
       this.addContact(post);
+      if (CONTACT_FORM.to) this.addForm();
     } else if (card === 'text') {
       this.addText(post, 'blog');
       media.forEach(m => this.addMedia(m.src, 355, m.credit, true, m.caption));
@@ -1888,16 +1957,21 @@ const post2D = {
     inner.querySelectorAll('.idx li[data-i]').forEach(li => { const f = inner.querySelector(`.face.go[data-i="${li.dataset.i}"]`); if (f) { li.classList.add('go'); li.dataset.go = f.dataset.go; } });
   },
 
+  addForm() {   // le petit questionnaire, à côté du contact
+    const fm = ficheM(), { x, colW } = textGeom('project'), gap = fm.gutter || 40;
+    this.addPanel('txt contact cform', x + colW * 2 + gap + x, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW * 2 + gap}px;--cf-gap:${gap}px">${contactFormHTML('pnl')}</div>`);
+    bindContactForm(strip.lastElementChild);
+  },
   /* Contact : la même fiche que les projets et les personnes (marges, titre, sous-titre et texte des Réglages › Typographie › Fiches) */
   addContact(post) {
     const fm = ficheM(), { width, x, colW } = textGeom('project'), E = escapeHTML;
     const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
     let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
-    const sub = tr(post.subtitle).trim(), place = tr(post.place).trim();
+    const sub = tr(post.subtitle).trim();
     this.addPanel('txt contact', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
       `<h2 class="ttl">${E(title)}</h2>${sub ? `<p class="stl">${E(sub)}</p>` : ''}` +
-      `<div class="body">${sanitizeHTML(tr(post.body))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
-      (place ? `<div class="meta"><span class="fecha">${E(place)}</span></div>` : '') + `</div>`);
+      `<div class="body">${socialIcons(sanitizeHTML(tr(post.body)))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
+      `</div>`);   // le lieu est déjà dans l'adresse : pas de ligne en plus
   },
   layout() {
     let x = 0; this.panels.forEach(p => { p.style.left = x + 'px'; x += p.offsetWidth - 2; });
@@ -1970,7 +2044,8 @@ const postV = {
       const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '');
       out.push(`<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
         (post.link ? `<p class="pv-site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : '') +
-        `<div class="pv-body">${sanitizeHTML(tr(post.body))}</div>${tr(post.place) ? `<p class="pv-meta">${E(tr(post.place))}</p>` : ''}</div>`);
+        `<div class="pv-body">${socialIcons(sanitizeHTML(tr(post.body)))}</div>${tr(post.place) ? `<p class="pv-meta">${E(tr(post.place))}</p>` : ''}</div>` +
+        (CONTACT_FORM.to ? `<div class="pv-form">${contactFormHTML('pv')}</div>` : ''));
     } else {
       out.push(this.text(post, title, subtitle, sec));
       if (sec.skills) out.push(this.relations(post));
@@ -1984,6 +2059,7 @@ const postV = {
       out.push(this.next(post));
     }
     postvEl.innerHTML = `<div class="pv-page">${out.join('')}</div>`;
+    const cf = postvEl.querySelector('.pv-form'); if (cf) bindContactForm(cf);
     this.wire();
     postvEl.hidden = false; postvEl.scrollTop = 0; void postvEl.offsetWidth; postvEl.classList.add('on');
     document.body.classList.add('pv-open');
@@ -2171,7 +2247,7 @@ function paginate(html, width, heights, measure) {   // PaginatorHtml : remplit 
 let mouse2D = 0;
 let pend2D = null;
 post2dEl.addEventListener('pointerdown', e => {
-  if (e.target.closest('a, .face, iframe')) return;
+  if (e.target.closest('a, .face, iframe, input, textarea, select, label, button')) return;
   if (e.target.tagName === 'VIDEO' && e.target.controls && e.clientY > e.target.getBoundingClientRect().bottom - 52) return;   // barre de lecture
   pend2D = { id: e.pointerId, x: e.clientX, y: e.clientY }; mouse2D = e.clientX;
 });
@@ -2312,6 +2388,7 @@ document.addEventListener('click', e => { const btn = e.target.closest('#menu bu
 window.addEventListener('keydown', e => {
   if (e.ctrlKey || e.metaKey || e.altKey || !homeGone) return;
   if ((e.target instanceof HTMLButtonElement || e.target.id === 'logo') && (e.code === 'Space' || e.code === 'Enter')) return;
+  if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;   // on écrit dans le formulaire : pas de raccourcis
   keyBoardNavigation(e);
 });
 

@@ -134,8 +134,8 @@ button { font: inherit; }
 .contact .cbox > .stl { margin-top: 8px; }
 .contact .cbox > .body { margin-top: 20px; overflow: visible; }
 .contact .cbox .body p { margin: 0; }
-.contact .cbox .body p:first-child { margin-bottom: 14px; }   /* la phrase d'accueil, puis l'adresse ligne à ligne */
-.contact .cbox .body p:last-child:not(:first-child) { margin-top: 14px; }   /* le lien vers les œuvres du duo, détaché */
+.contact .cbox .body p:first-child { margin-bottom: 10px; }   /* la phrase d'accueil, puis l'adresse ligne à ligne */
+.contact .cbox .body p:last-child:not(:first-child) { margin-top: 10px; }   /* le lien vers les œuvres du duo, détaché */
 .contact .cbox > .meta { margin-top: auto; padding-top: 12px; }
 
 /* Home */
@@ -1051,3 +1051,43 @@ html.hc-late #ticker, html.hc-late #enter, html.hc-late #home-dock { opacity: 0 
 html.neg :fullscreen, html.neg :fullscreen * { filter: none !important; }
 html.neg :-webkit-full-screen, html.neg :-webkit-full-screen * { filter: none !important; }
 
+
+/* Contact : le petit questionnaire, dans la typographie des fiches */
+.cform-f { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--cf-gap, 40px); height: 100%; color: #fff; }
+.cform-f .cf-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.cform-f .ttl, .cform-f .stl { position: static; width: auto; }
+.cf-intro { margin: -2px 0 2px; font: 13px/17px var(--ui); color: var(--grey-1, #ccc); }
+.cf-q { display: flex; flex-direction: column; gap: 2px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.cf-q > span, .cf-q > legend { font: 600 9.5px/13px var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--grey-2, #999); padding: 0; margin-bottom: 3px; }
+.cf-q input[type=email], .cf-q textarea { width: 100%; box-sizing: border-box; background: transparent; color: #fff; border: 0; border-bottom: 1px solid rgba(255,255,255,.35); border-radius: 0; padding: 2px 0 4px; font: 13px/17px var(--ui); outline: none; resize: none; transition: border-color .2s; }
+.cf-q input[type=email]:focus, .cf-q textarea:focus { border-bottom-color: var(--accent); }
+.cf-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.cf-chip { position: relative; cursor: pointer; }
+.cf-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.cf-chip span { display: inline-block; font: 11.5px/15px var(--ui); padding: 2px 8px; border: 1px solid rgba(255,255,255,.3); border-radius: 20px; color: #ddd; transition: background .15s, color .15s, border-color .15s; user-select: none; }
+.cf-chip:hover span { border-color: #fff; color: #fff; }
+.cf-chip input:checked + span { background: var(--accent); border-color: var(--accent); color: #000; }
+.cf-chip input:focus-visible + span { outline: 1px solid var(--accent); outline-offset: 2px; }
+.cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.cf-end { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.cf-send { font: bold 11px/26px var(--ui); letter-spacing: .08em; text-transform: uppercase; padding: 0 18px; background: var(--accent); color: #000; border: 0; cursor: pointer; flex: none; }
+.cf-send:hover { filter: brightness(1.08); }
+.cf-send:disabled { opacity: .6; cursor: default; }
+.cf-note { font: 10px/13px var(--ui); color: var(--grey-2, #888); }
+.cf-st { margin: 0; min-height: 15px; font: 11.5px/15px var(--ui); color: #fff; }
+.cf-st.ok { color: var(--accent); }
+.cf-st.bad a { color: var(--accent); }
+.contact.cform .cbox { display: block; }
+/* Réseaux : petites pastilles rondes, discrètes */
+.socs { display: flex; gap: 7px; margin: 7px 0 0 !important; }
+.socs .soc { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; font: 600 9.5px/1 var(--ui); letter-spacing: .02em; color: #fff !important; text-decoration: none !important; transition: border-color .2s, background .2s, color .2s; }
+.socs .soc:hover, .socs .soc:focus-visible { background: var(--accent); border-color: var(--accent); color: #000 !important; outline: none; }
+/* Téléphone : le questionnaire sous le contact, sur une colonne */
+#postv .pv-form { padding: 18px max(18px, env(safe-area-inset-right, 0px)) 48px max(18px, env(safe-area-inset-left, 0px)); border-top: 1px solid rgba(255,255,255,.2); margin-top: 18px; }
+#postv .cform-f { display: flex; flex-direction: column; gap: 18px; }
+#postv .cf-q input[type=email], #postv .cf-q textarea { font-size: 16px; }
+#postv .cf-chip span { font-size: 14px; line-height: 18px; padding: 6px 12px; }
+#postv .cf-intro { font-size: 15px; line-height: 21px; }
+#postv .cf-q > span, #postv .cf-q > legend { font-size: 11px; }
+#postv .cf-send { font-size: 13px; line-height: 40px; padding: 0 22px; }
+#postv .cf-end { margin-top: 6px; }
