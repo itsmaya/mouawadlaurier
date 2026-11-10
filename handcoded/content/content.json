@@ -417,7 +417,7 @@
    "layout": "carousel",
    "card": "image",
    "open": "strip",
-   "perPage": 10,
+   "perPage": 8,
    "defaultTag": "featured",
    "visible": true,
    "tags": [
@@ -440,6 +440,15 @@
      }
     },
     {
+     "id": "collab",
+     "label": {
+      "en": "With Artists",
+      "fr": "Avec les artistes",
+      "ca": "Amb els artistes",
+      "es": "Con los artistas"
+     }
+    },
+    {
      "id": "touring",
      "label": {
       "en": "Events and tours",
@@ -455,15 +464,6 @@
       "fr": "Scène et musique",
       "ca": "Escena i música",
       "es": "Escena y música"
-     }
-    },
-    {
-     "id": "collab",
-     "label": {
-      "en": "With Artists",
-      "fr": "Avec les artistes",
-      "ca": "Amb els artistes",
-      "es": "Con los artistas"
      }
     },
     {
