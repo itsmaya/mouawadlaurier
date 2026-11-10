@@ -57,6 +57,7 @@ Interactive art and technology studio based in Barcelona, founded in 2008. Not t
 - [Research](https://mouawadlaurier.com/handcoded/en/recherche/): Sony CSL · Paris. R&D on DSP algorithms Phase matching, EQ matching R&D on Deep Learning music and audio tools Generation of Bass lines, Drums and Orchestration
 - [Mood Cloud](https://mouawadlaurier.com/handcoded/en/mood-cloud/): Phd Cyril Laurier
 - [Music Tech Fest](https://mouawadlaurier.com/handcoded/en/music-tech-fest-2/)
+- [Echo](https://mouawadlaurier.com/handcoded/en/echo/): Guillaume Faure · a mirror for talking to yourself · 2022 – 2025 · IRCAM Paris, NYU New York, Santa Mònica Barcelona, Incheon Art Platform. “A mirror for talking to yourself.” In a small black booth, you sit facing your reflection and talk to it. After a few seconds, the reflection answers with your own words, recontextualised by artificial intelligence. The conversation keeps a harmonious, often enigmatic tone, and everyone is free to…
 
 ## Expertise
 - [Imagine](https://mouawadlaurier.com/handcoded/en/imaginer/): Concepts for brands and venues. For a brand, a launch or a venue, we invent the experience: what the audience will see, hear and set off. We write the concept, the device and the way it responds, then we build it all the way to opening day.

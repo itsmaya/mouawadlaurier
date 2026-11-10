@@ -203,13 +203,13 @@
    "sig1": {
     "font": "g:Instrument Serif",
     "italic": true,
-    "size": 56,
+    "size": 44,
     "lh": 58
    },
    "sig2": {
     "font": "g:Inter Tight",
     "weight": 500,
-    "size": 20,
+    "size": 17,
     "lh": 24
    },
    "menu": {
@@ -222,14 +222,14 @@
    "title": {
     "font": "g:Inter Tight",
     "weight": 600,
-    "size": 30,
+    "size": 26,
     "lh": 30,
     "ls": -0.02
    },
    "subtitle": {
     "font": "g:Instrument Serif",
     "italic": true,
-    "size": 25,
+    "size": 21,
     "lh": 25
    },
    "body": {
@@ -261,7 +261,8 @@
     "italic": true
    },
    "csub": {
-    "font": "g:Inter Tight"
+    "font": "g:Inter Tight",
+    "size": 17
    },
    "cinfo": {
     "font": "g:Inter Tight"
@@ -12347,7 +12348,7 @@
    "id": "echo",
    "section": "work",
    "order": 53,
-   "published": false,
+   "published": true,
    "title": {
     "fr": "Echo",
     "en": "Echo",
