@@ -603,8 +603,8 @@ function netLabel(text, strong) {   // étiquette de ville, toujours tournée ve
   c.width = w * 2; c.height = hh * 2; ctx.scale(2, 2);
   ctx.fillStyle = strong ? '#111' : 'rgba(255,255,255,.88)'; ctx.fillRect(0, 0, w, hh);
   ctx.font = `${strong ? 'bold ' : ''}${fs}px ${UIF}`; ctx.textBaseline = 'middle'; ctx.fillStyle = strong ? '#fff' : '#333'; ctx.fillText(text, padX, hh / 2 + 1);
-  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: prepTex(new THREE.CanvasTexture(c)), transparent: true }));
-  sp.center.set(0.5, 0); const H0 = 20; sp.scale.set(H0 * w / hh, H0, 1); sp.renderOrder = 2;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: prepTex(new THREE.CanvasTexture(c)), transparent: true, depthTest: false }));   // au-dessus des arcs et des points : le nom reste lisible
+  sp.center.set(0.5, 0); const H0 = 20; sp.scale.set(H0 * w / hh, H0, 1); sp.renderOrder = 5;
   return sp;
 }
 const netTip = document.createElement('div'); netTip.id = 'net-tip'; netTip.className = 'ui'; netTip.hidden = true; document.body.appendChild(netTip);
@@ -1001,8 +1001,9 @@ class PostsView3D {
       }
       let label = null, thr = Infinity;   // une voisine plus importante écrite trop près cache l'étiquette ; en zoomant, la place se libère
       if (n.city) {
-        for (const o of labeled) { const need = Math.max(Math.abs(o[0] - x) / 80, Math.abs(o[1] - z) / 22); if (need < o[2]) thr = Math.min(thr, need); }
-        if (thr > 0.06) { label = netLabel(n.city.toUpperCase() + (n.titles.length > 1 && !n.base ? ' · ' + n.titles.length : ''), n.base); label.position.set(...postLocal(x, Y + 9, z)); g.add(label); labeled.push([x, z, thr]); }
+        const lb = netLabel(n.city.toUpperCase() + (n.titles.length > 1 && !n.base ? ' · ' + n.titles.length : ''), n.base), lw = lb.scale.x;   // la vraie largeur du nom : les noms longs se gênent plus tôt
+        for (const o of labeled) { const need = Math.max(Math.abs(o[0] - x) / ((o[3] + lw) / 2 + 6), Math.abs(o[1] - z) / 24); if (need < o[2]) thr = Math.min(thr, need); }
+        if (thr > 0.06) { label = lb; label.position.set(...postLocal(x, Y + 9, z)); g.add(label); labeled.push([x, z, thr, lw]); } else { lb.material.map.dispose(); lb.material.dispose(); }
       }
       this.net.items.push({ dot, arc, segs, label, thr, delay, base: n.base, ds: dot.scale.x, ls: label ? label.scale.clone() : null, x, z });
     });
@@ -1688,6 +1689,9 @@ function contactParts(html) {
     else if (links.some(a => /^mailto:/i.test(a.getAttribute('href')))) links.filter(a => /^mailto:/i.test(a.getAttribute('href'))).forEach(a => out.mail.push(a.getAttribute('href').replace(/^mailto:/i, '').split('?')[0]));
     else if (/^\+?[\d\s().\-]{8,}$/.test(txt)) out.tel.push(txt);
     else if (i === 0 && !links.length && p.querySelector('b, strong') && p.querySelector('b, strong').textContent.trim() === txt) out.lead = p.querySelector('b, strong').innerHTML;
+    else if (i === 0 && !links.length && p.firstElementChild && /^(B|STRONG)$/.test(p.firstElementChild.tagName) && p.textContent.trim().startsWith(p.firstElementChild.textContent.trim())) {   // la phrase d'accueil, puis une ligne en dessous (les fondateurs)
+      const b = p.firstElementChild; out.lead = b.innerHTML; b.remove(); out.sub = p.innerHTML.replace(/^\s*(<br\s*\/?>\s*)+/i, '').trim();
+    }
     else if (links.length) out.note.push(p.innerHTML);
     else if (/\d/.test(txt) && txt.length < 120) out.addr.push(txt);
     else out.rest.push(p.outerHTML);
@@ -1700,7 +1704,7 @@ function contactHTML(html) {
   const row = (k, v) => `<div class="cr"><dt>${E(ui(k))}</dt><dd>${v}</dd></div>`;
   const tel = t => `<a href="tel:${E(t.replace(/[^\d+]/g, ''))}">${E(t)}</a>`;
   const addr = a => { const [rue, ...reste] = a.split(/\s+[.·•|]\s+/); return E(rue) + (reste.length ? '<br>' + E(reste.join(' · ')) : ''); };   // « rue . ville . pays » : la rue, puis la ville et le pays
-  return (c.lead ? `<p class="lead">${c.lead}</p>` : '') +
+  return (c.lead ? `<p class="lead">${c.lead}</p>` : '') + (c.sub ? `<p class="csub">${c.sub}</p>` : '') +
     `<dl class="crows">` +
     (c.mail.length ? row('c_write', c.mail.map(m => `<a class="mail" href="mailto:${E(m)}">${E(m)}</a>`).join('<br>')) : '') +
     (c.tel.length ? row('c_call', c.tel.map(tel).join('<br>')) : '') +
@@ -2827,6 +2831,7 @@ function dockLabels() {
   const on = !!(hv && hv.reelOn); rb.setAttribute('aria-pressed', String(on)); rb.classList.toggle('on', on); rb.setAttribute('aria-label', on ? ui('stop') + ' : Showreel' : 'Showreel');
   rb.querySelector('span').textContent = on ? ui('stop') : 'Showreel';   // pendant la lecture : un carré « stop »
   const sb2 = document.getElementById('home-snd');
+  if (sb2 && !rb._rwObs && window.ResizeObserver) { rb._rwObs = new ResizeObserver(() => { if (rb.offsetWidth) sb2.style.setProperty('--rw', rb.offsetWidth + 'px'); }); rb._rwObs.observe(rb); }   // le son suit le bouton quand il s'ouvre sur son nom
   if (sb2) { sb2.hidden = !on; if (on) requestAnimationFrame(() => sb2.style.setProperty('--rw', rb.offsetWidth + 'px')); const snd = !!(hv && hv.sound); sb2.querySelector('.ic').innerHTML = SPEAKER(snd); sb2.classList.toggle('on', snd); sb2.setAttribute('aria-pressed', String(snd)); sb2.setAttribute('aria-label', ui(snd ? 'soundOff' : 'soundOn')); sb2.title = ui(snd ? 'soundOff' : 'soundOn'); }
 }
 /* Sur iPhone, le « click » d'un doigt se dit souvent « mouse » : on regarde plutôt ce qui a appuyé (pointerdown). Clavier : pas d'appui, on bascule. */
