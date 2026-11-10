@@ -1186,3 +1186,9 @@ html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::be
 #kb .key:hover { border-color: #111; background: #fff; }
 #kb .key.down, #kb .key:active { background: #111; color: #fff; border-color: #111; }
 #kb .key.anim.off { background: #fff; color: #bdbdbd; border-color: #e0e0e0; }
+
+/* Le « ? » de l'accueil et l'histoire du site, dans la famille des ronds */
+#home-dock > button { border-radius: 17px; }
+#hc-story { border-radius: 14px; }
+#hc-story .go { border-radius: 13px; padding: 0 13px; }
+#hc-story .shots a { border-radius: 6px; overflow: hidden; }
