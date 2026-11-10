@@ -1049,3 +1049,8 @@ html.hc-late #ticker, html.hc-late #enter, html.hc-late #home-dock { opacity: 0 
 #seo-page h1 { font-size: 32px; margin: 0 0 8px; color: #fff; } #seo-page h2 { font-size: 20px; margin: 32px 0 8px; color: #fff; }
 #seo-page a { color: #ffcc00; } #seo-page img { max-width: min(100%, 720px); height: auto; display: block; margin: 12px 0 4px; }
 #seo-page article, #seo-page header, #seo-page section, #seo-page aside, #seo-page footer { max-width: 760px; }
+/* Plein écran : la vidéo sort de la page (couche du dessus), l'inversion de la page ne s'y applique plus.
+   On retire donc aussi sa pré-inversion, sinon la vidéo passe en négatif la nuit. */
+html.neg :fullscreen, html.neg :fullscreen * { filter: none !important; }
+html.neg :-webkit-full-screen, html.neg :-webkit-full-screen * { filter: none !important; }
+

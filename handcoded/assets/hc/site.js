@@ -165,10 +165,12 @@ renderer.debug.checkShaderErrors = false;   // pas de lecture des journaux de co
 const DPR_MAX = Math.min(window.devicePixelRatio || 1, 2), DPR_MIN = Math.min(DPR_MAX, DPR_MAX >= 2 ? 1.25 : 1);
 let dpr = DPR_MAX, dprSlow = 0, dprFast = 0, dprAt = 0;
 renderer.setPixelRatio(dpr);
+/* Changer la définition vide la toile : on redessine aussitôt, dans la même image, sinon l'écran 3D clignote (Mac Retina surtout) */
+function setDpr(v, now) { dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprSlow = dprFast = 0; dprAt = now; try { renderer.render(scene, camera); } catch (e) {} }
 function dprGovern(now, ms) {   // ms : temps entre deux images dessinées pendant que la 3D bouge
   if (now - dprAt < 1500) return;
-  if (ms > 30) { dprFast = 0; if (++dprSlow > 24 && dpr > DPR_MIN) { dpr = Math.max(DPR_MIN, Math.round((dpr - 0.25) * 4) / 4); renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprSlow = 0; dprAt = now; } }
-  else if (ms < 19) { dprSlow = Math.max(0, dprSlow - 1); if (++dprFast > 240 && dpr < DPR_MAX) { dpr = Math.min(DPR_MAX, dpr + 0.25); renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprFast = 0; dprAt = now; } }
+  if (ms > 30) { dprFast = 0; if (++dprSlow > 24 && dpr > DPR_MIN) setDpr(Math.max(DPR_MIN, Math.round((dpr - 0.25) * 4) / 4), now); }
+  else if (ms < 19) { dprSlow = Math.max(0, dprSlow - 1); if (++dprFast > 240 && dpr < DPR_MAX) setDpr(Math.min(DPR_MAX, dpr + 0.25), now); }
 }
 /* Vignettes : chaque image du site a une petite copie WebP (640 px) à côté d'elle, « photo.jpg.t.webp ». Les cartes 3D, les sommaires et les
    pastilles n'ont pas besoin de plus : 5 à 10 fois moins lourd à charger et à décoder. Si la copie manque, l'original prend le relais. */
@@ -1255,7 +1257,7 @@ function updateCamera() {   // caméra Papervision : focale en pixels (zoom x fo
   const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
   if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
 }
-function resizeViewport() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); LINE_MATS.forEach(m => m.resolution.set(W, H)); }
+function resizeViewport() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); LINE_MATS.forEach(m => m.resolution.set(W, H)); if (started) try { renderer.render(scene, camera); } catch (e) {} }   // la toile vidée est redessinée tout de suite
 
 /* ================================================================ Interface 2D */
 const menu = document.getElementById('menu'), sloganEl = document.getElementById('slogan'), langsEl = document.getElementById('langs');
