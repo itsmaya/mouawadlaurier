@@ -1077,6 +1077,7 @@ html.neg :-webkit-full-screen, html.neg :-webkit-full-screen * { filter: none !i
 .cf-st { margin: 0; min-height: 15px; font: 11.5px/15px var(--ui); color: #fff; }
 .cf-st.ok { color: var(--accent); }
 .cf-st.bad a { color: var(--accent); }
+.cf-why { display: block; margin-top: 2px; font-size: 10px; line-height: 13px; color: var(--grey-2, #999); }
 .contact.cform .cbox { display: block; }
 /* Réseaux : petites pastilles rondes, discrètes */
 .socs { display: flex; gap: 7px; margin: 7px 0 0 !important; }

@@ -1545,18 +1545,18 @@ const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) 
    La toute première fois, FormSubmit envoie un e-mail d'activation à l'adresse : il faut cliquer le lien une fois. */
 const CONTACT_FORM = { to: 'maya@hand-coded.net' };
 const CF = {
-  fr: { title: 'Parlons-en.', intro: 'Laissez-nous votre e-mail et quelques mots : on vous répond vite.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un(e) artiste', 'Une institution ou un festival', 'Autre'],
-        what: 'Votre projet', whatO: ['Une installation', 'Un événement ou une tournée', 'Un outil ou un logiciel', 'Du conseil', 'Autre chose'], when: 'Pour quand', whenO: ['Moins de 3 mois', '3 à 6 mois', 'Plus tard', 'Je ne sais pas encore'],
-        msg: 'En quelques mots', send: 'Envoyer', sending: 'Envoi…', ok: 'Merci ! Votre message est bien parti, on vous répond très vite.', err: 'L’envoi n’a pas marché. Écrivez-nous directement à ', bad: 'Il manque une adresse e-mail valide.', note: 'Votre e-mail sert seulement à vous répondre.' },
-  en: { title: 'Let’s talk.', intro: 'Leave us your email and a few words: we’ll get back to you quickly.', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
-        what: 'Your project', whatO: ['An installation', 'An event or a tour', 'A tool or software', 'Consulting', 'Something else'], when: 'When', whenO: ['Within 3 months', '3 to 6 months', 'Later', 'Not sure yet'],
-        msg: 'In a few words', send: 'Send', sending: 'Sending…', ok: 'Thank you! Your message is on its way, we’ll reply very soon.', err: 'Sending failed. Write to us directly at ', bad: 'Please enter a valid email address.', note: 'Your email is only used to reply to you.' },
-  ca: { title: 'Parlem-ne.', intro: 'Deixeu-nos el vostre correu i unes paraules: us responem aviat.', email: 'El vostre correu', who: 'Sou', whoO: ['Una marca', 'Una agència', 'Un artista', 'Una institució o un festival', 'Altres'],
-        what: 'El vostre projecte', whatO: ['Una instal·lació', 'Un esdeveniment o una gira', 'Una eina o un programari', 'Assessorament', 'Una altra cosa'], when: 'Per a quan', whenO: ['Menys de 3 mesos', 'De 3 a 6 mesos', 'Més endavant', 'Encara no ho sé'],
-        msg: 'En poques paraules', send: 'Enviar', sending: 'Enviant…', ok: 'Gràcies! El vostre missatge ha sortit, us responem molt aviat.', err: 'L’enviament no ha funcionat. Escriviu-nos directament a ', bad: 'Falta una adreça de correu vàlida.', note: 'El vostre correu només serveix per respondre-us.' },
-  es: { title: 'Hablemos.', intro: 'Déjanos tu correo y unas palabras: te respondemos pronto.', email: 'Tu correo', who: 'Eres', whoO: ['Una marca', 'Una agencia', 'Un artista', 'Una institución o un festival', 'Otro'],
-        what: 'Tu proyecto', whatO: ['Una instalación', 'Un evento o una gira', 'Una herramienta o un software', 'Asesoría', 'Otra cosa'], when: 'Para cuándo', whenO: ['Menos de 3 meses', 'De 3 a 6 meses', 'Más adelante', 'Aún no lo sé'],
-        msg: 'En pocas palabras', send: 'Enviar', sending: 'Enviando…', ok: '¡Gracias! Tu mensaje ha salido, te respondemos muy pronto.', err: 'El envío no ha funcionado. Escríbenos directamente a ', bad: 'Falta una dirección de correo válida.', note: 'Tu correo solo sirve para responderte.' },
+  fr: { title: 'Restons en contact.', intro: 'Nos nouvelles, quelques fois par an : projets et coulisses. Un projet en tête ? Dites-nous en plus.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un(e) artiste', 'Une institution ou un festival', 'Autre'],
+        what: 'Un projet en tête ? (facultatif)', whatO: ['Une installation', 'Un événement ou une tournée', 'Un outil ou un logiciel', 'Du conseil', 'Autre chose'], when: 'Pour quand', whenO: ['Moins de 3 mois', '3 à 6 mois', 'Plus tard', 'Je ne sais pas encore'],
+        msg: 'En quelques mots (facultatif)', send: 'S’inscrire', sending: 'Envoi…', ok: 'Merci, vous êtes inscrit(e) ! Et si vous nous avez parlé d’un projet, on vous répond très vite.', err: 'L’envoi n’a pas marché. Écrivez-nous directement à ', bad: 'Il manque une adresse e-mail valide.', note: 'Quelques e-mails par an. Désinscription en un clic.' },
+  en: { title: 'Let’s keep in touch.', intro: 'Our news, a few times a year: projects and behind the scenes. A project in mind? Tell us more.', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
+        what: 'A project in mind? (optional)', whatO: ['An installation', 'An event or a tour', 'A tool or software', 'Consulting', 'Something else'], when: 'When', whenO: ['Within 3 months', '3 to 6 months', 'Later', 'Not sure yet'],
+        msg: 'In a few words (optional)', send: 'Sign up', sending: 'Sending…', ok: 'Thank you, you’re signed up! And if you told us about a project, we’ll get back to you very soon.', err: 'Sending failed. Write to us directly at ', bad: 'Please enter a valid email address.', note: 'A few emails a year. Unsubscribe in one click.' },
+  ca: { title: 'Mantinguem el contacte.', intro: 'Les nostres novetats, unes quantes vegades l’any: projectes i bastidors. Teniu un projecte al cap? Expliqueu-nos-en més.', email: 'El vostre correu', who: 'Sou', whoO: ['Una marca', 'Una agència', 'Un/a artista', 'Una institució o un festival', 'Altres'],
+        what: 'Un projecte al cap? (opcional)', whatO: ['Una instal·lació', 'Un esdeveniment o una gira', 'Una eina o un programari', 'Assessorament', 'Una altra cosa'], when: 'Per a quan', whenO: ['Menys de 3 mesos', 'De 3 a 6 mesos', 'Més endavant', 'Encara no ho sé'],
+        msg: 'En poques paraules (opcional)', send: 'Subscriure’s', sending: 'Enviant…', ok: 'Gràcies, ja us heu subscrit! I si ens heu parlat d’un projecte, us responem molt aviat.', err: 'L’enviament no ha funcionat. Escriviu-nos directament a ', bad: 'Falta una adreça de correu vàlida.', note: 'Uns quants correus l’any. Baixa amb un clic.' },
+  es: { title: 'Sigamos en contacto.', intro: 'Nuestras novedades, unas pocas veces al año: proyectos y bastidores. ¿Un proyecto en mente? Cuéntanos más.', email: 'Tu correo', who: 'Eres', whoO: ['Una marca', 'Una agencia', 'Un/a artista', 'Una institución o un festival', 'Otro'],
+        what: '¿Un proyecto en mente? (opcional)', whatO: ['Una instalación', 'Un evento o una gira', 'Una herramienta o un software', 'Asesoría', 'Otra cosa'], when: 'Para cuándo', whenO: ['Menos de 3 meses', 'De 3 a 6 meses', 'Más adelante', 'Aún no lo sé'],
+        msg: 'En pocas palabras (opcional)', send: 'Suscribirme', sending: 'Enviando…', ok: '¡Gracias, ya te has suscrito! Y si nos has hablado de un proyecto, te respondemos muy pronto.', err: 'El envío no ha funcionado. Escríbenos directamente a ', bad: 'Falta una dirección de correo válida.', note: 'Unos pocos correos al año. Baja con un clic.' },
 };
 const cft = () => CF[LANG] || CF.en;
 let cfSeq = 0;
@@ -1581,16 +1581,20 @@ function bindContactForm(root) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) { st.textContent = t.bad; st.className = 'cf-st bad'; f.email.focus(); return; }
     if (f._honey.value) return;   // un robot a rempli le champ caché
     btn.disabled = true; btn.textContent = t.sending; st.textContent = ''; st.className = 'cf-st';
-    const body = { email: mail, 'Vous êtes': val('who'), 'Projet': val('what'), 'Pour quand': val('when'), 'Message': f.message.value.trim(), 'Langue': LANG, 'Page': location.href,
-      _subject: 'Hand Coded · nouveau contact' + (val('who') ? ' (' + val('who') + ')' : ''), _template: 'table', _captcha: 'false' };
-    let ok = false;
-    try {
+    const proj = !!(val('what') || val('when') || f.message.value.trim());
+    const body = { email: mail, 'Newsletter': 'oui', 'Vous êtes': val('who'), 'Projet': val('what'), 'Pour quand': val('when'), 'Message': f.message.value.trim(), 'Langue': LANG, 'Page': location.href,
+      _subject: 'Hand Coded · ' + (proj ? 'newsletter + projet' : 'inscription newsletter') + (val('who') ? ' (' + val('who') + ')' : ''), _template: 'table', _captcha: 'false' };
+    let ok = false, why = '';
+    if (location.protocol === 'file:') why = 'page ouverte depuis le disque : l’envoi ne marche que sur le site en ligne';
+    else try {
       const r = await fetch('https://formsubmit.co/ajax/' + CONTACT_FORM.to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
       const j = await r.json().catch(() => ({})); ok = r.ok && String(j.success) !== 'false';
-    } catch (err) { ok = false; }
+      if (!ok) why = j.message || ('HTTP ' + r.status);
+    } catch (err) { why = err && err.message || 'réseau'; }
+    if (!ok) console.warn('[contact] envoi refusé :', why);
     btn.disabled = false; btn.textContent = t.send;
     if (ok) { f.reset(); st.textContent = t.ok; st.className = 'cf-st ok'; countView('contact-form', 'Formulaire de contact envoyé', true); }
-    else { st.innerHTML = escapeHTML(t.err) + `<a href="mailto:${escapeHTML(CONTACT_FORM.to)}">${escapeHTML(CONTACT_FORM.to)}</a>`; st.className = 'cf-st bad'; }
+    else { st.innerHTML = escapeHTML(t.err) + `<a href="mailto:${escapeHTML(CONTACT_FORM.to)}">${escapeHTML(CONTACT_FORM.to)}</a>` + (why ? `<small class="cf-why">${escapeHTML(why)}</small>` : ''); st.className = 'cf-st bad'; }   // la raison exacte, en petit : utile pour la première activation
   });
 }
 /* Réseaux sociaux : un lien dont le texte est le nom du réseau devient une petite pastille discrète (initiales, sans logo de marque) */
