@@ -5693,7 +5693,7 @@
    },
    "date": "",
    "tags": [],
-   "thumb": "media/barcelona/logohandcoded-2lpt.jpg",
+   "thumb": "",
    "thumbBack": "",
    "body": {
     "en": "<p><b>A brand, an agency, an artist: let’s talk about your project.</b></p>Carrer Pérez Galdós, 6 . 08012 Barcelone . Spain<br>+34 666 19 94 29<br><br><a href=\"mailto:contact@hand-coded.net\" target=\"_blank\" rel=\"noopener\"><b>contact@hand-coded.net</b></a><p><a href=\"https://www.instagram.com/cyrillaurier/\" target=\"_blank\" rel=\"noopener\">Instagram</a> · <a href=\"https://vimeo.com/handcoded\" target=\"_blank\" rel=\"noopener\">Vimeo</a> · <a href=\"https://www.facebook.com/handcoders\" target=\"_blank\" rel=\"noopener\">Facebook</a></p><p>To programme a Mouawad + Laurier artwork in an institution or a festival: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p>",
@@ -6156,7 +6156,8 @@
    },
    "date": "",
    "tags": [
-    "specialists"
+    "specialists",
+    "artists"
    ],
    "thumb": "media/guillaume-faure/guillaume-faure-retrat-e1716389240637-dor8.jpg",
    "thumbBack": "",
@@ -12339,6 +12340,57 @@
     "media/logos/generalitat.png",
     "media/logos/catalanarts.png"
    ],
+   "updated": "2026-11-10"
+  },
+  {
+   "id": "nouveau-contenu-5",
+   "section": "work",
+   "order": 53,
+   "published": false,
+   "title": {
+    "en": "Echo",
+    "fr": "Echo",
+    "ca": "Echo",
+    "es": "Echo"
+   },
+   "subtitle": {
+    "en": "Guillaume Faure",
+    "fr": "Guillaume Faure",
+    "ca": "Guillaume Faure",
+    "es": "Guillaume Faure"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "collab",
+    "ai"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [
+    "cyril",
+    "joan-sandoval",
+    "guillaume-faure"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": [],
    "updated": "2026-11-10"
   }
  ]
