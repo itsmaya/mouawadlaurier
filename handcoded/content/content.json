@@ -6942,8 +6942,9 @@
    },
    "date": "2015",
    "tags": [
+    "performance",
     "ai",
-    "performance"
+    "software"
    ],
    "thumb": "media/prometheus/01.jpg",
    "thumbBack": "",
@@ -7031,7 +7032,7 @@
    "logos": [
     "media/logos/upf.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "augmented-paper",
@@ -7157,7 +7158,8 @@
    },
    "date": "2020",
    "tags": [
-    "collab"
+    "collab",
+    "exposition"
    ],
    "thumb": "media/poussiere-detoile/01.jpg",
    "thumbBack": "",
@@ -11301,7 +11303,8 @@
    },
    "date": "2026 – 2027",
    "tags": [
-    "collab"
+    "collab",
+    "exposition"
    ],
    "thumb": "media/nouveau-contenu-4/arsincampania-captagora-231026-52-lc9c.jpg",
    "thumbBack": "",
@@ -11403,7 +11406,7 @@
    "logos": [
     "media/logos/ruinart.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "wizz",
@@ -11432,7 +11435,8 @@
    "tags": [
     "advertising",
     "touring",
-    "performance"
+    "performance",
+    "software"
    ],
    "thumb": "media/nouveau-contenu-5/shape1-fv90.jpg",
    "thumbBack": "",
@@ -11539,7 +11543,7 @@
    "logos": [
     "media/centquatre/logo-104-we8h.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "les-debuts",
@@ -12013,7 +12017,10 @@
     "es": "Paris"
    },
    "date": "",
-   "tags": [],
+   "tags": [
+    "ai",
+    "software"
+   ],
    "thumb": "media/nouveau-contenu-4/screenshot-2026-11-10-at-00-48-31-5pf3.jpg",
    "thumbBack": "",
    "body": {
@@ -12039,7 +12046,7 @@
    "logos": [
     "media/logos/sonycsl-re8n.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "mood-cloud",
@@ -12066,6 +12073,7 @@
    },
    "date": "",
    "tags": [
+    "ai",
     "software"
    ],
    "thumb": "media/nouveau-contenu-5/ios-simulator-screen-shot-feb-13-2014-3-45-40-pm-0vfz.jpg",
@@ -12162,6 +12170,7 @@
    },
    "date": "",
    "tags": [
+    "ai",
     "software"
    ],
    "thumb": "media/nouveau-contenu-6/screen-shot-2014-11-17-at-23-01-14-654y.jpg",
@@ -12209,7 +12218,7 @@
    ],
    "author": "",
    "logos": [],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   }
  ]
 }
