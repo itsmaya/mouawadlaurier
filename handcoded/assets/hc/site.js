@@ -562,37 +562,29 @@ function infoTexture(post, kind) {
       }
       if (tr(post.place)) { ctx.font = `600 ${fz(13)}px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 14, 176); }
     }, 2.5);
-    /* La fiche d'une personne, à côté de son portrait : tout son texte, sur une feuille aussi longue qu'il le faut */
-    const SW = 420, m = 26, tw = SW - 2 * m, MAXH = 640, c = document.createElement('canvas').getContext('2d');
-    const name = tr(post.title).trim(), sub = tr(post.subtitle).trim(), body = htmlToText(tr(post.body)), place = tr(post.place).trim();
-    const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
-    const ops = [];   // la mise en page d'abord, pour connaître la hauteur de la feuille
-    let y = 22;
-    c.font = TF(fz(24)); wrapLines(c, name + '.', tw).slice(0, 3).forEach(l => { ops.push(['t', TF(fz(24)), l, y]); y += fz(27); });
-    if (sub) { y += 4; c.font = IT(fz(15)); sub.split(/(?<=\.)\s+/).forEach(x => wrapLines(c, x, tw).forEach(l => { ops.push(['t', IT(fz(15)), l, y]); y += fz(19); })); }
-    const tail = (projs.length ? 22 + Math.min(4, (c.font = `10.5px ${UIF}`, wrapLines(c, projs.join('  ·  '), tw).length)) * 14 : 0) + (place ? 26 : 0) + 18;
-    if (body.length) {
-      y += 12; const f = `11.5px ${UIF}`, lh = 16; c.font = f;
-      const lines = []; body.forEach((para, i) => { if (i) lines.push(null); wrapLines(c, para, tw).forEach(l => lines.push(l)); });
-      const room = Math.floor((MAXH - tail - y) / lh); let shown = lines.length > room ? lines.slice(0, Math.max(1, room)) : lines;
-      while (shown.length && shown[shown.length - 1] === null) shown.pop();
-      if (shown.length < lines.length && shown.length) { let last = shown[shown.length - 1]; while (last && c.measureText(last + '…').width > tw) last = last.replace(/\s*\S+$/, ''); shown[shown.length - 1] = last + '…'; }
-      shown.forEach(l => { if (l === null) { y += 7; return; } ops.push(['t', f, l, y]); y += lh; });
-    }
-    if (projs.length) {
-      y += 16; ops.push(['r', y - 8]); ops.push(['t', `600 8.5px ${UIF}`, ui('together').toUpperCase(), y]); y += 14;
-      c.font = `10.5px ${UIF}`; wrapLines(c, projs.join('  ·  '), tw).slice(0, 4).forEach(l => { ops.push(['t', `10.5px ${UIF}`, l, y]); y += 14; });
-    }
-    if (place) { y += 12; ops.push(['t', `600 11px ${UIF}`, place.toUpperCase(), y]); y += 14; }
-    const SH = Math.max(200, Math.ceil(y + 18));
-    return canvasTex(SW, SH, ctx => {
-      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, SW, SH); ctx.textBaseline = 'top';
-      ctx.fillStyle = accent(); ctx.fillRect(m, 12, 16, 2);
-      for (const o of ops) {
-        if (o[0] === 'r') { ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillRect(m, o[1], tw, 0.6); continue; }
-        ctx.fillStyle = '#fff'; ctx.font = o[1]; ctx.fillText(o[2], m, o[3]);
+    return canvasTex(200, 200, ctx => {   // MovieClip "people"
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
+      ctx.fillStyle = '#fff'; ctx.font = TF(fz(20));
+      const name = wrapLines(ctx, tr(post.title) + '.', 166).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 18, 14 + i * 22));
+      let y = 20 + name.length * 22;
+      ctx.font = `10px ${UIF}`;   // ses projets avec nous, en bas de la fiche
+      const projs = linkedProjects(post).map(p => tr(p.title).trim()).filter(Boolean);
+      const pl = projs.length ? wrapLines(ctx, projs.join('  ·  '), 166).slice(0, 3) : [];
+      const pTop = (tr(post.place) ? 174 : 188) - pl.length * 13 - 13;
+      ctx.font = IT(fz(15));   // la phrase s'arrête avant le bloc des projets
+      const lim = (pl.length ? pTop - 4 : 168) - 18, sub = [];
+      tr(post.subtitle).split(/(?<=\.)\s+/).forEach(l => wrapLines(ctx, l, 166).forEach(s => sub.push(s)));
+      const shown = []; for (const s of sub) { if (y > lim) break; shown.push(s); y += 18; }
+      if (shown.length < sub.length && shown.length) { let last = shown[shown.length - 1]; while (last && ctx.measureText(last + '…').width > 166) last = last.replace(/\s*\S+$/, ''); shown[shown.length - 1] = last + '…'; }
+      shown.forEach((s, i) => ctx.fillText(s, 19, 20 + name.length * 22 + i * 18));
+      ctx.font = `11px ${UIF}`;
+      htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
+      if (pl.length) {
+        ctx.font = `600 8px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 19, pTop);
+        ctx.font = `10px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 19, pTop + 13 + i * 13));
       }
-    }, 3);
+      if (tr(post.place)) { ctx.font = `600 11px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 19, 180); }
+    });
   });
 }
 
@@ -691,7 +683,6 @@ class PostView {
   apply() {
     const th = this.thumb, g = this.group;
     g.position.set(...postLocal(th.x, th.y, th.z));
-    g.rotation.order = th.scale > 1.001 ? 'YXZ' : 'XYZ';   // seule la carte ouverte, agrandie, se penche autour de son propre axe ; les autres animations gardent leur sens
     g.rotation.y = -(th.rotY + 180) * D2R; g.rotation.x = -th.rotX * D2R; g.rotation.z = th.rotZ * D2R;
     g.scale.setScalar(Math.max(1e-4, th.scale));
     if (this.band) this.drawBand();
@@ -704,15 +695,14 @@ class PostView {
     Object.assign(this.thumb, { rotX: this.p2.rotX, rotY: this.p2.rotY, rotZ: this.p2.rotZ });
     to(this.thumb, STYLE.tween, { [key]: this.p2[key] + degree }, { ease: 'quartOut' });
   }
-  moveToCamera(distance, time = 0, scale = 1) {   // la carte vient se placer devant la caméra (position finale de l'orbite), agrandie pour être lue
+  moveToCamera(distance, time = 0) {   // la carte vient se placer devant la caméra (position finale de l'orbite)
     killTweensOf(this.thumb);
     const D = camD(), cl = { x: -D * Math.sin(P.degreeCamera), z: -D * Math.cos(P.degreeCamera) }, p = this.p2;
     const dx = p.x - cl.x, dz = p.z - cl.z, len = Math.hypot(dx, dz) || 1;
-    const tilt = scale > 1 ? Math.atan2(p.y - camTargetY(), camD() || 1) / D2R : 0;   // agrandie et tout près : elle se penche comme l'objectif (la caméra se met à sa hauteur), sans déformation
-    to(this.thumb, time, { x: cl.x + dx * distance / len, y: p.y, z: cl.z + dz * distance / len, rotY: p.rotY + 720, rotX: tilt, scale }, { ease: 'quartOut' });
+    to(this.thumb, time, { x: cl.x + dx * distance / len, y: p.y, z: cl.z + dz * distance / len, rotY: p.rotY + 720 }, { ease: 'quartOut' });
     return { cl, dir: { x: dx / len, z: dz / len } };
   }
-  moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ, scale: 1 }, { ease: 'quartOut' }); }
+  moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ }, { ease: 'quartOut' }); }
   jump(x, y, z) { to(this.thumb, STYLE.tween / 2, { x, y, z }, { ease: 'quartOut', onComplete: () => to(this.thumb, STYLE.tween / 2, { x: this.p2.x, y: this.p2.y, z: this.p2.z }, { ease: 'quartOut' }) }); }
   /* Survol : le nom et la description montent du bas de la photo, dans un bandeau noir transparent, coupé au bord de la carte */
   setBand(band) {
@@ -996,41 +986,22 @@ class PostsView3D {
     to(info.p, STYLE.tween / 4, { x: p.p2.x - p.width - 20 }, { delay: timeAnim, ease: 'quartOut' });
     delayedCall(timeAnim, () => { mesh.visible = true; });
   }
-  setInfoTex(tex) {   // la feuille prend la proportion de son texte
-    const info = this.focusInfo, im = tex.image, ar = im && im.width ? im.height / im.width : 1;
-    if (info.mesh.material.map) info.mesh.material.map.dispose();
-    info.mesh.material.map = tex; info.mesh.material.needsUpdate = true;
-    if (Math.abs((info.ar || 0) - ar) > 1e-3) { info.mesh.geometry.dispose(); info.mesh.geometry = new THREE.PlaneGeometry(90, 90 * ar); info.ar = ar; }
-    info.s0 = this.h * this.k * 2 / 90;   // la feuille est plus large que le portrait n'est haut : le texte se lit en lignes longues
-  }
-  /* La taille d'ouverture : le portrait et sa feuille, côte à côte, occupent l'écran sans toucher le logo ni le menu */
-  focusScale(p) {
-    const f = this.focusInfo, iw = f && f.ar ? 90 * f.s0 : 0, ih = iw * ((f && f.ar) || 0);
-    const pairW = p.width + (iw ? iw + 3 : 0), narrow = Math.min(1, W / 900), ppu = cam.zoom * CAMERA.focus * narrow / (60 + CAMERA.focus * eyeK);
-    const s = Math.min(0.76 * W / (pairW * ppu), 0.7 * H / (Math.max(p.height, ih) * ppu), 0.44 * H / (p.height * ppu));
-    return Math.max(0.5, Math.min(4, s || 1));
-  }
-  focusMove(p, time) { if (this.L.grid) this.gridToCamera(p, time); else p.moveToCamera(60, time, this.focusScale(p)); }
   async openPost3D() {   // LineView3D.openPost3D, généralisé à tous les styles
     const id = P.selected, p = this.postViews[id]; if (!p || !p.ready) return;
-    if (!this.focusInfo) { this.focusInfo = { mesh: new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, depthTest: false })), p: { x: 0, y: 0, z: 0, rotY: 150 }, ar: 1 }; this.focusInfo.mesh.renderOrder = 3; this.container.add(this.focusInfo.mesh); }   // toujours devant : ni le sol ni les autres cartes ne la coupent
-    const info = this.focusInfo; killTweensOf(info); info.target = null; info.mesh.visible = false;
-    const tex = await infoTexture(this.posts[id], 'person'); if (!this.alive) { tex.dispose(); return; }
-    if (!P.postOpen || P.selected !== id) { tex.dispose(); return; }
-    this.setInfoTex(tex);
-    this.focusMove(p, STYLE.tween);
+    if (this.L.grid) this.gridToCamera(p, STYLE.tween); else p.moveToCamera(60, STYLE.tween);
+    if (!this.focusInfo) { this.focusInfo = { mesh: new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })), p: { x: 0, y: 0, z: 0, rotY: 150 } }; this.container.add(this.focusInfo.mesh); }
+    const info = this.focusInfo; info.mesh.visible = false;
+    const tex = await infoTexture(this.posts[id], 'person'); if (!this.alive) return;
+    if (info.mesh.material.map) info.mesh.material.map.dispose();
+    info.mesh.material.map = tex; info.mesh.material.needsUpdate = true;
+    const s = this.h * this.k / 90; info.mesh.scale.setScalar(s);
     delayedCall(STYLE.tween, () => {   // la fiche sort de derrière le portrait et se pose à côté, dans le même plan
       if (!P.postOpen || P.selected !== id) return;
       info.target = p; info.k = 0; info.mesh.visible = true;
       killTweensOf(info); to(info, STYLE.tween / 4, { k: 1 }, { ease: 'quartOut' });
     });
   }
-  closePost3D() {
-    const p = this.postViews[P.selected]; if (p) p.moveBack(STYLE.tween / 2);
-    const f = this.focusInfo; if (!f) return; killTweensOf(f);
-    if (!f.target || !f.mesh.visible) { f.target = null; f.mesh.visible = false; return; }
-    const t = f.target; to(f, STYLE.tween / 5, { k: 0 }, { ease: 'quartOut', onComplete: () => { if (f.target === t) { f.target = null; f.mesh.visible = false; } } });   // la feuille repart derrière le portrait
-  }
+  closePost3D() { const p = this.postViews[P.selected]; if (p) p.moveBack(STYLE.tween / 2); if (this.focusInfo) { killTweensOf(this.focusInfo); this.focusInfo.target = null; this.focusInfo.mesh.visible = false; } }
   movePosts(dx, dy, k) { this.L.move.call(this.L, this, dx, dy, k); }
   /* Changement de format (rotation, fenêtre) : grille ↔ disposition d'origine. Les vignettes glissent vers leur nouvelle place. */
   relayout() {
@@ -1054,13 +1025,12 @@ class PostsView3D {
   }
   /* Grille : la vignette ouverte (studio) vient se poser devant la caméra, avec sa fiche à droite, au centre de la place libre */
   gridToCamera(p, time) {
-    const f = this.focusInfo, iw = f && f.ar ? 90 * f.s0 : p.width, ih = f && f.ar ? iw * f.ar : p.height, pairW = p.width + iw + 3;
-    const G = this.grid, o = orbitNow(), zf = ZOOMF();
-    const depth = Math.max(90, zf * Math.max(pairW / (G.aw * 0.92), Math.max(p.height, ih) / (G.ah * 0.85)));
+    const G = this.grid, o = orbitNow(), zf = ZOOMF(), pairW = 2 * p.width + 3;
+    const depth = Math.max(90, zf * Math.max(pairW / (G.aw * 0.92), p.height / (G.ah * 0.85)));
     const eyeZ = camD() + CAMERA.focus, k = depth / zf;
     const ax = this.section.p.x - o.x, ay = o.ty - this.container.position.y;   // l'axe de la caméra, en coordonnées des vignettes
     killTweensOf(p.thumb);
-    to(p.thumb, time, { x: ax - G.fx * k + (iw + 3) / 2, y: ay - G.fy * k, z: eyeZ - depth, rotY: p.p2.rotY + 720, rotX: 0, rotZ: 0, scale: 1 }, { ease: 'quartOut' });
+    to(p.thumb, time, { x: ax - G.fx * k + (p.width + 3) / 2, y: ay - G.fy * k, z: eyeZ - depth, rotY: p.p2.rotY + 720, rotX: 0, rotZ: 0 }, { ease: 'quartOut' });
   }
   resetPostPosition() {
     this.postViews.forEach((p, i) => {
@@ -1101,10 +1071,9 @@ class PostsView3D {
     this.following.forEach(p => this.followLine(p, p.id_));
     this.infos.forEach(inf => { if (!inf) return; inf.mesh.position.set(...postLocal(inf.p.x, inf.p.y, inf.p.z)); inf.mesh.rotation.y = -(inf.p.rotY + 180) * D2R; });
     if (this.focusInfo && this.focusInfo.target) {   // collée au portrait : même orientation, posée sur sa droite
-      const f = this.focusInfo, g = f.target.group, k = f.k ?? 1, sc = g.scale.x, iw = 90 * (f.s0 || 1);
-      f.mesh.quaternion.copy(g.quaternion); f.mesh.scale.setScalar((f.s0 || 1) * sc);
-      if (!this.L.grid) { _side.set(1, 0, 0).applyQuaternion(g.quaternion).multiplyScalar(-(iw + 3) / 2 * k * sc); g.position.add(_side); }   // le portrait se décale : le couple reste au centre
-      _side.set(1, 0, 0).applyQuaternion(g.quaternion).multiplyScalar((f.target.width / 2 + iw / 2 + 3) * k * sc);
+      const f = this.focusInfo, g = f.target.group, k = f.k ?? 1;
+      f.mesh.quaternion.copy(g.quaternion);
+      _side.set(1, 0, 0).applyQuaternion(g.quaternion).multiplyScalar((f.target.width / 2 + 45 * f.mesh.scale.x + 3) * k * g.scale.x);
       _back.set(0, 0, -1).applyQuaternion(g.quaternion).multiplyScalar(1.5 * (1 - k));
       f.mesh.position.copy(g.position).add(_side).add(_back);
     }
@@ -1123,7 +1092,7 @@ class PostsView3D {
       const inf = this.infos[i];
       if (inf) { const it = await infoTexture(this.posts[i], 'place'); if (!this.alive) { it.dispose(); return; } const o = swap(inf.mesh, it); if (o) o.dispose(); }
     }
-    if (this.focusInfo && this.focusInfo.mesh.material.map && P.postOpen) { const it = await infoTexture(this.posts[P.selected], 'person'); if (this.alive) this.setInfoTex(it); else it.dispose(); }
+    if (this.focusInfo && this.focusInfo.mesh.material.map && P.postOpen) { const it = await infoTexture(this.posts[P.selected], 'person'); if (this.alive) { const o = swap(this.focusInfo.mesh, it); if (o) o.dispose(); } }
   }
   get meshes() { return this.postViews.flatMap(p => p.meshes); }
   destroy() {
@@ -1195,7 +1164,7 @@ function reflow(before) {   // grille ↔ disposition d'origine, ou grille recad
   if (gridView()) P.degreeCamera = frontDeg(P.degreeCamera);
   P.cameraY = camHeight(); closeTurn = true; easeSpeed = STYLE.cameraEaseSpeed;
   const pv2 = P.postOpen && curOpenMode() === 'focus3d' && !post2D.open && postsView.postViews[P.selected];
-  if (pv2 && pv2.ready) postsView.focusMove(pv2, STYLE.tween / 2);
+  if (pv2 && pv2.ready) { if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(60, STYLE.tween / 2); }
 }
 let gridTick = 0;
 function watchGrid() {   // la place libre change (menu posé, polices arrivées, barre du navigateur) : la grille se recadre
@@ -1238,7 +1207,7 @@ function setCamera() { const hmax = 1000, max = 680, div = STYLE.cameraDistanceP
 function onStageResize3D() {
   closeTurn = false; setCamera(); if (!started) return;
   const s = orbitCenter();
-  if (P.postOpen && curOpenMode() === 'focus3d' && !post2D.open && postsView && postsView.postViews[P.selected]) postsView.focusMove(postsView.postViews[P.selected], 0);
+  if (P.postOpen && curOpenMode() === 'focus3d' && !post2D.open && postsView && postsView.postViews[P.selected]) { const pv2 = postsView.postViews[P.selected]; if (postsView.L.grid) postsView.gridToCamera(pv2, STYLE.tween / 2); else pv2.moveToCamera(100, 0); }
   const fixed = isMap() || gridView();
   cameraOnlyGoto(s.x + camD() * Math.sin(P.actualDeg), fixed ? P.cameraY : cam.y, s.z + camD() * Math.cos(P.actualDeg), STYLE.cameraSpeed / 2);
   if (fixed) cameraTarget(s.x, s.ty, s.z, STYLE.cameraSpeed / 2);
@@ -2270,7 +2239,8 @@ function goToPost(id) {
 }
 strip.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); goToPost(b.dataset.go); } });
 /* Ouverture d'une fiche : celle de la section, sauf pour un tag réglé « pleine page » (le cœur du studio) : la fiche 2D au premier plan */
-const postOpenMode = (post, def = P.section && P.section.def) => (!def ? '' : post && def.open === 'focus3d' && (def.tags || []).some(t => t.page && (post.tags || []).includes(t.id)) ? 'strip' : def.open);
+/* Le studio : toutes les personnes s'ouvrent en fiche pleine page, comme Maya et Cyril ; les partenaires (logos) gardent l'ouverture en 3D */
+const postOpenMode = (post, def = P.section && P.section.def) => (!def ? '' : post && def.open === 'focus3d' && ((def.tags || []).some(t => t.page && (post.tags || []).includes(t.id)) || !isLogo(post)) ? 'strip' : def.open);
 const curOpenMode = () => postOpenMode(P.data && P.data.posts[P.selected]);
 function openPost() {
   if (!postsView || !P.data.posts[P.selected]) return;

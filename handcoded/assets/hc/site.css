@@ -473,7 +473,7 @@ body:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 #home-ctl > button { height: 34px; min-width: 34px; border: 1px solid #333; padding: 0; background: rgba(20,20,20,.8); color: #cfcfcf; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
 #home-ctl > button:hover, #home-ctl > button:focus-visible { color: #fff; border-color: #666; outline: none; }
 #home-ctl svg { width: 21px; height: 21px; display: block; }
-#home.reel-on #hv-panel { display: none; }   /* le bouton des réglages reste là : il arrête le showreel et ouvre le panneau */   /* le showreel joue : les réglages des carrés ne servent à rien */
+#home.reel-on #hv-panel, #home.reel-on #hv-toggle { display: none !important; }   /* le showreel joue : le bouton et le panneau des réglages des carrés disparaissent, ils reviennent à l'arrêt */
 #home-ctl #hv-panel { left: calc(100% + 12px); top: 0; right: auto !important; bottom: auto !important; transform-origin: 0 0; }
 #home.leaving #home-ctl { pointer-events: none; }
 @media (max-width: 700px), (max-height: 520px) {
