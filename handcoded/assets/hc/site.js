@@ -615,6 +615,36 @@ function showNetTip(n, x, y) {
 }
 function hideNetTip() { netTip.hidden = true; }
 
+/* Les points d'accroche des fils : les sommets où se rejoignent le plus de faces (le cœur des fleurs de la lampe,
+   les nœuds de la racine), regroupés quand ils sont voisins. En coordonnées du conteneur de la section. */
+function modelAnchors(root) {
+  root.updateMatrixWorld(true);
+  const pts = [], v = new THREE.Vector3(), inv = root.matrixWorld.clone().invert();
+  root.traverse(o => {
+    if (!o.isMesh || !o.geometry || !o.geometry.attributes.position) return;
+    const g = o.geometry; g.computeBoundingBox(); const s = g.boundingBox.getSize(new THREE.Vector3());
+    if (Math.min(s.x, s.y, s.z) < 1e-6 * Math.max(s.x, s.y, s.z, 1e-9)) return;   // le sol, à plat
+    const pos = g.attributes.position, idx = g.index, n = idx ? idx.count : pos.count, map = new Map(), q = Math.max(s.x, s.y, s.z) / 2000;
+    for (let k = 0; k < n; k++) {
+      const j = idx ? idx.getX(k) : k, key = Math.round(pos.getX(j) / q) + ',' + Math.round(pos.getY(j) / q) + ',' + Math.round(pos.getZ(j) / q);
+      let e = map.get(key); if (!e) map.set(key, e = { j, n: 0 }); e.n++;
+    }
+    const m = new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld);
+    map.forEach(e => { v.fromBufferAttribute(pos, e.j).applyMatrix4(m); pts.push({ p: v.clone(), n: e.n }); });
+  });
+  if (!pts.length) return null;
+  const top = Math.max(...pts.map(x => x.n)); if (top < 8) return null;
+  const box = new THREE.Box3(); pts.forEach(x => box.expandByPoint(x.p)); const R = box.getSize(new THREE.Vector3()).length() * 0.09;
+  const cl = [];
+  pts.filter(x => x.n >= top * 0.8).forEach(x => {
+    let c = cl.find(c => c.c.distanceTo(x.p) < R); if (!c) cl.push(c = { s: new THREE.Vector3(), w: 0, c: x.p.clone() });
+    c.s.addScaledVector(x.p, x.n); c.w += x.n; c.c.copy(c.s).divideScalar(c.w);
+  });
+  const wMax = Math.max(...cl.map(c => c.w));
+  const out = cl.filter(c => c.w >= wMax * 0.3).map(c => c.c);
+  return out.length ? out : null;
+}
+
 /* ================================================================ Root3D / SectionObject3D */
 class SectionObject3D {
   constructor(def, i) { this.def = def; this.idTable = i; this.container = new THREE.Group(); this.p = { x: 0, y: 0, z: 0 }; this.blockers = []; }
@@ -655,6 +685,7 @@ class SectionObject3D {
     }
     const turn = new THREE.Group(); turn.rotation.y = (m.rotationY || 0) * D2R; turn.add(holder);
     this.container.add(turn);
+    try { this.anchors = modelAnchors(this.container); } catch (e) { this.anchors = null; }
   }
   place(i) {
     this.p.x = i * 5 * STYLE.object3DDistance;
@@ -875,17 +906,41 @@ const frontDeg = deg => deg + ((((Math.PI - deg) % TAU) + TAU + Math.PI) % TAU -
 function gridLayout(base) {
   return {
     grid: true, base, open: base.open, lineStart: base.lineStart,
-    lineEnd: base.lineEnd ? (p, view, i) => base.lineEnd.call(base, p, view, i) : undefined,
+    lineEnd: base.lineEnd && base.gridLines !== false ? (p, view, i) => base.lineEnd.call(base, p, view, i) : undefined,
     preset() {}, position: (view, p, i) => gridPos(view, i),
     focus(view, id) {   // la vignette sort de la grille vers la caméra, avec le geste de sa disposition d'origine
       const pv2 = view.postViews[id]; if (!pv2) return;
       P.selected = id; P.degreeCamera = frontDeg(P.degreeCamera); P.cameraY = camHeight();
       if (!pv2.ready) return;
       pv2.selectIt(); pv2.jump(pv2.p2.x, pv2.p2.y, pv2.p2.z + 70);
-      if (base === LAYOUT.fan) pv2.turnAround('x', 720); else if (base === LAYOUT.arc) pv2.turnAround('y', 360);
+      const B = base.orig || base; if (B === LAYOUT.fan) pv2.turnAround('x', 720); else if (B === LAYOUT.arc) pv2.turnAround('y', 360);
     },
     move: (view, dx, dy, k) => base.move.call(base, view, dx, dy, k),
   };
+}
+
+/* Les fils vont de la carte au cœur de fleur (ou au nœud) qui lui fait face, un par carte tant qu'il en reste de ce côté.
+   La disposition, les mouvements et les animations des cartes restent ceux d'origine : seul le bout du fil change. */
+function anchoredLayout(base, view) {
+  const L = Object.create(base), own = [], used = new Map();
+  const local = () => {   // les accroches dans le repère des cartes
+    const yOff = view.container.position.y - view.section.container.position.y;
+    return view.section.anchors.map(a => [-a.x, a.y - yOff, a.z]);
+  };
+  L.orig = base; L.gridLines = false; L.addedLines = !base.lineEnd;   // fils ajoutés : suivis à part, les cartes gardent leur comportement
+  L.lineStart = base.lineStart || ((p, th) => [th.x, th.y - p.height / 2, th.z]);
+  L.lineEnd = function (q, v, i) {
+    if (own[i] == null) {
+      const A = local(), c = [0, 1, 2].map(k => A.reduce((s, a) => s + a[k], 0) / A.length);
+      const dir = a => { const d = [a[0] - c[0], a[1] - c[1], a[2] - c[2]], l = Math.hypot(...d) || 1; return d.map(x => x / l); };
+      const cd = dir([q.x, q.y, q.z]);
+      const score = A.map((a, k) => { const d = dir(a); return [k, d[0] * cd[0] + d[1] * cd[1] + d[2] * cd[2]]; }).sort((a, b) => b[1] - a[1]);
+      const free = score.find(([k, s]) => !used.has(k) && s > score[0][1] - 0.6);
+      own[i] = (free || score[0])[0]; used.set(own[i], i);
+    }
+    return local()[own[i]];
+  };
+  return L;
 }
 
 const _side = new THREE.Vector3(), _back = new THREE.Vector3();
@@ -893,13 +948,14 @@ class PostsView3D {
   constructor(section) {
     this.section = section; this.def = section.def;
     this.base = this.L = LAYOUT[this.def.layout] || LAYOUT.carousel;
+    if (section.anchors && (this.def.layout === 'carousel' || (this.def.layout === 'arc' && this.def.skills))) this.base = this.L = anchoredLayout(this.base, this);
     this.card = this.def.card;
     this.posts = P.data.posts.slice(); this.n = this.posts.length;
     this.tex = this.def.skills ? skillCard : CARD_TEX[this.card];   // savoir-faire : le texte d'abord, l'image l'illustre
     [this.w, this.h] = this.def.skills ? (this.card === 'text' ? CARDS.text.size : CARDS.image.size) : CARDS[this.card].size; this.k = cardK(this.def);   // textures à la taille d'origine, cartes agrandies ou réduites
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
-    this.lines = []; this.following = new Set(); this.infos = []; this.alive = true;
+    this.lines = []; this.following = new Set(); this.trail = new Set(); this.infos = []; this.alive = true;
     this.L.preset.call(this.L, this);
     if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
@@ -970,21 +1026,21 @@ class PostsView3D {
     Object.assign(p.thumb, { x: q.x / 2, y: 10, z: q.z / 2, rotY: q.rotY, rotX: 90 - 2 * 360, rotZ: 0, scale: 0.5 });
     const timeAnim = 2 * STYLE.planeSpeed;
     let pending;
-    const done = () => { if (--pending <= 0) { this.following.delete(p); if (L.lineEnd) this.followLine(p, i); } };
+    const done = () => { if (--pending <= 0) { this.following.delete(p); this.trail.delete(p); if (L.lineEnd) this.followLine(p, i); } };
     if (L.open === 'twoStep') {
       pending = 2;
       to(p.thumb, timeAnim, { y: q.y, rotX: 0 }, { delay: STYLE.planeSpeed / 3, ease: 'expoOut', onComplete: done });
       to(p.thumb, timeAnim, { x: q.x, z: q.z, rotY: q.rotY, scale: 1 }, { ease: 'circOut', onComplete: done });
     } else { pending = 1; to(p.thumb, timeAnim, { x: q.x, y: q.y, z: q.z, rotY: q.rotY, rotX: 0, scale: 1 }, { ease: 'circOut', onComplete: done }); }
     p.apply(); this.container.add(p.group);
-    if (L.lineEnd) { this.following.add(p); this.followLine(p, i); }
+    if (L.lineEnd) { (L.addedLines ? this.trail : this.following).add(p); this.followLine(p, i); }
     if (this.def.layout === 'map' && this.card === 'place') this.openInfo(p, i, timeAnim);
   }
   followLine(p, i) {
     if (!this.L.lineEnd) return;
     const a = this.L.lineStart(p, p.thumb), b = this.L.lineEnd.call(this.L, p.p2, this, i);
     const pts = [...postLocal(...a), ...postLocal(...b)];
-    let l = this.lines[i]; if (!l) { l = this.lines[i] = makeSegments(pts, lineMatCenter); this.container.add(l); } else l.geometry.setPositions(pts);
+    let l = this.lines[i]; if (!l) { l = this.lines[i] = makeSegments(pts, lineMatCenter); this.container.add(l); } else { l.geometry.setPositions(pts); l.visible = true; }
   }
   async openInfo(p, i, timeAnim) {   // la fiche du lieu à côté de la carte
     const tex = await infoTexture(this.posts[i], 'place'); if (!this.alive) return;
@@ -1019,6 +1075,7 @@ class PostsView3D {
     const G = want ? computeGrid(this) : null, old = this.grid;
     const same = want && was && old && ['cols', 'rows', 'uw', 'uh', 'gy'].every(k => Math.abs(G[k] - old[k]) < 0.5);
     this.grid = G || old; this.L = want ? (this.gridL || (this.gridL = gridLayout(this.base))) : this.base;
+    if (!this.L.lineEnd) this.lines.forEach(l => { if (l) l.visible = false; });   // grille sans fils : ceux de la disposition d'origine se cachent
     if (same) return true;   // même grille : seule la caméra recadre
     const T = STYLE.tween * 1.2;
     const held = P.postOpen && curOpenMode() === 'focus3d' ? P.selected : -1;   // la personne ouverte reste devant la caméra
@@ -1077,7 +1134,7 @@ class PostsView3D {
       this.net.sc = sc;
     }
     for (const p of this.postViews) if (p.ready) p.apply();
-    this.following.forEach(p => this.followLine(p, p.id_));
+    this.following.forEach(p => this.followLine(p, p.id_)); this.trail.forEach(p => this.followLine(p, p.id_));
     this.infos.forEach(inf => { if (!inf) return; inf.mesh.position.set(...postLocal(inf.p.x, inf.p.y, inf.p.z)); inf.mesh.rotation.y = -(inf.p.rotY + 180) * D2R; });
     if (this.focusInfo && this.focusInfo.target) {   // collée au portrait : même orientation, posée sur sa droite
       const f = this.focusInfo, g = f.target.group, k = f.k ?? 1;
