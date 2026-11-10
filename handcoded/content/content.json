@@ -417,7 +417,7 @@
    "layout": "carousel",
    "card": "image",
    "open": "strip",
-   "perPage": 8,
+   "perPage": 10,
    "defaultTag": "featured",
    "visible": true,
    "tags": [
@@ -440,15 +440,6 @@
      }
     },
     {
-     "id": "collab",
-     "label": {
-      "en": "With Artists",
-      "fr": "Avec les artistes",
-      "ca": "Amb els artistes",
-      "es": "Con los artistas"
-     }
-    },
-    {
      "id": "touring",
      "label": {
       "en": "Events and tours",
@@ -467,6 +458,15 @@
      }
     },
     {
+     "id": "collab",
+     "label": {
+      "en": "With Artists",
+      "fr": "Avec les artistes",
+      "ca": "Amb els artistes",
+      "es": "Con los artistas"
+     }
+    },
+    {
      "id": "ai",
      "label": {
       "en": "AI and research",
@@ -482,8 +482,7 @@
       "fr": "Logiciels",
       "ca": "Programari",
       "es": "Software"
-     },
-     "menu": false
+     }
     },
     {
      "id": "permanent",
@@ -12081,31 +12080,40 @@
    },
    "media": [
     {
-     "src": "media/nouveau-contenu-5/audioanalysis-d8ga.jpg"
+     "src": "media/nouveau-contenu-5/audioanalysis-d8ga.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/ipad-mini-0fxu.jpg"
+     "src": "media/nouveau-contenu-5/ipad-mini-0fxu.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/ipad-odbt.jpg"
+     "src": "media/nouveau-contenu-5/ipad-odbt.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/mood2-ifsd.jpg"
+     "src": "media/nouveau-contenu-5/mood2-ifsd.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/moodcloud-copy-lnpf.jpg"
+     "src": "media/nouveau-contenu-5/moodcloud-copy-lnpf.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/moodcloud-lk06.jpg"
+     "src": "media/nouveau-contenu-5/moodcloud-lk06.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/picture-1-17hn.jpg"
+     "src": "media/nouveau-contenu-5/picture-1-17hn.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/picture-2-mjbw.jpg"
+     "src": "media/nouveau-contenu-5/picture-2-mjbw.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-5/picture-3-8e8w.jpg"
+     "src": "media/nouveau-contenu-5/picture-3-8e8w.jpg",
+     "credit": ""
     }
    ],
    "link": "",
@@ -12129,7 +12137,7 @@
    "logos": [
     "media/logos/upf.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "music-tech-fest-2",
