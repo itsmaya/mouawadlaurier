@@ -6789,15 +6789,19 @@
      "credit": ""
     },
     {
+     "src": "media/albatros/albatros-mirror-9u8z.jpg",
+     "credit": ""
+    },
+    {
      "src": "media/albatros/img-9695-2-agut.jpg",
      "credit": ""
     },
     {
-     "src": "media/albatros/img-9785-2-i22d.jpg",
+     "src": "media/albatros/img-9849-2-t3bg.jpg",
      "credit": ""
     },
     {
-     "src": "media/albatros/img-9849-2-t3bg.jpg",
+     "src": "media/albatros/img-9785-2-i22d.jpg",
      "credit": ""
     },
     {
@@ -6817,23 +6821,11 @@
      "credit": ""
     },
     {
-     "src": "media/albatros/53258990237-a2ba76c588-o-8196.jpg",
-     "credit": ""
-    },
-    {
      "src": "media/albatros/53259869141-62c884ce77-o-42jw.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/albatros/53260155428-ab11dd3bdd-o-le2d.jpg",
-     "credit": ""
-    },
-    {
-     "src": "media/albatros/albatros-mirror-9u8z.jpg",
      "credit": ""
     }
    ],
-   "link": "https://mouawadlaurier.com",
+   "link": "https://nanomusee.fr/",
    "team": [
     "mouawad-laurier",
     "maya",
@@ -6861,7 +6853,7 @@
     "media/nanomusee/identite-graphique-bordeaux-nano-musee-2-txup.jpg",
     "media/la-rochelle-universite/la-rochelle-universite-wo03.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "prometheus",
@@ -12150,52 +12142,68 @@
    },
    "media": [
     {
-     "src": "media/music-tech-fest-2/musicbricks-mtfscandi-gxj0.jpg"
+     "src": "media/music-tech-fest-2/musicbricks-mtfscandi-gxj0.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/10177361-10153167300874115-2630480929039845813-n-dh0l.jpg"
+     "src": "media/music-tech-fest-2/10177361-10153167300874115-2630480929039845813-n-dh0l.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/musicbricks-kickoff-brick1-1080x675-prs4.jpg"
+     "src": "media/music-tech-fest-2/musicbricks-kickoff-brick1-1080x675-prs4.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/10540791-10153166314294115-7942764324337716628-n-kq05.jpg"
+     "src": "media/music-tech-fest-2/10540791-10153166314294115-7942764324337716628-n-kq05.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/10592872-10153166314144115-1943377176351657899-n-hdax.jpg"
+     "src": "media/music-tech-fest-2/10592872-10153166314144115-1943377176351657899-n-hdax.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/10633994-1555460741344380-3342582872444380104-o-lz8f.jpg"
+     "src": "media/music-tech-fest-2/10633994-1555460741344380-3342582872444380104-o-lz8f.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/10678425-10153173558969115-8374303741652152109-n-5yl6.jpg"
+     "src": "media/music-tech-fest-2/10678425-10153173558969115-8374303741652152109-n-5yl6.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/ezramtf-t3oa.jpg"
+     "src": "media/music-tech-fest-2/ezramtf-t3oa.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/hat1-435g.jpg"
+     "src": "media/music-tech-fest-2/hat1-435g.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/hat2-hq5s.jpg"
+     "src": "media/music-tech-fest-2/hat2-hq5s.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/hat3-p245.jpg"
+     "src": "media/music-tech-fest-2/hat3-p245.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/screen-shot-2015-09-25-at-10-33-18-2k7v.jpg"
+     "src": "media/music-tech-fest-2/screen-shot-2015-09-25-at-10-33-18-2k7v.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/mata-grts.jpg"
+     "src": "media/music-tech-fest-2/mata-grts.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/mtf3-pxgf.jpg"
+     "src": "media/music-tech-fest-2/mtf3-pxgf.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/mtf4-sbwd.jpg"
+     "src": "media/music-tech-fest-2/mtf4-sbwd.jpg",
+     "credit": ""
     },
     {
-     "src": "media/music-tech-fest-2/mtf5-dfoy.jpg"
+     "src": "media/music-tech-fest-2/mtf5-dfoy.jpg",
+     "credit": ""
     }
    ],
    "link": "",
@@ -12389,19 +12397,24 @@
    },
    "media": [
     {
-     "src": "media/nouveau-contenu-4/3385fea2-bfcc-437e-9d8c-5b76629267cb-sfmg.mp4"
+     "src": "media/nouveau-contenu-4/3385fea2-bfcc-437e-9d8c-5b76629267cb-sfmg.mp4",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-4/aa5d8482-fa89-4e6a-8b5e-0e7c6acbfdc8-qcac.jpg"
+     "src": "media/nouveau-contenu-4/aa5d8482-fa89-4e6a-8b5e-0e7c6acbfdc8-qcac.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-4/12294fb1-8c6c-42e6-9bc9-ceeed2611be4-5oc8.jpg"
+     "src": "media/nouveau-contenu-4/12294fb1-8c6c-42e6-9bc9-ceeed2611be4-5oc8.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-4/a4650a47-bf11-4933-80ab-1a604287abfc-8fnm.jpg"
+     "src": "media/nouveau-contenu-4/a4650a47-bf11-4933-80ab-1a604287abfc-8fnm.jpg",
+     "credit": ""
     },
     {
-     "src": "media/nouveau-contenu-4/eabd968d-714a-4ddf-874d-b8d401bef03a-1f6u.jpg"
+     "src": "media/nouveau-contenu-4/eabd968d-714a-4ddf-874d-b8d401bef03a-1f6u.jpg",
+     "credit": ""
     }
    ],
    "link": "",
