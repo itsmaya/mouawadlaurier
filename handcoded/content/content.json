@@ -4208,67 +4208,6 @@
    "updated": "2026-11-09"
   },
   {
-   "id": "cadbury",
-   "section": "work",
-   "order": 42,
-   "published": false,
-   "title": {
-    "en": "Cadbury",
-    "fr": "Cadbury",
-    "ca": "Cadbury",
-    "es": "Cadbury"
-   },
-   "subtitle": {
-    "en": "Campaign",
-    "fr": "Campagne",
-    "ca": "Campanya",
-    "es": "Campaña"
-   },
-   "place": {
-    "en": "United Kingdom",
-    "fr": "Royaume-Uni",
-    "ca": "Regne Unit",
-    "es": "Reino Unido"
-   },
-   "date": "",
-   "tags": [
-    "advertising"
-   ],
-   "thumb": "media/cadbury/image-asset-xerb.webp",
-   "thumbBack": "",
-   "body": {
-    "en": "<p>A campaign published in the United Kingdom.</p>",
-    "fr": "<p>Une campagne publiée au Royaume-Uni.</p>",
-    "ca": "<p>Una campanya publicada al Regne Unit.</p>",
-    "es": "<p>Una campaña publicada en el Reino Unido.</p>"
-   },
-   "media": [
-    {
-     "src": "media/cadbury/image-asset-xerb.webp",
-     "credit": ""
-    },
-    {
-     "src": "media/cadbury/image-asset-k2qn.jpg",
-     "credit": ""
-    }
-   ],
-   "link": "",
-   "team": [],
-   "credits": "",
-   "location": null,
-   "spots": [],
-   "author": "",
-   "skills": [
-    "generative",
-    "concept-design",
-    "fabriquer"
-   ],
-   "logos": [
-    "media/logos/marque-cadbury.png"
-   ],
-   "updated": "2026-11-09"
-  },
-  {
    "id": "coors",
    "section": "work",
    "order": 41,
@@ -12290,6 +12229,115 @@
    "skills": [],
    "author": "",
    "logos": [],
+   "updated": "2026-11-10"
+  },
+  {
+   "id": "nouveau-contenu",
+   "section": "work",
+   "order": 51,
+   "published": false,
+   "title": {
+    "en": "Immersive spacialize sound",
+    "fr": "Immersive spacialize sound",
+    "ca": "Immersive spacialize sound",
+    "es": "Immersive spacialize sound"
+   },
+   "subtitle": {
+    "en": "TigreLab",
+    "fr": "TigreLab",
+    "ca": "TigreLab",
+    "es": "TigreLab"
+   },
+   "place": {
+    "en": "Palau de la Musica",
+    "fr": "Palau de la Musica",
+    "ca": "Palau de la Musica",
+    "es": "Palau de la Musica"
+   },
+   "date": "2026",
+   "tags": [
+    "performance",
+    "permanent",
+    "exposition"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "accompagner"
+   ],
+   "author": "Tilergab",
+   "logos": [
+    "media/logos/palaumusica-qlzt.jpg",
+    "media/tigre-lab/job-fair-logos-web-4xib.jpg"
+   ],
+   "updated": "2026-11-10"
+  },
+  {
+   "id": "nouveau-contenu-4",
+   "section": "work",
+   "order": 52,
+   "published": false,
+   "title": {
+    "en": "Complete",
+    "fr": "Complete",
+    "ca": "Complete",
+    "es": "Complete"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "performance"
+   ],
+   "thumb": "media/nouveau-contenu-4/mood-aura-bncl.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [
+    "marine-budin",
+    "pedra",
+    "maya",
+    "cyril"
+   ],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [
+    "explorer"
+   ],
+   "author": "",
+   "logos": [
+    "media/logos/generalitat.png",
+    "media/logos/catalanarts.png"
+   ],
    "updated": "2026-11-10"
   }
  ]
