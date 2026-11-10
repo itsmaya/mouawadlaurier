@@ -577,7 +577,8 @@
    "network": false,
    "skills": true,
    "camera": 80,
-   "cardScale": 145
+   "cardScale": 145,
+   "noAll": true
   },
   {
    "id": "studio",
