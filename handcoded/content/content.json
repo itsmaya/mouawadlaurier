@@ -3711,7 +3711,7 @@
   {
    "id": "audi-mind-race",
    "section": "work",
-   "order": 30,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Audi Mind Race",
@@ -3859,7 +3859,7 @@
     "media/fc-barcelona/fcbcn-ndni.jpg",
     "media/logos/ddb.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-10"
   },
   {
    "id": "sonaris",
@@ -4069,7 +4069,7 @@
   {
    "id": "churchill",
    "section": "work",
-   "order": 31,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Churchill",
@@ -4208,12 +4208,12 @@
     "media/logos/churchills.png",
     "media/logos/muartslogo-hgii.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "coors",
    "section": "work",
-   "order": 41,
+   "order": 46,
    "published": true,
    "title": {
     "en": "Coors",
@@ -4280,7 +4280,7 @@
    "logos": [
     "media/logos/marque-coors.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "imaginer",
@@ -7156,7 +7156,7 @@
   {
    "id": "fuurin",
    "section": "work",
-   "order": 43,
+   "order": 47,
    "published": false,
    "title": {
     "en": "Fuurin",
@@ -7206,7 +7206,7 @@
    ],
    "author": "Mouawad + Laurier",
    "logos": [],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "ruinart",
@@ -11152,7 +11152,7 @@
   {
    "id": "kinematope-pommery",
    "section": "work",
-   "order": 44,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Kinematope (Pommery)",
@@ -11216,12 +11216,12 @@
    "logos": [
     "media/logos/pommery.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "ras-ubiquitous",
    "section": "work",
-   "order": 33,
+   "order": 31,
    "published": true,
    "title": {
     "en": "RAS Ubiquitous",
@@ -11351,7 +11351,7 @@
   {
    "id": "wizz",
    "section": "work",
-   "order": 45,
+   "order": 51,
    "published": true,
    "title": {
     "en": "Wizz",
@@ -11488,7 +11488,7 @@
   {
    "id": "les-debuts",
    "section": "work",
-   "order": 46,
+   "order": 48,
    "published": true,
    "title": {
     "fr": "Les débuts",
@@ -11658,7 +11658,7 @@
     "media/logos/danone.png",
     "media/logos/france-24.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "pubs-interactives",
@@ -11875,7 +11875,7 @@
   {
    "id": "audio-processing",
    "section": "work",
-   "order": 47,
+   "order": 49,
    "published": true,
    "title": {
     "fr": "Détection de l’humeur musicale",
@@ -11937,7 +11937,7 @@
   {
    "id": "recherche",
    "section": "work",
-   "order": 48,
+   "order": 50,
    "published": true,
    "title": {
     "fr": "IA pour la musique",
@@ -12008,7 +12008,7 @@
   {
    "id": "mood-cloud",
    "section": "work",
-   "order": 49,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Mood Cloud",
@@ -12107,7 +12107,7 @@
   {
    "id": "music-tech-fest-2",
    "section": "work",
-   "order": 50,
+   "order": 42,
    "published": true,
    "title": {
     "en": "MusicBricks",
@@ -12310,7 +12310,7 @@
   {
    "id": "nouveau-contenu",
    "section": "work",
-   "order": 51,
+   "order": 52,
    "published": false,
    "title": {
     "en": "Immersive spacialize sound",
@@ -12363,7 +12363,7 @@
   {
    "id": "complete-revolution",
    "section": "work",
-   "order": 52,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Complete Revolution",
@@ -12446,7 +12446,7 @@
   {
    "id": "echo",
    "section": "work",
-   "order": 53,
+   "order": 44,
    "published": true,
    "title": {
     "fr": "Echo",
