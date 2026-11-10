@@ -1454,9 +1454,10 @@ function homeVideoFields(s) {
     catch (e) { toast(e.message, 'bad', 8000); }
   });
   drawName();
-  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en carrés, plein écran'),
+  return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Vidéo de l’accueil, en ronds ou en carrés, plein écran'),
     h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, btn(hvs.src ? 'Remplacer la vidéo…' : 'Choisir une vidéo…', pick, 'sm'), hvs.src ? btn('Retirer', () => { hvs.src = ''; change(); drawName(); }, 'sm ghost') : null, name),
     h('p', { class: 'hint' }, 'MP4 sans son ou avec, en boucle : un extrait de 20 à 30 secondes en 720p suffit (moins de 15 Mo). Elle démarre à un endroit au hasard. Une vidéo YouTube ne marche pas ici : il faut le fichier.'),
+    h('div', { class: 'grid2', style: { marginTop: '10px' } }, field('Forme', selectInput([{ value: 'round', label: 'Des ronds' }, { value: 'square', label: 'Des carrés' }], () => hvs.shape === 'square' ? 'square' : 'round', v => { if (v === 'square') hvs.shape = 'square'; else delete hvs.shape; }))),
     h('div', { style: { marginTop: '10px' } }, toggle('Réglage au hasard à chaque visite (grille, contraste, delay, couleur, sens)', () => hvs.random !== false, v => { hvs.random = v; renderMain(); })),
     hvs.random !== false ? h('p', { class: 'hint' }, 'Chaque visiteur arrive sur une combinaison différente, puis la change avec le panneau de réglages. Coupe cet interrupteur pour fixer le réglage ci-dessous.') : h('div', { style: { marginTop: '10px' } },
       hvFader(hvs, 'cell', 'Carrés (px)', 14, 3, 40, 1, 'La taille de la grille. Petit : plus de carrés, image plus fine.'),

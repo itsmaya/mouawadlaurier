@@ -2733,7 +2733,7 @@ function setupHomeVideo() {
   const shade = document.createElement('div'); shade.className = 'hv-shade';
   band.prepend(cv, shade);
   if (window.ResizeObserver) new ResizeObserver(() => hvSize()).observe(cv);   // la barre de Safari se replie : la bande grandit, la grille suit
-  hv = { cv, ctx: cv.getContext('2d'), off: document.createElement('canvas'), cell: +cfg.cell || 14, gamma: +cfg.contrast || 1, fill: (+cfg.size || 92) / 100,
+  hv = { cv, ctx: cv.getContext('2d'), off: document.createElement('canvas'), cell: +cfg.cell || 14, gamma: +cfg.contrast || 1, fill: (+cfg.size || 92) / 100, round: cfg.shape !== 'square',   // des ronds (ou des carrés, Réglages › Accueil)
     color: HV_COLORS.includes(cfg.color) ? cfg.color : 'white', mode: cfg.mode === 'dark' ? 'dark' : 'light', delay: Math.max(1, Math.min(HV_MAX_DELAY, +cfg.delay || 1)), sound: false, cam: null, video: null, pics: [], lo: 0, hi: 1,
     tainted: false, last: 0, t0: performance.now() - Math.random() * 60000, W: 0, H: 0, interval: 1000 / 30, floor: 0, cost: 0, slow: 0, fast: 0 };
   hv.octx = hv.off.getContext('2d', { willReadFrequently: true });
@@ -3277,14 +3277,14 @@ function hvSource(t) {
    l'image en blocs (moitié) + une pyramide par case (moitié), puis un seuil très dur : chaque case garde un carré d'autant plus grand que le bloc est clair. */
 const canFilter = (() => { try { const c = document.createElement('canvas').getContext('2d'); return typeof c.filter === 'string'; } catch (e) { return false; } })();
 function hvPyramid(cell) {
-  if (hv.pyr && hv.pyr.cell === cell && hv.pyr.fill === hv.fill) return hv.pyr.pat;
+  if (hv.pyr && hv.pyr.cell === cell && hv.pyr.fill === hv.fill && hv.pyr.round === hv.round) return hv.pyr.pat;
   const c = document.createElement('canvas'); c.width = c.height = cell; const x = c.getContext('2d'), im = x.createImageData(cell, cell), half = cell / 2;
   for (let j = 0; j < cell; j++) for (let i = 0; i < cell; i++) {
-    const dd = Math.max(Math.abs(i + 0.5 - half), Math.abs(j + 0.5 - half)) / half, v = Math.max(0, Math.min(1, 1 - dd / hv.fill)) * 255, q = (j * cell + i) * 4;
+    const dd = (hv.round ? Math.hypot(i + 0.5 - half, j + 0.5 - half) / 1.12 : Math.max(Math.abs(i + 0.5 - half), Math.abs(j + 0.5 - half))) / half, v = Math.max(0, Math.min(1, 1 - dd / hv.fill)) * 255, q = (j * cell + i) * 4;
     im.data[q] = im.data[q + 1] = im.data[q + 2] = v; im.data[q + 3] = 255;
   }
   x.putImageData(im, 0, 0);
-  hv.pyr = { cell, fill: hv.fill, pat: hv.ctx.createPattern(c, 'repeat') };
+  hv.pyr = { cell, fill: hv.fill, round: hv.round, pat: hv.ctx.createPattern(c, 'repeat') };
   return hv.pyr.pat;
 }
 function hvComposite(cols, rows, cell) {
@@ -3377,7 +3377,8 @@ function hvSquares(d, cols, rows, cell, ex = -1, intro = -1) {
         else sz *= 1 - zeno(3 + 4 * w, intro);
         if (sz < 0.6) continue;
       }
-      m.rect(cx - sz / 2, cyy - sz / 2, sz, sz);   // une seule forme pour toute la grille : un seul dessin
+      if (hv.round) { const r = Math.min(sz * 0.56, cell / 2); m.moveTo(cx + r, cyy); m.arc(cx, cyy, r, 0, 6.2832); }   // un rond un peu plus large que le carré : la même lumière
+      else m.rect(cx - sz / 2, cyy - sz / 2, sz, sz);   // une seule forme pour toute la grille : un seul dessin
     }
   }
   m.fill();
@@ -3397,7 +3398,7 @@ function hvGLInit(under) {
     const pr = gl.createProgram();
     gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
     gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, `precision highp float;
-uniform sampler2D T;uniform vec2 grid,org,res;uniform float cell,maxs,lo,k,gam,dark,ex,intro,dpr,src;uniform vec3 col,bg;
+uniform sampler2D T;uniform vec2 grid,org,res;uniform float cell,maxs,lo,k,gam,dark,ex,intro,dpr,src,rnd;uniform vec3 col,bg;
 void main(){
   vec2 p=vec2(gl_FragCoord.x,res.y-gl_FragCoord.y)/dpr-org;vec2 ci=floor(p/cell);
   if(ci.x<0.||ci.y<0.||ci.x>=grid.x||ci.y>=grid.y){gl_FragColor=vec4(bg,1.);return;}
@@ -3408,7 +3409,7 @@ void main(){
   float w=sz/maxs;
   if(ex>=0.)sz*=pow(1.-1./(2.4+4.6*w),ex*.06);else if(intro>=0.)sz*=1.-pow(1.-1./(3.+4.*w),intro*.06);
   vec2 d=abs(p-(ci+.5)*cell);float h=sz*.5;
-  float a=clamp((h-d.x)*dpr+.5,0.,1.)*clamp((h-d.y)*dpr+.5,0.,1.);if(sz<.6)a=0.;
+  float a=rnd>.5?clamp((min(h*1.12,cell*.5)-length(d))*dpr+.5,0.,1.):clamp((h-d.x)*dpr+.5,0.,1.)*clamp((h-d.y)*dpr+.5,0.,1.);if(sz<.6)a=0.;
   gl_FragColor=vec4(mix(bg,src>.5?s.rgb:col,a),1.);
 }`));
     gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
@@ -3418,7 +3419,7 @@ void main(){
     const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
     [[gl.TEXTURE_MIN_FILTER, gl.NEAREST], [gl.TEXTURE_MAG_FILTER, gl.NEAREST], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(([a, b]) => gl.texParameteri(gl.TEXTURE_2D, a, b));
     gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-    const u = {}; ['grid', 'org', 'res', 'cell', 'maxs', 'lo', 'k', 'gam', 'dark', 'ex', 'intro', 'dpr', 'src', 'col', 'bg'].forEach(n => { u[n] = gl.getUniformLocation(pr, n); });
+    const u = {}; ['grid', 'org', 'res', 'cell', 'maxs', 'lo', 'k', 'gam', 'dark', 'ex', 'intro', 'dpr', 'src', 'rnd', 'col', 'bg'].forEach(n => { u[n] = gl.getUniformLocation(pr, n); });
     under.after(c);
     return { c, gl, u, dpr: 1, data: null };
   } catch (e) { return null; }
@@ -3437,7 +3438,7 @@ function hvDraw(d, cols, rows, cell, ex = -1, intro = -1) {
   const col = hexRGB(hv.color === 'grey' ? '#8d8d8d' : hv.color === 'accent' ? (CONTENT.settings.accent || '#ffcc00') : '#f2f2f2');
   gl.uniform2f(u.grid, cols, rows); gl.uniform2f(u.org, (hv.W - cols * cell) / 2, (hv.H - rows * cell) / 2); gl.uniform2f(u.res, G.c.width, G.c.height);
   gl.uniform1f(u.cell, cell); gl.uniform1f(u.maxs, cell * hv.fill); gl.uniform1f(u.lo, hv.lo); gl.uniform1f(u.k, 1 / (hv.hi - hv.lo)); gl.uniform1f(u.gam, hv.gamma);
-  gl.uniform1f(u.dark, hv.mode === 'dark' ? 1 : 0); gl.uniform1f(u.ex, ex); gl.uniform1f(u.intro, intro); gl.uniform1f(u.dpr, G.dpr); gl.uniform1f(u.src, hv.color === 'source' ? 1 : 0);
+  gl.uniform1f(u.dark, hv.mode === 'dark' ? 1 : 0); gl.uniform1f(u.ex, ex); gl.uniform1f(u.intro, intro); gl.uniform1f(u.dpr, G.dpr); gl.uniform1f(u.src, hv.color === 'source' ? 1 : 0); gl.uniform1f(u.rnd, hv.round ? 1 : 0);
   gl.uniform3f(u.col, col[0], col[1], col[2]); gl.uniform3f(u.bg, 11 / 255, 11 / 255, 11 / 255);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
