@@ -792,12 +792,11 @@ const LAYOUT = {
     move(view, dx) { view.postViews.forEach((p, i) => { if (!p.ready) return; const th = p.thumb, mv = Math.pow(-1, i) * dx * (Math.random() * 2 + 1); th.y -= (th.y - p.p2.y + mv) * ease(2 * STYLE.cameraEaseSpeed); th.z -= (th.z - p.p2.z + mv) * ease(2 * STYLE.cameraEaseSpeed); }); },
   },
   map: {        // DistributeView3D : les cartes posées par ville
-    /* MAP_CARD_Y : hauteur des fiches au-dessus de la carte (1 = la hauteur d'origine) */
     offsets: [[250, 200], [0, -50], [400, 0], [-600, -100], [-500, 200]],
     preset(view) { view.angle = Math.PI / (view.n + 1); },
     coords(view, i) { return mapCoords(view.posts[i].location) || [((i % 5) - 2) * 160, ((i % 3) - 1) * 120]; },
     offset(i) { return this.offsets[i] || [(i % 2 ? 1 : -1) * (300 + 40 * i), ((i % 3) - 1) * 160]; },
-    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i), k = camK(view.def), y = (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)) * Math.min(1, 0.2 + k); return { x: c[0] + d[0], y: Math.max(p.height / 2 + 60, y * MAP_CARD_Y), z: c[1] + d[1], rotY: 180 }; },   // caméra plus proche : les fiches descendent vers la carte ; posées plus bas, près des lieux
+    position(view, p, i) { const c = this.coords(view, i), d = this.offset(i), k = camK(view.def); return { x: c[0] + d[0], y: 0.8 * (STYLE.planeDistance + p.height + Math.pow(-1, i + 1) * STYLE.planeDisOrder / (Math.random() + 1)) * Math.sin(view.angle * (i + 1)) * Math.min(1, 0.2 + k), z: c[1] + d[1], rotY: 180 }; },   // caméra plus proche : les fiches descendent vers la carte (20 % plus bas qu'à l'origine)
     open: 'oneStep', lineEnd(p, view, i) { const c = this.coords(view, i); return [c[0], 50, c[1]]; }, lineStart: (p, th) => [th.x, th.y - p.height / 2, th.z],
     focus: (view, id) => focusFront(view, id, p => { const xp = p.p2.x * (p.width / 2) / Math.hypot(p.p2.x, p.p2.y) + p.p2.x; p.jump(p.p2.x, p.p2.y * xp / (p.p2.x || 1e-6), p.p2.z); }),
     move(view, dx) { view.postViews.forEach((p, i) => { if (!p.ready || isTweening(p.thumb)) return; const th = p.thumb, mv = -Math.abs(dx * (Math.random() * 2 + 1)) / 2; th.x -= (th.x - p.p2.x + mv) * ease(2 * STYLE.cameraEaseSpeed); const inf = view.infos[i]; if (inf) inf.p.x = p.p2.x - p.width - 20 - (th.x - p.p2.x); }); },
@@ -828,8 +827,7 @@ const LAYOUT = {
    Debout, la grille s'allonge en hauteur ; couché, en largeur. Le nombre de colonnes est celui qui donne les plus grandes
    vignettes dans la place laissée libre par le menu, la signature et le logo, et la caméra s'approche pour la cadrer.
    Sur grand écran, rien ne change. */
-var MAP_CARD_Y = 0.5, MAP_PAN_SX = -1, MAP_PAN_SZ = -1;
-const GRID_LAYOUTS = ['fan', 'arc'];   // la carte du monde reste en 3D sur téléphone : on la parcourt du doigt et on zoome en pinçant
+const GRID_LAYOUTS = ['fan', 'arc', 'map'];
 const gridWanted = def => phoneMode() && GRID_LAYOUTS.includes(def.layout);
 const ZOOMF = () => CAMERA.zoom * CAMERA.focus * Math.min(1, W / 900);   // pixels à l'écran pour une unité à une unité de l'œil
 function freeRect() {   // la zone de l'écran que l'interface laisse libre
@@ -1072,10 +1070,6 @@ class PostsView3D {
       this.net.sc = sc;
     }
     for (const p of this.postViews) if (p.ready) p.apply();
-    if (this.def.layout === 'map' && !this.L.grid) {   // carte zoomée : les fiches s'effacent, la caméra passe entre les pays sans les traverser
-      const show = mapZoomT() < 0.3;
-      if ((this.mapShow ?? true) !== show) { this.mapShow = show; this.postViews.forEach((p, i) => { p.group.visible = show; if (this.lines[i]) this.lines[i].visible = show; const inf = this.infos[i]; if (inf) inf.mesh.visible = show; }); }
-    }
     this.following.forEach(p => this.followLine(p, p.id_));
     this.infos.forEach(inf => { if (!inf) return; inf.mesh.position.set(...postLocal(inf.p.x, inf.p.y, inf.p.z)); inf.mesh.rotation.y = -(inf.p.rotY + 180) * D2R; });
     if (this.focusInfo && this.focusInfo.target) {   // collée au portrait : même orientation, posée sur sa droite
@@ -1149,21 +1143,12 @@ function mapFocus() {   // le cœur du réseau, en coordonnées Papervision
   const f = postsView && postsView.net && postsView.net.focus; if (!f) return null;
   f.getWorldPosition(_fw); return { x: _fw.x, y: _fw.y, z: -_fw.z };
 }
-/* Sur la carte zoomée, on glisse du doigt ou de la souris pour aller voir d'autres pays : mapPan décale le centre de l'orbite */
-const mapPan = { x: 0, z: 0 };
 function orbitCenter() {
   const s = curSec(), t = mapZoomT(), f = t ? mapFocus() : null;
   const ty0 = camTargetY(), v = gridView();
   if (v) return { x: s.p.x - gridCam(v).dx, z: s.p.z, ty: ty0 };   // la grille au centre de la place libre
   if (!f) return { x: s.p.x, z: s.p.z, ty: ty0 };
-  return { x: s.p.x + (f.x - s.p.x + mapPan.x) * t, z: s.p.z + (f.z - s.p.z + mapPan.z) * t, ty: ty0 + (f.y - ty0) * t };
-}
-function panMap(dx, dy) {   // la carte suit le geste, dans le sens où on la tire
-  if (!orbitE) orbitE = orbitNow();
-  const k = (camD() + CAMERA.focus) / ZOOMF() / Math.max(0.2, mapZoomT()), a = P.actualDeg;
-  mapPan.x += (-Math.cos(a) * dx + Math.sin(a) * dy) * k * MAP_PAN_SX;
-  mapPan.z += (Math.sin(a) * dx + Math.cos(a) * dy) * k * MAP_PAN_SZ;
-  mapPan.x = Math.max(-650, Math.min(650, mapPan.x)); mapPan.z = Math.max(-320, Math.min(320, mapPan.z));
+  return { x: s.p.x + (f.x - s.p.x) * t, z: s.p.z + (f.z - s.p.z) * t, ty: ty0 + (f.y - ty0) * t };
 }
 const camHeight = () => {   // sur la carte zoomée, la caméra descend avec la distance : même angle, jamais sous la carte
   if (!isMap() || gridView()) return camHeightBase();
@@ -1231,11 +1216,7 @@ function onStageResize3D() {
 }
 function renderMachine() {
   if (!inputEnabled) { if (Math.abs(cam.y - P.cameraY) > 0.007 && !isTweening(cam)) cam.y -= (cam.y - P.cameraY) * ease(STYLE.cameraEaseSpeed); return; }
-  if (isClicking && isMap() && !gridView() && mapZoomT() > 0.05) {   // carte zoomée : le geste fait glisser la carte au lieu de tourner autour
-    easeSpeed = STYLE.cameraEaseSpeed;
-    panMap(mouseX - prevX, mouseY - prevY);
-    prevX = mouseX; prevY = mouseY;
-  } else if (isClicking) {
+  if (isClicking) {
     easeSpeed = STYLE.cameraEaseSpeed;
     const deg = P.degreeCamera;
     P.degreeCamera += (mouseX - prevX) / 150;
@@ -2378,8 +2359,8 @@ const isMap = () => (((curSec() || {}).def || {}).layout === 'map');
 const zoomMin = () => (isMap() ? 60 : STYLE.cameraZoomMin);
 function zoomOut() { if (STYLE.cameraDistanceProportion < STYLE.cameraZoomMax) { STYLE.cameraDistanceProportion = Math.min(STYLE.cameraZoomMax, Math.trunc(STYLE.cameraDistanceProportion * 1.5)); zoomMoved(); } }
 function zoomIn() { if (STYLE.cameraDistanceProportion > zoomMin()) { STYLE.cameraDistanceProportion = Math.trunc(STYLE.cameraDistanceProportion / 1.5); zoomMoved(); } }
-function zoomMoved() { if (isMap() && STYLE.cameraDistanceProportion >= zoomBase) { mapPan.x = 0; mapPan.z = 0; } if (isMap() || gridView()) P.cameraY = camHeight(); onStageResize3D(); }
-function resetZoom() { mapPan.x = 0; mapPan.z = 0; if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
+function zoomMoved() { if (isMap() || gridView()) P.cameraY = camHeight(); onStageResize3D(); }
+function resetZoom() { if (STYLE.cameraDistanceProportion === zoomBase) return; STYLE.cameraDistanceProportion = zoomBase; setCamera(); }
 let touchedKeyboard = false;
 function keyBoardNavigation(e) {
   if (!inputEnabled) return;
