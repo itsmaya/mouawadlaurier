@@ -939,9 +939,7 @@
    "tags": [
     "featured",
     "permanent",
-    "collab",
-    "ai",
-    "software"
+    "collab"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
@@ -1087,7 +1085,7 @@
     "media/logos/ruinart.png",
     "media/nasonmoretti/nasonmoretti-qjex.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "rising",
@@ -7159,7 +7157,7 @@
    },
    "date": "2020",
    "tags": [
-    "ai"
+    "collab"
    ],
    "thumb": "media/poussiere-detoile/01.jpg",
    "thumbBack": "",
@@ -7213,7 +7211,7 @@
    "logos": [
     "media/logos/fisheye.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "fuurin",
