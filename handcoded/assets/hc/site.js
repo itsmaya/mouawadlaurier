@@ -691,7 +691,7 @@ class PostView {
   apply() {
     const th = this.thumb, g = this.group;
     g.position.set(...postLocal(th.x, th.y, th.z));
-    g.rotation.order = this.tiltLocal ? 'YXZ' : 'XYZ';   // ouverte et penchée : l'inclinaison se fait autour de son propre axe
+    g.rotation.order = th.scale > 1.001 ? 'YXZ' : 'XYZ';   // seule la carte ouverte, agrandie, se penche autour de son propre axe ; les autres animations gardent leur sens
     g.rotation.y = -(th.rotY + 180) * D2R; g.rotation.x = -th.rotX * D2R; g.rotation.z = th.rotZ * D2R;
     g.scale.setScalar(Math.max(1e-4, th.scale));
     if (this.band) this.drawBand();
@@ -709,11 +709,10 @@ class PostView {
     const D = camD(), cl = { x: -D * Math.sin(P.degreeCamera), z: -D * Math.cos(P.degreeCamera) }, p = this.p2;
     const dx = p.x - cl.x, dz = p.z - cl.z, len = Math.hypot(dx, dz) || 1;
     const tilt = scale > 1 ? Math.atan2(p.y - camTargetY(), camD() || 1) / D2R : 0;   // agrandie et tout près : elle se penche comme l'objectif (la caméra se met à sa hauteur), sans déformation
-    this.tiltLocal = true;
     to(this.thumb, time, { x: cl.x + dx * distance / len, y: p.y, z: cl.z + dz * distance / len, rotY: p.rotY + 720, rotX: tilt, scale }, { ease: 'quartOut' });
     return { cl, dir: { x: dx / len, z: dz / len } };
   }
-  moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ, scale: 1 }, { ease: 'quartOut', onComplete: () => { this.tiltLocal = false; } }); }
+  moveBack(time = 0) { killTweensOf(this.thumb); const p = this.p2; to(this.thumb, time, { x: p.x, y: p.y, z: p.z, rotX: p.rotX, rotY: p.rotY, rotZ: p.rotZ, scale: 1 }, { ease: 'quartOut' }); }
   jump(x, y, z) { to(this.thumb, STYLE.tween / 2, { x, y, z }, { ease: 'quartOut', onComplete: () => to(this.thumb, STYLE.tween / 2, { x: this.p2.x, y: this.p2.y, z: this.p2.z }, { ease: 'quartOut' }) }); }
   /* Survol : le nom et la description montent du bas de la photo, dans un bandeau noir transparent, coupé au bord de la carte */
   setBand(band) {
