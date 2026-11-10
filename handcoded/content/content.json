@@ -203,14 +203,14 @@
    "sig1": {
     "font": "g:Instrument Serif",
     "italic": true,
-    "size": 44,
+    "size": 42,
     "lh": 58
    },
    "sig2": {
     "font": "g:Inter Tight",
     "weight": 500,
-    "size": 17,
-    "lh": 24
+    "size": 16,
+    "lh": 19
    },
    "menu": {
     "font": "g:Inter Tight",
@@ -262,7 +262,8 @@
    },
    "csub": {
     "font": "g:Inter Tight",
-    "size": 17
+    "size": 17,
+    "lh": 21
    },
    "cinfo": {
     "font": "g:Inter Tight"
