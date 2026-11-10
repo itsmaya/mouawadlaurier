@@ -1907,7 +1907,8 @@
    "link": "http://www.romaintardy.com",
    "team": [
     "romain-tardy",
-    "cyril"
+    "cyril",
+    "laurent-delforge"
    ],
    "credits": "Loran Delforge, Jesler Amarins, Squeaky Lobster",
    "location": null,
@@ -1929,7 +1930,7 @@
    "logos": [
     "media/logos/mta-festival.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-10"
   },
   {
    "id": "ox",
