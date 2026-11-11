@@ -1287,12 +1287,12 @@ html.neg #hc-ov .tx::before { background: var(--accent-raw, #ffcc00); }   /* la 
 
 /* ===== maj-158 : la vue d'ensemble garde tous les projets ; une catégorie fait ressortir les siens ===== */
 #hc-ov .t img { transition: transform .9s cubic-bezier(.17,.84,.44,1), filter .5s, opacity .5s; }
-#hc-ov .mos.sel .t.dim img { filter: grayscale(1) brightness(.5); opacity: .45; }
+#hc-ov .mos.sel .t.dim { background: #f1f1f1; }   /* maj-159 : les projets hors catégorie passent en gris très clair, sans cadre autour des autres */
+#hc-ov .mos.sel .t.dim img { filter: grayscale(1) contrast(.8); opacity: .14; }
 #hc-ov .mos.sel .t.dim .tx, #hc-ov .mos.sel .t.dim em { opacity: 0; }
 #hc-ov .mos.sel .t.hit .tx { opacity: 1; transform: none; }
 #hc-ov .mos.sel .t.hit em { opacity: .85; }
-#hc-ov .mos.sel .t.hit::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 2px var(--accent); pointer-events: none; }
-html.neg #hc-ov .mos.sel .t.hit::after { box-shadow: inset 0 0 0 2px var(--accent-raw, #ffcc00); }
+html.neg #hc-ov .mos.sel .t.dim { filter: none; }   /* la nuit : le gris clair devient un gris très sombre, comme le reste de la page inversée */
 @media (hover: hover) { #hc-ov .mos.sel .t.dim:hover img { filter: none; opacity: 1; } #hc-ov .mos.sel .t.dim:hover .tx { opacity: 1; } }
 
 /* ===== maj-158 : à l'ouverture, en attendant la vidéo, le rond jaune bat comme un cœur ===== */
