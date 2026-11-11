@@ -162,7 +162,7 @@ const canvas = document.getElementById('stage');
    elle sort du <body> et s'inverse elle-même dans WebGL, en une passe (le même résultat, sans recalcul du filtre à chaque image) */
 if (canvas && canvas.parentNode === document.body) document.documentElement.insertBefore(canvas, document.body);
 /* l'accueil, l'ouverture et le message d'erreur sortent aussi du <body> : ils gardent leurs vraies couleurs sans être inversés deux fois */
-['home', 'hc-intro', 'load-error'].forEach(id => { const el = document.getElementById(id); if (el && el.parentNode === document.body) document.documentElement.appendChild(el); });
+['home', 'hc-intro'].forEach(id => { const el = document.getElementById(id); if (el && el.parentNode === document.body) document.documentElement.appendChild(el); });
 /* Écran Retina : l'image est déjà calculée deux fois plus fine, l'antialiasing matériel n'y ajoute presque rien et coûte cher à la carte graphique */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: (window.devicePixelRatio || 1) < 1.75, powerPreference: 'high-performance' });
 renderer.debug.checkShaderErrors = false;
@@ -170,27 +170,26 @@ renderer.debug.checkShaderErrors = false;
    l'opacité de la toile ne bouge pas. Une seule passe, sur la carte graphique. */
 const NEG_SCENE = new THREE.Scene(), NEG_CAM = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 NEG_SCENE.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, depthTest: false, depthWrite: false,
-  blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.OneMinusDstColorFactor, blendDst: THREE.OneMinusSrcColorFactor,   // a·(1−c) + (1−a)·c : invert(a)
+  blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.OneMinusDstColorFactor, blendDst: THREE.ZeroFactor,   // 1 − c : invert(1)
   blendEquationAlpha: THREE.AddEquation, blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor })));
 NEG_SCENE.children[0].frustumCulled = false;
-let negDrawn = null, negAmt = null;
+let negDrawn = null, negShown = null;   // negShown : le négatif réellement affiché par la 3D (il suit negMode quand les cartes sont prêtes)
 function render3D() {
-  if (negAmt === null) negAmt = negMode ? 1 : 0;   // à l'arrivée : tout de suite, sans fondu
+  if (negShown === null) negShown = negMode;
   renderer.render(scene, camera);
-  if (negAmt > 0) { NEG_SCENE.children[0].material.color.setScalar(negAmt); const ac = renderer.autoClear; renderer.autoClear = false; renderer.render(NEG_SCENE, NEG_CAM); renderer.autoClear = ac; }
-  negDrawn = negAmt;
+  if (negShown) { const ac = renderer.autoClear; renderer.autoClear = false; renderer.render(NEG_SCENE, NEG_CAM); renderer.autoClear = ac; }
+  negDrawn = negShown;
 }
-/* la bascule : 0,45 s, la même durée et la même courbe que le filtre des textes (ease) */
-let negFrom = 0, negAt = 0;
-function negStep(now) {
-  const want = negMode ? 1 : 0; if (negAmt === null || negAmt === want) return;
-  if (!negAt) { negAt = now; negFrom = negAmt; }
-  const t = Math.min(1, (now - negAt) / 450), e = t < 1 ? cubicBez(0.25, 0.1, 0.25, 1, t) : 1;
-  negAmt = negFrom + (want - negFrom) * e; if (t >= 1) { negAmt = want; negAt = 0; }
-}
-function cubicBez(x1, y1, x2, y2, x) {   // la courbe « ease » du CSS
-  let a = x; for (let i = 0; i < 8; i++) { const cx = 3 * x1 * a * (1 - a) ** 2 + 3 * x2 * a * a * (1 - a) + a ** 3 - x, d = 3 * x1 * (1 - a) ** 2 + 6 * (x2 - x1) * a * (1 - a) + 3 * (1 - x2) * a * a; if (Math.abs(d) < 1e-6) break; a = Math.max(0, Math.min(1, a - cx / d)); }
-  return 3 * y1 * a * (1 - a) ** 2 + 3 * y2 * a * a * (1 - a) + a ** 3;
+/* maj-168 : la bascule se fait d'un coup, quand tout est prêt. On redessine d'abord les cartes (photos pré-inversées) sans rien montrer,
+   puis on pose dans la même image les cartes, le négatif de la 3D et celui des textes : plus de photo qui passe une fraction de seconde en négatif. */
+let negToken = 0;
+async function applyNeg() {
+  const t = ++negToken;
+  if (postsView) { try { await postsView.retexture(() => t === negToken); } catch (e) {} }
+  if (t !== negToken) return;
+  const R = document.documentElement; R.classList.add('neg-switch');   // le temps d'une image : aucune transition de filtre (vignettes, visages) ne traîne derrière
+  renderTexts(); negShown = negMode; try { render3D(); } catch (e) {}
+  requestAnimationFrame(() => requestAnimationFrame(() => R.classList.remove('neg-switch')));
 }   // pas de lecture des journaux de compilation : le navigateur compile les shaders sans bloquer l'image
 /* Finesse de l'image adaptée à la machine : on part de la pleine finesse, on descend par paliers si l'image n'arrive plus à suivre, on remonte quand ça va mieux */
 const DPR_MAX = Math.min(window.devicePixelRatio || 1, 2), DPR_MIN = Math.min(DPR_MAX, DPR_MAX >= 2 ? 1.25 : 1);
@@ -265,7 +264,7 @@ function visitorNeg() {
   try { const m = /^([01])(?:@(\d+))?$/.exec(localStorage.getItem('hc-neg') || ''); if (m && (!autoNeg() || (m[2] && Date.now() < +m[2]))) return m[1] === '1'; } catch (e) {}
   return null;
 }
-function setNeg(v) { if (v === negMode) return; negMode = v; renderTexts(); if (postsView) postsView.retexture(); }
+function setNeg(v) { if (v === negMode) return; negMode = v; applyNeg(); }
 /* Le site bascule de lui-même au lever et au coucher du soleil si la page reste ouverte (et au retour sur un onglet resté en veille) */
 function watchSun() {
   clearTimeout(sunTimer); if (!autoNeg()) return;
@@ -1177,21 +1176,29 @@ class PostsView3D {
       f.mesh.position.copy(g.position).add(_side).add(_back);
     }
   }
-  async retexture() {   // après un passage négatif / positif
-    if (this.net) { lineMatNet.color.set(accent()); this.net.mats.on.color.set(accent()); }
+  async retexture(still = () => true) {   // après un passage négatif / positif. maj-168 : toutes les cartes sont préparées, puis posées dans la même image
     const swap = (mesh, tex) => { const old = mesh.material.map; mesh.material.map = tex; mesh.material.needsUpdate = true; return old; };
+    const ready = [];
+    const drop = () => ready.forEach(r => (r.all || []).forEach(x => x && x.dispose()));
     for (let i = 0; i < this.n; i++) {
       const pv2 = this.postViews[i]; if (!pv2.ready) continue;
       let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
-      if (!this.alive) { [tex[0], tex[1], tex[2] && tex[2].tex, tex[3]].forEach(x => x && x.dispose()); return; }
+      const inf = this.infos[i]; let it = null; if (inf) { try { it = await infoTexture(this.posts[i], 'place'); } catch (e) {} }
+      ready.push({ i, pv2, tex, inf, it, all: [tex[0], tex[1], tex[2] && tex[2].tex, tex[3], it] });
+      if (!this.alive || !still()) { drop(); return false; }
+    }
+    let fit = null; if (this.focusInfo && this.focusInfo.mesh.material.map && P.postOpen) { try { fit = await infoTexture(this.posts[P.selected], 'person'); } catch (e) {} }
+    if (!this.alive || !still()) { drop(); if (fit) fit.dispose(); return false; }
+    if (this.net) { lineMatNet.color.set(accent()); this.net.mats.on.color.set(accent()); }
+    ready.forEach(({ pv2, tex, inf, it }) => {
       const k = pv2.band ? pv2.band.k : 0;
       pv2.setBand(tex[2] || null); if (pv2.band && k) { pv2.band.k = k; pv2.hover(hovered === pv2); }
       new Set([swap(pv2.meshes[0], tex[0]), swap(pv2.meshes[1], tex[1])]).forEach(x => x && x.dispose());
       if (pv2.bhi && tex[3]) { const o = swap(pv2.bhi.mesh, tex[3]); if (o) o.dispose(); } else if (tex[3]) tex[3].dispose();
-      const inf = this.infos[i];
-      if (inf) { const it = await infoTexture(this.posts[i], 'place'); if (!this.alive) { it.dispose(); return; } const o = swap(inf.mesh, it); if (o) o.dispose(); }
-    }
-    if (this.focusInfo && this.focusInfo.mesh.material.map && P.postOpen) { const it = await infoTexture(this.posts[P.selected], 'person'); if (this.alive) { const o = swap(this.focusInfo.mesh, it); if (o) o.dispose(); } }
+      if (inf && it) { const o = swap(inf.mesh, it); if (o) o.dispose(); }
+    });
+    if (fit && this.focusInfo) { const o = swap(this.focusInfo.mesh, fit); if (o) o.dispose(); }
+    return true;
   }
   get meshes() { return this.postViews.flatMap(p => p.meshes); }
   destroy() {
@@ -1538,7 +1545,7 @@ function renderTexts() {
     box.append(cur, opts);
   });
   placeAbout();   // la langue s'insère entre le Showreel et le « i »
-  document.documentElement.style.setProperty('--accent', accent());
+  document.documentElement.style.setProperty('--accent', CONTENT.settings.accent || '#ffcc00');   // maj-169 : l'interface n'est plus inversée la nuit, le jaune reste le jaune
   document.documentElement.style.setProperty('--accent-raw', CONTENT.settings.accent || '#ffcc00');
   document.documentElement.style.setProperty('--accent-inv', invertHex(CONTENT.settings.accent || '#ffcc00'));   // affiché en jaune une fois la page inversée
   buildTickerDots();
@@ -2163,7 +2170,7 @@ const post2D = {
       const f = document.createElement(go ? 'button' : 'div'); f.className = 'face' + (go ? ' go' : ''); if (go) { f.type = 'button'; f.dataset.go = p.id; }
       f.dataset.i = j; Object.assign(f.style, { left: x + 'px', top: y + 'px', width: sz + 'px', height: sz + 'px' });
       const other = !p.thumb && (personProjects(p).find(q => q !== post) || personProjects(p)[0]);   // pas de portrait : un de ses autres projets, voilé, sous les initiales
-      const bg = other ? ` style="background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
+      const bg = other ? ` style="background:linear-gradient(var(--veil),var(--veil)),url('${escapeHTML(url(photoOf(other))).replace(/'/g, '%27')}') center/cover"` : '';
       f.innerHTML = (p.thumb ? smallImg(p.thumb, 'alt="" draggable="false"') : `<span class="mono"${bg}>${escapeHTML(initials(tr(p.title)))}</span>`) + `<b class="n">${num(j)}</b>`;
       f.setAttribute('aria-label', tr(p.title));
       inner.appendChild(f);
@@ -2706,8 +2713,7 @@ function toggleNeg() {
   negMode = !negMode;
   if (autoNeg()) arrivalNeg();   // met à jour sunNext : le choix vaut jusqu'au prochain lever ou coucher
   if (!PREVIEW) try { localStorage.setItem('hc-neg', (negMode ? '1' : '0') + (autoNeg() ? '@' + sunNext : '')); } catch (e) {}
-  renderTexts();
-  if (postsView) postsView.retexture();
+  applyNeg();
 }
 /* Le disque du logo : quand la souris s'approche, un disque d'ombre glisse devant, du côté de la souris, et fait une éclipse.
    L'ombre est un trou dans le disque (masque) : on voit le vrai fond à travers, de jour comme de nuit. */
@@ -2753,7 +2759,7 @@ function renderReel() {
     btn.innerHTML = '<i class="tri"></i><span>Showreel</span>';   // un carré et un triangle « lecture » ; au survol, le mot glisse dans le rectangle
     const box = document.createElement('div'); box.id = 'reel'; box.hidden = true; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Showreel');
     box.innerHTML = '<div class="scrim"></div><div class="scr"><div class="bar"><b>Showreel</b><a class="ext" target="_blank" rel="noopener"></a><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button></div><div class="vid"></div></div>';
-    document.body.append(btn); document.documentElement.appendChild(box);   // l'écran du showreel passe au-dessus de l'accueil, hors du <body>
+    document.body.append(btn, box);
     reel = { btn, box, scr: box.querySelector('.scr'), vid: box.querySelector('.vid'), snd: box.querySelector('.snd'), x: box.querySelector('.x'), ext: box.querySelector('.ext'), src: null, kind: '', player: null, muted: true, open: false, last: null };
     btn.addEventListener('click', () => showreelClick());
     reel.x.addEventListener('click', closeReel);
@@ -3063,7 +3069,7 @@ async function hvPhoto() {
   ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, base);
   ss = wordsSize(ws); ctx.font = smlFont(ss); ctx.textBaseline = 'alphabetic'; const slh = ss * 1.18;
   words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, base - (words.length - 1 - i) * slh));
-  ctx.fillStyle = accent(); ctx.beginPath(); ctx.arc(W - mx - R, top + ws * 0.42, R, 0, Math.PI * 2); ctx.fill();   // le rond du logo, en haut à droite comme sur le site
+  ctx.fillStyle = ST.accent || '#ffcc00'; ctx.beginPath(); ctx.arc(W - mx - R, top + ws * 0.42, R, 0, Math.PI * 2); ctx.fill();   // le rond du logo, en haut à droite comme sur le site
   /* en bas : le texte tapé, jusqu'à quatre lignes, aussi grand que possible */
   const tw = W - 2 * mx; let size = 84, lines = [];
   const track = sz => { if ('letterSpacing' in ctx) ctx.letterSpacing = Math.round((+fT.ls || -0.02) * sz) + 'px'; };
@@ -3071,7 +3077,7 @@ async function hvPhoto() {
   lines = slogan ? lines.slice(0, 4) : [];
   const urlSize = 30, urlY = H - 64 - urlSize, lh = Math.round(size * 1.02), y0 = urlY - 64 - lines.length * lh;
   ctx.textBaseline = 'top';
-  if (lines.length) { ctx.fillStyle = accent(); ctx.fillRect(mx, y0 - 34, 46, 6); }
+  if (lines.length) { ctx.fillStyle = ST.accent || '#ffcc00'; ctx.fillRect(mx, y0 - 34, 46, 6); }
   ctx.fillStyle = '#fff'; ctx.font = ttlFont(size); track(size);
   lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.03, y0 + i * lh));
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
@@ -3862,8 +3868,7 @@ function frame(now) {
     updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
     const busy = tweens.length || now < wakeUntil || now < behindUntil || isClicking || closeTurn || orbitE || now - lastDraw > 2000;
     const sig = sceneSig();
-    negStep(now);
-    if (busy || sig !== lastSig || negDrawn !== negAmt) { render3D(); if (now - drewAt < 100 && homeGone && !document.hidden) dprGovern(now, now - drewAt); drewAt = now; lastDraw = now; lastSig = sig; }
+    if (busy || sig !== lastSig || negDrawn !== negShown) { render3D(); if (now - drewAt < 100 && homeGone && !document.hidden) dprGovern(now, now - drewAt); drewAt = now; lastDraw = now; lastSig = sig; }
   }
   requestAnimationFrame(frame);
 }

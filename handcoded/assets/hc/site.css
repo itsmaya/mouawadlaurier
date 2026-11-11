@@ -197,22 +197,23 @@ button { font: inherit; }
 #net-tip span { display: block; }
 
 /* Mode négatif (Réglages › Apparence) : la page entière est inversée, les photos et vidéos des projets sont ré-inversées pour garder leurs vraies couleurs */
-html.neg body { filter: invert(1); }
+/* maj-169 : plus aucun filtre d'inversion sur la page. La 3D s'inverse elle-même (WebGL) ; l'interface 2D a ses couleurs de nuit écrites en clair (bloc « nuit » généré à la fin de ce fichier). */
 /* maj-167 : la 3D est sortie du <body> (elle s'inverse elle-même dans WebGL) ; le <body> devient transparent et laisse passer les clics vers elle */
 body { background: transparent; }
 html.neg { background: #000; }
-html.neg body { pointer-events: none; }
-:where(html.neg body) > * { pointer-events: auto; }
-html.neg #reel, html.neg #load-error { filter: invert(1); }   /* hors du <body>, ils s'inversent eux-mêmes, comme le reste de l'interface */
-:where(#home, #hc-intro, #reel, #load-error) { font-family: var(--ui); color: var(--ink); }   /* ce qu'ils héritaient du <body> */
-html.neg #strip img, html.neg #strip video, html.neg .face img { filter: invert(1); }   /* le logo par défaut est dessiné pré-inversé : pas de filtre, Safari le repeint mal à la bascule */
-html body { transition: filter .45s ease; }
+
+
+
+:where(#home, #hc-intro) { font-family: var(--ui); color: var(--ink); }   /* ce qu'ils héritaient du <body> */
+
+html.neg-switch, html.neg-switch *, html.neg-switch *::before, html.neg-switch *::after { transition: none !important; }
+/* maj-168 : pas de fondu sur l'inversion des textes : pendant un fondu, les photos remises à l'endroit passaient un instant en négatif. La bascule est franche, au même instant que la 3D. */
 /* Survol du logo : ombre noire nette sur fond blanc ; en négatif, un croissant jaune (la couleur d'accent) derrière le logo */
 #logo.toggle, #home-logo.toggle { pointer-events: auto; cursor: pointer; border-radius: 50%; transition: filter .22s cubic-bezier(.17,.84,.44,1); filter: drop-shadow(0 0 0 transparent); }
 /* Au survol, le disque projette son ombre décalée : noire le jour, jaune la nuit (comme les maquettes de Maya). L'accueil est toujours de nuit. */
 #logo.toggle:hover, #logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 #000); }
-html.neg #logo.toggle { filter: drop-shadow(0 0 0 transparent); }
-html.neg #logo.toggle:hover, html.neg #logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent-inv, #0033ff)); }
+
+
 #home-logo.toggle:hover, #home-logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent)); }
 html.neg #home-logo.toggle:hover, html.neg #home-logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent-raw, #ffcc00)); }   /* l'accueil est remis à l'endroit : la vraie couleur */
 #logo.toggle:focus-visible, #home-logo.toggle:focus-visible { outline: 1px dotted var(--grey-3); outline-offset: 4px; }
@@ -230,9 +231,9 @@ html:not(.neg) #home-logo.toggle:hover, html:not(.neg) #home-logo.toggle:focus-v
 #strip .play, #postv .play { position: absolute; left: 50%; top: 50%; width: 74px; height: 74px; margin: -37px 0 0 -37px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); cursor: pointer; z-index: 1; transition: transform .15s, background .15s; }
 #strip .play::after, #postv .play::after { content: ''; position: absolute; left: 29px; top: 23px; border-style: solid; border-width: 14px 0 14px 23px; border-color: transparent transparent transparent var(--accent); }
 #strip .play:hover, #postv .play:hover { transform: scale(1.08); background: rgba(0,0,0,.75); }
-html.neg #strip iframe, html.neg #strip .cover { filter: invert(1); }
-html.neg #strip .cover img { filter: none; }
-html.neg #strip .cover .play::after { border-left-color: var(--accent-raw, #ffcc00); }
+
+
+
 
 /* Petits écrans : quand une fiche est ouverte et qu'il n'y a plus la place, le menu s'efface (on ferme avec ×) */
 #menu, #langs, #kb { transition: opacity .3s; }
@@ -273,8 +274,9 @@ body.post-cramped #menu, body.post-cramped #langs, body.post-cramped #kb { opaci
 #reel .bar [hidden] { display: none; }
 #reel .vid { position: relative; aspect-ratio: 16 / 9; background: #000; }
 #reel .vid > * { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; object-fit: contain; }
-html.neg #reel .scr { filter: invert(1); }   /* l'écran garde ses vraies couleurs en négatif */
-html.neg #reel .scrim { background: rgba(243,243,243,.62); }
+
+html.neg #reel .scrim { background: rgba(12,12,12,.62); }
+html.neg .face .mono { --veil: rgba(255,255,255,.55); }   /* la nuit : la photo reste à l'endroit, sous un voile clair */
 @media (max-width: 700px) {
   #reel-btn { width: 72px; top: calc(100px + env(safe-area-inset-top, 0px)); gap: 5px; padding: 0 6px; font-size: 9px; letter-spacing: .04em; }
   #reel .scr { width: calc(100vw - 20px); padding: 0 6px 6px; box-shadow: 8px 7px 0 #000; }
@@ -616,7 +618,7 @@ html:has(#home:not([hidden]):not(.out)) #reel-btn { opacity: 0; pointer-events: 
 .face { position: absolute; padding: 0; border: 0; background: #1b1b1b; cursor: default; display: block; }
 .face.go { cursor: pointer; }
 .face img, .face .mono { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.face .mono { display: grid; place-items: center; color: #fff; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 30px; }
+.face .mono { --veil: rgba(0,0,0,.55); display: grid; place-items: center; color: #fff; font-family: var(--f-subtitle, var(--serif)); font-style: var(--st-subtitle, italic); font-size: 30px; }
 .face .n { position: absolute; left: 0; top: 100%; margin-top: 3px; font: 600 9px/12px var(--f-date, var(--ui)); letter-spacing: .06em; color: #fff; }
 .face img { transition: filter .25s; }
 html:not(.neg) .face.on img { filter: brightness(1.12); }
@@ -644,8 +646,8 @@ html:not(.neg) .face.on img { filter: brightness(1.12); }
 .pnl.logos img { position: absolute; left: 18px; top: 13px; width: calc(100% - 36px); height: calc(100% - 26px); display: block; object-fit: contain; user-select: none; -webkit-user-drag: none; }
 .pnl.logos img:not([src]) { visibility: hidden; }
 .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; }   /* image d'un autre site : approximation par filtre */
-html.neg #strip .pnl.logos img { filter: none; }
-html.neg #strip .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6); }
+html.neg #strip .pnl.logos img { filter: invert(1); }   /* la nuit, les logos noirs des partenaires passent en blanc */
+html.neg #strip .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6) invert(1); mix-blend-mode: multiply; }
 
 /* ================================================================ Fiche verticale (téléphone) : on lit de haut en bas, comme une page de magazine */
 #postv { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100dvh; z-index: 30; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; background: var(--panel); color: #fff; transform: translateY(100%); transition: transform .42s cubic-bezier(.25,1,.5,1); touch-action: pan-y; }
@@ -714,13 +716,13 @@ html.neg #strip .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1
 #postv .pv-next .l { font: 600 12px/1.4 var(--f-body, var(--serif)); letter-spacing: .02em; }
 #postv .pv-next .t { margin: 4px 0 14px; font-family: var(--f-title, var(--serif)); font-weight: var(--w-title, 600); letter-spacing: var(--ls-title, 0); font-size: 30px; line-height: 1.02; }
 #postv .pv-next img { aspect-ratio: 16 / 9; object-fit: cover; }
-html.neg #postv img, html.neg #postv video, html.neg #postv iframe { filter: invert(1); }
-html.neg #postv .pv-lgrid img { filter: none; }
-html.neg #postv .pv-cover { filter: invert(1); }
-html.neg #postv .pv-cover img { filter: none; }
-html.neg #postv .pv-cover .play::after { border-left-color: var(--accent-raw, #ffcc00); }
-html.neg #postv .pv-lgrid img.raw { filter: grayscale(1) invert(1) brightness(1.6); }
-html.neg #postv .pv-face img { filter: invert(1) grayscale(1); }
+
+html.neg #postv .pv-lgrid img { filter: invert(1); }   /* la nuit, les logos noirs passent en blanc */
+
+
+
+html.neg #postv .pv-lgrid img.raw { filter: grayscale(1) invert(1) brightness(1.6) invert(1); mix-blend-mode: multiply; }
+
 body.pv-open #kb, body.pv-open #menu, body.pv-open #langs { visibility: hidden; }
 
 /* Accueil : la signature en blanc */
@@ -900,7 +902,7 @@ html:has(#home:not([hidden]):not(.out)) #about-btn, body.post-open-wide #about-b
 #about-card.on { opacity: 1; clip-path: inset(0 0 0 0); }
 #about-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transform: scale(1.06); transition: transform 1.6s cubic-bezier(.17,.84,.44,1); }
 #about-card.on img { transform: none; }
-html.neg #about-card img { filter: invert(1); }   /* la photo garde ses vraies couleurs la nuit */
+
 #about-card figcaption { padding: 20px 24px 24px; }
 #about-card b { position: relative; display: block; margin-bottom: 12px; padding-top: 12px; font: bold 11px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
 #about-card b::before { content: ''; position: absolute; left: 0; top: 0; width: 28px; height: 3px; background: var(--accent); }
@@ -969,8 +971,8 @@ html.neg #about-card img { filter: invert(1); }   /* la photo garde ses vraies c
 .pnl.idx .go:hover .no, .pnl.idx .go:focus-visible .no { color: var(--accent); }
 .pnl.idx .go:hover .t, .pnl.idx .go:focus-visible .t { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .pnl.idx .go:focus-visible { outline: none; }
-html.neg #strip .pnl.idx .th img { filter: grayscale(1) invert(1); }
-html.neg #strip .pnl.idx .go:hover .th img { filter: invert(1); }
+
+
 
 /* Téléphone, caméra allumée : le panneau devient une barre en bas de l'écran, le visage reste visible au-dessus */
 #hv-panel .hd .more { display: none; margin-left: 6px; width: 30px; height: 22px; padding: 0; border: 1px solid #333; background: #1b1b1b; color: #ddd; font: bold 14px/20px var(--ui); cursor: pointer; }
@@ -998,7 +1000,7 @@ html.neg #strip .pnl.idx .go:hover .th img { filter: invert(1); }
   #hc-story { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); width: auto; bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 100lvh - 100dvh); max-height: min(62dvh, calc(100dvh - 170px)); }
   #hc-story .shots a { flex-basis: 72%; }
 }
-html.neg #postv figure.pv-logo { background: #000; }   /* le site en négatif est inversé en bloc : ce noir s’affiche blanc */
+html.neg #postv figure.pv-logo { background: #fff; }
 /* maj-167 : l'ouverture est sortie du <body> inversé : ses vraies couleurs, sans filtre */
 
 /* L'ouverture : la phrase du studio au centre de l'accueil, ligne par ligne ; la vidéo reste noire jusqu'au départ de la dernière ligne */
@@ -1055,8 +1057,8 @@ html.hc-late #ticker, html.hc-late #home-dock, html.hc-stage #enter { opacity: 0
 #seo-page article, #seo-page header, #seo-page section, #seo-page aside, #seo-page footer { max-width: 760px; }
 /* Plein écran : la vidéo sort de la page (couche du dessus), l'inversion de la page ne s'y applique plus.
    On retire donc aussi sa pré-inversion, sinon la vidéo passe en négatif la nuit. */
-html.neg :fullscreen, html.neg :fullscreen * { filter: none !important; }
-html.neg :-webkit-full-screen, html.neg :-webkit-full-screen * { filter: none !important; }
+
+
 
 
 /* Contact : le petit questionnaire, dans la typographie des fiches */
@@ -1183,7 +1185,7 @@ html #cat-open:hover, html #cat-box.open #cat-open { background: #111 !important
 html #cat-open #cat-name .t { color: #fff; }
 html #cat-name .n { color: #9a9a9a !important; }
 html #cat-open:hover .tri::before, html #cat-open:focus-visible .tri::before, html #cat-box.open #cat-open .tri::before { border-left-color: #111; }
-html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::before, html.neg #cat-box.open #cat-open .tri::before { border-left-color: #fff; }
+html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::before, html.neg #cat-box.open #cat-open .tri::before { border-left-color: #000; }
 
 /* Le clavier, dans la famille des ronds : un cadre en trait fin aux coins arrondis, les titres en petites capitales grises
    (comme « Catégorie »), des touches rondes en trait fin ; la touche appuyée se remplit, comme le bouton des catégories */
@@ -1288,9 +1290,9 @@ html #home-ctl > #home-snd { width: 32px; }
   #hc-ov .t.xl { grid-column: span 3; }
   #hc-ov .t.xl b { font-size: 18px; } #hc-ov .t.xl i { font-size: 16px; } #hc-ov .t.l b, #hc-ov .t.l i { font-size: 13px; } #hc-ov .tx { padding: 26px 10px 9px; } #hc-ov .t.l em { display: none; }
 }
-html.neg #hc-ov .t { filter: invert(1); }   /* la page inversée : les photos restent à l'endroit */
+
 html.ov-open #kb, html.ov-open #cats { visibility: hidden; }
-html.neg #hc-ov .tx::before { background: var(--accent-raw, #ffcc00); }   /* la vignette est remise à l'endroit : la vraie couleur d'accent */
+
 
 /* ===== maj-158 : la vue d'ensemble garde tous les projets ; une catégorie fait ressortir les siens ===== */
 #hc-ov .t img { transition: transform .9s cubic-bezier(.17,.84,.44,1), filter .5s, opacity .5s; }
@@ -1299,7 +1301,7 @@ html.neg #hc-ov .tx::before { background: var(--accent-raw, #ffcc00); }   /* la 
 #hc-ov .mos.sel .t.dim .tx, #hc-ov .mos.sel .t.dim em { opacity: 0; }
 #hc-ov .mos.sel .t.hit .tx { opacity: 1; transform: none; }
 #hc-ov .mos.sel .t.hit em { opacity: .85; }
-html.neg #hc-ov .mos.sel .t.dim { filter: none; }   /* la nuit : le gris clair devient un gris très sombre, comme le reste de la page inversée */
+html.neg #hc-ov .mos.sel .t.dim { background: #0e0e0e; }   /* la nuit : les projets hors catégorie en gris très sombre */
 @media (hover: hover) { #hc-ov .mos.sel .t.dim:hover img { filter: none; opacity: 1; } #hc-ov .mos.sel .t.dim:hover .tx { opacity: 1; } }
 
 /* ===== maj-158 : à l'ouverture, en attendant la vidéo, le rond jaune bat comme un cœur ===== */
@@ -1308,3 +1310,298 @@ html.neg #hc-ov .mos.sel .t.dim { filter: none; }   /* la nuit : le gris clair d
 #hc-intro.hold.beat-on .beat { opacity: 1; }   /* maj-160 : après l'apparition de l'interface, tant que la vidéo n'est pas là */
 @keyframes hcBeat { 0% { transform: scale(1); } 10% { transform: scale(1.32); } 20% { transform: scale(1.04); } 30% { transform: scale(1.2); } 48%, 100% { transform: scale(1); } }
 @keyframes hcBeatRing { 0% { transform: scale(1); opacity: .7; } 60%, 100% { transform: scale(3); opacity: 0; } }
+
+/* ===== nuit : début du bloc généré (scripts/night/gen.py), ne pas modifier à la main ===== */
+html.neg body { background-image: none; background-color: #000000; }
+html.neg body { color: #eeeeee; }
+html.neg :where(body) :focus-visible { outline-color: #999999; }
+html.neg :where(body) #slogan { color: #cccccc; }
+html.neg :where(body) #slogan span { color: #707070; }
+html.neg :where(body) #slogan .wm[role="link"]:focus-visible { outline-color: #999999; }
+html.neg :where(body) #menu::before { background-image: none; background-color: #4f4f4f; }
+html.neg :where(body) #menu button { color: #eeeeee; background-image: none; background-color: transparent; border-color: currentcolor; }
+html.neg :where(body) #menu button:hover, html.neg :where(body) #menu button[aria-current="true"] { color: #eeeeee; }
+html.neg :where(body) #langs button { border-color: currentcolor; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #langs button[aria-pressed="true"] { color: #dddddd; box-shadow: inset 0 -2px 0 var(--accent); }
+html.neg :where(body) .pg { border-color: #656565; background-image: none; background-color: #000000; color: #888888; }
+html.neg :where(body) #cat-open { border-color: currentcolor; background-image: none; background-color: #111111; color: #cccccc; }
+html.neg :where(body) #cat-open .tri { border-left-color: var(--accent); border-top-color: transparent; border-bottom-color: transparent; }
+html.neg :where(body) #cat-list { background-image: none; background-color: #0b0b0b; border-top-color: #232323; }
+html.neg :where(body) #cat-list button { border-color: currentcolor; background-image: none; background-color: transparent; color: #888888; }
+html.neg :where(body) #cat-list button:hover, html.neg :where(body) #cat-list button[aria-current="true"] { color: #dddddd; }
+html.neg :where(body) #kb-toggle { border-color: currentcolor; background-image: url("ui/keyboard-night.svg"); background-color: transparent; }
+html.neg :where(body) #kb-panel { background-image: none; background-color: #0d0d0d; border-top-color: #232323; }
+html.neg :where(body) #kb-panel .lbl { color: #aaaaaa; }
+html.neg :where(body) .key { border-color: #aaaaaa; background-image: none; background-color: #727272; color: #0d0d0d; box-shadow: inset 0 1px 0 #4b4b4b; }
+html.neg :where(body) .key.down, html.neg :where(body) .key:active { background-image: none; background-color: #aaaaaa; }
+html.neg :where(body) .key.anim.off { background-image: none; background-color: #0d0d0d; color: #aaaaaa; }
+html.neg :where(body) #whiteboard { background-image: none; background-color: rgba(0, 0, 0, .6); }
+html.neg :where(body) .pnl .bgx { background-image: none; background-color: #ffffff; }
+html.neg :where(body) .pnl.media .bgx { background-image: none; background-color: rgba(255, 255, 255, .45); }
+html.neg :where(body) .pnl.link .lbl { color: #666666; }
+html.neg :where(body) .pnl.link a { color: var(--accent); text-decoration-color: currentcolor; }
+html.neg :where(body) .pnl.link a:hover .host { text-decoration-color: currentcolor; }
+html.neg :where(body) .txt .skl-tags .go { color: var(--accent); }
+html.neg :where(body) .txt .skl-tags .go:hover, html.neg :where(body) .txt .skl-tags .go:focus-visible { text-decoration-color: currentcolor; outline-color: currentcolor; }
+html.neg :where(body) .pnl .go { color: inherit; background-image: none; background-color: transparent; border-color: currentcolor; }
+html.neg :where(body) .relh .ttl { color: #000000; }
+html.neg :where(body) .relh .n { color: var(--accent); }
+html.neg :where(body) .proj .go { color: #000000; }
+html.neg :where(body) .proj .mono { background-image: none; background-color: #e4e4e4; }
+html.neg :where(body) .proj .m { color: #666666; }
+html.neg :where(body) .proj .go:hover .t, html.neg :where(body) .proj .go:focus-visible .t { color: var(--accent); }
+html.neg :where(body) .proj .go:focus-visible { outline-color: currentcolor; }
+html.neg :where(body) .txt .ttl { color: #000000; }
+html.neg :where(body) .txt .stl { color: #656565; }
+html.neg :where(body) .txt .body { color: #000000; }
+html.neg :where(body) .txt .body a, html.neg :where(body) .txt .posted span, html.neg :where(body) .contact .site a { color: var(--accent); text-decoration-color: currentcolor; }
+html.neg :where(body) .txt .body a:hover { text-decoration-color: currentcolor; }
+html.neg :where(body) .txt .fecha { color: #333333; }
+html.neg :where(body) .txt .posted { color: #666666; }
+html.neg :where(body) .contact .bgx { background-image: none; background-color: #ffffff; }
+html.neg :where(body) #load-error { color: #eeeeee; }
+html.neg :where(body) #net-tip { background-image: none; background-color: #ffffff; color: #000000; }
+html.neg :where(body) #net-tip b { color: var(--accent); }
+html.neg body { background-image: none; background-color: transparent; }
+html.neg :where(body) #logo.toggle { filter: drop-shadow(0 0 0 transparent); }
+html.neg :where(body) #logo.toggle:hover, html.neg :where(body) #logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 #ffffff); }
+html.neg :where(body) #logo.toggle:focus-visible { outline-color: #999999; }
+html.neg :where(body) #strip .media video { background-image: none; background-color: #ffffff; }
+html.neg :where(body) #strip .embed iframe { border-color: currentcolor; background-image: none; background-color: #ffffff; }
+html.neg :where(body) #reel-btn { border-color: currentcolor; background-image: none; background-color: #111111; color: #cccccc; }
+html.neg :where(body) #reel-btn i { border-left-color: var(--accent); border-top-color: transparent; border-bottom-color: transparent; }
+html.neg :where(body) #reel-btn:hover, html.neg :where(body) #reel-btn:focus-visible { background-image: none; background-color: #1d1d1d; outline-color: currentcolor; }
+html.neg :where(body) #reel .scrim { background-image: none; background-color: rgba(243, 243, 243, .62); }
+html.neg :where(body) #reel .bar { color: #222222; }
+html.neg :where(body) #reel .bar b { color: #000000; }
+html.neg :where(body) #reel .bar b::before { background-image: none; background-color: var(--accent-inv, var(--accent, #0033ff)); }
+html.neg :where(body) #reel .bar a, html.neg :where(body) #reel .bar button { border-color: currentcolor; background-image: none; background-color: transparent; color: #444444; text-decoration-color: currentcolor; }
+html.neg :where(body) #reel .bar a:hover, html.neg :where(body) #reel .bar button:hover, html.neg :where(body) #reel .bar a:focus-visible, html.neg :where(body) #reel .bar button:focus-visible { color: #000000; outline-color: currentcolor; }
+html.neg :where(body) #reel .bar .snd { color: #eeeeee; background-image: none; background-color: var(--accent-inv, var(--accent, #0033ff)); }
+html.neg :where(body) #reel .bar .snd[aria-pressed="true"] { color: #222222; background-image: none; background-color: #d5d5d5; }
+html.neg :where(body) #reel .bar .snd:hover { color: #ffffff; }
+html.neg :where(body) #reel .bar .snd[aria-pressed="true"]:hover { color: #000000; }
+html.neg :where(body) #reel .vid { background-image: none; background-color: #ffffff; }
+html.neg :where(body) #reel .vid > * { border-color: currentcolor; }
+html.neg :where(body) .pnl.media .mcap { background-image: none; background-color: rgba(255, 255, 255, .66); color: #171717; }
+html.neg :where(body) .pnl.media .mcap b { color: #000000; }
+html.neg :where(body) #cat-list .n, html.neg :where(body) #cat-name .n { color: #656565; }
+html.neg :where(body) #pg-num { color: #757575; }
+html.neg:is(html):has(#home:not([hidden]):not(.out)) body { background-image: none; background-color: #f4f4f4; }
+html.neg :where(body) #seo-text { border-color: currentcolor; }
+html.neg :where(body) .txt .relp { border-top-color: rgba(0, 0, 0, .45); }
+html.neg :where(body) .txt .relp .lbl { color: #424242; }
+html.neg :where(body) .txt .relp .n { color: var(--accent); }
+html.neg :where(body) .txt .relp .arr { color: #757575; }
+html.neg :where(body) #menu::before { background-image: none; background-color: var(--accent); }
+html.neg :where(body) #menu button { color: #eeeeee; }
+html.neg :where(body) #menu button:hover { color: #eeeeee; }
+html.neg :where(body) #menu button[aria-current="true"] { color: #eeeeee; }
+html.neg :where(body) #cat-cap { color: #eeeeee; }
+html.neg :where(body) #cat-open { border-color: #eeeeee; background-image: none; background-color: rgba(0, 0, 0, .9); color: #eeeeee; }
+html.neg :where(body) #cat-open:hover, html.neg :where(body) #cat-open:focus-visible, html.neg :where(body) #cat-box.open #cat-open { border-color: #eeeeee; outline-color: currentcolor; background-image: none; background-color: #000000; }
+html.neg :where(body) #cat-name .n { color: #eeeeee; }
+html.neg :where(body) #cat-list { background-image: none; background-color: #000000; border-color: #eeeeee; border-top-color: #eeeeee; box-shadow: 0 14px 34px rgba(215, 215, 215, .08); }
+html.neg :where(body) #cat-list button { color: #eeeeee; }
+html.neg :where(body) #cat-list button:hover { color: #eeeeee; }
+html.neg :where(body) #cat-list button[aria-current="true"] { color: #eeeeee; }
+html.neg :where(body) #cat-list button[aria-current="true"]::before { background-image: none; background-color: var(--accent); }
+html.neg :where(body) #cat-list .n { color: #eeeeee; }
+html.neg :where(body) #reel-btn { border-color: #eeeeee; background-image: none; background-color: rgba(0, 0, 0, .9); color: #eeeeee; }
+html.neg :where(body) #reel-btn:hover, html.neg :where(body) #reel-btn:focus-visible { background-image: none; background-color: #000000; border-color: #eeeeee; }
+html.neg :where(body) #pager .pg { border-color: #eeeeee; background-image: none; background-color: rgba(0, 0, 0, .9); color: #eeeeee; }
+html.neg :where(body) #pager .pg:not(:disabled):hover, html.neg :where(body) #pager .pg:not(:disabled):focus-visible { border-color: #eeeeee; color: #eeeeee; outline-color: currentcolor; }
+html.neg :where(body) #pager .pg:disabled { color: #eeeeee; }
+html.neg :where(body) #pager #pg-num { color: #eeeeee; }
+html.neg :where(body) #langs button { color: #eeeeee; }
+html.neg :where(body) #langs button:hover { color: #eeeeee; }
+html.neg :where(body) #langs button[aria-pressed="true"] { color: #eeeeee; }
+html.neg :where(body) #slogan, html.neg :where(body) #slogan span { color: #eeeeee; }
+html.neg :where(body) #menu::before { background-image: none; background-color: #eeeeee; }
+html.neg :where(body) #menu button, html.neg :where(body) #menu button:hover { color: #eeeeee; }
+html.neg :where(body) #menu button:not([aria-current="true"]):hover { text-decoration-color: currentcolor; }
+html.neg :where(body) #langs button, html.neg :where(body) #langs button:hover { color: #eeeeee; }
+html.neg :where(body) #cat-cap, html.neg :where(body) #cat-name .n, html.neg :where(body) #cat-list .n, html.neg :where(body) #cat-list button, html.neg :where(body) #pager #pg-num { color: #eeeeee; }
+html.neg :where(body) #cat-list button:hover { text-decoration-color: currentcolor; }
+html.neg :where(body) #pager .pg:disabled { color: #eeeeee; }
+html.neg :where(body) .txt .stl, html.neg :where(body) .txt .fecha, html.neg :where(body) .txt .posted, html.neg :where(body) .proj .m, html.neg :where(body) .txt .relp .lbl, html.neg :where(body) .txt .relp .arr, html.neg :where(body) .pnl.link .lbl { color: #000000; }
+html.neg :where(body) .txt .body a, html.neg :where(body) .txt .posted span, html.neg :where(body) .txt .skl-tags .go { color: #000000; text-decoration-color: currentcolor; }
+html.neg :where(body) .proj .t { color: #000000; }
+html.neg :where(body) .proj .go:hover .t, html.neg :where(body) .proj .go:focus-visible .t { color: #000000; text-decoration-color: currentcolor; }
+html.neg :where(body) .pnl.link a { color: #000000; }
+html.neg :where(body) .txt .relp .n { color: #000000; }
+html.neg :where(body) .relh .n { color: #000000; }
+html.neg :where(body) #strip .pnl:not(.media):not(.embed):not(.proj) + .pnl:not(.media):not(.embed):not(.proj) > .in::before { background-image: none; background-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) .team .bgx { background-image: none; background-color: #ffffff; }
+html.neg :where(body) .team .ttl { color: #000000; }
+html.neg :where(body) .team .idx { color: #000000; }
+html.neg :where(body) .team .idx li.on .nm { text-decoration-color: currentcolor; }
+html.neg :where(body) .face { border-color: currentcolor; background-image: none; background-color: #e4e4e4; }
+html.neg :where(body) .face .mono { color: #000000; }
+html.neg :where(body) .face .n { color: #000000; }
+html.neg :where(body) .face.on { outline-color: #000000; }
+html.neg :where(body) .pnl.mat .bgx { background-image: none; background-color: #000000; }
+html.neg :where(body) .pnl.mat .mcap2 { color: #eeeeee; }
+html.neg :where(body) .pnl.grid4 .bgx { background-image: none; background-color: #ffffff; }
+html.neg :where(body) .pnl.comp .bgx { background-image: none; background-color: #ffffff; }
+html.neg :where(body) .pnl.comp.wht .bgx { background-image: none; background-color: #000000; }
+html.neg :where(body) .pnl.comp .mcap2 { color: #eeeeee; }
+html.neg :where(body) .pnl.comp:not(.wht) .mcap2 { color: #000000; }
+html.neg :where(body) .pnl.logos .lbl { color: #000000; }
+html.neg :where(body) .pnl.logos .grid { background-image: none; background-color: rgba(0, 0, 0, .28); }
+html.neg :where(body) .pnl.logos .lg { background-image: none; background-color: #ffffff; }
+html.neg :where(body) #postv { background-image: none; background-color: #ffffff; color: #000000; }
+html.neg :where(body) #postv .pv-bar { background-image: none; background-color: #ffffff; border-bottom-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) #postv .pv-x { border-color: currentcolor; background-image: none; background-color: transparent; }
+html.neg :where(body) #postv .pv-x span { background-image: none; background-color: #000000; }
+html.neg :where(body) #postv a, html.neg :where(body) #postv .pv-meta .go { color: #000000; text-decoration-color: currentcolor; }
+html.neg :where(body) #postv .pv-folds { border-top-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) #postv .pv-fold { border-bottom-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) #postv .pv-meta .go { border-color: currentcolor; background-image: none; background-color: transparent; }
+html.neg :where(body) #postv .pv-mat { background-image: none; background-color: #000000; }
+html.neg :where(body) #postv .pv-mat figcaption { color: #eeeeee; }
+html.neg :where(body) #postv .pv-embed iframe { border-color: currentcolor; }
+html.neg :where(body) #postv .pv-rel, html.neg :where(body) #postv .pv-team, html.neg :where(body) #postv .pv-logos { border-top-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) #postv .pv-tile, html.neg :where(body) #postv .pv-face, html.neg :where(body) #postv .pv-next { border-color: currentcolor; background-image: none; background-color: transparent; color: #000000; }
+html.neg :where(body) #postv .mono { background-image: none; background-color: #dddddd; color: #000000; }
+html.neg :where(body) #postv .pv-lgrid { background-image: none; background-color: rgba(0, 0, 0, .28); border-color: rgba(0, 0, 0, .28); }
+html.neg :where(body) #postv .pv-lgrid span { background-image: none; background-color: #ffffff; }
+html.neg :where(body) #postv .pv-next { border-top-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) #reel-btn, html.neg body #reel-btn { border-color: currentcolor; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #reel-btn .hub { fill: var(--accent); }
+html.neg :where(body) #reel-btn:hover, html.neg :where(body) #reel-btn:focus-visible, html.neg body #reel-btn:hover, html.neg body #reel-btn:focus-visible { background-image: none; background-color: transparent; border-color: currentcolor; outline-color: currentcolor; }
+html.neg :where(body) #reel-btn:hover span, html.neg :where(body) #reel-btn:focus-visible span { text-decoration-color: currentcolor; }
+html.neg :where(body) #slogan .tls { color: #eeeeee; }
+html.neg :where(body) #slogan .tls span, html.neg :where(body) #slogan .tls span:not(.x) { color: inherit; }
+html.neg :where(body) #logo { background-image: none; background-color: #eeeeee; }
+html.neg :where(body) #logo.img { background-color: transparent; }
+html.neg body #reel-btn { border-color: #eeeeee; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg body #reel-btn:hover, html.neg body #reel-btn:focus-visible { background-image: none; background-color: transparent; border-color: #eeeeee; outline-color: currentcolor; }
+html.neg :where(body) #reel-btn .tri::before { border-left-color: var(--accent); border-top-color: transparent; border-bottom-color: transparent; }
+html.neg :where(body) #reel-btn span { text-decoration-color: currentcolor !important; }
+html.neg :where(body) #langs .lg-open, html.neg :where(body) #langs .lg-open:hover { border-color: currentcolor; background-image: none; background-color: transparent; box-shadow: none; color: #eeeeee; }
+html.neg :where(body) #langs .lg-open span { box-shadow: inset 0 -2px 0 var(--accent); }
+html.neg :where(body) #langs .tri { border-left-color: var(--accent); border-top-color: transparent; border-bottom-color: transparent; }
+html.neg :where(body) #langs .lg-list { background-image: none; background-color: #000000; border-color: #eeeeee; box-shadow: 0 -10px 30px rgba(215, 215, 215, .08); }
+html.neg :where(body) #langs .lg-list button, html.neg :where(body) #langs .lg-list button:hover { border-color: currentcolor; background-image: none; background-color: transparent; box-shadow: none; color: #eeeeee; }
+html.neg :where(body) #langs .lg-list button:hover, html.neg :where(body) #langs .lg-list button:focus-visible { text-decoration-color: currentcolor; outline-color: currentcolor; }
+html.neg :where(body) #cat-open, html.neg :where(body) #cat-open:hover, html.neg :where(body) #cat-open:focus-visible, html.neg :where(body) #cat-box.open #cat-open { border-color: transparent; background-image: none; background-color: transparent; }
+html.neg :where(body) #cat-open:hover #cat-name, html.neg :where(body) #cat-open:focus-visible #cat-name { text-decoration-color: currentcolor; }
+html.neg :where(body) #reel-btn i.tri { border-color: currentcolor; }
+html.neg :where(body) #langs .lg-open, html.neg :where(body) #langs .lg-open:hover { color: #424242; }
+html.neg :where(body) #langs .lg-open:hover, html.neg :where(body) #langs.open .lg-open { color: #eeeeee; }
+html.neg :where(body) #langs .lg-list button, html.neg :where(body) #langs .lg-list button:hover { color: #eeeeee; }
+html.neg :where(body) #kb-panel { background-image: none; background-color: #000000; border-color: #eeeeee; border-top-color: #eeeeee; box-shadow: 0 -10px 30px rgba(215, 215, 215, .08); }
+html.neg :where(body) #kb-panel .lbl { color: #eeeeee; }
+html.neg :where(body) #kb .key { border-color: #eeeeee; background-image: none; background-color: #000000; color: #eeeeee; box-shadow: none; }
+html.neg :where(body) #kb .key:hover { background-image: none; background-color: #0e0e0e; }
+html.neg :where(body) #kb .key.down, html.neg :where(body) #kb .key:active { background-image: none; background-color: #eeeeee; color: #000000; }
+html.neg :where(body) #kb .key.anim.off { background-image: none; background-color: #000000; color: #424242; border-color: #424242; }
+html.neg :where(body) #about-btn { border-color: #eeeeee; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #about-btn:focus-visible { outline-color: #999999; }
+html.neg :where(body) #about-card { background-image: none; background-color: #000000; border-color: #eeeeee; box-shadow: 0 24px 60px rgba(215, 215, 215, .14); color: #eeeeee; }
+html.neg :where(body) #about-card b { color: #eeeeee; }
+html.neg :where(body) #about-card b::before { background-image: none; background-color: var(--accent); }
+html.neg :where(body) #about-card figcaption::before { background-image: none; background-color: var(--accent); }
+html.neg :where(body) .pnl.idx .ttl { color: #000000; }
+html.neg :where(body) .pnl.idx .ttl .n { color: var(--accent); }
+html.neg :where(body) .pnl.idx .go { border-color: currentcolor; border-top-color: rgba(0, 0, 0, .22); background-image: none; background-color: transparent; color: #000000; }
+html.neg :where(body) .pnl.idx .no { color: rgba(0, 0, 0, .55); }
+html.neg :where(body) .pnl.idx .th { background-image: none; background-color: #e4e4e4; }
+html.neg :where(body) .pnl.idx .th .mono { color: #000000; }
+html.neg :where(body) .pnl.idx .m { color: rgba(0, 0, 0, .6); }
+html.neg :where(body) .pnl.idx .go:hover .no, html.neg :where(body) .pnl.idx .go:focus-visible .no { color: var(--accent); }
+html.neg :where(body) .pnl.idx .go:hover .t, html.neg :where(body) .pnl.idx .go:focus-visible .t { text-decoration-color: currentcolor; }
+html.neg :where(body) .pnl.idx .go:focus-visible { outline-color: currentcolor; }
+html.neg :where(body) #postv figure.pv-logo { background-image: none; background-color: #000000; }
+html.neg :where(body) #hc-say.world .ln { color: #eeeeee; }
+html.neg :where(body) #hc-say.world .ln::before { background-image: none; background-color: #000000; }
+html.neg :where(body) #lang-sq { border-color: #eeeeee; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #lang-sq .cur { border-color: currentcolor; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #lang-sq .opts button { border-color: currentcolor; background-image: none; background-color: transparent; color: #eeeeee; }
+html.neg :where(body) #lang-sq .opts button:hover, html.neg :where(body) #lang-sq .opts button:focus-visible { outline-color: currentcolor; }
+html.neg :where(body) #seo-page { background-image: none; background-color: #f4f4f4; color: #272727; }
+html.neg :where(body) #seo-page h1 { color: #000000; }
+html.neg :where(body) #seo-page h2 { color: #000000; }
+html.neg :where(body) #seo-page a { color: #0033ff; }
+html.neg :where(body) .cform-f { color: #000000; }
+html.neg :where(body) .cf-intro { color: #333333; }
+html.neg :where(body) .cf-q { border-color: currentcolor; }
+html.neg :where(body) .cf-q > span, html.neg :where(body) .cf-q > legend { color: #666666; }
+html.neg :where(body) .cf-q input[type=email], html.neg :where(body) .cf-q textarea { background-image: none; background-color: transparent; color: #000000; border-color: currentcolor; border-bottom-color: rgba(0, 0, 0, .35); outline-color: currentcolor; }
+html.neg :where(body) .cf-q input[type=email]:focus, html.neg :where(body) .cf-q textarea:focus { border-bottom-color: var(--accent); }
+html.neg :where(body) .cf-chip span { border-color: rgba(0, 0, 0, .3); color: #222222; }
+html.neg :where(body) .cf-chip:hover span { border-color: #000000; color: #000000; }
+html.neg :where(body) .cf-chip input:checked + span { background-image: none; background-color: var(--accent); border-color: var(--accent); color: #ffffff; }
+html.neg :where(body) .cf-chip input:focus-visible + span { outline-color: var(--accent); }
+html.neg :where(body) .cf-send { background-image: none; background-color: var(--accent); color: #ffffff; border-color: currentcolor; }
+html.neg :where(body) .cf-note { color: #666666; }
+html.neg :where(body) .cf-st { color: #000000; }
+html.neg :where(body) .cf-st.ok { color: var(--accent); }
+html.neg :where(body) .cf-st.bad a { color: var(--accent); }
+html.neg :where(body) .cf-why { color: #666666; }
+html.neg :where(body) .socs .soc { border-color: rgba(0, 0, 0, .4); color: #000000 !important; text-decoration-color: currentcolor !important; }
+html.neg :where(body) .socs .soc:hover, html.neg :where(body) .socs .soc:focus-visible { background-image: none; background-color: var(--accent); border-color: var(--accent); color: #ffffff !important; outline-color: currentcolor; }
+html.neg :where(body) #postv .pv-form { border-top-color: rgba(0, 0, 0, .2); }
+html.neg :where(body) .crows { border-top-color: rgba(0, 0, 0, .22); }
+html.neg :where(body) .crows dt { color: #666666; }
+html.neg :where(body) .crows a.mail { color: var(--accent) !important; text-decoration-color: currentcolor !important; }
+html.neg :where(body) .crows a.mail:hover, html.neg :where(body) .crows a.mail:focus-visible { text-decoration-color: currentcolor !important; outline-color: currentcolor; }
+html.neg :where(body) .crows a[href^="tel:"] { color: inherit !important; text-decoration-color: currentcolor !important; }
+html.neg :where(body) .cnote { border-top-color: rgba(0, 0, 0, .22); color: #424242; }
+html.neg :where(body) .cnote a { color: #000000 !important; }
+html.neg :where(body) #cat-cap { color: #757575; }
+html.neg :where(body) #cat-open, html.neg :where(body) #cat-open:hover, html.neg :where(body) #cat-open:focus-visible, html.neg :where(body) #cat-box.open #cat-open { border-color: #eeeeee !important; background-image: none !important; background-color: #000000 !important; color: #eeeeee; outline-color: currentcolor; }
+html.neg :where(body) #cat-open .tri, html.neg :where(body) #cat-box.open #cat-open .tri { border-color: currentcolor; border-right-color: #eeeeee; }
+html.neg :where(body) #cat-open .tri::before { border-left-color: var(--accent); border-top-color: transparent; border-bottom-color: transparent; }
+html.neg :where(body) #cat-open:hover .tri, html.neg :where(body) #cat-open:focus-visible .tri, html.neg :where(body) #cat-box.open #cat-open .tri { background-image: none; background-color: var(--accent); }
+html.neg :where(body) #cat-open:hover .tri::before, html.neg :where(body) #cat-open:focus-visible .tri::before, html.neg :where(body) #cat-box.open #cat-open .tri::before { border-left-color: #eeeeee; }
+html.neg :where(body) #cat-open:hover #cat-name, html.neg :where(body) #cat-open:focus-visible #cat-name { text-decoration-color: currentcolor; }
+html.neg :where(body) #cat-name .n { background-image: none; background-color: #eeeeee; color: #000000 !important; }
+html.neg :where(body) #cat-list .n { color: #656565 !important; }
+html.neg :where(body) #cat-list { border-color: #eeeeee; box-shadow: none; }
+html.neg :where(body) .contact .cbox .body p.csub, html.neg :where(body) .pv-contact p.csub { color: #424242; }
+html.neg:is(html) body #reel-btn, html.neg:is(html) #about-btn, html.neg:is(html) #lang-sq { border-color: #424242; }
+html.neg:is(html) body #reel-btn:hover, html.neg:is(html) #about-btn:hover, html.neg:is(html) #lang-sq:hover { border-color: #eeeeee; }
+html.neg:is(html) #cat-open, html.neg:is(html) #cat-open:focus-visible { border-color: #424242 !important; }
+html.neg:is(html) #cat-open:hover, html.neg:is(html) #cat-box.open #cat-open { border-color: #eeeeee !important; }
+html.neg:is(html) #cat-open .tri { border-right-color: currentcolor !important; }
+html.neg:is(html) #cat-name .n { background-image: none; background-color: transparent; color: #757575 !important; }
+html.neg:is(html) #cat-list { border-color: #424242; }
+html.neg:is(html) #cat-open, html.neg:is(html) #cat-open:focus-visible { background-image: none !important; background-color: #eeeeee !important; color: #000000 !important; border-color: #eeeeee !important; }
+html.neg:is(html) #cat-open:hover, html.neg:is(html) #cat-box.open #cat-open { background-image: none !important; background-color: #eeeeee !important; color: #000000 !important; border-color: #eeeeee !important; }
+html.neg:is(html) #cat-open #cat-name .t { color: #000000; }
+html.neg:is(html) #cat-name .n { color: #656565 !important; }
+html.neg:is(html) #cat-open:hover .tri::before, html.neg:is(html) #cat-open:focus-visible .tri::before, html.neg:is(html) #cat-box.open #cat-open .tri::before { border-left-color: #eeeeee; }
+html.neg :where(body) #kb-panel { border-color: #424242 !important; box-shadow: 0 -10px 30px rgba(215, 215, 215, .06); }
+html.neg :where(body) #kb-panel .lbl { color: #757575; }
+html.neg :where(body) #kb .key { border-color: #424242; background-image: none; background-color: #000000; color: #eeeeee; }
+html.neg :where(body) #kb .key:hover { border-color: #eeeeee; background-image: none; background-color: #000000; }
+html.neg :where(body) #kb .key.down, html.neg :where(body) #kb .key:active { background-image: none; background-color: #eeeeee; color: #000000; border-color: #eeeeee; }
+html.neg :where(body) #kb .key.anim.off { background-image: none; background-color: #000000; color: #424242; border-color: #1f1f1f; }
+html.neg :where(body) #ov-btn { border-color: #424242; background-image: none; background-color: #000000; color: #eeeeee; }
+html.neg :where(body) #ov-btn:hover, html.neg :where(body) #ov-btn:focus-visible { border-color: #eeeeee; outline-color: currentcolor; }
+html.neg :where(body) #hc-ov { background-image: none; background-color: #000000; color: #eeeeee; }
+html.neg :where(body) #hc-ov .n { color: #757575; }
+html.neg :where(body) #hc-ov .x { border-color: #424242; background-image: none; background-color: #000000; color: #eeeeee; }
+html.neg :where(body) #hc-ov .x:hover, html.neg :where(body) #hc-ov .x:focus-visible { border-color: #eeeeee; outline-color: currentcolor; }
+html.neg :where(body) #hc-ov .chips button { border-color: #424242; background-image: none; background-color: #000000; color: #eeeeee; }
+html.neg :where(body) #hc-ov .chips button span { color: #757575; }
+html.neg :where(body) #hc-ov .chips button:hover { border-color: #eeeeee; }
+html.neg :where(body) #hc-ov .chips button[aria-pressed="true"] { background-image: none; background-color: #eeeeee; color: #000000; border-color: #eeeeee; }
+html.neg :where(body) #hc-ov .mos { background-image: none; background-color: #1d1d1d; border-color: #1d1d1d; }
+/* les règles de nuit écrites à la main dans ce fichier, répétées ici pour passer après le bloc généré */
+html.neg { background: #000; }
+html.neg #home-logo.toggle:hover, html.neg #home-logo.toggle:focus-visible { filter: drop-shadow(10px 6px 0 var(--accent-raw, #ffcc00)); }
+html.neg #reel .scrim { background: rgba(12,12,12,.62); }
+html.neg .face .mono { --veil: rgba(255,255,255,.55); }
+html.neg #strip .pnl.logos img { filter: invert(1); }
+html.neg #strip .pnl.logos img.raw { filter: grayscale(1) invert(1) brightness(1.6) invert(1); mix-blend-mode: multiply; }
+html.neg #postv .pv-lgrid img { filter: invert(1); }
+html.neg #postv .pv-lgrid img.raw { filter: grayscale(1) invert(1) brightness(1.6) invert(1); mix-blend-mode: multiply; }
+#logo, html.neg #logo, #logo.toggle:hover, html.neg #logo.toggle:hover, #logo.toggle:focus-visible { filter: none !important; }
+html.neg #logo { background-color: var(--accent); }
+html.neg #postv figure.pv-logo { background: #fff; }
+html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::before, html.neg #cat-box.open #cat-open .tri::before { border-left-color: #000; }
+html.neg #hc-ov .mos.sel .t.dim { background: #0e0e0e; }
+/* ===== nuit : fin du bloc généré ===== */
