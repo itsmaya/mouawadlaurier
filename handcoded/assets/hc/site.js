@@ -2830,13 +2830,19 @@ function setupHomeVideo() {
     Object.assign(v, { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto', src: url(src) }); v.setAttribute('playsinline', '');
     v.addEventListener('loadedmetadata', () => { if (isFinite(v.duration) && v.duration > 2) v.currentTime = Math.random() * (v.duration - 1); v.play().catch(() => {}); }, { once: true });   // jamais le même départ
     hv.video = v;
-  } else {   // diaporama : les vignettes de dix projets différents, hébergées avec le site (une image d'un autre site ne se lit pas pixel par pixel), les mêmes que les cartes 3D
+  } else {   /* maj-162 : diaporama. Les images de l'intérieur des fiches (pas les vignettes), une par projet, prises d'abord dans la Sélection
+     puis dans les projets les plus récents. Seulement des images hébergées avec le site : une image d'un autre site ne se lit pas pixel par pixel. */
     const local = x => x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x);
-    const work = CONTENT.sections.find(x => x.visible && x.card === 'image' && !x.skills) || {};
-    const posts = CONTENT.posts.filter(p => p.published !== false && local(p.thumb)), first = posts.filter(p => p.section === work.id);
-    const mix = list => list.map(p => p.thumb).sort(() => Math.random() - 0.5);
-    const pick = [...new Set([...mix(first), ...mix(posts)])].slice(0, 10);   // d'abord les réalisations
-    hv.pics = pick.map(x => { const im = new Image(), t = thumbOf(x); im.decoding = 'async'; if (t !== x) im.onerror = () => { im.onerror = null; im.src = url(x); }; im.src = url(t); return im; });   // la grille de carrés n'a pas besoin de plus que la vignette
+    const work = CONTENT.sections.find(x => x.visible && x.card === 'image' && !x.skills) || {}, star = work.defaultTag || 'featured';
+    const year = p => Math.max(0, ...((String(p.date || '').match(/\d{4}/g) || []).map(Number)));
+    const inside = p => (p.media || []).map(m => m && m.src).filter(x => local(x) && x !== p.thumb);
+    const ranked = CONTENT.posts.filter(p => p.published !== false && p.section === work.id && (inside(p).length || local(p.thumb)))
+      .map(p => ({ p, k: ((p.tags || []).includes(star) ? 10000 : 0) + year(p) + Math.random() * 0.5 }))
+      .sort((a, b) => b.k - a.k).slice(0, 10).map(x => x.p);
+    const flat = x => /screen|capture|schema|sch[eé]ma|plan|diagram|logo|affiche|poster/i.test(x.split('/').pop());   // captures d'écran, schémas, logos : en ronds, on ne les reconnaît pas
+    const one = p => { const all = inside(p), l = all.filter(x => !flat(x)).length ? all.filter(x => !flat(x)) : all; return l.length ? l[Math.floor(Math.random() * l.length)] : p.thumb; };
+    const pick = [...new Set(ranked.map(one))].sort(() => Math.random() - 0.5);
+    hv.pics = pick.map(x => { const im = new Image(), t = thumbOf(x); im.decoding = 'async'; if (t !== x) im.onerror = () => { im.onerror = null; im.src = url(x); }; im.src = url(t); return im; });   // la grille de ronds n'a pas besoin de plus que la petite copie
   }
   buildHomeDock(cfg.controls !== false);
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
@@ -3036,7 +3042,9 @@ async function hvPhoto() {
   ctx.fillStyle = '#fff'; ctx.font = ttlFont(size); track(size);
   lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.03, y0 + i * lh));
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-  ctx.font = smlFont(urlSize); ctx.fillStyle = '#fff'; ctx.fillText('hand-coded.net', mx, urlY);
+  const fI = typoOf(ST, 'subtitle'), itFont = size => `${fI.italic !== false ? 'italic ' : ''}${fI.weight || 400} ${size}px ${fI.css}`;   // maj-161 : l'adresse dans l'italique du site
+  try { await document.fonts.load(itFont(38)); } catch (e) {}
+  ctx.font = itFont(38); ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText('hand-coded.net', mx, urlY + urlSize);
   const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
   countView('photo-souvenir', 'Photo souvenir', true);
   const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';
