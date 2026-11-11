@@ -112,14 +112,20 @@ canvas#out { display: block; box-shadow: 0 18px 50px rgba(0,0,0,.18); background
       <div class="f"><div class="seg" data-k="format"><button data-v="post">Post 4:5</button><button data-v="square">Carré</button><button data-v="story">Story 9:16</button><button data-v="wide">Paysage</button><button data-v="banner">LinkedIn</button></div></div>
     </details>
 
+    <details open><summary>Trame</summary>
+      <p class="hint" style="margin-top:2px">Les mêmes réglages que l’animation de l’accueil. En touchant l’un d’eux, la photo passe en trame.</p>
+      <div class="f"><span>Forme</span><div class="seg" data-k="fgShape" data-dots><button data-v="round">Ronds</button><button data-v="square">Carrés</button></div></div>
+      <div class="f"><span>Grille <output id="o-fgCell"></output></span><input type="range" id="fgCell" min="6" max="60" step="1" data-dots></div>
+      <div class="f"><span id="l-fgDot">Taille des ronds <output id="o-fgDot"></output></span><input type="range" id="fgDot" min="40" max="140" step="1" data-dots></div>
+      <div class="f"><span>Contraste <output id="o-fgContrast2"></output></span><input type="range" id="fgContrast2" min="20" max="300" step="1" data-dots></div>
+      <div class="f"><span>Couleur</span><div class="sw" data-c="fgDotColor" data-dots></div></div>
+      <label class="chk"><input type="checkbox" id="fgInvert" data-dots> Inverser</label>
+      <div class="seg" style="margin-top:10px"><button type="button" id="swapDots">Échanger fond et ronds</button></div>
+    </details>
+
     <details open><summary>Photo de premier plan</summary>
       <div class="f"><div class="pics"><div class="thumb" id="fgThumb"></div><button class="btn" type="button" id="fgUp">Choisir sur l’ordinateur</button><button class="btn" type="button" id="fgSite">Photos du site</button><button class="btn" type="button" id="fgNone">Aucune</button></div></div>
       <div class="f"><span>Traitement</span><div class="seg" data-k="fgMode"><button data-v="photo">Photo</button><button data-v="bw">Noir et blanc</button><button data-v="duo">Bichromie</button><button data-v="dots">Trame</button></div></div>
-      <div class="f" data-show="fgMode:dots"><span>Forme de la trame</span><div class="seg" data-k="fgShape"><button data-v="round">Ronds</button><button data-v="square">Carrés</button></div></div>
-      <div class="f" data-show="fgMode:dots"><span>Taille de la trame <output id="o-fgCell"></output></span><input type="range" id="fgCell" min="6" max="60" step="1"></div>
-      <div class="f" data-show="fgMode:dots"><span>Grosseur des points <output id="o-fgDot"></output></span><input type="range" id="fgDot" min="40" max="140" step="1"></div>
-      <div class="f" data-show="fgMode:dots"><span>Couleur des points</span><div class="sw" data-c="fgDotColor"></div></div>
-      <label class="chk" data-show="fgMode:dots"><input type="checkbox" id="fgInvert"> Inverser (les points dans les ombres)</label>
       <div class="f" data-show="fgMode:duo"><span>Bichromie : les ombres</span><div class="sw" data-c="fgDuoA"></div></div>
       <div class="f" data-show="fgMode:duo"><span>Bichromie : les lumières</span><div class="sw" data-c="fgDuoB"></div></div>
       <div class="row">
@@ -312,11 +318,13 @@ function draw() {
   const mx = Math.round(72 * u), top = Math.round(70 * u), R = 34 * u, words = TAGLINES.slice(1), studio = TAGLINES[0] || 'Hand Coded.';
   let ws = 96 * u * S.wmSize / 100, headBottom = top;
   if (S.showWm) {
-    const fit = () => { const ss = ws * 0.31; ctx.font = wordsFont(ss); const sw = S.showWords && words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
+    /* les trois mots occupent exactement la hauteur de « Hand Coded. » : du haut des majuscules à la ligne de base */
+    const wordsSize = ws => { ctx.font = wmFont(ws); const capH = ctx.measureText('H').actualBoundingBoxAscent || ws * 0.7; ctx.font = wordsFont(100); const k = (ctx.measureText('R').actualBoundingBoxAscent || 72) / 100, n = Math.max(1, words.length); return capH / ((n - 1) * 1.18 + k); };
+    const fit = () => { const ss = wordsSize(ws); ctx.font = wordsFont(ss); const sw = S.showWords && words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
     while (fit() > W - 2 * mx - (S.showLogo ? 2 * R + 30 * u : 0) && ws > 30 * u) ws -= 2 * u;
     ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width;
     ctx.fillStyle = S.wmColor; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillText(studio, mx, top + ws * 0.78);
-    if (S.showWords) { const ss = ws * 0.31, slh = ss * 1.18; ctx.font = wordsFont(ss); ctx.textBaseline = 'top'; words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, top + ws * 0.1 + i * slh)); headBottom = Math.max(headBottom, top + ws * 0.1 + words.length * slh); }
+    if (S.showWords) { const ss = wordsSize(ws), slh = ss * 1.18, base = top + ws * 0.78; ctx.font = wordsFont(ss); ctx.textBaseline = 'alphabetic'; words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, base - (words.length - 1 - i) * slh)); }
     headBottom = Math.max(headBottom, top + ws * 0.95);
   }
   if (S.showLogo) { ctx.fillStyle = S.logoColor; ctx.beginPath(); ctx.arc(W - mx - R, top + (S.showWm ? ws * 0.42 : R), R, 0, Math.PI * 2); ctx.fill(); headBottom = Math.max(headBottom, top + 2 * R); }
@@ -352,25 +360,29 @@ if (window.ResizeObserver) new ResizeObserver(fitView).observe(view); addEventLi
 
 /* ---------------------------------------------------------------- l'interface */
 function bindAll() {
-  document.querySelectorAll('input[type=range]').forEach(r => r.addEventListener('input', () => { S[r.id] = +r.value; syncOut(r.id); redraw(); saveDraft(); }));
+  const key = id => id === 'fgContrast2' ? 'fgContrast' : id;
+  const dots = el => { if (el && el.hasAttribute('data-dots') && S.fgMode !== 'dots') { S.fgMode = 'dots'; syncUI(); } };   // un réglage de trame met la photo en trame
+  document.querySelectorAll('input[type=range]').forEach(r => r.addEventListener('input', () => { S[key(r.id)] = +r.value; dots(r); syncUI(); redraw(); saveDraft(); }));
+  $('swapDots').onclick = () => { const a = S.bgColor; S.bgColor = S.fgDotColor; S.fgDotColor = a; S.fgInvert = !S.fgInvert; S.fgMode = 'dots'; syncUI(); redraw(); saveDraft(); };
   ['kicker', 'text', 'link'].forEach(k => $(k).addEventListener('input', () => { S[k] = $(k).value; redraw(); saveDraft(); }));
   ['fgBlend', 'bgBlend'].forEach(k => $(k).addEventListener('change', () => { S[k] = $(k).value; redraw(); saveDraft(); }));
-  ['dash', 'fgInvert', 'showWm', 'showWords', 'showLogo'].forEach(k => $(k).addEventListener('change', () => { S[k] = $(k).checked; redraw(); saveDraft(); }));
-  document.querySelectorAll('.seg[data-k]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.k] = b.dataset.v; syncUI(); redraw(); saveDraft(); }));
-  document.querySelectorAll('.sw[data-c]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.c] = b.dataset.v; syncUI(); redraw(); saveDraft(); }));
+  ['dash', 'fgInvert', 'showWm', 'showWords', 'showLogo'].forEach(k => $(k).addEventListener('change', () => { S[k] = $(k).checked; dots($(k)); syncUI(); redraw(); saveDraft(); }));
+  document.querySelectorAll('.seg[data-k]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.k] = b.dataset.v; dots(g); syncUI(); redraw(); saveDraft(); }));
+  document.querySelectorAll('.sw[data-c]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.c] = b.dataset.v; dots(g); syncUI(); redraw(); saveDraft(); }));
 }
 function buildSwatches() {
   document.querySelectorAll('.sw[data-c]').forEach(g => {
     const k = g.dataset.c;
     g.innerHTML = COLORS().map(([c, n]) => `<button type="button" data-v="${c}" title="${n}" aria-label="${n}" style="background:${c}"></button>`).join('') + `<input type="color" aria-label="Autre couleur">`;
-    g.querySelector('input').addEventListener('input', e => { S[k] = e.target.value; syncUI(); redraw(); saveDraft(); });
+    g.querySelector('input').addEventListener('input', e => { S[k] = e.target.value; if (g.hasAttribute('data-dots')) S.fgMode = 'dots'; syncUI(); redraw(); saveDraft(); });
   });
 }
 const fmt = { textSize: v => v, fgCell: v => v + ' px', fgDot: v => v + ' %', fgBright: v => (v > 0 ? '+' : '') + v, fgContrast: v => v + ' %', fgSat: v => v + ' %', fgZoom: v => v + ' %', fgOpacity: v => v + ' %',
   bgCell: v => v + ' px', bgBright: v => (v > 0 ? '+' : '') + v, bgContrast: v => v + ' %', bgOpacity: v => v + ' %', shade: v => v + ' %', wmSize: v => v + ' %' };
-function syncOut(k) { const o = $('o-' + k); if (o) o.textContent = (fmt[k] || (v => v))(S[k]); }
+function syncOut(k) { const key = k === 'fgContrast2' ? 'fgContrast' : k, o = $('o-' + k); if (o) o.textContent = (fmt[key] || (v => v))(S[key]); }
 function syncUI() {
-  document.querySelectorAll('input[type=range]').forEach(r => { r.value = S[r.id]; syncOut(r.id); });
+  document.querySelectorAll('input[type=range]').forEach(r => { r.value = S[r.id === 'fgContrast2' ? 'fgContrast' : r.id]; syncOut(r.id); });
+  const ld = $('l-fgDot'); if (ld && ld.firstChild) ld.firstChild.textContent = S.fgShape === 'square' ? 'Taille des carrés ' : 'Taille des ronds ';
   ['kicker', 'text', 'link'].forEach(k => { if ($(k).value !== S[k]) $(k).value = S[k]; });
   ['fgBlend', 'bgBlend'].forEach(k => { $(k).value = S[k]; });
   ['dash', 'fgInvert', 'showWm', 'showWords', 'showLogo'].forEach(k => { $(k).checked = !!S[k]; });

@@ -3023,13 +3023,15 @@ async function hvPhoto() {
   try { await Promise.all([document.fonts.load(ttlFont(80)), document.fonts.load(smlFont(30)), document.fonts.load(wmFont(96))]); } catch (e) {}
   const mx = 72, top = 70, R = 34, tl = (ST.taglines && (ST.taglines[LANG] || ST.taglines.en)) || [];
   const studio = tl[0] || ((ST.name || 'Hand Coded') + '.'), words = tl.slice(1);
-  let ws = 96, ss = Math.round(ws * 0.31);
-  const fitHead = () => { ss = Math.round(ws * 0.31); ctx.font = smlFont(ss); const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
+  let ws = 96, ss = 30;
+  /* maj-164 : les trois mots occupent exactement la hauteur de « Hand Coded. », du haut des majuscules à la ligne de base */
+  const wordsSize = w => { ctx.font = wmFont(w); const capH = ctx.measureText('H').actualBoundingBoxAscent || w * 0.7; ctx.font = smlFont(100); const k = (ctx.measureText('R').actualBoundingBoxAscent || 72) / 100, n = Math.max(1, words.length); return capH / ((n - 1) * 1.18 + k); };
+  const fitHead = () => { ss = wordsSize(ws); ctx.font = smlFont(ss); const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
   while (fitHead() > W - 2 * mx - 2 * R - 40 && ws > 48) ws -= 4;
   ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width, base = top + ws * 0.78;
   ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, base);
-  ctx.font = smlFont(ss); ctx.textBaseline = 'top'; const slh = Math.round(ss * 1.18);
-  words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, top + ws * 0.1 + i * slh));
+  ss = wordsSize(ws); ctx.font = smlFont(ss); ctx.textBaseline = 'alphabetic'; const slh = ss * 1.18;
+  words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, base - (words.length - 1 - i) * slh));
   ctx.fillStyle = accent(); ctx.beginPath(); ctx.arc(W - mx - R, top + ws * 0.42, R, 0, Math.PI * 2); ctx.fill();   // le rond du logo, en haut à droite comme sur le site
   /* en bas : le texte tapé, jusqu'à quatre lignes, aussi grand que possible */
   const tw = W - 2 * mx; let size = 84, lines = [];
