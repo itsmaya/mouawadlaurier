@@ -197,6 +197,7 @@ function usedPaths(c = S.content) {
   if (c.settings.logo) set.add(c.settings.logo);
   if (c.settings.homeVideo && c.settings.homeVideo.src) set.add(c.settings.homeVideo.src);
   if (c.settings.showreel) set.add(c.settings.showreel);
+  if (c.settings.showreelMobile) set.add(c.settings.showreelMobile);
   const story = c.settings.home && c.settings.home.story;   // les images de « L'histoire de ce site »
   if (story && Array.isArray(story.images)) story.images.forEach(x => x && set.add(x));
   if (c.settings.seo && c.settings.seo.image) set.add(c.settings.seo.image);
@@ -1645,7 +1646,14 @@ function viewSettings() {
             try { const up = await prepareUpload(files[0], 'media/showreel', 'media'); stageFile(up.path, up.blob); s.showreel = up.path; change(); renderMain(); toast('Showreel ajouté : il part sur le site à la prochaine publication.'); }
             catch (e) { toast(e.message, 'bad', 8000); }
           }), 'sm'),
-          h('span', { class: 'hint', style: { margin: 0 } }, 'H.264, 720p ou 1080p, moins de 40 Mo de préférence (GitHub refuse au-delà de 100 Mo).'))),
+          h('span', { class: 'hint', style: { margin: 0 } }, 'H.264, 720p ou 1080p, moins de 40 Mo de préférence (GitHub refuse au-delà de 100 Mo).')),
+        field('Version verticale, pour téléphone debout (facultatif)', textInput(() => s.showreelMobile || '', v => { v = v.trim(); if (v) s.showreelMobile = v; else delete s.showreelMobile; }, { placeholder: 'https://youtube.com/shorts/… ou media/showreel/showreel-vertical.mp4', spell: false }), 'Une vidéo en hauteur (9:16), jouée quand le téléphone est tenu debout. Sans elle, le showreel remplit l’écran en étant recadré, avec une petite note qui propose de tourner le téléphone.'),
+        h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '-6px' } },
+          btn('Choisir le fichier MP4 vertical…', () => filePicker('video/mp4,video/webm,.mp4,.webm', false, async files => {
+            if (!files[0]) return;
+            try { const up = await prepareUpload(files[0], 'media/showreel', 'media'); stageFile(up.path, up.blob); s.showreelMobile = up.path; change(); renderMain(); toast('Version verticale ajoutée : elle part sur le site à la prochaine publication.'); }
+            catch (e) { toast(e.message, 'bad', 8000); }
+          }), 'sm'))),
       h('div', { class: 'block' }, h('h3', null, 'Langues du site'), langBox,
         h('p', { class: 'hint' }, 'Le site s’ouvre dans la langue du navigateur du visiteur quand elle est proposée. Il peut ensuite en changer en bas à gauche. Le back-office affiche un champ par langue activée.')),
       h('div', { class: 'block' }, h('h3', null, 'Signature', h('small', null, 'en haut à gauche du site, une ligne par ligne')), h('div', { class: 'pair' }, siteLangs().map(tagl))),

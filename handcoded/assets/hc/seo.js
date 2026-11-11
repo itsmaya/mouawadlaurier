@@ -140,7 +140,7 @@ export function seoParts(content, opts = {}) {
      ...langs.map(l => entry(S.url(l), S.lastmod, '0.9', alt(null))),
      ...S.pages.flatMap(p => langs.map(l => entry(S.url(l, p), S.updated(p), sections[0] && p.section === sections[0].id ? '0.8' : '0.6', alt(p) + (imgs(p) ? '\n' + imgs(p) : ''))))].join('\n') + '\n</urlset>\n';
   /* ---------------- l'ouverture : la phrase du studio, au centre, ligne par ligne, avant même les scripts du site (Réglages › Accueil › Phrase du studio).
-     Chaque ligne entre en glissant vers la droite, au rythme de la lecture ; le site les fait repartir une à une et lance la vidéo sur la dernière. */
+     Chaque ligne entre en glissant vers la droite, au rythme de la lecture, par-dessus la vidéo déjà lancée ; le site les fait repartir une à une. */
   const cutLines = t => { const out = []; let cur = ''; String(t).split(/(?<=,)\s+/).forEach(ch => { if (cur && (cur + ' ' + ch).length > 62) { out.push(cur); cur = ch; } else cur = cur ? cur + ' ' + ch : ch; }); if (cur) out.push(cur); return out; };   // sans lignes écrites : coupée aux virgules
   const lines = {}; langs.forEach(l => { const ph = tr((S.s.home || {}).sub, l), t = /\n/.test(ph) ? ph.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(ph); if (t.length) lines[l] = t; });   // les retours à la ligne de la phrase du studio font les coupures
   const sf = (() => { const r = (S.s.typo || {}).sig2 || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic ? 1 : 0, w = +(r.weight || 400);
@@ -162,7 +162,7 @@ export function seoParts(content, opts = {}) {
     `var R=document.documentElement;R.classList.add('hc-stage','hc-late');var fl=null;` +
     `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);fl=document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"');}` +
     `window.HC_GO=function(){if(fl){fl.then(go,go);setTimeout(go,800);}else go();};` +
-    `setTimeout(function(){if(!go.d){R.classList.remove('hc-stage','hc-late');go();}},7000);}catch(e){document.documentElement.classList.remove('hc-stage','hc-late');el.remove();}})();</script>`;
+    `setTimeout(function(){if(!go.d&&!window.HC_NOINTRO){R.classList.remove('hc-stage','hc-late');go();}},14000);}catch(e){document.documentElement.classList.remove('hc-stage','hc-late');el.remove();}})();</script>`;
 
   return { head, body, llms: md, sitemap, base, intro: opening };
 }

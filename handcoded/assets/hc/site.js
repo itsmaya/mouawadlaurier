@@ -2925,8 +2925,8 @@ async function hvPhoto() {
     hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.off.width = hv.raw.width = keep.ow; hv.off.height = hv.raw.height = keep.oh; hv.lo = keep.lo; hv.hi = keep.hi; hv.fresh = true;
   }
   /* en haut : le logo et « Hand Coded. » dans la police de la signature du site ; en bas : la signature */
-  const gTop = ctx.createLinearGradient(0, 0, 0, 330); gTop.addColorStop(0, 'rgba(11,11,11,.92)'); gTop.addColorStop(1, 'rgba(11,11,11,0)');
-  ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 330);
+  const gTop = ctx.createLinearGradient(0, 0, 0, 230); gTop.addColorStop(0, 'rgba(11,11,11,.9)'); gTop.addColorStop(1, 'rgba(11,11,11,0)');
+  ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 230);
   const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
   ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
   const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur ; sans texte, la photo n'a que la signature
@@ -2936,18 +2936,18 @@ async function hvPhoto() {
   try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(`500 27px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
   /* en haut : « Hand Coded. » et, en petit à sa droite, les mots du slogan, comme sur le site */
   const mx = 72, top = 78, tl = (CONTENT.settings.taglines && (CONTENT.settings.taglines[LANG] || CONTENT.settings.taglines.en)) || [];
-  const studio = tl[0] || ((CONTENT.settings.name || 'Hand Coded') + '.'), words = tl.slice(1), ss = 27, slh = 31;
-  ctx.font = `500 ${ss}px ${grotesk}`; const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + 30 : 0;
-  let ws = 130; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - 2 * mx - sw && ws > 48) { ws -= 4; ctx.font = wmFont(ws); }
+  const studio = tl[0] || ((CONTENT.settings.name || 'Hand Coded') + '.'), words = tl.slice(1), ss = 16, slh = 19;   // maj-151 : la signature 60 % plus petite, les mots à côté dans la même proportion qu'en haut du site
+  ctx.font = `500 ${ss}px ${grotesk}`; const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + 22 : 0;
+  let ws = 52; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - 2 * mx - sw && ws > 30) { ws -= 2; ctx.font = wmFont(ws); }
   const nameW = ctx.measureText(studio).width;
   ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, top + ws * 0.8);
   ctx.font = `500 ${ss}px ${grotesk}`; ctx.textBaseline = 'top';
-  words.forEach((w, i) => ctx.fillText(w, mx + nameW + 30, top + ws * 0.12 + i * slh));
-  const tw = W - 2 * mx; let size = 104, lines = [];
-  for (; size >= 40; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
+  words.forEach((w, i) => ctx.fillText(w, mx + nameW + 22, top + ws * 0.14 + i * slh));
+  const tw = W - 2 * mx; let size = 72, lines = [];   // le texte tapé : 30 % plus petit
+  for (; size >= 28; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
   lines = slogan ? lines.slice(0, 4) : [];
-  const lh = Math.round(size * 1.05), urlY = H - 96, y0 = urlY - 44 - lines.length * lh;
-  ctx.fillStyle = accent(); if (lines.length) ctx.fillRect(mx, y0 - 38, 54, 7);
+  const lh = Math.round(size * 1.05), urlY = H - 96, y0 = urlY - 40 - lines.length * lh;
+  ctx.fillStyle = accent(); if (lines.length) ctx.fillRect(mx, y0 - 30, 40, 5);
   ctx.fillStyle = '#fff'; ctx.font = `bold ${size}px ${grotesk}`;
   lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, y0 + i * lh));
   ctx.fillStyle = '#8f8f8f'; ctx.font = `28px ${grotesk}`; ctx.fillText('hand-coded.net', mx, urlY);
@@ -2993,7 +2993,7 @@ function toggleStory(open) {
 window.addEventListener('keydown', e => { if (e.code === 'Escape' && document.getElementById('hc-story') && document.getElementById('hc-story').classList.contains('on')) { e.stopPropagation(); toggleStory(false); } }, true);
 function hvSize() { if (!hv) return; const r = hv.cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1), w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
   if (r.width < 2 || r.height < 2 || (w === hv.W && h === hv.H && d === hv.dpr)) return;   // accueil caché ou même taille : on ne réalloue pas les deux canvas (très coûteux)
-  hv.W = w; hv.H = h; hv.dpr = d; hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.gl) { hv.gl.c.width = hv.W * d; hv.gl.c.height = hv.H * d; hv.gl.dpr = d; } if (hv.reelOn) hvReelFit(); }
+  hv.W = w; hv.H = h; hv.dpr = d; hv.cv.width = hv.W * d; hv.cv.height = hv.H * d; hv.ctx.setTransform(d, 0, 0, d, 0, 0); if (hv.gl) { hv.gl.c.width = hv.W * d; hv.gl.c.height = hv.H * d; hv.gl.dpr = d; } if (hv.reelOn) { const hr = homeReel(); if (hv.rp && hv.rp.key !== hr.kind + '|' + hr.src) { const auto = !hv.userReel; hvReelStop(); hvReelStart(auto); } else hvReelFit(); } }   // téléphone tourné : l'autre version du showreel
 /* Le panneau de réglages de la vidéo, comme une console de lumière : des faders, des boutons à témoin, la grille et la cadence en direct.
    Raccourcis : K ouvre ou ferme, C couleur, I inverser, V caméra. */
 const HV_FADERS = [
@@ -3157,12 +3157,23 @@ window.addEventListener('message', e => {
   }
   hvReelBar(); hvReelVeil();
 });
-function hvReelFit() {   // la vidéo couvre l'écran ; sur un écran en hauteur, elle s'y tient entière
+/* maj-151 : téléphone debout, la version verticale du showreel si elle existe (Réglages › Showreel), sinon la vidéo en plein écran, recadrée */
+const portraitScreen = () => window.innerHeight > window.innerWidth * 1.1;
+function homeReel() {
+  const m = ((CONTENT && CONTENT.settings.showreelMobile) || '').trim(), k = m ? mediaKind(m) : '';
+  if (m && /^(video|youtube|vimeo)$/.test(k) && portraitScreen()) return { kind: k, src: m, vertical: true };
+  return { kind: reel.kind, src: reel.src, vertical: false };
+}
+function hvReelFit() {   // la vidéo couvre tout l'écran, même en hauteur ; trop recadrée, on propose de tourner le téléphone
   const rp = hv && hv.rp; if (!rp) return;
   const W = rp.box.clientWidth, H = rp.box.clientHeight; if (!W || !H) return;
-  const cover = W / H >= 1.2, r = rp.ratio;
-  let w = W, h = W / r; if (cover ? h < H : h > H) { h = H; w = H * r; }
+  const r = rp.ratio;
+  let w = W, h = W / r; if (h < H) { h = H; w = H * r; }
   Object.assign(rp.el.style, { width: Math.ceil(w) + 'px', height: Math.ceil(h) + 'px', left: Math.round((W - w) / 2) + 'px', top: Math.round((H - h) / 2) + 'px' });
+  let t = document.getElementById('hv-turn');
+  if (!t) { t = document.createElement('p'); t.id = 'hv-turn'; t.className = 'ui'; t.setAttribute('aria-hidden', 'true'); document.getElementById('home-band').appendChild(t); }
+  t.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 13.5a8.5 8.5 0 0 0 6 6.6M2.2 16.6l1.3-3.2 3 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>' + escapeHTML(ui('hv_turn')) + '</span>';
+  home.classList.toggle('reel-crop', r / (W / H) > 1.6);   // on ne voit plus qu'une petite partie de l'image
 }
 function hvReelStart(auto = false) {
   if (!hv || !reelPlayable()) return false;
@@ -3170,13 +3181,13 @@ function hvReelStart(auto = false) {
   if (hv.reelOn) return true;
   if (hv.setOpen) hv.setOpen(false);
   if (hv.cam) hvCamOff();
-  const key = reel.kind + '|' + reel.src;
+  const hr = homeReel(), key = hr.kind + '|' + hr.src;
   if (!hv.rp || hv.rp.key !== key) {
     if (hv.rp) { hv.rp.pause(); hv.rp.box.remove(); }
-    hv.rp = makeReelPlayer(reel.kind, reel.src); hv.rp.key = key;
+    hv.rp = makeReelPlayer(hr.kind, hr.src); hv.rp.key = key; if (hr.vertical) hv.rp.ratio = 9 / 16;
     const band = document.getElementById('home-band'); band.insertBefore(hv.rp.box, band.querySelector('.hv-shade'));
-    if (hv.sound && reel.kind === 'video') hv.rp.mute(false);
-    if (reel.kind === 'video') hv.rp.play();
+    if (hv.sound && hr.kind === 'video') hv.rp.mute(false);
+    if (hr.kind === 'video') hv.rp.play();
   } else { hv.rp.seek(0); hv.rp.play(); hv.rp.mute(!hv.sound); }
   hv.reelOn = true; hv.rp.box.hidden = false; hv.rp.playAt = performance.now(); reelWatch();
   if (hv.rp.kind === 'video') { if (hv.video) hv.video.pause(); } else { hv.rp.shown = true; hvReelVeil(); }   // YouTube / Vimeo : les carrés jouent jusqu'à ce que le lecteur soit propre
@@ -3784,7 +3795,7 @@ function sayGo(box, fast = false) {
   box.animate([{ opacity: 0 }], { duration: 600, delay: last + dur * 0.4, fill: 'forwards' });
   setTimeout(() => box.remove(), last + dur + 50);
 }
-let introDone = false, introKicked = false, introShown = false;
+let introDone = false, introKicked = false, introShown = false, introReady = false, introReadyAt = 0, introLinesAt = 0, introLinesGo = false;
 const INTRO_STEP = 240;
 function introRelease() {   // la vidéo apparaît sous les lignes
   if (introShown) return; introShown = true;
@@ -3792,7 +3803,7 @@ function introRelease() {   // la vidéo apparaît sous les lignes
   introVideo();
 }
 function introOut(now = false, fast = false) {
-  const el = document.getElementById('hc-intro'); if (!el || introDone) return; introDone = true;
+  const el = document.getElementById('hc-intro'); if (!el || introDone) return; introDone = true; window.HC_NOINTRO = true;   // la phrase ne reviendra plus
   if (now || !el.animate) { el.remove(); introRelease(); introLate(true); return; }
   if (fast) { introRelease(); R0.classList.remove('hc-stage'); }
   const ls = [...el.querySelectorAll('.l')], step = fast ? 80 : INTRO_STEP, dur = fast ? 450 : 750, last = (ls.length - 1) * step;
@@ -3829,7 +3840,7 @@ function introStage() {
     sl.forEach((x, i) => show(x, 380 + i * 130, -18, 800));
     sq.forEach((x, i) => x.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: getComputedStyle(x).opacity, transform: 'none' }], { duration: 520, delay: 760 + i * 90, easing: 'cubic-bezier(.34,1.4,.64,1)', fill: 'backwards' }));
     const en = document.getElementById('enter'); if (en) en.animate([{ opacity: 0, transform: 'translate(-50%, 10px)' }, { opacity: 1, transform: 'translateX(-50%)' }], { duration: 700, delay: 900, easing: EASE_IN, fill: 'backwards' });   // « Entrer » tout de suite : on n'est pas obligé de regarder l'ouverture
-    setTimeout(() => { if (window.HC_GO) window.HC_GO(); }, 1150 + sq.length * 60);   // la phrase entre quand les carrés se posent
+    setTimeout(() => { introReady = true; }, 1150 + sq.length * 60);   // maj-151 : quand les boutons sont posés, la vidéo d'abord, puis la phrase par-dessus
   };
   /* la signature dans sa vraie police, sinon elle apparaît en police de secours puis change */
   const f = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]) : Promise.resolve();
@@ -3854,16 +3865,19 @@ function introWatch() {
     if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam) started = hvReelStart(true);   // le showreel se charge pendant la phrase…
     if (started && !primed && hv.rp && hv.rp.t > 0.05) { hv.rp.pause(); hv.rp.seek(0); primed = true; }   // …et attend sur sa première image, caché
     if (started && !hv.reelOn) primed = true;   // arrêté par le visiteur
-    const I = window.HC_INTRO; if (!I) return;
-    const now = performance.now(), videoAt = I.t0 + (I.video ?? I.depart), departAt = I.t0 + I.depart;
+    const now = performance.now();
     /* YouTube et Vimeo couvrent leurs premières secondes de leur habillage : on les relance un peu avant, caché, pour qu'ils soient nets quand ils apparaissent */
     const lead = !hv || !hv.rp ? 0 : hv.rp.kind === 'youtube' ? 2900 : hv.rp.kind === 'vimeo' ? 500 : 0;
-    if (lead && primed && hv.reelOn && !introKicked && now >= videoAt - lead) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
-    if (!introShown && now >= videoAt) {
+    if (!introReady && !R0.classList.contains('hc-stage') && !R0.classList.contains('hc-late')) introReady = true;   // l'ouverture a été court-circuitée
+    if (!introShown && introReady) {   // d'abord la vidéo…
+      if (!introReadyAt) introReadyAt = now;
+      if (lead && primed && hv.reelOn && !introKicked) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
       const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && now >= kickAt + lead;
-      if (ready || now - videoAt > 6000) introRelease();   // la vidéo apparaît avec la dernière ligne
+      if (ready || now - introReadyAt > 7000) { introRelease(); introLinesAt = now + 1000; }
     }
-    if (!introDone && introShown && now >= Math.max(departAt, videoAt + 600)) introOut();   // puis les lignes s'en vont, par-dessus la vidéo
+    if (introShown && !introLinesGo && !introDone && now >= introLinesAt) { introLinesGo = true; if (window.HC_GO) window.HC_GO(); }   // …puis la phrase, par-dessus
+    const I = window.HC_INTRO; if (!I) return;
+    if (!introDone && introShown && now >= I.t0 + I.depart + 600) introOut();   // puis les lignes s'en vont
   }, 60);
 }
 (async function boot() {
