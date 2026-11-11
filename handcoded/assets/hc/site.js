@@ -3133,7 +3133,7 @@ async function hvPhoto() {
 function buildStory() {
   const btn = document.getElementById('story-btn'), band = document.getElementById('home-band'); if (!btn || !band) return;
   const st = (CONTENT.settings.home || {}).story || {};
-  const title = tr(st.title || {}).trim(), body = sanitizeHTML(tr(st.body || {})), has = !!(title || htmlToText(body).join('').trim());
+  const title = tr(st.title || {}).trim(), body = sanitizeHTML(tr(st.body || {})), has = !st.off && !!(title || htmlToText(body).join('').trim());   // maj-173 : « Masquer le ? » dans les Réglages
   btn.hidden = !has; let box = document.getElementById('hc-story');
   if (!has) { if (box) box.remove(); return; }
   if (!box) { box = document.createElement('section'); box.id = 'hc-story'; box.hidden = true; band.appendChild(box); }

@@ -1583,11 +1583,12 @@ function storyEditor(s) {
     }), 'sm'));
   drawShots();
   return h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Histoire du site', h('small', null, ' le « ? » en bas à droite de l’accueil')),
+    h('div', { style: { margin: '2px 0 12px' } }, toggle('Masquer le « ? » (le texte reste gardé ici)', () => !!st.off, v => { if (v) st.off = true; else delete st.off; })),
     pairInput('Titre', st, 'title'),
     h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Texte'), richText(st.body, 'L’histoire de ce site…')),
     h('div', { class: 'f' }, h('span', { class: 'lbl' }, 'Captures'), shots, h('p', { class: 'hint' }, 'Elles s’affichent à côté du texte ; un clic les ouvre en grand.')),
     h('div', { class: 'grid2' }, field('Lien', textInput(() => st.link, v => { st.link = v.trim(); }, { placeholder: 'https://…', spell: false })), pairInput('Texte du lien', st, 'linkLabel')),
-    h('p', { class: 'hint' }, 'Laisse le titre et le texte vides pour retirer le « ? ».'));
+    h('p', { class: 'hint' }, 'Pour retirer le « ? », coche « Masquer » plus haut, ou laisse le titre et le texte vides.'));
 }
 
 /* ================================================================ Vue : Réglages */
