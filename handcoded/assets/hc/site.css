@@ -66,6 +66,7 @@ button { font: inherit; }
 #kb { right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 77px; z-index: 7; }   /* aligné sur le menu des tags */
 #kb-toggle { display: block; width: 77px; height: 24px; border: 0; padding: 0; background: url("ui/keyboard.svg") center/63px auto no-repeat; cursor: pointer; opacity: .9; }
 #kb-toggle:hover { filter: brightness(.85); }
+@media (max-width: 700px), (max-height: 520px), (hover: none) and (pointer: coarse) { #kb { display: none !important; } }   /* maj-170 : pas de guide clavier sur téléphone ni tablette */
 #kb-panel { position: absolute; right: 0; bottom: 28px; width: 77px; background: #f2f2f2; border-top: 2px solid #dcdcdc; padding: 10px 0 12px; display: grid; justify-items: center; gap: 4px; transform: translateY(calc(100% + 60px)); transition: transform .5s cubic-bezier(.77,0,.18,1); }
 #kb.open #kb-panel { transform: translateY(0); }
 #kb-panel .lbl { font: bold 9px/11px var(--ui); color: #555; letter-spacing: .04em; text-transform: uppercase; margin-top: 6px; text-align: center; }
@@ -1206,7 +1207,9 @@ html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::be
    La signature à gauche, les mots du slogan en petit à côté, les boutons ronds dessous, aux mêmes places et aux mêmes tailles. */
 html #home-band { padding-left: max(23px, env(safe-area-inset-left, 0px)); }
 html #home-band .sl { display: grid; grid-template-columns: auto auto; grid-auto-rows: min-content; justify-content: start; align-items: start; column-gap: 18px; padding-right: 0; }
-html #home-band .sl .wm { grid-column: 1; grid-row: 1 / span 12; }
+html #home-band .sl .wm { grid-column: 1; grid-row: 1; }
+html #home-band .sl > .tls { grid-row: 1; }
+html #home-band .sl .tls span { display: block; padding-left: 0; font: inherit; line-height: inherit; color: inherit; }   /* maj-170 : les mots dans un bloc, leur taille est calculée sur la signature */
 html #home-band .sl > span { grid-column: 2; display: block; padding-left: 0; font: 500 13px/15px var(--ui); color: #fff; white-space: nowrap; }
 html #home-band .sl > span:nth-child(2) { margin-top: 5px; }
 html #home-ctl { margin: 12px 0 0 2px; }

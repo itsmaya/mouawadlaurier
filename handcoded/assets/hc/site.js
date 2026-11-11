@@ -1502,6 +1502,30 @@ function setupStats() {
 function countView(path, title, event = false) {
   try { if (window.goatcounter && typeof window.goatcounter.count === 'function') window.goatcounter.count({ path: event ? path : ((window.HC_ROUTE || {}).pages ? SITE_ROOT.pathname : location.pathname.replace(/index\.html$/, '')) + path, title, event }); } catch (e) {}
 }
+/* maj-170 : les lignes du slogan occupent exactement la hauteur de la signature « Hand Coded. » : du haut de ses lettres à sa ligne de base.
+   On mesure les vraies lettres dans les polices de Réglages › Typographie, à l'accueil comme à l'intérieur du site. */
+const tagCtx = document.createElement('canvas').getContext('2d');
+function fitTaglines() {
+  ['#slogan', '#home-slogan'].forEach(sel => {
+    const wm = document.querySelector(sel + ' > .wm'), box = document.querySelector(sel + ' > .tls'); if (!wm || !box) return;
+    const lines = [...box.children]; if (!lines.length) return;
+    box.style.fontSize = box.style.lineHeight = box.style.marginTop = '';   // les tailles du CSS, puis la mesure
+    const fontOf = (cs, px) => `${cs.fontStyle === 'italic' ? 'italic ' : ''}${cs.fontWeight} ${px}px ${cs.fontFamily}`;
+    const wcs = getComputedStyle(wm), wf = parseFloat(wcs.fontSize); if (!(wf > 0)) return;
+    tagCtx.font = fontOf(wcs, wf); const mw = tagCtx.measureText(wm.textContent);
+    if (!(mw.actualBoundingBoxAscent > 0) || !(mw.fontBoundingBoxAscent > 0)) return;   // navigateur sans ces mesures : on garde le CSS
+    const wlh = parseFloat(wcs.lineHeight) || wf * 1.2, asc = mw.actualBoundingBoxAscent;
+    const wBase = (wlh - mw.fontBoundingBoxAscent - mw.fontBoundingBoxDescent) / 2 + mw.fontBoundingBoxAscent;   // la ligne de base dans la ligne de la signature
+    const tcs = getComputedStyle(box); tagCtx.font = fontOf(tcs, 100); const m1 = tagCtx.measureText(lines[0].textContent);
+    const k = 1.15, a1 = (m1.actualBoundingBoxAscent || 72) / 100, size = asc / (a1 + (lines.length - 1) * k), lh = size * k;
+    const tBase = (lh - (m1.fontBoundingBoxAscent + m1.fontBoundingBoxDescent) * size / 100) / 2 + m1.fontBoundingBoxAscent * size / 100;
+    box.style.fontSize = size.toFixed(2) + 'px'; box.style.lineHeight = lh.toFixed(2) + 'px';
+    box.style.marginTop = ((wBase - asc) - (tBase - a1 * size)).toFixed(2) + 'px';   // le haut des mots sur le haut des lettres de la signature
+  });
+}
+fitTaglines.wait = () => { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(fitTaglines)); };
+if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => fitTaglines());
+window.addEventListener('resize', () => fitTaglines());
 function renderTexts() {
   const s = CONTENT.settings;
   applyTypo(); buildStory(); dockLabels();
@@ -1509,9 +1533,10 @@ function renderTexts() {
   document.documentElement.classList.toggle('neg', negMode);
   if (!P.postOpen) document.title = BASE_TITLE || s.name || 'Hand Coded';
   const tl = (s.taglines && (s.taglines[LANG] || s.taglines.en)) || [];
-  const sloganHTML = tl.length ? `<b class="wm">${escapeHTML(tl[0])}</b>${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}` : escapeHTML(s.name);
+  const sloganHTML = tl.length ? `<b class="wm">${escapeHTML(tl[0])}</b><span class="tls">${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}</span>` : escapeHTML(s.name);   // maj-170 : les mots dans un bloc, comme à l'intérieur du site
   sloganEl.innerHTML = tl.length ? `<b class="wm" role="link" tabindex="0" title="${escapeHTML(ui('homeLink'))}">${escapeHTML(tl[0])}</b><span class="tls">${tl.slice(1).map(l => `<span>${escapeHTML(l)}</span>`).join('')}</span>` : sloganHTML;   // les mots du slogan en petit, à droite de la signature
   document.getElementById('home-slogan').innerHTML = sloganHTML;
+  fitTaglines(); fitTaglines.wait();
   /* Logo par défaut : anneau à la couleur d'accent sur fond blanc, anneau blanc sur fond noir. Il échappe à l'inversion (classe raw). */
   drawLogos();
   if (!s.logo && document.fonts) { const lf = typoOf(s, 'logo'), spec = `${lf.italic ? 'italic ' : ''}${lf.weight || 400} 76px ${lf.css}`; if (!document.fonts.check(spec)) document.fonts.load(spec).then(() => { if (!CONTENT.settings.logo) drawLogos(); }).catch(() => {}); }
@@ -3062,7 +3087,7 @@ async function hvPhoto() {
   const studio = tl[0] || ((ST.name || 'Hand Coded') + '.'), words = tl.slice(1);
   let ws = 96, ss = 30;
   /* maj-164 : les trois mots occupent exactement la hauteur de « Hand Coded. », du haut des majuscules à la ligne de base */
-  const wordsSize = w => { ctx.font = wmFont(w); const capH = ctx.measureText('H').actualBoundingBoxAscent || w * 0.7; ctx.font = smlFont(100); const k = (ctx.measureText('R').actualBoundingBoxAscent || 72) / 100, n = Math.max(1, words.length); return capH / ((n - 1) * 1.18 + k); };
+  const wordsSize = w => { ctx.font = wmFont(w); const capH = ctx.measureText(studio).actualBoundingBoxAscent || w * 0.7; ctx.font = smlFont(100); const k = (ctx.measureText(words[0] || 'R').actualBoundingBoxAscent || 72) / 100, n = Math.max(1, words.length); return capH / ((n - 1) * 1.18 + k); };
   const fitHead = () => { ss = wordsSize(ws); ctx.font = smlFont(ss); const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
   while (fitHead() > W - 2 * mx - 2 * R - 40 && ws > 48) ws -= 4;
   ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width, base = top + ws * 0.78;
@@ -3976,7 +4001,7 @@ function introStage() {
   if (!R0.classList.contains('hc-stage')) return;
   const run = () => {
     if (!R0.classList.contains('hc-stage')) return;
-    const wm = document.querySelector('#home-slogan .wm'), sl = [...document.querySelectorAll('#home-slogan > span')], sq = [...document.querySelectorAll('#home-ctl > *')];   // les carrés encore cachés aussi (le son arrive avec la vidéo) : ils prennent leur tour
+    const wm = document.querySelector('#home-slogan .wm'), sl = [...document.querySelectorAll('#home-slogan .tls > span')], sq = [...document.querySelectorAll('#home-ctl > *')];   // les carrés encore cachés aussi (le son arrive avec la vidéo) : ils prennent leur tour
     R0.classList.remove('hc-stage');
     const show = (el, delay, dx = -24, dur = 900) => el && el.animate([{ opacity: 0, transform: `translateX(${dx}px)`, filter: 'blur(6px)' }, { opacity: getComputedStyle(el).opacity, transform: 'none', filter: 'blur(0)' }], { duration: dur, delay, easing: EASE_IN, fill: 'backwards' });
     show(wm, 0, -30, 1100);
