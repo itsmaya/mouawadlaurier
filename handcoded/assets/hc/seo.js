@@ -39,11 +39,11 @@ const L10N = {
   photos: { en: 'Photos', fr: 'Photos', ca: 'Fotos', es: 'Fotos' },
   more: { en: 'More', fr: 'Voir aussi', ca: 'Vegeu també', es: 'Ver también' },
   langs: { en: 'Languages', fr: 'Langues', ca: 'Llengües', es: 'Idiomas' },
-  tagline: { en: 'interactive art and technology studio', fr: 'studio d’art et de technologies interactives', ca: 'estudi d’art i tecnologies interactives', es: 'estudio de arte y tecnologías interactivas' },
-  not: { en: 'Interactive art and technology studio based in Barcelona, founded in %Y. Not to be confused with “hand-coded”, the generic term for code written by hand.',
-    fr: 'Studio d’art et de technologies interactives basé à Barcelone, fondé en %Y. À ne pas confondre avec « hand-coded », l’expression générique pour du code écrit à la main.',
-    ca: 'Estudi d’art i tecnologies interactives amb seu a Barcelona, fundat el %Y. No s’ha de confondre amb «hand-coded», l’expressió genèrica per a codi escrit a mà.',
-    es: 'Estudio de arte y tecnologías interactivas con sede en Barcelona, fundado en %Y. No confundir con «hand-coded», la expresión genérica para código escrito a mano.' },
+  tagline: { en: 'interactive and immersive experiences for brands, Barcelona', fr: 'expériences interactives et immersives pour les marques, Barcelone', ca: 'experiències interactives i immersives per a marques, Barcelona', es: 'experiencias interactivas e inmersivas para marcas, Barcelona' },   // maj-172 : les mots d’une recherche de marque, plutôt que « studio d’art »
+  not: { en: 'Creative technology studio based in Barcelona, founded in %Y. Not to be confused with “hand-coded”, the generic term for code written by hand.',
+    fr: 'Studio de creative technology basé à Barcelone, fondé en %Y. À ne pas confondre avec « hand-coded », l’expression générique pour du code écrit à la main.',
+    ca: 'Estudi de creative technology amb seu a Barcelona, fundat el %Y. No s’ha de confondre amb «hand-coded», l’expressió genèrica per a codi escrit a mà.',
+    es: 'Estudio de creative technology con sede en Barcelona, fundado en %Y. No confundir con «hand-coded», la expresión genérica para código escrito a mano.' },
 };
 const L = (k, l) => tr(L10N[k], l);
 const year = d => (String(d || '').match(/\d{4}/) || [''])[0];
@@ -68,6 +68,7 @@ function site(content, opts) {
   const image = abs(base, seo.image || photo(posts.find(p => photo(p)) || {}) || 'assets/hc/ui/logo-default.svg');
   const office = (s.offices || [])[0];
   const social = (s.social || []).map(x => x && (x.url || x.href || x.link)).filter(u => /^https?:\/\//.test(u || ''));
+  const sameAs = [...social, ...(/hand-coded\.net/.test(base + ' ' + social.join(' ')) ? [] : ['https://hand-coded.net/'])];   // maj-172 : l’ancien site du studio, que les moteurs et les IA connaissent déjà, est le même studio
   const desc = l => tr(seo.description, l) || SEO_DEFAULT[l] || SEO_DEFAULT.en;
   const founded = String(s.founded || s.since || '');
   const href = (l, p) => p ? `${l}/${encodeURIComponent(p.id)}/` : `${l}/`;          // relatif à la racine du site
@@ -94,7 +95,7 @@ function site(content, opts) {
     areaServed: 'Worldwide',
     founder: posts.filter(p => (p.tags || []).includes('core')).map(p => ({ '@id': url(l, p) + '#person' })),
     knowsAbout: posts.filter(p => (sections.find(x => x.id === p.section) || {}).skills).map(p => tr(p.title, l)).filter(Boolean),
-    ...(social.length ? { sameAs: social } : {}) });
+    ...(sameAs.length ? { sameAs } : {}) });
   return { s, seo, base, def, langs, name, sections, posts, pages, photo, image, office, social, desc, href, url, has, updated, lastmod, address, org };
 }
 

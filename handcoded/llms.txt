@@ -2,7 +2,7 @@
 
 > Hand Coded is a Barcelona studio that designs and builds interactive, immersive experiences for brands, and the technical workshop behind agencies and artists: light, sound, AI and our own tools.
 
-Interactive art and technology studio based in Barcelona, founded in 2008. Not to be confused with “hand-coded”, the generic term for code written by hand.
+Creative technology studio based in Barcelona, founded in 2008. Not to be confused with “hand-coded”, the generic term for code written by hand.
 
 ## Founders
 - [Cyril Laurier](https://mouawadlaurier.com/handcoded/en/cyril/): Co-founder. PhD in music AI, Sony CSL researcher.
