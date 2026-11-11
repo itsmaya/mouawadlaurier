@@ -615,6 +615,20 @@ function tiles(options, current, onPick, label) {
 }
 
 /* ================================================================ Champs */
+/* maj-165 : l'outil d'affiches (affiches/) et son mot de passe. Seule l'empreinte est publiée dans content.json, jamais le mot de passe. */
+async function postersHash(t) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('hc-affiches:' + t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+function postersBlock(s) {
+  const pw = h('input', { type: 'password', placeholder: s.postersPass ? 'Nouveau mot de passe' : 'Choisis un mot de passe', autocomplete: 'new-password' });
+  const set = btn('Enregistrer', async () => {
+    const v = pw.value.trim(); if (v.length < 4) { toast('Au moins 4 caractères.', 'bad'); return; }
+    s.postersPass = await postersHash(v); change(); renderMain(); toast('Mot de passe enregistré : il s’applique après la publication.');
+  }, 'sm');
+  const off = s.postersPass ? btn('Retirer le mot de passe', () => { delete s.postersPass; change(); renderMain(); }, 'sm ghost') : null;
+  return h('div', { class: 'block' }, h('h3', null, 'Affiches', h('small', null, 'l’outil pour les réseaux sociaux')),
+    h('p', { class: 'hint', style: { marginTop: 0 } }, s.postersPass ? 'L’outil demande un mot de passe. Chaque navigateur s’en souvient après la première fois.' : 'L’outil est ouvert à toute personne qui connaît son adresse.'),
+    h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, pw, set, off, h('a', { href: SITE + 'affiches/', target: '_blank', rel: 'noopener' }, 'Ouvrir l’outil ↗')),
+    h('p', { class: 'hint' }, 'Une protection simple, pour garder l’outil pour toi et ton équipe : elle ne protège rien de secret, les photos du site restant publiques.'));
+}
 function field(label, input, hint) { return h('label', { class: 'f' }, h('span', null, label), input, hint ? h('p', { class: 'hint' }, hint) : null); }
 function textInput(get, set, opts = {}) {
   const i = opts.rows ? h('textarea', { rows: opts.rows, placeholder: opts.placeholder }) : h('input', { type: opts.type || 'text', value: get() ?? '', placeholder: opts.placeholder, min: opts.min, max: opts.max, step: opts.step, spellcheck: opts.spell === false ? 'false' : null });
@@ -1639,6 +1653,7 @@ function viewSettings() {
         h('p', { class: 'hint' }, 'Le logo par défaut a un anneau à la couleur d’accent sur fond blanc, et blanc sur fond noir. Le choix du visiteur est gardé pour sa prochaine visite (en mode jour et nuit, jusqu’au prochain lever ou coucher du soleil).')),
       ficheBlock(s),
       typoBlock(s),
+      postersBlock(s),
       h('div', { class: 'block' }, h('h3', null, 'Showreel'),
         field('Lien de la vidéo', textInput(() => s.showreel, v => { s.showreel = v.trim(); }, { placeholder: 'https://youtu.be/… ou media/showreel/showreel.mp4', spell: false }), 'YouTube, Vimeo ou fichier MP4 du site. Le bouton Showreel joue la vidéo sur tout le fond de l’accueil, sous une grille fine, avec une barre de lecture ; depuis la 3D, il ramène à l’accueil et la lance. Le son est coupé au départ. Un fichier MP4 n’affiche aucun logo ; YouTube montre parfois son titre au démarrage. Laisse vide pour retirer le bouton.'),
         h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '-6px' } },
