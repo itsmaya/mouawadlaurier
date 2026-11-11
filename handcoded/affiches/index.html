@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Affiches · Hand Coded</title>
+<!-- Outil d'affiches de Hand Coded : des images pour les réseaux sociaux et les annonces, dans la charte du site.
+     Tout se passe dans le navigateur : les photos ajoutées ne quittent pas l'ordinateur, l'image est enregistrée directement. -->
+<style>
+:root { --ink: #111; --grey: #8a8a8a; --line: #e2e2e2; --hair: #bdbdbd; --bg: #fff; --panel: #fafafa; --accent: #ffcc00;
+  --serif: "Instrument Serif", Georgia, serif; --ui: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 400 13px/1.4 var(--ui); }
+button, input, select, textarea { font: inherit; color: inherit; }
+.app { display: grid; grid-template-columns: 380px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); height: 100vh; height: 100dvh; }
+.app > * { min-height: 0; }
+/* les réglages, à gauche */
+.side { overflow-y: auto; border-right: 1px solid var(--line); background: var(--panel); padding: 22px 20px 40px; }
+.brand { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.brand .wm { font: italic 32px/40px var(--serif); }
+.brand .tl { margin-top: 4px; font: 500 10.5px/12px var(--ui); }
+.brand a { margin-left: auto; margin-top: 8px; font: 600 10px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; color: var(--grey); text-decoration: none; }
+.brand a:hover { color: var(--ink); }
+h1 { margin: 0 0 4px; font: italic 30px/1 var(--serif); }
+.lead { margin: 0 0 16px; color: #555; }
+details { border-top: 1px solid var(--line); padding: 4px 0 10px; }
+details:last-of-type { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; padding: 10px 0 6px; font: 600 10.5px/1 var(--ui); letter-spacing: .14em; text-transform: uppercase; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: ''; width: 0; height: 0; border-left: 6px solid var(--accent); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; transition: transform .25s; }
+details[open] > summary::before { transform: rotate(90deg); }
+.f { display: grid; gap: 5px; margin: 10px 0 0; }
+.f > span { font: 600 10px/1 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--grey); display: flex; justify-content: space-between; }
+.f > span output { color: var(--ink); letter-spacing: 0; font-weight: 500; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+input[type=text], textarea, select { width: 100%; border: 1px solid var(--hair); border-radius: 10px; background: #fff; padding: 8px 10px; outline: none; }
+textarea { resize: vertical; min-height: 64px; line-height: 1.35; }
+input[type=text]:focus, textarea:focus, select:focus { border-color: var(--ink); }
+input[type=range] { width: 100%; accent-color: var(--ink); }
+.seg { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 5px; }
+.seg button, .btn { border: 1px solid var(--hair); background: #fff; border-radius: 16px; padding: 7px 12px; cursor: pointer; font: 600 10.5px/1 var(--ui); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.seg button:hover, .btn:hover { border-color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn.main { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn.yellow { background: var(--accent); border-color: var(--accent); color: #111; }
+.sw { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.sw button { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--hair); cursor: pointer; padding: 0; }
+.sw button[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sw input[type=color] { width: 30px; height: 26px; border: 1px solid var(--hair); border-radius: 8px; padding: 1px; background: #fff; cursor: pointer; }
+.pics { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pics .thumb { width: 54px; height: 40px; border-radius: 6px; background: #eee center / cover no-repeat; border: 1px solid var(--line); }
+.chk { display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer; }
+.chk input { accent-color: var(--ink); width: 16px; height: 16px; }
+.hint { margin: 6px 0 0; color: var(--grey); font-size: 11.5px; }
+/* l'aperçu, à droite */
+.stage { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: #ececec; min-width: 0; }
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 18px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top .sp { flex: 1; }
+.view { display: grid; place-items: center; padding: 26px; min-height: 0; overflow: hidden; }
+canvas#out { display: block; box-shadow: 0 18px 50px rgba(0,0,0,.18); background: #000; }
+.bottom { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 18px; background: var(--bg); border-top: 1px solid var(--line); }
+.bottom .note { color: var(--grey); font-size: 11.5px; margin-left: auto; }
+/* la galerie des photos du site */
+.gal { position: fixed; inset: 0; z-index: 10; background: rgba(255,255,255,.97); overflow-y: auto; padding: 24px max(20px, env(safe-area-inset-right, 0px)) 40px max(20px, env(safe-area-inset-left, 0px)); }
+.gal[hidden] { display: none; }
+.gal .bar { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; max-width: 1400px; margin-inline: auto; }
+.gal h2 { margin: 0; font: italic 34px/1 var(--serif); }
+.gal .bar .btn { margin-left: auto; }
+.gal .grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.gal .grid button { aspect-ratio: 3 / 2; border: 0; padding: 0; cursor: pointer; background: #111 center / cover no-repeat; position: relative; }
+.gal .grid button span { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 8px 6px; background: linear-gradient(transparent, rgba(0,0,0,.7)); color: #fff; font: 600 10.5px/1.2 var(--ui); text-align: left; opacity: 0; transition: opacity .25s; }
+.gal .grid button:hover span { opacity: 1; }
+.gal h3 { max-width: 1400px; margin: 22px auto 8px; font: 600 10.5px/1 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--grey); }
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: auto auto; height: auto; }
+  .stage { order: -1; position: sticky; top: 0; z-index: 2; }
+  .view { padding: 14px; height: 52vh; }
+  .side { border-right: 0; padding: 18px max(16px, env(safe-area-inset-left, 0px)) 60px; }
+  .top, .bottom { padding: 10px max(16px, env(safe-area-inset-left, 0px)); }
+  .bottom .note { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><div class="wm">Hand Coded.</div><div class="tl" id="tl"></div><a href="../admin/">Admin</a></div>
+    <h1>Affiches</h1>
+    <p class="lead">Des images pour tes réseaux et tes annonces, dans la charte du site. Tout reste sur ton ordinateur.</p>
+    <div class="f"><span>Partir d’un modèle</span><div class="seg" id="presets"></div></div>
+    <div class="f"><span>Mes modèles</span><div class="seg" id="mine"></div>
+      <div class="seg" style="margin-top:4px"><button type="button" id="save">Enregistrer ce réglage</button></div></div>
+
+    <details open><summary>Textes</summary>
+      <div class="f"><span>Sur-titre</span><input type="text" id="kicker" placeholder="ex. Nouveau projet · Reims, 2026"></div>
+      <div class="f"><span>Texte principal</span><textarea id="text" placeholder="Type something"></textarea></div>
+      <div class="f"><span>Lien</span><input type="text" id="link" placeholder="hand-coded.net"></div>
+      <div class="f"><span>Police du texte</span><div class="seg" data-k="textFont"><button data-v="title">Grotesque</button><button data-v="italic">Italique</button></div></div>
+      <div class="row">
+        <div class="f"><span>Casse</span><div class="seg" data-k="upper"><button data-v="1">Majuscules</button><button data-v="0">Normale</button></div></div>
+        <div class="f"><span>Alignement</span><div class="seg" data-k="align"><button data-v="left">Gauche</button><button data-v="center">Centre</button></div></div>
+      </div>
+      <div class="f"><span>Place du texte</span><div class="seg" data-k="place"><button data-v="bottom">En bas</button><button data-v="middle">Au milieu</button><button data-v="top">Sous le logo</button></div></div>
+      <div class="f"><span>Taille du texte <output id="o-textSize"></output></span><input type="range" id="textSize" min="40" max="180" step="1"></div>
+      <div class="f"><span>Couleur du texte</span><div class="sw" data-c="textColor"></div></div>
+      <label class="chk"><input type="checkbox" id="dash"> Le trait jaune au-dessus du texte</label>
+    </details>
+
+    <details open><summary>Format</summary>
+      <div class="f"><div class="seg" data-k="format"><button data-v="post">Post 4:5</button><button data-v="square">Carré</button><button data-v="story">Story 9:16</button><button data-v="wide">Paysage</button><button data-v="banner">LinkedIn</button></div></div>
+    </details>
+
+    <details open><summary>Photo de premier plan</summary>
+      <div class="f"><div class="pics"><div class="thumb" id="fgThumb"></div><button class="btn" type="button" id="fgUp">Choisir sur l’ordinateur</button><button class="btn" type="button" id="fgSite">Photos du site</button><button class="btn" type="button" id="fgNone">Aucune</button></div></div>
+      <div class="f"><span>Traitement</span><div class="seg" data-k="fgMode"><button data-v="photo">Photo</button><button data-v="bw">Noir et blanc</button><button data-v="duo">Bichromie</button><button data-v="dots">Trame</button></div></div>
+      <div class="f" data-show="fgMode:dots"><span>Forme de la trame</span><div class="seg" data-k="fgShape"><button data-v="round">Ronds</button><button data-v="square">Carrés</button></div></div>
+      <div class="f" data-show="fgMode:dots"><span>Taille de la trame <output id="o-fgCell"></output></span><input type="range" id="fgCell" min="6" max="60" step="1"></div>
+      <div class="f" data-show="fgMode:dots"><span>Grosseur des points <output id="o-fgDot"></output></span><input type="range" id="fgDot" min="40" max="140" step="1"></div>
+      <div class="f" data-show="fgMode:dots"><span>Couleur des points</span><div class="sw" data-c="fgDotColor"></div></div>
+      <label class="chk" data-show="fgMode:dots"><input type="checkbox" id="fgInvert"> Inverser (les points dans les ombres)</label>
+      <div class="f" data-show="fgMode:duo"><span>Bichromie : les ombres</span><div class="sw" data-c="fgDuoA"></div></div>
+      <div class="f" data-show="fgMode:duo"><span>Bichromie : les lumières</span><div class="sw" data-c="fgDuoB"></div></div>
+      <div class="row">
+        <div class="f"><span>Luminosité <output id="o-fgBright"></output></span><input type="range" id="fgBright" min="-100" max="100" step="1"></div>
+        <div class="f"><span>Contraste <output id="o-fgContrast"></output></span><input type="range" id="fgContrast" min="20" max="300" step="1"></div>
+      </div>
+      <div class="f" data-show="fgMode:photo"><span>Saturation <output id="o-fgSat"></output></span><input type="range" id="fgSat" min="0" max="200" step="1"></div>
+      <div class="f"><span>Cadrage</span><div class="seg" data-k="fgFit"><button data-v="cover">Plein cadre</button><button data-v="contain">Image entière</button></div></div>
+      <div class="f"><span>Zoom <output id="o-fgZoom"></output></span><input type="range" id="fgZoom" min="50" max="300" step="1"></div>
+      <div class="row">
+        <div class="f"><span>Gauche · droite</span><input type="range" id="fgX" min="-100" max="100" step="1"></div>
+        <div class="f"><span>Haut · bas</span><input type="range" id="fgY" min="-100" max="100" step="1"></div>
+      </div>
+      <div class="f"><span>Fusion avec le fond</span><select id="fgBlend">
+        <option value="source-over">Normal</option><option value="multiply">Produit (multiply)</option><option value="screen">Superposition claire (screen)</option>
+        <option value="overlay">Incrustation (overlay)</option><option value="soft-light">Lumière douce</option><option value="hard-light">Lumière crue</option>
+        <option value="darken">Obscurcir</option><option value="lighten">Éclaircir</option><option value="difference">Différence</option><option value="exclusion">Exclusion</option>
+        <option value="color-dodge">Densité couleur −</option><option value="color-burn">Densité couleur +</option><option value="luminosity">Luminosité</option></select></div>
+      <div class="f"><span>Opacité <output id="o-fgOpacity"></output></span><input type="range" id="fgOpacity" min="0" max="100" step="1"></div>
+    </details>
+
+    <details><summary>Fond</summary>
+      <div class="f"><span>Couleur de fond</span><div class="sw" data-c="bgColor"></div></div>
+      <div class="f"><span>Image d’arrière-plan</span><div class="pics"><div class="thumb" id="bgThumb"></div><button class="btn" type="button" id="bgUp">Ordinateur</button><button class="btn" type="button" id="bgSite">Photos du site</button><button class="btn" type="button" id="bgNone">Aucune</button></div></div>
+      <div class="f" data-show="bgImg"><span>Traitement</span><div class="seg" data-k="bgMode"><button data-v="photo">Photo</button><button data-v="bw">Noir et blanc</button><button data-v="duo">Bichromie</button><button data-v="dots">Trame</button></div></div>
+      <div class="f" data-show="bgImg bgMode:dots"><span>Forme de la trame</span><div class="seg" data-k="bgShape"><button data-v="round">Ronds</button><button data-v="square">Carrés</button></div></div>
+      <div class="f" data-show="bgImg bgMode:dots"><span>Taille de la trame <output id="o-bgCell"></output></span><input type="range" id="bgCell" min="6" max="60" step="1"></div>
+      <div class="f" data-show="bgImg bgMode:dots"><span>Couleur des points</span><div class="sw" data-c="bgDotColor"></div></div>
+      <div class="f" data-show="bgImg bgMode:duo"><span>Bichromie : les ombres</span><div class="sw" data-c="bgDuoA"></div></div>
+      <div class="f" data-show="bgImg bgMode:duo"><span>Bichromie : les lumières</span><div class="sw" data-c="bgDuoB"></div></div>
+      <div class="row" data-show="bgImg">
+        <div class="f"><span>Luminosité <output id="o-bgBright"></output></span><input type="range" id="bgBright" min="-100" max="100" step="1"></div>
+        <div class="f"><span>Contraste <output id="o-bgContrast"></output></span><input type="range" id="bgContrast" min="20" max="300" step="1"></div>
+      </div>
+      <div class="f" data-show="bgImg"><span>Fusion avec la couleur de fond</span><select id="bgBlend">
+        <option value="source-over">Normal</option><option value="multiply">Produit (multiply)</option><option value="screen">Superposition claire (screen)</option>
+        <option value="overlay">Incrustation (overlay)</option><option value="soft-light">Lumière douce</option><option value="luminosity">Luminosité</option><option value="difference">Différence</option></select></div>
+      <div class="f" data-show="bgImg"><span>Opacité de l’image <output id="o-bgOpacity"></output></span><input type="range" id="bgOpacity" min="0" max="100" step="1"></div>
+      <div class="f"><span>Dégradés de lisibilité <output id="o-shade"></output></span><input type="range" id="shade" min="0" max="100" step="1"></div>
+      <p class="hint">Un voile sombre en haut et en bas, pour lire le texte sur une photo claire. La couleur du voile suit la couleur de fond.</p>
+    </details>
+
+    <details><summary>Signature et logo</summary>
+      <label class="chk"><input type="checkbox" id="showWm"> « Hand Coded. » en haut à gauche</label>
+      <label class="chk"><input type="checkbox" id="showWords"> Les trois mots à côté</label>
+      <div class="f"><span>Taille de la signature <output id="o-wmSize"></output></span><input type="range" id="wmSize" min="50" max="160" step="1"></div>
+      <div class="f"><span>Couleur de la signature</span><div class="sw" data-c="wmColor"></div></div>
+      <label class="chk"><input type="checkbox" id="showLogo"> Le rond du logo en haut à droite</label>
+      <div class="f"><span>Couleur du logo</span><div class="sw" data-c="logoColor"></div></div>
+      <div class="f"><span>Couleur du lien et du sur-titre</span><div class="sw" data-c="linkColor"></div></div>
+    </details>
+  </aside>
+
+  <main class="stage">
+    <div class="top"><span id="dims" style="color:var(--grey);font-size:11.5px"></span><span class="sp"></span>
+      <button class="btn" type="button" id="reset">Tout remettre à zéro</button></div>
+    <div class="view"><canvas id="out" width="1080" height="1350" aria-label="Aperçu de l’affiche"></canvas></div>
+    <div class="bottom">
+      <button class="btn yellow" type="button" id="dlPng">Enregistrer en PNG</button>
+      <button class="btn" type="button" id="dlJpg">En JPG</button>
+      <button class="btn" type="button" id="share" hidden>Partager</button>
+      <span class="note">Les photos ajoutées restent dans ton navigateur.</span>
+    </div>
+  </main>
+</div>
+
+<section class="gal" id="gal" hidden aria-modal="true" role="dialog">
+  <div class="bar"><h2>Photos du site</h2><button class="btn" type="button" id="galClose">Fermer</button></div>
+  <div id="galBody"></div>
+</section>
+<input type="file" id="file" accept="image/*" hidden>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const out = $('out'), ctx = out.getContext('2d');
+const FORMATS = { post: [1080, 1350], square: [1080, 1080], story: [1080, 1920], wide: [1920, 1080], banner: [1200, 628] };
+let ACCENT = '#ffcc00', TAGLINES = ['Hand Coded.', 'Réactif.', 'Sensible.', 'Immersif.'], FONTS = { wm: 'Instrument Serif', wmIt: true, words: 'Inter Tight', wordsW: 500, title: 'Inter Tight', titleW: 600, titleLs: -0.02, italic: 'Instrument Serif' };
+let POSTS = [];
+const COLORS = () => [['#0b0b0b', 'Noir'], ['#ffffff', 'Blanc'], [ACCENT, 'Jaune'], ['#8a8a8a', 'Gris'], ['#e9e4da', 'Craie']];
+
+/* ---------------------------------------------------------------- les réglages */
+const DEF = () => ({
+  format: 'post', kicker: '', text: 'Type something', link: 'hand-coded.net', textFont: 'title', upper: '1', align: 'left', place: 'bottom', textSize: 84, textColor: '#ffffff', dash: true,
+  fgMode: 'dots', fgShape: 'round', fgCell: 16, fgDot: 100, fgDotColor: '#ffffff', fgInvert: false, fgDuoA: '#0b0b0b', fgDuoB: ACCENT,
+  fgBright: 0, fgContrast: 120, fgSat: 100, fgFit: 'cover', fgZoom: 100, fgX: 0, fgY: 0, fgBlend: 'source-over', fgOpacity: 100,
+  bgColor: '#0b0b0b', bgMode: 'bw', bgShape: 'round', bgCell: 22, bgDotColor: '#3a3a3a', bgDuoA: '#0b0b0b', bgDuoB: '#8a8a8a', bgBright: 0, bgContrast: 100, bgBlend: 'source-over', bgOpacity: 40,
+  shade: 70, showWm: true, showWords: true, wmSize: 100, wmColor: '#ffffff', showLogo: true, logoColor: ACCENT, linkColor: '#ffffff'
+});
+const PRESETS = {
+  'Photo souvenir': {},
+  'Annonce': { kicker: 'Nouveau projet', text: 'Retour aux Sources', upper: '0', textSize: 96, bgColor: ACCENT, textColor: '#0b0b0b', wmColor: '#0b0b0b', logoColor: '#0b0b0b', linkColor: '#0b0b0b',
+    fgMode: 'dots', fgShape: 'square', fgDotColor: '#0b0b0b', fgCell: 14, fgBlend: 'multiply', shade: 75, dash: false },
+  'Citation': { text: '« L’œuvre est vivante. »\nNuméro', textFont: 'italic', upper: '0', align: 'center', place: 'middle', textSize: 110, bgColor: '#ffffff', textColor: '#0b0b0b', wmColor: '#0b0b0b', logoColor: ACCENT, linkColor: '#0b0b0b', fgMode: 'dots', fgOpacity: 0, shade: 0, dash: false },
+  'Bichromie': { fgMode: 'duo', fgDuoA: '#0b0b0b', fgDuoB: ACCENT, fgContrast: 130, shade: 55, textColor: '#ffffff' },
+  'Story': { format: 'story', textSize: 96, place: 'bottom' }
+};
+let S = DEF();
+let fgImg = null, bgImg = null, fgName = '', bgName = '';
+
+/* ---------------------------------------------------------------- dessin */
+const lum = (r, g, b) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+const hex = c => { const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(c) || [0, 'ff', 'ff', 'ff']; return [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)]; };
+const rgba = (c, a) => { const [r, g, b] = hex(c); return `rgba(${r},${g},${b},${a})`; };
+function fitRect(im, W, H, fit, zoom, ox, oy) {
+  const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = (fit === 'contain' ? Math.min(W / iw, H / ih) : Math.max(W / iw, H / ih)) * zoom;
+  const w = iw * k, h = ih * k;
+  return [(W - w) / 2 * (1 + ox), (H - h) / 2 * (1 + oy), w, h];   // −1 : bord gauche (haut), +1 : bord droit (bas)
+}
+/* une image traitée, à la taille de l'affiche, sur un fond transparent */
+function layer(im, W, H, o) {
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  const [dx, dy, dw, dh] = fitRect(im, W, H, o.fit, o.zoom, o.ox, o.oy);
+  const br = o.bright / 100, ct = o.contrast / 100, sat = o.sat / 100;
+  const adj = v => Math.max(0, Math.min(1, (v - 0.5) * ct + 0.5 + br * 0.5));
+  if (o.mode === 'dots') {   // la trame du site : on lit l'image en petit, une case par point
+    const cell = Math.max(4, o.cell), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+    const s = document.createElement('canvas'); s.width = cols; s.height = rows; const sx = s.getContext('2d');
+    sx.imageSmoothingQuality = 'high'; sx.drawImage(im, dx / cell, dy / cell, dw / cell, dh / cell);
+    const d = sx.getImageData(0, 0, cols, rows).data, k = o.dot / 100;
+    x.fillStyle = o.dotColor; x.beginPath();
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const p = (j * cols + i) * 4; if (d[p + 3] < 8) continue;
+      let v = adj(lum(d[p], d[p + 1], d[p + 2])); if (o.invert) v = 1 - v; v *= d[p + 3] / 255;
+      if (v < 0.02) continue;
+      const cx = i * cell + cell / 2, cy = j * cell + cell / 2;
+      if (o.shape === 'square') { const sz = Math.min(cell, cell * Math.sqrt(v) * k); x.rect(cx - sz / 2, cy - sz / 2, sz, sz); }
+      else { const r = Math.min(cell * 0.56, cell * 0.56 * Math.sqrt(v) * k); x.moveTo(cx + r, cy); x.arc(cx, cy, r, 0, 6.2832); }
+    }
+    x.fill(); return c;
+  }
+  x.imageSmoothingQuality = 'high'; x.drawImage(im, dx, dy, dw, dh);
+  const id = x.getImageData(0, 0, W, H), d = id.data;
+  const A = hex(o.duoA), B = hex(o.duoB);
+  for (let p = 0; p < d.length; p += 4) {
+    if (!d[p + 3]) continue;
+    let r = d[p] / 255, g = d[p + 1] / 255, b = d[p + 2] / 255;
+    if (o.mode === 'photo') {
+      const l = lum(d[p], d[p + 1], d[p + 2]);
+      r = adj(l + (r - l) * sat); g = adj(l + (g - l) * sat); b = adj(l + (b - l) * sat);
+      d[p] = r * 255; d[p + 1] = g * 255; d[p + 2] = b * 255;
+    } else {
+      const l = adj(lum(d[p], d[p + 1], d[p + 2]));
+      if (o.mode === 'bw') { d[p] = d[p + 1] = d[p + 2] = l * 255; }
+      else { d[p] = A[0] + (B[0] - A[0]) * l; d[p + 1] = A[1] + (B[1] - A[1]) * l; d[p + 2] = A[2] + (B[2] - A[2]) * l; }
+    }
+  }
+  x.putImageData(id, 0, 0); return c;
+}
+function wrap(c, text, maxW) {
+  const out = [];
+  String(text).split('\n').forEach(par => {
+    const words = par.split(/\s+/).filter(Boolean); let line = '';
+    if (!words.length) { out.push(''); return; }
+    words.forEach(w => { const t = line ? line + ' ' + w : w; if (c.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; });
+    out.push(line);
+  });
+  return out;
+}
+const wmFont = s => `${FONTS.wmIt ? 'italic ' : ''}400 ${s}px "${FONTS.wm}", Georgia, serif`;
+const wordsFont = s => `${FONTS.wordsW} ${s}px "${FONTS.words}", Helvetica, Arial, sans-serif`;
+const titleFont = s => `${FONTS.titleW} ${s}px "${FONTS.title}", Helvetica, Arial, sans-serif`;
+const italicFont = s => `italic 400 ${s}px "${FONTS.italic}", Georgia, serif`;
+let drawQueued = false;
+function draw() {
+  drawQueued = false;
+  const [W, H] = FORMATS[S.format] || FORMATS.post;
+  if (out.width !== W || out.height !== H) { out.width = W; out.height = H; fitView(); }
+  $('dims').textContent = `${W} × ${H} px`;
+  const u = Math.min(W, H) / 1080;   // l'échelle : tout est pensé pour 1080 px de large
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  ctx.fillStyle = S.bgColor; ctx.fillRect(0, 0, W, H);
+  if (bgImg && S.bgOpacity > 0) {
+    const L = layer(bgImg, W, H, { mode: S.bgMode, shape: S.bgShape, cell: S.bgCell * u, dot: 100, dotColor: S.bgDotColor, invert: false, duoA: S.bgDuoA, duoB: S.bgDuoB, bright: S.bgBright, contrast: S.bgContrast, sat: 100, fit: 'cover', zoom: 1, ox: 0, oy: 0 });
+    ctx.globalCompositeOperation = S.bgBlend; ctx.globalAlpha = S.bgOpacity / 100; ctx.drawImage(L, 0, 0);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  }
+  if (fgImg && S.fgOpacity > 0) {
+    const L = layer(fgImg, W, H, { mode: S.fgMode, shape: S.fgShape, cell: S.fgCell * u, dot: S.fgDot, dotColor: S.fgDotColor, invert: S.fgInvert, duoA: S.fgDuoA, duoB: S.fgDuoB, bright: S.fgBright, contrast: S.fgContrast, sat: S.fgSat, fit: S.fgFit, zoom: S.fgZoom / 100, ox: S.fgX / 100, oy: S.fgY / 100 });
+    ctx.globalCompositeOperation = S.fgBlend; ctx.globalAlpha = S.fgOpacity / 100; ctx.drawImage(L, 0, 0);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  }
+  if (S.shade > 0) {   // voiles de lisibilité, dans la couleur du fond
+    const a = S.shade / 100, top = H * 0.24, bot = H * 0.5;
+    let g = ctx.createLinearGradient(0, 0, 0, top); g.addColorStop(0, rgba(S.bgColor, 0.9 * a)); g.addColorStop(1, rgba(S.bgColor, 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, top);
+    g = ctx.createLinearGradient(0, H - bot, 0, H); g.addColorStop(0, rgba(S.bgColor, 0)); g.addColorStop(0.55, rgba(S.bgColor, 0.8 * a)); g.addColorStop(1, rgba(S.bgColor, 0.95 * a)); ctx.fillStyle = g; ctx.fillRect(0, H - bot, W, bot);
+  }
+  /* en haut : la signature, ses mots, le rond du logo, comme l'en-tête du site */
+  const mx = Math.round(72 * u), top = Math.round(70 * u), R = 34 * u, words = TAGLINES.slice(1), studio = TAGLINES[0] || 'Hand Coded.';
+  let ws = 96 * u * S.wmSize / 100, headBottom = top;
+  if (S.showWm) {
+    const fit = () => { const ss = ws * 0.31; ctx.font = wordsFont(ss); const sw = S.showWords && words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
+    while (fit() > W - 2 * mx - (S.showLogo ? 2 * R + 30 * u : 0) && ws > 30 * u) ws -= 2 * u;
+    ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width;
+    ctx.fillStyle = S.wmColor; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillText(studio, mx, top + ws * 0.78);
+    if (S.showWords) { const ss = ws * 0.31, slh = ss * 1.18; ctx.font = wordsFont(ss); ctx.textBaseline = 'top'; words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, top + ws * 0.1 + i * slh)); headBottom = Math.max(headBottom, top + ws * 0.1 + words.length * slh); }
+    headBottom = Math.max(headBottom, top + ws * 0.95);
+  }
+  if (S.showLogo) { ctx.fillStyle = S.logoColor; ctx.beginPath(); ctx.arc(W - mx - R, top + (S.showWm ? ws * 0.42 : R), R, 0, Math.PI * 2); ctx.fill(); headBottom = Math.max(headBottom, top + 2 * R); }
+  /* le texte, le sur-titre, le lien */
+  const it = S.textFont === 'italic', font = s => it ? italicFont(s * 1.18) : titleFont(s), txt = S.upper === '1' ? S.text.toUpperCase() : S.text;
+  const tw = W - 2 * mx, maxLines = S.place === 'middle' ? 7 : 5;
+  let size = S.textSize * u, lines = [];
+  const track = s => { if ('letterSpacing' in ctx) ctx.letterSpacing = it ? '0px' : Math.round(FONTS.titleLs * s) + 'px'; };
+  for (; size >= 24 * u; size -= 2 * u) { ctx.font = font(size); track(size); lines = wrap(ctx, txt, tw); if (lines.length <= maxLines) break; }
+  if (!txt.trim()) lines = [];
+  const lh = size * (it ? 1.12 : 1.02), block = lines.length * lh;
+  const linkSize = 38 * u, hasLink = !!S.link.trim(), linkY = H - Math.round(64 * u);
+  const kickSize = 24 * u, hasKick = !!S.kicker.trim(), kickGap = hasKick ? kickSize + 22 * u : 0, dashGap = S.dash && lines.length ? 34 * u : 0;
+  let y0;
+  if (S.place === 'top') y0 = headBottom + 70 * u + kickGap + dashGap;
+  else if (S.place === 'middle') y0 = (H - block) / 2 + (kickGap + dashGap) / 2;
+  else y0 = (hasLink ? linkY - linkSize - 52 * u : H - 72 * u) - block;
+  const ax = S.align === 'center' ? W / 2 : mx; ctx.textAlign = S.align === 'center' ? 'center' : 'left';
+  if (hasKick) { if ('letterSpacing' in ctx) ctx.letterSpacing = Math.round(0.12 * kickSize) + 'px'; ctx.font = wordsFont(kickSize).replace(/^\d+/, '600'); ctx.fillStyle = S.linkColor; ctx.textBaseline = 'alphabetic'; ctx.fillText(S.kicker.toUpperCase(), ax, y0 - dashGap - 16 * u); }
+  if (S.dash && lines.length) { ctx.fillStyle = ACCENT; const dw = 46 * u; ctx.fillRect(S.align === 'center' ? W / 2 - dw / 2 : mx, y0 - 34 * u, dw, 6 * u); }
+  ctx.fillStyle = S.textColor; ctx.font = font(size); track(size); ctx.textBaseline = 'top';
+  lines.forEach((l, i) => ctx.fillText(l, ax - (S.align === 'center' || it ? 0 : size * 0.03), y0 + i * lh));
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  if (hasLink) { ctx.font = italicFont(linkSize); ctx.fillStyle = S.linkColor; ctx.textBaseline = 'alphabetic'; ctx.fillText(S.link.trim(), ax, linkY); }
+  ctx.textAlign = 'left';
+}
+const redraw = () => { if (!drawQueued) { drawQueued = true; requestAnimationFrame(draw); } };
+/* l'aperçu tient toujours dans sa zone, quel que soit le format */
+const view = document.querySelector('.view');
+function fitView() { const cs = getComputedStyle(view), aw = view.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), ah = view.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  if (aw <= 0 || ah <= 0) return; const k = Math.min(aw / out.width, ah / out.height); out.style.width = Math.floor(out.width * k) + 'px'; out.style.height = Math.floor(out.height * k) + 'px'; }
+if (window.ResizeObserver) new ResizeObserver(fitView).observe(view); addEventListener('resize', fitView);
+
+/* ---------------------------------------------------------------- l'interface */
+function bindAll() {
+  document.querySelectorAll('input[type=range]').forEach(r => r.addEventListener('input', () => { S[r.id] = +r.value; syncOut(r.id); redraw(); saveDraft(); }));
+  ['kicker', 'text', 'link'].forEach(k => $(k).addEventListener('input', () => { S[k] = $(k).value; redraw(); saveDraft(); }));
+  ['fgBlend', 'bgBlend'].forEach(k => $(k).addEventListener('change', () => { S[k] = $(k).value; redraw(); saveDraft(); }));
+  ['dash', 'fgInvert', 'showWm', 'showWords', 'showLogo'].forEach(k => $(k).addEventListener('change', () => { S[k] = $(k).checked; redraw(); saveDraft(); }));
+  document.querySelectorAll('.seg[data-k]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.k] = b.dataset.v; syncUI(); redraw(); saveDraft(); }));
+  document.querySelectorAll('.sw[data-c]').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[g.dataset.c] = b.dataset.v; syncUI(); redraw(); saveDraft(); }));
+}
+function buildSwatches() {
+  document.querySelectorAll('.sw[data-c]').forEach(g => {
+    const k = g.dataset.c;
+    g.innerHTML = COLORS().map(([c, n]) => `<button type="button" data-v="${c}" title="${n}" aria-label="${n}" style="background:${c}"></button>`).join('') + `<input type="color" aria-label="Autre couleur">`;
+    g.querySelector('input').addEventListener('input', e => { S[k] = e.target.value; syncUI(); redraw(); saveDraft(); });
+  });
+}
+const fmt = { textSize: v => v, fgCell: v => v + ' px', fgDot: v => v + ' %', fgBright: v => (v > 0 ? '+' : '') + v, fgContrast: v => v + ' %', fgSat: v => v + ' %', fgZoom: v => v + ' %', fgOpacity: v => v + ' %',
+  bgCell: v => v + ' px', bgBright: v => (v > 0 ? '+' : '') + v, bgContrast: v => v + ' %', bgOpacity: v => v + ' %', shade: v => v + ' %', wmSize: v => v + ' %' };
+function syncOut(k) { const o = $('o-' + k); if (o) o.textContent = (fmt[k] || (v => v))(S[k]); }
+function syncUI() {
+  document.querySelectorAll('input[type=range]').forEach(r => { r.value = S[r.id]; syncOut(r.id); });
+  ['kicker', 'text', 'link'].forEach(k => { if ($(k).value !== S[k]) $(k).value = S[k]; });
+  ['fgBlend', 'bgBlend'].forEach(k => { $(k).value = S[k]; });
+  ['dash', 'fgInvert', 'showWm', 'showWords', 'showLogo'].forEach(k => { $(k).checked = !!S[k]; });
+  document.querySelectorAll('.seg[data-k]').forEach(g => g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(String(S[g.dataset.k]) === b.dataset.v))));
+  document.querySelectorAll('.sw[data-c]').forEach(g => { const v = String(S[g.dataset.c]).toLowerCase(); let hit = false;
+    g.querySelectorAll('button').forEach(b => { const on = b.dataset.v.toLowerCase() === v; hit = hit || on; b.setAttribute('aria-pressed', String(on)); });
+    const ci = g.querySelector('input'); ci.value = /^#[\da-f]{6}$/i.test(v) ? v : '#000000'; ci.style.outline = hit ? '' : '2px solid #111'; });
+  document.querySelectorAll('[data-show]').forEach(el => { el.hidden = !el.dataset.show.split(' ').every(c => { if (c === 'bgImg') return !!bgImg; const [k, v] = c.split(':'); return String(S[k]) === v; }); });
+  $('fgThumb').style.backgroundImage = fgImg ? `url("${fgImg.src}")` : ''; $('bgThumb').style.backgroundImage = bgImg ? `url("${bgImg.src}")` : '';
+}
+/* les images : depuis l'ordinateur, ou depuis les photos du site (mêmes adresses que le site : le canvas peut les lire) */
+let target = 'fg';
+const setImg = (which, im, name) => { if (which === 'fg') { fgImg = im; fgName = name || ''; } else { bgImg = im; bgName = name || ''; } syncUI(); redraw(); saveDraft(); };
+function loadURL(src) { return new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = rej; im.src = src; }); }
+$('file').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const r = new FileReader(); r.onload = async () => { try { setImg(target, await loadURL(r.result), ''); } catch (err) { alert('Image illisible'); } }; r.readAsDataURL(f); });
+$('fgUp').onclick = () => { target = 'fg'; $('file').click(); }; $('bgUp').onclick = () => { target = 'bg'; $('file').click(); };
+$('fgNone').onclick = () => setImg('fg', null); $('bgNone').onclick = () => setImg('bg', null);
+$('fgSite').onclick = () => openGal('fg'); $('bgSite').onclick = () => openGal('bg');
+['dragover', 'drop'].forEach(ev => out.addEventListener(ev, async e => { e.preventDefault(); if (ev !== 'drop') return; const f = e.dataTransfer.files[0]; if (!f || !/^image\//.test(f.type)) return; const r = new FileReader(); r.onload = async () => setImg('fg', await loadURL(r.result), ''); r.readAsDataURL(f); }));
+const local = x => x && !/^(https?:|data:)/.test(x) && /\.(jpe?g|png|webp)$/i.test(x);
+function openGal(which) {
+  target = which; const body = $('galBody');
+  if (!body.dataset.built) {
+    body.dataset.built = '1';
+    body.innerHTML = POSTS.map(p => `<h3>${esc(p.t)}</h3><div class="grid">${p.imgs.map(src => `<button type="button" data-src="${esc(src)}" style="background-image:url('../${esc(src)}.t.webp'),url('../${esc(src)}')"><span>${esc(p.t)}</span></button>`).join('')}</div>`).join('');
+    body.addEventListener('click', async e => { const b = e.target.closest('button[data-src]'); if (!b) return; $('gal').hidden = true; try { setImg(target, await loadURL('../' + b.dataset.src), b.dataset.src); } catch (err) { alert('Photo introuvable'); } });
+  }
+  $('gal').hidden = false; $('gal').scrollTop = 0;
+}
+$('galClose').onclick = () => { $('gal').hidden = true; };
+addEventListener('keydown', e => { if (e.key === 'Escape') $('gal').hidden = true; });
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+/* les modèles : ceux de départ, et les tiens (gardés dans ce navigateur) */
+function applyPreset(p) { S = Object.assign(DEF(), p); syncUI(); redraw(); saveDraft(); }
+function mine() { try { return JSON.parse(localStorage.getItem('hc-affiches-mine') || '{}'); } catch (e) { return {}; } }
+function drawMine() {
+  const m = mine(), box = $('mine'); box.innerHTML = '';
+  Object.keys(m).forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n; b.title = 'Clic : appliquer · Alt + clic : supprimer';
+    b.onclick = e => { if (e.altKey) { const all = mine(); delete all[n]; try { localStorage.setItem('hc-affiches-mine', JSON.stringify(all)); } catch (er) {} drawMine(); return; } applyPreset(m[n]); }; box.appendChild(b); });
+  if (!Object.keys(m).length) box.innerHTML = '<span class="hint" style="margin:0">Aucun pour l’instant.</span>';
+}
+$('save').onclick = () => { const n = (prompt('Nom du modèle', 'Mon modèle') || '').trim(); if (!n) return; const all = mine(); all[n] = { ...S }; try { localStorage.setItem('hc-affiches-mine', JSON.stringify(all)); } catch (e) {} drawMine(); };
+$('reset').onclick = () => applyPreset({});
+function saveDraft() { try { localStorage.setItem('hc-affiches-draft', JSON.stringify({ S, fg: fgName, bg: bgName })); } catch (e) {} }
+
+/* l'export : l'image se télécharge directement ; sur téléphone, la feuille de partage propose « Enregistrer l'image » */
+const fname = ext => 'hand-coded-' + new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '') + '.' + ext;
+function save(type) {
+  draw();
+  out.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = fname(type === 'image/png' ? 'png' : 'jpg'); document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000); }, type, 0.93);
+}
+$('dlPng').onclick = () => save('image/png'); $('dlJpg').onclick = () => save('image/jpeg');
+if (navigator.canShare) { $('share').hidden = false; $('share').onclick = () => { draw(); out.toBlob(async b => { const f = new File([b], fname('png'), { type: 'image/png' }); if (navigator.canShare({ files: [f] })) try { await navigator.share({ files: [f] }); } catch (e) {} }, 'image/png'); }; }
+
+/* ---------------------------------------------------------------- démarrage : la charte du site (couleur, signature, polices) et ses photos */
+(async function boot() {
+  let C = null; try { C = await (await fetch('../content/content.json', { cache: 'no-cache' })).json(); } catch (e) {}
+  if (C) {
+    const st = C.settings || {}; ACCENT = st.accent || ACCENT; document.documentElement.style.setProperty('--accent', ACCENT);
+    const tl = st.taglines && (st.taglines.fr || st.taglines.en); if (tl && tl.length) TAGLINES = tl;
+    const ty = st.typo || {}, g = r => (r && /^g:/.test(r.font || '') ? r.font.slice(2) : null);
+    FONTS.wm = g(ty.sig1) || FONTS.wm; FONTS.wmIt = ty.sig1 ? ty.sig1.italic !== false : true;
+    FONTS.words = g(ty.sig2) || FONTS.words; FONTS.wordsW = (ty.sig2 && ty.sig2.weight) || 500;
+    FONTS.title = g(ty.title) || FONTS.title; FONTS.titleW = (ty.title && ty.title.weight) || 600; FONTS.titleLs = ty.title && ty.title.ls !== undefined ? +ty.title.ls : -0.02;
+    FONTS.italic = g(ty.subtitle) || FONTS.italic;
+    const work = (C.sections || []).find(x => x.visible && x.card === 'image' && !x.skills) || {}, star = work.defaultTag || 'featured';
+    const year = p => Math.max(0, ...((String(p.date || '').match(/\d{4}/g) || []).map(Number)));
+    POSTS = (C.posts || []).filter(p => p.published !== false && p.section === work.id)
+      .map(p => ({ p, k: ((p.tags || []).includes(star) ? 10000 : 0) + year(p) }))
+      .sort((a, b) => b.k - a.k)
+      .map(({ p }) => ({ t: (p.title && (p.title.fr || p.title.en)) || p.id, imgs: [...new Set([p.thumb, ...(p.media || []).map(m => m && m.src)].filter(local))] }))
+      .filter(x => x.imgs.length);
+  }
+  $('tl').innerHTML = TAGLINES.slice(1).map(esc).join('<br>');
+  /* les polices de Réglages › Typographie, depuis Google Fonts */
+  const fams = [...new Set([FONTS.wm, FONTS.words, FONTS.title, FONTS.italic])];
+  const l = document.createElement('link'); l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?' + fams.map(f => 'family=' + encodeURIComponent(f).replace(/%20/g, '+') + ':ital,wght@0,300;0,400;0,500;0,600;0,700;1,400').join('&') + '&display=swap';
+  document.head.appendChild(l);
+  document.documentElement.style.setProperty('--serif', `"${FONTS.wm}", Georgia, serif`); document.documentElement.style.setProperty('--ui', `"${FONTS.words}", Helvetica, Arial, sans-serif`);
+  /* les modèles de départ, puis le dernier réglage de ce navigateur */
+  const pb = $('presets'); Object.keys(PRESETS).forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n; b.onclick = () => applyPreset(PRESETS[n]); pb.appendChild(b); });
+  buildSwatches(); bindAll(); drawMine();
+  let draft = null; try { draft = JSON.parse(localStorage.getItem('hc-affiches-draft') || 'null'); } catch (e) {}
+  S = Object.assign(DEF(), draft && draft.S || {});
+  const first = POSTS[0] && POSTS[0].imgs[1] || POSTS[0] && POSTS[0].imgs[0];
+  const fgSrc = draft ? draft.fg : first, bgSrc = draft ? draft.bg : '';
+  try { if (fgSrc) { fgImg = await loadURL('../' + fgSrc); fgName = fgSrc; } } catch (e) {}
+  try { if (bgSrc) { bgImg = await loadURL('../' + bgSrc); bgName = bgSrc; } } catch (e) {}
+  syncUI(); draw(); fitView();
+  try { await document.fonts.load(wmFont(60)); await document.fonts.load(titleFont(60)); await document.fonts.load(italicFont(40)); await document.fonts.load(wordsFont(20)); } catch (e) {}
+  setTimeout(redraw, 50); document.fonts && document.fonts.ready.then(redraw);
+})();
+})();
+</script>
+</body>
+</html>

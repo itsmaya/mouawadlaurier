@@ -722,6 +722,7 @@ function renderNav() {
     h('div', { class: 'foot' },
       S.backend.kind === 'github' ? h('a', { href: `https://github.com/${S.cfg.owner}/${S.cfg.repo}`, target: '_blank', rel: 'noopener' }, `${S.cfg.owner}/${S.cfg.repo}`) : null,
       window.HC_SITE_HTML ? h('a', { href: '#', onclick: e => { e.preventDefault(); openPreview(); } }, 'Voir le site') : h('a', { href: SITE + 'index.html', target: '_blank', rel: 'noopener' }, 'Voir le site en ligne ↗'),
+      h('a', { href: SITE + 'affiches/', target: '_blank', rel: 'noopener', title: 'Des images pour les réseaux sociaux et les annonces' }, 'Affiches ↗'),
       isDirty() ? h('a', { href: '#', onclick: e => { e.preventDefault(); revertAll(); } }, 'Annuler les modifications') : null,
       S.backend.kind === 'github' ? h('a', { href: '#', onclick: e => { e.preventDefault(); logout(); } }, 'Se déconnecter') : null,
       S.backend.kind !== 'github' ? h('a', { href: '#', onclick: e => { e.preventDefault(); leaveLocal(); } }, S.backend.kind === 'folder' ? 'Changer de dossier' : 'Quitter la démo') : null));
