@@ -746,9 +746,10 @@
    "date": "2022 – 2025",
    "tags": [
     "featured",
-    "permanent",
+    "advertising",
     "touring",
-    "advertising"
+    "collab",
+    "permanent"
    ],
    "thumb": "media/peupler/marieflament-8044-copy-se4v.jpg",
    "thumbBack": "",
@@ -942,8 +943,9 @@
    "date": "2019",
    "tags": [
     "featured",
-    "permanent",
-    "collab"
+    "advertising",
+    "collab",
+    "permanent"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
    "thumbBack": "",
@@ -1119,7 +1121,8 @@
    "date": "2022 – 2025",
    "tags": [
     "featured",
-    "touring"
+    "touring",
+    "collab"
    ],
    "thumb": "media/rising/risinglamp-81e8.jpg",
    "thumbBack": "",
@@ -1296,7 +1299,7 @@
     "media/nasonmoretti/nasonmoretti-qjex.jpg",
     "media/hub-montreal/hubmontreal-xzgy.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-11"
   },
   {
    "id": "ephemere",
@@ -3231,6 +3234,7 @@
    },
    "date": "2019",
    "tags": [
+    "touring",
     "collab"
    ],
    "thumb": "media/wave/wave-1-1024x576-sv24.jpg",
@@ -3276,7 +3280,7 @@
    "logos": [
     "media/logos/la-prairie.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-11"
   },
   {
    "id": "methods",
@@ -6596,7 +6600,9 @@
    },
    "date": "2024",
    "tags": [
-    "permanent"
+    "collab",
+    "permanent",
+    "exposition"
    ],
    "thumb": "media/etre-absorbe/01.jpg",
    "thumbBack": "",
@@ -6667,7 +6673,7 @@
    "logos": [
     "media/logos/ruinart.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-11"
   },
   {
    "id": "upperground",
@@ -6694,7 +6700,8 @@
    },
    "date": "2018",
    "tags": [
-    "touring"
+    "touring",
+    "collab"
    ],
    "thumb": "media/upperground/s-img-2022-utk8.jpg",
    "thumbBack": "",
@@ -6767,7 +6774,7 @@
    "logos": [
     "media/lumiere/ll-rbg-rounded-capsule-cun9.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-11"
   },
   {
    "id": "albatros",
@@ -7124,7 +7131,7 @@
   {
    "id": "poussiere-detoile",
    "section": "work",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Poussière d’étoile",
@@ -7201,7 +7208,7 @@
    "logos": [
     "media/logos/fisheye.png"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "fuurin",
@@ -11203,7 +11210,7 @@
   {
    "id": "kinematope-pommery",
    "section": "work",
-   "order": 41,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Kinematope (Pommery)",
@@ -11267,7 +11274,7 @@
    "logos": [
     "media/logos/pommery.png"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "ras-ubiquitous",
@@ -11714,7 +11721,7 @@
   {
    "id": "pubs-interactives",
    "section": "work",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "fr": "Pubs interactives",
@@ -11869,7 +11876,7 @@
     "media/logos/danone.png",
     "media/logos/france-24.png"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-11"
   },
   {
    "id": "mouawad-laurier",
@@ -12059,7 +12066,7 @@
   {
    "id": "mood-cloud",
    "section": "work",
-   "order": 43,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Mood Cloud",
@@ -12153,12 +12160,12 @@
    "logos": [
     "media/logos/upf.png"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "music-tech-fest-2",
    "section": "work",
-   "order": 42,
+   "order": 44,
    "published": true,
    "title": {
     "en": "MusicBricks",
@@ -12180,6 +12187,7 @@
    },
    "date": "2012-2017",
    "tags": [
+    "performance",
     "ai",
     "software"
    ],
@@ -12303,7 +12311,7 @@
     "media/logos/ircam.png",
     "media/logos/upf.png.t.webp"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "mecaoctet",
@@ -12414,7 +12422,7 @@
   {
    "id": "complete-revolution",
    "section": "work",
-   "order": 45,
+   "order": 42,
    "published": true,
    "title": {
     "en": "Complete Revolution",
@@ -12436,7 +12444,8 @@
    },
    "date": "2025",
    "tags": [
-    "performance"
+    "performance",
+    "collab"
    ],
    "thumb": "media/nouveau-contenu-4/mood-aura-bncl.jpg",
    "thumbBack": "",
@@ -12492,12 +12501,12 @@
     "media/logos/generalitat.png",
     "media/logos/catalanarts.png"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "echo",
    "section": "work",
-   "order": 44,
+   "order": 39,
    "published": true,
    "title": {
     "fr": "Echo",
@@ -12533,7 +12542,8 @@
    },
    "media": [
     {
-     "src": "https://vimeo.com/639651200"
+     "src": "https://vimeo.com/639651200",
+     "credit": ""
     },
     {
      "src": "media/echo/echo-santamonica-2024-yu8k.jpg",
@@ -12560,7 +12570,7 @@
    "skills": [],
    "author": "Guillaume Faure",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   }
  ]
 }
