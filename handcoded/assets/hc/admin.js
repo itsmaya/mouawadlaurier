@@ -197,6 +197,9 @@ function usedPaths(c = S.content) {
   if (c.settings.logo) set.add(c.settings.logo);
   if (c.settings.homeVideo && c.settings.homeVideo.src) set.add(c.settings.homeVideo.src);
   if (c.settings.showreel) set.add(c.settings.showreel);
+  const story = c.settings.home && c.settings.home.story;   // les images de « L'histoire de ce site »
+  if (story && Array.isArray(story.images)) story.images.forEach(x => x && set.add(x));
+  if (c.settings.seo && c.settings.seo.image) set.add(c.settings.seo.image);
   return new Set([...set].filter(p => !/^(https?:|data:|blob:)/.test(p)));
 }
 const IMG_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg' };
@@ -1405,6 +1408,7 @@ function viewMedia() {
     c.posts.forEach(p => { if (p.thumb === path || p.thumbBack === path || p.media.some(m => m.src === path)) out.push(fr(p.title) || p.id); });
     c.models.forEach(m => { if (m.file === path || (m.textures || []).some(x => m.file.replace(/[^/]+$/, '') + x === path)) out.push('Modèle ' + m.name); });
     if (c.settings.logo === path) out.push('Logo');
+    if (((c.settings.home && c.settings.home.story && c.settings.home.story.images) || []).includes(path)) out.push('L’histoire de ce site');
     return out;
   };
   (async () => {

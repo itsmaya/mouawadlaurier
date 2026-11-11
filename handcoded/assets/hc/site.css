@@ -1192,3 +1192,28 @@ html.neg #cat-open:hover .tri::before, html.neg #cat-open:focus-visible .tri::be
 #hc-story { border-radius: 14px; }
 #hc-story .go { border-radius: 13px; padding: 0 13px; }
 #hc-story .shots a { border-radius: 6px; overflow: hidden; }
+
+/* ===== maj-150 : l'accueil prend la mise en page de l'intérieur du site =====
+   La signature à gauche, les mots du slogan en petit à côté, les boutons ronds dessous, aux mêmes places et aux mêmes tailles. */
+html #home-band { padding-left: max(23px, env(safe-area-inset-left, 0px)); }
+html #home-band .sl { display: grid; grid-template-columns: auto auto; grid-auto-rows: min-content; justify-content: start; align-items: start; column-gap: 18px; padding-right: 0; }
+html #home-band .sl .wm { grid-column: 1; grid-row: 1 / span 12; }
+html #home-band .sl > span { grid-column: 2; display: block; padding-left: 0; font: 500 13px/15px var(--ui); color: #fff; white-space: nowrap; }
+html #home-band .sl > span:nth-child(2) { margin-top: 5px; }
+html #home-ctl { margin: 12px 0 0 2px; }
+html #home-ctl > button, html #home-ctl > #home-langs { height: 32px; min-width: 32px; }
+html #home-ctl .ic, html #home-langs .cur { width: 30px; height: 30px; }
+html #home-ctl > #home-reel, html #home-ctl > #hv-toggle { min-width: 32px; line-height: 30px; }
+html #home-ctl > #home-langs .opts button { height: 30px; line-height: 30px; }
+html #home-ctl > #home-snd { width: 32px; }
+@media (max-width: 700px), (max-height: 520px) {
+  html #home-band .sl { column-gap: 12px; }
+  html #home-band .sl > span { font-size: 10.5px; line-height: 12px; }
+  html #home-band .sl > span:nth-child(2) { margin-top: 4px; }
+  html #home-ctl { margin: 2px 0 0 2px; }
+  html #home-ctl > button, html #home-ctl > #home-langs { height: 30px; min-width: 30px; }
+  html #home-ctl .ic, html #home-langs .cur { width: 28px; height: 28px; }
+  html #home-ctl > #home-reel, html #home-ctl > #hv-toggle { min-width: 30px; line-height: 28px; }
+  html #home-ctl > #home-langs .opts button { height: 28px; line-height: 28px; }
+  html #home-ctl > #home-snd { width: 30px; }
+}

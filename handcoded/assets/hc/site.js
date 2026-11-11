@@ -350,10 +350,11 @@ function veil(ctx, bd, w, h, alpha) { drawCover(ctx, bd.im, 0, 0, w, h); ctx.fil
 /* Survol d'une vignette photo : le nom et la description par-dessus, sur un petit fond noir transparent */
 function hoverBand(post, w) {   // bandeau seul (fond transparent autour) : il monte du bas de la carte au survol
   const title = tr(post.title).trim(), sub = tr(post.subtitle).trim(); if (!title && !sub) return null;
-  const ph = phoneCards(), ts = ph ? 24 : Math.max(9, Math.min(13.5, w * 0.053)), ss = ph ? 17 : Math.max(7.5, ts * 0.74), pad = Math.round(ts * (ph ? 0.6 : 0.75)), tw = w - 2 * pad;   // téléphone : lisible sans zoomer
+  const ph = phoneCards(), ts = ph ? 15 : Math.max(9, Math.min(13.5, w * 0.053)), ss = ph ? 11 : Math.max(7.5, ts * 0.74), pad = Math.round(ts * (ph ? 0.55 : 0.75)), tw = w - 2 * pad;   // téléphone : la caméra est plus proche, le texte plus petit
   const c = document.createElement('canvas').getContext('2d');
-  c.font = TF(ts); const tl = title ? wrapLines(c, title, tw).slice(0, 2) : [];
-  c.font = IT(ss); const sl = sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
+  const one = (txt, f) => { c.font = f; let t = txt; if (c.measureText(t).width <= tw) return [t]; while (t.length > 4 && c.measureText(t + '…').width > tw) t = t.slice(0, -1); return [t.trim() + '…']; };
+  c.font = TF(ts); const tl = ph ? (title ? one(title, TF(ts)) : []) : title ? wrapLines(c, title, tw).slice(0, 2) : [];   // téléphone : une seule ligne, le titre, pour laisser voir la photo
+  c.font = IT(ss); const sl = ph ? (title ? [] : one(sub, IT(ss))) : sub ? wrapLines(c, sub, tw).slice(0, 2) : [];
   const tlh = Math.round(ts * 1.2), slh = Math.round(ss * 1.25);
   const bh = Math.ceil(pad + tl.length * tlh + (sl.length ? 3 + sl.length * slh : 0) + pad - 2);
   const tex = dayTex(w, bh, ctx => {
@@ -1310,7 +1311,8 @@ function mainEntrance() {   // zoom d'entrée : focale de 6 à 2 en 1 s
   setTimeout(() => { inputEnabled = true; }, time * 1000 + 50);   // hors des tweens : un clic de menu pendant l'entrée ne bloque plus le clavier
 }
 const _p = new THREE.Vector3(), _t = new THREE.Vector3(), _dir = new THREE.Vector3();
-let eyeK = 1;
+let eyeK = 1, phoneK = 1;
+const PHONE_NEAR = 1.45;
 function updateCamera() {   // caméra Papervision : focale en pixels (zoom x focus), oeil "focus" unités derrière la caméra
   _p.copy(pv(cam.x, cam.y, cam.z)); _t.copy(pv(camTarget.x, camTarget.y, camTarget.z));
   _dir.subVectors(_t, _p); if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, -1); _dir.normalize();
@@ -1318,7 +1320,10 @@ function updateCamera() {   // caméra Papervision : focale en pixels (zoom x fo
   const fk = isMap() && !gridView() ? Math.min(1, STYLE.cameraDistanceProportion / zoomBase) : 1;
   eyeK += Math.abs(fk - eyeK) < 1e-3 ? fk - eyeK : (fk - eyeK) * ease(STYLE.cameraEaseSpeed);
   camera.position.copy(_p).addScaledVector(_dir, -CAMERA.focus * eyeK); camera.lookAt(_t);
-  const narrow = Math.min(1, W / 900);
+  /* téléphone debout : l'écran étroit élargit le champ (narrow) et éloignait trop les cartes du carrousel ; on rapproche, sauf en grille et sur la carte */
+  const near = W < 700 && H > W && !gridView() && !isMap() ? PHONE_NEAR : 1;
+  phoneK += Math.abs(near - phoneK) < 1e-3 ? near - phoneK : (near - phoneK) * ease(STYLE.cameraEaseSpeed);
+  const narrow = Math.min(1, W / 900 * phoneK);
   const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
   if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
 }
@@ -2970,7 +2975,7 @@ function buildStory() {
   box.innerHTML = `<div class="in"><button type="button" class="x" aria-label="${escapeHTML(ui('close'))}">×</button>` +
     `<h2>${escapeHTML(title || ui('story'))}</h2><div class="cols"><div class="txt">${body}` +
     (st.link ? `<a class="go" href="${escapeHTML(st.link)}" target="_blank" rel="noopener">${escapeHTML(tr(st.linkLabel || {}).trim() || st.link.replace(/^https?:\/\//, ''))} <span aria-hidden="true">↗</span></a>` : '') + '</div>' +
-    (imgs.length ? `<div class="shots scroll-x">${imgs.map(src => `<a href="${escapeHTML(url(src))}" target="_blank" rel="noopener"><img src="${escapeHTML(url(src))}" alt="" loading="lazy" draggable="false"></a>`).join('')}</div>` : '') + '</div></div>';
+    (imgs.length ? `<div class="shots scroll-x">${imgs.map(src => `<a href="${escapeHTML(url(src))}" target="_blank" rel="noopener"><img src="${escapeHTML(url(src))}" alt="" loading="lazy" draggable="false" onerror="this.parentNode.remove()"></a>`).join('')}</div>` : '') + '</div></div>';   // une image absente du dépôt : pas de cadre vide
   box.querySelector('.x').addEventListener('click', () => toggleStory(false));
   if (!buildStory.out) {   // un panneau, plus une page : on le ferme en touchant ailleurs
     buildStory.out = true;
