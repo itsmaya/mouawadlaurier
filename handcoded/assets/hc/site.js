@@ -1452,7 +1452,7 @@ function placeReel() {
 /* la sélection (tags) sous la signature, en haut à gauche : au même endroit que le bouton Showreel de l'accueil */
 function placeCats() {   // grand écran : en bas au centre, sous les flèches de pages ; téléphone : sous la signature
   catBox.style.top = catBox.style.left = ''; catList.style.maxHeight = Math.max(140, H - 200) + 'px';   // en bas, comme sur ordinateur ; une longue liste défile au lieu de sortir de l'écran
-  document.body.classList.toggle('cats-up', !wideScreen() && W < 560);   // téléphone debout : au centre, sous les flèches de pages, une ligne au-dessus des langues et du clavier
+  document.body.classList.toggle('cats-up', !wideScreen() && W < 560);   // téléphone debout : la Sélection garde une marge sur les côtés
 }
 /* Logo par défaut : anneau, disque noir, lettres réglées dans Typographie › Logo rond */
 const ringLogo = (ring, invert = false) => ringLogoURL(ring, CONTENT.settings, invert);
@@ -1506,10 +1506,13 @@ function countView(path, title, event = false) {
    On mesure les vraies lettres dans les polices de Réglages › Typographie, à l'accueil comme à l'intérieur du site. */
 const tagCtx = document.createElement('canvas').getContext('2d');
 function fitTaglines() {
+  const minWords = innerWidth <= 700 || innerHeight <= 520 ? 10.5 : 13;   // maj-171 : les mots restent lisibles ; si besoin, c'est la signature qui grandit
   ['#slogan', '#home-slogan'].forEach(sel => {
     const wm = document.querySelector(sel + ' > .wm'), box = document.querySelector(sel + ' > .tls'); if (!wm || !box) return;
     const lines = [...box.children]; if (!lines.length) return;
     box.style.fontSize = box.style.lineHeight = box.style.marginTop = '';   // les tailles du CSS, puis la mesure
+    wm.style.removeProperty('font-size'); wm.style.removeProperty('line-height');
+    for (let pass = 0; pass < 4; pass++) {
     const fontOf = (cs, px) => `${cs.fontStyle === 'italic' ? 'italic ' : ''}${cs.fontWeight} ${px}px ${cs.fontFamily}`;
     const wcs = getComputedStyle(wm), wf = parseFloat(wcs.fontSize); if (!(wf > 0)) return;
     tagCtx.font = fontOf(wcs, wf); const mw = tagCtx.measureText(wm.textContent);
@@ -1518,10 +1521,16 @@ function fitTaglines() {
     const wBase = (wlh - mw.fontBoundingBoxAscent - mw.fontBoundingBoxDescent) / 2 + mw.fontBoundingBoxAscent;   // la ligne de base dans la ligne de la signature
     const tcs = getComputedStyle(box); tagCtx.font = fontOf(tcs, 100); const m1 = tagCtx.measureText(lines[0].textContent);
     const k = 1.15, a1 = (m1.actualBoundingBoxAscent || 72) / 100, size = asc / (a1 + (lines.length - 1) * k), lh = size * k;
+    if (pass < 3 && size < minWords - 0.05) {   // trop petit : la signature grandit dans la même proportion, puis on remesure
+      const f = (minWords + 0.02) / size; wm.style.setProperty('font-size', (wf * f).toFixed(2) + 'px', 'important'); wm.style.setProperty('line-height', (wlh * f).toFixed(2) + 'px', 'important'); continue;
+    }
     const tBase = (lh - (m1.fontBoundingBoxAscent + m1.fontBoundingBoxDescent) * size / 100) / 2 + m1.fontBoundingBoxAscent * size / 100;
     box.style.fontSize = size.toFixed(2) + 'px'; box.style.lineHeight = lh.toFixed(2) + 'px';
     box.style.marginTop = ((wBase - asc) - (tBase - a1 * size)).toFixed(2) + 'px';   // le haut des mots sur le haut des lettres de la signature
+    break; }
   });
+  const h = document.getElementById('slogan') ? document.getElementById('slogan').offsetHeight : 0;
+  if (h !== fitTaglines.h) { fitTaglines.h = h; try { if (homeGone) { placeCats(); placeReel(); placeAbout(); } if (post2D.open) fitPost2D(); } catch (e) {} }   // la signature a changé de taille : ce qui est posé dessous suit
 }
 fitTaglines.wait = () => { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(fitTaglines)); };
 if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => fitTaglines());

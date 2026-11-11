@@ -800,10 +800,9 @@ body #reel-btn:hover, body #reel-btn:focus-visible { background: none; border: 1
    (au centre, ou à gauche sur un téléphone debout), langues et clavier en bas à droite. */
 @media (max-width: 700px), (max-height: 520px) {
   #cat-box { position: fixed; left: 50% !important; right: auto; top: auto !important; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); min-width: 0; width: auto; }
-  body.cats-up #cat-box { bottom: calc(58px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); }
+  body.cats-up #cat-box { max-width: calc(100vw - 40px); }   /* maj-171 : plus de clavier en bas sur téléphone, la Sélection descend au même niveau que partout */
   #cat-cap { display: none; }
   #cat-list { top: auto; bottom: calc(100% + 6px); left: 50%; translate: -50% 0; transform-origin: bottom; }
-  body.cats-up #pager { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
   #pager { bottom: calc(62px + env(safe-area-inset-bottom, 0px)); }
 }
 
