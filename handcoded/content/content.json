@@ -945,6 +945,7 @@
     "featured",
     "advertising",
     "collab",
+    "ai",
     "permanent"
    ],
    "thumb": "media/retour-aux-sources/01.jpg",
@@ -1122,7 +1123,9 @@
    "tags": [
     "featured",
     "touring",
-    "collab"
+    "collab",
+    "ai",
+    "exposition"
    ],
    "thumb": "media/rising/risinglamp-81e8.jpg",
    "thumbBack": "",
