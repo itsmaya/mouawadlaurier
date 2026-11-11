@@ -3380,9 +3380,19 @@ function hvSource(t) {
   if (hv.cam && hv.cam.video.readyState >= 2) { hvCover(hv.cam.video, hv.cam.video.videoWidth, hv.cam.video.videoHeight, 1, 0, 0, true); return true; }
   if (hv.video) { if (hv.video.readyState < 2) return false; hvCover(hv.video, hv.video.videoWidth, hv.video.videoHeight); return true; }
   const ok = hv.pics.filter(p => p.complete && p.naturalWidth); if (!ok.length) return false;
-  const per = 7, k = Math.max(0, t) / per, n = ok.length, i = ((Math.floor(k) % n) + n) % n, f = k - Math.floor(k);
-  const pan = (p, ph, a) => { c.globalAlpha = a; hvCover(p, p.naturalWidth, p.naturalHeight, 1.18 - 0.12 * ph, Math.sin(ph * 2.2) * 0.06, Math.cos(ph * 1.7) * 0.05); };
-  pan(ok[i], f, 1); if (f > 0.78 && n > 1) pan(ok[(i + 1) % n], f - 1, (f - 0.78) / 0.22);
+  /* maj-166 : sur un écran en hauteur, une photo en largeur n'en montrait qu'un quart, zoomé et qui flottait : on la parcourt plutôt
+     d'un bord à l'autre, lentement, en travelling, une fois vers la droite, une fois vers la gauche */
+  const cw = hv.raw.width, ch = hv.raw.height, portrait = ch > cw * 1.1;
+  const per = portrait ? 9 : 7, k = Math.max(0, t) / per, n = ok.length, i = ((Math.floor(k) % n) + n) % n, f = k - Math.floor(k);
+  const pan = (p, ph, a, idx) => {
+    c.globalAlpha = a;
+    if (portrait) {
+      const z = 1.04, s = Math.max(cw / p.naturalWidth, ch / p.naturalHeight) * z, over = Math.max(0, (p.naturalWidth * s - cw) / 2 / cw);
+      const q = Math.max(0, Math.min(1, ph)), e = q * q * (3 - 2 * q), dir = idx % 2 ? 1 : -1;   // départ et arrivée en douceur
+      hvCover(p, p.naturalWidth, p.naturalHeight, z, dir * over * 0.7 * (1 - 2 * e), 0);
+    } else hvCover(p, p.naturalWidth, p.naturalHeight, 1.18 - 0.12 * ph, Math.sin(ph * 2.2) * 0.06, Math.cos(ph * 1.7) * 0.05);
+  };
+  pan(ok[i], f, 1, i); if (f > 0.78 && n > 1) pan(ok[(i + 1) % n], f - 1, (f - 0.78) / 0.22, i + 1);
   c.globalAlpha = 1; return true;
 }
 /* Ouvert depuis le disque, le navigateur interdit de lire les pixels d'un fichier local. Les carrés se fabriquent alors sans les lire :
