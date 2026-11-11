@@ -5479,6 +5479,7 @@
    },
    "date": "",
    "tags": [
+    "specialists",
     "artists"
    ],
    "thumb": "media/ezra/screenshot-2026-11-06-at-16-50-08-vayy.jpg",
@@ -5498,7 +5499,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "pedra",
@@ -10582,6 +10583,7 @@
    },
    "date": "",
    "tags": [
+    "specialists",
     "artists"
    ],
    "thumb": "media/rossella-piccinno/ross-asm2.jpg",
@@ -10601,7 +10603,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "emma-haziza",
