@@ -1227,3 +1227,60 @@ html #home-ctl > #home-snd { width: 32px; }
 @keyframes hvTurnIn { from { opacity: 0; } }
 @keyframes hvTurnOut { to { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { #hv-turn svg { animation: none; } }
+
+/* ===== maj-157 : la vue d'ensemble, en mosaïque ===== */
+#ov-btn { position: absolute; left: calc(100% + 10px); bottom: 0; height: 34px; min-width: 34px; display: inline-flex; align-items: center; gap: 0; padding: 0; border: 1px solid #bdbdbd; border-radius: 17px; background: #fff; color: #111; cursor: pointer; font: bold 11px/32px var(--ui); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; box-sizing: border-box; transition: border-color .25s; }
+#ov-btn[hidden] { display: none; }
+#ov-btn svg { flex: none; width: 14px; height: 14px; margin: 0 9px; }
+#ov-btn span { display: block; max-width: 0; overflow: hidden; opacity: 0; padding-right: 0; transition: max-width .45s cubic-bezier(.77,0,.18,1), padding .45s cubic-bezier(.77,0,.18,1), opacity .3s; }
+#ov-btn:hover, #ov-btn:focus-visible { border-color: #111; outline: none; }
+#ov-btn:hover span, #ov-btn:focus-visible span { max-width: 180px; padding-right: 14px; opacity: 1; }
+@media (max-width: 700px), (max-height: 520px) { #ov-btn { height: 30px; min-width: 30px; left: calc(100% + 8px); } #ov-btn svg { margin: 0 7px; } }
+
+#hc-ov { position: fixed; inset: 0; z-index: 40; overflow-y: auto; overscroll-behavior: contain; background: #fff; color: #111; opacity: 0; transition: opacity .35s ease; -webkit-overflow-scrolling: touch; }
+#hc-ov.on { opacity: 1; }
+#hc-ov[hidden] { display: none; }
+#hc-ov .ov-in { max-width: 1600px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top, 0px)) max(23px, env(safe-area-inset-right, 0px)) calc(60px + env(safe-area-inset-bottom, 0px)) max(23px, env(safe-area-inset-left, 0px)); }
+#hc-ov .bar { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 14px 24px; padding-bottom: 20px; }
+#hc-ov h2 { margin: 0; font: italic 46px/.9 var(--f-subtitle, var(--serif)); letter-spacing: -.01em; }
+#hc-ov .n { font: 600 11px/1 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; padding-bottom: 6px; }
+#hc-ov .x { margin-left: auto; order: 2; width: 40px; height: 40px; border: 1px solid #bdbdbd; border-radius: 50%; background: #fff; color: #111; display: grid; place-items: center; cursor: pointer; align-self: flex-start; }
+#hc-ov .x:hover, #hc-ov .x:focus-visible { border-color: #111; outline: none; }
+#hc-ov .x svg { width: 14px; height: 14px; }
+#hc-ov .chips { order: 3; flex-basis: 100%; display: flex; gap: 6px; flex-wrap: wrap; }
+#hc-ov .chips button { font: 600 10.5px/1 var(--ui); letter-spacing: .1em; text-transform: uppercase; padding: 9px 13px; border-radius: 16px; border: 1px solid #bdbdbd; background: #fff; color: #111; cursor: pointer; white-space: nowrap; }
+#hc-ov .chips button span { color: #8a8a8a; margin-left: 6px; font-weight: 500; }
+#hc-ov .chips button:hover { border-color: #111; }
+#hc-ov .chips button[aria-pressed="true"] { background: #111; color: #fff; border-color: #111; }
+#hc-ov .mos { --cols: 8; display: grid; grid-template-columns: repeat(var(--cols), 1fr); grid-auto-rows: calc((min(100vw, 1600px) - 46px) / var(--cols) * .72); grid-auto-flow: dense; gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
+#hc-ov .t { position: relative; overflow: hidden; background: #111; min-width: 0; display: block; color: #fff; text-decoration: none; }
+#hc-ov .t[hidden] { display: none; }
+#hc-ov .t.xl { grid-column: span 4; grid-row: span 2; } #hc-ov .t.l { grid-column: span 2; grid-row: span 2; } #hc-ov .t.w { grid-column: span 2; }
+#hc-ov .t img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.17,.84,.44,1), filter .6s; }
+#hc-ov .tx { position: absolute; left: 0; right: 0; bottom: 0; padding: 34px 14px 12px; background: linear-gradient(transparent, rgba(0,0,0,.72)); opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .45s cubic-bezier(.17,.84,.44,1); }
+#hc-ov .tx::before { content: ''; display: block; width: 18px; height: 2px; background: var(--accent); margin-bottom: 8px; }
+#hc-ov .tx b { display: block; font: 600 13px/1.2 var(--ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#hc-ov .tx i { display: block; margin-top: 2px; font: italic 14px/1.2 var(--f-subtitle, var(--serif)); color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#hc-ov .tx i:empty { display: none; }
+#hc-ov .t em { position: absolute; top: 10px; right: 12px; font: 600 9.5px/1 var(--ui); letter-spacing: .12em; font-style: normal; opacity: 0; transition: opacity .35s; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+#hc-ov .t.l .tx, #hc-ov .t.xl .tx, #hc-ov .t:focus-visible .tx { opacity: 1; transform: none; }
+#hc-ov .t.l em, #hc-ov .t.xl em { opacity: .85; }
+#hc-ov .t.l b, #hc-ov .t.l i { font-size: 17px; } #hc-ov .t.xl b { font-size: 24px; } #hc-ov .t.xl i { font-size: 21px; } #hc-ov .t.xl .tx { padding: 60px 22px 18px; }
+#hc-ov .t:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (hover: hover) {
+  #hc-ov .t:hover img { transform: scale(1.06); }
+  #hc-ov .mos:hover .t:not(:hover) img { filter: grayscale(1) brightness(.75); }
+  #hc-ov .t:hover .tx { opacity: 1; transform: none; } #hc-ov .t:hover em { opacity: .85; }
+}
+@media (max-width: 1100px) { #hc-ov .mos { --cols: 6; } }
+@media (max-width: 700px) {
+  #hc-ov .ov-in { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-top: calc(22px + env(safe-area-inset-top, 0px)); }
+  #hc-ov h2 { font-size: 34px; } #hc-ov .bar { gap: 10px 14px; padding-bottom: 14px; }
+  #hc-ov .chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  #hc-ov .mos { --cols: 3; grid-auto-rows: calc((100vw - 32px) / 3 * .8); }
+  #hc-ov .t.xl { grid-column: span 3; }
+  #hc-ov .t.xl b { font-size: 18px; } #hc-ov .t.xl i { font-size: 16px; } #hc-ov .t.l b, #hc-ov .t.l i { font-size: 13px; } #hc-ov .tx { padding: 26px 10px 9px; } #hc-ov .t.l em { display: none; }
+}
+html.neg #hc-ov .t { filter: invert(1); }   /* la page inversée : les photos restent à l'endroit */
+html.ov-open #kb, html.ov-open #cats { visibility: hidden; }
+html.neg #hc-ov .tx::before { background: var(--accent-raw, #ffcc00); }   /* la vignette est remise à l'endroit : la vraie couleur d'accent */

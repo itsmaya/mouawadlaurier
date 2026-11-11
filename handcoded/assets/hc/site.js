@@ -1556,7 +1556,7 @@ function initCategorieData() {
     li.appendChild(b); catList.appendChild(li);
   });
   catName.innerHTML = `<span class="t">${escapeHTML(d.currentCatName)}</span> <span class="n">${d.countOf(d.category)}</span>`;
-  checkAccess(); closeCategory();
+  checkAccess(); closeCategory(); ovSync();
 }
 const pgNum = document.getElementById('pg-num');
 function checkAccess() {
@@ -1564,6 +1564,81 @@ function checkAccess() {
   if (pgNum) { pgNum.hidden = pgPrev.hidden; pgNum.textContent = `${d.page}/${d.pages}`; pgNum.setAttribute('aria-label', `${d.page} / ${d.pages}`); }   // où on en est : page 2 sur 5
 }
 function closeCategory() { clearTimeout(catPeekTimer); catBox.classList.remove('open'); catOpen.setAttribute('aria-expanded', 'false'); }
+/* ===== maj-157 : la vue d'ensemble. Toutes les réalisations d'un coup d'œil, en mosaïque : les vignettes bord à bord, séparées par un filet,
+   la Sélection en grand (la toute première en très grand), les marques en large. Un clic ouvre la fiche, comme dans la 3D. */
+const ovBtn = document.createElement('button'); ovBtn.id = 'ov-btn'; ovBtn.type = 'button'; ovBtn.hidden = true;
+ovBtn.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 1h8v8H1zM10.5 1H15v3.5h-4.5zM10.5 5.5H15V9h-4.5zM1 10.5h3.5V15H1zM5.5 10.5H9V15H5.5zM10.5 10.5H15V15h-4.5z" fill="currentColor"/></svg><span></span>';
+catBox.appendChild(ovBtn);
+let ovEl = null, ovCat = '';
+const ovWanted = () => !!(P.section && P.section.def.card === 'image' && !P.section.def.skills && P.data && P.data.all.length >= 8);
+function ovSync() { ovBtn.hidden = !ovWanted(); ovBtn.querySelector('span').textContent = ui('overview'); ovBtn.setAttribute('aria-label', ui('overview')); }
+ovBtn.addEventListener('click', e => { e.stopPropagation(); openOverview(); });
+function ovFit() {   // pas de trou en bas : quelques petites vignettes s'élargissent pour que la dernière ligne soit pleine
+  if (!ovEl) return;
+  const g = ovEl.querySelector('.mos'), cols = getComputedStyle(g).gridTemplateColumns.split(' ').length, ts = [...g.children].filter(t => !t.hidden);
+  [...g.children].forEach(t => { t.className = 't ' + t.dataset.k; t.style.gridColumn = ''; });
+  const size = t => t.classList.contains('xl') ? (cols < 6 ? cols * 2 : 8) : t.classList.contains('l') ? 4 : t.classList.contains('w') ? 2 : 1;
+  let need = (cols - ts.reduce((a, t) => a + size(t), 0) % cols) % cols;
+  for (let i = ts.length - 1; i >= 0 && need > 0; i--) if (!ts[i].dataset.k) { ts[i].classList.add('w'); need--; }
+  /* s'il reste un trou sur la dernière ligne (grandes vignettes seules), les dernières vignettes s'élargissent pour le combler */
+  const gr = g.getBoundingClientRect(), cw = gr.width / cols; if (!ts.length || !cw) return;
+  const box = t => { const r = t.getBoundingClientRect(); return { t, c: Math.round((r.left - gr.left) / cw), n: Math.round(r.width / cw), b: Math.round(r.bottom) }; };
+  const bs = ts.map(box), bottom = Math.max(...bs.map(x => x.b)), last = bs.filter(x => x.b >= bottom - 2).sort((x, y) => x.c - y.c);
+  let free = cols - last.reduce((a, x) => a + x.n, 0);
+  for (let i = last.length - 1, k = 0; free > 0; k++) { const x = last[(last.length - 1 - (k % last.length))]; x.n++; free--; i--; }
+  last.forEach(x => { x.t.style.gridColumn = 'span ' + x.n; });
+}
+function ovFilter(id) {
+  ovCat = id; if (!ovEl) return;
+  ovEl.querySelectorAll('.chips button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === id)));
+  ovEl.querySelectorAll('.mos .t').forEach(t => { t.hidden = !!id && !t.dataset.tags.split(' ').includes(id); });
+  ovFit();
+}
+function openOverview() {
+  if (!ovWanted() || !inputEnabled) return;
+  closeCategory();
+  const d = P.data, def = P.section.def, list = d.all, star = def.defaultTag || 'featured';
+  const brand = (def.tags || []).some(t => t.id === 'advertising') ? 'advertising' : '';
+  let first = true;
+  const tiles = list.map(p => {
+    const f = (p.tags || []).includes(star), k = f && first ? 'xl' : f ? 'l' : brand && (p.tags || []).includes(brand) ? 'w' : ''; if (f) first = false;
+    const img = !p.thumb ? '' : k === 'xl' ? `<img src="${escapeHTML(url(p.thumb))}" alt="" loading="lazy" draggable="false">` : smallImg(p.thumb, 'alt="" loading="lazy" draggable="false"');
+    return `<a class="t ${k}" data-k="${k}" data-ov="${escapeHTML(p.id)}" data-tags="${escapeHTML((p.tags || []).join(' '))}" href="?p=${encodeURIComponent(p.id)}&amp;lang=${LANG}">${img}` +
+      `<em>${escapeHTML(p.date || '')}</em><span class="tx"><b>${escapeHTML(tr(p.title))}</b><i>${escapeHTML(tr(p.subtitle))}</i></span></a>`;
+  }).join('');
+  const chips = d.categoryList.map(c => `<button type="button" data-cat="${escapeHTML(c.id)}" aria-pressed="false">${escapeHTML(tr(c.label))}<span>${d.countOf(c.id)}</span></button>`).join('');
+  if (!ovEl) {
+    ovEl = document.createElement('section'); ovEl.id = 'hc-ov'; ovEl.className = 'ui'; ovEl.setAttribute('role', 'dialog'); ovEl.setAttribute('aria-modal', 'true'); ovEl.hidden = true;
+    document.body.appendChild(ovEl);
+    ovEl.addEventListener('click', e => {
+      const t = e.target.closest('[data-ov]');
+      if (t) { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); const id = t.dataset.ov; closeOverview(); goToPost(id); return; }
+      const c = e.target.closest('[data-cat]'); if (c) { ovFilter(c.dataset.cat); return; }
+      if (e.target.closest('.x')) closeOverview();
+    });
+    window.addEventListener('keydown', e => {   // tant que la vue d'ensemble est ouverte, le clavier ne pilote plus la scène 3D
+      if (!ovEl || ovEl.hidden) return;
+      if (e.code === 'Escape') { e.preventDefault(); closeOverview(); }
+      if (e.code !== 'Tab' && e.code !== 'Enter' && e.code !== 'Space') e.stopImmediatePropagation();
+    }, true);
+    window.addEventListener('resize', ovFit);
+  }
+  ovEl.setAttribute('aria-label', ui('overview'));
+  ovEl.innerHTML = `<div class="ov-in"><div class="bar"><h2>${escapeHTML(ui('overview'))}</h2><span class="n">${list.length} ${escapeHTML(ui('ov_n'))}</span>` +
+    `<button type="button" class="x" aria-label="${escapeHTML(ui('close'))}"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>` +
+    `<div class="chips">${chips}</div></div><div class="mos">${tiles}</div></div>`;
+  ovEl.hidden = false; ovEl.scrollTop = 0; document.documentElement.classList.add('ov-open');
+  requestAnimationFrame(() => { ovEl.classList.add('on'); });
+  ovFilter(d.categoryList.some(c => c.id === '') ? '' : d.category);   // tout, d'un coup d'œil
+  setTimeout(() => { const x = ovEl.querySelector('.x'); if (x) x.focus({ preventScroll: true }); }, 50);
+  countView('#overview', ui('overview'), true);
+}
+function closeOverview() {
+  if (!ovEl || ovEl.hidden) return;
+  ovEl.classList.remove('on'); document.documentElement.classList.remove('ov-open');
+  setTimeout(() => { if (!ovEl.classList.contains('on')) ovEl.hidden = true; }, 350);
+  ovBtn.focus({ preventScroll: true });
+}
 /* Arrivée sur une section : le menu des catégories s'ouvre puis se referme tout seul, comme le clavier à la première touche */
 let catPeekTimer = 0, enteredAt = -1e9;
 function peekCategories(delay = 0.7) {
