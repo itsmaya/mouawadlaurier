@@ -6059,7 +6059,7 @@
    "id": "fanny-fortage",
    "section": "studio",
    "order": 14,
-   "published": true,
+   "published": false,
    "title": {
     "en": "Fanny Fortage",
     "fr": "Fanny Fortage",
@@ -6099,7 +6099,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-11"
   },
   {
    "id": "gaetan-cerrillo",
