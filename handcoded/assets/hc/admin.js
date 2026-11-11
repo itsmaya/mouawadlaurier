@@ -1237,7 +1237,7 @@ function postEditor(p, redrawList, redraw) {
       isSkill ? null : pairInput(L.place, p, 'place', { ...opts, after: () => drawSpots() }),
       isSkill ? null : h('div', { class: 'grid2' },
         field('Auteur de l’œuvre', textInput(() => p.author || '', v => { p.author = v; }, { placeholder: 'Ex. Romain Tardy' }), `Signé sur la vignette 3D : « ${fr(p.title) || 'Titre'} · ${p.author || S.content.settings.name} ». Vide : signé ${S.content.settings.name}.`),
-        h('div'),
+        sec.card === 'image' && !sec.skills ? field('Taille dans la vue d’ensemble', selectInput([{ value: '', label: 'Automatique' }, { value: 'xl', label: 'Très grande' }, { value: 'l', label: 'Grande' }, { value: 'w', label: 'Large' }, { value: 's', label: 'Petite' }], () => p.ovSize || '', v => { if (v) p.ovSize = v; else delete p.ovSize; }), 'Automatique : le premier projet de la Sélection en très grand, les autres projets de la Sélection en grand, les marques en large, le reste en petit.') : h('div'),
         field('Date', textInput(() => p.date, v => { p.date = v; }, { ...opts, placeholder: '2019, ou 2017 – 2019' })),
         field('Lien', textInput(() => p.link, v => { p.link = v.trim(); }, { type: 'url', placeholder: 'https://…' }), sec.card === 'place' ? 'Affiché sur la fiche du lieu.' : 'Affiché sous la fiche : « Voir le site ».'))),
     isSkill ? h('div', { class: 'block' }, h('h3', null, 'Projets', h('small', null, 'ceux qui l’ont coché dans leur fiche')), skillBox) : null,

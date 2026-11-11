@@ -1575,7 +1575,7 @@ function ovSync() { ovBtn.hidden = !ovWanted(); ovBtn.querySelector('span').text
 ovBtn.addEventListener('click', e => { e.stopPropagation(); openOverview(); });
 function ovFit() {   // pas de trou en bas : quelques petites vignettes s'élargissent pour que la dernière ligne soit pleine
   if (!ovEl) return;
-  const g = ovEl.querySelector('.mos'), cols = getComputedStyle(g).gridTemplateColumns.split(' ').length, ts = [...g.children].filter(t => !t.hidden);
+  const g = ovEl.querySelector('.mos'), cols = getComputedStyle(g).gridTemplateColumns.split(' ').length, ts = [...g.children];
   [...g.children].forEach(t => { t.className = 't ' + t.dataset.k; t.style.gridColumn = ''; });
   const size = t => t.classList.contains('xl') ? (cols < 6 ? cols * 2 : 8) : t.classList.contains('l') ? 4 : t.classList.contains('w') ? 2 : 1;
   let need = (cols - ts.reduce((a, t) => a + size(t), 0) % cols) % cols;
@@ -1588,11 +1588,13 @@ function ovFit() {   // pas de trou en bas : quelques petites vignettes s'élarg
   for (let i = last.length - 1, k = 0; free > 0; k++) { const x = last[(last.length - 1 - (k % last.length))]; x.n++; free--; i--; }
   last.forEach(x => { x.t.style.gridColumn = 'span ' + x.n; });
 }
-function ovFilter(id) {
+function ovFilter(id, scroll = true) {   // maj-158 : la mosaïque reste entière ; une catégorie fait ressortir ses projets, les autres s'effacent
   ovCat = id; if (!ovEl) return;
   ovEl.querySelectorAll('.chips button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === id)));
-  ovEl.querySelectorAll('.mos .t').forEach(t => { t.hidden = !!id && !t.dataset.tags.split(' ').includes(id); });
-  ovFit();
+  const g = ovEl.querySelector('.mos'); g.classList.toggle('sel', !!id);
+  let firstHit = null;
+  g.querySelectorAll('.t').forEach(t => { const hit = !!id && t.dataset.tags.split(' ').includes(id); t.classList.toggle('hit', hit); t.classList.toggle('dim', !!id && !hit); if (hit && !firstHit) firstHit = t; });
+  if (scroll && firstHit) { const r = firstHit.getBoundingClientRect(); if (r.top > innerHeight * 0.8 || r.bottom < 0) ovEl.scrollTo({ top: ovEl.scrollTop + r.top - 140, behavior: 'smooth' }); }
 }
 function openOverview() {
   if (!ovWanted() || !inputEnabled) return;
@@ -1601,12 +1603,13 @@ function openOverview() {
   const brand = (def.tags || []).some(t => t.id === 'advertising') ? 'advertising' : '';
   let first = true;
   const tiles = list.map(p => {
-    const f = (p.tags || []).includes(star), k = f && first ? 'xl' : f ? 'l' : brand && (p.tags || []).includes(brand) ? 'w' : ''; if (f) first = false;
+    const f = (p.tags || []).includes(star), auto = f && first ? 'xl' : f ? 'l' : brand && (p.tags || []).includes(brand) ? 'w' : ''; if (f) first = false;
+    const k = p.ovSize === 's' ? '' : /^(xl|l|w)$/.test(p.ovSize || '') ? p.ovSize : auto;   // la taille choisie dans l'admin, sinon la règle automatique
     const img = !p.thumb ? '' : k === 'xl' ? `<img src="${escapeHTML(url(p.thumb))}" alt="" loading="lazy" draggable="false">` : smallImg(p.thumb, 'alt="" loading="lazy" draggable="false"');
     return `<a class="t ${k}" data-k="${k}" data-ov="${escapeHTML(p.id)}" data-tags="${escapeHTML((p.tags || []).join(' '))}" href="?p=${encodeURIComponent(p.id)}&amp;lang=${LANG}">${img}` +
       `<em>${escapeHTML(p.date || '')}</em><span class="tx"><b>${escapeHTML(tr(p.title))}</b><i>${escapeHTML(tr(p.subtitle))}</i></span></a>`;
   }).join('');
-  const chips = d.categoryList.map(c => `<button type="button" data-cat="${escapeHTML(c.id)}" aria-pressed="false">${escapeHTML(tr(c.label))}<span>${d.countOf(c.id)}</span></button>`).join('');
+  const chips = (d.categoryList.some(c => c.id === '') ? d.categoryList : [{ id: '', label: Object.fromEntries(LANGS.map(l => [l, (UI[l] || UI.en).all])) }, ...d.categoryList]).map(c => `<button type="button" data-cat="${escapeHTML(c.id)}" aria-pressed="false">${escapeHTML(tr(c.label))}<span>${d.countOf(c.id)}</span></button>`).join('');
   if (!ovEl) {
     ovEl = document.createElement('section'); ovEl.id = 'hc-ov'; ovEl.className = 'ui'; ovEl.setAttribute('role', 'dialog'); ovEl.setAttribute('aria-modal', 'true'); ovEl.hidden = true;
     document.body.appendChild(ovEl);
@@ -1629,7 +1632,7 @@ function openOverview() {
     `<div class="chips">${chips}</div></div><div class="mos">${tiles}</div></div>`;
   ovEl.hidden = false; ovEl.scrollTop = 0; document.documentElement.classList.add('ov-open');
   requestAnimationFrame(() => { ovEl.classList.add('on'); });
-  ovFilter(d.categoryList.some(c => c.id === '') ? '' : d.category);   // tout, d'un coup d'œil
+  ovFit(); ovFilter('', false);   // tout, d'un coup d'œil
   setTimeout(() => { const x = ovEl.querySelector('.x'); if (x) x.focus({ preventScroll: true }); }, 50);
   countView('#overview', ui('overview'), true);
 }
@@ -3005,27 +3008,35 @@ async function hvPhoto() {
   const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
   ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
   const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur ; sans texte, la photo n'a que la signature
-  const grotesk = getComputedStyle(document.documentElement).getPropertyValue('--grotesk').trim() || 'sans-serif';
+  /* maj-158 : la mise en page reprend l'en-tête du site. En haut, « Hand Coded. » et ses trois mots, le rond jaune à droite ;
+     en bas, le trait jaune, le texte tapé dans la police des titres, et l'adresse du site en blanc. Les polices sont celles de Réglages › Typographie. */
+  const ST = CONTENT.settings, fT = typoOf(ST, 'title'), f2 = typoOf(ST, 'sig2');
   const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
   const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
-  try { await Promise.all([document.fonts.load(`bold 80px ${grotesk}`), document.fonts.load(`500 27px ${grotesk}`), document.fonts.load(wmFont(110))]); } catch (e) {}
-  /* en haut : « Hand Coded. » et, en petit à sa droite, les mots du slogan, comme sur le site */
-  const mx = 72, top = 78, tl = (CONTENT.settings.taglines && (CONTENT.settings.taglines[LANG] || CONTENT.settings.taglines.en)) || [];
-  const studio = tl[0] || ((CONTENT.settings.name || 'Hand Coded') + '.'), words = tl.slice(1), ss = 16, slh = 19;   // maj-151 : la signature 60 % plus petite, les mots à côté dans la même proportion qu'en haut du site
-  ctx.font = `500 ${ss}px ${grotesk}`; const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + 22 : 0;
-  let ws = 52; ctx.font = wmFont(ws); while (ctx.measureText(studio).width > W - 2 * mx - sw && ws > 30) { ws -= 2; ctx.font = wmFont(ws); }
-  const nameW = ctx.measureText(studio).width;
-  ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, top + ws * 0.8);
-  ctx.font = `500 ${ss}px ${grotesk}`; ctx.textBaseline = 'top';
-  words.forEach((w, i) => ctx.fillText(w, mx + nameW + 22, top + ws * 0.14 + i * slh));
-  const tw = W - 2 * mx; let size = 72, lines = [];   // le texte tapé : 30 % plus petit
-  for (; size >= 28; size -= 4) { ctx.font = `bold ${size}px ${grotesk}`; lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
+  const ttlFont = size => `${fT.italic ? 'italic ' : ''}${fT.weight || 600} ${size}px ${fT.css}`, smlFont = size => `${f2.italic ? 'italic ' : ''}${f2.weight || 500} ${size}px ${f2.css}`;
+  try { await Promise.all([document.fonts.load(ttlFont(80)), document.fonts.load(smlFont(30)), document.fonts.load(wmFont(96))]); } catch (e) {}
+  const mx = 72, top = 70, R = 34, tl = (ST.taglines && (ST.taglines[LANG] || ST.taglines.en)) || [];
+  const studio = tl[0] || ((ST.name || 'Hand Coded') + '.'), words = tl.slice(1);
+  let ws = 96, ss = Math.round(ws * 0.31);
+  const fitHead = () => { ss = Math.round(ws * 0.31); ctx.font = smlFont(ss); const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
+  while (fitHead() > W - 2 * mx - 2 * R - 40 && ws > 48) ws -= 4;
+  ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width, base = top + ws * 0.78;
+  ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, base);
+  ctx.font = smlFont(ss); ctx.textBaseline = 'top'; const slh = Math.round(ss * 1.18);
+  words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, top + ws * 0.1 + i * slh));
+  ctx.fillStyle = accent(); ctx.beginPath(); ctx.arc(W - mx - R, top + ws * 0.42, R, 0, Math.PI * 2); ctx.fill();   // le rond du logo, en haut à droite comme sur le site
+  /* en bas : le texte tapé, jusqu'à quatre lignes, aussi grand que possible */
+  const tw = W - 2 * mx; let size = 84, lines = [];
+  const track = sz => { if ('letterSpacing' in ctx) ctx.letterSpacing = Math.round((+fT.ls || -0.02) * sz) + 'px'; };
+  for (; size >= 36; size -= 4) { ctx.font = ttlFont(size); track(size); lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
   lines = slogan ? lines.slice(0, 4) : [];
-  const lh = Math.round(size * 1.05), urlY = H - 96, y0 = urlY - 40 - lines.length * lh;
-  ctx.fillStyle = accent(); if (lines.length) ctx.fillRect(mx, y0 - 30, 40, 5);
-  ctx.fillStyle = '#fff'; ctx.font = `bold ${size}px ${grotesk}`;
-  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.04, y0 + i * lh));
-  ctx.fillStyle = '#8f8f8f'; ctx.font = `28px ${grotesk}`; ctx.fillText('hand-coded.net', mx, urlY);
+  const urlSize = 30, urlY = H - 64 - urlSize, lh = Math.round(size * 1.02), y0 = urlY - 64 - lines.length * lh;
+  ctx.textBaseline = 'top';
+  if (lines.length) { ctx.fillStyle = accent(); ctx.fillRect(mx, y0 - 34, 46, 6); }
+  ctx.fillStyle = '#fff'; ctx.font = ttlFont(size); track(size);
+  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.03, y0 + i * lh));
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  ctx.font = smlFont(urlSize); ctx.fillStyle = '#fff'; ctx.fillText('hand-coded.net', mx, urlY);
   const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
   countView('photo-souvenir', 'Photo souvenir', true);
   const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';

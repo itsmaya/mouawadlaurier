@@ -147,7 +147,7 @@ export function seoParts(content, opts = {}) {
     return { fam, it, w, css: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap` }; })();   // la police du slogan sous la signature (« Réactif. Sensible. Immersif. »), même adresse que le site
   const data = { langs, def: lang, lines, f: sf };
   const opening = !Object.keys(lines).length ? '' :
-    `<div id="hc-intro" class="hold" aria-hidden="true"><div class="ln"></div></div>\n` +
+    `<div id="hc-intro" class="hold" aria-hidden="true"><i class="beat"></i><div class="ln"></div></div>\n` +
     `<script>(function(){var D=${JSON.stringify(data).replace(/</g, '\\u003c')},el=document.getElementById('hc-intro');try{var q=new URLSearchParams(location.search);` +
     `var RT=window.HC_ROUTE||{};if(q.get('p')||RT.p||!/^(#(accueil|home|inici|inicio)?)?$/i.test(location.hash||'')||(matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||!el.animate){el.remove();return;}` +
     `var sv=null;try{sv=localStorage.getItem('hc-lang')}catch(e){}var nl=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).map(function(x){return String(x).toLowerCase().slice(0,2)});` +
