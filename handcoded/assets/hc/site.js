@@ -158,15 +158,46 @@ const postLocal = (x, y, z) => [-x, y, z];             // conteneur de posts tou
 
 /* ================================================================ Rendu */
 const canvas = document.getElementById('stage');
+/* maj-167 : en négatif, la page 2D reste inversée en bloc (html.neg body), mais la 3D n'est plus sous ce filtre :
+   elle sort du <body> et s'inverse elle-même dans WebGL, en une passe (le même résultat, sans recalcul du filtre à chaque image) */
+if (canvas && canvas.parentNode === document.body) document.documentElement.insertBefore(canvas, document.body);
+/* l'accueil, l'ouverture et le message d'erreur sortent aussi du <body> : ils gardent leurs vraies couleurs sans être inversés deux fois */
+['home', 'hc-intro', 'load-error'].forEach(id => { const el = document.getElementById(id); if (el && el.parentNode === document.body) document.documentElement.appendChild(el); });
 /* Écran Retina : l'image est déjà calculée deux fois plus fine, l'antialiasing matériel n'y ajoute presque rien et coûte cher à la carte graphique */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: (window.devicePixelRatio || 1) < 1.75, powerPreference: 'high-performance' });
-renderer.debug.checkShaderErrors = false;   // pas de lecture des journaux de compilation : le navigateur compile les shaders sans bloquer l'image
+renderer.debug.checkShaderErrors = false;
+/* le négatif de la 3D : un rectangle blanc posé sur toute l'image, mélangé en « 1 − couleur déjà dessinée » (exactement le filtre invert(1) du CSS) ;
+   l'opacité de la toile ne bouge pas. Une seule passe, sur la carte graphique. */
+const NEG_SCENE = new THREE.Scene(), NEG_CAM = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+NEG_SCENE.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, depthTest: false, depthWrite: false,
+  blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.OneMinusDstColorFactor, blendDst: THREE.OneMinusSrcColorFactor,   // a·(1−c) + (1−a)·c : invert(a)
+  blendEquationAlpha: THREE.AddEquation, blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor })));
+NEG_SCENE.children[0].frustumCulled = false;
+let negDrawn = null, negAmt = null;
+function render3D() {
+  if (negAmt === null) negAmt = negMode ? 1 : 0;   // à l'arrivée : tout de suite, sans fondu
+  renderer.render(scene, camera);
+  if (negAmt > 0) { NEG_SCENE.children[0].material.color.setScalar(negAmt); const ac = renderer.autoClear; renderer.autoClear = false; renderer.render(NEG_SCENE, NEG_CAM); renderer.autoClear = ac; }
+  negDrawn = negAmt;
+}
+/* la bascule : 0,45 s, la même durée et la même courbe que le filtre des textes (ease) */
+let negFrom = 0, negAt = 0;
+function negStep(now) {
+  const want = negMode ? 1 : 0; if (negAmt === null || negAmt === want) return;
+  if (!negAt) { negAt = now; negFrom = negAmt; }
+  const t = Math.min(1, (now - negAt) / 450), e = t < 1 ? cubicBez(0.25, 0.1, 0.25, 1, t) : 1;
+  negAmt = negFrom + (want - negFrom) * e; if (t >= 1) { negAmt = want; negAt = 0; }
+}
+function cubicBez(x1, y1, x2, y2, x) {   // la courbe « ease » du CSS
+  let a = x; for (let i = 0; i < 8; i++) { const cx = 3 * x1 * a * (1 - a) ** 2 + 3 * x2 * a * a * (1 - a) + a ** 3 - x, d = 3 * x1 * (1 - a) ** 2 + 6 * (x2 - x1) * a * (1 - a) + 3 * (1 - x2) * a * a; if (Math.abs(d) < 1e-6) break; a = Math.max(0, Math.min(1, a - cx / d)); }
+  return 3 * y1 * a * (1 - a) ** 2 + 3 * y2 * a * a * (1 - a) + a ** 3;
+}   // pas de lecture des journaux de compilation : le navigateur compile les shaders sans bloquer l'image
 /* Finesse de l'image adaptée à la machine : on part de la pleine finesse, on descend par paliers si l'image n'arrive plus à suivre, on remonte quand ça va mieux */
 const DPR_MAX = Math.min(window.devicePixelRatio || 1, 2), DPR_MIN = Math.min(DPR_MAX, DPR_MAX >= 2 ? 1.25 : 1);
 let dpr = DPR_MAX, dprSlow = 0, dprFast = 0, dprAt = 0;
 renderer.setPixelRatio(dpr);
 /* Changer la définition vide la toile : on redessine aussitôt, dans la même image, sinon l'écran 3D clignote (Mac Retina surtout) */
-function setDpr(v, now) { dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprSlow = dprFast = 0; dprAt = now; try { renderer.render(scene, camera); } catch (e) {} }
+function setDpr(v, now) { dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); dprSlow = dprFast = 0; dprAt = now; try { render3D(); } catch (e) {} }
 function dprGovern(now, ms) {   // ms : temps entre deux images dessinées pendant que la 3D bouge
   if (now - dprAt < 1500) return;
   if (ms > 30) { dprFast = 0; if (++dprSlow > 24 && dpr > DPR_MIN) setDpr(Math.max(DPR_MIN, Math.round((dpr - 0.25) * 4) / 4), now); }
@@ -1327,7 +1358,7 @@ function updateCamera() {   // caméra Papervision : focale en pixels (zoom x fo
   const fov = 2 * Math.atan(H / 2 / (cam.zoom * CAMERA.focus * narrow)) / D2R;
   if (Math.abs(camera.fov - fov) > 1e-4) { camera.fov = fov; camera.updateProjectionMatrix(); }
 }
-function resizeViewport() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); LINE_MATS.forEach(m => m.resolution.set(W, H)); if (started) try { renderer.render(scene, camera); } catch (e) {} }   // la toile vidée est redessinée tout de suite
+function resizeViewport() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); LINE_MATS.forEach(m => m.resolution.set(W, H)); if (started) try { render3D(); } catch (e) {} }   // la toile vidée est redessinée tout de suite
 
 /* ================================================================ Interface 2D */
 const menu = document.getElementById('menu'), sloganEl = document.getElementById('slogan'), langsEl = document.getElementById('langs');
@@ -2722,7 +2753,7 @@ function renderReel() {
     btn.innerHTML = '<i class="tri"></i><span>Showreel</span>';   // un carré et un triangle « lecture » ; au survol, le mot glisse dans le rectangle
     const box = document.createElement('div'); box.id = 'reel'; box.hidden = true; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Showreel');
     box.innerHTML = '<div class="scrim"></div><div class="scr"><div class="bar"><b>Showreel</b><a class="ext" target="_blank" rel="noopener"></a><button type="button" class="snd"></button><button type="button" class="x"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.8"/></svg></button></div><div class="vid"></div></div>';
-    document.body.append(btn, box);
+    document.body.append(btn); document.documentElement.appendChild(box);   // l'écran du showreel passe au-dessus de l'accueil, hors du <body>
     reel = { btn, box, scr: box.querySelector('.scr'), vid: box.querySelector('.vid'), snd: box.querySelector('.snd'), x: box.querySelector('.x'), ext: box.querySelector('.ext'), src: null, kind: '', player: null, muted: true, open: false, last: null };
     btn.addEventListener('click', () => showreelClick());
     reel.x.addEventListener('click', closeReel);
@@ -3817,7 +3848,7 @@ function warmShaders() {
     [...KEEP.children, ...lines.children].forEach(o => { const c = o.clone(); c.frustumCulled = false; tmp.add(c); });
     scene.add(tmp);
     try { renderer.render(scene, camera); } catch (e) {}
-    scene.remove(tmp); try { renderer.render(scene, camera); } catch (e) {} g.dispose();
+    scene.remove(tmp); try { render3D(); } catch (e) {} g.dispose();
   };
   const go = () => Promise.all([KEEP, lines, scene].map(sc => renderer.compileAsync(sc, camera, scene).catch(() => {}))).then(() => (window.requestIdleCallback || (f => setTimeout(f, 50)))(prime, { timeout: 800 }));
   (window.requestIdleCallback || (f => setTimeout(f, 200)))(go, { timeout: 1500 });
@@ -3831,7 +3862,8 @@ function frame(now) {
     updateTweens(); watchGrid(); settleOrbit(); renderMachine(); if (postsView) postsView.update(); phoneBand(); post2D.step(); updateCamera();
     const busy = tweens.length || now < wakeUntil || now < behindUntil || isClicking || closeTurn || orbitE || now - lastDraw > 2000;
     const sig = sceneSig();
-    if (busy || sig !== lastSig) { renderer.render(scene, camera); if (now - drewAt < 100 && homeGone && !document.hidden) dprGovern(now, now - drewAt); drewAt = now; lastDraw = now; lastSig = sig; }
+    negStep(now);
+    if (busy || sig !== lastSig || negDrawn !== negAmt) { render3D(); if (now - drewAt < 100 && homeGone && !document.hidden) dprGovern(now, now - drewAt); drewAt = now; lastDraw = now; lastSig = sig; }
   }
   requestAnimationFrame(frame);
 }
