@@ -3927,6 +3927,8 @@ function introStage() {
     sq.forEach((x, i) => x.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: getComputedStyle(x).opacity, transform: 'none' }], { duration: 520, delay: 760 + i * 90, easing: 'cubic-bezier(.34,1.4,.64,1)', fill: 'backwards' }));
     const en = document.getElementById('enter'); if (en) en.animate([{ opacity: 0, transform: 'translate(-50%, 10px)' }, { opacity: 1, transform: 'translateX(-50%)' }], { duration: 700, delay: 900, easing: EASE_IN, fill: 'backwards' });   // « Entrer » tout de suite : on n'est pas obligé de regarder l'ouverture
     setTimeout(() => { introReady = true; }, 1150 + sq.length * 60);   // maj-151 : quand les boutons sont posés, la vidéo d'abord, puis la phrase par-dessus
+    const settled = Math.max(1100, 380 + Math.max(0, sl.length - 1) * 130 + 800, 760 + Math.max(0, sq.length - 1) * 90 + 520) + 120;
+    setTimeout(() => { const el = document.getElementById('hc-intro'); if (el && !introShown) el.classList.add('beat-on'); }, settled);   // maj-160 : le cœur ne bat qu'une fois l'interface posée, et seulement si la vidéo se fait attendre
   };
   /* la signature dans sa vraie police, sinon elle apparaît en police de secours puis change */
   const f = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]) : Promise.resolve();
