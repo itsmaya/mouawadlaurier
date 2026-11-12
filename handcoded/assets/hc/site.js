@@ -1042,6 +1042,9 @@ class PostsView3D {
   }
   async openPosts() {
     this.loading = true;
+    /* maj-176 : toutes les images des cartes se téléchargent en même temps ; les cartes, elles, continuent d'apparaître l'une après l'autre.
+       Avant, chaque carte attendait son image avant que la suivante demande la sienne : sur une connexion lente, l'attente s'additionnait. */
+    this.posts.forEach(p => [p.thumb, p.thumbBack].forEach(x => { if (x) loadImage(x).catch(() => {}); }));
     for (let i = 0; i < this.n; i++) {
       let tex; try { tex = await this.tex(this.posts[i], this.w, this.h); } catch (e) { continue; }
       if (!this.alive) return;
