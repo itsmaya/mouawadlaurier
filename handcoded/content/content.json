@@ -5977,7 +5977,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-13"
+   "updated": "2026-11-12"
   },
   {
    "id": "clement-rignault",
@@ -6077,10 +6077,10 @@
    "order": 104,
    "published": true,
    "title": {
-    "en": "Loïc Lecoq",
-    "fr": "Loïc Lecoq",
-    "ca": "Loïc Lecoq",
-    "es": "Loïc Lecoq"
+    "en": "Loïc Lecocq",
+    "fr": "Loïc Lecocq",
+    "ca": "Loïc Lecocq",
+    "es": "Loïc Lecocq"
    },
    "subtitle": {
     "fr": "Montage et mapping pour salles immersives",
@@ -6098,7 +6098,7 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/loic-lecoq/loic-21cp.jpg",
    "thumbBack": "",
    "body": {
     "fr": "<p>Il monte les salles immersives : accroche des projecteurs, warping, mapping et blending.</p><p>Avec nous : Peupler et Rising.</p>",
