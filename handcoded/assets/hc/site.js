@@ -3072,63 +3072,75 @@ function hvNote(text, ms) {
   if (text && ms) noteTimer = setTimeout(() => { n.hidden = true; }, ms);
 }
 /* Photo souvenir : l'image de la caméra en carrés, le slogan tapé et la signature du studio. Elle reste sur l'appareil du visiteur. */
+/* maj-178 : la photo souvenir est l'image de l'écran, en plus grand : la même grille de ronds (la dernière image dessinée, lissée par le delay),
+   le même cadrage, le même voile sombre (lu sur .hv-shade) et la signature à l'endroit où on la voit. Seuls s'ajoutent le rond jaune, le texte tapé et l'adresse. */
+function hvShadeOn(ctx, W, H, s) {
+  const el = document.querySelector('#home-band .hv-shade'), bg = el ? getComputedStyle(el).backgroundImage : '';
+  bg.split(/,\s*(?=linear-gradient\()/).forEach(g => {
+    const m = /^linear-gradient\((.*)\)$/.exec(g.trim()); if (!m) return;
+    let body = m[1], ang = 180;
+    const a = /^(-?[\d.]+)deg\s*,\s*/.exec(body), to = /^to (top|bottom|left|right)\s*,\s*/.exec(body);
+    if (a) { ang = ((+a[1] % 360) + 360) % 360; body = body.slice(a[0].length); } else if (to) { ang = { top: 0, right: 90, bottom: 180, left: 270 }[to[1]]; body = body.slice(to[0].length); }
+    if (ang % 90) return;
+    const stops = [...body.matchAll(/(rgba?\([^)]*\))\s*(-?[\d.]+)(px|%)?/g)]; if (!stops.length) return;
+    const len = ang % 180 ? W : H, xy = { 0: [0, H, 0, 0], 90: [0, 0, W, 0], 180: [0, 0, 0, H], 270: [W, 0, 0, 0] }[ang], gr = ctx.createLinearGradient(...xy);
+    stops.forEach(x => { const px = x[3] === '%' ? +x[2] / 100 * len : +x[2] * s; gr.addColorStop(Math.max(0, Math.min(1, px / len)), x[1]); });
+    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
+  });
+}
 async function hvPhoto() {
   if (!hv || (hv.cam && hv.cam.video.readyState < 2)) return;   // caméra ou diaporama : l'image du moment
-  const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
+  const f = hv.frozenAt; if (!f || !f.cols || !hv.W) return;
+  const big = Math.max(hv.W, hv.H), s = Math.min(3000 / big, Math.max(2, 2000 / big));   // au moins deux fois l'écran, au plus 3000 px de côté
+  const W = Math.round(hv.W * s), H = Math.round(hv.H * s), c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
   const band = document.getElementById('home-band'); band.classList.remove('flash'); void band.offsetWidth; band.classList.add('flash');
-  /* les carrés à la taille de la photo, avec autant de colonnes qu'à l'écran */
-  const scr = Math.max(hv.cell, hv.floor), cell = Math.max(10, Math.min(36, Math.round(scr * W / Math.max(320, hv.W))));
-  const cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
-  const keep = { ctx: hv.ctx, W: hv.W, H: hv.H, ow: hv.off.width, oh: hv.off.height, lo: hv.lo, hi: hv.hi };
+  const keep = { ctx: hv.ctx, W: hv.W, H: hv.H, lo: hv.lo, hi: hv.hi };
   try {
     hv.ctx = ctx; hv.W = W; hv.H = H;
-    hv.off.width = hv.raw.width = cols; hv.off.height = hv.raw.height = rows;
-    if (!hvSource(HV_REDUCE.matches ? 0 : (performance.now() - hv.t0) / 1000)) return; hv.octx.globalAlpha = 1; hv.octx.drawImage(hv.raw, 0, 0);
-    let d = null; try { d = hv.octx.getImageData(0, 0, cols, rows).data; } catch (e) {}
-    if (d) hvSquares(d, cols, rows, cell); else hvComposite(cols, rows, cell);   // même contraste qu'à l'écran
-  } finally {
-    hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.off.width = hv.raw.width = keep.ow; hv.off.height = hv.raw.height = keep.oh; hv.lo = keep.lo; hv.hi = keep.hi; hv.fresh = true;
+    if (f.d) hvSquares(f.d, f.cols, f.rows, f.cell * s); else hvComposite(f.cols, f.rows, Math.round(f.cell * s));   // les mêmes ronds qu'à l'écran, au même endroit
+  } finally { hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.lo = keep.lo; hv.hi = keep.hi; }
+  hvShadeOn(ctx, W, H, s);
+  const ST = CONTENT.settings, fT = typoOf(ST, 'title'), unit = Math.min(W, H) / 1080;
+  const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur
+  const cr = hv.cv.getBoundingClientRect(), X = x => (x - cr.left) * s, Y = y => (y - cr.top) * s;   // de l'écran à la photo
+  const fontOf = (cs, px) => `${cs.fontStyle === 'italic' ? 'italic ' : ''}${cs.fontWeight} ${px}px ${cs.fontFamily}`;
+  const wm = document.querySelector('#home-slogan > .wm'), lines = [...document.querySelectorAll('#home-slogan .tls > span')];
+  let mx = 72 * unit, bandMid = 0, bandH = 0;
+  if (wm) {
+    try { await document.fonts.load(fontOf(getComputedStyle(wm), 96)); } catch (e) {}
+    /* chaque ligne posée sur sa ligne de base, comme le navigateur l'a posée à l'écran */
+    const draw = el => {
+      const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || fs * 1.2, r = el.getBoundingClientRect();
+      ctx.font = fontOf(cs, 100); const m = ctx.measureText(el.textContent), fa = (m.fontBoundingBoxAscent || 80) * fs / 100, fd = (m.fontBoundingBoxDescent || 20) * fs / 100;
+      const base = r.top + (lh - fa - fd) / 2 + fa;
+      ctx.font = fontOf(cs, fs * s); ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(el.textContent, X(r.left), Y(base));
+      return { base, asc: (m.actualBoundingBoxAscent || 70) * fs / 100, left: r.left };
+    };
+    const w = draw(wm); lines.forEach(draw);
+    mx = X(w.left); bandH = w.asc * s; bandMid = Y(w.base) - bandH / 2;
   }
-  /* en haut : le logo et « Hand Coded. » dans la police de la signature du site ; en bas : la signature */
-  const gTop = ctx.createLinearGradient(0, 0, 0, 230); gTop.addColorStop(0, 'rgba(11,11,11,.9)'); gTop.addColorStop(1, 'rgba(11,11,11,0)');
-  ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, 230);
-  const gBot = ctx.createLinearGradient(0, H * 0.5, 0, H); gBot.addColorStop(0, 'rgba(11,11,11,0)'); gBot.addColorStop(0.5, 'rgba(11,11,11,.8)'); gBot.addColorStop(1, 'rgba(11,11,11,.95)');
-  ctx.fillStyle = gBot; ctx.fillRect(0, H * 0.5, W, H * 0.5);
-  const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur ; sans texte, la photo n'a que la signature
-  /* maj-158 : la mise en page reprend l'en-tête du site. En haut, « Hand Coded. » et ses trois mots, le rond jaune à droite ;
-     en bas, le trait jaune, le texte tapé dans la police des titres, et l'adresse du site en blanc. Les polices sont celles de Réglages › Typographie. */
-  const ST = CONTENT.settings, fT = typoOf(ST, 'title'), f2 = typoOf(ST, 'sig2');
-  const wmEl = document.querySelector('#slogan .wm') || document.querySelector('#home-band .sl .wm') || document.getElementById('slogan');
-  const wcs = getComputedStyle(wmEl), wmFont = size => `${wcs.fontStyle === 'italic' ? 'italic ' : ''}${wcs.fontWeight} ${size}px ${wcs.fontFamily}`;
-  const ttlFont = size => `${fT.italic ? 'italic ' : ''}${fT.weight || 600} ${size}px ${fT.css}`, smlFont = size => `${f2.italic ? 'italic ' : ''}${f2.weight || 500} ${size}px ${f2.css}`;
-  try { await Promise.all([document.fonts.load(ttlFont(80)), document.fonts.load(smlFont(30)), document.fonts.load(wmFont(96))]); } catch (e) {}
-  const mx = 72, top = 70, R = 34, tl = (ST.taglines && (ST.taglines[LANG] || ST.taglines.en)) || [];
-  const studio = tl[0] || ((ST.name || 'Hand Coded') + '.'), words = tl.slice(1);
-  let ws = 96, ss = 30;
-  /* maj-164 : les trois mots occupent exactement la hauteur de « Hand Coded. », du haut des majuscules à la ligne de base */
-  const wordsSize = w => { ctx.font = wmFont(w); const capH = ctx.measureText(studio).actualBoundingBoxAscent || w * 0.7; ctx.font = smlFont(100); const k = (ctx.measureText(words[0] || 'R').actualBoundingBoxAscent || 72) / 100, n = Math.max(1, words.length); return capH / ((n - 1) * 1.18 + k); };
-  const fitHead = () => { ss = wordsSize(ws); ctx.font = smlFont(ss); const sw = words.length ? Math.max(...words.map(w => ctx.measureText(w).width)) + ws * 0.24 : 0; ctx.font = wmFont(ws); return ctx.measureText(studio).width + sw; };
-  while (fitHead() > W - 2 * mx - 2 * R - 40 && ws > 48) ws -= 4;
-  ctx.font = wmFont(ws); const nameW = ctx.measureText(studio).width, base = top + ws * 0.78;
-  ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText(studio, mx, base);
-  ss = wordsSize(ws); ctx.font = smlFont(ss); ctx.textBaseline = 'alphabetic'; const slh = ss * 1.18;
-  words.forEach((w, i) => ctx.fillText(w, mx + nameW + ws * 0.24, base - (words.length - 1 - i) * slh));
-  ctx.fillStyle = ST.accent || '#ffcc00'; ctx.beginPath(); ctx.arc(W - mx - R, top + ws * 0.42, R, 0, Math.PI * 2); ctx.fill();   // le rond du logo, en haut à droite comme sur le site
-  /* en bas : le texte tapé, jusqu'à quatre lignes, aussi grand que possible */
-  const tw = W - 2 * mx; let size = 84, lines = [];
+  const R = Math.max(bandH, 40 * unit) * 0.55;   // le rond jaune, en haut à droite, centré sur les lettres comme dans le site
+  ctx.fillStyle = ST.accent || '#ffcc00'; ctx.beginPath(); ctx.arc(W - mx - R, bandMid || (70 * unit + R), R, 0, Math.PI * 2); ctx.fill();
+  /* en bas : le texte tapé, jusqu'à quatre lignes, aussi grand que possible ; puis l'adresse du site */
+  const tw = Math.min(W - 2 * mx, 1300 * unit); let size = Math.round(84 * unit), tl = [];
+  const ttlFont = sz => `${fT.italic ? 'italic ' : ''}${fT.weight || 600} ${sz}px ${fT.css}`;
+  try { await document.fonts.load(ttlFont(80)); } catch (e) {}
   const track = sz => { if ('letterSpacing' in ctx) ctx.letterSpacing = Math.round((+fT.ls || -0.02) * sz) + 'px'; };
-  for (; size >= 36; size -= 4) { ctx.font = ttlFont(size); track(size); lines = wrapLines(ctx, slogan, tw); if (lines.length <= 4) break; }
-  lines = slogan ? lines.slice(0, 4) : [];
-  const urlSize = 30, urlY = H - 64 - urlSize, lh = Math.round(size * 1.02), y0 = urlY - 64 - lines.length * lh;
-  ctx.textBaseline = 'top';
-  if (lines.length) { ctx.fillStyle = ST.accent || '#ffcc00'; ctx.fillRect(mx, y0 - 34, 46, 6); }
-  ctx.fillStyle = '#fff'; ctx.font = ttlFont(size); track(size);
-  lines.forEach((l, i) => ctx.fillText(l, mx - size * 0.03, y0 + i * lh));
+  for (; size >= 36 * unit; size -= 4) { ctx.font = ttlFont(size); track(size); tl = wrapLines(ctx, slogan, tw); if (tl.length <= 4) break; }
+  tl = slogan ? tl.slice(0, 4) : [];
+  const urlSize = Math.round(38 * unit), urlY = H - 64 * unit - urlSize, lh = Math.round(size * 1.02), y0 = urlY - 64 * unit - tl.length * lh;
+  if (tl.length) {   // un voile en plus, seulement derrière le texte tapé
+    const g = ctx.createLinearGradient(0, y0 - 160 * unit, 0, H); g.addColorStop(0, 'rgba(11,11,11,0)'); g.addColorStop(0.35, 'rgba(11,11,11,.75)'); g.addColorStop(1, 'rgba(11,11,11,.9)');
+    ctx.fillStyle = g; ctx.fillRect(0, y0 - 160 * unit, W, H - y0 + 160 * unit);
+    ctx.fillStyle = ST.accent || '#ffcc00'; ctx.fillRect(mx, y0 - 34 * unit, 46 * unit, 6 * unit);
+  }
+  ctx.textBaseline = 'top'; ctx.fillStyle = '#fff'; ctx.font = ttlFont(size); track(size);
+  tl.forEach((l, i) => ctx.fillText(l, mx - size * 0.03, y0 + i * lh));
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-  const fI = typoOf(ST, 'subtitle'), itFont = size => `${fI.italic !== false ? 'italic ' : ''}${fI.weight || 400} ${size}px ${fI.css}`;   // maj-161 : l'adresse dans l'italique du site
+  const fI = typoOf(ST, 'subtitle'), itFont = sz => `${fI.italic !== false ? 'italic ' : ''}${fI.weight || 400} ${sz}px ${fI.css}`;   // maj-161 : l'adresse dans l'italique du site
   try { await document.fonts.load(itFont(38)); } catch (e) {}
-  ctx.font = itFont(38); ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText('hand-coded.net', mx, urlY + urlSize);
+  ctx.font = itFont(urlSize); ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.fillText('hand-coded.net', mx, urlY + urlSize);
   const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92)); if (!blob) return;
   countView('photo-souvenir', 'Photo souvenir', true);
   const name = 'hand-coded-' + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '.jpg';
