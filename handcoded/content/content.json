@@ -5963,13 +5963,13 @@
    "thumb": "media/ben-kuper/benkuper-uw9i.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p>Technical director and coder, inventor of Chataigne, the open-source software that links show control, sensors and media. Creative coding on Peupler.</p>",
-    "fr": "<p>Directeur technique et développeur, inventeur de Chataigne, le logiciel libre qui relie régie, capteurs et médias. Creative coding sur Peupler.</p>",
-    "ca": "<p>Director tècnic i desenvolupador, inventor de Chataigne, el programari lliure que connecta regidoria, sensors i mitjans. Creative coding a Peupler.</p>",
-    "es": "<p>Director técnico y desarrollador, inventor de Chataigne, el software libre que conecta control de espectáculo, sensores y medios. Creative coding en Peupler.</p>"
+    "fr": "<p>Artiste numérique, développeur et jongleur, il crée des logiciels libres pour les artistes : Chataigne, qui relie logiciels, capteurs et matériel pour les spectacles et les installations, BenTo, pour la lumière des objets LED en mouvement, et Blux, pour piloter les objets de scène. Il voyage pour des installations, des spectacles et des ateliers.</p><p>Avec nous : direction technique et creative coding sur Peupler.</p><p><a href=\"https://www.youtube.com/channel/UCTbxndmzh8Dll6XmsyWzEDA\">YouTube</a></p>",
+    "en": "<p>A digital artist, developer and juggler who makes free software for artists: Chataigne, which links software, sensors and hardware for shows and installations, BenTo, for light on moving LED props, and Blux, to control stage props. He travels for installations, shows and workshops.</p><p>With us: technical direction and creative coding on Peupler.</p><p><a href=\"https://www.youtube.com/channel/UCTbxndmzh8Dll6XmsyWzEDA\">YouTube</a></p>",
+    "es": "<p>Artista digital, desarrollador y malabarista, crea software libre para artistas: Chataigne, que conecta software, sensores y hardware en espectáculos e instalaciones, BenTo, para la luz de objetos LED en movimiento, y Blux, para controlar objetos de escena. Viaja con instalaciones, espectáculos y talleres.</p><p>Con nosotros: dirección técnica y creative coding en Peupler.</p><p><a href=\"https://www.youtube.com/channel/UCTbxndmzh8Dll6XmsyWzEDA\">YouTube</a></p>",
+    "ca": "<p>Artista digital, desenvolupador i malabarista, crea programari lliure per a artistes: Chataigne, que connecta programari, sensors i maquinari en espectacles i instal·lacions, BenTo, per a la llum d’objectes LED en moviment, i Blux, per controlar objectes d’escena. Viatja amb instal·lacions, espectacles i tallers.</p><p>Amb nosaltres: direcció tècnica i creative coding a Peupler.</p><p><a href=\"https://www.youtube.com/channel/UCTbxndmzh8Dll6XmsyWzEDA\">YouTube</a></p>"
    },
    "media": [],
-   "link": "",
+   "link": "https://benjamin.kuperberg.fr/",
    "team": [],
    "credits": "",
    "location": null,
@@ -5977,7 +5977,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "clement-rignault",
