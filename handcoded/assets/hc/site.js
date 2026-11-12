@@ -4002,8 +4002,9 @@ function introRebuild() {
   box.querySelectorAll('.l').forEach(x => x.getAnimations().forEach(a => a.cancel()));
   box.innerHTML = ''; lines.forEach(t => { const x = document.createElement('span'); x.className = 'l'; x.textContent = t; box.appendChild(x); });
   let at = 0, va = 0;
-  [...box.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1000, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); if (i === lines.length - 1) va = at; at += Math.max(650, Math.min(1700, 120 + 16 * lines[i].length)); });
-  window.HC_INTRO = { t0: performance.now(), video: va, depart: at + 150 };
+  [...box.children].forEach((x, i) => { x.animate([{ opacity: 0, transform: 'translateX(-36px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 1000, delay: at, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' }); if (i === lines.length - 1) va = at; at += Math.max(650, Math.min(1700, 120 + 16 * lines[i].length)) * (100 / Math.max(25, Math.min(400, +(CONTENT.settings.home || {}).introPace || 100))); });
+  const hm = CONTENT.settings.home || {}, hold = hm.introHold == null || hm.introHold === '' ? 2 : +hm.introHold;
+  window.HC_INTRO = { t0: performance.now(), video: va, depart: at + 150 + Math.max(0, Math.min(15, hold)) * 1000 };   // maj-182 : le temps de lecture en plus
 }
 let sayBox = null;
 function saySentence() {

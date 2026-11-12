@@ -1680,6 +1680,8 @@ function viewSettings() {
         pairInput('Citations du bandeau LED', s.home, 'quotes', { rows: 5, hint: 'Sur le bandeau LED, après la phrase du studio, ces citations défilent l’une après l’autre : une par ligne, avec sa source. Les accents passent ; les guillemets s’affichent droits.' }),
         h('div', { style: { margin: '-4px 0 14px' } }, toggle('Masquer le bandeau LED du haut', () => !!s.home.tickerOff, v => { if (v) s.home.tickerOff = true; else delete s.home.tickerOff; })),
         hvFader(s.home, 'tickerSpeed', 'Vitesse du bandeau LED', 26, 4, 80, 1, 'En colonnes de points par seconde. Plus petit : le texte défile lentement ; plus grand : il file. 26 au départ.'),
+        hvFader(s.home, 'introPace', 'Vitesse de la phrase d’ouverture', 100, 25, 300, 5, 'En %. Plus petit : chaque ligne reste plus longtemps avant que la suivante arrive. 100 au départ.'),
+        hvFader(s.home, 'introHold', 'Temps de lecture à la fin de l’ouverture', 2, 0, 12, 0.5, 'En secondes : combien de temps la phrase entière reste à l’écran avant de partir. 2 au départ.'),
         pairInput('Mot au-dessus de la flèche', s.home, 'enter', { hint: 'En petites capitales, au-dessus de la flèche d’entrée.' }),
         storyEditor(s),
         homeVideoFields(s),

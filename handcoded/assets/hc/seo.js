@@ -146,7 +146,8 @@ export function seoParts(content, opts = {}) {
   const lines = {}; langs.forEach(l => { const ph = tr((S.s.home || {}).sub, l), t = /\n/.test(ph) ? ph.split(/\n+/).map(x => x.trim()).filter(Boolean) : cutLines(ph); if (t.length) lines[l] = t; });   // les retours à la ligne de la phrase du studio font les coupures
   const sf = (() => { const r = (S.s.typo || {}).sig2 || {}, f = String(r.font || ''); if (!/^g:/.test(f)) return null; const fam = f.slice(2), it = r.italic ? 1 : 0, w = +(r.weight || 400);
     return { fam, it, w, css: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:ital,wght@${it},${w}&display=swap` }; })();   // la police du slogan sous la signature (« Réactif. Sensible. Immersif. »), même adresse que le site
-  const data = { langs, def: lang, lines, f: sf };
+  const hm = S.s.home || {}, pace = Math.max(25, Math.min(400, +hm.introPace || 100)), hold = Math.max(0, Math.min(15, hm.introHold == null || hm.introHold === '' ? 2 : +hm.introHold));   // maj-182 : Réglages › Accueil, vitesse de la phrase et temps de lecture en plus
+  const data = { langs, def: lang, lines, f: sf, k: +(100 / pace).toFixed(3), h: Math.round(hold * 1000) };
   const opening = !Object.keys(lines).length ? '' :
     `<div id="hc-intro" class="hold" aria-hidden="true"><i class="beat"></i><div class="ln"></div></div>\n` +
     `<script>(function(){var D=${JSON.stringify(data).replace(/</g, '\\u003c')},el=document.getElementById('hc-intro');try{var q=new URLSearchParams(location.search);` +
@@ -158,7 +159,7 @@ export function seoParts(content, opts = {}) {
     `T.forEach(function(t){var x=document.createElement('span');x.className='l';x.textContent=t;box.appendChild(x);});` +
     /* le rythme : une ligne, le temps de la parcourir (0,12 s + 16 ms par lettre, entre 0,65 et 1,7 s), puis la suivante ; la vidéo apparaît avec la dernière ligne, puis les lignes s'en vont par-dessus */
     `var go=function(){if(go.d)return;go.d=1;var at=0;for(var i=0;i<T.length;i++){box.children[i].animate([{opacity:0,transform:'translateX(-36px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1000,delay:at,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});` +
-    `if(i===T.length-1)var va=at;at+=Math.max(650,Math.min(1700,120+16*T[i].length));}window.HC_INTRO={t0:performance.now(),video:va,depart:at+150};};` +
+    `if(i===T.length-1)var va=at;at+=Math.max(650,Math.min(1700,120+16*T[i].length))*(D.k||1);}window.HC_INTRO={t0:performance.now(),video:va,depart:at+150+(D.h==null?2000:D.h)};};` +
     /* l'ordre de l'ouverture : le site pose d'abord la signature et les carrés (hc-stage), lance la phrase (HC_GO), puis le bandeau et « Entrer » à la toute fin (hc-late) */
     `var R=document.documentElement;R.classList.add('hc-stage','hc-late');var fl=null;` +
     `if(D.f&&document.fonts){var k=document.createElement('link');k.rel='stylesheet';k.href=D.f.css;document.head.appendChild(k);fl=document.fonts.load((D.f.it?'italic ':'')+D.f.w+' 30px "'+D.f.fam+'"');}` +
