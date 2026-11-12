@@ -1100,7 +1100,7 @@
     "media/logos/ruinart.png",
     "media/nasonmoretti/nasonmoretti-qjex.jpg"
    ],
-   "updated": "2026-11-11"
+   "updated": "2026-11-12"
   },
   {
    "id": "rising",
@@ -9011,7 +9011,7 @@
    },
    "date": "",
    "tags": [
-    "institutions"
+    "venues"
    ],
    "thumb": "media/societe-du-grand-paris/logo-societe-du-grand-paris-eu90.png",
    "thumbBack": "",
@@ -9819,7 +9819,7 @@
    "id": "rai",
    "section": "studio",
    "order": 48,
-   "published": true,
+   "published": false,
    "title": {
     "en": "Rai",
     "fr": "Rai",
@@ -9865,7 +9865,7 @@
    "id": "tv3",
    "section": "studio",
    "order": 49,
-   "published": true,
+   "published": false,
    "title": {
     "en": "TV3",
     "fr": "TV3",
