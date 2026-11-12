@@ -5367,7 +5367,7 @@
   {
    "id": "beardyman-musician",
    "section": "studio",
-   "order": 25,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -5408,7 +5408,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "maotik",
@@ -5756,7 +5756,7 @@
    },
    "date": "",
    "tags": [],
-   "thumb": "media/barcelona/hand-coded-avatar-nuit-q4rx.jpg",
+   "thumb": "",
    "thumbBack": "",
    "body": {
     "en": "<p><b>A brand, an agency, an artist: let’s talk about your project.</b><br>With Maya Benaïnous and Cyril Laurier, the founders.</p><p>Carrer Pérez Galdós, 6 . 08012 Barcelona . Spain</p><p>+34 666 19 94 29</p><p><a href=\"mailto:contact@hand-coded.net\" target=\"_blank\" rel=\"noopener\"><b>contact@hand-coded.net</b></a></p><p><a href=\"https://www.instagram.com/cyrillaurier/\" target=\"_blank\" rel=\"noopener\">Instagram</a> · <a href=\"https://vimeo.com/handcoded\" target=\"_blank\" rel=\"noopener\">Vimeo</a> · <a href=\"https://www.facebook.com/handcoders\" target=\"_blank\" rel=\"noopener\">Facebook</a></p><p>To programme a Mouawad + Laurier artwork in an institution or a festival: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p>",
@@ -5777,7 +5777,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-11"
+   "updated": "2026-11-12"
   },
   {
    "id": "immersive",
@@ -6379,7 +6379,7 @@
   {
    "id": "tigre-lab",
    "section": "studio",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "TigreLab",
@@ -6420,7 +6420,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "paysage-sonore",
@@ -7274,7 +7274,7 @@
   {
    "id": "ruinart",
    "section": "studio",
-   "order": 27,
+   "order": 28,
    "published": true,
    "title": {
     "en": "Ruinart",
@@ -7316,12 +7316,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "absolut",
    "section": "studio",
-   "order": 28,
+   "order": 29,
    "published": true,
    "title": {
     "en": "The Absolut Company",
@@ -7362,12 +7362,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "audi",
    "section": "studio",
-   "order": 29,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Audi",
@@ -7408,12 +7408,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "fc-barcelona",
    "section": "studio",
-   "order": 30,
+   "order": 31,
    "published": true,
    "title": {
     "en": "FC Barcelona",
@@ -7454,12 +7454,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "bnp-paribas-real-estate",
    "section": "studio",
-   "order": 31,
+   "order": 32,
    "published": true,
    "title": {
     "en": "BNP Paribas Real Estate",
@@ -7500,12 +7500,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "nestle",
    "section": "studio",
-   "order": 32,
+   "order": 33,
    "published": true,
    "title": {
     "en": "Nestlé",
@@ -7546,12 +7546,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "marque-peugeot",
    "section": "studio",
-   "order": 33,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -7592,12 +7592,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "marque-lexus",
    "section": "studio",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -7638,12 +7638,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "marque-coors",
    "section": "studio",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Coors",
@@ -7684,12 +7684,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "marque-cadbury",
    "section": "studio",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -7730,12 +7730,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "churchills",
    "section": "studio",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Churchill’s",
@@ -7776,12 +7776,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "fisheye",
    "section": "studio",
-   "order": 49,
+   "order": 50,
    "published": true,
    "title": {
     "en": "Fisheye",
@@ -7823,12 +7823,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "tetro",
    "section": "studio",
-   "order": 50,
+   "order": 51,
    "published": true,
    "title": {
     "en": "Tetro",
@@ -7869,12 +7869,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "ddb",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -7915,12 +7915,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -7962,12 +7962,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -8009,12 +8009,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -8056,12 +8056,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -8103,12 +8103,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -8150,12 +8150,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -8196,12 +8196,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -8243,12 +8243,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -8289,12 +8289,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -8335,12 +8335,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -8381,12 +8381,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -8427,12 +8427,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -8473,12 +8473,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -8519,12 +8519,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -8565,12 +8565,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -8611,12 +8611,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -8657,12 +8657,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "mira",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -8703,12 +8703,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -8749,12 +8749,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -8795,12 +8795,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -8841,12 +8841,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -8887,12 +8887,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": false,
    "title": {
     "en": "Into the Great Wide Open",
@@ -8933,12 +8933,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -8980,12 +8980,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -9026,12 +9026,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -9073,12 +9073,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -9120,12 +9120,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -9167,12 +9167,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -9214,12 +9214,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "scam",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "Scam",
@@ -9261,12 +9261,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -9305,12 +9305,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "upf",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -9351,12 +9351,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "ircam",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -9397,12 +9397,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "cea",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9441,12 +9441,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "cupra",
    "section": "studio",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Cupra",
@@ -9487,12 +9487,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "red-bull",
    "section": "studio",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Red Bull",
@@ -9533,12 +9533,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "danone",
    "section": "studio",
-   "order": 41,
+   "order": 42,
    "published": true,
    "title": {
     "en": "Danone",
@@ -9579,12 +9579,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "nokia",
    "section": "studio",
-   "order": 42,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Nokia",
@@ -9625,12 +9625,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "pommery",
    "section": "studio",
-   "order": 43,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Pommery",
@@ -9671,12 +9671,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "santander",
    "section": "studio",
-   "order": 44,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Santander",
@@ -9717,12 +9717,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "eventide",
    "section": "studio",
-   "order": 45,
+   "order": 46,
    "published": true,
    "title": {
     "en": "Eventide",
@@ -9763,12 +9763,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "france-24",
    "section": "studio",
-   "order": 46,
+   "order": 47,
    "published": true,
    "title": {
     "en": "France 24",
@@ -9809,12 +9809,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "rai",
    "section": "studio",
-   "order": 47,
+   "order": 48,
    "published": true,
    "title": {
     "en": "Rai",
@@ -9855,12 +9855,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "tv3",
    "section": "studio",
-   "order": 48,
+   "order": 49,
    "published": true,
    "title": {
     "en": "TV3",
@@ -9901,12 +9901,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -9948,12 +9948,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -9994,12 +9994,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -10040,12 +10040,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "alpine",
    "section": "studio",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Alpine",
@@ -10086,7 +10086,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-12"
   },
   {
    "id": "batalla-de-los-gallos",
@@ -10367,7 +10367,7 @@
   {
    "id": "aubio",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "aubio",
@@ -10406,7 +10406,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "la-traversee-du-temps",
@@ -10563,7 +10563,7 @@
   {
    "id": "rossella-piccinno",
    "section": "studio",
-   "order": 90,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Rossella Piccinno",
@@ -10597,7 +10597,7 @@
     "es": "<p>Artista italiana nacida en 1978 en el Salento, afincada en el área de Lille. Formada en cine documental y experimental en la Universidad de Bolonia y después en Le Fresnoy, trabaja el cine y la instalación, mostrados en Europa, Estados Unidos y Oriente Medio. También enseña fotografía e imagen.</p><p>Con nosotros: Eruption of the end, premio de los Amigos de Le Fresnoy a la mejor instalación en 2011.</p>"
    },
    "media": [],
-   "link": "",
+   "link": "https://rossellapiccinno.com/",
    "team": [],
    "credits": "",
    "location": null,
@@ -10605,7 +10605,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-11"
+   "updated": "2026-11-12"
   },
   {
    "id": "emma-haziza",
@@ -11888,7 +11888,7 @@
   {
    "id": "mouawad-laurier",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "Mouawad + Laurier",
@@ -11935,7 +11935,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
   },
   {
    "id": "audio-processing",
