@@ -148,8 +148,7 @@
     "images": [
      "media/site/story/fat-site-2008-1.jpg",
      "media/site/story/fat-site-2008-2.jpg",
-     "media/site/story/fat-site-2008-3.jpg",
-     "media/site/story/screenshot-2026-11-10-at-00-37-16-b1iq.jpg"
+     "media/site/story/fat-site-2008-3.jpg"
     ],
     "link": "https://mouawadlaurier.com/fatsite/",
     "linkLabel": {
@@ -596,7 +595,7 @@
    "layout": "arc",
    "card": "portrait",
    "open": "focus3d",
-   "perPage": 20,
+   "perPage": 21,
    "defaultTag": "specialists",
    "visible": true,
    "tags": [
