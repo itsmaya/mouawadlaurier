@@ -62,7 +62,7 @@
    },
    "sub": {
     "fr": "Studio d’artistes et d’ingénieurs,\nnous créons des expériences réactives, sensibles et immersives,\net nous sommes l’atelier technique des agences et des artistes,\npartout dans le monde.",
-    "en": "A studio of artists and engineers,\nwe create responsive, sensitive and immersive experiences,\nand we are the technical workshop behind agencies and artists,\nworldwide.",
+    "en": "A studio of artists and engineers.\nWe create responsive, sensitive and immersive experiences,\nand we are the technical workshop behind agencies and artists,\nworldwide.",
     "ca": "Estudi d’artistes i enginyers,\ncreem experiències reactives, sensibles i immersives,\ni som el taller tècnic d’agències i artistes,\narreu del món.",
     "es": "Estudio de artistas e ingenieros,\ncreamos experiencias reactivas, sensibles e inmersivas,\ny somos el taller técnico de agencias y artistas,\nen todo el mundo."
    },
@@ -306,7 +306,7 @@
    "gutter": 40,
    "col": 280
   },
-  "postersPass": "57f2326f3ea8b09e56ba56859b0e0405f20f63197a14f55d7ed5b1e5ca00b32c"
+  "postersPass": "28f011206b68a19d646e85c9a82fc57cc0dffc620f9169b986276cf0b952e386"
  },
  "models": [
   {
@@ -448,8 +448,8 @@
      "id": "touring",
      "label": {
       "en": "Events and tours",
-      "fr": "Évènements et tournées",
-      "ca": "Eventos i gires",
+      "fr": "Événements et tournées",
+      "ca": "Esdeveniments i gires",
       "es": "Eventos y giras"
      }
     },
@@ -465,7 +465,7 @@
     {
      "id": "collab",
      "label": {
-      "en": "With Artists",
+      "en": "With artists",
       "fr": "Avec les artistes",
       "ca": "Amb els artistes",
       "es": "Con los artistas"
@@ -502,10 +502,10 @@
     {
      "id": "exposition",
      "label": {
-      "en": "Exhibition",
-      "fr": "Exposition",
-      "ca": "Exposition",
-      "es": "Exposition"
+      "en": "Exhibitions",
+      "fr": "Expositions",
+      "ca": "Exposicions",
+      "es": "Exposiciones"
      },
      "menu": false
     }
@@ -519,7 +519,7 @@
    "name": {
     "en": "Expertise",
     "fr": "Savoir-faire",
-    "ca": "Coneixement",
+    "ca": "Saber fer",
     "es": "Saber hacer"
    },
    "model": "root",
@@ -544,8 +544,8 @@
      "label": {
       "en": "Design",
       "fr": "Conception",
-      "ca": "Concepció",
-      "es": "Concepción"
+      "ca": "Disseny",
+      "es": "Diseño"
      }
     },
     {
@@ -571,8 +571,8 @@
      "label": {
       "en": "Operations",
       "fr": "Exploitation",
-      "ca": "Explotació",
-      "es": "Explotación"
+      "ca": "Operació",
+      "es": "Operación"
      }
     }
    ],
@@ -613,7 +613,7 @@
       "en": "Artists",
       "fr": "Artistes",
       "ca": "Artistes",
-      "es": "Artistes"
+      "es": "Artistas"
      }
     },
     {
@@ -657,8 +657,8 @@
      "label": {
       "en": "Partners",
       "fr": "Partenaires",
-      "ca": "Col·laboradors",
-      "es": "Colaboradores"
+      "ca": "Socis",
+      "es": "Socios"
      }
     },
     {
@@ -866,7 +866,8 @@
     "joan-sandoval",
     "gaetan-cerrillo",
     "gustavo-valera",
-    "valentin-ducros"
+    "valentin-ducros",
+    "loic-lecoq"
    ],
    "credits": "Benoît Baume (Fisheye), UltraLab, BNP Real Estate",
    "location": null,
@@ -960,12 +961,18 @@
    },
    "media": [
     {
-     "src": "https://youtu.be/XozmiaQtWOo",
-     "credit": "Raphaël Haddad"
-    },
-    {
      "src": "https://vimeo.com/362816752",
      "credit": ""
+    },
+    {
+     "src": "https://youtu.be/XozmiaQtWOo",
+     "credit": "Raphaël Haddad",
+     "caption": {
+      "fr": "Enregistrement 360° : faites glisser l’image pour regarder autour de vous.",
+      "en": "360° recording: drag the image to look around.",
+      "es": "Grabación 360°: arrastra la imagen para mirar alrededor.",
+      "ca": "Enregistrament 360°: arrossega la imatge per mirar al voltant."
+     }
     },
     {
      "src": "media/retour-aux-sources/01.jpg",
@@ -1242,7 +1249,8 @@
     "cyril",
     "louis-raveton",
     "emma-haziza",
-    "mecaoctet"
+    "mecaoctet",
+    "loic-lecoq"
    ],
    "credits": "Université de La Rochelle, Learning Planet Institute, La Scam",
    "location": null,
@@ -1342,7 +1350,7 @@
    "thumb": "media/ephemere/it-is-now-san-joan-de-deu-small-108-1e2g.jpg",
    "thumbBack": "",
    "body": {
-    "en": "<p><strong>Our role</strong> Concept, tracking, generative visuals, sound, installation.</p><p>The present moment as a living artwork. Simply by being there, visitors create a moving picture and an evolving music. No instructions, no prerequisites: anyone can draw and compose the music, whatever their motor or communication abilities.</p><p>A depth sensor follows every movement in the room. We designed the generative image, the interactive music and the integration into places of care: a screen, a sensor, a small computer, and the installation runs on its own, every day, with no dedicated staff. Made for children, families and carers, it works just as well in a waiting room as in a corridor.</p><p>Hors du temps turns hospital waiting rooms and corridors into places of contemplation and play. Permanent at the Centre Robert Doisneau of the OVE Foundation in Paris since June 2023 and at the Sant Joan de Déu children’s hospital in Barcelona since December 2023, where it welcomes children in outpatient palliative care. Lille University Hospital in 2026, then Bordeaux University Hospital. Presented at Museum Connections 2026.</p><p>To programme this artwork: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p><h3>Credits</h3><ul><li><strong>Artists</strong> Mouawad + Laurier</li><li><strong>Interactive music</strong> Cyril Laurier</li><li><strong>Technical development</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Patronage</strong> Art Explora</li></ul><h3>Venues</h3><ul><li>Centre Robert Doisneau, OVE Foundation, Paris, since June 2023</li><li>Sant Joan de Déu Hospital, Barcelona, since December 2023</li><li>Lille University Hospital, 2026</li><li>Bordeaux University Hospital</li></ul><h3>Testimonials</h3><ul><li>“We are convinced that therapy alone does not sum up the solutions we owe our patients. We have a duty to bring together every contributing energy, and artistic energies are part of it, to go beyond care and help improve patients’ lives.” Laure Boquet</li></ul><h3>Press</h3><ul><li>“In this gigantic hospital, one of the largest in Europe, we installed Hors du temps, an immersive production created by Maya Mouawad and Cyril Laurier: an interactive device coupled with an LED screen captures the movements of the young patients and the digital work comes alive with their gestures, turning them into both actors and spectators. Witnessing the immediate joy it brings, the relief of the parents, the wholehearted support of the medical staff, all of this, on that exceptional morning, filled us with pride.” Frédéric Jousset, founder of Art Explora, L’Eau, l’air et l’art, Gallimard, 2026</li><li><a href=\"https://www.artexplora.org/en/articles/it-is-now\" target=\"_blank\" rel=\"noopener\">Art Explora, “It Is Now: art for children in hospital”</a></li></ul>",
+    "en": "<p><strong>Our role</strong> Concept, tracking, generative visuals, sound, installation.</p><p>The present moment as a living artwork. Simply by being there, visitors create a moving picture and evolving music. No instructions, no prerequisites: anyone can draw and compose the music, whatever their motor or communication abilities.</p><p>A depth sensor follows every movement in the room. We designed the generative image, the interactive music and the integration into places of care: a screen, a sensor, a small computer, and the installation runs on its own, every day, with no dedicated staff. Made for children, families and carers, it works just as well in a waiting room as in a corridor.</p><p>Hors du temps turns hospital waiting rooms and corridors into places of contemplation and play. Permanent at the Centre Robert Doisneau of the OVE Foundation in Paris since June 2023 and at the Sant Joan de Déu children’s hospital in Barcelona since December 2023, where it welcomes children in outpatient palliative care. Lille University Hospital in 2026, then Bordeaux University Hospital. Presented at Museum Connections 2026.</p><p>To programme this artwork: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p><h3>Credits</h3><ul><li><strong>Artists</strong> Mouawad + Laurier</li><li><strong>Interactive music</strong> Cyril Laurier</li><li><strong>Technical development</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Patronage</strong> Art Explora</li></ul><h3>Venues</h3><ul><li>Centre Robert Doisneau, OVE Foundation, Paris, since June 2023</li><li>Sant Joan de Déu Hospital, Barcelona, since December 2023</li><li>Lille University Hospital, 2026</li><li>Bordeaux University Hospital</li></ul><h3>Testimonials</h3><ul><li>“We are convinced that therapy alone does not sum up the solutions we owe our patients. We have a duty to bring together every contributing energy, and artistic energies are part of it, to go beyond care and help improve patients’ lives.” Laure Boquet</li></ul><h3>Press</h3><ul><li>“In this gigantic hospital, one of the largest in Europe, we installed Hors du temps, an immersive production created by Maya Mouawad and Cyril Laurier: an interactive device coupled with an LED screen captures the movements of the young patients and the digital work comes alive with their gestures, turning them into both actors and spectators. Witnessing the immediate joy it brings, the relief of the parents, the wholehearted support of the medical staff, all of this, on that exceptional morning, filled us with pride.” Frédéric Jousset, founder of Art Explora, L’Eau, l’air et l’art, Gallimard, 2026</li><li><a href=\"https://www.artexplora.org/en/articles/it-is-now\" target=\"_blank\" rel=\"noopener\">Art Explora, “It Is Now: art for children in hospital”</a></li></ul>",
     "fr": "<p><strong>Notre rôle</strong> Concept, tracking, image générative, son, installation.</p><p>L’instant présent comme œuvre vivante. Par leur simple présence, les visiteurs créent un tableau en mouvement et une musique qui évolue. Sans mode d’emploi ni prérequis : chacun peut dessiner et composer la musique, quelles que soient ses capacités motrices ou de communication.</p><p>Un capteur de profondeur suit tous les mouvements dans la pièce. Nous avons conçu l’image générative, la musique interactive et l’intégration dans des lieux de soin : un écran, un capteur, un petit ordinateur, et l’installation tourne seule, tous les jours, sans personnel dédié. Pensée pour les enfants, les familles et les soignants, elle fonctionne aussi bien dans une salle d’attente que dans un couloir.</p><p>Hors du temps transforme les salles d’attente et les couloirs d’hôpitaux en lieux de contemplation et de jeu. Permanente au Centre Robert Doisneau de la Fondation OVE, à Paris, depuis juin 2023 et à l’hôpital pour enfants Sant Joan de Déu de Barcelone depuis décembre 2023, où elle accueille les enfants suivis en soins palliatifs ambulatoires. CHU de Lille en 2026, puis CHU de Bordeaux. Présentée à Museum Connections 2026.</p><p>Pour programmer cette œuvre : <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p><h3>Crédits</h3><ul><li><strong>Artistes</strong> Mouawad + Laurier</li><li><strong>Musique interactive</strong> Cyril Laurier</li><li><strong>Développement technique</strong> Joan Sandoval</li><li><strong>Production</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mécénat</strong> Art Explora</li></ul><h3>Lieux</h3><ul><li>Centre Robert Doisneau, Fondation OVE, Paris, depuis juin 2023</li><li>Hôpital Sant Joan de Déu, Barcelone, depuis décembre 2023</li><li>CHU de Lille, 2026</li><li>CHU de Bordeaux</li></ul><h3>Témoignages</h3><ul><li>« Nous sommes convaincus que la thérapeutique ne résume pas les solutions que nous devons apporter aux patients. Nous avons le devoir de réunir les énergies contributives, et les énergies artistiques en font partie, pour aller au-delà du soin et contribuer à améliorer la vie des patients. » Laure Boquet</li></ul><h3>Presse</h3><ul><li>« <i>Nous avons installé dans cet hôpital gigantesque, l’un des plus grands d’Europe, Hors du temps, une production évidemment immersive créée par Maya Mouawad et Cyril Laurier : un dispositif interactif couplé à un écran LED capte les mouvements des jeunes patients et l’œuvre numérique s’anime selon leurs gestes, les transformant à la fois en acteurs et en spectateurs. Être témoin de la joie immédiate qu’elle suscite, constater le soulagement des parents, l’adhésion totale du personnel soignant, tout cela, en ce matin exceptionnel, nous comble de fierté. </i>» <b>Frédéric Jousset, fondateur d’Art Explora</b>, L’Eau, l’air et l’art, Gallimard, 2026</li><li><a href=\"https://www.artexplora.org/en/articles/it-is-now\" target=\"_blank\" rel=\"noopener\">Art Explora, « It Is Now : l’art pour les enfants à l’hôpital »</a></li></ul>",
     "ca": "<p><strong>El nostre paper</strong> Concepte, tracking, imatge generativa, so, instal·lació.</p><p>L’instant present com a obra viva. Només amb la seva presència, els visitants creen un quadre en moviment i una música que evoluciona. Sense instruccions ni requisits: tothom pot dibuixar i compondre la música, siguin quines siguin les seves capacitats motrius o de comunicació.</p><p>Un sensor de profunditat segueix tots els moviments de la sala. Vam concebre la imatge generativa, la música interactiva i la integració en llocs de cura: una pantalla, un sensor, un petit ordinador, i la instal·lació funciona sola, cada dia, sense personal dedicat. Pensada per als infants, les famílies i el personal sanitari, funciona tan bé en una sala d’espera com en un passadís.</p><p>Hors du temps transforma les sales d’espera i els passadissos dels hospitals en llocs de contemplació i de joc. Permanent al Centre Robert Doisneau de la Fundació OVE, a París, des del juny del 2023, i a l’hospital infantil Sant Joan de Déu de Barcelona des del desembre del 2023, on acull els infants atesos en cures pal·liatives ambulatòries. CHU de Lilla el 2026, i després CHU de Bordeus. Presentada a Museum Connections 2026.</p><p>Per programar aquesta obra: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p><h3>Crèdits</h3><ul><li><strong>Artistes</strong> Mouawad + Laurier</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desenvolupament tècnic</strong> Joan Sandoval</li><li><strong>Producció</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenatge</strong> Art Explora</li></ul><h3>Llocs</h3><ul><li>Centre Robert Doisneau, Fundació OVE, París, des del juny del 2023</li><li>Hospital Sant Joan de Déu, Barcelona, des del desembre del 2023</li><li>CHU de Lilla, 2026</li><li>CHU de Bordeus</li></ul><h3>Testimonis</h3><ul><li>«Estem convençuts que la terapèutica no resumeix les solucions que hem d’oferir als pacients. Tenim el deure de reunir totes les energies que hi contribueixen, i les energies artístiques en formen part, per anar més enllà de la cura i contribuir a millorar la vida dels pacients.» Laure Boquet</li></ul><h3>Premsa</h3><ul><li>«Hem instal·lat en aquest hospital gegantí, un dels més grans d’Europa, Hors du temps, una producció evidentment immersiva creada per Maya Mouawad i Cyril Laurier: un dispositiu interactiu acoblat a una pantalla LED capta els moviments dels joves pacients i l’obra digital s’anima segons els seus gestos, i els converteix alhora en actors i en espectadors. Ser testimoni de l’alegria immediata que suscita, constatar l’alleujament dels pares, l’adhesió total del personal sanitari, tot això, en aquell matí excepcional, ens omple d’orgull.» Frédéric Jousset, fundador d’Art Explora, L’Eau, l’air et l’art, Gallimard, 2026</li><li><a href=\"https://www.artexplora.org/en/articles/it-is-now\" target=\"_blank\" rel=\"noopener\">Art Explora, «It Is Now: l’art per als infants a l’hospital»</a></li></ul>",
     "es": "<p><strong>Nuestro papel</strong> Concepto, tracking, imagen generativa, sonido, instalación.</p><p>El instante presente como obra viva. Con su sola presencia, los visitantes crean un cuadro en movimiento y una música que evoluciona. Sin instrucciones ni requisitos: cualquiera puede dibujar y componer la música, sean cuales sean sus capacidades motrices o de comunicación.</p><p>Un sensor de profundidad sigue todos los movimientos de la sala. Concebimos la imagen generativa, la música interactiva y la integración en lugares de cuidado: una pantalla, un sensor, un pequeño ordenador, y la instalación funciona sola, cada día, sin personal dedicado. Pensada para los niños, las familias y el personal sanitario, funciona tan bien en una sala de espera como en un pasillo.</p><p>Hors du temps transforma las salas de espera y los pasillos de los hospitales en lugares de contemplación y de juego. Permanente en el Centre Robert Doisneau de la Fundación OVE, en París, desde junio de 2023, y en el hospital infantil Sant Joan de Déu de Barcelona desde diciembre de 2023, donde acoge a los niños atendidos en cuidados paliativos ambulatorios. CHU de Lille en 2026, y después CHU de Burdeos. Presentada en Museum Connections 2026.</p><p>Para programar esta obra: <a href=\"https://mouawadlaurier.com\" target=\"_blank\" rel=\"noopener\">mouawadlaurier.com</a></p><h3>Créditos</h3><ul><li><strong>Artistas</strong> Mouawad + Laurier</li><li><strong>Música interactiva</strong> Cyril Laurier</li><li><strong>Desarrollo técnico</strong> Joan Sandoval</li><li><strong>Producción</strong> Noémie Ganem (It Is Now), Fanny Fortage</li><li><strong>Mecenazgo</strong> Art Explora</li></ul><h3>Lugares</h3><ul><li>Centre Robert Doisneau, Fundación OVE, París, desde junio de 2023</li><li>Hospital Sant Joan de Déu, Barcelona, desde diciembre de 2023</li><li>CHU de Lille, 2026</li><li>CHU de Burdeos</li></ul><h3>Testimonios</h3><ul><li>«Estamos convencidos de que la terapéutica no resume las soluciones que debemos ofrecer a los pacientes. Tenemos el deber de reunir todas las energías que contribuyen, y las energías artísticas forman parte de ellas, para ir más allá del cuidado y contribuir a mejorar la vida de los pacientes.» Laure Boquet</li></ul><h3>Prensa</h3><ul><li>«Hemos instalado en este hospital gigantesco, uno de los más grandes de Europa, Hors du temps, una producción evidentemente inmersiva creada por Maya Mouawad y Cyril Laurier: un dispositivo interactivo acoplado a una pantalla LED capta los movimientos de los jóvenes pacientes y la obra digital se anima según sus gestos, convirtiéndolos a la vez en actores y en espectadores. Ser testigo de la alegría inmediata que suscita, constatar el alivio de los padres, la adhesión total del personal sanitario, todo ello, en esa mañana excepcional, nos llena de orgullo.» Frédéric Jousset, fundador de Art Explora, L’Eau, l’air et l’art, Gallimard, 2026</li><li><a href=\"https://www.artexplora.org/en/articles/it-is-now\" target=\"_blank\" rel=\"noopener\">Art Explora, «It Is Now: el arte para los niños en el hospital»</a></li></ul>"
@@ -5982,10 +5990,10 @@
     "es": "Clément Gamgie Rignault"
    },
    "subtitle": {
-    "fr": "Creative coder",
-    "en": "Creative coder",
-    "ca": "Creative coder",
-    "es": "Creative coder"
+    "en": "Creative coder & digital artist",
+    "fr": "Creative coder et artiste numérique",
+    "es": "Creative coder y artista digital",
+    "ca": "Creative coder i artista digital"
    },
    "place": {
     "en": "",
@@ -6000,10 +6008,56 @@
    "thumb": "media/clement-rignault/rignault-clement-stellar-drift-3-agence-alan-cop-vzhx.jpg",
    "thumbBack": "",
    "body": {
-    "fr": "<p>Il écrit le code des images et des interactions : creative coding sur Peupler.</p>",
-    "en": "<p>He writes the code behind images and interactions: creative coding on Peupler.</p>",
-    "ca": "<p>Escriu el codi de les imatges i les interaccions: creative coding a Peupler.</p>",
-    "es": "<p>Escribe el código de las imágenes y las interacciones: creative coding en Peupler.</p>"
+    "fr": "<p>Clément « Gamgie » Rignault est un artiste numérique et codeur créatif français, spécialisé dans la création immersive. Il réalise des performances audiovisuelles live, des spectacles et des films, portés par Oxipital, son propre logiciel de particules en temps réel. Parmi ses réalisations : Stellar Drift, une performance AV live avec David-Alexandre Chanel présentée au Mapping Festival de Genève, et Scala, un film fulldome co-créé avec la musicienne Diana Medina et projeté au SAT Fest de Montréal et au festival Sous Dôme à Paris.</p><p>Avec nous : creative coding sur Peupler.</p><p><a href=\"https://www.instagram.com/gamgie_/\">Instagram</a></p>",
+    "en": "<p>Clément “Gamgie” Rignault is a French digital artist and creative coder specializing in immersive creation. He makes live audiovisual performances, shows and films, powered by Oxipital, his own real-time particle software. His work includes Stellar Drift, a live AV performance with David-Alexandre Chanel presented at Mapping Festival in Geneva, and Scala, a fulldome film co-created with musician Diana Medina and screened at SAT Fest in Montreal and Sous Dôme Festival in Paris.</p><p>With us: creative coding on Peupler.</p><p><a href=\"https://www.instagram.com/gamgie_/\">Instagram</a></p>",
+    "ca": "<p>Clément «Gamgie» Rignault és un artista digital i programador creatiu francès, especialitzat en la creació immersiva. Fa performances audiovisuals en directe, espectacles i pel·lícules, impulsats per Oxipital, el seu propi programari de partícules en temps real. Entre les seves obres destaquen Stellar Drift, una performance audiovisual en directe amb David-Alexandre Chanel presentada al Mapping Festival de Ginebra, i Scala, una pel·lícula fulldome cocreada amb la música Diana Medina i projectada al SAT Fest de Mont-real i al festival Sous Dôme de París.</p><p>Amb nosaltres: creative coding a Peupler.</p><p><a href=\"https://www.instagram.com/gamgie_/\">Instagram</a></p>",
+    "es": "<p>Clément «Gamgie» Rignault es un artista digital y programador creativo francés, especializado en la creación inmersiva. Realiza performances audiovisuales en vivo, espectáculos y películas, impulsados por Oxipital, su propio software de partículas en tiempo real. Entre sus obras destacan Stellar Drift, una performance audiovisual en vivo junto a David-Alexandre Chanel presentada en el Mapping Festival de Ginebra, y Scala, una película fulldome cocreada con la música Diana Medina y proyectada en el SAT Fest de Montreal y en el festival Sous Dôme de París.</p><p>Con nosotros: creative coding en Peupler.</p><p><a href=\"https://www.instagram.com/gamgie_/\">Instagram</a></p>"
+   },
+   "media": [],
+   "link": "https://www.gamgie.com",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-10"
+  },
+  {
+   "id": "baptiste-sansierra",
+   "section": "studio",
+   "order": 103,
+   "published": true,
+   "title": {
+    "en": "Baptiste Sansierra",
+    "fr": "Baptiste Sansierra",
+    "ca": "Baptiste Sansierra",
+    "es": "Baptiste Sansierra"
+   },
+   "subtitle": {
+    "fr": "Développeur iOS et shaders",
+    "en": "iOS and shader developer",
+    "es": "Desarrollador iOS y shaders",
+    "ca": "Desenvolupador iOS i shaders"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "specialists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "fr": "<p>Développeur iOS installé à Barcelone, il écrit aussi des shaders. Il a commencé comme ingénieur R&amp;D pour l’animation et les effets visuels, chez Mac Guff (Illumination) et Duran Duboi : Moi, moche et méchant 2, Les Minions, Le Lorax, Micmacs à tire-larigot. Il développe aujourd’hui des applications iOS natives, dont des applications médicales pour l’audition.</p>",
+    "en": "<p>An iOS developer based in Barcelona who also writes shaders. He started as an R&amp;D engineer in animation and visual effects at Mac Guff (Illumination) and Duran Duboi, on Despicable Me 2, Minions, The Lorax and Micmacs. He now builds native iOS apps, including medical hearing apps.</p>",
+    "es": "<p>Desarrollador iOS afincado en Barcelona, también escribe shaders. Empezó como ingeniero de I+D en animación y efectos visuales en Mac Guff (Illumination) y Duran Duboi: Despicable Me 2, Minions, The Lorax, Micmacs. Hoy desarrolla apps iOS nativas, entre ellas apps médicas de audición.</p>",
+    "ca": "<p>Desenvolupador iOS establert a Barcelona, també escriu shaders. Va començar com a enginyer de R+D en animació i efectes visuals a Mac Guff (Illumination) i Duran Duboi: Despicable Me 2, Minions, The Lorax, Micmacs. Avui desenvolupa apps iOS natives, entre les quals apps mèdiques d’audició.</p>"
    },
    "media": [],
    "link": "",
@@ -6014,7 +6068,53 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-12"
+  },
+  {
+   "id": "loic-lecoq",
+   "section": "studio",
+   "order": 104,
+   "published": true,
+   "title": {
+    "en": "Loïc Lecoq",
+    "fr": "Loïc Lecoq",
+    "ca": "Loïc Lecoq",
+    "es": "Loïc Lecoq"
+   },
+   "subtitle": {
+    "fr": "Montage et mapping pour salles immersives",
+    "en": "Rigging and mapping for immersive rooms",
+    "es": "Montaje y mapping para salas inmersivas",
+    "ca": "Muntatge i mapping per a sales immersives"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "specialists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "fr": "<p>Il monte les salles immersives : accroche des projecteurs, warping, mapping et blending.</p><p>Avec nous : Peupler et Rising.</p>",
+    "en": "<p>He sets up immersive rooms: projector rigging, warping, mapping and blending.</p><p>With us: Peupler and Rising.</p>",
+    "es": "<p>Monta salas inmersivas: colgado de proyectores, warping, mapping y blending.</p><p>Con nosotros: Peupler y Rising.</p>",
+    "ca": "<p>Munta sales immersives: penjada de projectors, warping, mapping i blending.</p><p>Amb nosaltres: Peupler i Rising.</p>"
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-12"
   },
   {
    "id": "louis-raveton",
@@ -6405,7 +6505,8 @@
    },
    "date": "",
    "tags": [
-    "agencies"
+    "agencies",
+    "partners"
    ],
    "thumb": "media/tigre-lab/job-fair-logos-web-4xib.jpg",
    "thumbBack": "",
@@ -12349,8 +12450,7 @@
    },
    "date": "",
    "tags": [
-    "specialists",
-    "partners"
+    "specialists"
    ],
    "thumb": "media/mecaoctet/mecaoctet-goq5.jpg",
    "thumbBack": "",

@@ -539,8 +539,7 @@ async function skillCard(post, w, h) {
     const g = ctx.createLinearGradient(0, h * 0.3, 0, h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.82)'); ctx.fillStyle = g; ctx.fillRect(0, h * 0.3, w, h * 0.7);
     const pad = Math.round(w * 0.07), tw2 = w - 2 * pad, n = relProjects(post).length;
     ctx.textBaseline = 'top'; ctx.fillStyle = '#fff';
-    if (n) { ctx.font = `600 ${fz(11)}px ${UIF}`; ctx.fillText(`${n} ${ui('nProjects')}`.toUpperCase(), pad, pad); }
-    const sub = tr(post.subtitle).trim(); ctx.font = `${fz(11.5)}px ${UIF}`; const subL = sub ? wrapLines(ctx, sub, tw2).slice(0, 2) : [];
+    const subL = [];   // maj-181 : sur téléphone, le nom seul ; le nombre de projets et la phrase étaient illisibles à cette taille
     let y = h - pad - subL.length * fz(14);
     subL.forEach((l, i) => ctx.fillText(l, pad, y + i * fz(14)));
     ctx.font = IT(fz(26)); const tl2 = wrapLines(ctx, title, tw2).slice(0, 2); y -= (subL.length ? fz(6) : 0) + tl2.length * fz(25);
@@ -572,6 +571,9 @@ function infoTexture(post, kind) {
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 380, 300); ctx.textBaseline = 'top';
       ctx.fillStyle = accent(); ctx.fillRect(X, 24, 16, 2);
       let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
+      if (phoneCards()) {   // maj-181 : sur téléphone, le nom seul, en grand ; adresse et téléphone sont dans la fiche
+        ctx.fillStyle = '#fff'; ctx.font = TF(fz(62)); let ty = 44; wrapLines(ctx, title, TW).slice(0, 2).forEach(l => { ctx.fillText(l, X, ty); ty += fz(66); }); return;
+      }
       ctx.fillStyle = '#fff'; ctx.font = TF(fz(40)); let y = 36; wrapLines(ctx, title, TW).slice(0, 1).forEach(l => { ctx.fillText(l, X, y); y += fz(44); });
       ctx.font = IT(fz(17)); wrapLines(ctx, tr(post.subtitle), TW).slice(0, 2).forEach(l => { ctx.fillText(l, X, y); y += fz(21); });
       y = Math.max(y + 16, 150);
@@ -832,9 +834,14 @@ const LAYOUT = {
   arc: {        // LineView3D
     preset(view) { view.angle = Math.PI / (view.n + 1); },
     position(view, p, i) {
-      const a = view.angle * (i + 1), S = STYLE;
-      return { x: (S.planeDistance - Math.abs(a - Math.PI / 2) * 120 + p.width + Math.pow(-1, i + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.cos(a),
-        y: (S.planeDistance + p.height + Math.pow(-1, i + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.sin(a),
+      const S = STYLE;
+      if (view.core && view.core.has(i)) {   // maj-181 : Maya et Cyril au milieu de l'écran, côte à côte au-dessus de l'objet, un peu en avant
+        const k = view.coreList.indexOf(i), m = view.coreList.length;
+        return { x: ((m - 1) / 2 - k) * (p.width + 46), y: S.planeDistance * view.coreY + p.height / 2, z: S.planeDisOrder * 1.8, rotY: 180 };
+      }
+      const j = view.slotOf ? view.slotOf[i] : i, a = (view.arcAngle || view.angle) * (j + 1);   // les autres se répartissent sur tout l'arc
+      return { x: (S.planeDistance - Math.abs(a - Math.PI / 2) * 120 + p.width + Math.pow(-1, j + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.cos(a),
+        y: (S.planeDistance + p.height + Math.pow(-1, j + 1) * S.planeDisOrder / (Math.random() + 1)) * Math.sin(a),
         z: Math.pow(-1, Math.round(Math.random() * 5)) * S.planeDisOrder * Math.random(), rotY: 180 };
     },
     open: 'oneStep',
@@ -987,6 +994,13 @@ class PostsView3D {
     this.container = new THREE.Group(); this.container.position.copy(section.container.position); scene.add(this.container);
     this.postViews = this.posts.map((_, i) => new PostView(this, this.w * this.k, this.h * this.k, i));
     this.lines = []; this.following = new Set(); this.trail = new Set(); this.infos = []; this.alive = true;
+    /* maj-181 : les personnes du cœur du studio (Maya, Cyril) prennent les places du milieu de l'arc ; les autres se répartissent autour, dans l'ordre */
+    const coreIdx = this.posts.map((p, i) => ((p.tags || []).includes('core') ? i : -1)).filter(i => i >= 0);
+    if (this.def.layout === 'arc' && !this.def.skills && coreIdx.length && coreIdx.length < this.n && coreIdx.length <= 3) {
+      const others = this.posts.map((p, i) => i).filter(i => !coreIdx.includes(i));
+      this.slotOf = []; others.forEach((i, k) => { this.slotOf[i] = k; });
+      this.core = new Set(coreIdx); this.coreList = coreIdx; this.arcAngle = Math.PI / (others.length + 1); this.coreY = 0.62;
+    }
     this.L.preset.call(this.L, this);
     if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
     if (this.def.layout === 'map' && this.def.network) this.buildNetwork();
@@ -2084,7 +2098,7 @@ const post2D = {
   },
   addMedia(src, h = 355, credit = '', sign = true, caption = null) {
     const kind = mediaKind(src);
-    if (kind === 'youtube' || kind === 'vimeo') { this.addEmbed(src, kind, h, credit); return; }
+    if (kind === 'youtube' || kind === 'vimeo') { this.addEmbed(src, kind, h, credit, caption); return; }
     const vid = kind === 'video', el = this.addPanel('media', h, '');
     const m = document.createElement(vid ? 'video' : 'img'); m.draggable = false; m.style.height = h + 'px';
     if (vid) {   // la vidéo attend un toucher : on peut glisser le bandeau par-dessus sans la lancer
@@ -2105,7 +2119,7 @@ const post2D = {
       el.querySelector('.in').appendChild(d);
     }
   },
-  addEmbed(src, kind, h, credit = '') {   // YouTube / Vimeo : vignette et bouton, le lecteur ne se charge qu'au toucher
+  addEmbed(src, kind, h, credit = '', caption = null) {   // YouTube / Vimeo : vignette et bouton, le lecteur ne se charge qu'au toucher
     const w = Math.round(h * 16 / 9), el = this.addPanel('media embed', w, '');
     const inner = el.querySelector('.in'), id = kind === 'youtube' ? ytId(src) : vimeoId(src);
     const cover = document.createElement('div'); cover.className = 'cover';
@@ -2121,6 +2135,8 @@ const post2D = {
       cover.replaceWith(f);
     });
     cover.appendChild(play); inner.appendChild(cover);
+    const cap = caption ? tr(caption).trim() : '';
+    if (cap) { const d = document.createElement('div'); d.className = 'mcap'; d.textContent = cap; inner.appendChild(d); }   // maj-180 : la légende aussi sur les vidéos YouTube et Vimeo, en haut pour laisser les commandes du lecteur visibles
   },
   addText(post, mode) {
     let { width, x, colW, press } = textGeom(mode);
@@ -2132,16 +2148,19 @@ const post2D = {
     const subtitle = tr(post.subtitle);
     const sec = P.section.def;
     const tags = post.tags.filter(id => id !== 'featured').map(id => sec.tags.find(tg => tg.id === id)).filter(Boolean).map(tg => tr(tg.label));   // « Sélection » est une vitrine, pas une catégorie à afficher
-    const posted = tags.length ? `${escapeHTML(ui('postedIn'))} <span>${tags.map(escapeHTML).join(', ')}</span>` : '';
+    const posted = '';   // maj-181 : plus de « Classé dans » en fin de fiche
     const fecha = escapeHTML([post.date, tr(post.place)].filter(Boolean).join(' | '));
-    const html = sanitizeHTML(tr(post.body));
+    /* maj-181 : comme sur téléphone, les parties à intertitre (crédits, presse…) deviennent des déroulants, dans une colonne à part */
+    const parts = sanitizeHTML(tr(post.body)).split(/(?=<h3[\s>])/i), html = /^\s*<h3/i.test(parts[0] || '') ? '' : parts.shift();
+    const foldsHTML = parts.map(pt => { const m = /^<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*)$/i.exec(pt.trim()); return m ? `<details><summary>${m[1]}</summary><div class="fb">${m[2]}</div></details>` : `<div class="fb">${pt}</div>`; }).join('');
+    const addFolds = (n) => { if (!foldsHTML) return; const [fx, frp] = pads(n, n + 1); this.addPanel('txt', fx + colW + frp, `<div class="folds" style="left:${fx}px;top:${fm.top}px;width:${colW}px;max-height:${low - fm.top}px">${foldsHTML}</div>`); };
     const measure = document.createElement('div');
     measure.className = 'txt'; measure.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;width:${colW}px`;
     document.body.appendChild(measure);
     measure.innerHTML = `<h2 class="ttl" style="position:static">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="position:static">${escapeHTML(subtitle)}</p>` : ''}`;
     const tH = measure.firstChild.offsetHeight, sH = subtitle ? measure.lastChild.offsetHeight + 6 : 0;
     /* ses savoir-faire : une petite ligne de tags sous « Classé dans », chacun ouvre sa fiche */
-    const skills = mode === 'project' ? relSkills(post) : [];
+    const skills = [];   // maj-181 : les savoir-faire ne se listent plus en fin de fiche
     let sklLine = '';
     if (skills.length) {
       const sd = (SECTIONS.find(x => x.def.id === skills[0].section) || {}).def;
@@ -2184,6 +2203,7 @@ const post2D = {
           (last && relH ? `<div class="relp" style="left:${x}px;top:${relTop}px;width:${colW}px">${relHTML}</div>` : '') +
           (last ? `<div class="meta" style="left:${x}px;top:${metaTop}px;width:${colW}px">${metaHTML}</div>` : ''));
       });
+      addFolds(pages.length);
     } else {
       const sy = 13 + tH + 4, fy = 13 + tH + sH + 10, py = fy + 20, top = py + 18 + 20;
       const pages = paginate(html, colW, [355 - top - 14, 355 - 28], measure);
@@ -2191,6 +2211,7 @@ const post2D = {
         this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:13px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}<div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : 14}px;width:${colW}px">${pg}</div>`);
       });
+      addFolds(pages.length);
     }
     measure.remove();
   },
@@ -2346,8 +2367,7 @@ const postV = {
       skl = `<p class="pv-meta"><span>${E((sd ? tr(sd.name) : ui('skills')).trim())}</span> ${skills.map(k => `<button type="button" class="go" data-go="${E(k.id)}">${E(tr(k.title).trim())}</button>`).join(', ')}</p>`; }
     return `<div class="pv-txt"><h1 class="pv-ttl">${E(title)}</h1>${subtitle ? `<p class="pv-stl">${E(subtitle)}</p>` : ''}` +
       (fecha ? `<p class="pv-date">${E(fecha)}</p>` : '') + `<div class="pv-body">${lead || ''}</div>` +
-      (folds ? `<div class="pv-folds">${folds}</div>` : '') +
-      (tags.length ? `<p class="pv-meta"><span>${E(ui('postedIn'))}</span> ${tags.map(E).join(', ')}</p>` : '') + skl + '</div>';
+      (folds ? `<div class="pv-folds">${folds}</div>` : '') + '</div>';   // maj-181 : plus de catégories ni de savoir-faire en fin de fiche, trop d'informations
   },
   media(m, cls) {   // une image, une vidéo ou un lecteur, toujours entier, en pleine largeur
     const E = escapeHTML, kind = mediaKind(m.src), cap = m.caption ? tr(m.caption).trim() : '';
@@ -2534,6 +2554,8 @@ post2dEl.addEventListener('pointermove', e => {
 post2dEl.addEventListener('click', e => { if (post2D.justDragged) { e.preventDefault(); e.stopPropagation(); post2D.justDragged = false; } }, true);
 /* Pavé tactile et molette sur la fiche : la bande défile, et un balayage horizontal ne renvoie jamais à la page précédente */
 post2dEl.addEventListener('wheel', e => {
+  const fo = e.target.closest && e.target.closest('.folds');   // maj-181 : dans les déroulants, la molette fait défiler le texte
+  if (fo && Math.abs(e.deltaY) > Math.abs(e.deltaX) && fo.scrollHeight > fo.clientHeight + 1 && (e.deltaY < 0 ? fo.scrollTop > 0 : fo.scrollTop + fo.clientHeight < fo.scrollHeight - 1)) return;
   e.preventDefault(); if (!post2D.open || post2D.dragging) return;
   const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY, k = e.deltaMode === 1 ? 16 : 1;
   post2D.push(-d * k / (post2D.scale || 1));
@@ -3091,21 +3113,27 @@ function hvShadeOn(ctx, W, H, s) {
 async function hvPhoto() {
   if (!hv || (hv.cam && hv.cam.video.readyState < 2)) return;   // caméra ou diaporama : l'image du moment
   const f = hv.frozenAt; if (!f || !f.cols || !hv.W) return;
-  const big = Math.max(hv.W, hv.H), s = Math.min(3000 / big, Math.max(2, 2000 / big));   // au moins deux fois l'écran, au plus 3000 px de côté
-  const W = Math.round(hv.W * s), H = Math.round(hv.H * s), c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
+  /* deux formats (maj-179) : « grand format », l'écran entier en grand ; « réseaux », 1080 × 1350 (4:5), le milieu de l'écran recadré */
+  const rs = hv.fmt === 'rs'; let W, H, s, cx = 0, cy = 0;
+  if (rs) { W = 1080; H = 1350; let cw = hv.W, ch = hv.H; if (cw / ch > W / H) cw = ch * W / H; else ch = cw * H / W; s = W / cw; cx = (hv.W - cw) / 2; cy = (hv.H - ch) / 2; }
+  else { const big = Math.max(hv.W, hv.H); s = Math.min(3000 / big, Math.max(2, 2000 / big)); W = Math.round(hv.W * s); H = Math.round(hv.H * s); }   // au moins deux fois l'écran, au plus 3000 px de côté
+  const FW = hv.W * s, FH = hv.H * s, c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
   ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
   const band = document.getElementById('home-band'); band.classList.remove('flash'); void band.offsetWidth; band.classList.add('flash');
   const keep = { ctx: hv.ctx, W: hv.W, H: hv.H, lo: hv.lo, hi: hv.hi };
+  ctx.save(); ctx.translate(-cx * s, -cy * s);   // l'écran entier, décalé : la photo n'en garde que le cadre choisi
   try {
-    hv.ctx = ctx; hv.W = W; hv.H = H;
+    hv.ctx = ctx; hv.W = FW; hv.H = FH;
     if (f.d) hvSquares(f.d, f.cols, f.rows, f.cell * s); else hvComposite(f.cols, f.rows, Math.round(f.cell * s));   // les mêmes ronds qu'à l'écran, au même endroit
   } finally { hv.ctx = keep.ctx; hv.W = keep.W; hv.H = keep.H; hv.lo = keep.lo; hv.hi = keep.hi; }
-  hvShadeOn(ctx, W, H, s);
+  hvShadeOn(ctx, FW, FH, s); ctx.restore();
   const ST = CONTENT.settings, fT = typoOf(ST, 'title'), unit = Math.min(W, H) / 1080;
   const wordsEl = document.getElementById('hv-words'), slogan = (wordsEl ? wordsEl.value : '').replace(/\s+/g, ' ').trim().toUpperCase();   // le texte tapé par le visiteur
-  const cr = hv.cv.getBoundingClientRect(), X = x => (x - cr.left) * s, Y = y => (y - cr.top) * s;   // de l'écran à la photo
-  const fontOf = (cs, px) => `${cs.fontStyle === 'italic' ? 'italic ' : ''}${cs.fontWeight} ${px}px ${cs.fontFamily}`;
   const wm = document.querySelector('#home-slogan > .wm'), lines = [...document.querySelectorAll('#home-slogan .tls > span')];
+  const cr = hv.cv.getBoundingClientRect(), wr = wm ? wm.getBoundingClientRect() : cr;
+  const offX = rs ? 72 * unit - (wr.left - cr.left - cx) * s : 0, offY = rs ? 60 * unit - (wr.top - cr.top - cy) * s : 0;   // réseaux : la signature reprend sa place en haut à gauche du cadre
+  const X = x => (x - cr.left - cx) * s + offX, Y = y => (y - cr.top - cy) * s + offY;   // de l'écran à la photo
+  const fontOf = (cs, px) => `${cs.fontStyle === 'italic' ? 'italic ' : ''}${cs.fontWeight} ${px}px ${cs.fontFamily}`;
   let mx = 72 * unit, bandMid = 0, bandH = 0;
   if (wm) {
     try { await document.fonts.load(fontOf(getComputedStyle(wm), 96)); } catch (e) {}
@@ -3200,8 +3228,10 @@ function buildHvPanel(home, src, host = home) {
     HV_FADERS.map(f => `<label class="rw"><span class="lb" data-k="${f.p}"></span><input type="range" data-p="${f.p}" min="${f.min}" max="${f.max}" step="${f.step}"><output></output></label>`).join('') +
     `<div class="rw"><span class="lb" data-k="color"></span><div class="seg sw" role="group">${HV_COLORS.map(c => `<button type="button" data-c="${c}"><i class="c-${c}"></i></button>`).join('')}</div></div>` +
     `<div class="rw tg"><button type="button" class="tgl" data-a="invert"><i aria-hidden="true"></i><span data-k="invert"></span></button></div>` +
-    `<div class="pic"><input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done"><button type="button" id="hv-shot">${ICON.shot}<span></span></button></div>`;   // tout en bas : le titre de la photo, puis le bouton
+    `<div class="pic"><div class="seg fmt" role="group"><button type="button" data-fmt="big" data-k="fmtBig"></button><button type="button" data-fmt="rs" data-k="fmtRs"></button></div><input type="text" id="hv-words" maxlength="80" autocomplete="off" enterkeyhint="done"><button type="button" id="hv-shot">${ICON.shot}<span></span></button></div>`;   // tout en bas : le titre de la photo, puis le bouton
   host.appendChild(panel);
+  try { hv.fmt = localStorage.getItem('hc-photo-fmt') === 'rs' ? 'rs' : 'big'; } catch (e) { hv.fmt = 'big'; }
+  panel.querySelectorAll('[data-fmt]').forEach(b => b.addEventListener('click', () => { hv.fmt = b.dataset.fmt; try { localStorage.setItem('hc-photo-fmt', hv.fmt); } catch (e) {} hvLabels(); }));
   const toggle = document.getElementById('hv-toggle');
   hv.panel = panel; hv.toggle = toggle;
   let hideT = 0;
@@ -3256,6 +3286,7 @@ function hvLabels() {
     paintFader(i); i.setAttribute('aria-label', ui('hv_' + f.p));
     i.nextElementSibling.textContent = f.show();
   });
+  P.querySelectorAll('[data-fmt]').forEach(b => { const on = b.dataset.fmt === (hv.fmt || 'big'); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); });   // maj-179 : le format de la photo
   P.querySelectorAll('[data-c]').forEach(b => { const on = b.dataset.c === hv.color; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); b.setAttribute('aria-label', ui('hv_color') + ' ' + ui('hv_c_' + b.dataset.c)); });
   const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
   tg('invert', hv.mode === 'dark');

@@ -125,6 +125,19 @@ button { font: inherit; }
 .txt .body p, .txt .body ul, .txt .body ol { margin: 0 0 18px; }
 .txt .body ul, .txt .body ol { padding-left: 18px; }
 .txt .body h3 { font: bold 14px/18px var(--serif); margin: 0 0 6px; }
+/* maj-181 : crédits, presse… en déroulants, comme sur téléphone */
+.txt .folds { position: absolute; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid rgba(255,255,255,.4); color: #fff; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.3) transparent; }
+.txt .folds details { border-bottom: 1px solid rgba(255,255,255,.4); }
+.txt .folds summary { list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 11px 0; cursor: pointer; font-family: var(--f-h3, var(--serif)); font-style: var(--st-h3, italic); font-weight: var(--w-h3, 400); font-size: 20px; line-height: 24px; }
+.txt .folds summary::-webkit-details-marker { display: none; }
+.txt .folds summary::after { content: "+"; font: 300 22px/1 var(--serif); font-style: normal; }
+.txt .folds details[open] summary::after { content: "−"; }
+.txt .folds summary:focus-visible { outline: 1px dotted var(--accent); outline-offset: 2px; }
+.txt .folds .fb { font: 14px/18px var(--serif); padding-bottom: 12px; }
+.txt .folds .fb p, .txt .folds .fb ul, .txt .folds .fb ol { margin: 0 0 12px; }
+.txt .folds .fb ul, .txt .folds .fb ol { padding-left: 18px; }
+.txt .folds .fb a { color: var(--accent); text-decoration: none; }
+.txt .folds .fb a:hover { text-decoration: underline; }
 .txt .body a, .txt .posted span, .contact .site a { color: var(--accent); text-decoration: none; }
 .txt .body a:hover { text-decoration: underline; }
 .txt .fecha { position: absolute; font: 13px/18px var(--serif); color: var(--grey-1); }
@@ -354,6 +367,7 @@ body.post-short #reel-btn { opacity: 0; pointer-events: none; }   /* fiche ouver
 /* légende posée en bas d'une image de fiche (captures de logiciel, etc.) */
 .pnl.media .mcap { position: absolute; left: 0; right: 0; bottom: 0; padding: 9px 14px 10px; background: rgba(0,0,0,.66); color: #e8e8e8; font: 12px/1.4 var(--serif); pointer-events: none; }
 .pnl.media .mcap b { color: #fff; font-weight: 600; }
+.pnl.media.embed .mcap { top: 0; bottom: auto; z-index: 2; }   /* maj-180 : sur une vidéo, la légende en haut, les commandes du lecteur restent visibles en bas */
 
 /* bas de la fiche projet : date, « Classé dans », savoir-faire, empilés */
 .txt .meta { position: absolute; display: flex; flex-direction: column; gap: 4px; }
@@ -1356,6 +1370,11 @@ html.neg :where(body) .proj .go:focus-visible { outline-color: currentcolor; }
 html.neg :where(body) .txt .ttl { color: #000000; }
 html.neg :where(body) .txt .stl { color: #656565; }
 html.neg :where(body) .txt .body { color: #000000; }
+html.neg :where(body) .txt .folds { border-top-color: rgba(0, 0, 0, .4); color: #000000; scrollbar-color: rgba(0, 0, 0, .3) transparent; }
+html.neg :where(body) .txt .folds details { border-bottom-color: rgba(0, 0, 0, .4); }
+html.neg :where(body) .txt .folds summary:focus-visible { outline-color: var(--accent); }
+html.neg :where(body) .txt .folds .fb a { color: var(--accent); text-decoration-color: currentcolor; }
+html.neg :where(body) .txt .folds .fb a:hover { text-decoration-color: currentcolor; }
 html.neg :where(body) .txt .body a, html.neg :where(body) .txt .posted span, html.neg :where(body) .contact .site a { color: var(--accent); text-decoration-color: currentcolor; }
 html.neg :where(body) .txt .body a:hover { text-decoration-color: currentcolor; }
 html.neg :where(body) .txt .fecha { color: #333333; }
