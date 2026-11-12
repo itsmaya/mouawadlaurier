@@ -1304,7 +1304,7 @@ html.ov-open #kb, html.ov-open #cats { visibility: hidden; }
 #hc-ov .mos.sel .t.hit .tx { opacity: 1; transform: none; }
 #hc-ov .mos.sel .t.hit em { opacity: .85; }
 html.neg #hc-ov .mos.sel .t.dim { background: #0e0e0e; }   /* la nuit : les projets hors catégorie en gris très sombre */
-@media (hover: hover) { #hc-ov .mos.sel .t.dim:hover img { filter: none; opacity: 1; } #hc-ov .mos.sel .t.dim:hover .tx { opacity: 1; } }
+#hc-ov .mos.sel .t.dim { pointer-events: none; cursor: default; }   /* maj-174 : hors de la sélection, ni survol ni clic */
 
 /* ===== maj-158 : à l'ouverture, en attendant la vidéo, le rond jaune bat comme un cœur ===== */
 #hc-intro .beat { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--accent-raw, #ffcc00); opacity: 0; transition: opacity .7s ease; animation: hcBeat 1.4s cubic-bezier(.45,0,.55,1) infinite; will-change: transform; }

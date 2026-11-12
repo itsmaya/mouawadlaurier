@@ -1506,7 +1506,8 @@ function countView(path, title, event = false) {
    On mesure les vraies lettres dans les polices de Réglages › Typographie, à l'accueil comme à l'intérieur du site. */
 const tagCtx = document.createElement('canvas').getContext('2d');
 function fitTaglines() {
-  const minWords = innerWidth <= 700 || innerHeight <= 520 ? 10.5 : 13;   // maj-171 : les mots restent lisibles ; si besoin, c'est la signature qui grandit
+  const minWords = innerWidth <= 700 || innerHeight <= 520 ? 10.5 : 13;
+  let band = null;   // maj-171 : les mots restent lisibles ; si besoin, c'est la signature qui grandit
   ['#slogan', '#home-slogan'].forEach(sel => {
     const wm = document.querySelector(sel + ' > .wm'), box = document.querySelector(sel + ' > .tls'); if (!wm || !box) return;
     const lines = [...box.children]; if (!lines.length) return;
@@ -1527,8 +1528,15 @@ function fitTaglines() {
     const tBase = (lh - (m1.fontBoundingBoxAscent + m1.fontBoundingBoxDescent) * size / 100) / 2 + m1.fontBoundingBoxAscent * size / 100;
     box.style.fontSize = size.toFixed(2) + 'px'; box.style.lineHeight = lh.toFixed(2) + 'px';
     box.style.marginTop = ((wBase - asc) - (tBase - a1 * size)).toFixed(2) + 'px';   // le haut des mots sur le haut des lettres de la signature
+    if (sel === '#slogan') band = wBase - asc / 2;   // le milieu des lettres, depuis le haut de la signature
     break; }
   });
+  /* maj-175 : le rond en haut à droite se centre sur les lettres de « Hand Coded. », quelle que soit leur taille */
+  const lg = document.getElementById('logo'), sg = document.getElementById('slogan'), swm = sg && sg.querySelector(':scope > .wm');
+  if (lg) lg.style.top = '';
+  if (lg && swm && band !== null && /fixed|absolute/.test(getComputedStyle(lg).position) && lg.offsetHeight) {
+    lg.style.top = (sg.offsetTop + swm.offsetTop + band - lg.offsetHeight / 2).toFixed(1) + 'px';
+  }
   const h = document.getElementById('slogan') ? document.getElementById('slogan').offsetHeight : 0;
   if (h !== fitTaglines.h) { fitTaglines.h = h; try { if (homeGone) { placeCats(); placeReel(); placeAbout(); } if (post2D.open) fitPost2D(); } catch (e) {} }   // la signature a changé de taille : ce qui est posé dessous suit
 }
@@ -1665,7 +1673,7 @@ function ovFilter(id, scroll = true) {   // maj-158 : la mosaïque reste entièr
   ovEl.querySelectorAll('.chips button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === id)));
   const g = ovEl.querySelector('.mos'); g.classList.toggle('sel', !!id);
   let firstHit = null;
-  g.querySelectorAll('.t').forEach(t => { const hit = !!id && t.dataset.tags.split(' ').includes(id); t.classList.toggle('hit', hit); t.classList.toggle('dim', !!id && !hit); if (hit && !firstHit) firstHit = t; });
+  g.querySelectorAll('.t').forEach(t => { const hit = !!id && t.dataset.tags.split(' ').includes(id); t.classList.toggle('hit', hit); t.classList.toggle('dim', !!id && !hit); if (id && !hit) { t.setAttribute('tabindex', '-1'); t.setAttribute('aria-disabled', 'true'); } else { t.removeAttribute('tabindex'); t.removeAttribute('aria-disabled'); } if (hit && !firstHit) firstHit = t; });
   if (scroll && firstHit) { const r = firstHit.getBoundingClientRect(); if (r.top > innerHeight * 0.8 || r.bottom < 0) ovEl.scrollTo({ top: ovEl.scrollTop + r.top - 140, behavior: 'smooth' }); }
 }
 function openOverview() {
@@ -1687,7 +1695,7 @@ function openOverview() {
     document.body.appendChild(ovEl);
     ovEl.addEventListener('click', e => {
       const t = e.target.closest('[data-ov]');
-      if (t) { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); const id = t.dataset.ov; closeOverview(); goToPost(id); return; }
+      if (t) { if (t.classList.contains('dim')) { e.preventDefault(); return; } if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); const id = t.dataset.ov; closeOverview(); goToPost(id); return; }
       const c = e.target.closest('[data-cat]'); if (c) { ovFilter(c.dataset.cat); return; }
       if (e.target.closest('.x')) closeOverview();
     });
@@ -2919,7 +2927,7 @@ function setupHomeVideo() {
   /* à l'arrivée sur l'accueil, le showreel part tout seul, son coupé (pas sur une adresse de fiche ou de section, ni si le visiteur réduit les animations) */
   /* il attend que la 3D ait fini de se charger : lancé en même temps, le lecteur faisait ramer l'accueil les premières secondes */
   if (reelPlayable() && isHomeHash() && !/[?&]p=/.test(location.search) && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start) && !document.getElementById('hc-intro')) {   // avec l'ouverture, c'est elle qui lance le showreel
-    const t0 = performance.now(), go = () => { if (!homeGone && !hv.reelOn && !hv.cam && !hv.userReel && isHomeHash()) hvReelStart(true); };
+    const t0 = performance.now(), go = () => { if (!homeGone && !hv.reelOn && !hv.cam && !hv.userReel && !hv.reelRefused && isHomeHash()) hvReelStart(true); };
     const wait = setInterval(() => { if (assetsLoaded || performance.now() - t0 > 6000) { clearInterval(wait); setTimeout(go, 500); } }, 150);
   }
   const langs = document.getElementById('home-langs'), ctl = document.getElementById('home-ctl');
@@ -3286,8 +3294,8 @@ function makeReelPlayer(kind, src) {
        le lecteur reste caché (les carrés continuent dessous) jusqu'à ce que cet habillage soit parti */
     rp.showAt = yt ? 3.2 : 0.4; box.classList.add('wait');
     Object.assign(rp, { el: f, post,
-      play: () => { rp.paused = false; rp.playAt = performance.now(); rp.showAt = rp.t + (yt ? 2.6 : 0.3); cmd(yt ? 'playVideo' : 'play'); hvReelVeil(); hvReelBar(); },
-      pause: () => { rp.paused = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelVeil(); hvReelBar(); },
+      play: () => { rp.paused = false; rp.hold = false; rp.playAt = performance.now(); rp.showAt = rp.t + (yt ? 2.6 : 0.3); cmd(yt ? 'playVideo' : 'play'); hvReelVeil(); hvReelBar(); },
+      pause: () => { rp.paused = true; rp.hold = true; cmd(yt ? 'pauseVideo' : 'pause'); hvReelVeil(); hvReelBar(); },   // maj-174 : hold = une pause voulue par le site (l'ouverture), pas un refus du navigateur
       mute: m => { if (yt) { cmd(m ? 'mute' : 'unMute'); if (!m) cmd('setVolume', [100]); } else { cmd('setMuted', m); if (!m) cmd('setVolume', 1); } },
       seek: x => { if (yt) cmd('seekTo', [x, true]); else cmd('setCurrentTime', x); rp.t = x; hvReelBar(); } });
   }
@@ -3314,11 +3322,11 @@ window.addEventListener('message', e => {
     const i = d.event === 'infoDelivery' && d.info; if (!i) return;
     if (typeof i.currentTime === 'number') rp.t = i.currentTime;
     if (typeof i.duration === 'number' && i.duration) rp.d = i.duration;
-    if (typeof i.playerState === 'number') { if (i.playerState === 0 && hv.reelOn) { hvReelStop(); return; } if (i.playerState === 1) rp.paused = false; else if (i.playerState === 2) rp.paused = true; }
+    if (typeof i.playerState === 'number') { if (i.playerState === 0 && hv.reelOn) { hvReelStop(); return; } if (i.playerState === 1) { rp.paused = false; rp.playingAt = performance.now(); } else if (i.playerState === 2) rp.paused = true; }
   } else {
     if (d.event === 'ready') { ['timeupdate', 'play', 'pause', 'ended'].forEach(ev => rp.post({ method: 'addEventListener', value: ev })); if (hv.sound) rp.mute(false); return; }
-    if (d.event === 'timeupdate' && d.data) { rp.t = d.data.seconds || 0; rp.d = d.data.duration || rp.d; }
-    else if (d.event === 'play') rp.paused = false;
+    if (d.event === 'timeupdate' && d.data) { rp.t = d.data.seconds || 0; rp.d = d.data.duration || rp.d; if (rp.t > 0) rp.playingAt = performance.now(); }
+    else if (d.event === 'play') { rp.paused = false; rp.playingAt = performance.now(); }
     else if (d.event === 'pause') rp.paused = true;
     else if (d.event === 'ended' && hv.reelOn) { hvReelStop(); return; }
   }
@@ -3362,17 +3370,21 @@ function hvReelStart(auto = false) {
   if (!auto) countView('showreel', 'Showreel', true);
   return true;
 }
-/* Un lecteur YouTube / Vimeo qui ne se montre pas (bloqué par une extension, réseau lent, vidéo refusée) : au bout de 8 s,
-   le showreel lancé tout seul s'arrête et les carrés reprennent ; lancé par le visiteur, on montre ce que le lecteur affiche */
+/* Un lecteur YouTube / Vimeo qui ne joue pas (Safari qui refuse la lecture automatique, extension, réseau lent, vidéo refusée) :
+   lancé tout seul, au bout de 6 s sans lecture réelle, le showreel s'arrête, le bouton revient sur ▶ et les carrés reprennent ;
+   lancé par le visiteur, au bout de 8 s, on montre ce que le lecteur affiche (son propre bouton lecture, par exemple).
+   maj-174 : une pause voulue par le site (l'ouverture le garde sur sa première image) ne compte pas ; une pause décidée par le navigateur, si. */
 let reelWatchT = 0;
 function reelWatch() {
   clearInterval(reelWatchT);
   reelWatchT = setInterval(() => {
     const rp = hv && hv.rp;
     if (!rp || !hv.reelOn || rp.kind === 'video' || rp.shown) { clearInterval(reelWatchT); return; }
-    if (rp.paused || homeGone || performance.now() - (rp.playAt || 0) < 8000) return;   // en pause (l'ouverture le garde sur sa première image) : on attend
+    if (rp.hold || homeGone) return;
+    if ((rp.playingAt || 0) > (rp.playAt || 0)) return;   // il joue : le voile se lèvera de lui-même
+    if (performance.now() - (rp.playAt || 0) < (hv.userReel ? 8000 : 6000)) return;
     clearInterval(reelWatchT);
-    if (!rp.heard || !hv.userReel) { hvReelStop(); return; }
+    if (!rp.heard || !hv.userReel) { if (!hv.userReel) hv.reelRefused = true; hvReelStop(); return; }   // refusé une fois : on ne relance plus tout seul
     rp.showAt = 0; rp.forced = true; rp.shown = true; rp.box.classList.remove('wait');
     if (hv.video && !hv.frozen) hv.video.pause();
   }, 500);
@@ -3992,7 +4004,7 @@ function introOut(now = false, fast = false) {
 function introVideo() {
   if (!hv || homeGone) return;
   if (hv.reelOn && hv.rp && !hv.userReel) { if (!introKicked) { introKicked = true; hv.rp.seek(0); hv.rp.play(); } }
-  else if (!hv.reelOn && !hv.userReel && !hv.cam && reelPlayable() && isHomeHash() && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) {   // le visiteur a pressé le pas avant que le showreel soit prêt : il part dès que possible
+  else if (!hv.reelOn && !hv.userReel && !hv.reelRefused && !hv.cam && reelPlayable() && isHomeHash() && !HV_REDUCE.matches && !(PREVIEW && PREVIEW.start)) {   // le visiteur a pressé le pas avant que le showreel soit prêt : il part dès que possible
     const wait = setInterval(() => { if (homeGone || hv.reelOn || hv.cam) { clearInterval(wait); return; } if (assetsLoaded) { clearInterval(wait); hvReelStart(true); dockLabels(); introBlink(); } }, 150);
     return;
   }
@@ -4041,7 +4053,7 @@ function introWatch() {
   const tick = setInterval(() => {
     if (introDone && introShown) { clearInterval(tick); return; }
     if (homeGone) { clearInterval(tick); introOut(true); return; }
-    if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam) started = hvReelStart(true);   // le showreel se charge pendant la phrase…
+    if (wantsReel && assetsLoaded && !started && !hv.reelOn && !hv.cam && !hv.reelRefused) started = hvReelStart(true);   // le showreel se charge pendant la phrase…
     if (started && !primed && hv.rp && hv.rp.t > 0.05) { hv.rp.pause(); hv.rp.seek(0); primed = true; }   // …et attend sur sa première image, caché
     if (started && !hv.reelOn) primed = true;   // arrêté par le visiteur
     const now = performance.now();
@@ -4051,7 +4063,7 @@ function introWatch() {
     if (!introShown && introReady) {   // d'abord la vidéo…
       if (!introReadyAt) introReadyAt = now;
       if (lead && primed && hv.reelOn && !introKicked) { introKicked = true; kickAt = now; hv.rp.seek(0); hv.rp.play(); }
-      const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && now >= kickAt + lead;
+      const ready = !wantsReel ? assetsLoaded : !hv.reelOn ? true : !primed ? false : !lead ? true : introKicked && (hv.rp.shown || now >= kickAt + lead + 4000);   // maj-174 : quand la vidéo se montre vraiment (Safari démarre YouTube plus lentement)
       if (ready || now - introReadyAt > 7000) { introRelease(); introLinesAt = now + 1000; }
     }
     if (introShown && !introLinesGo && !introDone && now >= introLinesAt) { introLinesGo = true; if (window.HC_GO) window.HC_GO(); }   // …puis la phrase, par-dessus
