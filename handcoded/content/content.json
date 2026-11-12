@@ -166,7 +166,9 @@
     "ca": "«Hand Coded s’amaga darrere de totes les vostres instal·lacions preferides.» Vice\n«L’obra és viva.» Numéro\n«Obres tecnològiques al servei de la sostenibilitat.» Forbes\n«Entre totes les propostes de Llum BCN 2025, Rising destaca.» El País\n«Ser testimoni de l’alegria immediata que suscita… ens omple d’orgull.» Frédéric Jousset, Art Explora",
     "es": "«Hand Coded se esconde detrás de todas vuestras instalaciones favoritas.» Vice\n«La obra está viva.» Numéro\n«Obras tecnológicas al servicio de la sostenibilidad.» Forbes\n«Entre todas las propuestas de Llum BCN 2025, Rising destaca.» El País\n«Ser testigo de la alegría inmediata que suscita… nos llena de orgullo.» Frédéric Jousset, Art Explora"
    },
-   "tickerOff": true
+   "tickerOff": true,
+   "introPace": 70,
+   "introHold": 3.5
   },
   "offices": [
    {
