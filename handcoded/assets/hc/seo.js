@@ -39,7 +39,7 @@ const L10N = {
   photos: { en: 'Photos', fr: 'Photos', ca: 'Fotos', es: 'Fotos' },
   more: { en: 'More', fr: 'Voir aussi', ca: 'Vegeu també', es: 'Ver también' },
   langs: { en: 'Languages', fr: 'Langues', ca: 'Llengües', es: 'Idiomas' },
-  tagline: { en: 'interactive and immersive experiences for brands, Barcelona', fr: 'expériences interactives et immersives pour les marques, Barcelone', ca: 'experiències interactives i immersives per a marques, Barcelona', es: 'experiencias interactivas e inmersivas para marcas, Barcelona' },   // maj-172 : les mots d’une recherche de marque, plutôt que « studio d’art »
+  tagline: { en: 'interactive and immersive experiences for brands and museums, Barcelona', fr: 'expériences interactives et immersives pour les marques et les musées, Barcelone', ca: 'experiències interactives i immersives per a marques i museus, Barcelona', es: 'experiencias interactivas e inmersivas para marcas y museos, Barcelona' },   // maj-172 : les mots d’une recherche de marque, plutôt que « studio d’art »
   not: { en: 'Creative technology studio based in Barcelona, founded in %Y. Not to be confused with “hand-coded”, the generic term for code written by hand.',
     fr: 'Studio de creative technology basé à Barcelone, fondé en %Y. À ne pas confondre avec « hand-coded », l’expression générique pour du code écrit à la main.',
     ca: 'Estudi de creative technology amb seu a Barcelona, fundat el %Y. No s’ha de confondre amb «hand-coded», l’expressió genèrica per a codi escrit a mà.',
