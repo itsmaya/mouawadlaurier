@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://mouawadlaurier.com/handcoded/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -12,7 +12,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/"/>
@@ -4163,52 +4163,8 @@
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/maya/screen-shot-2014-05-28-at-7-49-53-pm-copy-g8gl.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://mouawadlaurier.com/handcoded/en/ben-kuper/</loc>
-    <lastmod>2026-11-12</lastmod>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://mouawadlaurier.com/handcoded/fr/ben-kuper/</loc>
-    <lastmod>2026-11-12</lastmod>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://mouawadlaurier.com/handcoded/ca/ben-kuper/</loc>
-    <lastmod>2026-11-12</lastmod>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://mouawadlaurier.com/handcoded/es/ben-kuper/</loc>
-    <lastmod>2026-11-12</lastmod>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
-    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
-  </url>
-  <url>
     <loc>https://mouawadlaurier.com/handcoded/en/joan-sandoval/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/joan-sandoval/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/joan-sandoval/"/>
@@ -4219,7 +4175,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/joan-sandoval/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/joan-sandoval/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/joan-sandoval/"/>
@@ -4230,7 +4186,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/joan-sandoval/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/joan-sandoval/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/joan-sandoval/"/>
@@ -4241,7 +4197,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/joan-sandoval/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/joan-sandoval/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/joan-sandoval/"/>
@@ -4252,7 +4208,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/clement-rignault/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/clement-rignault/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/clement-rignault/"/>
@@ -4263,7 +4219,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/clement-rignault/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/clement-rignault/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/clement-rignault/"/>
@@ -4274,7 +4230,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/clement-rignault/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/clement-rignault/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/clement-rignault/"/>
@@ -4285,7 +4241,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/clement-rignault/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/clement-rignault/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/clement-rignault/"/>
@@ -4296,7 +4252,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/stephanie/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/stephanie/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/stephanie/"/>
@@ -4307,7 +4263,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/stephanie/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/stephanie/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/stephanie/"/>
@@ -4318,7 +4274,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/stephanie/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/stephanie/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/stephanie/"/>
@@ -4329,7 +4285,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/stephanie/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/stephanie/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/stephanie/"/>
@@ -4340,7 +4296,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/gustavo-valera/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/gustavo-valera/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/gustavo-valera/"/>
@@ -4351,7 +4307,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/gustavo-valera/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/gustavo-valera/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/gustavo-valera/"/>
@@ -4362,7 +4318,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/gustavo-valera/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/gustavo-valera/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/gustavo-valera/"/>
@@ -4373,7 +4329,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/gustavo-valera/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/gustavo-valera/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/gustavo-valera/"/>
@@ -4384,7 +4340,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/louis-raveton/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/louis-raveton/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/louis-raveton/"/>
@@ -4395,7 +4351,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/fr/louis-raveton/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/louis-raveton/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/louis-raveton/"/>
@@ -4406,7 +4362,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/ca/louis-raveton/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/louis-raveton/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/louis-raveton/"/>
@@ -4417,7 +4373,7 @@
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/es/louis-raveton/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/louis-raveton/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/louis-raveton/"/>
@@ -4425,6 +4381,50 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/louis-raveton/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/louis-raveton/"/>
     <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/louis-raveton/louisraveton-yu60.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/en/ben-kuper/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/fr/ben-kuper/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/ca/ben-kuper/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://mouawadlaurier.com/handcoded/es/ben-kuper/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://mouawadlaurier.com/handcoded/fr/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://mouawadlaurier.com/handcoded/ca/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mouawadlaurier.com/handcoded/es/ben-kuper/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mouawadlaurier.com/handcoded/en/ben-kuper/"/>
+    <image:image><image:loc>https://mouawadlaurier.com/handcoded/media/ben-kuper/benkuper-uw9i.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://mouawadlaurier.com/handcoded/en/laurent-delforge/</loc>

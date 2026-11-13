@@ -5196,7 +5196,7 @@
   {
    "id": "stephanie",
    "section": "studio",
-   "order": 5,
+   "order": 4,
    "published": true,
    "title": {
     "en": "Stéphanie Huerre",
@@ -5237,7 +5237,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "romain-tardy",
@@ -5701,7 +5701,7 @@
   {
    "id": "joan-sandoval",
    "section": "studio",
-   "order": 3,
+   "order": 2,
    "published": true,
    "title": {
     "en": "Joan Sandoval",
@@ -5742,7 +5742,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "barcelona",
@@ -5936,7 +5936,7 @@
   {
    "id": "ben-kuper",
    "section": "studio",
-   "order": 2,
+   "order": 7,
    "published": true,
    "title": {
     "en": "Ben Kuper",
@@ -5977,12 +5977,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "clement-rignault",
    "section": "studio",
-   "order": 4,
+   "order": 3,
    "published": true,
    "title": {
     "en": "Clément Gamgie Rignault",
@@ -6023,7 +6023,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "baptiste-sansierra",
@@ -6120,7 +6120,7 @@
   {
    "id": "louis-raveton",
    "section": "studio",
-   "order": 7,
+   "order": 6,
    "published": true,
    "title": {
     "en": "Louis Raveton",
@@ -6161,7 +6161,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "fanny-fortage",
@@ -6256,7 +6256,7 @@
   {
    "id": "gustavo-valera",
    "section": "studio",
-   "order": 6,
+   "order": 5,
    "published": true,
    "title": {
     "en": "Gustavo Valera",
@@ -6297,7 +6297,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "guillaume-faure",
