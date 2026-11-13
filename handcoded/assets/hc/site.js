@@ -606,7 +606,8 @@ function infoTexture(post, kind) {
       }
       if (tr(post.place)) { ctx.font = `600 ${fz(13)}px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 14, 176); }
     }, 2.5);
-    return canvasTex(200, 200, ctx => {   // MovieClip "people"
+    let rest = [];   // maj-202 : le texte qui ne tient pas dans le premier carré passe dans un deuxième, posé à côté
+    const t1 = canvasTex(200, 200, ctx => {   // MovieClip "people"
       ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top';
       ctx.fillStyle = '#fff'; ctx.font = TF(fz(20));
       const name = wrapLines(ctx, tr(post.title) + '.', 166).slice(0, 2); name.forEach((l, i) => ctx.fillText(l, 18, 14 + i * 22));
@@ -622,13 +623,23 @@ function infoTexture(post, kind) {
       if (shown.length < sub.length && shown.length) { let last = shown[shown.length - 1]; while (last && ctx.measureText(last + '…').width > 166) last = last.replace(/\s*\S+$/, ''); shown[shown.length - 1] = last + '…'; }
       shown.forEach((s, i) => ctx.fillText(s, 19, 20 + name.length * 22 + i * 18));
       ctx.font = `11px ${UIF}`;
-      htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1 && wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166).slice(0, Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14))).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; });
+      if (htmlToText(tr(post.body)).join(' ').split(/\s+/).length > 1) {
+        const all = wrapLines(ctx, htmlToText(tr(post.body)).join(' '), 166), fitN = Math.max(0, Math.floor(((pl.length ? pTop - 6 : 176) - y) / 14));
+        all.slice(0, fitN).forEach(s => { ctx.fillText(s, 19, y + 4); y += 14; }); rest = all.slice(fitN);
+      }
       if (pl.length) {
         ctx.font = `600 8px ${UIF}`; ctx.fillText(ui('together').toUpperCase(), 19, pTop);
         ctx.font = `10px ${UIF}`; pl.forEach((l, i) => ctx.fillText(l, 19, pTop + 13 + i * 13));
       }
       if (tr(post.place)) { ctx.font = `600 11px ${UIF}`; ctx.fillText(tr(post.place).toUpperCase(), 19, 180); }
     });
+    if (rest.length) t1.userData.next = canvasTex(200, 200, ctx => {
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 200); ctx.textBaseline = 'top'; ctx.fillStyle = '#fff'; ctx.font = `11px ${UIF}`;
+      const n = Math.floor((200 - 28) / 14), ls = rest.slice(0, n);
+      if (rest.length > n) { let last = ls[n - 1]; while (last && ctx.measureText(last + '…').width > 166) last = last.replace(/\s*\S+$/, ''); ls[n - 1] = last + '…'; }
+      ls.forEach((s, i) => ctx.fillText(s, 19, 16 + i * 14));
+    });
+    return t1;
   });
 }
 
@@ -1106,18 +1117,21 @@ class PostsView3D {
     const id = P.selected, p = this.postViews[id]; if (!p || !p.ready) return;
     if (this.L.grid) this.gridToCamera(p, STYLE.tween); else p.moveToCamera(60, STYLE.tween);
     if (!this.focusInfo) { this.focusInfo = { mesh: new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })), p: { x: 0, y: 0, z: 0, rotY: 150 } }; this.container.add(this.focusInfo.mesh); }
-    const info = this.focusInfo; info.mesh.visible = false;
+    if (!this.focusInfo2) { this.focusInfo2 = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })); this.focusInfo2.visible = false; this.container.add(this.focusInfo2); }
+    const info = this.focusInfo; info.mesh.visible = false; this.focusInfo2.visible = false;
     const tex = await infoTexture(this.posts[id], 'person'); if (!this.alive) return;
     if (info.mesh.material.map) info.mesh.material.map.dispose();
     info.mesh.material.map = tex; info.mesh.material.needsUpdate = true;
-    const s = this.h * this.k / 90; info.mesh.scale.setScalar(s);
+    if (this.focusInfo2.material.map) this.focusInfo2.material.map.dispose();
+    this.focusInfo2.material.map = tex.userData.next || null; this.focusInfo2.material.needsUpdate = true;
+    const s = this.h * this.k / 90; info.mesh.scale.setScalar(s); this.focusInfo2.scale.setScalar(s);
     delayedCall(STYLE.tween, () => {   // la fiche sort de derrière le portrait et se pose à côté, dans le même plan
       if (!P.postOpen || P.selected !== id) return;
-      info.target = p; info.k = 0; info.mesh.visible = true;
+      info.target = p; info.k = 0; info.mesh.visible = true; this.focusInfo2.visible = !!this.focusInfo2.material.map;
       killTweensOf(info); to(info, STYLE.tween / 4, { k: 1 }, { ease: 'quartOut' });
     });
   }
-  closePost3D() { const p = this.postViews[P.selected]; if (p) p.moveBack(STYLE.tween / 2); if (this.focusInfo) { killTweensOf(this.focusInfo); this.focusInfo.target = null; this.focusInfo.mesh.visible = false; } }
+  closePost3D() { const p = this.postViews[P.selected]; if (p) p.moveBack(STYLE.tween / 2); if (this.focusInfo) { killTweensOf(this.focusInfo); this.focusInfo.target = null; this.focusInfo.mesh.visible = false; } if (this.focusInfo2) this.focusInfo2.visible = false; }
   movePosts(dx, dy, k) { this.L.move.call(this.L, this, dx, dy, k); }
   /* Changement de format (rotation, fenêtre) : grille ↔ disposition d'origine. Les vignettes glissent vers leur nouvelle place. */
   relayout() {
@@ -1193,6 +1207,11 @@ class PostsView3D {
       _side.set(1, 0, 0).applyQuaternion(g.quaternion).multiplyScalar((f.target.width / 2 + 45 * f.mesh.scale.x + 3) * k * g.scale.x);
       _back.set(0, 0, -1).applyQuaternion(g.quaternion).multiplyScalar(1.5 * (1 - k));
       f.mesh.position.copy(g.position).add(_side).add(_back);
+      if (this.focusInfo2 && this.focusInfo2.visible) {   // le deuxième carré, juste à droite du premier
+        const f2 = this.focusInfo2; f2.quaternion.copy(g.quaternion);
+        _side.set(1, 0, 0).applyQuaternion(g.quaternion).multiplyScalar((90 * f.mesh.scale.x + 3) * k * g.scale.x);
+        f2.position.copy(f.mesh.position).add(_side);
+      }
     }
   }
   async retexture(still = () => true) {   // après un passage négatif / positif. maj-168 : toutes les cartes sont préparées, puis posées dans la même image
@@ -1217,6 +1236,7 @@ class PostsView3D {
       if (inf && it) { const o = swap(inf.mesh, it); if (o) o.dispose(); }
     });
     if (fit && this.focusInfo) { const o = swap(this.focusInfo.mesh, fit); if (o) o.dispose(); }
+    if (fit && this.focusInfo2) { const m2 = this.focusInfo2.material; if (m2.map) m2.map.dispose(); m2.map = fit.userData.next || null; m2.needsUpdate = true; this.focusInfo2.visible = !!m2.map && !!this.focusInfo.mesh.visible; }
     return true;
   }
   get meshes() { return this.postViews.flatMap(p => p.meshes); }
@@ -1226,6 +1246,7 @@ class PostsView3D {
     this.lines.forEach(l => l && l.geometry.dispose());
     this.infos.forEach(i => { if (i) { killTweensOf(i.p); i.mesh.material.map && i.mesh.material.map.dispose(); i.mesh.material.dispose(); } });
     if (this.focusInfo) { this.focusInfo.mesh.material.map && this.focusInfo.mesh.material.map.dispose(); this.focusInfo.mesh.material.dispose(); }
+    if (this.focusInfo2) { this.focusInfo2.material.map && this.focusInfo2.material.map.dispose(); this.focusInfo2.material.dispose(); }
     if (this.net) { this.net.items.forEach(it => { if (it.arc) it.arc.geometry.dispose(); if (it.label) { it.label.material.map.dispose(); it.label.material.dispose(); } }); this.net.dispose.forEach(d => d.dispose()); }
     hideNetTip();
     scene.remove(this.container);

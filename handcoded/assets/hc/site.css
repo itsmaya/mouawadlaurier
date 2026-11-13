@@ -1007,7 +1007,7 @@ html:has(#home:not([hidden]):not(.out)) #about-btn, body.post-open-wide #about-b
   #hv-panel:not(.more-on) > label.rw, #hv-panel:not(.more-on) > .rw:has(.sw), #hv-panel:not(.more-on) > .rw.tg { display: none; }
   #hv-panel .hd { position: sticky; top: 0; z-index: 1; }
   /* maj-198 : collée en bas de l'écran (sans dépendre des barres de Safari), jamais décalée de côté, et plus basse : le visage reste visible au-dessus */
-  #home-ctl #hv-panel { bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important; overflow-x: hidden; overscroll-behavior: contain; }
+  #home-ctl #hv-panel, #home-ctl #hv-panel.cam { bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important; max-height: calc(100dvh - 120px); overflow-x: hidden; overscroll-behavior: contain; }   /* maj-202 : caméra allumée aussi */
   #hv-panel:not(.more-on) .priv { display: none; }
   #hv-panel .rw:has(> .lb[data-k="source"]) { grid-template-columns: minmax(0, 1fr); }
   #hv-panel .rw:has(> .lb[data-k="source"]) > .lb { display: none; }
