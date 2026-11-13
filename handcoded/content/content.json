@@ -445,6 +445,15 @@
      }
     },
     {
+     "id": "collab",
+     "label": {
+      "en": "With artists",
+      "fr": "Avec les artistes",
+      "ca": "Amb els artistes",
+      "es": "Con los artistas"
+     }
+    },
+    {
      "id": "touring",
      "label": {
       "en": "Events and tours",
@@ -460,15 +469,6 @@
       "fr": "Scène et musique",
       "ca": "Escena i música",
       "es": "Escena y música"
-     }
-    },
-    {
-     "id": "collab",
-     "label": {
-      "en": "With artists",
-      "fr": "Avec les artistes",
-      "ca": "Amb els artistes",
-      "es": "Con los artistas"
      }
     },
     {
@@ -617,12 +617,30 @@
      }
     },
     {
+     "id": "partners",
+     "label": {
+      "en": "Partners",
+      "fr": "Partenaires",
+      "ca": "Socis",
+      "es": "Socios"
+     }
+    },
+    {
      "id": "brands",
      "label": {
       "en": "Brands",
       "fr": "Marques",
       "ca": "Marques",
       "es": "Marcas"
+     }
+    },
+    {
+     "id": "festivals",
+     "label": {
+      "en": "Festivals & events",
+      "fr": "Festivals et événements",
+      "ca": "Festivals i esdeveniments",
+      "es": "Festivales y eventos"
      }
     },
     {
@@ -642,24 +660,6 @@
       "fr": "Institutions",
       "ca": "Institucions",
       "es": "Instituciones"
-     }
-    },
-    {
-     "id": "festivals",
-     "label": {
-      "en": "Festivals & events",
-      "fr": "Festivals et événements",
-      "ca": "Festivals i esdeveniments",
-      "es": "Festivales y eventos"
-     }
-    },
-    {
-     "id": "partners",
-     "label": {
-      "en": "Partners",
-      "fr": "Partenaires",
-      "ca": "Socis",
-      "es": "Socios"
      }
     },
     {
