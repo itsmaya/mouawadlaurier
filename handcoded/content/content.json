@@ -632,7 +632,8 @@
       "fr": "Agences et production",
       "ca": "Agències i producció",
       "es": "Agencias y producción"
-     }
+     },
+     "menu": false
     },
     {
      "id": "institutions",
@@ -12749,6 +12750,101 @@
    "author": "Guillaume Faure",
    "logos": [],
    "updated": "2026-11-11"
+  },
+  {
+   "id": "nouveau-contenu-4",
+   "section": "studio",
+   "order": 106,
+   "published": false,
+   "title": {
+    "en": "Zero1",
+    "fr": "Zero1",
+    "ca": "Zero1",
+    "es": "Zero1"
+   },
+   "subtitle": {
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
+   },
+   "place": {
+    "en": "La Rochelle",
+    "fr": "La Rochelle",
+    "ca": "La Rochelle",
+    "es": "La Rochelle"
+   },
+   "date": "",
+   "tags": [
+    "festivals"
+   ],
+   "thumb": "media/nouveau-contenu-4/zero1-5xqv.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "Festival des Arts hybride et d'art numerique",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "https://www.festivalzero1.com/",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "La Rochelle",
+     "lat": 46.16,
+     "lon": -1.15
+    }
+   ],
+   "skills": [],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-13"
+  },
+  {
+   "id": "nouveau-contenu-5",
+   "section": "studio",
+   "order": 107,
+   "published": false,
+   "title": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": []
   }
  ]
 }
