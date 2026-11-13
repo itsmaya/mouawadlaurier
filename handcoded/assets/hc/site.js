@@ -1001,7 +1001,7 @@ class PostsView3D {
     if (this.def.layout === 'arc' && !this.def.skills && coreIdx.length && coreIdx.length < this.n && coreIdx.length <= 3) {
       const others = this.posts.map((p, i) => i).filter(i => !coreIdx.includes(i));
       this.slotOf = []; others.forEach((i, k) => { this.slotOf[i] = k; });
-      this.core = new Set(coreIdx); this.coreList = coreIdx; this.arcAngle = Math.PI / (others.length + 1); this.coreY = 0.62;
+      this.core = new Set(coreIdx); this.coreList = coreIdx; this.arcAngle = Math.PI / (others.length + 1); this.coreY = 0.27;
     }
     this.L.preset.call(this.L, this);
     if (gridWanted(this.def)) { this.grid = computeGrid(this); this.L = this.gridL = gridLayout(this.base); }
