@@ -13721,7 +13721,7 @@
    "updated": "2026-11-13"
   },
   {
-   "id": "nouveau-contenu-4",
+   "id": "deardesign",
    "section": "studio",
    "order": 123,
    "published": true,
@@ -13732,16 +13732,16 @@
     "es": "DearDesign"
    },
    "subtitle": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "fr": "Design d’intérieur et architecture éphémère",
+    "en": "Interior design and temporary architecture",
+    "ca": "Disseny d’interiors i arquitectura efímera",
+    "es": "Diseño de interiores y arquitectura efímera"
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "fr": "Barcelone",
+    "en": "Barcelona",
+    "ca": "Barcelona",
+    "es": "Barcelona"
    },
    "date": "",
    "tags": [
@@ -13750,13 +13750,13 @@
    "thumb": "media/nouveau-contenu-4/deardesign-z6k9.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "fr": "<p>Studio barcelonais fondé en 2005, cofondé par Ignasi Llauradó, avec une équipe d’architectes et de designers. Il conçoit des espaces pour les marques : boutiques, restaurants, bureaux, lieux d’apprentissage et architecture éphémère, en écoconception depuis 2017. Parmi ses projets : le Canòdrom, parc de recherche créative de la Ville de Barcelone, et les bureaux de la Mobile World Capital Barcelona. Prix Talent de la Chambre de commerce de Barcelone en 2021.</p><p>Ensemble, nous imaginons des projets qui mêlent architecture et technologie.</p>",
+    "en": "<p>A Barcelona studio founded in 2005, co-founded by Ignasi Llauradó, with a team of architects and designers. It designs spaces for brands: retail, restaurants, offices, learning spaces and temporary architecture, with an eco-design approach since 2017. Its projects include the Canòdrom, Barcelona City Council’s creative research park, and the offices of Mobile World Capital Barcelona. Talent Award from the Barcelona Chamber of Commerce in 2021.</p><p>Together, we are developing projects that bring architecture and technology together.</p>",
+    "ca": "<p>Estudi barceloní fundat el 2005, cofundat per Ignasi Llauradó, amb un equip d’arquitectes i dissenyadors. Dissenya espais per a marques: botigues, restaurants, oficines, espais d’aprenentatge i arquitectura efímera, amb ecodisseny des del 2017. Entre els seus projectes: el Canòdrom, parc de recerca creativa de l’Ajuntament de Barcelona, i les oficines de la Mobile World Capital Barcelona. Premi Talent de la Cambra de Comerç de Barcelona el 2021.</p><p>Junts, imaginem projectes que barregen arquitectura i tecnologia.</p>",
+    "es": "<p>Estudio barcelonés fundado en 2005, cofundado por Ignasi Llauradó, con un equipo de arquitectos y diseñadores. Diseña espacios para marcas: tiendas, restaurantes, oficinas, espacios de aprendizaje y arquitectura efímera, con ecodiseño desde 2017. Entre sus proyectos: el Canòdrom, parque de investigación creativa del Ayuntamiento de Barcelona, y las oficinas de la Mobile World Capital Barcelona. Premio Talento de la Cámara de Comercio de Barcelona en 2021.</p><p>Juntos, imaginamos proyectos que mezclan arquitectura y tecnología.</p>"
    },
    "media": [],
-   "link": "",
+   "link": "http://www.deardesign.studio",
    "team": [],
    "credits": "",
    "location": null,
