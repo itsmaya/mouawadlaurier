@@ -5318,7 +5318,7 @@
   {
    "id": "romain-tardy",
    "section": "studio",
-   "order": 20,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Romain Tardy",
@@ -5364,7 +5364,7 @@
   {
    "id": "pablo-valbuena",
    "section": "studio",
-   "order": 21,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Pablo Valbuena",
@@ -5410,7 +5410,7 @@
   {
    "id": "adrien-m-claire-b",
    "section": "studio",
-   "order": 22,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Adrien M & Claire B",
@@ -5456,7 +5456,7 @@
   {
    "id": "beardyman-musician",
    "section": "studio",
-   "order": 27,
+   "order": 28,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -5502,7 +5502,7 @@
   {
    "id": "maotik",
    "section": "studio",
-   "order": 24,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Maotik",
@@ -5548,7 +5548,7 @@
   {
    "id": "ezra",
    "section": "studio",
-   "order": 23,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Ezra",
@@ -5693,7 +5693,7 @@
   {
    "id": "paul-brossier",
    "section": "studio",
-   "order": 18,
+   "order": 19,
    "published": true,
    "title": {
     "en": "Paul Brossier",
@@ -6110,7 +6110,7 @@
   {
    "id": "baptiste-sansierra",
    "section": "studio",
-   "order": 104,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Baptiste Sansierra",
@@ -6425,9 +6425,7 @@
     "es": ""
    },
    "date": "",
-   "tags": [
-    "specialists"
-   ],
+   "tags": [],
    "thumb": "media/fanny-fortage/fanny-y19m.jpg",
    "thumbBack": "",
    "body": {
@@ -6450,8 +6448,8 @@
   {
    "id": "gaetan-cerrillo",
    "section": "studio",
-   "order": 17,
-   "published": true,
+   "order": 18,
+   "published": false,
    "title": {
     "en": "Gaëtan Cerrillo",
     "fr": "Gaëtan Cerrillo",
@@ -6633,7 +6631,7 @@
   {
    "id": "marco-nason",
    "section": "studio",
-   "order": 19,
+   "order": 20,
    "published": false,
    "title": {
     "en": "Marco Nason",
@@ -6677,7 +6675,7 @@
   {
    "id": "viktoria-modesta-artist",
    "section": "studio",
-   "order": 25,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -6723,7 +6721,7 @@
   {
    "id": "tigre-lab",
    "section": "studio",
-   "order": 28,
+   "order": 29,
    "published": true,
    "title": {
     "en": "TigreLab",
@@ -7679,7 +7677,7 @@
   {
    "id": "ruinart",
    "section": "studio",
-   "order": 29,
+   "order": 30,
    "published": true,
    "title": {
     "en": "Ruinart",
@@ -7726,7 +7724,7 @@
   {
    "id": "absolut",
    "section": "studio",
-   "order": 30,
+   "order": 31,
    "published": true,
    "title": {
     "en": "The Absolut Company",
@@ -7772,7 +7770,7 @@
   {
    "id": "audi",
    "section": "studio",
-   "order": 31,
+   "order": 32,
    "published": true,
    "title": {
     "en": "Audi",
@@ -7818,7 +7816,7 @@
   {
    "id": "fc-barcelona",
    "section": "studio",
-   "order": 32,
+   "order": 33,
    "published": true,
    "title": {
     "en": "FC Barcelona",
@@ -7864,7 +7862,7 @@
   {
    "id": "bnp-paribas-real-estate",
    "section": "studio",
-   "order": 33,
+   "order": 34,
    "published": true,
    "title": {
     "en": "BNP Paribas Real Estate",
@@ -7910,7 +7908,7 @@
   {
    "id": "nestle",
    "section": "studio",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Nestlé",
@@ -7956,7 +7954,7 @@
   {
    "id": "marque-peugeot",
    "section": "studio",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -8002,7 +8000,7 @@
   {
    "id": "marque-lexus",
    "section": "studio",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -8048,7 +8046,7 @@
   {
    "id": "marque-coors",
    "section": "studio",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Coors",
@@ -8094,7 +8092,7 @@
   {
    "id": "marque-cadbury",
    "section": "studio",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -8140,7 +8138,7 @@
   {
    "id": "churchills",
    "section": "studio",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Churchill’s",
@@ -8186,7 +8184,7 @@
   {
    "id": "fisheye",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "Fisheye",
@@ -8233,7 +8231,7 @@
   {
    "id": "tetro",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "Tetro",
@@ -8280,7 +8278,7 @@
   {
    "id": "ddb",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -8327,7 +8325,7 @@
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -8374,7 +8372,7 @@
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -8421,7 +8419,7 @@
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -8468,7 +8466,7 @@
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -8515,7 +8513,7 @@
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -8562,7 +8560,7 @@
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -8608,7 +8606,7 @@
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -8655,7 +8653,7 @@
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -8701,7 +8699,7 @@
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -8747,7 +8745,7 @@
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -8793,7 +8791,7 @@
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -8839,7 +8837,7 @@
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -8885,7 +8883,7 @@
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -8931,7 +8929,7 @@
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -8977,7 +8975,7 @@
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -9023,7 +9021,7 @@
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -9069,7 +9067,7 @@
   {
    "id": "mira",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -9115,7 +9113,7 @@
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -9161,7 +9159,7 @@
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -9207,7 +9205,7 @@
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -9253,7 +9251,7 @@
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -9299,7 +9297,7 @@
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": false,
    "title": {
     "en": "Into the Great Wide Open",
@@ -9345,7 +9343,7 @@
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -9392,7 +9390,7 @@
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -9439,7 +9437,7 @@
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -9486,7 +9484,7 @@
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -9533,7 +9531,7 @@
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -9580,7 +9578,7 @@
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -9627,7 +9625,7 @@
   {
    "id": "scam",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "Scam",
@@ -9674,7 +9672,7 @@
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -9718,7 +9716,7 @@
   {
    "id": "upf",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -9764,7 +9762,7 @@
   {
    "id": "ircam",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -9810,7 +9808,7 @@
   {
    "id": "cea",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9854,7 +9852,7 @@
   {
    "id": "cupra",
    "section": "studio",
-   "order": 41,
+   "order": 42,
    "published": true,
    "title": {
     "en": "Cupra",
@@ -9900,7 +9898,7 @@
   {
    "id": "red-bull",
    "section": "studio",
-   "order": 42,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Red Bull",
@@ -9946,7 +9944,7 @@
   {
    "id": "danone",
    "section": "studio",
-   "order": 43,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Danone",
@@ -9992,7 +9990,7 @@
   {
    "id": "nokia",
    "section": "studio",
-   "order": 44,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Nokia",
@@ -10038,7 +10036,7 @@
   {
    "id": "pommery",
    "section": "studio",
-   "order": 45,
+   "order": 46,
    "published": true,
    "title": {
     "en": "Pommery",
@@ -10084,7 +10082,7 @@
   {
    "id": "santander",
    "section": "studio",
-   "order": 46,
+   "order": 47,
    "published": true,
    "title": {
     "en": "Santander",
@@ -10130,7 +10128,7 @@
   {
    "id": "eventide",
    "section": "studio",
-   "order": 47,
+   "order": 48,
    "published": true,
    "title": {
     "en": "Eventide",
@@ -10176,7 +10174,7 @@
   {
    "id": "france-24",
    "section": "studio",
-   "order": 48,
+   "order": 49,
    "published": true,
    "title": {
     "en": "France 24",
@@ -10222,7 +10220,7 @@
   {
    "id": "rai",
    "section": "studio",
-   "order": 49,
+   "order": 50,
    "published": false,
    "title": {
     "en": "Rai",
@@ -10268,7 +10266,7 @@
   {
    "id": "tv3",
    "section": "studio",
-   "order": 50,
+   "order": 51,
    "published": false,
    "title": {
     "en": "TV3",
@@ -10314,7 +10312,7 @@
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -10361,7 +10359,7 @@
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -10407,7 +10405,7 @@
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -10453,7 +10451,7 @@
   {
    "id": "alpine",
    "section": "studio",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Alpine",
@@ -10775,7 +10773,7 @@
   {
    "id": "aubio",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "aubio",
@@ -10975,7 +10973,7 @@
   {
    "id": "rossella-piccinno",
    "section": "studio",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Rossella Piccinno",
@@ -11021,7 +11019,7 @@
   {
    "id": "emma-haziza",
    "section": "studio",
-   "order": 92,
+   "order": 93,
    "published": false,
    "title": {
     "en": "Emma Haziza",
@@ -11067,7 +11065,7 @@
   {
    "id": "le-fresnoy",
    "section": "studio",
-   "order": 93,
+   "order": 94,
    "published": true,
    "title": {
     "en": "Le Fresnoy",
@@ -11113,7 +11111,7 @@
   {
    "id": "la-rochelle-universite",
    "section": "studio",
-   "order": 94,
+   "order": 95,
    "published": true,
    "title": {
     "en": "La Rochelle Université",
@@ -11160,7 +11158,7 @@
   {
    "id": "nasonmoretti",
    "section": "studio",
-   "order": 95,
+   "order": 96,
    "published": true,
    "title": {
     "en": "NasonMoretti",
@@ -11207,7 +11205,7 @@
   {
    "id": "hub-montreal",
    "section": "studio",
-   "order": 96,
+   "order": 97,
    "published": true,
    "title": {
     "en": "Hub Montréal",
@@ -11253,7 +11251,7 @@
   {
    "id": "musee-de-l-elysee",
    "section": "studio",
-   "order": 97,
+   "order": 98,
    "published": true,
    "title": {
     "en": "Musée de l’Élysée",
@@ -11301,7 +11299,7 @@
   {
    "id": "fondation-ove",
    "section": "studio",
-   "order": 98,
+   "order": 99,
    "published": true,
    "title": {
     "en": "Fondation OVE",
@@ -11347,7 +11345,7 @@
   {
    "id": "sant-joan-de-deu",
    "section": "studio",
-   "order": 99,
+   "order": 100,
    "published": true,
    "title": {
     "en": "Sant Joan de Déu",
@@ -11393,7 +11391,7 @@
   {
    "id": "chu-lille",
    "section": "studio",
-   "order": 100,
+   "order": 101,
    "published": true,
    "title": {
     "en": "CHU de Lille",
@@ -11439,7 +11437,7 @@
   {
    "id": "chu-bordeaux",
    "section": "studio",
-   "order": 101,
+   "order": 102,
    "published": true,
    "title": {
     "en": "CHU de Bordeaux",
@@ -11537,7 +11535,7 @@
   {
    "id": "marine-budin",
    "section": "studio",
-   "order": 102,
+   "order": 103,
    "published": true,
    "title": {
     "en": "Marine Budin",
@@ -12308,7 +12306,7 @@
   {
    "id": "mouawad-laurier",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "Mouawad + Laurier",
@@ -12743,7 +12741,7 @@
   {
    "id": "mecaoctet",
    "section": "studio",
-   "order": 103,
+   "order": 104,
    "published": true,
    "title": {
     "en": "MecaOctet",
