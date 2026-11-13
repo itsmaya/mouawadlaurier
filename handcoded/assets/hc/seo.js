@@ -207,7 +207,7 @@ function postArticle(S, content, l, p) {
   const imgs = [S.photo(p), ...(p.media || []).filter(m => m && isImage(m.src)).map(m => m.src)].filter((x, i, a) => x && a.indexOf(x) === i);
   const cap = src => { const m = (p.media || []).find(x => x && x.src === src) || {}; return { alt: (m.caption && tr(m.caption, l)) || `${t}${tr(p.subtitle, l) ? ', ' + tr(p.subtitle, l) : ''}`, credit: m.credit || '' }; };
   const vids = (p.media || []).filter(m => m && isVideo(m.src)).map(m => m.src);
-  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(Boolean);
+  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(x => x && !(x.tags || []).includes('festivals'));
   const skills = (p.skills || []).map(id => S.posts.find(x => x.id === id)).filter(Boolean);
   const projects = S.posts.filter(x => x !== p && ((x.skills || []).includes(p.id) || (x.team || []).includes(p.id)) && S.has(x));
   const sibs = S.pages.filter(x => x.section === p.section && x !== p).slice(0, 12);
@@ -229,7 +229,7 @@ function postLD(S, content, l, p) {
   const imgs = [S.photo(p), ...(p.media || []).filter(m => m && isImage(m.src)).map(m => m.src)].filter((x, i, a) => x && a.indexOf(x) === i).slice(0, 8);
   const imageObjs = imgs.map(src => { const m = (p.media || []).find(x => x && x.src === src) || {}; return { '@type': 'ImageObject', contentUrl: abs(S.base, src), ...(m.caption && tr(m.caption, l) ? { caption: tr(m.caption, l) } : {}), ...(m.credit ? { creditText: m.credit, creator: { '@type': 'Person', name: m.credit } } : {}) }; });
   const isPerson = x => (x.tags || []).some(t2 => PEOPLE_TAGS.includes(t2)) || (!(x.tags || []).length && (S.sections.find(z => z.id === x.section) || {}).card === 'portrait');
-  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(Boolean)
+  const team = (p.team || []).map(id => content.posts.find(x => x.id === id && x.published !== false)).filter(x => x && !(x.tags || []).includes('festivals'))
     .map(x => S.has(x) ? { '@id': S.url(l, x) + '#person' } : { '@type': isPerson(x) ? 'Person' : 'Organization', name: tr(x.title, l) });
   const creators = String(p.author || '').split(/\s*&\s*/).filter(Boolean).map(n => /mouawad\s*\+?\s*laurier/i.test(n) ? { '@type': 'Organization', name: 'Mouawad + Laurier' } : { '@type': /\+|studio|collective/i.test(n) ? 'Organization' : 'Person', name: n });
   const vids = (p.media || []).filter(m => m && isVideo(m.src)).map(m => { const y = ytId(m.src); return { '@type': 'VideoObject', name: t, description: cut(story(tr(p.body, l)), 200) || t, embedUrl: y ? `https://www.youtube.com/embed/${y}` : m.src.replace(/vimeo\.com\/(\d+)/, 'player.vimeo.com/video/$1'), thumbnailUrl: y ? `https://i.ytimg.com/vi/${y}/hqdefault.jpg` : (imgs[0] ? abs(S.base, imgs[0]) : S.image) }; });

@@ -355,6 +355,8 @@ const onSite = p => SECTIONS.some(s => s.def.id === p.section);
 /* Une personne ou un partenaire : les projets où figure son nom dans l'équipe, ou son logo */
 const byOrder = (a, b) => SECTIONS.findIndex(s => s.def.id === a.section) - SECTIONS.findIndex(s => s.def.id === b.section) || (a.order ?? 0) - (b.order ?? 0);
 const linkedProjects = post => CONTENT.posts.filter(p => p.published && p !== post && onSite(p) && ((p.team || []).includes(post.id) || (post.thumb && (p.logos || []).includes(post.thumb)))).sort(byOrder);
+/* maj-191 : un festival peut être relié à un projet par son équipe ; il apparaît alors dans « Projets ensemble » du festival, pas parmi les visages de l'équipe */
+const teamOf = post => (post.team || []).map(id => CONTENT.posts.find(p => p.id === id)).filter(p => p && !(p.tags || []).includes('festivals'));
 const relProjects = post => { const s = projectsOf(CONTENT, post).filter(onSite); return s.length ? s : linkedProjects(post); };
 const PERSON_TAGS = ['core', 'artists', 'specialists', 'team', 'people'];
 /* un partenaire (marque, agence, lieu, festival, institution…) : tout ce qui, dans le studio, n'est pas une personne. Son logo est posé entier sur blanc. */
@@ -1935,14 +1937,14 @@ const post2D = {
       this.addText(post, 'project');
       this.addRelations(post);
       this.addGallery(media.slice(1));
-      if ((post.team && post.team.length) || post.credits) this.addTeam(post);
+      if (teamOf(post).length || post.credits) this.addTeam(post);
     } else {
       const first = media[0] ? media[0].src : (post.thumb || null);
       if (first) this.addMedia(first, 355, media[0] ? media[0].credit : '', true, media[0] && media[0].caption);
       this.addText(post, 'project');
       this.addGallery(media.slice(1));
       this.addRelations(post);
-      if ((post.team && post.team.length) || post.credits) this.addTeam(post);
+      if (teamOf(post).length || post.credits) this.addTeam(post);
     }
     if (card !== 'place') this.addCredits();   // maj-184 : crédits, presse… en fin de bande, juste avant les partenaires
     if (post.logos && post.logos.length && card !== 'place') this.addLogos(post);   // partenaires, avant le lien
@@ -2241,7 +2243,7 @@ const post2D = {
     measure.remove();
   },
   addTeam(post) {   // « Qui a travaillé sur ce projet ? » : à gauche le titre et l'index numéroté, à droite les portraits en planche, de tailles variées, comme une page de magazine
-    const team = post.team.map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
+    const team = teamOf(post);
     const fm = ficheM(), top = fm.top, low = 355 - fm.bottom, L = fm.side, gap = Math.max(24, Math.min(36, fm.gutter));
     const num = j => String(j + 1).padStart(2, '0');
     const el = this.addPanel('team', 900, `<h2 class="ttl" style="left:${L}px;top:${top}px">${escapeHTML(ui('who'))}</h2>` +
@@ -2370,7 +2372,7 @@ const postV = {
       if (card === 'text') media.slice(1).forEach(m => out.push(this.media(m, 'pv-full')));
       else out.push(this.gallery(media.slice(1)));
       if (!sec.skills) out.push(this.relations(post));
-      if (card !== 'text' && ((post.team && post.team.length) || post.credits)) out.push(this.team(post));
+      if (card !== 'text' && (teamOf(post).length || post.credits)) out.push(this.team(post));
       if (post.logos && post.logos.length) out.push(`<section class="pv-logos"><h2 class="pv-h">${E(ui('partners'))}</h2><div class="pv-lgrid">${post.logos.map(src => `<span><img data-src="${E(src)}" alt=""></span>`).join('')}</div></section>`);
       if (post.link) { const href = /^https?:\/\//.test(post.link) ? post.link : 'https://' + post.link, host = post.link.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
         out.push(`<p class="pv-link"><span>${E(String(ui('visit')).replace(/\s*:\s*$/, ''))}</span><a href="${E(href)}" target="_blank" rel="noopener">${E(host)} ↗</a></p>`); }
@@ -2439,7 +2441,7 @@ const postV = {
         return `<button type="button" class="go pv-tile" data-go="${E(p.id)}">${ph ? smallImg(ph, 'alt="" loading="lazy"') : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${meta ? `<span class="m">${E(meta)}</span>` : ''}</button>`; }).join('') + '</div></section>';
   },
   team(post) {
-    const E = escapeHTML, team = (post.team || []).map(id => CONTENT.posts.find(p => p.id === id)).filter(Boolean);
+    const E = escapeHTML, team = teamOf(post);
     return `<section class="pv-team"><h2 class="pv-h">${E(ui('who'))}</h2><div class="pv-faces">` +
       team.map(p => { const go = onSite(p) && p.published !== false, tag = go ? 'button' : 'div';
         return `<${tag} ${go ? `type="button" class="go pv-face" data-go="${E(p.id)}"` : 'class="pv-face"'}>${p.thumb ? smallImg(p.thumb, 'alt="" loading="lazy"') : `<span class="mono">${E(initials(tr(p.title)))}</span>`}<span class="t">${E(tr(p.title).trim())}</span>${tr(p.subtitle).trim() ? `<span class="m">${E(tr(p.subtitle).trim())}</span>` : ''}</${tag}>`; }).join('') +
