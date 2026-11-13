@@ -1006,7 +1006,17 @@ html:has(#home:not([hidden]):not(.out)) #about-btn, body.post-open-wide #about-b
   #hv-panel .hd .stat { display: none; }
   #hv-panel:not(.more-on) > label.rw, #hv-panel:not(.more-on) > .rw:has(.sw), #hv-panel:not(.more-on) > .rw.tg { display: none; }
   #hv-panel .hd { position: sticky; top: 0; z-index: 1; }
+  /* maj-198 : collée en bas de l'écran (sans dépendre des barres de Safari), jamais décalée de côté, et plus basse : le visage reste visible au-dessus */
+  #home-ctl #hv-panel { bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important; overflow-x: hidden; overscroll-behavior: contain; }
+  #hv-panel:not(.more-on) .priv { display: none; }
+  #hv-panel .rw:has(> .lb[data-k="source"]) { grid-template-columns: minmax(0, 1fr); }
+  #hv-panel .rw:has(> .lb[data-k="source"]) > .lb { display: none; }
+  #hv-panel .rw:has(> .lb[data-k="source"]) > .seg { grid-column: 1 / -1; }
+  #hv-panel .pic { grid-template-columns: minmax(0, 1fr) auto; }
+  #hv-panel .pic .fmt { grid-column: 1 / -1; }
+  #hv-panel #hv-shot { height: 32px; line-height: 32px; }
 }
+@media (max-width: 700px) { :root:has(#hv-panel.open) #enter, :root:has(#hv-panel.open) #story-btn { opacity: 0; pointer-events: none; } }   /* la barre ouverte : « Entrer » et le « ? » s'effacent dessous */
 @media (max-height: 520px) {   /* couché : la barre à droite, le visage reste visible à gauche et au centre */
   #home-ctl #hv-panel { left: auto; width: min(340px, 46vw); bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important; max-height: calc(100dvh - 28px); }
 }
