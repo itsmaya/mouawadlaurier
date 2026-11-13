@@ -6742,7 +6742,7 @@
     "agencies",
     "partners"
    ],
-   "thumb": "media/tigre-lab/job-fair-logos-web-4xib.jpg",
+   "thumb": "media/tigre-lab/tigrelab-logo-ayd0.jpg",
    "thumbBack": "",
    "body": {
     "en": "<p>Maestro, Sharjah Light Festival, 2017.</p>",
@@ -8249,8 +8249,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/tetro/tetro-logo-v6v5.jpg",
    "thumbBack": "",
@@ -8296,8 +8295,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/logos/ddb.png",
    "thumbBack": "",
@@ -10662,10 +10660,10 @@
    "author": "",
    "logos": [
     "media/logos/cupra.jpg",
-    "media/tigre-lab/job-fair-logos-web-4xib.jpg",
+    "media/tigre-lab/tigrelab-logo-ayd0.jpg",
     "media/logos/landscape-b3xd.png"
    ],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "alpine-mondial-2024",
@@ -11176,8 +11174,7 @@
    },
    "date": "",
    "tags": [
-    "agencies",
-    "partners"
+    "agencies"
    ],
    "thumb": "media/nasonmoretti/nasonmoretti-qjex.jpg",
    "thumbBack": "",
@@ -12835,9 +12832,9 @@
    "author": "Tilergab",
    "logos": [
     "media/logos/palaumusica-qlzt.jpg",
-    "media/tigre-lab/job-fair-logos-web-4xib.jpg"
+    "media/tigre-lab/tigrelab-logo-ayd0.jpg"
    ],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "complete-revolution",
@@ -13716,6 +13713,58 @@
      "city": "La Rochelle",
      "lat": 46.16,
      "lon": -1.15
+    }
+   ],
+   "skills": [],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-13"
+  },
+  {
+   "id": "nouveau-contenu-4",
+   "section": "studio",
+   "order": 123,
+   "published": true,
+   "title": {
+    "en": "DearDesign",
+    "fr": "DearDesign",
+    "ca": "DearDesign",
+    "es": "DearDesign"
+   },
+   "subtitle": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "partners"
+   ],
+   "thumb": "media/nouveau-contenu-4/deardesign-z6k9.jpg",
+   "thumbBack": "",
+   "body": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "media": [],
+   "link": "",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
     }
    ],
    "skills": [],
