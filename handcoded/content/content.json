@@ -594,7 +594,7 @@
    "layout": "arc",
    "card": "portrait",
    "open": "focus3d",
-   "perPage": 21,
+   "perPage": 23,
    "defaultTag": "specialists",
    "visible": true,
    "tags": [
@@ -5242,7 +5242,7 @@
   {
    "id": "romain-tardy",
    "section": "studio",
-   "order": 19,
+   "order": 20,
    "published": true,
    "title": {
     "en": "Romain Tardy",
@@ -5283,12 +5283,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "pablo-valbuena",
    "section": "studio",
-   "order": 20,
+   "order": 21,
    "published": true,
    "title": {
     "en": "Pablo Valbuena",
@@ -5329,12 +5329,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "adrien-m-claire-b",
    "section": "studio",
-   "order": 21,
+   "order": 22,
    "published": true,
    "title": {
     "en": "Adrien M & Claire B",
@@ -5375,12 +5375,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "beardyman-musician",
    "section": "studio",
-   "order": 26,
+   "order": 27,
    "published": true,
    "title": {
     "en": "Beardyman",
@@ -5421,12 +5421,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "maotik",
    "section": "studio",
-   "order": 23,
+   "order": 24,
    "published": true,
    "title": {
     "en": "Maotik",
@@ -5467,12 +5467,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "ezra",
    "section": "studio",
-   "order": 22,
+   "order": 23,
    "published": true,
    "title": {
     "en": "Ezra",
@@ -5514,12 +5514,12 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-11"
+   "updated": "2026-11-13"
   },
   {
    "id": "pedra",
    "section": "studio",
-   "order": 13,
+   "order": 14,
    "published": true,
    "title": {
     "en": "Marina Pujadas",
@@ -5534,10 +5534,10 @@
     "es": "Artista y diseñadora de vestuario"
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Barcelona",
+    "fr": "Barcelone",
+    "ca": "Barcelona",
+    "es": "Barcelona"
    },
    "date": "",
    "tags": [
@@ -5546,21 +5546,27 @@
    "thumb": "media/pedra/marina-pujadas-uko5.jpg",
    "thumbBack": "",
    "body": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Vestuario | Diseño de espacio | Dirección de arte",
+    "fr": "Costume | Scénographie | Direction artistique",
+    "ca": "Vestuario | Diseño de espacio | Dirección de arte",
+    "es": "Vestuario | Diseño de espacio | Dirección de arte"
    },
    "media": [],
-   "link": "",
+   "link": "https://www.instagram.com/pedra.pedra_/",
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "jesse-watts",
@@ -5611,7 +5617,7 @@
   {
    "id": "paul-brossier",
    "section": "studio",
-   "order": 17,
+   "order": 18,
    "published": true,
    "title": {
     "en": "Paul Brossier",
@@ -5650,7 +5656,7 @@
    "author": "",
    "skills": [],
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "thomas-aussenac",
@@ -6028,7 +6034,7 @@
   {
    "id": "baptiste-sansierra",
    "section": "studio",
-   "order": 103,
+   "order": 104,
    "published": true,
    "title": {
     "en": "Baptiste Sansierra",
@@ -6069,12 +6075,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "loic-lecoq",
    "section": "studio",
-   "order": 104,
+   "order": 105,
    "published": true,
    "title": {
     "en": "Loïc Lecocq",
@@ -6115,12 +6121,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "fernando-calvi",
    "section": "studio",
-   "order": 105,
+   "order": 12,
    "published": true,
    "title": {
     "en": "Fernando Calvi",
@@ -6144,10 +6150,10 @@
    "tags": [
     "specialists"
    ],
-   "thumb": "",
+   "thumb": "media/fernando-calvi/fernandocalvi-4bsb.jpg",
    "thumbBack": "",
    "body": {
-    "fr": "<p>Autodidacte, installé à Barcelone, il raconte des marques en images animées depuis plus de vingt ans. Il a fondé Hypno, un studio de motion design, et a travaillé pour Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel et GSK.</p><p>Avec nous : le motion design du Fat-Site, en 2008, au sein du Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
+    "fr": "<p>Autodidacte, installé à Barcelone, il raconte des marques en images animées depuis plus de vingt ans. Il a fondé Hypno, un studio de motion design, et a travaillé pour Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel et GSK.</p><p><a href=\"https://vimeo.com/fernandocalvi\" target=\"_blank\" rel=\"noopener\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\" target=\"_blank\" rel=\"noopener\">LinkedIn</a></p>",
     "en": "<p>Self-taught and based in Barcelona, he has been telling brand stories in motion for over twenty years. He founded Hypno, a motion design studio, and has worked for Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel and GSK.</p><p>With us: motion design for the Fat-Site, in 2008, within the Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
     "ca": "<p>Autodidacte i establert a Barcelona, fa més de vint anys que explica marques amb imatges animades. Va fundar Hypno, un estudi de motion design, i ha treballat per a Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel i GSK.</p><p>Amb nosaltres: el motion design del Fat-Site, el 2008, dins del Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
     "es": "<p>Autodidacta y afincado en Barcelona, lleva más de veinte años contando marcas con imágenes animadas. Fundó Hypno, un estudio de motion design, y ha trabajado para Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel y GSK.</p><p>Con nosotros: el motion design del Fat-Site, en 2008, dentro del Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>"
@@ -6157,7 +6163,13 @@
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
    "skills": [],
    "author": "",
    "logos": [],
@@ -6212,7 +6224,7 @@
   {
    "id": "fanny-fortage",
    "section": "studio",
-   "order": 14,
+   "order": 15,
    "published": false,
    "title": {
     "en": "Fanny Fortage",
@@ -6253,12 +6265,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-11"
+   "updated": "2026-11-13"
   },
   {
    "id": "gaetan-cerrillo",
    "section": "studio",
-   "order": 16,
+   "order": 17,
    "published": true,
    "title": {
     "en": "Gaëtan Cerrillo",
@@ -6297,7 +6309,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-07"
+   "updated": "2026-11-13"
   },
   {
    "id": "gustavo-valera",
@@ -6395,7 +6407,7 @@
   {
    "id": "antoni-hadzijanev",
    "section": "studio",
-   "order": 12,
+   "order": 13,
    "published": true,
    "title": {
     "en": "Antoni Hadzijanev",
@@ -6436,12 +6448,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "marco-nason",
    "section": "studio",
-   "order": 18,
+   "order": 19,
    "published": false,
    "title": {
     "en": "Marco Nason",
@@ -6479,12 +6491,13 @@
    "spots": [],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-13"
   },
   {
    "id": "viktoria-modesta-artist",
    "section": "studio",
-   "order": 24,
+   "order": 25,
    "published": true,
    "title": {
     "en": "Viktoria Modesta",
@@ -6525,12 +6538,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "tigre-lab",
    "section": "studio",
-   "order": 27,
+   "order": 28,
    "published": true,
    "title": {
     "en": "TigreLab",
@@ -6572,7 +6585,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "paysage-sonore",
@@ -7426,7 +7439,7 @@
   {
    "id": "ruinart",
    "section": "studio",
-   "order": 28,
+   "order": 29,
    "published": true,
    "title": {
     "en": "Ruinart",
@@ -7468,12 +7481,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "absolut",
    "section": "studio",
-   "order": 29,
+   "order": 30,
    "published": true,
    "title": {
     "en": "The Absolut Company",
@@ -7514,12 +7527,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "audi",
    "section": "studio",
-   "order": 30,
+   "order": 31,
    "published": true,
    "title": {
     "en": "Audi",
@@ -7560,12 +7573,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "fc-barcelona",
    "section": "studio",
-   "order": 31,
+   "order": 32,
    "published": true,
    "title": {
     "en": "FC Barcelona",
@@ -7606,12 +7619,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "bnp-paribas-real-estate",
    "section": "studio",
-   "order": 32,
+   "order": 33,
    "published": true,
    "title": {
     "en": "BNP Paribas Real Estate",
@@ -7652,12 +7665,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "nestle",
    "section": "studio",
-   "order": 33,
+   "order": 34,
    "published": true,
    "title": {
     "en": "Nestlé",
@@ -7698,12 +7711,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "marque-peugeot",
    "section": "studio",
-   "order": 34,
+   "order": 35,
    "published": true,
    "title": {
     "en": "Peugeot",
@@ -7744,12 +7757,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "marque-lexus",
    "section": "studio",
-   "order": 35,
+   "order": 36,
    "published": true,
    "title": {
     "en": "Lexus",
@@ -7790,12 +7803,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "marque-coors",
    "section": "studio",
-   "order": 36,
+   "order": 37,
    "published": true,
    "title": {
     "en": "Coors",
@@ -7836,12 +7849,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "marque-cadbury",
    "section": "studio",
-   "order": 37,
+   "order": 38,
    "published": true,
    "title": {
     "en": "Cadbury",
@@ -7882,12 +7895,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "churchills",
    "section": "studio",
-   "order": 38,
+   "order": 39,
    "published": true,
    "title": {
     "en": "Churchill’s",
@@ -7928,12 +7941,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "fisheye",
    "section": "studio",
-   "order": 50,
+   "order": 51,
    "published": true,
    "title": {
     "en": "Fisheye",
@@ -7975,12 +7988,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "tetro",
    "section": "studio",
-   "order": 51,
+   "order": 52,
    "published": true,
    "title": {
     "en": "Tetro",
@@ -8021,12 +8034,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "ddb",
    "section": "studio",
-   "order": 53,
+   "order": 54,
    "published": true,
    "title": {
     "en": "DDB Spain",
@@ -8067,12 +8080,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "art-explora",
    "section": "studio",
-   "order": 54,
+   "order": 55,
    "published": true,
    "title": {
     "en": "Art Explora",
@@ -8114,12 +8127,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "it-is-now",
    "section": "studio",
-   "order": 55,
+   "order": 56,
    "published": true,
    "title": {
     "en": "It Is Now",
@@ -8161,12 +8174,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "the-caring-gallery",
    "section": "studio",
-   "order": 56,
+   "order": 57,
    "published": true,
    "title": {
     "en": "The Caring Gallery",
@@ -8208,12 +8221,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "palais-de-tokyo",
    "section": "studio",
-   "order": 57,
+   "order": 58,
    "published": true,
    "title": {
     "en": "Palais de Tokyo",
@@ -8255,12 +8268,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "grand-palais",
    "section": "studio",
-   "order": 58,
+   "order": 59,
    "published": true,
    "title": {
     "en": "Grand Palais",
@@ -8302,12 +8315,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "centquatre",
    "section": "studio",
-   "order": 59,
+   "order": 60,
    "published": true,
    "title": {
     "en": "CENTQUATRE-PARIS",
@@ -8348,12 +8361,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "gaite-lyrique",
    "section": "studio",
-   "order": 60,
+   "order": 61,
    "published": true,
    "title": {
     "en": "La Gaîté Lyrique",
@@ -8395,12 +8408,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "fundacion-telefonica",
    "section": "studio",
-   "order": 61,
+   "order": 62,
    "published": true,
    "title": {
     "en": "Fundación Telefónica",
@@ -8441,12 +8454,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "learning-planet",
    "section": "studio",
-   "order": 62,
+   "order": 63,
    "published": true,
    "title": {
     "en": "Learning Planet Institute",
@@ -8487,12 +8500,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "nanomusee",
    "section": "studio",
-   "order": 63,
+   "order": 64,
    "published": true,
    "title": {
     "en": "NANOmusée",
@@ -8533,12 +8546,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "biennale-venezia",
    "section": "studio",
-   "order": 65,
+   "order": 66,
    "published": true,
    "title": {
     "en": "La Biennale di Venezia",
@@ -8579,12 +8592,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "biennale-dakar",
    "section": "studio",
-   "order": 66,
+   "order": 67,
    "published": true,
    "title": {
     "en": "Biennale de Dakar",
@@ -8625,12 +8638,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "riyadh-art",
    "section": "studio",
-   "order": 67,
+   "order": 68,
    "published": true,
    "title": {
     "en": "Riyadh Art",
@@ -8671,12 +8684,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "lumiere",
    "section": "studio",
-   "order": 68,
+   "order": 69,
    "published": true,
    "title": {
     "en": "Lumiere",
@@ -8717,12 +8730,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "nuit-blanche",
    "section": "studio",
-   "order": 69,
+   "order": 70,
    "published": true,
    "title": {
     "en": "Nuit Blanche",
@@ -8763,12 +8776,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "llum-bcn",
    "section": "studio",
-   "order": 70,
+   "order": 71,
    "published": true,
    "title": {
     "en": "Llum BCN",
@@ -8809,12 +8822,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "mira",
    "section": "studio",
-   "order": 71,
+   "order": 72,
    "published": true,
    "title": {
     "en": "MIRA",
@@ -8855,12 +8868,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "eufonic",
    "section": "studio",
-   "order": 72,
+   "order": 73,
    "published": true,
    "title": {
     "en": "Eufònic",
@@ -8901,12 +8914,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "sharjah-light-festival",
    "section": "studio",
-   "order": 73,
+   "order": 74,
    "published": true,
    "title": {
     "en": "Sharjah Light Festival",
@@ -8947,12 +8960,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "proyecta",
    "section": "studio",
-   "order": 74,
+   "order": 75,
    "published": true,
    "title": {
     "en": "Proyecta",
@@ -8993,12 +9006,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "signal-festival",
    "section": "studio",
-   "order": 76,
+   "order": 77,
    "published": true,
    "title": {
     "en": "Signal Festival",
@@ -9039,12 +9052,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "into-the-great-wide-open",
    "section": "studio",
-   "order": 77,
+   "order": 78,
    "published": false,
    "title": {
     "en": "Into the Great Wide Open",
@@ -9085,12 +9098,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "music-tech-fest",
    "section": "studio",
-   "order": 78,
+   "order": 79,
    "published": true,
    "title": {
     "en": "Music Tech Fest",
@@ -9132,12 +9145,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "societe-du-grand-paris",
    "section": "studio",
-   "order": 79,
+   "order": 80,
    "published": true,
    "title": {
     "en": "Société du Grand Paris",
@@ -9178,12 +9191,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "institut-francais",
    "section": "studio",
-   "order": 80,
+   "order": 81,
    "published": true,
    "title": {
     "en": "Institut français",
@@ -9225,12 +9238,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "generalitat",
    "section": "studio",
-   "order": 81,
+   "order": 82,
    "published": true,
    "title": {
     "en": "Generalitat de Catalunya",
@@ -9272,12 +9285,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "catalan-arts",
    "section": "studio",
-   "order": 82,
+   "order": 83,
    "published": true,
    "title": {
     "en": "Catalan Arts",
@@ -9319,12 +9332,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "institut-ramon-llull",
    "section": "studio",
-   "order": 83,
+   "order": 84,
    "published": true,
    "title": {
     "en": "Institut Ramon Llull",
@@ -9366,12 +9379,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "scam",
    "section": "studio",
-   "order": 84,
+   "order": 85,
    "published": true,
    "title": {
     "en": "Scam",
@@ -9413,12 +9426,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "cnrs",
    "section": "studio",
-   "order": 87,
+   "order": 88,
    "published": true,
    "title": {
     "en": "CNRS",
@@ -9457,12 +9470,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "upf",
    "section": "studio",
-   "order": 88,
+   "order": 89,
    "published": true,
    "title": {
     "en": "Universitat Pompeu Fabra, MTG",
@@ -9503,12 +9516,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "ircam",
    "section": "studio",
-   "order": 89,
+   "order": 90,
    "published": true,
    "title": {
     "en": "Ircam",
@@ -9549,12 +9562,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "cea",
    "section": "studio",
-   "order": 90,
+   "order": 91,
    "published": true,
    "title": {
     "en": "CEA",
@@ -9593,12 +9606,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "cupra",
    "section": "studio",
-   "order": 40,
+   "order": 41,
    "published": true,
    "title": {
     "en": "Cupra",
@@ -9639,12 +9652,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "red-bull",
    "section": "studio",
-   "order": 41,
+   "order": 42,
    "published": true,
    "title": {
     "en": "Red Bull",
@@ -9685,12 +9698,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "danone",
    "section": "studio",
-   "order": 42,
+   "order": 43,
    "published": true,
    "title": {
     "en": "Danone",
@@ -9731,12 +9744,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "nokia",
    "section": "studio",
-   "order": 43,
+   "order": 44,
    "published": true,
    "title": {
     "en": "Nokia",
@@ -9777,12 +9790,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "pommery",
    "section": "studio",
-   "order": 44,
+   "order": 45,
    "published": true,
    "title": {
     "en": "Pommery",
@@ -9823,12 +9836,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "santander",
    "section": "studio",
-   "order": 45,
+   "order": 46,
    "published": true,
    "title": {
     "en": "Santander",
@@ -9869,12 +9882,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "eventide",
    "section": "studio",
-   "order": 46,
+   "order": 47,
    "published": true,
    "title": {
     "en": "Eventide",
@@ -9915,12 +9928,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "france-24",
    "section": "studio",
-   "order": 47,
+   "order": 48,
    "published": true,
    "title": {
     "en": "France 24",
@@ -9961,12 +9974,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "rai",
    "section": "studio",
-   "order": 48,
+   "order": 49,
    "published": false,
    "title": {
     "en": "Rai",
@@ -10007,12 +10020,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "tv3",
    "section": "studio",
-   "order": 49,
+   "order": 50,
    "published": false,
    "title": {
     "en": "TV3",
@@ -10053,12 +10066,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "cite-de-la-musique",
    "section": "studio",
-   "order": 64,
+   "order": 65,
    "published": true,
    "title": {
     "en": "Cité de la musique",
@@ -10100,12 +10113,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "mta-festival",
    "section": "studio",
-   "order": 75,
+   "order": 76,
    "published": true,
    "title": {
     "en": "MTA Festival",
@@ -10146,12 +10159,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "chataigne",
    "section": "studio",
-   "order": 85,
+   "order": 86,
    "published": true,
    "title": {
     "en": "Chataigne",
@@ -10192,12 +10205,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "alpine",
    "section": "studio",
-   "order": 39,
+   "order": 40,
    "published": true,
    "title": {
     "en": "Alpine",
@@ -10238,7 +10251,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "batalla-de-los-gallos",
@@ -10519,7 +10532,7 @@
   {
    "id": "aubio",
    "section": "studio",
-   "order": 86,
+   "order": 87,
    "published": true,
    "title": {
     "en": "aubio",
@@ -10558,7 +10571,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "la-traversee-du-temps",
@@ -10715,7 +10728,7 @@
   {
    "id": "rossella-piccinno",
    "section": "studio",
-   "order": 25,
+   "order": 26,
    "published": true,
    "title": {
     "en": "Rossella Piccinno",
@@ -10757,12 +10770,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "emma-haziza",
    "section": "studio",
-   "order": 91,
+   "order": 92,
    "published": false,
    "title": {
     "en": "Emma Haziza",
@@ -10803,12 +10816,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "le-fresnoy",
    "section": "studio",
-   "order": 92,
+   "order": 93,
    "published": true,
    "title": {
     "en": "Le Fresnoy",
@@ -10849,12 +10862,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "la-rochelle-universite",
    "section": "studio",
-   "order": 93,
+   "order": 94,
    "published": true,
    "title": {
     "en": "La Rochelle Université",
@@ -10896,12 +10909,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "nasonmoretti",
    "section": "studio",
-   "order": 94,
+   "order": 95,
    "published": true,
    "title": {
     "en": "NasonMoretti",
@@ -10942,12 +10955,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "hub-montreal",
    "section": "studio",
-   "order": 95,
+   "order": 96,
    "published": true,
    "title": {
     "en": "Hub Montréal",
@@ -10988,12 +11001,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "musee-de-l-elysee",
    "section": "studio",
-   "order": 96,
+   "order": 97,
    "published": true,
    "title": {
     "en": "Musée de l’Élysée",
@@ -11035,12 +11048,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "fondation-ove",
    "section": "studio",
-   "order": 97,
+   "order": 98,
    "published": true,
    "title": {
     "en": "Fondation OVE",
@@ -11081,12 +11094,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "sant-joan-de-deu",
    "section": "studio",
-   "order": 98,
+   "order": 99,
    "published": true,
    "title": {
     "en": "Sant Joan de Déu",
@@ -11127,12 +11140,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "chu-lille",
    "section": "studio",
-   "order": 99,
+   "order": 100,
    "published": true,
    "title": {
     "en": "CHU de Lille",
@@ -11173,12 +11186,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "chu-bordeaux",
    "section": "studio",
-   "order": 100,
+   "order": 101,
    "published": true,
    "title": {
     "en": "CHU de Bordeaux",
@@ -11219,12 +11232,12 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "valentin-ducros",
    "section": "studio",
-   "order": 15,
+   "order": 16,
    "published": true,
    "title": {
     "en": "Valentin Ducros",
@@ -11276,7 +11289,7 @@
   {
    "id": "marine-budin",
    "section": "studio",
-   "order": 101,
+   "order": 102,
    "published": true,
    "title": {
     "en": "Marine Budin",
@@ -11323,7 +11336,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "laurent-delforge",
@@ -12047,7 +12060,7 @@
   {
    "id": "mouawad-laurier",
    "section": "studio",
-   "order": 52,
+   "order": 53,
    "published": true,
    "title": {
     "en": "Mouawad + Laurier",
@@ -12094,7 +12107,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-12"
+   "updated": "2026-11-13"
   },
   {
    "id": "audio-processing",
@@ -12482,7 +12495,7 @@
   {
    "id": "mecaoctet",
    "section": "studio",
-   "order": 102,
+   "order": 103,
    "published": true,
    "title": {
     "en": "MecaOctet",
@@ -12529,7 +12542,7 @@
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "nouveau-contenu",
