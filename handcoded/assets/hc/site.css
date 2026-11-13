@@ -997,6 +997,19 @@ html:has(#home:not([hidden]):not(.out)) #about-btn, body.post-open-wide #about-b
   #hv-panel.cam:not(.more-on) > label.rw, #hv-panel.cam:not(.more-on) > .rw:has(.sw), #hv-panel.cam:not(.more-on) > .rw.tg { display: none; }
   #hv-panel.cam .hd { position: sticky; top: 0; z-index: 1; }
 }
+/* maj-184 : sur téléphone, toujours une barre compacte en bas (diaporama ou caméra, debout ou couché) : source, format, texte et photo ;
+   les réglages fins (grille, taille, contraste, delay, couleur, inverser) se déplient avec « + » */
+@media (max-width: 700px), (max-height: 520px) {
+  #home-ctl #hv-panel { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)) !important; top: auto !important; bottom: calc(84px + env(safe-area-inset-bottom, 0px) + 100lvh - 100dvh) !important; width: auto; max-width: none; max-height: calc(100dvh - 110px); overflow-y: auto; transform-origin: 50% 100%; }
+  #home-ctl #hv-panel.open { transform: none; }
+  #hv-panel .hd .more { display: block; margin-left: auto; }
+  #hv-panel .hd .stat { display: none; }
+  #hv-panel:not(.more-on) > label.rw, #hv-panel:not(.more-on) > .rw:has(.sw), #hv-panel:not(.more-on) > .rw.tg { display: none; }
+  #hv-panel .hd { position: sticky; top: 0; z-index: 1; }
+}
+@media (max-height: 520px) {   /* couché : la barre à droite, le visage reste visible à gauche et au centre */
+  #home-ctl #hv-panel { left: auto; width: min(340px, 46vw); bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important; max-height: calc(100dvh - 28px); }
+}
 /* fiche d'un partenaire sans photo : son logo réduit et centré sur un carré blanc, même s'il est transparent ou tout en longueur */
 #postv figure.pv-logo { background: #fff; aspect-ratio: 16 / 10; max-height: 60vh; display: grid; place-items: center; padding: 9% 20%; box-sizing: border-box; }
 #postv figure.pv-logo img { width: 100%; height: 100%; object-fit: contain; }

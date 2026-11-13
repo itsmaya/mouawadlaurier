@@ -1897,7 +1897,7 @@ const OVER_MAX = 56;   // dépassement maximal de la bande à ses bouts, en pixe
 const post2D = {
   open: false, height: 0, panels: [], x: 0, finalpos: 0, over: 0, ov: 0, end: 0, dragging: false, xprev: 0, vel: 0, delay: 0,
   build(post, card) {
-    this.clear(); this.post = post;
+    this.clear(); this.post = post; this.creditsHTML = '';
     /* savoir-faire : un petit bandeau fixe rappelle où l'on est quand la bande a défilé au-delà de la description */
     this.open = true; this.height = 355;   // le contact a la hauteur des autres fiches
     post2dEl.classList.remove('closing'); post2dEl.hidden = false;
@@ -1929,9 +1929,22 @@ const post2D = {
       this.addRelations(post);
       if ((post.team && post.team.length) || post.credits) this.addTeam(post);
     }
+    if (card !== 'place') this.addCredits();   // maj-184 : crédits, presse… en fin de bande, juste avant les partenaires
     if (post.logos && post.logos.length && card !== 'place') this.addLogos(post);   // partenaires, avant le lien
     if (post.link && card !== 'place') this.addLink(post);   // le lien du projet ferme la bande, sur la dernière fiche
     this.layout(); this.x = 0; this.finalpos = 0; this.over = 0; this.ov = 0; this.tx = 0; strip.style.transform = 'translateX(0px)';
+  },
+  addCredits() {   // les parties à intertitre de la description, en colonnes comme le texte, ouvertes
+    const html = this.creditsHTML; this.creditsHTML = ''; if (!html) return;
+    const { width, x, colW, press } = textGeom('project'), fm = ficheM(), low = 355 - fm.bottom;
+    const measure = document.createElement('div'); measure.className = 'txt'; measure.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;width:${colW}px`;
+    document.body.appendChild(measure);
+    const pages = paginate(html, colW, [low - fm.top], measure).filter(pg => pg.trim());
+    measure.remove();
+    pages.forEach((pg, i) => {
+      const [px, rp] = press ? [i === 0 ? fm.side : Math.floor(fm.gutter / 2), i === pages.length - 1 ? fm.side : Math.ceil(fm.gutter / 2)] : [x, width - x - colW];
+      this.addPanel('txt cred', px + colW + rp, `<div class="body" style="left:${px}px;top:${fm.top}px;width:${colW}px">${pg}</div>`);
+    });
   },
   addRelations(post) {   // fiche d'un savoir-faire : ses projets défilent, chacun avec sa vignette
     const projects = relProjects(post); if (!projects.length) return;
@@ -2150,10 +2163,9 @@ const post2D = {
     const tags = post.tags.filter(id => id !== 'featured').map(id => sec.tags.find(tg => tg.id === id)).filter(Boolean).map(tg => tr(tg.label));   // « Sélection » est une vitrine, pas une catégorie à afficher
     const posted = '';   // maj-181 : plus de « Classé dans » en fin de fiche
     const fecha = escapeHTML([post.date, tr(post.place)].filter(Boolean).join(' | '));
-    /* maj-181 : comme sur téléphone, les parties à intertitre (crédits, presse…) deviennent des déroulants, dans une colonne à part */
+    /* maj-184 : les parties à intertitre (crédits, presse…) quittent la description et passent en fin de bande, avec les partenaires (addCredits) */
     const parts = sanitizeHTML(tr(post.body)).split(/(?=<h3[\s>])/i), html = /^\s*<h3/i.test(parts[0] || '') ? '' : parts.shift();
-    const foldsHTML = parts.map(pt => { const m = /^<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*)$/i.exec(pt.trim()); return m ? `<details><summary>${m[1]}</summary><div class="fb">${m[2]}</div></details>` : `<div class="fb">${pt}</div>`; }).join('');
-    const addFolds = (n) => { if (!foldsHTML) return; const [fx, frp] = pads(n, n + 1); this.addPanel('txt', fx + colW + frp, `<div class="folds" style="left:${fx}px;top:${fm.top}px;width:${colW}px;max-height:${low - fm.top}px">${foldsHTML}</div>`); };
+    this.creditsHTML = parts.join('');
     const measure = document.createElement('div');
     measure.className = 'txt'; measure.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;width:${colW}px`;
     document.body.appendChild(measure);
@@ -2203,7 +2215,6 @@ const post2D = {
           (last && relH ? `<div class="relp" style="left:${x}px;top:${relTop}px;width:${colW}px">${relHTML}</div>` : '') +
           (last ? `<div class="meta" style="left:${x}px;top:${metaTop}px;width:${colW}px">${metaHTML}</div>` : ''));
       });
-      addFolds(pages.length);
     } else {
       const sy = 13 + tH + 4, fy = 13 + tH + sH + 10, py = fy + 20, top = py + 18 + 20;
       const pages = paginate(html, colW, [355 - top - 14, 355 - 28], measure);
@@ -2211,7 +2222,6 @@ const post2D = {
         this.addPanel('txt', width, (i === 0 ? `<h2 class="ttl" style="left:${x}px;top:13px;width:${colW}px">${escapeHTML(title)}</h2>${subtitle ? `<p class="stl" style="left:${x}px;top:${sy}px;width:${colW}px">${escapeHTML(subtitle)}</p>` : ''}<div class="fecha" style="left:${x}px;top:${fy}px;width:${colW}px">${fecha}</div><div class="posted" style="left:${x}px;top:${py}px;width:${colW}px">${posted}</div>` : '') +
           `<div class="body" style="left:${x}px;top:${i === 0 ? top : 14}px;width:${colW}px">${pg}</div>`);
       });
-      addFolds(pages.length);
     }
     measure.remove();
   },
@@ -3291,7 +3301,6 @@ function hvLabels() {
   const tg = (a, on) => { const b = P.querySelector(`.tgl[data-a="${a}"]`); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); };
   tg('invert', hv.mode === 'dark');
   P.classList.toggle('cam', !!hv.cam);
-  if (!hv.cam && P.classList.contains('more-on')) P.querySelector('.more').click();
   P.querySelector('.more').setAttribute('aria-label', ui('params'));
   hvStat();
 }
