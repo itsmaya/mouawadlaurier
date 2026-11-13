@@ -6251,7 +6251,7 @@
    "id": "jordi",
    "section": "studio",
    "order": 117,
-   "published": true,
+   "published": false,
    "title": {
     "fr": "Jordi",
     "en": "Jordi",
@@ -6303,7 +6303,7 @@
    "id": "leon",
    "section": "studio",
    "order": 118,
-   "published": true,
+   "published": false,
    "title": {
     "fr": "Leon Dark",
     "en": "Leon Dark",
