@@ -6255,7 +6255,7 @@
    "id": "jordi",
    "section": "studio",
    "order": 117,
-   "published": false,
+   "published": true,
    "title": {
     "fr": "Jordi",
     "en": "Jordi",
@@ -6307,7 +6307,7 @@
    "id": "leon",
    "section": "studio",
    "order": 118,
-   "published": false,
+   "published": true,
    "title": {
     "fr": "Leon",
     "en": "Leon",
@@ -10997,7 +10997,6 @@
    },
    "date": "",
    "tags": [
-    "specialists",
     "artists"
    ],
    "thumb": "media/rossella-piccinno/ross-asm2.jpg",
