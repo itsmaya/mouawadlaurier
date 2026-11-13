@@ -6118,6 +6118,52 @@
    "updated": "2026-11-12"
   },
   {
+   "id": "fernando-calvi",
+   "section": "studio",
+   "order": 105,
+   "published": true,
+   "title": {
+    "en": "Fernando Calvi",
+    "fr": "Fernando Calvi",
+    "ca": "Fernando Calvi",
+    "es": "Fernando Calvi"
+   },
+   "subtitle": {
+    "fr": "Directeur artistique et motion designer",
+    "en": "Art director and motion designer",
+    "ca": "Director d’art i motion designer",
+    "es": "Director de arte y motion designer"
+   },
+   "place": {
+    "en": "",
+    "fr": "",
+    "ca": "",
+    "es": ""
+   },
+   "date": "",
+   "tags": [
+    "specialists"
+   ],
+   "thumb": "",
+   "thumbBack": "",
+   "body": {
+    "fr": "<p>Autodidacte, installé à Barcelone, il raconte des marques en images animées depuis plus de vingt ans. Il a fondé Hypno, un studio de motion design, et a travaillé pour Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel et GSK.</p><p>Avec nous : le motion design du Fat-Site, en 2008, au sein du Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
+    "en": "<p>Self-taught and based in Barcelona, he has been telling brand stories in motion for over twenty years. He founded Hypno, a motion design studio, and has worked for Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel and GSK.</p><p>With us: motion design for the Fat-Site, in 2008, within the Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
+    "ca": "<p>Autodidacte i establert a Barcelona, fa més de vint anys que explica marques amb imatges animades. Va fundar Hypno, un estudi de motion design, i ha treballat per a Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel i GSK.</p><p>Amb nosaltres: el motion design del Fat-Site, el 2008, dins del Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>",
+    "es": "<p>Autodidacta y afincado en Barcelona, lleva más de veinte años contando marcas con imágenes animadas. Fundó Hypno, un estudio de motion design, y ha trabajado para Mastercard, Dell, Netskope, CrowdStrike, Typeform, History Channel y GSK.</p><p>Con nosotros: el motion design del Fat-Site, en 2008, dentro del Fat-Man Collective.</p><p><a href=\"https://vimeo.com/fernandocalvi\">Vimeo</a> · <a href=\"https://www.linkedin.com/in/fernandocalvi/\">LinkedIn</a></p>"
+   },
+   "media": [],
+   "link": "https://www.fernandocalvi.com/",
+   "team": [],
+   "credits": "",
+   "location": null,
+   "spots": [],
+   "skills": [],
+   "author": "",
+   "logos": [],
+   "updated": "2026-11-13"
+  },
+  {
    "id": "louis-raveton",
    "section": "studio",
    "order": 6,
@@ -11798,7 +11844,8 @@
    ],
    "link": "",
    "team": [
-    "maya"
+    "maya",
+    "fernando-calvi"
    ],
    "credits": "Fat-Man Collective",
    "location": null,
