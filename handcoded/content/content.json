@@ -12809,26 +12809,28 @@
    "order": 107,
    "published": false,
    "title": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Festival dos Canais",
+    "fr": "Festival dos Canais",
+    "ca": "Festival dos Canais",
+    "es": "Festival dos Canais"
    },
    "subtitle": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Festival",
+    "fr": "Festival",
+    "ca": "Festival",
+    "es": "Festival"
    },
    "place": {
-    "en": "",
-    "fr": "",
-    "ca": "",
-    "es": ""
+    "en": "Aveiro",
+    "fr": "Aveiro",
+    "ca": "Aveiro",
+    "es": "Aveiro"
    },
    "date": "",
-   "tags": [],
-   "thumb": "",
+   "tags": [
+    "festivals"
+   ],
+   "thumb": "media/nouveau-contenu-5/festivaldoscanarias-7q8t.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -12841,10 +12843,17 @@
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Aveiro",
+     "lat": 40.64,
+     "lon": -8.65
+    }
+   ],
    "skills": [],
    "author": "",
-   "logos": []
+   "logos": [],
+   "updated": "2026-11-13"
   }
  ]
 }
