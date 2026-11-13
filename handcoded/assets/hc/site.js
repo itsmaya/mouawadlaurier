@@ -1790,16 +1790,16 @@ const mediaKind = s => (ytId(s) ? 'youtube' : vimeoId(s) ? 'vimeo' : isVideo(s) 
    La toute première fois, FormSubmit envoie un e-mail d'activation à l'adresse : il faut cliquer le lien une fois. */
 const CONTACT_FORM = { to: 'maya@hand-coded.net' };
 const CF = {
-  fr: { title: 'Restons en contact.', intro: 'Nos nouvelles, quelques fois par an : projets et coulisses. Un projet en tête ? Dites-nous en plus.', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un(e) artiste', 'Une institution ou un festival', 'Autre'],
+  fr: { title: 'Restons en contact.', intro: 'Nos nouvelles, quelques fois par an : projets et coulisses. Un projet en tête ? Dites-nous en plus.', ph: 'vous@exemple.com', msgPh: 'Le lieu, les dates, l’idée…', email: 'Votre e-mail', who: 'Vous êtes', whoO: ['Une marque', 'Une agence', 'Un(e) artiste', 'Une institution ou un festival', 'Autre'],
         what: 'Un projet en tête ? (facultatif)', whatO: ['Une installation', 'Un événement ou une tournée', 'Un outil ou un logiciel', 'Du conseil', 'Autre chose'], when: 'Pour quand', whenO: ['Moins de 3 mois', '3 à 6 mois', 'Plus tard', 'Je ne sais pas encore'],
         msg: 'En quelques mots (facultatif)', send: 'S’inscrire', sending: 'Envoi…', ok: 'Merci, vous êtes inscrit(e) ! Et si vous nous avez parlé d’un projet, on vous répond très vite.', err: 'L’envoi n’a pas marché. Écrivez-nous directement à ', bad: 'Il manque une adresse e-mail valide.', note: 'Quelques e-mails par an. Désinscription en un clic.' },
-  en: { title: 'Let’s keep in touch.', intro: 'Our news, a few times a year: projects and behind the scenes. A project in mind? Tell us more.', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
+  en: { title: 'Let’s keep in touch.', intro: 'Our news, a few times a year: projects and behind the scenes. A project in mind? Tell us more.', ph: 'you@example.com', msgPh: 'The place, the dates, the idea…', email: 'Your email', who: 'You are', whoO: ['A brand', 'An agency', 'An artist', 'An institution or a festival', 'Other'],
         what: 'A project in mind? (optional)', whatO: ['An installation', 'An event or a tour', 'A tool or software', 'Consulting', 'Something else'], when: 'When', whenO: ['Within 3 months', '3 to 6 months', 'Later', 'Not sure yet'],
         msg: 'In a few words (optional)', send: 'Sign up', sending: 'Sending…', ok: 'Thank you, you’re signed up! And if you told us about a project, we’ll get back to you very soon.', err: 'Sending failed. Write to us directly at ', bad: 'Please enter a valid email address.', note: 'A few emails a year. Unsubscribe in one click.' },
-  ca: { title: 'Mantinguem el contacte.', intro: 'Les nostres novetats, unes quantes vegades l’any: projectes i bastidors. Teniu un projecte al cap? Expliqueu-nos-en més.', email: 'El vostre correu', who: 'Sou', whoO: ['Una marca', 'Una agència', 'Un/a artista', 'Una institució o un festival', 'Altres'],
+  ca: { title: 'Mantinguem el contacte.', intro: 'Les nostres novetats, unes quantes vegades l’any: projectes i bastidors. Teniu un projecte al cap? Expliqueu-nos-en més.', ph: 'nom@exemple.cat', msgPh: 'El lloc, les dates, la idea…', email: 'El vostre correu', who: 'Sou', whoO: ['Una marca', 'Una agència', 'Un/a artista', 'Una institució o un festival', 'Altres'],
         what: 'Un projecte al cap? (opcional)', whatO: ['Una instal·lació', 'Un esdeveniment o una gira', 'Una eina o un programari', 'Assessorament', 'Una altra cosa'], when: 'Per a quan', whenO: ['Menys de 3 mesos', 'De 3 a 6 mesos', 'Més endavant', 'Encara no ho sé'],
         msg: 'En poques paraules (opcional)', send: 'Subscriure’s', sending: 'Enviant…', ok: 'Gràcies, ja us heu subscrit! I si ens heu parlat d’un projecte, us responem molt aviat.', err: 'L’enviament no ha funcionat. Escriviu-nos directament a ', bad: 'Falta una adreça de correu vàlida.', note: 'Uns quants correus l’any. Baixa amb un clic.' },
-  es: { title: 'Sigamos en contacto.', intro: 'Nuestras novedades, unas pocas veces al año: proyectos y bastidores. ¿Un proyecto en mente? Cuéntanos más.', email: 'Tu correo', who: 'Eres', whoO: ['Una marca', 'Una agencia', 'Un/a artista', 'Una institución o un festival', 'Otro'],
+  es: { title: 'Sigamos en contacto.', intro: 'Nuestras novedades, unas pocas veces al año: proyectos y bastidores. ¿Un proyecto en mente? Cuéntanos más.', ph: 'tu@ejemplo.com', msgPh: 'El lugar, las fechas, la idea…', email: 'Tu correo', who: 'Eres', whoO: ['Una marca', 'Una agencia', 'Un/a artista', 'Una institución o un festival', 'Otro'],
         what: '¿Un proyecto en mente? (opcional)', whatO: ['Una instalación', 'Un evento o una gira', 'Una herramienta o un software', 'Asesoría', 'Otra cosa'], when: 'Para cuándo', whenO: ['Menos de 3 meses', 'De 3 a 6 meses', 'Más adelante', 'Aún no lo sé'],
         msg: 'En pocas palabras (opcional)', send: 'Suscribirme', sending: 'Enviando…', ok: '¡Gracias, ya te has suscrito! Y si nos has hablado de un proyecto, te respondemos muy pronto.', err: 'El envío no ha funcionado. Escríbenos directamente a ', bad: 'Falta una dirección de correo válida.', note: 'Unos pocos correos al año. Baja con un clic.' },
 };
@@ -1810,10 +1810,10 @@ function contactFormHTML(kind) {
   const chips = (name, label, opts) => `<fieldset class="cf-q"><legend>${E(label)}</legend><div class="cf-chips">${opts.map((o, i) => `<label class="cf-chip"><input type="radio" name="${id}-${name}" value="${E(o)}"${i === -1 ? ' checked' : ''}><span>${E(o)}</span></label>`).join('')}</div></fieldset>`;
   return `<form class="cform-f cf-${kind}" novalidate>` +
     `<div class="cf-col"><h2 class="${kind === 'pv' ? 'pv-ttl' : 'ttl'}">${E(t.title)}</h2><p class="cf-intro">${E(t.intro)}</p>` +
-    `<label class="cf-q cf-mail"><span>${E(t.email)}</span><input type="email" name="email" autocomplete="email" required spellcheck="false"></label>` +
-    chips('who', t.who, t.whoO) + chips('when', t.when, t.whenO) + `</div>` +
-    `<div class="cf-col">` + chips('what', t.what, t.whatO) +
-    `<label class="cf-q cf-msg"><span>${E(t.msg)}</span><textarea name="message" rows="${kind === 'pv' ? 3 : 2}"></textarea></label>` +
+    `<label class="cf-q cf-mail"><span>${E(t.email)}</span><input type="email" name="email" autocomplete="email" required spellcheck="false" placeholder="${E(t.ph || 'nom@exemple.com')}"></label>` +
+    chips('who', t.who, t.whoO) + (kind === 'pv' ? chips('when', t.when, t.whenO) : '') + `</div>` +
+    `<div class="cf-col">` + chips('what', t.what, t.whatO) + (kind === 'pv' ? '' : chips('when', t.when, t.whenO)) +
+    `<label class="cf-q cf-msg"><span>${E(t.msg)}</span><textarea name="message" rows="${kind === 'pv' ? 3 : 2}" placeholder="${E(t.msgPh || '')}"></textarea></label>` +
     `<input type="text" name="_honey" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">` +
     `<div class="cf-end"><button type="submit" class="cf-send">${E(t.send)}</button><span class="cf-note">${E(t.note)}</span></div><p class="cf-st" role="status" aria-live="polite"></p></div></form>`;
 }
@@ -1879,12 +1879,27 @@ function contactParts(html) {
   out.ok = !!(out.mail.length || out.tel.length || out.addr.length);
   return out;
 }
-function contactHTML(html) {
-  const c = contactParts(html), E = escapeHTML; if (!c.ok) return socialIcons(html || '');
+/* maj-186 : les personnes nommées sous la phrase d'accueil (les fondateurs) apparaissent en petits ronds, chacun ouvre sa fiche */
+function contactFaces(sub) {
+  const txt = (() => { const d = document.createElement('div'); d.innerHTML = sub || ''; return d.textContent; })();
+  const ppl = CONTENT.posts.filter(p => p.thumb && p.published !== false && onSite(p) && tr(p.title).trim().length > 3 && txt.includes(tr(p.title).trim()))
+    .sort((a, b) => txt.indexOf(tr(a.title).trim()) - txt.indexOf(tr(b.title).trim()));
+  return ppl.map(p => `<button type="button" class="cface" data-go="${escapeHTML(p.id)}" title="${escapeHTML(tr(p.title).trim())}" aria-label="${escapeHTML(tr(p.title).trim())}">${smallImg(p.thumb, 'alt="" draggable="false"')}</button>`).join('');
+}
+function contactHTML(html, split = false) {
+  const c = contactParts(html), E = escapeHTML; if (!c.ok) return split ? { a: socialIcons(html || ''), b: '' } : socialIcons(html || '');
   const row = (k, v) => `<div class="cr"><dt>${E(ui(k))}</dt><dd>${v}</dd></div>`;
   const tel = t => `<a href="tel:${E(t.replace(/[^\d+]/g, ''))}">${E(t)}</a>`;
   const addr = a => { const [rue, ...reste] = a.split(/\s+[.·•|]\s+/); return E(rue) + (reste.length ? '<br>' + E(reste.join(' · ')) : ''); };   // « rue . ville . pays » : la rue, puis la ville et le pays
-  return (c.lead ? `<p class="lead">${c.lead}</p>` : '') + (c.sub ? `<p class="csub">${c.sub}</p>` : '') +
+  const faces = c.sub ? contactFaces(c.sub) : '';
+  const who = (c.lead ? `<p class="lead">${c.lead}</p>` : '') + (c.sub ? (faces ? `<div class="cwho"><span class="cfaces">${faces}</span><p class="csub">${c.sub}</p></div>` : `<p class="csub">${c.sub}</p>`) : '');
+  if (split) return { a: who, b: `<dl class="crows">` +
+    (c.mail.length ? row('c_write', c.mail.map(m => `<a class="mail" href="mailto:${E(m)}">${E(m)}</a>`).join('<br>')) : '') +
+    (c.tel.length ? row('c_call', c.tel.map(tel).join('<br>')) : '') +
+    (c.addr.length ? row('c_addr', c.addr.map(addr).join('<br>')) : '') +
+    (c.socs ? row('c_follow', `<span class="socs">${c.socs}</span>`) : '') + `</dl>` + c.rest.join('') +
+    (c.note.length ? `<div class="cnote">${c.note.map(n => `<p>${n}</p>`).join('')}</div>` : '') };
+  return who +
     `<dl class="crows">` +
     (c.mail.length ? row('c_write', c.mail.map(m => `<a class="mail" href="mailto:${E(m)}">${E(m)}</a>`).join('<br>')) : '') +
     (c.tel.length ? row('c_call', c.tel.map(tel).join('<br>')) : '') +
@@ -2270,10 +2285,13 @@ const post2D = {
     const site = (post.link || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
     let title = tr(post.title).trim(); if (title && !/[.!?]$/.test(title)) title += '.';
     const sub = tr(post.subtitle).trim();
-    this.addPanel('txt contact', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
+    /* maj-186 : deux colonnes. À gauche qui l'on est et à qui l'on parle (titre, phrase d'accueil, les fondateurs en ronds) ; à droite comment nous joindre */
+    const c = contactHTML(sanitizeHTML(tr(post.body)), true);
+    this.addPanel('txt contact c-who', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
       `<h2 class="ttl">${E(title)}</h2>${sub ? `<p class="stl">${E(sub)}</p>` : ''}` +
-      `<div class="body">${contactHTML(sanitizeHTML(tr(post.body)))}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div>` +
-      `</div>`);   // le lieu est déjà dans l'adresse : pas de ligne en plus
+      `<div class="body">${c.a}</div></div>`);
+    if (c.b || post.link) this.addPanel('txt contact c-how', width, `<div class="cbox" style="left:${x}px;top:${fm.top}px;bottom:${fm.bottom}px;width:${colW}px">` +
+      `<div class="body">${c.b}${post.link ? `<p class="site"><a href="${E(post.link)}" target="_blank" rel="noopener">${E(site)}</a></p>` : ''}</div></div>`);   // le lieu est déjà dans l'adresse : pas de ligne en plus
   },
   layout() {
     let x = 0; this.panels.forEach(p => { p.style.left = x + 'px'; x += p.offsetWidth - 2; });
