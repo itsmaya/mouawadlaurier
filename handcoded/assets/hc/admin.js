@@ -43,6 +43,18 @@ function h(tag, props, ...kids) {
 }
 function fill(el, ...kids) { el.replaceChildren(...kids.flat(Infinity).filter(k => k != null && k !== false)); return el; }
 const ytIdOf = s => { const m = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/.exec(s || ''); return m && m[1]; };
+/* maj-197 : vidéos YouTube / Vimeo dans l'admin : vignette, titre, lien pour l'ouvrir, repérage des doublons */
+const vimeoIdOf = s => { const m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(s || ''); return m && m[1]; };
+const embedKey = s => (ytIdOf(s) ? 'yt:' + ytIdOf(s) : vimeoIdOf(s) ? 'vi:' + vimeoIdOf(s) : '');
+const embedInfos = new Map();
+const embedInfo = src => {   // { title, thumb } depuis oEmbed ; vide si le service ne répond pas
+  const k = embedKey(src); if (!k) return Promise.resolve({});
+  if (!embedInfos.has(k)) {
+    const u = k.startsWith('yt:') ? `https://www.youtube.com/oembed?format=json&url=${encodeURIComponent('https://www.youtube.com/watch?v=' + k.slice(3))}` : `https://vimeo.com/api/oembed.json?width=640&url=${encodeURIComponent('https://vimeo.com/' + k.slice(3))}`;
+    embedInfos.set(k, fetch(u).then(r => (r.ok ? r.json() : null)).then(j => (j ? { title: j.title || '', thumb: j.thumbnail_url || '', author: j.author_name || '' } : { missing: true })).catch(() => ({})));
+  }
+  return embedInfos.get(k);
+};
 const mediaKindOf = s => (ytIdOf(s) ? 'youtube' : /vimeo\.com\/(?:video\/)?\d+/.test(s || '') ? 'vimeo' : /\.(mp4|webm|mov)(\?|#|$)/i.test(s || '') ? 'video' : 'image');
 const defaultLogo = () => ringLogoURL((S.content && S.content.settings.accent) || '#ffcc00', S.content && S.content.settings);   // dessiné comme sur le site (Typographie › Logo rond)
 const fr = f => t(f, 'fr') || t(f, 'en');
@@ -1073,12 +1085,18 @@ function postEditor(p, redrawList, redraw) {
       if (!u || !/^https?:\/\/\S+$/.test(u.trim())) return;
       p.media.push({ src: u.trim() }); change(); drawMedia();
     } }, h('span', null, '+ Vidéo YouTube / Vimeo', h('br'), h('small', null, 'colle son lien (ou celui d’une image en ligne)')));
+    const seen = new Map(); p.media.forEach(m => { const ek = embedKey(m && m.src); if (ek) seen.set(ek, (seen.get(ek) || 0) + 1); });
     fill(mediaBox, ...p.media.map((m, i) => {
-      const k = mediaKindOf(m.src), vid = k === 'video';
+      const k = mediaKindOf(m.src), vid = k === 'video', ek = embedKey(m.src);
       const el = k === 'youtube' ? h('img', { src: `https://i.ytimg.com/vi/${ytIdOf(m.src)}/hqdefault.jpg`, alt: '', loading: 'lazy' })
-        : k === 'vimeo' ? h('span', { style: { color: '#888', font: 'italic 18px Georgia, serif' } }, 'Vimeo')
+        : k === 'vimeo' ? (() => { const im = h('img', { alt: '', loading: 'lazy' }); embedInfo(m.src).then(x => { if (x.thumb) im.src = x.thumb; else im.replaceWith(h('span', { style: { color: '#888', font: 'italic 18px Georgia, serif' } }, 'Vimeo')); }); return im; })()
         : vid ? h('video', { src: fileURL(m.src), muted: true, preload: 'metadata', playsinline: true }) : h('img', { src: fileURL(m.src), alt: '', loading: 'lazy' });
-      return h('div', { class: 'media-item' }, h('div', { class: 'pv', title: 'Glisse pour changer l’ordre' }, el, h('b', { class: 'rank' }, String(i + 1))),
+      const embed = k === 'youtube' || k === 'vimeo';
+      const vt = embed ? h('div', { class: 'vt' }, h('a', { href: m.src, target: '_blank', rel: 'noopener', title: m.src }, 'Ouvrir la vidéo ↗'), h('span', { class: 'ttl' }, '…')) : null;
+      if (vt) embedInfo(m.src).then(x => { vt.querySelector('.ttl').textContent = x.missing ? 'introuvable ou privée' : x.title ? x.title + (x.author ? ' · ' + x.author : '') : ''; if (x.missing) vt.classList.add('bad'); });
+      return h('div', { class: 'media-item' + (ek && seen.get(ek) > 1 ? ' dup' : '') }, h('div', { class: 'pv', title: 'Glisse pour changer l’ordre' }, el, h('b', { class: 'rank' }, String(i + 1)), ek && seen.get(ek) > 1 ? h('b', { class: 'dupb' }, 'Doublon') : null),
+        vt,
+        embed ? h('div', { class: 'cr' }, textInput(() => m.src, v => { m.src = v.trim(); if (vt) vt.querySelector('a').href = m.src; }, { placeholder: 'Lien YouTube ou Vimeo', spell: false })) : null,
         h('div', { class: 'ft' }, h('span', { title: m.src }, (k === 'image' ? '' : '▶ ') + (k === 'youtube' ? 'YouTube' : k === 'vimeo' ? 'Vimeo ' + m.src.split('/').pop() : decodeURIComponent(m.src.split('?')[0].split('/').pop()))),
           btn('←', () => { if (i) { move(p.media, i, i - 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Avant', disabled: !i }),
           btn('→', () => { if (i < p.media.length - 1) { move(p.media, i, i + 1); change(); drawMedia(); } }, 'sm icon ghost', { 'aria-label': 'Après', disabled: i === p.media.length - 1 }),
