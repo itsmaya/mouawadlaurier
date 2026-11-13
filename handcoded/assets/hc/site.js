@@ -2144,7 +2144,7 @@ const post2D = {
     play.addEventListener('click', () => {
       const f = document.createElement('iframe');
       f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : vimeoPlayer(id, 'autoplay=1&title=0&byline=0&portrait=0');
-      f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
+      f.allow = 'accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture; web-share'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
       cover.replaceWith(f);
     });
     cover.appendChild(play); inner.appendChild(cover);
@@ -2444,7 +2444,7 @@ const postV = {
     postvEl.querySelectorAll('.pv-embed').forEach(fg => fg.querySelector('.play').addEventListener('click', () => {
       const kind = fg.dataset.kind, id = fg.dataset.id, f = document.createElement('iframe');
       f.src = kind === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0` : vimeoPlayer(id, 'autoplay=1&title=0&byline=0&portrait=0');
-      f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
+      f.allow = 'accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture; web-share'; f.allowFullscreen = true; f.title = kind === 'youtube' ? 'YouTube' : 'Vimeo';
       fg.querySelector('.pv-cover').replaceWith(f);
     }));
   },
@@ -2886,7 +2886,7 @@ function openReel() {
       const f = document.createElement('iframe'), id = k === 'youtube' ? ytId(src) : vimeoId(src);
       const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
       f.src = k === 'youtube' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&playsinline=1&rel=0&loop=1&playlist=${id}&enablejsapi=1${origin}` : vimeoPlayer(id, 'autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0');
-      f.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media'; f.allowFullscreen = true; f.title = 'Showreel';
+      f.allow = 'accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture; web-share'; f.allowFullscreen = true; f.title = 'Showreel';
       f.referrerPolicy = 'strict-origin-when-cross-origin';
       f.addEventListener('load', () => { if (k === 'youtube') f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'reel', channel: 'widget' }), '*'); if (!reel.muted) setReelMuted(false); });
       reel.player = f;
