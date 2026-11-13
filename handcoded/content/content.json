@@ -911,7 +911,7 @@
    "logos": [
     "media/logos/fisheye.png",
     "media/logos/biennalevenise.png",
-    "media/logos/biennaledakar.png",
+    "media/logos/biennaledakar.jpg",
     "media/logos/generalitat.png",
     "media/logos/catalanarts.png",
     "media/logos/chataigne.png",
@@ -2555,8 +2555,8 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/ledotron.png",
-    "media/logos/upf.png",
+    "media/logos/ledotron.jpg",
+    "media/logos/upf.jpg",
     "media/logos/aubio.png",
     "media/logos/chataigne.png"
    ],
@@ -3043,7 +3043,7 @@
     "accompagner"
    ],
    "logos": [
-    "media/logos/upf.png",
+    "media/logos/upf.jpg",
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/abbaye-de-fontevraud.png",
     "media/logos/abbaye-de-vivoin.png",
@@ -3881,7 +3881,7 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/audi.png",
+    "media/logos/audi.jpg",
     "media/fc-barcelona/fcbcn-ndni.jpg",
     "media/logos/ddb.png"
    ],
@@ -4030,7 +4030,7 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/nestle.png"
+    "media/logos/nestle.jpg"
    ],
    "updated": "2026-11-09"
   },
@@ -4088,7 +4088,7 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/marque-peugeot.png"
+    "media/logos/marque-peugeot.jpg"
    ],
    "updated": "2026-11-09"
   },
@@ -4231,7 +4231,7 @@
     "imaginer"
    ],
    "logos": [
-    "media/logos/churchills.png",
+    "media/logos/churchills.jpg",
     "media/logos/muartslogo-hgii.jpg"
    ],
    "updated": "2026-11-10"
@@ -4304,7 +4304,7 @@
     "imaginer"
    ],
    "logos": [
-    "media/logos/marque-coors.png"
+    "media/logos/marque-coors.jpg"
    ],
    "updated": "2026-11-10"
   },
@@ -6736,7 +6736,7 @@
    ],
    "author": "Maya Mouawad",
    "logos": [
-    "media/logos/grandpalais.png",
+    "media/logos/grandpalais.jpg",
     "media/logos/fisheye.png",
     "media/logos/riyadhart.png",
     "media/logos/institutfrancais.png",
@@ -7196,7 +7196,7 @@
    ],
    "author": "Hand Coded",
    "logos": [
-    "media/logos/upf.png"
+    "media/logos/upf.jpg"
    ],
    "updated": "2026-11-10"
   },
@@ -7556,7 +7556,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/audi.png",
+   "thumb": "media/logos/audi.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7694,7 +7694,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/nestle.png",
+   "thumb": "media/logos/nestle.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7740,7 +7740,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/marque-peugeot.png",
+   "thumb": "media/logos/marque-peugeot.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7786,7 +7786,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/marque-lexus.png",
+   "thumb": "media/logos/marque-lexus.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7832,7 +7832,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/marque-coors.png",
+   "thumb": "media/logos/marque-coors.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7878,7 +7878,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/marque-cadbury.png",
+   "thumb": "media/logos/marque-cadbury.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -7924,7 +7924,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/churchills.png",
+   "thumb": "media/logos/churchills.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -8298,7 +8298,7 @@
     "venues",
     "institutions"
    ],
-   "thumb": "media/logos/grandpalais.png",
+   "thumb": "media/logos/grandpalais.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -8621,7 +8621,7 @@
    "tags": [
     "festivals"
    ],
-   "thumb": "media/logos/biennaledakar.png",
+   "thumb": "media/logos/biennaledakar.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9499,7 +9499,7 @@
    "tags": [
     "partners"
    ],
-   "thumb": "media/logos/upf.png",
+   "thumb": "media/logos/upf.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9635,7 +9635,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/cupra.png",
+   "thumb": "media/logos/cupra.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9681,7 +9681,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/red-bull.png",
+   "thumb": "media/logos/red-bull.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9727,7 +9727,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/danone.png",
+   "thumb": "media/logos/danone.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9773,7 +9773,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/nokia.png",
+   "thumb": "media/logos/nokia.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9865,7 +9865,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/santander.png",
+   "thumb": "media/logos/santander.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9911,7 +9911,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/eventide.png",
+   "thumb": "media/logos/eventide.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -9957,7 +9957,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/france-24.png",
+   "thumb": "media/logos/france-24.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10003,7 +10003,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/rai.png",
+   "thumb": "media/logos/rai.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10049,7 +10049,7 @@
    "tags": [
     "brands"
    ],
-   "thumb": "media/logos/tv3.png",
+   "thumb": "media/logos/tv3.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10096,7 +10096,7 @@
     "venues",
     "institutions"
    ],
-   "thumb": "media/logos/cite-de-la-musique.png",
+   "thumb": "media/logos/cite-de-la-musique.jpg",
    "thumbBack": "",
    "body": {
     "en": "",
@@ -10353,7 +10353,7 @@
    ],
    "author": "",
    "logos": [
-    "media/logos/red-bull.png"
+    "media/logos/red-bull.jpg"
    ],
    "updated": "2026-11-09"
   },
@@ -10424,7 +10424,7 @@
    ],
    "author": "",
    "logos": [
-    "media/logos/cupra.png",
+    "media/logos/cupra.jpg",
     "media/tigre-lab/job-fair-logos-web-4xib.jpg",
     "media/logos/landscape-b3xd.png"
    ],
@@ -11888,12 +11888,12 @@
     "tools"
    ],
    "logos": [
-    "media/logos/marque-lexus.png",
-    "media/logos/marque-cadbury.png",
-    "media/logos/nokia.png",
-    "media/logos/marque-peugeot.png",
-    "media/logos/danone.png",
-    "media/logos/france-24.png"
+    "media/logos/marque-lexus.jpg",
+    "media/logos/marque-cadbury.jpg",
+    "media/logos/nokia.jpg",
+    "media/logos/marque-peugeot.jpg",
+    "media/logos/danone.jpg",
+    "media/logos/france-24.jpg"
    ],
    "updated": "2026-11-10"
   },
@@ -12048,12 +12048,12 @@
     "fabriquer"
    ],
    "logos": [
-    "media/logos/marque-lexus.png",
-    "media/logos/marque-cadbury.png",
-    "media/logos/nokia.png",
-    "media/logos/marque-peugeot.png",
-    "media/logos/danone.png",
-    "media/logos/france-24.png"
+    "media/logos/marque-lexus.jpg",
+    "media/logos/marque-cadbury.jpg",
+    "media/logos/nokia.jpg",
+    "media/logos/marque-peugeot.jpg",
+    "media/logos/danone.jpg",
+    "media/logos/france-24.jpg"
    ],
    "updated": "2026-11-11"
   },
@@ -12167,7 +12167,7 @@
    ],
    "author": "Mood",
    "logos": [
-    "media/logos/eventide.png"
+    "media/logos/eventide.jpg"
    ],
    "updated": "2026-11-10"
   },
@@ -12337,7 +12337,7 @@
    ],
    "author": "",
    "logos": [
-    "media/logos/upf.png"
+    "media/logos/upf.jpg"
    ],
    "updated": "2026-11-11"
   },
@@ -12488,7 +12488,7 @@
    "logos": [
     "media/music-tech-fest/musictechfest-2glp.jpg",
     "media/logos/ircam.png",
-    "media/logos/upf.png.t.webp"
+    "media/logos/upf.jpg.t.webp"
    ],
    "updated": "2026-11-11"
   },
