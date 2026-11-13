@@ -3123,7 +3123,8 @@
    "team": [
     "adrien-m-claire-b",
     "cyril",
-    "maya"
+    "maya",
+    "pedra"
    ],
    "credits": "",
    "location": null,
@@ -3142,7 +3143,7 @@
     "accompagner"
    ],
    "logos": [],
-   "updated": "2026-11-09"
+   "updated": "2026-11-13"
   },
   {
    "id": "slush",
@@ -11204,21 +11205,27 @@
    "thumb": "media/nouveau-contenu-5/mouawadlaurier-valentinducros-copy-yg61.jpg",
    "thumbBack": "",
    "body": {
-    "fr": "<p>Curateur et chef de projet sur Peupler et Paysage Sonore.</p>",
+    "fr": "<p>Curateur et chef de projet.</p>",
     "en": "<p>Curator and project manager on Peupler and Paysage Sonore.</p>",
     "ca": "<p>Comissari i cap de projecte a Peupler i Paysage Sonore.</p>",
     "es": "<p>Comisario y jefe de proyecto en Peupler y Paysage Sonore.</p>"
    },
    "media": [],
-   "link": "",
+   "link": "www.romignon.fr",
    "team": [],
    "credits": "",
    "location": null,
-   "spots": [],
+   "spots": [
+    {
+     "city": "Barcelona",
+     "lat": 41.39,
+     "lon": 2.17
+    }
+   ],
    "skills": [],
    "author": "",
    "logos": [],
-   "updated": "2026-11-10"
+   "updated": "2026-11-13"
   },
   {
    "id": "marine-budin",
