@@ -1615,6 +1615,7 @@
    },
    "date": "2017",
    "tags": [
+    "featured",
     "touring"
    ],
    "thumb": "media/maestro/maestro-2-aj6r.jpg",
@@ -1627,7 +1628,7 @@
    },
    "media": [
     {
-     "src": "https://vimeo.com/232012124",
+     "src": "https://www.youtube.com/watch?v=PUpGKYq_A94",
      "credit": ""
     },
     {
@@ -1716,7 +1717,7 @@
     "media/sharjah-light-festival/sharjahlogo-va6m.jpg",
     "media/logos/job-fair-logos-web-t06h.jpg"
    ],
-   "updated": "2026-11-09"
+   "updated": "2026-11-14"
   },
   {
    "id": "future-ruins",
